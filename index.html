@@ -1599,20 +1599,20 @@ const greet = () => gx(Q()
   ? `Привет${nameBit()}! Я ${friend().who}, твой напарник. ${dayTotal(dayKey()) ? 'Миссия сегодня уже есть. Можно ещё одну!' : 'Начнём миссию?'}`
   : `Привет${nameBit()}! Я ${friend().who}. ${friend().hello} ${dayTotal(dayKey()) ? 'Сегодня ты уже позанималась. Можно ещё!' : 'Начнём занятие?'}`);
 function lessonsCard() {
-  const td = todayState(), c = dayCounts(td.date), s = streak();
+  const td = todayState(), c = dayCounts(td.date);
   const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : '<span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b></span>', math: '<span class="ico-num">1+2</span>', book: pic('📖') };
   const rows = LIDS().map(id => {
     const L = LS()[id], plan = lessonPlan(id), d = td.done[id].length, n = c[id] || 0;
     const label = id === 'book' ? (n ? 'Сегодня прочитано ✓' : `${ICON.play}Отметить чтение`) : d ? `${ICON.play}Дальше · ${d}/${plan.length}` : n ? `${ICON.play}Ещё раз` : `${ICON.play}Начать`;
     return `<div class="lesson" style="--lc:${L.color};--lb:${L.bg}">
       <span class="l-ico">${ico[id]}</span>
-      <span class="l-t"><b>${L.name}</b><small>${L.sub}${L.mins ? ` · ${L.mins} мин` : ''}</small><span class="l-bar"><i style="width:${d / plan.length * 100}%"></i></span></span>
+      <span class="l-t"><b>${L.name}</b><span class="l-bar"><i style="width:${d / plan.length * 100}%"></i></span></span>
       <span class="l-n" title="Сегодня">${n ? `${ICON.star}×${n}` : ''}</span>
       <button class="big l-go" data-l="${id}">${label}</button></div>`;
   }).join('');
   return `<section class="today">
     <div class="today-top">
-      <div><h2>${Q() ? 'Миссии дня' : 'Занятия на сегодня'}</h2><p class="muted">${s ? `${s} ${plural(s, ['день', 'дня', 'дней'])} подряд` : 'занимаемся каждый день'} · можно сколько хочешь раз</p></div>
+      <div><h2>${Q() ? 'Миссии дня' : 'Занятия на сегодня'}</h2></div>
       <button class="week" id="weekBtn" aria-label="Мой календарь">${weekStrip()}</button>
     </div>
     <div class="lessons">${rows}</div>
@@ -1684,8 +1684,7 @@ function goHome() {
     <header class="hero">
       <button class="hero-ryz" id="heroRyz" aria-label="Поздороваться">${friendSVG()}</button>
       <div class="hero-text">
-        ${Q() ? `<h1 class="logo q" aria-label="Миссия Л">Миссия <span class="ql">Л</span><span class="sub">напарник: ${friend().who}</span></h1>` : `<h1 class="logo" aria-label="Говорилки с ${friend().with}">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}<span class="sub">с ${friend().with}</span></h1>`}
-        <p class="bubble" id="bubble">${esc(greet())}</p>
+        ${Q() ? `<h1 class="logo q" aria-label="Миссия Л">Миссия <span class="ql">Л</span></h1>` : `<h1 class="logo" aria-label="Говорилки с ${friend().with}">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}</h1>`}
       </div>
       <div class="hero-side">
         <div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div>
