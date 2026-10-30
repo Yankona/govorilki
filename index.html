@@ -916,6 +916,24 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .story-c.seen{opacity:.85}
 body.quest .story,body.quest .fam-card{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.dots .dot.next circle{animation:none}}
+.fam-who{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.fam-ok{margin:0;font:800 17px/1.3 var(--f-body);color:#1E7A47}
+body.quest .fam-ok{color:#7BE0A0}
+.fam-inv{display:flex;flex-direction:column;gap:10px;width:100%}
+.fam-inv:empty{display:none}
+.inv{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-radius:22px;background:#FFF3C4;color:#2A2346;box-shadow:0 5px 0 #E8C76A;animation:popin .4s both}
+.inv-t{display:flex;flex-direction:column}
+.inv-t b{font:800 19px/1.25 var(--f-body)}
+.inv-t small{font:700 14px var(--f-body);color:#6B6488}
+.inv .big{min-height:52px;font-size:20px}
+.g-inv{display:flex;flex-direction:column;gap:10px;width:100%}
+.g-hero{display:flex;align-items:center;gap:14px;padding:8px 4px}
+.g-hero .pic{font-size:64px}
+.g-hero h1{margin:0;font:700 30px/1.1 var(--f-display)}
+.g-hero p{margin:4px 0 0;color:var(--ink-soft)}
+.g-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font:700 18px/1.4 var(--f-body)}
+#invBanner{width:100%}
+#invBanner:empty{display:none}
 </style>
 </head>
 <body>
@@ -1653,6 +1671,7 @@ const GAMES = [
   { id: 'sh-house', name: 'Где живёт звук Ш', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse('Ш'), grp: 9 }
 ];
 function goHome() {
+  if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   newScreen(); ACTIVE = null; P = ROOT.profiles[ROOT.cur];
   document.body.classList.toggle('quest', Q());
   const tiles = g => GAMES.filter(x => x.grp === g).map(x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
@@ -1675,12 +1694,13 @@ function goHome() {
         <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? 'Мой друг' : 'Выбери друга!'}</button>
       </div>
     </header>
-    ${Q() ? rankCard() : ''}
+    ${Q() ? rankCard() + '<div id="invBanner"></div>' : ''}
     ${lessonsCard()}
     ${P.goal ? goalCard() : ''}
     ${teamCard()}
     ${SECTIONS.filter(x => !x.only || x.only === P.settings.track).map(x => `<section class="group"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`).join('')}
     <button class="link-btn" id="parentsBtn">Для взрослых: голос, настройки, как заниматься</button>
+    ${GUEST ? `<button class="link-btn" id="guestBtn">${GRAND[GUEST.who].e} Вернуться: вход для ${GUEST.who === 'nina' ? 'бабушки Нины' : 'дедушки Саши'}</button>` : ''}
    </main></div>`;
   lastLine = greet();
   $('#heroRyz').onclick = () => { hopEl($('#heroRyz')); say(greet()); };
@@ -1693,6 +1713,8 @@ function goHome() {
   $('#duoBtn').onclick = () => { sfx.pop(); screenDuo(); };
   $('#parentsBtn').onclick = () => { sfx.pop(); screenParents(); };
   $$('.tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
+  if (GUEST) $('#guestBtn').onclick = () => { sfx.pop(); GUEST_OFF = false; screenGuest(); };
+  if (Q()) famBanner();
 }
 
 /* ---------- breathing ---------- */
@@ -4081,8 +4103,10 @@ const DRAW_TASKS = [
   { t: 'Нарисуй кораблик на волнах.', w: 'кораблик на волнах', cols: 2 }
 ];
 function nextDrawTask() { P.drawTask = ((P.drawTask ?? -1) + 1) % DRAW_TASKS.length; save(); return P.drawTask; }
-/* ---------- chess online: a game with grandma and grandpa through Lichess, one link for each side ----------
-   Lichess does not let other sites show its boards inside a frame, so the game opens in a Lichess window over the app. */
+/* ---------- chess online: games with grandma Nina and grandpa Sasha through Lichess ----------
+   Lichess does not let other sites show its boards inside a frame, so a game opens in a Lichess window over the app.
+   Grandparents get their own entry: a personal link with the family code. Invitations travel both ways through a
+   private ntfy.sh topic named by that code (kept 12 hours there); the messengers stay as a fallback. */
 const FAM_TC = [
   { id: 'none', name: 'Без часов', sub: 'думаем сколько хотим', q: '' },
   { id: '15', name: '15 минут', sub: '+10 секунд за ход', q: 'clock.limit=900&clock.increment=10' },
@@ -4093,70 +4117,215 @@ const LICHESS_MORE = [
   ['🎓', 'Учимся играть', 'уроки для начинающих', 'https://lichess.org/learn'],
   ['🏋️', 'Тренировка', 'эндшпили, мат, тактика', 'https://lichess.org/practice']
 ];
+const GRAND = {
+  nina: { name: 'Бабушка Нина', to: 'бабушке Нине', hi: 'Привет, бабушка Нина!', call: 'Позвать бабушку Нину', e: '👵' },
+  sasha: { name: 'Дедушка Саша', to: 'дедушке Саше', hi: 'Привет, дедушка Саша!', call: 'Позвать дедушку Сашу', e: '👴' }
+};
+const KID = { name: 'Сава', acc: 'Саву', gen: 'Савы', dat: 'Саве', ins: 'Савой' };
+const lcFirst = x => x[0].toLowerCase() + x.slice(1);
+const SITE = EMBEDDED ? 'https://yankona.github.io/govorilki/' : location.origin + location.pathname;
+const RELAY = 'https://ntfy.sh/';
 const famDate = at => new Date(at).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+const colorName = c => c === 'white' ? 'белыми' : 'чёрными';
+
+// the grandparent's entry: #vhod=<who>.<family code>, remembered on that phone
+const GUEST_KEY = 'govorilki-guest';
+let GUEST = null, GUEST_OFF = false;
+try {
+  const m = location.hash.match(/vhod=(nina|sasha)\.([a-z0-9]{8,40})/);
+  if (m) { GUEST = { who: m[1], fam: m[2] }; localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST)); }
+  else { const g = JSON.parse(localStorage.getItem(GUEST_KEY) || 'null'); if (g && GRAND[g.who]) GUEST = g; }
+} catch (e) {}
+if (GUEST) {
+  // without the app manifest, «На экран Домой» keeps this exact link, so the saved icon opens the grandparent's entry
+  document.querySelectorAll('link[rel="manifest"]').forEach(l => l.remove());
+  const t = document.querySelector('meta[name="apple-mobile-web-app-title"]'); if (t) t.content = 'Шахматы с Савой';
+  document.title = 'Шахматы с Савой';
+}
+function famCode() {
+  if (GUEST && !GUEST_OFF) return GUEST.fam;
+  if (!ROOT.fam) { const a = new Uint8Array(15); crypto.getRandomValues(a); ROOT.fam = [...a].map(x => (x % 36).toString(36)).join(''); save(); }
+  return ROOT.fam;
+}
+const entryLink = who => `${SITE}#vhod=${who}.${famCode()}`;
+async function relayPost(msg) {
+  try { const r = await fetch(RELAY + 'govorilki-' + famCode(), { method: 'POST', body: JSON.stringify({ ...msg, at: Date.now() }) }); return r.ok; } catch (e) { return false; }
+}
+async function relayInvites(to) {
+  const r = await fetch(RELAY + 'govorilki-' + famCode() + '/json?poll=1&since=12h');
+  if (!r.ok) throw new Error('relay ' + r.status);
+  return (await r.text()).split('\n').map(l => { try { const e = JSON.parse(l); return e.event === 'message' ? JSON.parse(e.message) : null; } catch (x) { return null; } })
+    .filter(x => x && x.k === 'inv' && x.to === to && x.url && /^https:\/\/lichess\.org\//.test(x.url)).sort((a, b) => b.at - a.at).slice(0, 3);
+}
+async function famCreate(tcId, side) {
+  const T = FAM_TC.find(x => x.id === tcId) || FAM_TC[0];
+  const r = await fetch('https://lichess.org/api/challenge/open', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: [T.q, 'rated=false'].filter(Boolean).join('&') });
+  if (!r.ok) throw new Error('lichess ' + r.status);
+  const j = await r.json();
+  const mine = side === 'random' ? (Math.random() < .5 ? 'white' : 'black') : side;
+  const me = mine === 'white' ? j.urlWhite : j.urlBlack, them = mine === 'white' ? j.urlBlack : j.urlWhite;
+  if (!me || !them) throw new Error('no links');
+  return { me, them, mine, T };
+}
+const shareRow = (msg, url, id) => `<div class="fam-row"><button class="big" id="${id}">📤 Отправить</button>
+  <a class="chip" href="https://wa.me/?text=${encodeURIComponent(msg + ' ' + url)}" target="_blank" rel="noopener">WhatsApp</a>
+  <a class="chip" href="https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Telegram</a>
+  <button class="chip" data-copy="${id}">Скопировать</button></div>`;
+function bindShare(id, msg, url, said) {
+  const copy = () => { if (navigator.clipboard) navigator.clipboard.writeText(msg + ' ' + url).then(() => said('Ссылка скопирована. Вставьте её в сообщение.'), () => said('Не получилось скопировать. Нажмите «Отправить».')); };
+  $('#' + id).onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: 'Шахматы', text: msg, url }).catch(() => {}); else copy(); };
+  $(`[data-copy="${id}"]`).onclick = () => { sfx.pop(); copy(); };
+}
+const tcChips = tc => FAM_TC.map(x => `<button class="chip fam-c ${x.id === tc ? 'sel' : ''}" data-tc="${x.id}"><span><b>${x.name}</b><small>${x.sub}</small></span></button>`).join('');
+const sideChips = side => [['white', '♔ белыми'], ['black', '♚ чёрными'], ['random', '🎲 как повезёт']].map(([v, n]) => `<button class="chip fam-c ${v === side ? 'sel' : ''}" data-s="${v}">${n}</button>`).join('');
+const invHTML = (inv, fromName) => `<div class="inv"><span class="inv-t"><b>${fromName(inv.from)} зовёт играть!</b><small>${esc(inv.tc || '')} · ${new Date(inv.at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}</small></span>
+  <a class="big" href="${esc(inv.url)}" target="_blank" rel="noopener">${inv.side === 'white' ? '♔' : '♚'} Играть ${colorName(inv.side)}</a></div>`;
+
 function screenFamChess() {
   const t = newScreen();
   let tc = P.famTc || 'none', side = P.famSide || 'white', busy = false;
   const past = P.famGames || [];
   shell('Шахматы онлайн', `<div class="fam">
+    <div class="fam-inv" id="famInv"></div>
     <div class="fam-card"><h2 class="fam-h">${pic('👵')}${pic('👴')} Партия с бабушкой и дедушкой</h2>
-      <p class="lead">Создай партию и отправь ссылку. Играете на Lichess: бесплатно, без регистрации, с телефона или компьютера.</p>
-      <h3 class="fam-s">Часы</h3>
-      <div class="fam-row" id="famTc">${FAM_TC.map(x => `<button class="chip fam-c ${x.id === tc ? 'sel' : ''}" data-tc="${x.id}"><span><b>${x.name}</b><small>${x.sub}</small></span></button>`).join('')}</div>
-      <h3 class="fam-s">Я играю</h3>
-      <div class="fam-row" id="famSide">${[['white', '♔ белыми'], ['black', '♚ чёрными'], ['random', '🎲 как повезёт']].map(([v, n]) => `<button class="chip fam-c ${v === side ? 'sel' : ''}" data-s="${v}">${n}</button>`).join('')}</div>
-      <button class="big" id="famGo">♟ Создать партию</button>
+      <h3 class="fam-s">Часы</h3><div class="fam-row" id="famTc">${tcChips(tc)}</div>
+      <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
+      <div class="fam-who">${Object.entries(GRAND).map(([k, g]) => `<button class="big" data-who="${k}">${g.e} ${g.call}</button>`).join('')}
+        <button class="big ghost" data-who="any">♟ Позвать кого-то ещё</button></div>
       <div class="fam-out" id="famOut"></div>
     </div>
-    ${past.length ? `<div class="fam-card"><h3 class="fam-s">Мои прошлые партии</h3><div class="fam-row">${past.map(g => `<a class="chip" href="${esc(g.me)}" target="_blank" rel="noopener">${g.side === 'white' ? '♔' : '♚'} ${famDate(g.at)} · ${esc(g.tcName)}</a>`).join('')}</div></div>` : ''}
+    ${past.length ? `<div class="fam-card"><h3 class="fam-s">Мои прошлые партии</h3><div class="fam-row">${past.map(g => `<a class="chip" href="${esc(g.me)}" target="_blank" rel="noopener">${g.side === 'white' ? '♔' : '♚'} ${famDate(g.at)} · ${g.who && GRAND[g.who] ? GRAND[g.who].e + ' ' : ''}${esc(g.tcName)}</a>`).join('')}</div></div>` : ''}
+    <div class="fam-card"><h3 class="fam-s">Вход для бабушки и дедушки</h3>
+      <p class="lead">Отправьте один раз: по своей ссылке бабушка и дедушка увидят приглашения и смогут сами позвать ${KID.acc}.</p>
+      <div class="fam-row">${Object.entries(GRAND).map(([k, g]) => `<button class="chip" data-entry="${k}">${g.e} Вход ${g.to}</button>`).join('')}</div>
+      <div class="fam-out" id="famEntry"></div></div>
     <div class="fam-card"><h3 class="fam-s">Ещё на Lichess</h3><div class="fam-more">${LICHESS_MORE.map(([e, n, s, u]) => `<a class="fam-link" href="${u}" target="_blank" rel="noopener">${pic(e)}<span><b>${n}</b><small>${s}</small></span></a>`).join('')}</div></div>
   </div>`);
-  talk('Шахматы онлайн! Выбери часы и цвет фигур. Нажми «Создать партию» и отправь ссылку бабушке или дедушке.');
+  talk('Шахматы онлайн! Выбери часы и цвет. Потом нажми, кого позвать: бабушку Нину или дедушку Сашу.');
   $('#famTc').onclick = e => { const b = e.target.closest('[data-tc]'); if (!b) return; tc = P.famTc = b.dataset.tc; save(); $$('#famTc .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = P.famSide = b.dataset.s; save(); $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
-  $('#famGo').onclick = async () => {
-    if (busy) return; busy = true; sfx.pop();
-    const out = $('#famOut'), T = FAM_TC.find(x => x.id === tc);
+  $('.fam-who').onclick = async e => {
+    const b = e.target.closest('[data-who]'); if (!b || busy) return;
+    busy = true; sfx.pop();
+    const who = b.dataset.who, g = GRAND[who], out = $('#famOut');
     out.innerHTML = '<p class="lead">Создаю партию…</p>';
     try {
-      const r = await fetch('https://lichess.org/api/challenge/open', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: [T.q, 'rated=false'].filter(Boolean).join('&') });
-      if (!r.ok) throw new Error('lichess ' + r.status);
-      const j = await r.json(); if (t !== tok) return;
-      const mine = side === 'random' ? (Math.random() < .5 ? 'white' : 'black') : side;
-      const me = mine === 'white' ? j.urlWhite : j.urlBlack, them = mine === 'white' ? j.urlBlack : j.urlWhite;
-      if (!me || !them) throw new Error('no links');
-      P.famGames = [{ at: Date.now(), me, them, tcName: T.name, side: mine }, ...(P.famGames || [])].slice(0, 6); save();
-      showLinks(me, them, mine, T);
-    } catch (e) {
+      const { me, them, mine, T } = await famCreate(tc, side); if (t !== tok) return;
+      P.famGames = [{ at: Date.now(), me, them, tcName: T.name, side: mine, who }, ...(P.famGames || [])].slice(0, 6); save();
+      const sent = g ? await relayPost({ k: 'inv', from: 'sava', to: who, url: them, side: mine === 'white' ? 'black' : 'white', tc: T.name }) : false;
       if (t !== tok) return;
-      out.innerHTML = `<p class="lead">Отсюда партия не создалась. Открой Lichess, нажми «Сыграть с другом» и отправь бабушке и дедушке ссылку, которую он покажет.</p>
+      const msg = `${g ? g.name + ', это ' + KID.name + '! Давай' : 'Давай'} сыграем в шахматы. Я играю ${colorName(mine)}, ты — ${colorName(mine === 'white' ? 'black' : 'white')}. ${T.name}. Открой ссылку, регистрация не нужна:`;
+      out.innerHTML = `<div class="fam-steps">
+        ${sent ? `<p class="fam-ok">✅ ${g.name} увидит приглашение в своём входе.</p><p>Можно ещё и написать:</p>` : `<p><b>1.</b> Отправь ссылку${g ? ' ' + g.to : ''}:</p>`}
+        ${shareRow(msg, them, 'famShare')}
+        <p class="fam-url">${esc(them)}</p>
+        <p><b>${sent ? '' : '2. '}</b>Открой свою доску. Партия начнётся, когда ${g ? lcFirst(g.name) : 'второй игрок'} откроет ссылку.</p>
+        <a class="big" href="${esc(me)}" target="_blank" rel="noopener">${mine === 'white' ? '♔' : '♚'} Играть ${colorName(mine)}</a>
+        <p class="muted">Совет: созвонитесь по видео и называйте ходы вслух — «слон на эф-четыре», «ладья на а-один». Чётко, со звуком Л!</p>
+      </div>`;
+      bindShare('famShare', msg, them, talk);
+      $('#famOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      talk(sent ? `Приглашение отправлено! Теперь нажми «Играть ${colorName(mine)}».` : 'Партия готова! Отправь ссылку. Потом нажми «Играть».');
+    } catch (err) {
+      if (t !== tok) return;
+      out.innerHTML = `<p class="lead">Отсюда партия не создалась. Открой Lichess, нажми «Сыграть с другом» и отправь ссылку, которую он покажет.</p>
         <a class="big" href="https://lichess.org/#friend" target="_blank" rel="noopener">Открыть Lichess</a>`;
     }
     busy = false;
   };
-  function showLinks(me, them, mine, T) {
-    const my = mine === 'white' ? 'белыми' : 'чёрными', their = mine === 'white' ? 'чёрными' : 'белыми';
-    const msg = `${P.settings.name ? P.settings.name + ' зовёт' : 'Зову'} тебя сыграть в шахматы! Я играю ${my}, ты — ${their}. ${T.name}. Открой ссылку, регистрация не нужна:`;
-    $('#famOut').innerHTML = `<div class="fam-steps">
-      <p><b>1.</b> Отправь ссылку бабушке или дедушке:</p>
-      <div class="fam-row"><button class="big" id="famShare">📤 Отправить</button>
-        <a class="chip" href="https://wa.me/?text=${encodeURIComponent(msg + ' ' + them)}" target="_blank" rel="noopener">WhatsApp</a>
-        <a class="chip" href="https://t.me/share/url?url=${encodeURIComponent(them)}&text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Telegram</a>
-        <button class="chip" id="famCopy">Скопировать</button></div>
-      <p class="fam-url">${esc(them)}</p>
-      <p><b>2.</b> Открой свою доску. Партия начнётся, когда бабушка или дедушка откроют ссылку.</p>
-      <a class="big" href="${esc(me)}" target="_blank" rel="noopener">${mine === 'white' ? '♔' : '♚'} Играть ${my}</a>
-      <p class="muted">Совет: созвонитесь по видео и называйте ходы вслух — «слон на эф-четыре», «ладья на а-один». Чётко, со звуком Л!</p>
-    </div>`;
-    const copy = () => {
-      const done = () => talk('Ссылка скопирована. Вставь её в сообщение бабушке или дедушке.');
-      if (navigator.clipboard) navigator.clipboard.writeText(msg + ' ' + them).then(done, () => talk('Не получилось скопировать. Нажми «Отправить».'));
-    };
-    $('#famShare').onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: 'Шахматы', text: msg, url: them }).catch(() => {}); else copy(); };
-    $('#famCopy').onclick = () => { sfx.pop(); copy(); };
-    $('#famOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    talk('Партия готова! Отправь ссылку бабушке или дедушке. Потом нажми «Играть».');
-  }
+  $$('[data-entry]').forEach(b => b.onclick = () => {
+    sfx.pop(); const who = b.dataset.entry, g = GRAND[who], url = entryLink(who);
+    const msg = `${g.name}, это твой вход в «Говорилки»: здесь ${KID.name} зовёт тебя играть в шахматы, и ты можешь позвать его сам${who === 'nina' ? 'а' : ''}. Открой ссылку и сохрани её на экран «Домой»:`;
+    $('#famEntry').innerHTML = `<div class="fam-steps"><p>${g.e} Вход ${g.to}:</p>${shareRow(msg, url, 'entryShare')}<p class="fam-url">${esc(url)}</p></div>`;
+    bindShare('entryShare', msg, url, talk);
+  });
+  // invitations from grandma and grandpa, checked while this screen is open
+  const poll = async () => {
+    try {
+      const list = await relayInvites('sava'); if (t !== tok) return;
+      $('#famInv').innerHTML = list.map(x => invHTML(x, f => GRAND[f] ? GRAND[f].name : 'Кто-то')).join('');
+    } catch (e) {}
+    later(poll, 15000);
+  };
+  if (ROOT.fam) poll();
+}
+
+// on Sava's home: a fresh invitation from a grandparent shows up as a banner, said aloud once
+const SEEN_INV = new Set();
+async function famBanner() {
+  if (!ROOT.fam) return;
+  const t = tok;
+  try {
+    const list = (await relayInvites('sava')).filter(x => Date.now() - x.at < 3 * 3600e3); if (t !== tok || !list.length) return;
+    const el = $('#invBanner'); if (!el) return;
+    el.innerHTML = `<div class="fam-inv">${invHTML(list[0], f => GRAND[f] ? GRAND[f].name : 'Кто-то')}</div>`;
+    if (!SEEN_INV.has(list[0].at)) SEEN_INV.add(list[0].at), say(`${GRAND[list[0].from] ? GRAND[list[0].from].name : 'Кто-то'} зовёт тебя играть в шахматы!`);
+  } catch (e) {}
+}
+
+// the grandparent's own screen: invitations from Sava, inviting him, how Lichess works
+function screenGuest() {
+  const t = newScreen(), g = GRAND[GUEST.who];
+  let tc = 'none', side = 'white', busy = false;
+  document.body.classList.remove('quest');
+  const mine = (() => { try { return JSON.parse(localStorage.getItem(GUEST_KEY + '-games') || '[]'); } catch (e) { return []; } })();
+  app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
+    <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1><p>Здесь вы играете в шахматы с ${KID.ins}.</p></div></header>
+    <div class="fam-card"><h2 class="fam-h">♟ Приглашения от ${KID.gen}</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
+    <div class="fam-card"><h2 class="fam-h">Позвать ${KID.acc} сыграть</h2>
+      <h3 class="fam-s">Часы</h3><div class="fam-row" id="famTc">${tcChips(tc)}</div>
+      <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
+      <button class="big" id="gGo">♟ Создать партию</button>
+      <div class="fam-out" id="gOut"></div></div>
+    <div class="fam-card"><h2 class="fam-h">Как играть</h2><ol class="g-steps">
+      <li>Нажмите «Играть» — откроется сайт Lichess. Регистрация не нужна.</li>
+      <li>Если появится кнопка «Присоединиться к игре» (Join the game), нажмите её.</li>
+      <li>Ход: нажмите на фигуру, потом на клетку, куда её поставить.</li>
+      <li>Партия на часах? Время идёт только у того, чей ход.</li>
+      <li>Можно созвониться по видео и играть вместе. Сава учится говорить звук Л — попросите его называть ходы вслух.</li></ol></div>
+    <div class="fam-card"><h2 class="fam-h">Сохранить вход на телефон</h2>
+      <p class="lead">iPhone: в Safari нажмите «Поделиться» → «На экран „Домой“». Android: меню ⋮ → «Добавить на главный экран». Потом вход открывается одной кнопкой.</p></div>
+    ${mine.length ? `<div class="fam-card"><h3 class="fam-s">Мои партии</h3><div class="fam-row">${mine.map(x => `<a class="chip" href="${esc(x.me)}" target="_blank" rel="noopener">${x.side === 'white' ? '♔' : '♚'} ${famDate(x.at)} · ${esc(x.tcName)}</a>`).join('')}</div></div>` : ''}
+    <div class="fam-card"><h3 class="fam-s">Порешать задачи</h3><div class="fam-more">${LICHESS_MORE.map(([e, n, s, u]) => `<a class="fam-link" href="${u}" target="_blank" rel="noopener">${pic(e)}<span><b>${n}</b><small>${s}</small></span></a>`).join('')}</div></div>
+    <button class="link-btn" id="gKids">Открыть игру внуков</button>
+    <button class="link-btn" id="gExit">Это телефон детей — выйти из входа</button>
+  </div></main></div>`;
+  $('#famTc').onclick = e => { const b = e.target.closest('[data-tc]'); if (!b) return; tc = b.dataset.tc; $$('#famTc .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = b.dataset.s; $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  $('#gKids').onclick = () => { sfx.pop(); GUEST_OFF = true; goHome(); };
+  $('#gExit').onclick = () => { try { localStorage.removeItem(GUEST_KEY); } catch (e) {} location.replace(SITE); };
+  const note = s => { const o = $('#gOut'); if (o) o.insertAdjacentHTML('beforeend', `<p class="fam-ok">${esc(s)}</p>`); };
+  $('#gGo').onclick = async () => {
+    if (busy) return; busy = true; sfx.pop();
+    const out = $('#gOut'); out.innerHTML = '<p class="lead">Создаю партию…</p>';
+    try {
+      const { me, them, mine: my, T } = await famCreate(tc, side); if (t !== tok) return;
+      const list = [{ at: Date.now(), me, tcName: T.name, side: my }, ...mine].slice(0, 6);
+      try { localStorage.setItem(GUEST_KEY + '-games', JSON.stringify(list)); } catch (e) {}
+      const sent = await relayPost({ k: 'inv', from: GUEST.who, to: 'sava', url: them, side: my === 'white' ? 'black' : 'white', tc: T.name });
+      if (t !== tok) return;
+      const msg = `${KID.name}, ${lcFirst(g.name)} зовёт тебя сыграть в шахматы! Ты играешь ${colorName(my === 'white' ? 'black' : 'white')}. ${T.name}. Открой ссылку:`;
+      out.innerHTML = `<div class="fam-steps">
+        ${sent ? `<p class="fam-ok">✅ ${KID.name} увидит приглашение в своей игре.</p><p>Можно ещё и написать ему:</p>` : `<p><b>1.</b> Отправьте ссылку ${KID.dat}:</p>`}
+        ${shareRow(msg, them, 'gShare')}
+        <p>${sent ? '' : '<b>2.</b> '}Откройте свою доску. Партия начнётся, когда ${KID.name} откроет ссылку.</p>
+        <a class="big" href="${esc(me)}" target="_blank" rel="noopener">${my === 'white' ? '♔' : '♚'} Играть ${colorName(my)}</a></div>`;
+      bindShare('gShare', msg, them, note);
+      out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) {
+      if (t !== tok) return;
+      out.innerHTML = `<p class="lead">Партия не создалась. Откройте Lichess, нажмите «Сыграть с другом» и отправьте ссылку ${KID.dat}.</p><a class="big" href="https://lichess.org/#friend" target="_blank" rel="noopener">Открыть Lichess</a>`;
+    }
+    busy = false;
+  };
+  const poll = async () => {
+    try {
+      const list = await relayInvites(GUEST.who); if (t !== tok) return;
+      $('#gInv').innerHTML = list.length ? list.map(x => invHTML(x, () => KID.name)).join('') : `<p class="lead">Пока приглашений нет. Когда ${KID.name} позовёт вас играть, приглашение появится здесь само.</p>`;
+    } catch (e) { if (t === tok) $('#gInv').innerHTML = '<p class="lead">Приглашения сейчас не загрузились. Ссылку от Савы можно открыть и из сообщения.</p>'; }
+    later(poll, 15000);
+  };
+  poll();
 }
 /* ---------- «Узнавай»: short true stories about St Petersburg, Portugal, composers and painters, each with a question ----------
    Vera listens (the sentence being read lights up), Sava reads aloud and the microphone checks that he did. a[0] is the right answer. */
@@ -4446,7 +4615,7 @@ function screenParents(focus) {
   $('#micIn').onchange = e => { ROOT.micOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   $('#expBtn').onclick = async () => {
-    const data = { v: 2, cur: ROOT.cur, profiles: Object.fromEntries(KIDS.map(id => [id, { ...ROOT.profiles[id], art: [] }])) };
+    const data = { v: 2, cur: ROOT.cur, fam: ROOT.fam, profiles: Object.fromEntries(KIDS.map(id => [id, { ...ROOT.profiles[id], art: [] }])) };
     const code = 'GOV2:' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
     try { await navigator.clipboard.writeText(code); $('#expState').textContent = 'Прогресс обоих детей скопирован. На новом адресе: «Для взрослых» → «Вставить прогресс».'; }
     catch (e) { $('#impBox').hidden = false; $('#impTxt').value = code; $('#impTxt').select(); $('#expState').textContent = 'Скопируйте этот текст вручную.'; }
@@ -4457,6 +4626,7 @@ function screenParents(focus) {
       const raw = $('#impTxt').value.trim(); if (!raw.startsWith('GOV2:')) throw new Error('format');
       const data = JSON.parse(decodeURIComponent(escape(atob(raw.slice(5)))));
       KIDS.forEach(id => { const o = data.profiles && data.profiles[id]; if (o) ROOT.profiles[id] = { ...ROOT.profiles[id], ...o, art: ROOT.profiles[id].art || [], settings: { ...ROOT.profiles[id].settings, ...(o.settings || {}) } }; });
+      if (data.fam && /^[a-z0-9]{8,40}$/.test(data.fam)) ROOT.fam = data.fam;
       P = ROOT.profiles[ROOT.cur]; save(); $('#expState').textContent = 'Прогресс загружен!'; later(goHome, 800);
     } catch (e) { $('#expState').textContent = 'Не получилось прочитать. Скопируйте прогресс ещё раз целиком.'; }
   };
