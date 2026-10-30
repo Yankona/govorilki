@@ -22,7 +22,7 @@ img{max-width:100%}
 <title>Говорилки с Рыжиком</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Russo+One&family=Nunito:wght@600;700;800;900&display=swap">
 <style>
 /* Layout: an island of big pastel "stations"; each opens a full-height stage where the tiger cub Рыжик speaks from the bottom bar.
    One bright daytime world on purpose (a children's game), so there is no dark palette. */
@@ -366,6 +366,7 @@ b.r{color:var(--berry)}
 .chest small{font:700 14px var(--f-body);color:var(--ink-soft)}
 .team .big{align-self:flex-start}
 .tiles>.tile:only-child{grid-column:1/-1}
+@media (min-width:760px){.tiles>.tile:last-child:nth-child(4n+1){grid-column:1/-1}}
 .tw-card{width:min(100%,640px);padding:22px 24px;background:var(--paper);border-radius:28px;box-shadow:0 6px 0 var(--line);text-align:center}
 .tw-n{margin:0 0 6px;font:800 15px var(--f-body);color:var(--ink-soft)}
 .tw-text{margin:0;font:800 clamp(24px,5.4vw,36px)/1.35 var(--f-body);text-wrap:balance}
@@ -422,6 +423,114 @@ b.r{color:var(--berry)}
 .el-t{flex:1;min-width:0;display:flex;flex-direction:column}
 .el-t b{font:700 18px var(--f-display)}
 .el-t small{font:700 13px/1.3 var(--f-body);color:var(--ink-soft);overflow-wrap:anywhere}
+
+/* «Миссия Л»: Sava's night-castle look */
+body.quest{--sky:#121833;--ink:#EEF1FF;--ink-soft:#A8B0D8;--paper:#20284A;--tiger:#FFAA2B;--tiger-deep:#E08E10;--berry:#FF6B8E;--leaf:#38CF86;--sun:#FFC83A;--sea:#62ABFF;--plum:#B49BFF;
+  --t-blue:#1F2C55;--t-green:#183A39;--t-peach:#3B2B25;--t-lilac:#2D2651;--t-pink:#3A2342;--t-yellow:#3A3320;--t-mint:#173936;
+  --line:rgba(255,255,255,.09);--line-strong:rgba(0,0,0,.5);--shade:rgba(5,8,20,.72);--f-display:"Russo One","Balsamiq Sans",system-ui,sans-serif;color-scheme:dark;
+  background-image:radial-gradient(1.6px 1.6px at 12% 14%,#FFFFFF 50%,transparent 52%),radial-gradient(1.2px 1.2px at 31% 6%,#FFFFFF 50%,transparent 52%),radial-gradient(1.6px 1.6px at 58% 11%,#FFF3C4 50%,transparent 52%),radial-gradient(1.2px 1.2px at 77% 22%,#FFFFFF 50%,transparent 52%),radial-gradient(1.8px 1.8px at 91% 8%,#FFFFFF 50%,transparent 52%),radial-gradient(1.2px 1.2px at 45% 27%,#C9D4FF 50%,transparent 52%),radial-gradient(ellipse 70% 45% at 85% -5%,rgba(98,171,255,.2),transparent 70%),radial-gradient(ellipse 50% 35% at 0% 100%,rgba(180,155,255,.14),transparent 70%)}
+body.quest .logo.q{color:var(--ink);font:400 clamp(34px,8vw,54px)/1 var(--f-display);letter-spacing:.02em;text-transform:uppercase}
+body.quest .logo .ql{color:var(--sun);text-shadow:0 0 22px rgba(255,200,58,.55)}
+body.quest .logo .sub{font:700 16px var(--f-body);color:var(--ink-soft);text-transform:none;letter-spacing:0;margin-top:8px}
+body.quest .prow input,body.quest .prow select{background:#11162B;color:var(--ink);border-color:rgba(255,255,255,.16)}
+body.quest .scheme figcaption{color:#5E5683}
+body.quest .winbox h2{color:var(--sun)}
+body.quest .said{color:#2A2346}
+body.quest .l-bar{background:rgba(255,255,255,.12)}
+body.quest .tile{box-shadow:0 7px 0 rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.07)}
+body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
+.rank{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--paper);border-radius:22px;box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 2px rgba(255,200,58,.35)}
+.rank-ico{font-size:40px;line-height:1}
+.rank div{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.rank b{font:400 22px/1 var(--f-display);color:var(--sun)}
+.rank small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.rank-bar{display:block;height:10px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.rank-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--sun),var(--tiger))}
+.rap{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%}
+.rap-lvl{margin:0;font:400 22px var(--f-display);color:var(--sun)}
+.rap-count{min-height:48px;font:400 44px/1 var(--f-display);color:var(--plum)}
+.rap-words{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:min(100%,640px)}
+.rw{display:grid;place-items:center;min-height:74px;padding:6px;border-radius:18px;background:var(--paper);font:900 clamp(20px,5vw,32px)/1.1 var(--f-body);text-align:center;box-shadow:0 5px 0 var(--line-strong);transition:transform .08s,background-color .08s}
+.rw.on{background:var(--sun);color:#2A2346;transform:scale(1.08)}
+.rw.on b.r{color:#C2185B}
+.rap-beat{display:flex;gap:12px}
+.rap-beat i{width:18px;height:18px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line-strong)}
+.rap-beat i.on{background:var(--berry);box-shadow:0 0 14px var(--berry)}
+.arena{position:relative;width:100%;flex:1;min-height:360px;overflow:hidden;border-radius:26px;background:linear-gradient(#1B2350,#0F1430);box-shadow:inset 0 0 0 2px rgba(255,255,255,.08);touch-action:none}
+.hud{position:absolute;top:10px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:3;font:800 18px var(--f-body);color:#EEF1FF}
+.arena-go{position:absolute;left:50%;top:45%;translate:-50% -50%;z-index:4}
+.fall{position:absolute;top:0;display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 8px 4px;border:0;border-radius:16px;background:rgba(255,255,255,.1);color:#EEF1FF;font-size:44px;cursor:pointer;will-change:transform;touch-action:none}
+.fall small{font:800 14px var(--f-body);color:#EEF1FF}
+.fall.got{background:rgba(56,207,134,.55)}
+.fall.bad{background:rgba(255,107,142,.6);animation:wig .3s}
+.arena-end{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:20px;text-align:center;color:#EEF1FF;background:rgba(10,14,32,.82)}
+.arena-end b{font:400 30px var(--f-display);color:var(--sun)}
+.arena-end p{margin:0;font:800 22px/1.5 var(--f-body)}
+.wd-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.wd-grid{display:flex;flex-direction:column;gap:6px}
+.wd-row{display:grid;grid-template-columns:repeat(5,clamp(46px,13vw,60px));gap:6px}
+.wd-c{aspect-ratio:1;display:grid;place-items:center;border-radius:10px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line-strong);font:900 clamp(24px,6vw,32px)/1 var(--f-body)}
+.wd-c.full{box-shadow:inset 0 0 0 2px var(--ink-soft)}
+.wd-c.g,.wd-c.y,.wd-c.x{animation:popin .35s both;box-shadow:none}
+.wd-c.g{background:#2FA865;color:#fff}
+.wd-c.y{background:#E2B100;color:#2A2346}
+.wd-c.x{background:#4A5170;color:#C9CEE6}
+.kb{display:flex;flex-direction:column;gap:6px;width:min(100%,560px)}
+.kb-r{display:flex;gap:4px;justify-content:center}
+.kb-k{flex:1;min-width:0;height:48px;border:0;border-radius:8px;background:var(--paper);color:var(--ink);font:800 clamp(14px,3.6vw,18px)/1 var(--f-body);cursor:pointer;box-shadow:0 3px 0 var(--line-strong)}
+.kb-k.wide{flex:1.6;font-size:14px}
+.kb-k.g{background:#2FA865;color:#fff}
+.kb-k.y{background:#E2B100;color:#2A2346}
+.kb-k.x{background:#3A4060;color:#8B92B3}
+.boss-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.boss{position:relative;width:clamp(140px,34vmin,220px)}
+.boss svg{width:100%;height:auto;display:block;filter:hue-rotate(200deg) saturate(3) drop-shadow(0 0 18px rgba(255,107,142,.55));animation:bob 2s ease-in-out infinite}
+.boss.hit svg{animation:wig .4s}
+.boss.down svg{opacity:.25;transform:scale(.6) rotate(-20deg);transition:all .6s}
+.boss-dmg{position:absolute;top:0;right:0;font:400 32px var(--f-display);color:var(--berry);opacity:0}
+.boss.hit .boss-dmg{animation:fly .8s ease-out}
+.hp{position:relative;width:min(100%,420px);height:22px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.hp i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--berry),var(--tiger));transition:width .5s}
+.hp span{position:absolute;inset:0;display:grid;place-items:center;font:900 14px var(--f-body);color:#fff}
+.rec-out{display:flex;flex-direction:column;align-items:center;gap:12px}
+.rec-out audio{width:min(100%,360px)}
+
+.howto-steps{margin:0;padding:12px 18px 12px 40px;width:min(100%,640px);background:var(--paper);border-radius:20px;box-shadow:0 4px 0 var(--line);font:700 16px/1.45 var(--f-body)}
+.howto-steps li::marker{font-weight:900;color:var(--tiger-deep)}
+.sy-cell.next{background:var(--sun);transform:scale(1.07);box-shadow:0 0 0 4px #FFFFFF,0 6px 0 #D39A00}
+.sy-cell.done{opacity:.35}
+.book-note{margin:0;padding:10px 16px;border-radius:16px;background:var(--t-green);font:700 15px/1.4 var(--f-body)}
+.bins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,520px)}
+.bin{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 10px;border:0;border-radius:24px;background:var(--paper);cursor:pointer;box-shadow:0 7px 0 var(--line-strong)}
+.bin .emo{font-size:52px;line-height:1}
+.bin b{font:900 54px/1 var(--f-body)}
+.bin small{font:700 14px var(--f-body);color:var(--ink-soft)}
+.pn-top{width:min(100%,680px)}
+.pn-line{margin:0;padding:10px 16px;border-radius:18px;background:var(--paper);text-align:center;font:700 16px/1.4 var(--f-body);box-shadow:0 4px 0 var(--line)}
+.pn-line .la{display:inline-block;padding:0 8px;border-radius:8px;background:var(--sun);color:#2A2346;font-weight:900}
+.piano{position:relative;display:flex;width:min(100%,680px);height:clamp(170px,32vh,260px);padding:10px 10px 12px;border-radius:18px;background:#1E1A2E;box-shadow:0 8px 0 rgba(0,0,0,.4)}
+.pk.w{flex:1;position:relative;margin:0 2px;border:0;border-radius:0 0 10px 10px;background:linear-gradient(#FFFFFF,#ECEAF4);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;cursor:pointer;touch-action:none;box-shadow:inset 0 -6px 0 #D4D0E2}
+.pk.w span{font:800 clamp(10px,2.4vw,14px) var(--f-body);color:#5E5683}
+.pk.b{position:absolute;top:10px;height:58%;z-index:2;border:0;border-radius:0 0 8px 8px;background:linear-gradient(#3A3550,#141022);cursor:pointer;touch-action:none;box-shadow:inset 0 -5px 0 #000}
+.pk.down{filter:brightness(.85);transform:translateY(2px)}
+.pk.w.glow{background:linear-gradient(#FFF3B0,#FFC83A);box-shadow:inset 0 -6px 0 #D39A00,0 0 18px rgba(255,200,58,.8)}
+.pk.b.glow{background:linear-gradient(#FFC83A,#D39A00);box-shadow:0 0 18px rgba(255,200,58,.9)}
+.sprint{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.sp-hud{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:center;font:800 18px var(--f-body)}
+.sp-hud b{font-size:28px;color:var(--plum)}
+.sp-q{min-width:min(100%,360px);padding:16px 22px;border-radius:24px;background:var(--paper);text-align:center;font:900 clamp(36px,9vw,54px)/1 var(--f-body);font-variant-numeric:tabular-nums;box-shadow:0 5px 0 var(--line)}
+.sp-q span{color:var(--plum)}
+.keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
+.kp-k{height:58px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:900 26px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
+.kp-k.ok{background:var(--leaf);color:#fff}
+.move-card{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(100%,600px);padding:20px 22px;border-radius:28px;background:var(--paper);text-align:center;box-shadow:0 6px 0 var(--line)}
+.move-e{font-size:clamp(70px,18vmin,110px)}
+.move-big{margin:0;font:900 clamp(26px,6vw,38px)/1.2 var(--f-body)}
+.move-t{margin:0;font:700 18px/1.45 var(--f-body);color:var(--ink-soft)}
+
+.svg-page{position:absolute;inset:0;display:grid;place-items:center;padding:3%}
+.svg-page svg{display:block;width:100%;height:100%}
+.svg-page svg *{cursor:pointer}
 
 /* friends */
 .friends{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,640px)}
@@ -765,14 +874,14 @@ const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', '�
 const WEEK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const MEDALS = [{ n: 3, e: '🥉', t: '3 дня подряд' }, { n: 7, e: '🥈', t: 'неделя подряд' }, { n: 14, e: '🥇', t: '2 недели подряд' }, { n: 30, e: '🏆', t: 'месяц подряд' }];
 const LESSONS_R = {
-  speech: { name: 'Логопед', sub: 'дыхание, язычок, звук Р', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
+  speech: { name: 'Логопед', sub: 'дыхание, язычок, Р и шипящие', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Чтение', sub: 'буквы, слоги, слова', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   math: { name: 'Математика', sub: 'считаем и складываем', mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' }
 };
 const LESSONS_L = {
-  speech: { name: 'Логопед', sub: 'дыхание, язычок, звук Л', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
+  speech: { name: 'Тренировка Л', sub: 'разогрев, язык, арена Л', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Скорочтение', sub: 'слоги и текст на время', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
-  book: { name: 'Книга', sub: 'читаю каждый день', mins: 20, color: 'var(--plum)', bg: 'var(--t-lilac)' }
+  book: { name: 'Книга', sub: 'немного каждый день, с удовольствием', mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' }
 };
 const LS = () => P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
 const LIDS = () => Object.keys(LS());
@@ -793,13 +902,13 @@ function todayState() {
   ['speech', 'read', 'math', 'book'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
   return P.today;
 }
-const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: g.name, run: () => g.go() }; };
+const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
 // the plan depends on the date and on how many times this lesson was already done today
 function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
   if (P.settings.track === 'l') {
     if (id === 'speech') {
-      const o = 2 * n + 2 * s, lg = ['l-chist', 'l-twist', 'l-house'];
+      const o = 2 * n + 2 * s, lg = ['l-rap', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house'];
       for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
       const art = s === 0 ? ARTIC_L.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC_L.length);
       art.forEach(i => steps.push({ key: 'artic:' + ARTIC_L[i].id, kind: 'artic', name: ARTIC_L[i].name, run: () => screenArtic(i, true) }));
@@ -809,11 +918,15 @@ function lessonPlan(id) {
     return steps;
   }
   if (id === 'speech') {
-    const o = 2 * n + 2 * s, games = GAMES.filter(g => g.grp === 1 && !g.info);
+    const o = 2 * n + 2 * s, games = GAMES.filter(g => g.grp === 1 && !g.info && g.id !== 'r-end');
     for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
-    const art = s === 0 ? ARTIC.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC.length);
-    art.forEach(i => steps.push({ key: 'artic:' + ARTIC[i].id, kind: 'artic', name: ARTIC[i].name, run: () => screenArtic(i, true) }));
-    for (let k = 0; k < 2; k++) steps.push(gameStep(games[(o + k) % games.length].id, 'game'));
+    // now the priority: hissing sounds every day, plus three С/З exercises in turn
+    const AR = AL(), shI = ARTIC_SH.map((_, i) => ARTIC.length + i);
+    const art = s === 0 ? [...shI, ...[0, 1, 2].map(k => (3 * n + k) % ARTIC.length)] : [0, 1, 2, 3].map(k => (n + 4 * s + k) % AR.length);
+    art.forEach(i => steps.push({ key: 'artic:' + AR[i].id, kind: 'artic', name: AR[i].name, run: () => screenArtic(i, true) }));
+    const pri = ['r-end', 'sh-sort', 'sh-syll', 'sh-house'];
+    steps.push(gameStep(pri[(n + s) % pri.length], 'game'));
+    steps.push(gameStep(games[o % games.length].id, 'game'));
   } else if (id === 'read') {
     ['abc-find', 'abc-first', 'read-merge', (n + s) % 2 ? 'read-pick' : 'read-words'].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
@@ -831,7 +944,8 @@ let VOICE = null;
 function pickVoice() {
   try {
     const ru = speechSynthesis.getVoices().filter(v => /^ru/i.test(v.lang));
-    VOICE = ru.find(v => /milena|katya|svetlana|dariya|irina|google/i.test(v.name)) || ru[0] || null;
+    const want = ROOT && ROOT.devVoice;
+    VOICE = (want && ru.find(v => v.name === want)) || ru.find(v => /premium|enhanced|улучш|natural|neural|online/i.test(v.name)) || ru.find(v => /milena|katya|svetlana|dariya|irina|google/i.test(v.name)) || ru[0] || null;
   } catch (e) {}
 }
 if ('speechSynthesis' in window) { pickVoice(); try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) {} }
@@ -1063,6 +1177,8 @@ function mouth(p) {
     case 'needle': { const h = 24, yB = .9375 * h - .75; return mOpen({ w: 34, h, c: 3, lower: false, over: `<path d="M-11 ${yB - 4}Q-9 ${yB + 26} 0 ${yB + 34}Q9 ${yB + 26} 11 ${yB - 4}Z" fill="${T}"/><path d="M0 ${yB}V${yB + 24}" stroke="${TD}" stroke-width="2" stroke-linecap="round"/>` }); }
     case 'lickUp': { const h = 24, yT = -.75 * h - .75; return mOpen({ w: 38, h, c: 3, upper: false, over: `<g class="tg"><path d="M-22 12Q-28 ${yT - 2} 0 ${yT - 12}Q28 ${yT - 2} 22 12Z" fill="${T}"/><path d="M0 ${yT - 6}V6" stroke="${TD}" stroke-width="2" stroke-linecap="round"/></g>` }); }
     case 'paintBack': return mouth('swingUp');
+    case 'cup': { const h = 22, yB = .9375 * h - 1; return mOpen({ w: 40, h, c: 4, lower: false, tongue: `<ellipse cx="0" cy="${yB}" rx="24" ry="9" fill="${T}"/>`, over: `<path d="M-30 ${yB + 2}Q-32 ${yB + 26} 0 ${yB + 26}Q32 ${yB + 26} 30 ${yB + 2}Q20 ${yB + 12} 0 ${yB + 12}Q-20 ${yB + 12} -30 ${yB + 2}Z" fill="${T}"/><path d="M-30 ${yB + 2}Q0 ${yB - 8} 30 ${yB + 2}" fill="none" stroke="${TD}" stroke-width="2.5"/>` }); }
+    case 'horn': return `<ellipse cx="0" cy="2" rx="24" ry="19" fill="${FC.lip}"/><ellipse cx="0" cy="2" rx="14" ry="11" fill="${FC.inn}"/><rect x="-8" y="-6" width="16" height="6" rx="2" fill="${FC.tooth}"/><rect x="-7" y="4" width="14" height="6" rx="2" fill="${FC.tooth}"/>`;
     case 'ship': return mOpen({ w: 34, h: 22, c: 3, tongue: `<ellipse cx="0" cy="16" rx="20" ry="7" fill="${T}"/>` });
     default:
       if (p.startsWith('count')) {
@@ -1267,7 +1383,7 @@ function finish({ key, stars = 3, line = '', again, next, menu }) {
   const ns = ACTIVE ? nextStepOf(ACTIVE) : null;
   if (ns) { next = () => ns.run(); menu = null; }
   const plan = ACTIVE ? lessonPlan(ACTIVE) : [], doneN = ACTIVE ? td.done[ACTIVE].length : 0;
-  const title = pickOne(['Молодец!', 'Ура!', 'Супер!', 'Здорово!']);
+  const title = pickOne(Q() ? ['Чётко!', 'Мощно!', 'Есть!', 'Отлично!'] : ['Молодец!', 'Ура!', 'Супер!', 'Здорово!']);
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="${title}">
     <div class="ryz-w">${friendSVG()}</div>
@@ -1356,7 +1472,9 @@ function screenCalendar(off = 0) {
 }
 
 /* ---------- home ---------- */
-const greet = () => gx(`Привет${nameBit()}! Я ${friend().who}. ${friend().hello} ${dayTotal(dayKey()) ? 'Сегодня ты уже позанималась. Можно ещё!' : 'Начнём занятие?'}`);
+const greet = () => gx(Q()
+  ? `Привет${nameBit()}! Я ${friend().who}, твой напарник. ${dayTotal(dayKey()) ? 'Миссия сегодня уже есть. Можно ещё одну!' : 'Начнём миссию?'}`
+  : `Привет${nameBit()}! Я ${friend().who}. ${friend().hello} ${dayTotal(dayKey()) ? 'Сегодня ты уже позанималась. Можно ещё!' : 'Начнём занятие?'}`);
 function lessonsCard() {
   const td = todayState(), c = dayCounts(td.date), s = streak();
   const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : '<span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b></span>', math: '<span class="ico-num">1+2</span>', book: pic('📖') };
@@ -1365,13 +1483,13 @@ function lessonsCard() {
     const label = id === 'book' ? (n ? 'Сегодня прочитано ✓' : `${ICON.play}Отметить чтение`) : d ? `${ICON.play}Дальше · ${d}/${plan.length}` : n ? `${ICON.play}Ещё раз` : `${ICON.play}Начать`;
     return `<div class="lesson" style="--lc:${L.color};--lb:${L.bg}">
       <span class="l-ico">${ico[id]}</span>
-      <span class="l-t"><b>${L.name}</b><small>${L.sub} · ${L.mins} мин</small><span class="l-bar"><i style="width:${d / plan.length * 100}%"></i></span></span>
+      <span class="l-t"><b>${L.name}</b><small>${L.sub}${L.mins ? ` · ${L.mins} мин` : ''}</small><span class="l-bar"><i style="width:${d / plan.length * 100}%"></i></span></span>
       <span class="l-n" title="Сегодня">${n ? `${ICON.star}×${n}` : ''}</span>
       <button class="big l-go" data-l="${id}">${label}</button></div>`;
   }).join('');
   return `<section class="today">
     <div class="today-top">
-      <div><h2>Занятия на сегодня</h2><p class="muted">${s ? `${s} ${plural(s, ['день', 'дня', 'дней'])} подряд` : 'занимаемся каждый день'} · можно сколько хочешь раз</p></div>
+      <div><h2>${Q() ? 'Миссии дня' : 'Занятия на сегодня'}</h2><p class="muted">${s ? `${s} ${plural(s, ['день', 'дня', 'дней'])} подряд` : 'занимаемся каждый день'} · можно сколько хочешь раз</p></div>
       <button class="week" id="weekBtn" aria-label="Мой календарь">${weekStrip()}</button>
     </div>
     <div class="lessons">${rows}</div>
@@ -1380,8 +1498,8 @@ function lessonsCard() {
 const doneOf = (prefix, list) => list.filter(x => P.best[prefix + x.id]).length;
 const starsRow = k => `${[0, 1, 2].map(i => `<span class="${(P.best[k] || 0) > i ? '' : 'off'}">${ICON.star}</span>`).join('')}`;
 const GAMES = [
-  { id: 'breath', name: 'Подуем!', sub: 'дыхательная разминка', ico: () => pic('svg:bubbles'), bg: 'var(--t-blue)', go: () => screenBreathMenu(), grp: 0, prog: () => `${ICON.star}${doneOf('breath:', BREATH)} из ${BREATH.length}` },
-  { id: 'artic', name: 'Зарядка для язычка', sub: () => P.settings.track === 'l' ? 'перед зеркалом · звук Л' : 'перед зеркалом · звуки С и З', ico: () => faceSVG('spatula'), bg: 'var(--t-pink)', go: () => screenArticMenu(), grp: 0, prog: () => `${ICON.star}${doneOf('artic:', AL())} из ${AL().length}` },
+  { id: 'breath', name: () => Q() ? 'Дыхание' : 'Подуем!', sub: 'дыхательная разминка', ico: () => pic('svg:bubbles'), bg: 'var(--t-blue)', go: () => screenBreathMenu(), grp: 0, prog: () => `${ICON.star}${doneOf('breath:', BREATH)} из ${BREATH.length}` },
+  { id: 'artic', name: () => Q() ? 'Зарядка для языка' : 'Зарядка для язычка', sub: () => P.settings.track === 'l' ? 'перед зеркалом · звук Л' : 'перед зеркалом · звуки С и З', ico: () => faceSVG('spatula'), bg: 'var(--t-pink)', go: () => screenArticMenu(), grp: 0, prog: () => `${ICON.star}${doneOf('artic:', AL())} из ${AL().length}` },
   { id: 'sounds', name: 'Как ставить язык', sub: 'схемы звуков С, З, Р', ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[2].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(), grp: 1, info: 1, prog: () => '' },
   { id: 'vera', name: 'Коробка Веры', sub: '«У Веры в коробке…»', ico: () => pic('📦'), bg: 'var(--t-peach)', go: () => screenVera(), grp: 1 },
   { id: 'count', name: 'Найди и посчитай', sub: 'рак, рыба, робот, ракета…', ico: () => pic('🔍'), bg: 'var(--t-yellow)', go: () => screenCount(), grp: 1 },
@@ -1405,19 +1523,33 @@ const GAMES = [
   { id: 'xylo', name: 'Ксилофон', sub: 'играем песенки', ico: () => pic('🎶'), bg: 'var(--t-yellow)', go: () => screenXylo(), grp: 4, prog: () => '' },
   { id: 'draw', name: 'Рисовалка', sub: 'рисуем пальчиком', ico: () => pic('🎨'), bg: 'var(--t-peach)', go: () => screenDrawMenu(), grp: 4, prog: () => `${(P.art || []).length ? `${(P.art || []).length} в альбоме` : ''}` },
   { id: 'color', name: 'Раскраски', sub: 'коала, панда, единорожка…', ico: () => pic('🖍️'), bg: 'var(--t-blue)', go: () => screenColorMenu(), grp: 4, prog: () => '' },
-  { id: 'sounds-l', name: 'Как ставить язык', sub: 'схема звука Л', ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[SOUNDS.length - 1].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(SOUNDS.length - 1), grp: 5, info: 1, prog: () => '' },
+  { id: 'sounds-l', name: 'Как ставить язык', sub: 'схема звука Л', ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx('Л')].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx('Л')), grp: 5, info: 1, prog: () => '' },
   { id: 'l-chist', name: 'Чистоговорки', sub: 'ла-ла-ла, ал-ал-ал', ico: () => '<span class="ico-letters"><b class="L c">Л</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenChist(), grp: 5 },
   { id: 'l-twist', name: 'Скороговорки', sub: 'медленно, потом быстро', ico: () => pic('🌪️'), bg: 'var(--t-pink)', go: () => screenTwist(), grp: 5 },
   { id: 'l-house', name: 'Где живёт звук Л', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-blue)', go: () => screenHouse('Л'), grp: 5 },
-  { id: 'book', name: 'Книга', sub: () => P.book.title, ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenBook(), grp: 6, prog: () => { const n = Object.keys(P.book.log).length; return n ? `${n} ${plural(n, ['день', 'дня', 'дней'])} чтения` : ''; } },
+  { id: 'book', name: 'Книга', sub: () => P.book.title, ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenBook(), grp: 6, prog: () => { const n = Object.keys(P.book.log).length; return n ? `${n} ${plural(n, ['день', 'дня', 'дней'])} с книгой` : ''; } },
   { id: 'speed', name: 'Читаем на скорость', sub: 'слов в минуту', ico: () => pic('⏱️'), bg: 'var(--t-green)', go: () => screenSpeedMenu(), grp: 6, prog: () => bestWpm() ? `рекорд: ${bestWpm()} сл/мин` : '' },
   { id: 'l-syll', name: 'Слоговые дорожки', sub: 'ЛА-ЛО-ЛУ на время', ico: () => '<span class="ico-letters"><b class="L v">А</b><b class="L c">Л</b></span>', bg: 'var(--t-peach)', go: () => screenLSyll(), grp: 6, prog: () => P.sylBest ? `рекорд: ${fmtSec(P.sylBest)}` : '' },
-  { id: 'duo', name: 'Скороговорки вдвоём', sub: () => KIDS.map(k => ROOT.profiles[k].settings.name).join(' и ') + ' по очереди', ico: () => pic('🤝'), bg: 'var(--t-mint)', go: () => screenDuo(), grp: 7, prog: () => '' }
+  { id: 'duo', name: 'Скороговорки вдвоём', sub: () => KIDS.map(k => ROOT.profiles[k].settings.name).join(' и ') + ' по очереди', ico: () => pic('🤝'), bg: 'var(--t-mint)', go: () => screenDuo(), grp: 7, prog: () => '' },
+  { id: 'l-rap', name: 'Рэп-битва', sub: 'слоги с Л под бит', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => screenRap(), grp: 5 },
+  { id: 'l-catch', name: 'Л-ловушка', sub: 'аркада на реакцию', ico: () => pic('🎯'), bg: 'var(--t-green)', go: () => screenCatch(), grp: 5 },
+  { id: 'l-word', name: 'Угадай слово', sub: '5 букв, в слове есть Л', ico: () => '<span class="ico-letters"><b class="L c">Л</b><b class="L v">О</b><b class="L c">Д</b></span>', bg: 'var(--t-yellow)', go: () => screenWordle(), grp: 5 },
+  { id: 'l-boss', name: 'Спарринг', sub: 'тхэквондо против путаника', ico: () => pic('🥋'), bg: 'var(--t-pink)', go: () => screenBoss(), grp: 5 },
+  { id: 'l-rec', name: 'Диктофон', sub: 'запиши и послушай себя', ico: () => pic('🎙️'), bg: 'var(--t-blue)', go: () => screenRec(), grp: 5, prog: () => '' },
+  { id: 'l-move', name: 'Физминутка', sub: 'прыжки, удары, сёрфинг — и звук Л', ico: () => pic('🤸'), bg: 'var(--t-peach)', go: () => screenMove(), grp: 5 },
+  { id: 'm-sprint', name: 'Мат-спринт', sub: 'сколько примеров за минуту', ico: () => '<span class="ico-num">7×8</span>', bg: 'var(--t-blue)', go: () => screenSprint(), grp: 8, prog: () => P.mathBest ? `рекорд: ${P.mathBest}` : '' },
+  { id: 'piano', name: 'Пианино', sub: 'Бетховен, Jingle Bells — и пой «ла»', ico: () => pic('🎹'), bg: 'var(--t-lilac)', go: () => screenPiano(), grp: 8, prog: () => '' },
+  { id: 'r-end', name: 'Р в конце', sub: 'шар, сыр, помидор', ico: () => pic('🎈'), bg: 'var(--t-yellow)', go: () => screenSyll(SYL_REND, 'r-end', 'Р в конце слова', 'р'), grp: 1 },
+  { id: 'sounds-sh', name: 'Как ставить язык', sub: 'схемы звуков Ш и Ж', ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx('Ш')].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx('Ш')), grp: 9, info: 1, prog: () => '' },
+  { id: 'sh-syll', name: 'Шипящие слоги', sub: 'ша-ша-ша… шапка!', ico: () => '<span class="ico-letters"><b class="L c">Ш</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenSyll(SYL_SH, 'sh-syll', 'Шипящие слоги', 'шжчщ'), grp: 9 },
+  { id: 'sh-sort', name: 'Змейка или жук?', sub: 'Ш, Ж, Ч или Щ', ico: () => pic('🐍'), bg: 'var(--t-green)', go: () => screenSort(), grp: 9 },
+  { id: 'sh-house', name: 'Где живёт звук Ш', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse('Ш'), grp: 9 }
 ];
 function goHome() {
   newScreen(); ACTIVE = null; P = ROOT.profiles[ROOT.cur];
+  document.body.classList.toggle('quest', Q());
   const tiles = g => GAMES.filter(x => x.grp === g).map(x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
-      <span class="tile-ico">${x.ico()}</span><b>${x.name}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
+      <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`).join('');
   const sc = stickerCount();
   app.innerHTML = `<div class="screen">
@@ -1426,20 +1558,21 @@ function goHome() {
     <header class="hero">
       <button class="hero-ryz" id="heroRyz" aria-label="Поздороваться">${friendSVG()}</button>
       <div class="hero-text">
-        <h1 class="logo" aria-label="Говорилки с ${friend().with}">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}<span class="sub">с ${friend().with}</span></h1>
+        ${Q() ? `<h1 class="logo q" aria-label="Миссия Л">Миссия <span class="ql">Л</span><span class="sub">напарник: ${friend().who}</span></h1>` : `<h1 class="logo" aria-label="Говорилки с ${friend().with}">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}<span class="sub">с ${friend().with}</span></h1>`}
         <p class="bubble" id="bubble">${esc(greet())}</p>
       </div>
       <div class="hero-side">
         <div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div>
         <button class="chip" id="voiceBtn"><span class="emo">🔊</span>Голос</button>
-        <button class="chip" id="albumBtn"><span class="emo">${sc ? stickerHTML(STK()[sc - 1]) : '🎁'}</span>Наклейки</button>
+        <button class="chip" id="albumBtn"><span class="emo">${sc ? stickerHTML(STK()[sc - 1]) : '🎁'}</span>${Q() ? 'Трофеи' : 'Наклейки'}</button>
         <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? 'Мой друг' : 'Выбери друга!'}</button>
       </div>
     </header>
+    ${Q() ? rankCard() : ''}
     ${lessonsCard()}
     ${P.goal ? goalCard() : ''}
     ${teamCard()}
-    ${SECTIONS.filter(x => !x.only || x.only === P.settings.track).map(x => `<section class="group"><div class="group-head"><h2>${x.h}</h2><p>${x.p}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`).join('')}
+    ${SECTIONS.filter(x => !x.only || x.only === P.settings.track).map(x => `<section class="group"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`).join('')}
     <button class="link-btn" id="parentsBtn">Для взрослых: голос, настройки, как заниматься</button>
    </main></div>`;
   lastLine = greet();
@@ -1458,7 +1591,7 @@ function goHome() {
 /* ---------- breathing ---------- */
 function screenBreathMenu() {
   newScreen();
-  const st = shell('Подуем!', `<p class="lead">Дуем по-настоящему, а пальчиком держим кнопку, пока длится выдох.</p>
+  const st = shell(Q() ? 'Дыхание' : 'Подуем!', `<p class="lead">Дуем по-настоящему, а пальчиком держим кнопку, пока длится выдох.</p>
     <div class="cards">${BREATH.map(b => `<button class="card" data-id="${b.id}" style="--bg:${b.bg}">${pic(b.icon)}<span>${b.name}</span>${P.best['breath:' + b.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
   talk('Выбери картинку. Дуть нужно по-настоящему.');
   st.onclick = e => { const c = e.target.closest('.card'); if (c) { sfx.pop(); BREATH_RUN[c.dataset.id](); } };
@@ -1614,7 +1747,7 @@ const BREATH_RUN = {
 function screenArticMenu() {
   newScreen();
   const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
-  const st = shell('Зарядка для язычка', `<p class="lead">Садимся перед зеркалом и повторяем за девочкой. ${P.settings.track === 'l' ? 'Эти упражнения готовят язык к звуку Л.' : 'Эти упражнения готовят язычок к звукам С и З.'}</p>
+  const st = shell(Q() ? 'Зарядка для языка' : 'Зарядка для язычка', `<p class="lead">Садимся перед зеркалом и повторяем за девочкой. ${P.settings.track === 'l' ? 'Эти упражнения готовят язык к звуку Л.' : 'Первые девять — для звуков С и З, следующие — для шипящих Ш, Ж, Ч, Щ.'}</p>
     <div class="cards">${AL().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceSVG(a.thumb)}<span>${a.name}</span>${P.best['artic:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
   talk('Сядь перед зеркалом. Выбери упражнение.');
   st.onclick = e => { const c = e.target.closest('.card'); if (c) { sfx.pop(); screenArtic(+c.dataset.i); } };
@@ -1811,10 +1944,10 @@ function screenBooks() {
 }
 
 /* ---------- syllables and words ---------- */
-function screenSyll() {
-  const t = newScreen(), deck = sample(SYL, 5);
+function screenSyll(src = SYL, key = 'syll', title = 'Слоги и слова', hl = 'р') {
+  const t = newScreen(), deck = sample(src, 5);
   let k = 0, step = 0, busy = false;
-  shell('Слоги и слова', `<div class="syl-board" id="board"></div><p class="syl-word" id="sword"></p>`);
+  shell(title, `<div class="syl-board" id="board"></div><p class="syl-word" id="sword"></p>`);
   const board = $('#board'), sword = $('#sword');
   const trail = '<svg class="syl-trail" viewBox="0 0 145 100" preserveAspectRatio="none" aria-hidden="true"><path d="M19 36Q22 70 46 77H96Q122 72 126 35" fill="none" stroke="#5E5683" stroke-width="1.2" stroke-dasharray="2 3" opacity=".5"/></svg>';
   function show() {
@@ -1834,11 +1967,11 @@ function screenSyll() {
     if (step < 4) { board.querySelector('.b' + step).classList.add('next'); return; }
     busy = true;
     later(async () => {
-      $('#spic').classList.add('open'); sfx.good(); sword.innerHTML = hiR(w.toUpperCase());
+      $('#spic').classList.add('open'); sfx.good(); sword.innerHTML = hiS(w.toUpperCase(), hl);
       await talk(`${s}… ${w}! Скажи: ${w}. Потом нажми жёлтую кнопку.`); if (t !== tok) return;
       await askSaid(); if (t !== tok) return;
       k++;
-      if (k >= deck.length) finish({ key: 'syll', line: 'Ты сказала все слова!', again: screenSyll });
+      if (k >= deck.length) finish({ key, line: 'Ты сказала все слова!', again: () => screenSyll(src, key, title, hl) });
       else show();
     }, 650);
   };
@@ -1848,7 +1981,7 @@ function screenSyll() {
 /* ---------- where does R live ---------- */
 function screenHouse(S = 'Р') {
   const t = newScreen(), posW = ['в начале', 'в середине', 'в конце'];
-  const H = S === 'Л' ? HOUSE_L : HOUSE, deck = shuffle([...sample(H.filter(h => h[2] === 0), 3), ...sample(H.filter(h => h[2] === 1), 3), ...sample(H.filter(h => h[2] === 2), 2)]);
+  const H = S === 'Л' ? HOUSE_L : S === 'Ш' ? HOUSE_SH : HOUSE, deck = shuffle([...sample(H.filter(h => h[2] === 0), 3), ...sample(H.filter(h => h[2] === 1), 3), ...sample(H.filter(h => h[2] === 2), 2)]);
   let k = 0, busy = false, miss = 0;
   shell(`Где живёт звук ${S}`, `<div class="house">
       <div class="house-top"><div class="roof"></div><div class="attic" id="attic"></div></div>
@@ -1879,7 +2012,7 @@ function screenHouse(S = 'Р') {
     hword.innerHTML = hiS(w.toUpperCase(), S);
     await talk(`${cap(w)}: звук ${S} ${posW[pos]}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: S === 'Л' ? 'l-house' : 'house', line: `Ты нашла, где живёт звук ${S}!`, again: () => screenHouse(S) });
+    if (k >= deck.length) finish({ key: S === 'Л' ? 'l-house' : S === 'Ш' ? 'sh-house' : 'house', line: `Ты нашла, где живёт звук ${S}!`, again: () => screenHouse(S) });
     else later(show, 300);
   };
   show();
@@ -2237,7 +2370,7 @@ function songTokens(sg) {
   return out;
 }
 const lyricText = sg => sg.lines.map(([l]) => l.replace(/\|/g, '').replace(/ /g, ' ').replace(/[,:;]?$/, m => /[.!?]$/.test(l) ? m : '.')).join(' ');
-const MIDI = n => { const m = n.match(/^([A-G])(\d)$/); return 12 * (+m[2] + 1) + { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]]; };
+const MIDI = n => { const m = n.match(/^([A-G])(#?)(\d)$/); return 12 * (+m[3] + 1) + { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]] + (m[2] ? 1 : 0); };
 const FREQ = n => 440 * Math.pow(2, (MIDI(n) - 69) / 12);
 let music = null;
 function stopMusic() { if (!music) return; const m = music; music = null; try { m.gain.setTargetAtTime(0, AC.currentTime, .04); setTimeout(() => m.disconnect(), 400); } catch (e) {} }
@@ -2390,7 +2523,7 @@ function screenPaint({ mode = 'free', page = null, li = 0 } = {}) {
   const L = ABC[li];
   shell(title, `<div class="paint">
       ${mode === 'write' ? `<div class="wr-head"><button class="ibtn" id="prevL" aria-label="Предыдущая буква">${ICON.back}</button><span class="wr-ex">${pic(L[2])}<span>${hiLetter(L[1], L[0])}</span></span><button class="ibtn" id="nextL" aria-label="Следующая буква">${ICON.fwd}</button></div>` : ''}
-      <div class="paper" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
+      <div class="paper" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
       <div class="swatches" id="sw">${PALETTE.map((c, i) => `<button class="swc ${i === 0 ? 'sel' : ''}" data-c="${c}" style="--c:${c}" aria-label="Цвет"></button>`).join('')}</div>
       <div class="tools" id="tools">
         <button class="tool" data-t="brush" data-s="6" aria-label="Тонкая кисть"><i style="--d:8px"></i></button>
@@ -2407,7 +2540,7 @@ function screenPaint({ mode = 'free', page = null, li = 0 } = {}) {
   const xB = cB.getContext('2d', { willReadFrequently: true }), xL = cL.getContext('2d', { willReadFrequently: true });
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   let W = 0, H = 0, color = PALETTE[0], size = 14, tool = mode === 'color' ? 'fill' : 'brush', drawing = false, last = null, undo = [], lineImg = null;
-  const markTool = () => $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size)));
+  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' ? 'none' : 'auto'; };
   markTool();
   function drawLines() {
     xL.clearRect(0, 0, cL.width, cL.height);
@@ -2427,7 +2560,18 @@ function screenPaint({ mode = 'free', page = null, li = 0 } = {}) {
   }
   fit(); resizeFn = fit;
   const pt = e => { const r = cB.getBoundingClientRect(); return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr }; };
-  const pushUndo = () => { try { undo.push(xB.getImageData(0, 0, cB.width, cB.height)); if (undo.length > 4) undo.shift(); } catch (e) {} };
+  const pushUndo = () => { try { undo.push(xB.getImageData(0, 0, cB.width, cB.height)); if (undo.length > 12) undo.shift(); } catch (e) {} };
+  if (mode === 'color') {
+    const pg = $('#svgPage'), dark = el => { const m = getComputedStyle(el).fill.match(/\d+/g); return !m || (m[0] * .3 + m[1] * .59 + m[2] * .11) < 80; };
+    pg.addEventListener('pointerdown', e => {
+      if (tool !== 'fill') return;
+      const el = e.target.closest('path,circle,ellipse,rect,polygon'); if (!el || !pg.contains(el)) return;
+      e.preventDefault();
+      if (el.getAttribute('fill') === 'none' || (dark(el) && !el.style.fill)) return;
+      undo.push({ el, prev: el.style.fill }); if (undo.length > 40) undo.shift();
+      el.style.fill = color; sfx.pop();
+    });
+  }
   function line(a, b) {
     xB.save();
     xB.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
@@ -2478,14 +2622,14 @@ function screenPaint({ mode = 'free', page = null, li = 0 } = {}) {
     const b = e.target.closest('.tool[data-t]'); if (!b) return;
     tool = b.dataset.t; if (b.dataset.s) size = +b.dataset.s; markTool(); sfx.tick();
   };
-  $('#undo').onclick = () => { if (undo.length) { xB.putImageData(undo.pop(), 0, 0); sfx.tick(); } };
-  $('#clear').onclick = () => { pushUndo(); xB.clearRect(0, 0, cB.width, cB.height); sfx.whoosh(.3, .15); };
-  $('#done').onclick = () => {
+  $('#undo').onclick = () => { const u = undo.pop(); if (!u) return; if (u.el) u.el.style.fill = u.prev; else xB.putImageData(u, 0, 0); sfx.tick(); };
+  $('#clear').onclick = () => { pushUndo(); xB.clearRect(0, 0, cB.width, cB.height); $$('#svgPage [style]').forEach(x => { x.style.fill = ''; }); sfx.whoosh(.3, .15); };
+  $('#done').onclick = async () => {
     sfx.pop();
     if (mode !== 'write') {
       try {
         const tw = 480, th = Math.round(tw * cB.height / cB.width), c = document.createElement('canvas'), x = c.getContext('2d');
-        c.width = tw; c.height = th; x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, tw, th); x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
+        c.width = tw; c.height = th; x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color') { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
         saveArt(c.toDataURL('image/jpeg', .75));
       } catch (err) {}
     }
@@ -2499,7 +2643,6 @@ function screenPaint({ mode = 'free', page = null, li = 0 } = {}) {
     talk(`Это буква ${lsay(L[0])}. Обведи её пальчиком. Потом нажми «Готово».`);
   } else if (mode === 'color') {
     talk('Выбери цвет внизу. Потом нажми внутри картинки — она раскрасится.');
-    svgImage(outlineSVG(pageSVG(page))).then(img => { if (t !== tok) return; lineImg = img; drawLines(); });
   } else talk('Выбери цвет и рисуй пальчиком. Ведёрко заливает краской.');
 }
 
@@ -2559,7 +2702,10 @@ const SOUNDS = [
 
 /* ---------- camera as a mirror (works where the browser gives the page a camera: the phone app version) ---------- */
 let camStream = null;
-function stopCam() { if (camStream) { camStream.getTracks().forEach(tr => tr.stop()); camStream = null; } }
+function stopCam() {
+  if (camStream) { camStream.getTracks().forEach(tr => tr.stop()); camStream = null; }
+  if (micStream) { micStream.getTracks().forEach(tr => tr.stop()); micStream = null; }
+}
 async function startCam(video) {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('no camera');
   stopCam();
@@ -2586,7 +2732,7 @@ function bindCam(stage) {
     }
   };
 }
-function screenSounds(si = P.settings.track === 'l' ? SOUNDS.length - 1 : 0) {
+function screenSounds(si = P.settings.track === 'l' ? sndIdx('Л') : 0) {
   newScreen();
   const S = SOUNDS[si];
   const st = shell('Как ставить язык', `<div class="snd-tabs" id="sndTabs">${SOUNDS.map((x, i) => `<button class="snd-tab ${i === si ? 'sel' : ''}" data-i="${i}" aria-label="Звук ${x.L}">${Lspan(x.L)}</button>`).join('')}</div>
@@ -2637,7 +2783,7 @@ const ARTIC_L = [
   { id: 'l-horse', name: 'Лошадка', thumb: 'swingUp', text: 'Присоси язык к нёбу и щёлкни: «цок-цок».', tip: 'Нижняя челюсть неподвижна, щёлкает только язык.', intro: 'Поскачем на лошадке! Присоси язык к нёбу и щёлкни: цок-цок!', steps: rep(5, [['swingUp', 'Цок!', 900], ['swingDown', '', 700]]) },
   { id: 'l-ship', name: 'Пароход гудит', thumb: 'ship', text: 'Приоткрой рот и долго тяни «ы-ы-ы». Кончик языка опущен, корень приподнят.', intro: 'Пароход гудит: ы-ы-ы! Тяни долго-долго.', steps: [['ship', 'Ы-ы-ы!', 2300], ['ship', '', 1600], ['ship', 'Ы-ы-ы!', 2300], ['ship', '', 1400]] }
 ];
-const AL = () => P.settings.track === 'l' ? ARTIC_L : ARTIC;
+const AL = () => P.settings.track === 'l' ? ARTIC_L : [...ARTIC, ...ARTIC_SH];
 
 const CHIST_L = ['Ла-ла-ла — наша Мила весела.', 'Ло-ло-ло — на улице тепло.', 'Лу-лу-лу — стол стоит в углу.', 'Лы-лы-лы — мы помыли все полы.',
   'Ал-ал-ал — Сава мяч достал.', 'Ол-ол-ол — накрываем стол.', 'Ул-ул-ул — Сава сел на стул.', 'Ыл-ыл-ыл — я посуду мыл.',
@@ -2696,21 +2842,26 @@ function stopwatch(onTick) {
 }
 function screenLSyll() {
   const t = newScreen(), rows = LROWS.map(r => shuffle(r));
-  let running = null;
-  shell('Слоговые дорожки', `<p class="lead">Прочитай все слоги вслух по порядку — чётко и быстро. Нажми на слог, чтобы послушать.</p>
+  let run = null, idx = 0;
+  shell('Слоговые дорожки', `<ol class="howto-steps"><li>Нажми «Старт».</li><li>Читай вслух слог, который светится, и нажимай на него.</li><li>Прочитаешь последний — время остановится само.</li></ol>
     <div class="sy-table" id="tb">${rows.map(r => `<div class="sy-row">${r.map(s => `<button class="sy-cell" data-s="${s}">${[...s].map(Lspan).join('')}</button>`).join('')}</div>`).join('')}</div>
     <div class="sp-bar"><span class="sp-time" id="spTime">0:00</span><button class="big" id="spGo">${ICON.play}Старт</button></div>
-    <p class="lead" id="spBest">${P.sylBest ? `Рекорд: ${fmtSec(P.sylBest)}` : 'Рекорда пока нет'}</p>`);
-  talk('Нажми «Старт» и читай слоги по порядку, строчку за строчкой. Дочитаешь — нажми «Стоп».');
-  $('#tb').onclick = e => { const c = e.target.closest('.sy-cell'); if (c && !running) { hopEl(c); talk(c.dataset.s.toLowerCase()); } };
-  $('#spGo').onclick = () => {
-    sfx.pop();
-    if (!running) { hush(); running = stopwatch(s => { $('#spTime').textContent = fmtSec(s); }); $('#spGo').textContent = 'Стоп'; $('#tb').classList.add('go'); return; }
-    const sec = Math.max(1, Math.round(running())); running = null;
-    const pb = !P.sylBest || sec < P.sylBest; if (pb) P.sylBest = sec; save();
-    finish({ key: 'l-syll', line: `${fmtSec(sec)}.${pb ? ' Новый рекорд!' : ''}`, again: screenLSyll });
+    <p class="lead">${P.sylBest ? `Твой лучший результат: ${fmtSec(P.sylBest)}` : 'Первая попытка: твоё время станет рекордом, который потом можно побить.'}</p>`);
+  talk('Нажми «Старт». Потом читай вслух слог, который светится, и нажимай на него. И так до последнего. До старта можно нажать на слог и послушать.');
+  const cells = $$('.sy-cell');
+  const mark = () => cells.forEach((c, i) => { c.classList.toggle('next', !!run && i === idx); c.classList.toggle('done', i < idx); });
+  $('#tb').onclick = e => {
+    const c = e.target.closest('.sy-cell'); if (!c) return;
+    if (!run) { if (!idx) { hopEl(c); talk(c.dataset.s.toLowerCase()); } return; }
+    if (cells.indexOf(c) !== idx) { wiggle(cells[idx]); return; }
+    idx++; sfx.tick(); mark();
+    if (idx < cells.length) return;
+    const sec = Math.max(1, Math.round(run())); run = null; mark();
+    const first = !P.sylBest, pb = first || sec < P.sylBest; if (pb) P.sylBest = sec; save();
+    finish({ key: 'l-syll', line: `${fmtSec(sec)}.${first ? ' Это твой первый результат!' : pb ? ' Новый рекорд!' : ' Отлично прочитано!'}`, again: screenLSyll });
     void t;
   };
+  $('#spGo').onclick = () => { if (run) return; sfx.pop(); hush(); idx = 0; run = stopwatch(s => { $('#spTime').textContent = fmtSec(s); }); $('#spGo').hidden = true; mark(); };
 }
 
 /* reading speed: original short texts, words per minute */
@@ -2779,28 +2930,32 @@ function goalCard() {
 }
 function screenBook() {
   newScreen();
-  const tk = dayKey(), e = P.book.log[tk];
-  let mins = e ? e.min : 0;
+  const tk = dayKey(), e = P.book.log[tk], CH = [1, 2, 3, 5, 10];
+  let pages = e && e.pages ? e.pages : 0, like = e && e.like != null ? e.like : -1;
   const days = Array.from({ length: 14 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 13 + i); return d; });
-  const last = bookDays().map(k => P.book.log[k]).filter(x => x.page).pop();
+  const total = Object.values(P.book.log).reduce((a, x) => a + (x.pages || 0), 0), pgW = n => plural(n, ['страницу', 'страницы', 'страниц']);
   shell('Книга', `<div class="book-wrap">
-      <div class="book-card"><span class="emo book-ico">📖</span><div><b>${esc(P.book.title)}</b><small>${bookDays().length} ${plural(bookDays().length, ['день', 'дня', 'дней'])} чтения${last ? ` · страница ${last.page}` : ''}</small></div></div>
+      <div class="book-card"><span class="emo book-ico">📖</span><div><b>${esc(P.book.title)}</b><small>${bookDays().length} ${plural(bookDays().length, ['день', 'дня', 'дней'])} с книгой${total ? ` · ${total} ${plural(total, ['страница', 'страницы', 'страниц'])}` : ''}</small></div></div>
+      <p class="book-note">Любая скорость хороша. Главное — читать каждый день понемногу и с удовольствием.</p>
       ${goalCard()}
-      <section class="psec book-log"><h2>${G('Сегодня я читала', 'Сегодня я читал')}</h2>
-        <div class="mins" id="mins">${[10, 15, 20, 30, 45].map(m => `<button class="chip mn ${mins === m ? 'sel' : ''}" data-m="${m}">${m} мин</button>`).join('')}</div>
-        <label class="prow" for="pageIn">${G('Дочитала', 'Дочитал')} до страницы <input id="pageIn" type="number" inputmode="numeric" min="1" max="2000" value="${e && e.page ? e.page : ''}"></label>
+      <section class="psec book-log"><h2>${G('Сегодня я прочитала', 'Сегодня я прочитал')}</h2>
+        <div class="mins" id="pgs">${CH.map(n => `<button class="chip mn ${pages === n ? 'sel' : ''}" data-p="${n}">${n} ${pgW(n)}</button>`).join('')}</div>
+        <label class="prow" for="pageIn">Или впишите, сколько страниц <input id="pageIn" type="number" inputmode="numeric" min="1" max="500" value="${pages && !CH.includes(pages) ? pages : ''}"></label>
+        <p class="prow">Понравилось?</p>
+        <div class="mins" id="likes">${['😐 так себе', '🙂 хорошо', '😍 очень!'].map((x, i) => `<button class="chip lk ${like === i ? 'sel' : ''}" data-l="${i}">${x}</button>`).join('')}</div>
         <button class="big" id="logBtn">${e ? 'Обновить запись' : 'Записать'}</button>
       </section>
       <div class="days14">${days.map(d => { const k = dayKey(d); return `<span class="d14 ${P.book.log[k] ? 'on' : ''} ${k === tk ? 'now' : ''}"><small>${WEEK[(d.getDay() + 6) % 7]}</small><i>${P.book.log[k] ? ICON.star : d.getDate()}</i></span>`; }).join('')}</div>
     </div>`);
-  talk(e ? `Сегодня ты уже ${G('читала', 'читал')} ${e.min} минут. Молодец!` : `Почитай книгу. Потом отметь, сколько минут ${G('читала', 'читал')}.`);
-  $('#mins').onclick = ev => { const b = ev.target.closest('.mn'); if (!b) return; mins = +b.dataset.m; $$('.mn').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  talk(e ? `Сегодня ты уже ${G('прочитала', 'прочитал')} ${e.pages ? `${e.pages} ${pgW(e.pages)}` : 'немного'}. Здорово!` : `Почитай книгу в удовольствие. Потом отметь, сколько страниц ${G('прочитала', 'прочитал')}.`);
+  $('#pgs').onclick = ev => { const b = ev.target.closest('.mn'); if (!b) return; pages = +b.dataset.p; $('#pageIn').value = ''; $$('#pgs .mn').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  $('#pageIn').addEventListener('input', ev => { pages = Math.max(0, Math.round(+ev.target.value || 0)); $$('#pgs .mn').forEach(x => x.classList.remove('sel')); });
+  $('#likes').onclick = ev => { const b = ev.target.closest('.lk'); if (!b) return; like = +b.dataset.l; $$('#likes .lk').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#logBtn').onclick = () => {
-    if (!mins) { talk(`Выбери, сколько минут ${G('читала', 'читал')}.`); wiggle($('#mins')); return; }
-    const page = Math.max(0, Math.round(+$('#pageIn').value || 0));
-    P.book.log[tk] = { min: mins, page: page || null }; save(); sfx.pop();
+    if (!pages) { talk('Отметь, сколько страниц.'); wiggle($('#pgs')); return; }
+    P.book.log[tk] = { pages, like: like >= 0 ? like : null }; save(); sfx.pop();
     if (e) { talk('Запись обновлена.'); later(goHome, 900); return; }
-    finish({ key: 'book', line: 'Ещё один день чтения! Так держать!' });
+    finish({ key: 'book', line: 'Ещё один день с книгой! Читай с удовольствием.' });
   };
 }
 
@@ -2897,15 +3052,490 @@ function elPlay(buffer) {
 }
 
 const SECTIONS = [
-  { g: 0, h: 'Разминка', p: 'сначала дыхание и язычок' },
+  { g: 0, h: () => Q() ? 'Разогрев' : 'Разминка', p: () => Q() ? 'дыхание и зарядка перед тренировкой' : 'сначала дыхание и язычок' },
   { g: 1, h: 'Играем со звуком Р', p: 'р-р-р, как тигрёнок', only: 'r' },
-  { g: 5, h: 'Звук Л', p: 'ла-ло-лу-лы, ал-ол-ул-ыл', only: 'l' },
-  { g: 6, h: 'Чтение', p: 'каждый день быстрее и чётче', only: 'l' },
+  { g: 9, h: 'Шипящие: Ш Ж Ч Щ', p: 'змейка, жук, паровоз и щёточка', only: 'r' },
+  { g: 5, h: 'Арена Л', p: 'бит, аркада, босс и скороговорки', only: 'l' },
+  { g: 6, h: 'Чтение', p: 'каждый день понемногу', only: 'l' },
+  { g: 8, h: 'Математика и пианино', p: 'спринт по примерам и любимые мелодии', only: 'l' },
   { g: 2, h: 'Буквы и чтение', p: 'гласные красные, согласные синие', only: 'r' },
   { g: 3, h: 'Математика', p: 'считаем, складываем, сравниваем', only: 'r' },
   { g: 7, h: 'Вместе', p: 'играем вдвоём' },
-  { g: 4, h: 'Песенки и рисование', p: 'поём, играем, рисуем' }
+  { g: 4, h: 'Песенки и рисование', p: 'поём, играем, рисуем', only: 'r' }
 ];
+
+/* ---------- «Миссия Л»: Sava's own, older-looking mode with ranks, a beat battle, an arcade, a word puzzle, a boss and a recorder ---------- */
+const Q = () => P.settings.track === 'l';
+const nm = x => typeof x === 'function' ? x() : x;
+const RANKS = [{ at: 0, name: 'Новичок' }, { at: 15, name: 'Стажёр' }, { at: 40, name: 'Агент' }, { at: 80, name: 'Мастер' }, { at: 140, name: 'Эксперт' }, { at: 220, name: 'Чемпион' }, { at: 320, name: 'Легенда' }];
+function rankCard() {
+  const i = RANKS.reduce((k, r, j) => P.stars >= r.at ? j : k, 0), r = RANKS[i], nx = RANKS[i + 1];
+  const pct = nx ? (P.stars - r.at) / (nx.at - r.at) * 100 : 100;
+  return `<div class="rank"><span class="rank-ico">🥋</span><div><b>${r.name}</b><span class="rank-bar"><i style="width:${pct}%"></i></span><small>${P.stars} XP${nx ? ` · до «${nx.name}» ещё ${nx.at - P.stars}` : ' · высший ранг!'}</small></div></div>`;
+}
+
+/* drums for the beat battle */
+function drum(type, t, bus) {
+  if (type === 'k') {
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + .14);
+    g.gain.setValueAtTime(.9, t); g.gain.exponentialRampToValueAtTime(.001, t + .28);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + .3); return;
+  }
+  const s = noiseSrc(AC), f = AC.createBiquadFilter(), g = AC.createGain(), snare = type === 's', len = snare ? .18 : .05;
+  f.type = snare ? 'bandpass' : 'highpass'; f.frequency.value = snare ? 1800 : 7000;
+  g.gain.setValueAtTime(snare ? .55 : .16, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
+  s.connect(f); f.connect(g); g.connect(bus); s.start(t); s.stop(t + len + .02);
+}
+const RAP = [
+  { bpm: 80, words: ['ЛА', 'ЛО', 'ЛУ', 'ЛЫ', 'ЛА', 'ЛО', 'ЛУ', 'ЛЫ'] },
+  { bpm: 88, words: ['АЛ', 'ОЛ', 'УЛ', 'ЫЛ', 'АЛ', 'ОЛ', 'УЛ', 'ЫЛ'] },
+  { bpm: 94, words: ['АЛА', 'ОЛО', 'УЛУ', 'ЫЛЫ', 'ПЛА', 'КЛО', 'ГЛУ', 'БЛЫ'] },
+  { bpm: 100, words: ['Мила', 'мыла', 'мишку', 'мылом,', 'мыло', 'Мила', 'уронила!', 'Йо!'] }
+];
+function screenRap() {
+  const t = newScreen();
+  let lv = 0, playing = false;
+  shell('Рэп-битва', `<div class="rap">
+      <p class="rap-lvl" id="rl"></p>
+      <div class="rap-count" id="rc"></div>
+      <div class="rap-words" id="rw"></div>
+      <div class="rap-beat" id="rb"><i></i><i></i><i></i><i></i></div>
+      <button class="big" id="rgo">${ICON.play}Погнали!</button>
+    </div>`);
+  const rl = $('#rl'), rc = $('#rc'), rw = $('#rw'), dots = $$('#rb i'), go = $('#rgo');
+  function show() {
+    const L = RAP[lv];
+    rl.textContent = `${lv === RAP.length - 1 ? 'Финал' : `Уровень ${lv + 1}`} · ${L.bpm} BPM`;
+    rw.innerHTML = L.words.map(w => `<span class="rw">${hiS(w, 'л')}</span>`).join('');
+    rc.textContent = ''; go.hidden = false; playing = false;
+    talk(lv === 0 ? 'Рэп-битва! Сначала четыре удара отсчёта, потом читай слоги ровно в бит. Два круга подряд.' : `${lv === RAP.length - 1 ? 'Финал' : `Уровень ${lv + 1}`}. Бит быстрее!`);
+  }
+  go.onclick = () => {
+    if (playing || !ac()) return;
+    playing = true; go.hidden = true; hush();
+    const L = RAP[lv], bus = musicBus(), beat = 60 / L.bpm, t0 = AC.currentTime + .25, words = $$('.rw', rw), total = 4 + 16;
+    for (let i = 0; i < total; i++) {
+      const at = t0 + i * beat;
+      drum('h', at, bus); drum('h', at + beat / 2, bus);
+      if (i >= 4) drum((i - 4) % 2 ? 's' : 'k', at, bus);
+      later(() => {
+        dots.forEach((d, j) => d.classList.toggle('on', j === i % 4));
+        if (i < 4) { rc.textContent = 4 - i; return; }
+        rc.textContent = i < 12 ? 'Круг 1' : 'Круг 2';
+        words.forEach((w, j) => w.classList.toggle('on', j === (i - 4) % 8));
+      }, (at - AC.currentTime) * 1000);
+    }
+    later(async () => {
+      words.forEach(w => w.classList.remove('on')); dots.forEach(d => d.classList.remove('on')); rc.textContent = '';
+      await askSaid(G('Я прочитала в ритм!', 'Я прочитал в ритм!')); if (t !== tok) return;
+      lv++;
+      if (lv >= RAP.length) finish({ key: 'l-rap', line: 'Это был мощный рэп!', again: screenRap });
+      else show();
+    }, (t0 + total * beat - AC.currentTime) * 1000 + 200);
+  };
+  show();
+}
+
+/* arcade: tap only the falling things that have Л in their name */
+const CATCH_L = [['лодка', '🛶'], ['лампа', '💡'], ['лук', '🧅'], ['ложка', '🥄'], ['лапа', '🐾'], ['лыжи', '🎿'], ['белка', '🐿️'], ['пчела', '🐝'], ['волк', '🐺'], ['молоко', '🥛'],
+  ['голубь', '🕊️'], ['яблоко', '🍎'], ['слон', '🐘'], ['стул', '🪑'], ['футбол', '⚽'], ['орёл', '🦅'], ['клоун', '🤡'], ['самолёт', '✈️'], ['лимон', '🍋'], ['лев', '🦁']];
+const CATCH_X = [['рыба', '🐟'], ['кот', '🐈'], ['дом', '🏠'], ['машина', '🚗'], ['ракета', '🚀'], ['торт', '🎂'], ['гриб', '🍄'], ['сыр', '🧀'], ['зонт', '☂️'], ['часы', '⏰'],
+  ['собака', '🐕'], ['кит', '🐋'], ['арбуз', '🍉'], ['банан', '🍌'], ['тигр', '🐯'], ['жук', '🪲'], ['ёжик', '🦔'], ['утка', '🦆'], ['роза', '🌹'], ['мяч', '🏀']];
+function screenCatch() {
+  const t = newScreen(), goal = 15;
+  let score = 0, lives = 3, run = false, items = [], spawnIn = 0, time = 0, caught = [];
+  shell('Л-ловушка', `<div class="arena" id="ar">
+      <div class="hud"><span>Поймано: <b id="sc">0</b> / ${goal}</span><span id="lv">❤️❤️❤️</span></div>
+      <button class="big arena-go" id="ago">${ICON.play}Старт</button>
+    </div>`);
+  const ar = $('#ar');
+  talk('Лови только то, в чём есть звук Л! Нажимай на эти картинки. Остальные не трогай — потеряешь жизнь.');
+  function spawn() {
+    const l = Math.random() < .55, [w, e] = pickOne(l ? CATCH_L : CATCH_X);
+    const el = document.createElement('button'); el.className = 'fall'; el.innerHTML = `${pic(e)}<small>${w}</small>`;
+    el.style.left = rnd(4, 76) + '%'; ar.append(el);
+    const it = { el, y: -70, v: rnd(70, 105) + time * 2.2, l, w };
+    el.addEventListener('pointerdown', ev => { ev.preventDefault(); hit(it); });
+    items.push(it);
+  }
+  function drop(it) { items = items.filter(x => x !== it); it.el.remove(); }
+  function hit(it) {
+    if (!run || it.gone) return; it.gone = true;
+    if (it.l) {
+      score++; caught.push(it.w); $('#sc').textContent = score; sfx.pop(); it.el.classList.add('got'); setTimeout(() => drop(it), 250);
+      if (score >= goal) end(true);
+    } else {
+      lives--; $('#lv').textContent = '❤️'.repeat(lives) + '🖤'.repeat(3 - lives); sfx.oops(); it.el.classList.add('bad'); setTimeout(() => drop(it), 300);
+      if (lives <= 0) end(false);
+    }
+  }
+  async function end(win) {
+    run = false; items.forEach(x => x.el.remove()); items = [];
+    const list = [...new Set(caught)].slice(-6);
+    ar.insertAdjacentHTML('beforeend', `<div class="arena-end"><b>${win ? 'Ловушка сработала!' : 'Жизни закончились'}</b><span>Поймано: ${score}</span>${list.length ? `<p>${list.map(w => hiS(w, 'л')).join(' · ')}</p>` : ''}</div>`);
+    if (list.length) { await talk(`Поймано ${score}. Теперь скажи эти слова чётко: ${list.join(', ')}.`); if (t !== tok) return; await askSaid(G('Я сказала все слова!', 'Я сказал все слова!')); if (t !== tok) return; }
+    finish({ key: 'l-catch', stars: win ? 3 : 2, line: win ? 'Отличная реакция!' : 'Хорошая попытка, давай ещё!', again: screenCatch });
+  }
+  $('#ago').onclick = () => {
+    $('#ago').remove(); run = true; hush();
+    loop(t, dt => {
+      if (!run) return;
+      time += dt; spawnIn -= dt;
+      if (spawnIn <= 0) { spawn(); spawnIn = Math.max(.5, 1.1 - time * .012); }
+      const H = ar.clientHeight;
+      items.slice().forEach(it => { if (it.gone) return; it.y += it.v * dt; it.el.style.transform = `translateY(${it.y}px)`; if (it.y > H) drop(it); });
+    });
+  };
+}
+
+/* word puzzle: guess a five-letter word with Л */
+const WORDS5 = [['ЛОДКА', '🛶'], ['ЛОЖКА', '🥄'], ['ЛАМПА', '💡'], ['БЕЛКА', '🐿️'], ['ВОЛНА', '🌊'], ['ПЧЕЛА', '🐝'], ['ПЛИТА', '🍳'], ['КУКЛА', '🪆'],
+  ['ПОЛКА', '📚'], ['ВИЛКА', '🍴'], ['МЕЛОК', '🖍️'], ['ПИЛОТ', '✈️'], ['САЛАТ', '🥗'], ['КЛОУН', '🤡'], ['ЛЫЖНЯ', '🎿'], ['СКАЛА', '🧗']];
+const KB = ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ'];
+function wordleScore(g, ans) {
+  const res = Array(5).fill('x'), a = [...ans];
+  [...g].forEach((c, i) => { if (c === a[i]) { res[i] = 'g'; a[i] = null; } });
+  [...g].forEach((c, i) => { if (res[i] === 'x') { const j = a.indexOf(c); if (j >= 0) { res[i] = 'y'; a[j] = null; } } });
+  return res;
+}
+function screenWordle() {
+  const t = newScreen(), [word, emo] = pickOne(WORDS5), tries = [];
+  let cur = '', over = false;
+  const keyState = {};
+  shell('Угадай слово', `<div class="wd-wrap">
+      <p class="lead" id="wHint">Слово из 5 букв, в нём есть Л. Зелёная — буква на месте, жёлтая — есть в слове, но не тут.</p>
+      <div class="wd-grid" id="wg">${Array.from({ length: 6 }, () => `<div class="wd-row">${'<span class="wd-c"></span>'.repeat(5)}</div>`).join('')}</div>
+      <div class="kb" id="kb">${KB.map((r, i) => `<div class="kb-r">${i === 2 ? '<button class="kb-k wide" data-k="ok">Ввод</button>' : ''}${[...r].map(c => `<button class="kb-k" data-k="${c}">${c}</button>`).join('')}${i === 2 ? '<button class="kb-k wide" data-k="del" aria-label="Стереть">⌫</button>' : ''}</div>`).join('')}</div>
+    </div>`);
+  talk('Угадай слово из пяти букв. В нём есть звук Л. Шесть попыток.');
+  const rows = $$('.wd-row');
+  const paint = () => { const cells = $$('.wd-c', rows[tries.length]); cells.forEach((c, i) => { c.textContent = cur[i] || ''; c.classList.toggle('full', !!cur[i]); }); };
+  async function enter() {
+    if (cur.length < 5) { wiggle(rows[tries.length]); talk('Нужно пять букв.'); return; }
+    const res = wordleScore(cur, word), cells = $$('.wd-c', rows[tries.length]);
+    cells.forEach((c, i) => { c.classList.add(res[i]); c.style.animationDelay = i * .12 + 's'; });
+    [...cur].forEach((c, i) => { const r = res[i], prev = keyState[c]; if (r === 'g' || (r === 'y' && prev !== 'g') || !prev) keyState[c] = r; });
+    $$('.kb-k').forEach(k => { const s = keyState[k.dataset.k]; if (s) { k.classList.remove('g', 'y', 'x'); k.classList.add(s); } });
+    tries.push(cur); const guess = cur; cur = '';
+    if (guess === word || tries.length === 6) {
+      over = true; const win = guess === word;
+      win ? sfx.good() : sfx.oops();
+      $('#wHint').innerHTML = win ? `Угадано с ${tries.length}-й попытки! ${pic(emo)}` : `Это было слово ${hiS(word, 'л')} ${pic(emo)}`;
+      await talk(`${win ? 'Есть!' : 'Это было слово'} ${word.toLowerCase()}. Скажи его три раза чётко.`); if (t !== tok) return;
+      await askSaid(G('Я сказала три раза!', 'Я сказал три раза!')); if (t !== tok) return;
+      finish({ key: 'l-word', stars: win ? 3 : 2, line: win ? 'Слово разгадано!' : 'В следующий раз получится!', again: screenWordle });
+      return;
+    }
+    sfx.tick();
+    if (tries.length === 3) { $('#wHint').innerHTML = `Подсказка: ${pic(emo)}`; talk('Держи подсказку!'); }
+  }
+  const press = k => { if (over) return; if (k === 'ok') enter(); else if (k === 'del') { cur = cur.slice(0, -1); paint(); } else if (cur.length < 5) { cur += k; paint(); sfx.tick(); } };
+  $('#kb').onclick = e => { const b = e.target.closest('.kb-k'); if (b) press(b.dataset.k); };
+  const onKey = e => {
+    if (t !== tok) { document.removeEventListener('keydown', onKey); return; }
+    if (e.key === 'Enter') press('ok'); else if (e.key === 'Backspace') press('del');
+    else { const c = e.key.toUpperCase().replace('Ё', 'Е'); if (/^[А-Я]$/.test(c)) press(c); }
+  };
+  document.addEventListener('keydown', onKey);
+}
+
+/* boss fight: every clearly said task is a hit */
+function screenBoss() {
+  const t = newScreen();
+  let hp = 100;
+  const pool = [
+    () => ['Ап-чаги — удар вперёд', 'ЛА — ЛО — ЛУ — ЛЫ', 'Скажи чётко: ла, ло, лу, лы.'],
+    () => ['Долио-чаги — круговой удар', 'АЛ — ОЛ — УЛ — ЫЛ', 'Скажи: ал, ол, ул, ыл.'],
+    () => { const w = pickOne(HOUSE_L)[0]; return ['Ёп-чаги — удар в сторону', `${w.toUpperCase()} ×3`, `Скажи три раза: ${w}.`]; },
+    () => { const s = pickOne(TWIST_L); return ['Комбо-скороговорка', s, `Комбо! ${s}`]; },
+    () => { const s = pickOne(CHIST_L); return ['Блок', s, s]; },
+    () => ['Финальная серия', 'ЛОДКА · ЛАМПА · ЛОЖКА · ЛЫЖИ', 'Быстро и чётко: лодка, лампа, ложка, лыжи.']
+  ];
+  const tasks = [...shuffle(pool.slice(0, 5)).slice(0, 4), pool[5]].map(f => f());
+  shell('Спарринг: Мастер-путаник', `<div class="boss-wrap">
+      <div class="boss" id="boss">${friendSVG('', 'ghost')}<span class="boss-dmg" id="dmg"></span></div>
+      <div class="hp"><i id="hp"></i><span id="hpN">100</span></div>
+      <div class="tw-card" id="bc"></div>
+    </div>`);
+  const boss = $('#boss'), bc = $('#bc');
+  (async () => {
+    await talk('Спарринг! Мастер-путаник путает звуки. Каждая чётко сказанная фраза — твой удар, как на тхэквондо!'); if (t !== tok) return;
+    for (let i = 0; i < tasks.length; i++) {
+      const [title, text, line] = tasks[i];
+      bc.innerHTML = `<p class="tw-n">Удар ${i + 1} из ${tasks.length} · ${title}</p><p class="tw-text">${hiS(text, 'л')}</p>`;
+      await talk(line); if (t !== tok) return;
+      await askSaid('Удар!'); if (t !== tok) return;
+      hp = Math.max(0, hp - 20); $('#hp').style.width = hp + '%'; $('#hpN').textContent = hp;
+      $('#dmg').textContent = '−20'; boss.classList.remove('hit'); void boss.offsetWidth; boss.classList.add('hit');
+      drum('k', ac().currentTime + .01, ac().destination); sfx.whoosh(.25, .2);
+      if (hp > 0) { await say(pickOne(['Ой! Не может быть!', 'Ха! Я ещё держусь!', 'Ты сильный соперник!', 'Уф! Так нечестно!'])); if (t !== tok) return; }
+    }
+    boss.classList.add('down');
+    finish({ key: 'l-boss', line: 'Победа в спарринге! Звук Л на твоей стороне.', again: screenBoss });
+  })();
+}
+
+/* recorder: say it, then listen to yourself (works where the browser gives the page a microphone) */
+let micStream = null;
+function screenRec() {
+  newScreen();
+  const phrases = shuffle([...TWIST_L, ...CHIST_L]);
+  let k = 0, rec = null, url = null;
+  shell('Диктофон', `<div class="tw-card"><p class="tw-n">Скажи и послушай себя</p><p class="tw-text" id="rp"></p></div>
+    <div class="prow-btns"><button class="big" id="recBtn">🎙 Записать</button><button class="big ghost" id="model">${ICON.speaker}Как правильно</button><button class="big ghost" id="nextP">Другая фраза</button></div>
+    <div class="rec-out" id="recOut"></div><p class="muted" id="recNote" hidden></p>`);
+  const show = () => { $('#rp').innerHTML = hiS(phrases[k % phrases.length], 'л'); $('#recOut').innerHTML = ''; };
+  show();
+  talk('Нажми «Записать», скажи фразу и нажми «Стоп». Потом послушай себя: звук Л слышно?');
+  $('#model').onclick = () => talk(phrases[k % phrases.length]);
+  $('#nextP').onclick = () => { k++; show(); sfx.pop(); };
+  $('#recBtn').onclick = async () => {
+    if (rec && rec.state === 'recording') { rec.stop(); return; }
+    try {
+      if (!window.MediaRecorder) throw new Error('no recorder');
+      micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const chunks = []; rec = new MediaRecorder(micStream);
+      rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = () => {
+        micStream.getTracks().forEach(tr => tr.stop()); micStream = null;
+        if (url) URL.revokeObjectURL(url);
+        url = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || 'audio/mp4' }));
+        $('#recBtn').textContent = '🎙 Записать ещё';
+        $('#recOut').innerHTML = `<audio controls src="${url}"></audio><button class="big" id="recOk">Звучит чётко!</button>`;
+        const au = $('#recOut audio'); au.play().catch(() => {});
+        $('#recOk').onclick = () => finish({ key: 'l-rec', stars: 1, line: 'Ты слышишь свой звук Л!', again: screenRec });
+      };
+      hush(); rec.start(); $('#recBtn').textContent = '■ Стоп'; sfx.tick();
+      later(() => { if (rec && rec.state === 'recording') rec.stop(); }, 9000);
+    } catch (e) {
+      $('#recNote').hidden = false;
+      $('#recNote').textContent = EMBEDDED ? 'Внутри claude.ai микрофон недоступен. Он работает в приложении yankona.github.io/govorilki.' : 'Не получилось включить микрофон. Разрешите доступ к микрофону для этого сайта в настройках браузера.';
+    }
+  };
+}
+
+/* Sava's hobbies in the content: skate, bike, surf, chess, taekwondo, piano, his lizard */
+CHIST_L.push('Ла-ла-ла — по волне летит доска.', 'Лу-лу-лу — слон шагает по углу.', 'Лы-лы-лы — у ящерицы Лизы лапки малы.', 'Ал-ал-ал — Сава шахматы достал.',
+  'Ол-ол-ол — тренер в зал пришёл.', 'Ул-ул-ул — Сава ногу подтянул.', 'Ыл-ыл-ыл — Сава пианино открыл.');
+TWIST_L.push('Слон ходит по диагонали, ладья — по линиям, а король — куда велели.', 'Ящерица Лиза лежала на валуне и ловила лучи на лапах и спине.',
+  'Волна за волной, Сава на доске — ловко лавирует, как лодка в реке.', 'Клавиши белые, клавиши чёрные, мелодии звонкие, ловкие, вольные.',
+  'Велосипед летит, колёса шуршат, педали ловко ноги крутят.', 'Лихо Сава на скейте летал, ловко с лавочки трюк выполнял.');
+CATCH_L.push(['велосипед', '🚲'], ['шлем', '⛑️'], ['клавиши', '🎹'], ['волна', '🌊'], ['пляж', '🏖️'], ['колесо', '🛞'], ['мелодия', '🎵'], ['ладья', '♜']);
+CATCH_X.push(['скейт', '🛹'], ['самокат', '🛴'], ['ящерица', '🦎'], ['черепаха', '🐢'], ['сёрфер', '🏄'], ['пешка', '♟️']);
+WORDS5.push(['ЛАДЬЯ', '♜'], ['ЛИДЕР', '🏆'], ['ЛИМОН', '🍋']);
+PASSAGES.push(
+  { id: 'skate', title: 'Скейт-парк', text: 'В субботу Сава взял скейт, шлем и наколенники и поехал в скейт-парк. Сначала он долго катался по ровной площадке. Потом попробовал спуститься с маленькой горки. Колёса громко застучали, но Сава удержал равновесие. Рядом катались ребята на самокатах и велосипедах. Один мальчик показал ему новый трюк. Сава пробовал снова и снова, и к вечеру у него получилось.' },
+  { id: 'chess', title: 'Шахматная партия', text: 'Вечером папа поставил на стол шахматную доску. Сава играл белыми. Он сделал первый ход пешкой, а потом вывел коня. Папа долго думал над каждым ходом. Сава заметил, что белый слон может напасть на ладью. Он ловко передвинул слона, и папа покачал головой. Через десять ходов Сава объявил мат. Они пожали друг другу руки и решили сыграть ещё.' },
+  { id: 'lizard', title: 'Ящерица Лиза', text: 'В террариуме живёт ящерица Лиза. Днём она любит лежать на тёплом камне под лампой. Лиза медленно поворачивает голову и смотрит на всех круглыми глазами. Когда в террариум кладут листья салата, она быстро подбегает и ест. Ночью лампу выключают, и Лиза прячется в маленькую пещеру. Сава каждый день проверяет, хватает ли ей воды и тепла.' },
+  { id: 'surf', title: 'Первая волна', text: 'Летом на море Сава впервые встал на доску для сёрфинга. Тренер показал, как ложиться на доску и грести руками. Волны были небольшие и тёплые. Сава долго ловил подходящую волну. Наконец он вскочил на ноги и проехал несколько метров. Потом он упал в воду, но сразу засмеялся и поплыл обратно. Это был самый весёлый день лета.' }
+);
+STICKERS_L.splice(0, STICKERS_L.length, '🛹', '🥋', '♟️', '🎹', '🦎', '🏄', '🚲', '🛴', '🐢', 'svg:ghost', '🎮', '⚽', '🚀', '🦖', '🐉', '🏆', '🤖', '🏰', '🦈', '🏎️', '🛸', '🎸', '🦅', '🐺', '⚡', '🎯', '🧩', '🔭', '🪐', '🐲');
+// ranks are taekwondo belts
+RANKS.splice(0, RANKS.length, { at: 0, name: 'Белый пояс' }, { at: 15, name: 'Жёлтый пояс' }, { at: 40, name: 'Зелёный пояс' }, { at: 80, name: 'Синий пояс' }, { at: 140, name: 'Красный пояс' }, { at: 220, name: 'Чёрный пояс' }, { at: 320, name: 'Мастер' });
+
+/* ---------- Sava's hobbies: piano, math sprint and moving with the sound Л ---------- */
+const PIANO = ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5', 'D#5', 'E5'];
+const PNAME = { C: 'до', D: 'ре', E: 'ми', F: 'фа', G: 'соль', A: 'ля', B: 'си' };
+const TUNES = [
+  { id: 'ode', title: 'Ода к радости', by: 'Бетховен', notes: 'E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4:1.5 D4:.5 D4:2 E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 D4:1.5 C4:.5 C4:2' },
+  { id: 'elise', title: 'К Элизе', by: 'Бетховен', notes: 'E5:.5 D#5:.5 E5:.5 D#5:.5 E5:.5 B4:.5 D5:.5 C5:.5 A4:1.5 C4:.5 E4:.5 A4:.5 B4:1.5 E4:.5 G#4:.5 B4:.5 C5:1.5' },
+  { id: 'jingle', title: 'Jingle Bells', by: 'Джеймс Пьерпонт', notes: 'E4 E4 E4:2 E4 E4 E4:2 E4 G4 C4:1.5 D4:.5 E4:4 F4 F4 F4:1.5 F4:.5 F4 E4 E4 E4:.5 E4:.5 E4 D4 D4 E4 D4:2 G4:2' },
+  { id: 'twinkle', title: 'Звёздочка', by: 'старинная мелодия', notes: 'C4 C4 G4 G4 A4 A4 G4:2 F4 F4 E4 E4 D4 D4 C4:2' }
+];
+const tuneNotes = tn => tn.notes.split(' ').map(x => { const [n, b] = x.split(':'); return { note: n, beats: +(b || 1) }; });
+function pianoNote(f, t, len, bus, v = .3) {
+  [[1, 'triangle', v], [2, 'sine', v * .25], [3, 'sine', v * .08]].forEach(([m, type, vol]) => {
+    const o = AC.createOscillator(), g = AC.createGain(); o.type = type; o.frequency.value = f * m;
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .006); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + len + .05);
+  });
+}
+function screenPiano() {
+  const t = newScreen();
+  let follow = null, fi = 0, tune = null;
+  const whites = PIANO.filter(n => !n.includes('#')), wpct = 100 / whites.length;
+  const blacks = PIANO.filter(n => n.includes('#')).map(n => ({ n, left: (whites.indexOf(n.replace('#', '')) + 1) * wpct }));
+  shell('Пианино', `<div class="pn-top"><p class="pn-line" id="pl">Играй что хочешь или выбери мелодию. Пой «ла» на каждой ноте!</p></div>
+    <div class="piano" id="pn">
+      ${whites.map(n => `<button class="pk w" data-n="${n}" aria-label="${PNAME[n[0]]}"><span>${PNAME[n[0]]}</span></button>`).join('')}
+      ${blacks.map(b => `<button class="pk b" data-n="${b.n}" style="left:calc(${b.left}% - ${wpct * .3}%);width:${wpct * .6}%" aria-label="${PNAME[b.n[0]]}-диез"></button>`).join('')}
+    </div>
+    <div class="xy-songs" id="tunes">${TUNES.map((x, i) => `<button class="chip" data-i="${i}"><span class="emo">🎼</span>${x.title}</button>`).join('')}</div>
+    <div class="prow-btns"><button class="big ghost" id="demo" hidden>${ICON.speaker}Послушать</button></div>`);
+  talk('Нажимай на клавиши. Или выбери мелодию: нужная клавиша будет светиться, а ты пой «ла» на каждой ноте.');
+  const pl = $('#pl'), keyOf = n => $(`.pk[data-n="${n}"]`);
+  const glow = () => { $$('.pk').forEach(k => k.classList.remove('glow')); if (follow && follow[fi]) keyOf(follow[fi].note).classList.add('glow'); };
+  const lineHTML = () => `<b>${tune.title}</b> · нота ${Math.min(fi + 1, follow.length)} из ${follow.length} · пой: <span class="la">ла</span>`;
+  function press(k) {
+    if (!ac()) return;
+    const bus = music || musicBus();
+    pianoNote(FREQ(k.dataset.n), AC.currentTime + .01, 1.2, bus);
+    k.classList.add('down'); setTimeout(() => k.classList.remove('down'), 160);
+    if (!follow || k.dataset.n !== follow[fi].note) return;
+    fi++;
+    if (fi < follow.length) { pl.innerHTML = lineHTML(); glow(); return; }
+    const done = tune; follow = null; glow(); pl.innerHTML = `Ура! «${done.title}» сыграна!`;
+    later(() => finish({ key: 'piano:' + done.id, stars: 2, line: 'Красиво сыграно и спето!', again: screenPiano }), 900);
+  }
+  $('#pn').addEventListener('pointerdown', e => { const k = e.target.closest('.pk'); if (k) { e.preventDefault(); press(k); } });
+  $('#tunes').onclick = e => {
+    const c = e.target.closest('.chip'); if (!c) return;
+    sfx.pop(); tune = TUNES[+c.dataset.i]; follow = tuneNotes(tune); fi = 0;
+    pl.innerHTML = lineHTML(); glow(); $('#demo').hidden = false;
+    talk(`«${tune.title}». Сначала можно послушать. Потом нажимай на светящуюся клавишу и пой «ла».`);
+  };
+  $('#demo').onclick = () => {
+    if (!tune || !ac()) return; hush();
+    const bus = musicBus(), beat = 60 / 100, notes = tuneNotes(tune); let tt = AC.currentTime + .2;
+    notes.forEach(nt => {
+      pianoNote(FREQ(nt.note), tt, Math.max(.5, nt.beats * beat * 1.2), bus);
+      later(() => { const k = keyOf(nt.note); k.classList.add('down'); setTimeout(() => k.classList.remove('down'), 200); }, (tt - AC.currentTime) * 1000);
+      tt += nt.beats * beat;
+    });
+    void t;
+  };
+}
+
+function mathTask() {
+  const ty = pickOne(['+', '−', '×', '÷']);
+  if (ty === '+') { const a = ri(12, 65), b = ri(5, 34); return { q: `${a} + ${b}`, ans: a + b }; }
+  if (ty === '−') { const a = ri(20, 99), b = ri(5, a - 3); return { q: `${a} − ${b}`, ans: a - b }; }
+  if (ty === '×') { const a = ri(2, 9), b = ri(2, 9); return { q: `${a} × ${b}`, ans: a * b }; }
+  const b = ri(2, 9), r = ri(2, 9); return { q: `${b * r} ÷ ${b}`, ans: r };
+}
+function screenSprint() {
+  const t = newScreen(), LEN = 60;
+  let task = mathTask(), input = '', score = 0, combo = 0, run = false, stop = null;
+  shell('Мат-спринт', `<div class="sprint">
+      <div class="sp-hud"><span class="sp-time" id="spT">1:00</span><span>Решено: <b id="spS">0</b></span><span id="spC"></span></div>
+      <div class="sp-q" id="spQ">${task.q} = <span id="spA">?</span></div>
+      <div class="keypad" id="kp">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 'del', 0, 'ok'].map(k => `<button class="kp-k ${k === 'ok' ? 'ok' : ''}" data-k="${k}">${k === 'del' ? '⌫' : k === 'ok' ? 'OK' : k}</button>`).join('')}</div>
+      <button class="big" id="spGo">${ICON.play}Старт</button>
+      <p class="lead" id="spBest">${P.mathBest ? `Рекорд: ${P.mathBest} за минуту` : 'Рекорда пока нет'}</p>
+    </div>`);
+  talk('Мат-спринт! Сложение, вычитание, умножение и деление. Сколько примеров решишь за минуту?');
+  const show = () => { $('#spQ').innerHTML = `${task.q} = <span id="spA">${input || '?'}</span>`; };
+  function submit() {
+    if (!input) return;
+    if (+input === task.ans) { score++; combo++; sfx.note(Math.min(3, combo % 4)); $('#spS').textContent = score; $('#spC').textContent = combo >= 3 ? `серия ×${combo}` : ''; }
+    else { combo = 0; sfx.oops(); $('#spC').textContent = `было ${task.ans}`; wiggle($('#spQ')); }
+    task = mathTask(); input = ''; show();
+  }
+  $('#kp').onclick = e => {
+    const b = e.target.closest('.kp-k'); if (!b || !run) return;
+    const k = b.dataset.k;
+    if (k === 'ok') submit(); else if (k === 'del') { input = input.slice(0, -1); show(); } else if (input.length < 3) { input += k; show(); }
+  };
+  const onKey = e => {
+    if (t !== tok) { document.removeEventListener('keydown', onKey); return; }
+    if (!run) return;
+    if (e.key === 'Enter') submit(); else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 3) { input += e.key; show(); }
+  };
+  document.addEventListener('keydown', onKey);
+  $('#spGo').onclick = () => {
+    $('#spGo').remove(); run = true; hush(); sfx.pop();
+    stop = stopwatch(s => {
+      const left = Math.max(0, LEN - s); $('#spT').textContent = fmtSec(Math.ceil(left));
+      if (left <= 0 && run) {
+        run = false; stop();
+        const pb = score > (P.mathBest || 0); if (pb) P.mathBest = score; save();
+        finish({ key: 'm-sprint', stars: score >= 15 ? 3 : score >= 8 ? 2 : 1, line: `${score} ${plural(score, ['пример', 'примера', 'примеров'])} за минуту!${pb ? ' Новый рекорд!' : ''}`, again: screenSprint });
+      }
+    });
+  };
+}
+
+// a very active boy: move and say Л at the same time
+const MOVES = [
+  ['🛹', 'Встань, как на скейте, и сделай пять приседаний. На каждом говори: ЛА!', 'ЛА × 5'],
+  ['🥋', 'Стойка тхэквондо! Пять ударов ногой вперёд. На каждом ударе: ЛО!', 'ЛО × 5'],
+  ['🚲', 'Ляг на спину и покрути «велосипед» ногами десять раз: лу-лу-лу!', 'ЛУ × 10'],
+  ['🏄', 'Поза сёрфера: балансируй и тяни долго: л-л-л-л, пока считаешь до десяти.', 'Л-л-л-л…'],
+  ['🛴', 'Десять прыжков на месте, как на самокате. На каждом прыжке: ЛЫ!', 'ЛЫ × 10'],
+  ['♟️', 'Шагни, как шахматный конь: два шага вперёд и шаг вбок. И скажи: ладья, слон, король!', 'ладья · слон · король'],
+  ['🦎', 'Проползи, как ящерица, пять шагов и скажи: ящерица Лиза ловкая!', 'ящерица Лиза ловкая'],
+  ['🎹', 'Сыграй пальцами по столу, как на пианино, и пой: ла-ла-ла-ла-ла!', 'ла-ла-ла-ла-ла'],
+  ['🥋', 'Блок руками вверх и вниз пять раз. Вверх — АЛ, вниз — ОЛ!', 'АЛ — ОЛ × 5']
+];
+function screenMove() {
+  const t = newScreen(), deck = sample(MOVES, 5);
+  let k = 0;
+  shell('Физминутка', `<div class="move-card" id="mv"></div>`);
+  async function show() {
+    const [e, line, big] = deck[k];
+    $('#mv').innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><span class="move-e">${pic(e)}</span><p class="move-big">${hiS(big, 'л')}</p><p class="move-t">${esc(line)}</p>`;
+    await talk(line); if (t !== tok) return;
+    await askSaid(G('Сделала!', 'Сделал!')); if (t !== tok) return;
+    k++;
+    if (k >= deck.length) finish({ key: 'l-move', line: 'Отличная физминутка! Тело и язык размялись.', again: screenMove });
+    else show();
+  }
+  show();
+}
+
+/* ---------- Vera: hissing sounds Ш Ж Ч Щ and Р at the end of a word ---------- */
+Object.assign(PROF, {
+  cup: { j: 10, lips: 'smile', tip: [204, 100], hump: [122, 92], out: 1 },
+  horn: { j: 3, lips: 'round', tip: [152, 58], hump: [112, 80] }
+});
+const sndIdx = L => Math.max(0, SOUNDS.findIndex(x => x.L === L));
+SOUNDS.push(
+  { L: 'Ш', pose: 'horn',
+    prof: { j: 3, lips: 'round', tip: [152, 58], hump: [112, 80], air: 'M60 78Q118 64 150 66Q172 74 218 80', marks: [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]] },
+    steps: ['Губы округлены и вытянуты вперёд, как рупор.', 'Зубки почти сомкнуты.', 'Широкий кончик языка поднят к бугоркам за верхними зубками — язык как чашечка.', 'По середине языка идёт тёплый воздух: ш-ш-ш, как змейка шипит.', 'Горлышко молчит.'],
+    line: 'Звук Ш. Губки вытяни рупором. Широкий язычок подними чашечкой к бугоркам за верхними зубками. Подуй тёплым воздухом, как змейка шипит.' },
+  { L: 'Ж', pose: 'horn',
+    prof: { j: 3, lips: 'round', tip: [152, 58], hump: [112, 80], air: 'M60 78Q118 64 150 66Q172 74 218 80', voice: 1, marks: [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [34, 114, 5]] },
+    steps: ['Губы округлены и вытянуты вперёд, как рупор.', 'Зубки почти сомкнуты.', 'Широкий кончик языка поднят к бугоркам за верхними зубками — язык как чашечка.', 'По середине языка идёт тёплый воздух.', 'Горлышко работает: ж-ж-ж, как жук жужжит.'],
+    line: 'Звук Ж — как звук Ш, только с голосом. Губки рупором, язычок чашечкой наверху. Пусть горлышко жужжит, как жук.' }
+);
+const ARTIC_SH = [
+  { id: 'sh-cup', name: 'Чашечка', thumb: 'cup', text: 'Улыбнись, открой рот. Высунь широкий язык и подними его края — получится чашечка. Держи, пока считаем до пяти.', tip: 'Губы не помогают, язык широкий.', intro: 'Сделаем из язычка чашечку! Высунь широкий язычок и подними края. Держим до пяти.', steps: count5('cup') },
+  { id: 'sh-mushroom', name: 'Грибок', thumb: 'swingUp', text: 'Улыбнись, открой рот. Присоси широкий язык к нёбу: язык — шляпка грибка, уздечка — ножка. Держи до пяти.', intro: 'Прилепи язычок к нёбу, как шляпку грибка. Держим до пяти.', steps: count5('swingUp') },
+  { id: 'sh-accordion', name: 'Гармошка', thumb: 'swingUp', text: 'Присоси язык к нёбу и, не отрывая его, открывай и закрывай рот.', tip: 'Язык всё время прилеплен к нёбу.', intro: 'Язычок прилип к нёбу. Открываем и закрываем ротик, как гармошка.', steps: rep(4, [['swingUp', 'Открыли', 1300], ['donkey', 'Закрыли', 1300]]) },
+  { id: 'sh-jam', name: 'Вкусное варенье', thumb: 'lickUp', text: 'Широким языком оближи верхнюю губу сверху вниз.', tip: 'Нижняя челюсть не двигается.', intro: 'На верхней губке варенье. Оближи его широким язычком сверху вниз.', steps: rep(4, [['lickUp', '', 950], ['swingUp', '', 950]]) },
+  { id: 'sh-horse', name: 'Лошадка', thumb: 'swingUp', text: 'Пощёлкай языком, присасывая его к нёбу: цок-цок.', intro: 'Поскачем на лошадке: цок-цок!', steps: rep(5, [['swingUp', 'Цок!', 900], ['swingDown', '', 700]]) },
+  { id: 'sh-focus', name: 'Фокус', thumb: 'lickUp', text: 'Положи язык чашечкой на верхнюю губу и подуй на кончик носа. Можно сдувать ватку с носа.', intro: 'Фокус! Язычок чашечкой на верхней губке. Подуй на носик!', steps: [['lickUp', 'Дуем!', 1500], ['lickUp', '', 1100], ['lickUp', 'Дуем!', 1500], ['lickUp', '', 1000]] },
+  { id: 'sh-horn', name: 'Рупор', thumb: 'horn', text: 'Сомкни зубы и вытяни губы вперёд рупором. Держи, пока считаем до пяти.', intro: 'Губки рупором, как будто зовём: эй! Держим до пяти.', steps: count5('horn') }
+];
+const SYL_SH = [['ша', 'ША', 'шапка', '🧢'], ['шу', 'ШУ', 'шуба', '🧥'], ['ши', 'ШИ', 'шина', '🛞'], ['шо', 'ШО', 'шоколад', '🍫'], ['жа', 'ЖА', 'жаба', '🐸'], ['жу', 'ЖУ', 'жук', '🪲'],
+  ['жи', 'ЖИ', 'жираф', '🦒'], ['ча', 'ЧА', 'чайник', '🫖'], ['чу', 'ЧУ', 'чулок', '🧦'], ['щё', 'ЩЁ', 'щётка', '🪥'], ['ще', 'ЩЕ', 'щенок', '🐶']];
+const SYL_REND = [['ар', 'АР', 'шар', '🎈'], ['ыр', 'ЫР', 'сыр', '🧀'], ['ор', 'ОР', 'помидор', '🍅'], ['ар', 'АР', 'комар', '🦟'], ['ор', 'ОР', 'мухомор', '🍄'],
+  ['ор', 'ОР', 'топор', '🪓'], ['ор', 'ОР', 'светофор', '🚦'], ['ер', 'ЕР', 'ветер', '🌬️'], ['ар', 'АР', 'повар', '🧑‍🍳']];
+const HOUSE_SH = [['шапка', '🧢', 0], ['шуба', '🧥', 0], ['шар', '🎈', 0], ['шина', '🛞', 0], ['мышка', '🐭', 1], ['кошка', '🐈', 1], ['мишка', '🧸', 1], ['машина', '🚗', 1], ['каша', '🥣', 1],
+  ['душ', '🚿', 2], ['малыш', '👶', 2], ['карандаш', '✏️', 2]];
+const SH_ITEMS = [['Ш', 'шапка', '🧢'], ['Ш', 'шуба', '🧥'], ['Ш', 'шар', '🎈'], ['Ш', 'шина', '🛞'], ['Ш', 'мышка', '🐭'], ['Ш', 'кошка', '🐈'],
+  ['Ж', 'жук', '🪲'], ['Ж', 'жираф', '🦒'], ['Ж', 'жаба', '🐸'], ['Ж', 'ёжик', '🦔'], ['Ж', 'лыжи', '🎿'], ['Ж', 'ножницы', '✂️'],
+  ['Ч', 'чайник', '🫖'], ['Ч', 'черепаха', '🐢'], ['Ч', 'часы', '⏰'], ['Ч', 'мяч', '⚽'], ['Ч', 'ключ', '🔑'], ['Ч', 'очки', '👓'],
+  ['Щ', 'щётка', '🪥'], ['Щ', 'щенок', '🐶'], ['Щ', 'ящик', '📦'], ['Щ', 'овощи', '🥕'], ['Щ', 'щука', '🐟']];
+const SH_BINS = { 'Ш': ['🐍', 'змейка шипит'], 'Ж': ['🪲', 'жук жужжит'], 'Ч': ['🚂', 'паровоз пыхтит'], 'Щ': ['🪥', 'щёточка чистит'] };
+function screenSort() {
+  const t = newScreen(), pair = pickOne([['Ш', 'Ж'], ['Ш', 'Щ'], ['Ч', 'Щ'], ['Ж', 'Ш']]);
+  const deck = shuffle(pair.flatMap(L => sample(SH_ITEMS.filter(x => x[0] === L), 3)));
+  let k = 0, busy = false;
+  shell('Змейка или жук?', `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
+    <div class="bins" id="bins">${pair.map(L => `<button class="bin" data-l="${L}"><span class="emo">${SH_BINS[L][0]}</span><b class="L c">${L}</b><small>${SH_BINS[L][1]}</small></button>`).join('')}</div></div>`);
+  const cslot = $('#cslot'), bins = $('#bins');
+  const intro = pair.map(L => `${SH_BINS[L][1]} — звук ${L}`).join('. ');
+  function show() {
+    busy = false; const [, w, e] = deck[k];
+    cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
+    talk(k === 0 ? `${intro}. Послушай слово и нажми на нужный звук. ${cap(w)}.` : `${cap(w)}. Какой звук?`);
+  }
+  bins.onclick = async e => {
+    const b = e.target.closest('.bin'); if (!b || busy) return;
+    const [L, w] = deck[k];
+    if (b.dataset.l !== L) { wiggle(b); sfx.oops(); talk(`Послушай ещё раз: ${w}`, { rate: .7 }); return; }
+    busy = true; sfx.good(); hopEl(b);
+    $('.pcard .w').innerHTML = hiS(w.toUpperCase(), L);
+    await talk(`${cap(w)} — звук ${L}!`); if (t !== tok) return;
+    k++;
+    if (k >= deck.length) finish({ key: 'sh-sort', line: 'Ты различаешь шипящие звуки!', again: screenSort });
+    else later(show, 300);
+  };
+  show();
+}
 
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
       <li>«Скорочтение»: слоговые дорожки (ЛА-ЛО-ЛУ, АЛ-ОЛ-УЛ, АЛА-ОЛО) на время и текст на скорость. Игра считает слова в минуту и рисует график. Важно не только быстро, но и чётко.</li>
@@ -2934,7 +3564,7 @@ function screenAlbum() {
   newScreen();
   const n = stickerCount(), left = 5 - (P.stars % 5), all = n >= STK().length;
   const leftTxt = `${left} ${plural(left, ['звёздочка', 'звёздочки', 'звёздочек'])}`;
-  shell('Мои наклейки', `<div class="album">
+  shell(Q() ? 'Мои трофеи' : 'Мои наклейки', `<div class="album">
       <p class="lead">${all ? 'Ты собрала все наклейки!' : `${n ? `Собрано ${n} из ${STK().length}.` : 'Пока пусто.'} До новой наклейки: ${leftTxt}.`}</p>
       ${all ? '' : `<div class="next-bar" aria-hidden="true"><i style="width:${(P.stars % 5) / 5 * 100}%"></i></div>`}
       <div class="stickers">${STK().map((s, i) => i < n ? `<span class="stk" style="--r:${(i * 37 % 17) - 8}deg">${stickerHTML(s)}</span>` : '<span class="stk locked">?</span>').join('')}</div>
@@ -2951,6 +3581,7 @@ function screenParents(focus) {
         <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="например, Маша" value="${esc(P.settings.name || '')}"></label>
       <label class="sw" for="voiceIn"><input id="voiceIn" type="checkbox" ${P.settings.voice ? 'checked' : ''}>Друг говорит вслух</label>
       <label class="sw" for="slowIn"><input id="slowIn" type="checkbox" ${P.settings.rate < 1 ? 'checked' : ''}>Говорить ещё медленнее</label>
+      <label class="prow" for="devVoice">Голос телефона (бесплатный) <select id="devVoice"><option value="">— автоматически —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Звуки игры</label>
       <p class="muted" id="voiceState"></p>
       <div class="prow-btns"><button class="big ghost" id="testVoice">Проверить голос</button></div>
@@ -2977,6 +3608,7 @@ function screenParents(focus) {
       <div id="resetAsk" hidden><p>Стереть все звёздочки и наклейки?</p><div class="prow-btns"><button class="big danger" id="resetYes">Да, стереть</button><button class="big ghost" id="resetNo">Отмена</button></div></div>
     </section>
     <section class="psec"><h2>Как заниматься: ${esc(P.settings.name)}</h2><p class="muted">Профиль переключается вверху главного экрана. У каждого ребёнка свои звёздочки, календарь и настройки.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
+      <li>Сейчас в приоритете шипящие (Ш, Ж, Ч, Щ) и Р в конце слова: в «Логопеде» каждый день есть упражнения для шипящих и одна игра на шипящие или на Р в конце.</li>
       <li>На главном экране три занятия на сегодня. «Логопед»: 2 дыхательных упражнения, весь комплекс зарядки для язычка и 2 игры со звуком Р, около 15 минут. «Чтение» и «Математика» — по 4 игры, около 10 минут. Каждое занятие можно пройти ещё раз: задания будут другими.</li>
       <li>Буквы раскрашены, как в букваре: гласные красные, согласные синие. Читаем по слогам: «Буквы дружат» (М + А = МА), потом слова.</li>
       <li>Песенки — народные потешки и песенка про звук Р, мелодии простые. Их можно петь и играть на ксилофоне. Рисунки после «Готово» попадают в «Мои рисунки» (последние 12).</li>
@@ -2990,6 +3622,12 @@ function screenParents(focus) {
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
   vs(); later(vs, 1200);
+  const fillDev = () => {
+    let ru = []; try { ru = speechSynthesis.getVoices().filter(v => /^ru/i.test(v.lang)); } catch (e) {}
+    $('#devVoice').innerHTML = '<option value="">— автоматически —</option>' + ru.map(v => `<option value="${esc(v.name)}" ${ROOT.devVoice === v.name ? 'selected' : ''}>${esc(v.name)}${/premium|enhanced|улучш|natural|neural|online/i.test(v.name) ? ' ★' : ''}</option>`).join('');
+  };
+  fillDev(); later(fillDev, 1200);
+  $('#devVoice').onchange = e => { ROOT.devVoice = e.target.value; save(); pickVoice(); vs(); if (P.settings.voice) say('Привет! Я буду говорить этим голосом.'); };
   $('#nameIn').addEventListener('input', e => { P.settings.name = e.target.value.trim(); P.settings.nameTouched = true; save(); });
   $('#voiceIn').onchange = e => { P.settings.voice = e.target.checked; save(); if (!P.settings.voice) hush(); };
   $('#slowIn').onchange = e => { P.settings.rate = e.target.checked ? .8 : 1; save(); };
