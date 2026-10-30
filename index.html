@@ -545,6 +545,29 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .bc i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,.12)}
 .beauty-mini{width:150px}
 
+.chess{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.ch-modes{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ch-modes .chip.sel{background:var(--t-yellow);box-shadow:0 5px 0 #D39A00}
+.ch-task{margin:0;text-align:center;font:700 16px/1.35 var(--f-body);color:var(--ink-soft)}
+.ch-wrap{width:min(100%,460px,60vh)}
+.ch-board{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));overflow:hidden;border-radius:10px;box-shadow:0 0 0 6px #6E4A2E,0 10px 0 6px rgba(0,0,0,.35)}
+.sq{position:relative;aspect-ratio:1;border:0;padding:0;display:grid;place-items:center;cursor:pointer}
+.sq.l{background:#F0D9B5}
+.sq.d{background:#B58863}
+.sq.last{background-image:linear-gradient(rgba(255,214,90,.5),rgba(255,214,90,.5))}
+.sq.sel{box-shadow:inset 0 0 0 4px #FFC83A}
+.sq.hint{box-shadow:inset 0 0 0 4px #2FA865;animation:pulse .9s ease-in-out infinite}
+.pc{font:400 clamp(26px,8.6vw,46px)/1 "Segoe UI Symbol","Apple Symbols","DejaVu Sans","Noto Sans Symbols2",serif;pointer-events:none}
+.pc.w{color:#FFFFFF;-webkit-text-stroke:1.5px #1E1A2E;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.pc.b{color:#1E1A2E}
+.sq em{position:absolute;font:800 10px var(--f-body);font-style:normal;color:rgba(30,26,46,.55);pointer-events:none}
+.sq .rk{top:2px;left:3px}
+.sq .fl{bottom:1px;right:3px}
+.ch-note{margin:0;min-height:1.4em;text-align:center;font:700 17px/1.4 var(--f-body)}
+.ch-note b{color:var(--tiger-deep)}
+body.quest .ch-note b{color:var(--sun)}
+#impTxt{width:100%;font:600 14px var(--f-body);padding:10px;border-radius:12px;border:3px solid var(--line-strong);background:#fff;color:#2A2346}
+
 /* friends */
 .friends{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,640px)}
 @media (min-width:600px){.friends{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -921,7 +944,7 @@ function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
   if (P.settings.track === 'l') {
     if (id === 'speech') {
-      const o = 2 * n + 2 * s, lg = ['l-rap', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house'];
+      const o = 2 * n + 2 * s, lg = ['l-rap', 'chess', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house'];
       for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
       const art = s === 0 ? ARTIC_L.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC_L.length);
       art.forEach(i => steps.push({ key: 'artic:' + ARTIC_L[i].id, kind: 'artic', name: ARTIC_L[i].name, run: () => screenArtic(i, true) }));
@@ -1550,6 +1573,7 @@ const GAMES = [
   { id: 'l-boss', name: 'Спарринг', sub: 'тхэквондо против путаника', ico: () => pic('🥋'), bg: 'var(--t-pink)', go: () => screenBoss(), grp: 5 },
   { id: 'l-rec', name: 'Диктофон', sub: 'запиши и послушай себя', ico: () => pic('🎙️'), bg: 'var(--t-blue)', go: () => screenRec(), grp: 5, prog: () => '' },
   { id: 'l-move', name: 'Физминутка', sub: 'прыжки, удары, сёрфинг — и звук Л', ico: () => pic('🤸'), bg: 'var(--t-peach)', go: () => screenMove(), grp: 5 },
+  { id: 'chess', name: 'Шахматные задачи', sub: 'мат в 1 и в 2 хода', ico: () => pic('♟️'), bg: 'var(--t-yellow)', go: () => screenChess(), grp: 8, prog: () => P.chessSolved ? `решено: ${P.chessSolved}` : '' },
   { id: 'm-sprint', name: 'Мат-спринт', sub: 'сколько примеров за минуту', ico: () => '<span class="ico-num">7×8</span>', bg: 'var(--t-blue)', go: () => screenSprint(), grp: 8, prog: () => P.mathBest ? `рекорд: ${P.mathBest}` : '' },
   { id: 'piano', name: 'Пианино', sub: 'Бетховен, Jingle Bells — и пой «ла»', ico: () => pic('🎹'), bg: 'var(--t-lilac)', go: () => screenPiano(), grp: 8, prog: () => '' },
   { id: 'r-end', name: 'Р в конце', sub: 'шар, сыр, помидор', ico: () => pic('🎈'), bg: 'var(--t-yellow)', go: () => screenSyll(SYL_REND, 'r-end', 'Р в конце слова', 'р'), grp: 1 },
@@ -3071,7 +3095,7 @@ const SECTIONS = [
   { g: 9, h: 'Шипящие: Ш Ж Ч Щ', p: 'змейка, жук, паровоз и щёточка', only: 'r' },
   { g: 5, h: 'Арена Л', p: 'бит, аркада, босс и скороговорки', only: 'l' },
   { g: 6, h: 'Чтение', p: 'каждый день понемногу', only: 'l' },
-  { g: 8, h: 'Математика и пианино', p: 'спринт по примерам и любимые мелодии', only: 'l' },
+  { g: 8, h: 'Шахматы, математика и пианино', p: 'задачи на мат, спринт по примерам и любимые мелодии', only: 'l' },
   { g: 2, h: 'Буквы и чтение', p: 'гласные красные, согласные синие', only: 'r' },
   { g: 3, h: 'Математика', p: 'считаем, складываем, сравниваем', only: 'r' },
   { g: 7, h: 'Вместе', p: 'играем вдвоём' },
@@ -3641,6 +3665,77 @@ function screenBeauty() {
   $('#mirrorBtn').onclick = () => { if (!busy) mirror(); };
 }
 
+/* ---------- chess puzzles for Sava: every position and solution was checked with a chess engine (python-chess) ---------- */
+const CHESS1 = [["6R1/1k6/ppp5/8/8/8/3R4/2BK4", "d2d7", "Лd7#", "R"], ["7k/6p1/4Q3/8/6P1/4R3/8/5K2", "e3h3", "Лh3#", "R"], ["k7/pp6/2Rr3N/4R3/7r/3P1K2/8/8", "c6c8", "Лc8#", "R"], ["7k/5Rpp/1q6/P4B2/8/8/P7/4K3", "f7f8", "Лf8#", "R"], ["3k4/2ppp3/8/5Bq1/R4P2/8/8/7K", "a4a8", "Лa8#", "R"], ["1k6/ppp5/7B/8/P2R4/P5K1/1P6/8", "d4d8", "Лd8#", "R"], ["3k1r2/3pp3/2p5/8/8/1Q6/3K4/8", "b3b8", "Фb8#", "Q"], ["7k/6pp/8/P5Q1/P4P2/8/8/K7", "g5d8", "Фd8#", "Q"], ["5k2/4ppp1/7p/8/8/7P/3Q4/4R1K1", "d2d8", "Фd8#", "Q"], ["4k3/4p3/3Q4/4N3/4P3/1P6/3K4/8", "d6b8", "Фb8#", "Q"], ["k7/p7/1p1p4/2Q5/7P/N1P5/1K6/8", "c5c8", "Фc8#", "Q"], ["7k/8/1Q5p/1B1n4/8/2P4P/6R1/6K1", "b6h6", "Фxh6#", "Q"], ["7k/2B4p/4Q3/8/8/1b4PK/4P3/8", "c7e5", "Сe5#", "B"], ["k7/p7/8/8/B7/2K5/7B/8", "a4c6", "Сc6#", "B"], ["k7/p7/8/1R6/8/8/2B3P1/3K4", "c2e4", "Сe4#", "B"], ["3B3k/7p/6Q1/8/8/8/8/7K", "d8f6", "Сf6#", "B"], ["k7/p7/8/8/5Q2/8/8/3KRB2", "f1g2", "Сg2#", "B"], ["kb6/p7/8/8/6B1/P7/4PP2/2RK4", "g4f3", "Сf3#", "B"], ["1k6/ppp5/1N5r/4N3/8/R5P1/8/3K4", "e5d7", "Кed7#", "N"], ["q1k1N1R1/1pp5/8/Pn6/6P1/8/8/4K3", "e8f6", "Кf6#", "N"], ["k7/p7/4N3/1R6/1q1P4/3K4/8/8", "e6c7", "Кc7#", "N"], ["k7/pp6/2N5/1N6/8/KP6/8/2n5", "b5c7", "Кc7#", "N"], ["3N3k/7p/8/8/2p5/P4nR1/5K2/8", "d8f7", "Кf7#", "N"], ["7k/6p1/8/7N/8/r3P1P1/1P6/4K2Q", "h5f6", "Кf6#", "N"], ["2r4k/7p/8/3B4/7P/2P5/8/B6K", "c3c4", "c4#", "P"], ["3Q4/kb6/pp6/2PR2P1/8/8/8/7K", "c5b6", "cxb6#", "P"], ["6R1/2q1N2k/6pp/2P4P/4R3/8/4K3/8", "h5g6", "hxg6#", "P"], ["7k/7p/8/3B2P1/8/2Pb4/3K4/B7", "c3c4", "c4#", "P"], ["4R3/2k5/1p1p4/PQrB4/8/5P2/8/7K", "a5b6", "axb6#", "P"], ["R5R1/4p2k/2B3pp/5P2/8/4p1P1/8/K7", "f5g6", "fxg6#", "P"]];
+const CHESS2 = [["6k1/1R4pp/8/P7/2p5/Q1K5/6P1/8", "a3e7", "Фe7", "h7h6", "h6", ["e7g7"], "Фxg7#", "Q"], ["6k1/1B4pp/5p2/8/8/1P2P2K/6R1/3Q4", "d1d8", "Фd8+", "g8f7", "Крf7", ["b7d5"], "Сd5#", "Q"], ["8/k7/8/pp1Q4/8/P7/1P2R3/K7", "e2e7", "Лe7+", "a7b6", "Крb6", ["d5d6"], "Фd6#", "R"], ["5k2/3Qppp1/1b6/8/8/8/2N5/3K4", "d7c8", "Фc8+", "b6d8", "Сd8", ["c8d8"], "Фxd8#", "Q"], ["6k1/3Q2p1/5p2/2P5/5R2/8/1P6/1K6", "d7e8", "Фe8+", "g8h7", "Крh7", ["f4h4"], "Лh4#", "Q"], ["k7/1p6/2Q1R3/p7/8/P5K1/1P4P1/8", "c6b6", "Фb6", "a8b8", "Крb8", ["e6e8"], "Лe8#", "Q"], ["7k/8/7N/6R1/7r/6RP/1P6/2K5", "h6f7", "Кf7+", "h8h7", "Крh7", ["g5g7"], "Лg7#", "N"], ["7k/6p1/7p/3R2P1/8/8/2P4Q/3K4", "g5g6", "g6", "h8g8", "Крg8", ["d5d8", "h2b8"], "Лd8#", "P"], ["3k4/R1p1p3/8/8/8/8/2Q5/1K1b4", "c2c7", "Фxc7+", "d8e8", "Крe8", ["c7e7"], "Фxe7#", "Q"], ["r7/4k3/R2ppp2/1R5B/P7/8/P2P3K/8", "b5b7", "Лb7+", "e7f8", "Крf8", ["a6a8"], "Лxa8#", "R"], ["k7/pp6/8/2Q5/4B3/2r5/1n1K4/8", "c5f8", "Фf8+", "c3c8", "Лc8", ["f8c8"], "Фxc8#", "Q"], ["6k1/7p/B7/8/8/1P2K2P/2P5/5R1R", "h1g1", "Лhg1+", "g8h8", "Крh8", ["f1f8"], "Лf8#", "R"], ["1k6/1Np5/8/RP4p1/8/8/Q1P5/7K", "a5a8", "Лa8+", "b8b7", "Крxb7", ["a2a7", "a2a6"], "Фa7#", "R"], ["4R1Q1/3k4/3pp3/4P3/8/5N2/5b2/7K", "e8c8", "Лc8", "f2b6", "Сb6", ["g8e8"], "Фe8#", "R"]];
+const GLYPH = { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟' };
+const PIECE_RU = { K: 'король', Q: 'ферзь', R: 'ладья', B: 'слон', N: 'конь', P: 'пешка' };
+const MATE_LINE = { R: 'Ладья ставит мат! Скажи: ладья ставит мат.', Q: 'Ферзь ставит мат! Скажи: король в ловушке, мат.', B: 'Слон ставит мат! Скажи: слон ловко ставит мат.', N: 'Конь ставит мат! Скажи: ловкий конь ставит мат.', P: 'Пешка ставит мат! Скажи: маленькая пешка поставила мат.' };
+const fenBoard = f => { const out = []; f.split('/').forEach(row => { for (const c of row) { if (/\d/.test(c)) for (let i = 0; i < +c; i++) out.push(''); else out.push(c); } }); return out; };
+const sqIdx = s => (8 - +s[1]) * 8 + 'abcdefgh'.indexOf(s[0]);
+function screenChess(mode = 1) {
+  const t = newScreen(), deck = sample(mode === 1 ? CHESS1 : CHESS2, 5);
+  let k = 0, pos = [], sel = -1, stage = 0, miss = 0, busy = false;
+  shell('Шахматные задачи', `<div class="chess">
+      <div class="ch-modes"><button class="chip ${mode === 1 ? 'sel' : ''}" data-m="1">Мат в 1 ход</button><button class="chip ${mode === 2 ? 'sel' : ''}" data-m="2">Мат в 2 хода</button></div>
+      <p class="ch-task" id="chT"></p>
+      <div class="ch-wrap"><div class="ch-board" id="chB"></div></div>
+      <p class="ch-note" id="chN"></p>
+    </div>`);
+  const B = $('#chB');
+  $('.ch-modes').onclick = e => { const c = e.target.closest('[data-m]'); if (c && +c.dataset.m !== mode) { sfx.pop(); screenChess(+c.dataset.m); } };
+  function draw(hint = -1, last = []) {
+    B.innerHTML = pos.map((p, i) => {
+      const r = Math.floor(i / 8), f = i % 8, light = (r + f) % 2 === 0;
+      const lab = (f === 0 ? `<em class="rk">${8 - r}</em>` : '') + (r === 7 ? `<em class="fl">${'abcdefgh'[f]}</em>` : '');
+      return `<button class="sq ${light ? 'l' : 'd'} ${i === sel ? 'sel' : ''} ${i === hint ? 'hint' : ''} ${last.includes(i) ? 'last' : ''}" data-i="${i}">${p ? `<span class="pc ${p === p.toUpperCase() ? 'w' : 'b'}">${GLYPH[p.toLowerCase()]}︎</span>` : ''}${lab}</button>`;
+    }).join('');
+  }
+  const play = uci => { const a = sqIdx(uci.slice(0, 2)), b = sqIdx(uci.slice(2, 4)); let p = pos[a]; if (uci[4]) p = p === p.toUpperCase() ? uci[4].toUpperCase() : uci[4]; pos[b] = p; pos[a] = ''; return [a, b]; };
+  function show() {
+    const z = deck[k]; pos = fenBoard(z[0]); sel = -1; stage = 0; miss = 0; busy = false;
+    $('#chT').textContent = `Задача ${k + 1} из ${deck.length} · белые начинают и ставят мат в ${mode === 1 ? '1 ход' : '2 хода'}`;
+    $('#chN').textContent = ''; draw();
+    talk(k === 0 ? `Белые начинают и ставят мат в ${mode === 1 ? 'один ход' : 'два хода'}. Нажми на свою фигуру, потом на клетку, куда она пойдёт.` : `Задача ${k + 1}. Найди мат!`);
+  }
+  async function solved(lastSq) {
+    busy = true; draw(-1, lastSq); sfx.good();
+    const z = deck[k], san = mode === 1 ? z[2] : `1. ${z[2]} ${z[4]} 2. ${z[6]}`, piece = mode === 1 ? z[3] : z[1] && pos[lastSq[1]].toUpperCase();
+    $('#chN').innerHTML = `Мат! Решение: <b>${esc(san)}</b> · ✍️ запиши ход в тетрадь`;
+    await talk(MATE_LINE[piece] || MATE_LINE.Q); if (t !== tok) return;
+    await askSaid(); if (t !== tok) return;
+    P.chessSolved = (P.chessSolved || 0) + 1; save();
+    k++;
+    if (k >= deck.length) finish({ key: 'chess', line: `Пять задач решено! Всего решено: ${P.chessSolved}.`, again: () => screenChess(mode) });
+    else show();
+  }
+  B.onclick = async e => {
+    const c = e.target.closest('.sq'); if (!c || busy) return;
+    const i = +c.dataset.i, p = pos[i];
+    if (p && p === p.toUpperCase()) { sel = i; sfx.tick(); draw(); return; }
+    if (sel < 0) return;
+    const uci = 'abcdefgh'[sel % 8] + (8 - Math.floor(sel / 8)) + 'abcdefgh'[i % 8] + (8 - Math.floor(i / 8)), z = deck[k];
+    const ok = mode === 1 ? z[1].startsWith(uci) : stage === 0 ? z[1].startsWith(uci) : z[5].some(m => m.startsWith(uci));
+    if (!ok) {
+      miss++; sfx.oops(); wiggle(B); sel = -1;
+      const want = mode === 1 ? z[1] : stage === 0 ? z[1] : z[5][0];
+      draw(miss >= 2 ? sqIdx(want.slice(0, 2)) : -1);
+      talk(miss >= 2 ? 'Подсказка: этой фигурой, которая светится.' : stage === 0 && mode === 2 ? 'Так мат в два хода не получится. Попробуй другой ход.' : 'Это не мат. Попробуй ещё!');
+      return;
+    }
+    sel = -1; miss = 0;
+    if (mode === 1 || stage === 1) {
+      const full = mode === 1 ? z[1] : z[5].find(m => m.startsWith(uci));
+      solved(play(full)); return;
+    }
+    busy = true; const lastA = play(z[1]); draw(-1, lastA); sfx.pop();
+    await talk(`Хороший ход! Чёрные отвечают.`); if (t !== tok) return;
+    const lastB = play(z[3]); draw(-1, lastB); sfx.tick(); stage = 1; busy = false;
+    talk('А теперь поставь мат!');
+  };
+  show();
+}
+
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
       <li>«Скорочтение»: слоговые дорожки (ЛА-ЛО-ЛУ, АЛ-ОЛ-УЛ, АЛА-ОЛО) на время и текст на скорость. Игра считает слова в минуту и рисует график. Важно не только быстро, но и чётко.</li>
       <li>«Книга»: после чтения отметьте минуты и страницу. Карточка цели показывает, сколько дней прочитано и сколько осталось до дня рождения. Дату и приз задайте ниже.</li>
@@ -3708,6 +3803,9 @@ function screenParents(focus) {
     </section>
     <section class="psec"><h2>Прогресс</h2>
       <p>Звёздочек: <b>${P.stars}</b>. Наклеек: <b>${stickerCount()}</b> из ${STK().length}. Прогресс хранится только на этом устройстве.</p>
+      <div class="prow-btns"><button class="big ghost" id="expBtn">Скопировать прогресс</button><button class="big ghost" id="impBtn">Вставить прогресс</button></div>
+      <div id="impBox" hidden><textarea id="impTxt" rows="3" placeholder="Вставьте сюда скопированный прогресс"></textarea><div class="prow-btns"><button class="big" id="impGo">Загрузить</button></div></div>
+      <p class="muted" id="expState">Пригодится при переезде на новый адрес или другое устройство: здесь копируете, там вставляете.</p>
       <div class="prow-btns" id="resetRow"><button class="big ghost danger" id="resetBtn">Начать заново</button></div>
       <div id="resetAsk" hidden><p>Стереть все звёздочки и наклейки?</p><div class="prow-btns"><button class="big danger" id="resetYes">Да, стереть</button><button class="big ghost" id="resetNo">Отмена</button></div></div>
     </section>
@@ -3737,6 +3835,21 @@ function screenParents(focus) {
   $('#slowIn').onchange = e => { P.settings.rate = e.target.checked ? .8 : 1; save(); };
   $('#sfxIn').onchange = e => { P.settings.sfx = e.target.checked; save(); if (P.settings.sfx) sfx.pop(); };
   $('#testVoice').onclick = () => say(greet());
+  $('#expBtn').onclick = async () => {
+    const data = { v: 2, cur: ROOT.cur, profiles: Object.fromEntries(KIDS.map(id => [id, { ...ROOT.profiles[id], art: [] }])) };
+    const code = 'GOV2:' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    try { await navigator.clipboard.writeText(code); $('#expState').textContent = 'Прогресс обоих детей скопирован. На новом адресе: «Для взрослых» → «Вставить прогресс».'; }
+    catch (e) { $('#impBox').hidden = false; $('#impTxt').value = code; $('#impTxt').select(); $('#expState').textContent = 'Скопируйте этот текст вручную.'; }
+  };
+  $('#impBtn').onclick = () => { $('#impBox').hidden = false; $('#impTxt').value = ''; $('#impTxt').focus(); };
+  $('#impGo').onclick = () => {
+    try {
+      const raw = $('#impTxt').value.trim(); if (!raw.startsWith('GOV2:')) throw new Error('format');
+      const data = JSON.parse(decodeURIComponent(escape(atob(raw.slice(5)))));
+      KIDS.forEach(id => { const o = data.profiles && data.profiles[id]; if (o) ROOT.profiles[id] = { ...ROOT.profiles[id], ...o, art: ROOT.profiles[id].art || [], settings: { ...ROOT.profiles[id].settings, ...(o.settings || {}) } }; });
+      P = ROOT.profiles[ROOT.cur]; save(); $('#expState').textContent = 'Прогресс загружен!'; later(goHome, 800);
+    } catch (e) { $('#expState').textContent = 'Не получилось прочитать. Скопируйте прогресс ещё раз целиком.'; }
+  };
   $('#resetBtn').onclick = () => { $('#resetRow').hidden = true; $('#resetAsk').hidden = false; };
   $('#resetNo').onclick = () => { $('#resetRow').hidden = false; $('#resetAsk').hidden = true; };
   $('#resetYes').onclick = () => { Object.assign(P, { stars: 0, best: {}, plays: {} }); save(); screenParents(); };
