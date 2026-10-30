@@ -532,6 +532,19 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .svg-page svg{display:block;width:100%;height:100%}
 .svg-page svg *{cursor:pointer}
 
+.beauty-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.beauty-face{width:clamp(170px,38vmin,260px);overflow:hidden;border:10px solid #F7B6CF;border-radius:50%/46%;background:radial-gradient(circle at 50% 40%,#FFF5FA,#FFE0EC);box-shadow:0 8px 0 #E58FB1}
+.beauty-face svg,.beauty-mini svg{display:block;width:100%;height:auto}
+.beauty-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:min(100%,560px)}
+@media (min-width:760px){.beauty-items{grid-template-columns:repeat(5,minmax(0,1fr))}}
+.bitem{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border:0;border-radius:20px;background:var(--paper);font-size:40px;cursor:pointer;box-shadow:0 5px 0 var(--line-strong)}
+.bitem small{font:800 14px var(--f-body);color:var(--ink-soft)}
+.bitem.used{background:var(--t-pink)}
+.beauty-colors{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.bc{display:flex;align-items:center;gap:8px;padding:8px 14px;border:0;border-radius:999px;background:var(--paper);font:800 16px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
+.bc i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,.12)}
+.beauty-mini{width:150px}
+
 /* friends */
 .friends{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,640px)}
 @media (min-width:600px){.friends{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -918,13 +931,13 @@ function lessonPlan(id) {
     return steps;
   }
   if (id === 'speech') {
-    const o = 2 * n + 2 * s, games = GAMES.filter(g => g.grp === 1 && !g.info && g.id !== 'r-end');
+    const o = 2 * n + 2 * s, games = GAMES.filter(g => g.grp === 1 && !g.info && g.id !== 'r-end' && g.id !== 'beauty');
     for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
     // now the priority: hissing sounds every day, plus three С/З exercises in turn
     const AR = AL(), shI = ARTIC_SH.map((_, i) => ARTIC.length + i);
     const art = s === 0 ? [...shI, ...[0, 1, 2].map(k => (3 * n + k) % ARTIC.length)] : [0, 1, 2, 3].map(k => (n + 4 * s + k) % AR.length);
     art.forEach(i => steps.push({ key: 'artic:' + AR[i].id, kind: 'artic', name: AR[i].name, run: () => screenArtic(i, true) }));
-    const pri = ['r-end', 'sh-sort', 'sh-syll', 'sh-house'];
+    const pri = ['r-end', 'sh-sort', 'beauty', 'sh-syll', 'sh-house'];
     steps.push(gameStep(pri[(n + s) % pri.length], 'game'));
     steps.push(gameStep(games[o % games.length].id, 'game'));
   } else if (id === 'read') {
@@ -1540,6 +1553,7 @@ const GAMES = [
   { id: 'm-sprint', name: 'Мат-спринт', sub: 'сколько примеров за минуту', ico: () => '<span class="ico-num">7×8</span>', bg: 'var(--t-blue)', go: () => screenSprint(), grp: 8, prog: () => P.mathBest ? `рекорд: ${P.mathBest}` : '' },
   { id: 'piano', name: 'Пианино', sub: 'Бетховен, Jingle Bells — и пой «ла»', ico: () => pic('🎹'), bg: 'var(--t-lilac)', go: () => screenPiano(), grp: 8, prog: () => '' },
   { id: 'r-end', name: 'Р в конце', sub: 'шар, сыр, помидор', ico: () => pic('🎈'), bg: 'var(--t-yellow)', go: () => screenSyll(SYL_REND, 'r-end', 'Р в конце слова', 'р'), grp: 1 },
+  { id: 'beauty', name: 'Салон красоты', sub: 'румяна, помада, корона', ico: () => pic('💄'), bg: 'var(--t-pink)', go: () => screenBeauty(), grp: 1 },
   { id: 'sounds-sh', name: 'Как ставить язык', sub: 'схемы звуков Ш и Ж', ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx('Ш')].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx('Ш')), grp: 9, info: 1, prog: () => '' },
   { id: 'sh-syll', name: 'Шипящие слоги', sub: 'ша-ша-ша… шапка!', ico: () => '<span class="ico-letters"><b class="L c">Ш</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenSyll(SYL_SH, 'sh-syll', 'Шипящие слоги', 'шжчщ'), grp: 9 },
   { id: 'sh-sort', name: 'Змейка или жук?', sub: 'Ш, Ж, Ч или Щ', ico: () => pic('🐍'), bg: 'var(--t-green)', go: () => screenSort(), grp: 9 },
@@ -3535,6 +3549,96 @@ function screenSort() {
     else later(show, 300);
   };
   show();
+}
+
+/* ---------- Vera loves make-up: a beauty salon where every item is named with Р or a hissing sound ---------- */
+SVGS.comb = '<svg viewBox="0 0 100 100"><rect x="12" y="28" width="76" height="20" rx="7" fill="#EF4F7E"/><g fill="#EF4F7E">' + Array.from({ length: 10 }, (_, i) => `<rect x="${15 + i * 7.2}" y="44" width="4" height="32" rx="2"/>`).join('') + '</g></svg>';
+function beautySVG(st = {}) {
+  const lip = st.lips || '#E8838F', glow = 'bg' + (++fid);
+  const beads = Array.from({ length: 7 }, (_, i) => { const u = i / 6, x = (1 - u) ** 2 * 72 + 2 * (1 - u) * u * 100 + u * u * 128, y = (1 - u) ** 2 * 196 + 2 * (1 - u) * u * 216 + u * u * 196; return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="#FFF8F0" stroke="#E2D2BE" stroke-width="1.2"/>`; }).join('');
+  const star = (x, y, s = 1) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0-6 1.5-1.5 6 0 1.5 1.5 0 6-1.5 1.5-6 0-1.5-1.5Z" fill="#FFF3B0" stroke="#F2C200" stroke-width=".6"/>`;
+  return `<svg class="beauty" viewBox="0 0 200 240" aria-hidden="true">
+    ${st.powder ? `<defs><radialGradient id="${glow}" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".55"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient></defs>` : ''}
+    <ellipse cx="100" cy="112" rx="84" ry="96" fill="#E8762A"/>
+    ${st.hair ? '<path d="M38 132Q30 92 50 62M160 132Q170 92 150 62M62 40Q90 22 122 30" stroke="#FFC08A" stroke-width="6" fill="none" stroke-linecap="round" opacity=".85"/><path d="M150 52l14-10 4 14-12 2zM150 52l-4-16 14 4-4 10z" fill="#EF4F7E"/><circle cx="152" cy="50" r="4" fill="#C2185B"/>' : ''}
+    <path d="M30 240Q36 196 100 192Q164 196 170 240Z" fill="#FF8FB0"/>
+    <rect x="86" y="168" width="28" height="30" fill="#FFDDC2"/>
+    ${st.necklace ? `<path d="M72 196Q100 216 128 196" fill="none" stroke="#E2D2BE" stroke-width="1.5"/>${beads}` : ''}
+    <ellipse cx="38" cy="118" rx="10" ry="15" fill="#FFDDC2"/><ellipse cx="162" cy="118" rx="10" ry="15" fill="#FFDDC2"/>
+    ${st.earrings ? '<path d="M38 132l-6 12 6 10 6-10z" fill="#FFC83A" stroke="#D39A00" stroke-width="1.5"/><circle cx="38" cy="144" r="3" fill="#8C6CF2"/><path d="M162 132l-6 12 6 10 6-10z" fill="#FFC83A" stroke="#D39A00" stroke-width="1.5"/><circle cx="162" cy="144" r="3" fill="#8C6CF2"/>' : ''}
+    <ellipse cx="100" cy="114" rx="64" ry="72" fill="#FFDDC2"/>
+    ${st.powder ? `<ellipse cx="100" cy="114" rx="62" ry="70" fill="url(#${glow})"/>` : ''}
+    <path d="M36 104Q40 34 100 32Q160 34 164 104Q152 70 128 66Q112 52 96 64Q78 52 64 68Q44 72 36 104Z" fill="#E8762A"/>
+    ${st.shadow ? `<ellipse cx="74" cy="100" rx="15" ry="8" fill="${st.shadow}" opacity=".8"/><ellipse cx="126" cy="100" rx="15" ry="8" fill="${st.shadow}" opacity=".8"/>` : ''}
+    <path d="M62 88q12-6 24 0M114 88q12-6 24 0" stroke="#B4561C" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="74" cy="108" rx="7" ry="9" fill="#2A2346"/><ellipse cx="126" cy="108" rx="7" ry="9" fill="#2A2346"/>
+    <circle cx="76.5" cy="104.5" r="2.6" fill="#FFFFFF"/><circle cx="128.5" cy="104.5" r="2.6" fill="#FFFFFF"/>
+    ${st.lashes
+      ? '<path d="M66 102l-7-5M69 99l-4-7M74 98l0-8M118 98l0-8M123 99l4-7M134 102l7-5" stroke="#1E1A2E" stroke-width="3" stroke-linecap="round"/>'
+      : '<path d="M67 101l-4-3M71 99l-2-4M129 99l2-4M133 101l4-3" stroke="#2A2346" stroke-width="1.6" stroke-linecap="round"/>'}
+    <circle cx="58" cy="138" r="13" fill="${st.blush ? '#FF5E8A' : '#FF8FA3'}" opacity="${st.blush ? .7 : .3}"/><circle cx="142" cy="138" r="13" fill="${st.blush ? '#FF5E8A' : '#FF8FA3'}" opacity="${st.blush ? .7 : .3}"/>
+    <path d="M96 128q4 4 8 0" stroke="#D99A7A" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M86 150Q93 144 100 148Q107 144 114 150Q100 155 86 150Z" fill="${lip}"/><path d="M86 150Q100 166 114 150Q100 156 86 150Z" fill="${lip}"/>
+    ${st.powder ? star(52, 120) + star(150, 124, .8) + star(66, 168, .7) + star(138, 62, .9) : ''}
+    ${st.crown ? '<path d="M64 42 72 12 86 30 100 6 114 30 128 12 136 42Z" fill="#FFC83A" stroke="#D39A00" stroke-width="2" stroke-linejoin="round"/><circle cx="100" cy="24" r="4.5" fill="#EF4F7E"/><circle cx="80" cy="34" r="3.2" fill="#3D8BFD"/><circle cx="120" cy="34" r="3.2" fill="#2FA865"/>' : ''}
+  </svg>`;
+}
+SVGS.beauty = beautySVG({});
+PAGES.push('svg:beauty');
+STICKERS.splice(5, 0, '💄'); STICKERS.splice(9, 0, '💅'); STICKERS.splice(14, 0, '💍');
+const BEAUTY = [
+  { id: 'blush', name: 'румяна', e: '🌸', line: 'Скажи: розовые румяна.' },
+  { id: 'lips', name: 'помада', e: '💄', colors: [['красная', '#E0234E'], ['розовая', '#FF6FA3'], ['вишнёвая', '#9E1A4A']], line: c => `Скажи: ${c} помада.` },
+  { id: 'shadow', name: 'тени', e: '🎨', colors: [['сиреневые', '#B79CFF'], ['изумрудные', '#3FBF92'], ['перламутровые', '#E3D3F5']], line: c => `Скажи: ${c} тени.` },
+  { id: 'lashes', name: 'тушь', e: '🖌️', line: 'Скажи: чёрная тушь.' },
+  { id: 'powder', name: 'пудра', e: '✨', line: 'Скажи: перламутровая пудра.' },
+  { id: 'hair', name: 'расчёска', e: 'svg:comb', line: 'Скажи: расчёска. Расчешем волосы!' },
+  { id: 'earrings', name: 'серёжки', e: '💎', line: 'Скажи: серёжки.' },
+  { id: 'necklace', name: 'ожерелье', e: '📿', line: 'Скажи: жемчужное ожерелье.' },
+  { id: 'crown', name: 'корона', e: '👑', line: 'Скажи: корона.' }
+];
+function screenBeauty() {
+  const t = newScreen(), st = {}, done = new Set();
+  let busy = false;
+  shell('Салон красоты', `<div class="beauty-wrap">
+      <div class="beauty-face" id="bf">${beautySVG(st)}</div>
+      <div class="beauty-colors" id="bcol" hidden></div>
+      <div class="beauty-items" id="bit">${BEAUTY.map(b => `<button class="bitem" data-id="${b.id}">${pic(b.e)}<small>${b.name}</small></button>`).join('')}</div>
+      <button class="big" id="mirrorBtn" hidden>🪞 Посмотреть в зеркало</button>
+    </div>`);
+  talk('Салон красоты! Выбирай, что нанести. Сначала чётко скажи название, потом нажми жёлтую кнопку.');
+  const bf = $('#bf'), bcol = $('#bcol');
+  async function mirror() {
+    busy = true; hush();
+    try {
+      const img = await svgImage(beautySVG(st).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="480" '));
+      if (img) { const c = document.createElement('canvas'), x = c.getContext('2d'); c.width = 400; c.height = 480; x.fillStyle = '#FFE7F0'; x.fillRect(0, 0, 400, 480); x.drawImage(img, 0, 0, 400, 480); saveArt(c.toDataURL('image/jpeg', .8)); }
+    } catch (e) {}
+    if (t !== tok) return;
+    finish({ key: 'beauty', line: 'Посмотри в зеркало! Какая красавица! Портрет теперь в альбоме рисунков.', again: screenBeauty });
+    const h = $('.winbox h2'); if (h) h.insertAdjacentHTML('afterend', `<div class="beauty-mini">${beautySVG(st)}</div>`);
+  }
+  async function apply(b, val, colorName) {
+    busy = true;
+    await talk(typeof b.line === 'function' ? b.line(colorName) : b.line); if (t !== tok) return;
+    await askSaid(); if (t !== tok) return;
+    st[b.id] = val; done.add(b.id); bf.innerHTML = beautySVG(st); hopEl(bf); sfx.magic();
+    $(`.bitem[data-id="${b.id}"]`).classList.add('used');
+    if (done.size >= 4) $('#mirrorBtn').hidden = false;
+    busy = false;
+    if (done.size === BEAUTY.length) mirror();
+    else talk(pickOne(['Красота! Что ещё?', 'Чудесно! Выбирай дальше.', 'Здорово! А теперь что?']));
+  }
+  $('#bit').onclick = e => {
+    const x = e.target.closest('.bitem'); if (!x || busy) return;
+    const b = BEAUTY.find(y => y.id === x.dataset.id); sfx.pop();
+    if (!b.colors) { bcol.hidden = true; apply(b, true); return; }
+    bcol.hidden = false;
+    bcol.innerHTML = b.colors.map(([n, c]) => `<button class="bc" data-c="${c}" data-n="${n}"><i style="background:${c}"></i>${n}</button>`).join('');
+    talk(`Выбери цвет: ${b.colors.map(c => c[0]).join(', ')}.`);
+    bcol.onclick = ev => { const c = ev.target.closest('.bc'); if (!c || busy) return; bcol.hidden = true; apply(b, c.dataset.c, c.dataset.n); };
+  };
+  $('#mirrorBtn').onclick = () => { if (!busy) mirror(); };
 }
 
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
