@@ -1,5 +1,5 @@
 // Offline cache: the game opens from the cache at once and refreshes itself in the background.
-const CACHE = 'govorilki-v7';
+const CACHE = 'govorilki-v8';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
