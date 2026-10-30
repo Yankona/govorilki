@@ -1431,6 +1431,7 @@ function goHome() {
       </div>
       <div class="hero-side">
         <div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div>
+        <button class="chip" id="voiceBtn"><span class="emo">🔊</span>Голос</button>
         <button class="chip" id="albumBtn"><span class="emo">${sc ? stickerHTML(STK()[sc - 1]) : '🎁'}</span>Наклейки</button>
         <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? 'Мой друг' : 'Выбери друга!'}</button>
       </div>
@@ -1439,11 +1440,12 @@ function goHome() {
     ${P.goal ? goalCard() : ''}
     ${teamCard()}
     ${SECTIONS.filter(x => !x.only || x.only === P.settings.track).map(x => `<section class="group"><div class="group-head"><h2>${x.h}</h2><p>${x.p}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`).join('')}
-    <button class="link-btn" id="parentsBtn">Для взрослых: как заниматься и настройки</button>
+    <button class="link-btn" id="parentsBtn">Для взрослых: голос, настройки, как заниматься</button>
    </main></div>`;
   lastLine = greet();
   $('#heroRyz').onclick = () => { hopEl($('#heroRyz')); say(greet()); };
   $('#albumBtn').onclick = () => { sfx.pop(); screenAlbum(); };
+  $('#voiceBtn').onclick = () => { sfx.pop(); screenParents('voice'); };
   $('#friendBtn').onclick = () => { sfx.pop(); screenFriends(); };
   $('#weekBtn').onclick = () => { sfx.pop(); screenCalendar(); };
   $$('.l-go').forEach(b => b.onclick = () => { sfx.pop(); startLesson(b.dataset.l); });
@@ -2941,19 +2943,9 @@ function screenAlbum() {
 }
 
 /* ---------- for grown-ups ---------- */
-function screenParents() {
+function screenParents(focus) {
   newScreen();
   shell('Для взрослых', `<div class="parents">
-    <section class="psec"><h2>Как заниматься: ${esc(P.settings.name)}</h2><p class="muted">Профиль переключается вверху главного экрана. У каждого ребёнка свои звёздочки, календарь и настройки.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
-      <li>На главном экране три занятия на сегодня. «Логопед»: 2 дыхательных упражнения, весь комплекс зарядки для язычка и 2 игры со звуком Р, около 15 минут. «Чтение» и «Математика» — по 4 игры, около 10 минут. Каждое занятие можно пройти ещё раз: задания будут другими.</li>
-      <li>Буквы раскрашены, как в букваре: гласные красные, согласные синие. Читаем по слогам: «Буквы дружат» (М + А = МА), потом слова.</li>
-      <li>Песенки — народные потешки и песенка про звук Р, мелодии простые. Их можно петь и играть на ксилофоне. Рисунки после «Готово» попадают в «Мои рисунки» (последние 12).</li>
-      <li>За каждый день занятий в календаре появляется звёздочка, за 3, 7, 14 и 30 дней подряд — медали. Пропущенный день обнуляет серию: это хороший повод не пропускать.</li>
-      <li>Зарядку для язычка делайте перед зеркалом: девочка на экране показывает, ребёнок повторяет. Под каждым упражнением есть подсказка, на что смотреть.</li>
-      <li>Игра не слушает микрофон. Кнопку «Я сказала!» нажимает ребёнок или вы, когда слово или фраза сказаны вслух. Если звук не получился, попросите повторить ещё раз, не торопясь.</li>
-      <li>В дыхательных упражнениях ребёнок по-настоящему дует, а пальчиком держит кнопку, пока длится выдох. Следите, чтобы вдох был носом, а плечи не поднимались.</li>
-      <li>Хвалите за старание. За каждые 5 звёздочек открывается новая наклейка.</li>
-`}    </ul></section>
     <section class="psec"><h2>Настройки</h2>
       <label class="prow" for="nameIn">Имя ребёнка (друг будет обращаться по имени)
         <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="например, Маша" value="${esc(P.settings.name || '')}"></label>
@@ -2969,8 +2961,8 @@ function screenParents() {
       <label class="prow" for="goalDate">День рождения: до этой даты читаем каждый день <input id="goalDate" type="date" value="${P.goal.date || ''}"></label>
       <p class="muted">Дни считаются с ${fmtDate(P.goal.start || dayKey())}. Игра только показывает путь к цели, решение о подарке — за вами.</p>
     </section>` : ''}
-    <section class="psec"><h2>Голос ElevenLabs</h2>
-      ${EMBEDDED ? '<p>Живой голос ElevenLabs работает в приложении: yankona.github.io/govorilki → «Для взрослых».</p>' : `<p class="muted">Живой голос вместо голоса телефона, общий для обоих детей. Нужен ключ API из вашего аккаунта ElevenLabs (Profile → API Keys). Ключ хранится только на этом устройстве и отправляется только в ElevenLabs. Сказанные фразы сохраняются в телефоне: повторы бесплатны и звучат без интернета.</p>
+    <section class="psec" id="elSec"><h2>Голос друга: ElevenLabs</h2>
+      ${EMBEDDED ? '<p>Здесь, внутри claude.ai, голос ElevenLabs не подключается. Откройте приложение <a href="https://yankona.github.io/govorilki/" target="_blank" rel="noopener">yankona.github.io/govorilki</a> и нажмите на главном экране кнопку «Голос».</p>' : `<p class="muted">Живой голос вместо голоса телефона, общий для обоих детей. Нужен ключ API из вашего аккаунта ElevenLabs (Profile → API Keys). Ключ хранится только на этом устройстве и отправляется только в ElevenLabs. Сказанные фразы сохраняются в телефоне: повторы бесплатны и звучат без интернета.</p>
       <label class="prow" for="elKey">Ключ API <input id="elKey" type="password" autocomplete="off" value="${esc(ROOT.eleven.key)}"></label>
       <label class="prow" for="elFind">Найти голос по имени <input id="elFind" type="text" maxlength="40" autocomplete="off" value="Hope"></label>
       <div class="prow-btns"><button class="big" id="elSearch">Найти голос</button><button class="big ghost" id="elLoad">Все мои голоса</button></div>
@@ -2983,7 +2975,19 @@ function screenParents() {
       <p>Звёздочек: <b>${P.stars}</b>. Наклеек: <b>${stickerCount()}</b> из ${STK().length}. Прогресс хранится только на этом устройстве.</p>
       <div class="prow-btns" id="resetRow"><button class="big ghost danger" id="resetBtn">Начать заново</button></div>
       <div id="resetAsk" hidden><p>Стереть все звёздочки и наклейки?</p><div class="prow-btns"><button class="big danger" id="resetYes">Да, стереть</button><button class="big ghost" id="resetNo">Отмена</button></div></div>
-    </section></div>`, { guide: false });
+    </section>
+    <section class="psec"><h2>Как заниматься: ${esc(P.settings.name)}</h2><p class="muted">Профиль переключается вверху главного экрана. У каждого ребёнка свои звёздочки, календарь и настройки.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
+      <li>На главном экране три занятия на сегодня. «Логопед»: 2 дыхательных упражнения, весь комплекс зарядки для язычка и 2 игры со звуком Р, около 15 минут. «Чтение» и «Математика» — по 4 игры, около 10 минут. Каждое занятие можно пройти ещё раз: задания будут другими.</li>
+      <li>Буквы раскрашены, как в букваре: гласные красные, согласные синие. Читаем по слогам: «Буквы дружат» (М + А = МА), потом слова.</li>
+      <li>Песенки — народные потешки и песенка про звук Р, мелодии простые. Их можно петь и играть на ксилофоне. Рисунки после «Готово» попадают в «Мои рисунки» (последние 12).</li>
+      <li>За каждый день занятий в календаре появляется звёздочка, за 3, 7, 14 и 30 дней подряд — медали. Пропущенный день обнуляет серию: это хороший повод не пропускать.</li>
+      <li>Зарядку для язычка делайте перед зеркалом: девочка на экране показывает, ребёнок повторяет. Под каждым упражнением есть подсказка, на что смотреть.</li>
+      <li>Игра не слушает микрофон. Кнопку «Я сказала!» нажимает ребёнок или вы, когда слово или фраза сказаны вслух. Если звук не получился, попросите повторить ещё раз, не торопясь.</li>
+      <li>В дыхательных упражнениях ребёнок по-настоящему дует, а пальчиком держит кнопку, пока длится выдох. Следите, чтобы вдох был носом, а плечи не поднимались.</li>
+      <li>Хвалите за старание. За каждые 5 звёздочек открывается новая наклейка.</li>
+`}    </ul></section>
+    </div>`, { guide: false });
+  if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
   vs(); later(vs, 1200);
   $('#nameIn').addEventListener('input', e => { P.settings.name = e.target.value.trim(); P.settings.nameTouched = true; save(); });
@@ -3071,7 +3075,12 @@ goHome();
 })();
 </script>
 <script>
-if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+// a new version takes over right away: reload once when the updated worker starts controlling the page
+if ('serviceWorker' in navigator) {
+  const had = !!navigator.serviceWorker.controller; let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !reloaded) { reloaded = true; location.reload(); } });
+  addEventListener('load', () => navigator.serviceWorker.register('sw.js').then(r => r.update()).catch(() => {}));
+}
 </script>
 </body>
 </html>
