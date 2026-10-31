@@ -346,6 +346,17 @@ b.r{color:var(--berry)}
 .fam-chip{display:flex;align-items:center;gap:6px;padding:4px 14px;border:0;border-radius:999px;background:transparent;font:800 15px var(--f-body);color:var(--ink-soft);cursor:pointer;box-shadow:inset 0 0 0 2px var(--line-strong)}
 .fam-chip .emo{font-size:18px}
 /* families and the league */
+.picks-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;width:100%}
+.picks-g.two{grid-template-columns:1fr 1fr}
+.picks-g.one{grid-template-columns:1fr}
+.picks-g.nums{grid-template-columns:repeat(auto-fill,minmax(46px,1fr))}
+.pick-b{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border:0;border-radius:16px;padding:10px 12px;background:var(--paper);color:var(--ink);font:800 16px/1.25 var(--f-body);box-shadow:0 4px 0 var(--line-strong);cursor:pointer;text-align:center}
+.picks-g.one .pick-b{justify-content:flex-start;text-align:left}
+.picks-g.nums .pick-b{padding:8px 0;font-size:18px}
+.pick-b.sel{background:var(--t-yellow);color:#2A2346;box-shadow:0 4px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.picks-g.one .pick-b.sel::after{content:'✓';margin-left:auto;padding-left:8px;color:var(--leaf);font-weight:900}
+.fe-age b{font:800 15px var(--f-body)}
+.ks-date{font:700 18px var(--f-body);padding:10px 12px;border-radius:14px;border:3px solid var(--line-strong);background:#fff;color:#2A2346;width:min(100%,260px)}
 .dict{display:flex;flex-direction:column;gap:12px;width:100%;max-width:660px;margin:0 auto;padding-bottom:20px}
 .dict-in{display:flex;gap:8px;align-items:center}
 .dict-in input{flex:1;min-width:0;font:700 20px var(--f-body);padding:12px 14px;border-radius:16px;border:3px solid var(--line-strong);background:#fff;color:#2A2346}
@@ -499,15 +510,15 @@ body.quest .ks-chips .chip.sel,body.quest .ks-mods .chip.sel{color:#1E1A2E;backg
 .fe-hero .logo{margin:0;text-align:left}
 .fe-hero p{margin:6px 0 0;font-weight:700;line-height:1.45;color:var(--ink-soft)}
 .fe-list{display:flex;flex-direction:column;gap:10px}
-.fe-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;border-radius:18px;background:var(--sky)}
-.fe-row .fe-name{flex:1 1 170px;min-width:0;font:700 18px var(--f-body);padding:10px 12px;border-radius:14px;border:3px solid var(--line-strong);background:#fff;color:#2A2346}
+.fe-row{display:flex;flex-direction:column;gap:10px;align-items:stretch;padding:12px;border-radius:18px;background:var(--sky)}
+.fe-row .fe-name{flex:none;min-width:0;font:700 18px var(--f-body);padding:10px 12px;border-radius:14px;border:3px solid var(--line-strong);background:#fff;color:#2A2346}
 .fe-chips{display:flex;gap:6px}
 .fe-chips .chip{padding:6px 12px;font-size:15px;box-shadow:0 3px 0 var(--line-strong)}
 .fe-chips .chip.sel,.lg-tabs .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
-.fe-age{display:flex;align-items:center;gap:6px;font-weight:800}
+.fe-age{display:flex;flex-direction:column;align-items:stretch;gap:6px;font-weight:800}
 .fe-row select{font:700 16px var(--f-body);padding:8px 10px;border-radius:12px;border:3px solid var(--line-strong);background:#fff;color:#2A2346;max-width:100%}
 .fe-track{flex:1 1 230px;min-width:0}
-.fe-x{border:0;background:transparent;font:800 15px var(--f-body);color:var(--berry);cursor:pointer;padding:6px 8px}
+.fe-x{align-self:flex-end;border:0;background:transparent;font:800 15px var(--f-body);color:var(--berry);cursor:pointer;padding:6px 8px}
 .fe-err{margin:0;min-height:1.3em;text-align:center;color:var(--berry);font-weight:800}
 .fe-imp summary{cursor:pointer;font-weight:800}
 .fe-imp textarea{width:100%;font:600 14px var(--f-body);border-radius:12px;border:3px solid var(--line-strong);padding:8px}
@@ -528,7 +539,7 @@ body.quest .ks-chips .chip.sel,body.quest .ks-mods .chip.sel{color:#1E1A2E;backg
 .lg-t b{font:800 20px var(--f-body)}
 .lg-t small{font:700 15px/1.35 var(--f-body);color:var(--ink-soft)}
 .lg-top{display:flex;flex-wrap:wrap;gap:4px 12px}
-.lg-tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}
+.lg-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:2px 2px 6px}
 .lg-tabs .chip{flex:none;padding:8px 14px}
 .lg-sub{margin:0;text-align:center;color:var(--ink-soft);font-weight:700}
 .lg-list{display:flex;flex-direction:column;gap:8px;width:100%}
@@ -6791,23 +6802,22 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   let ask = '';
   const kidRow = (k, i) => `<div class="fe-row" data-k="${i}">
       <input class="fe-name" type="text" maxlength="20" autocomplete="off" placeholder="Имя" aria-label="Имя ребёнка" value="${esc(k.name)}">
-      <div class="fe-chips"><button class="chip ${k.she ? 'sel' : ''}" data-g="f">👧 девочка</button><button class="chip ${k.she ? '' : 'sel'}" data-g="m">🧒 мальчик</button></div>
-      <label class="fe-age">Возраст <select class="fe-agesel"><option value="0">—</option>${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(a => `<option value="${a}" ${k.age === a ? 'selected' : ''}>${a}</option>`).join('')}</select></label>
-      <select class="fe-track" aria-label="Программа">${TRACKS.map(([v, n]) => `<option value="${v}" ${k.track === v ? 'selected' : ''}>${n}</option>`).join('')}</select>
-      ${kids.length > 1 ? `<button class="fe-x" data-x="k${i}">${ask === 'k' + i ? 'Точно удалить? Звёздочки пропадут' : '✕ убрать'}</button>` : ''}
+      <div class="picks-g two"><button class="pick-b ${k.she ? 'sel' : ''}" data-g="f">👧 Девочка</button><button class="pick-b ${k.she ? '' : 'sel'}" data-g="m">🧒 Мальчик</button></div>
+      <div class="fe-age"><b>Возраст</b><div class="picks-g nums">${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(a => `<button class="pick-b ${k.age === a ? 'sel' : ''}" data-age="${a}">${a}</button>`).join('')}</div></div>
+      ${kids.length > 1 ? `<button class="fe-x" data-x="k${i}">${ask === 'k' + i ? 'Точно удалить? Звёздочки пропадут' : '✕ Убрать'}</button>` : ''}
     </div>`;
   const grandRow = (g, i) => `<div class="fe-row" data-gi="${i}">
       <input class="fe-name" type="text" maxlength="30" autocomplete="off" placeholder="${g.she ? 'Бабушка Нина' : 'Дедушка Саша'}" aria-label="Как ребёнок зовёт" value="${esc(g.name)}">
-      <div class="fe-chips"><button class="chip ${g.she ? 'sel' : ''}" data-s="1">👵 бабушка</button><button class="chip ${g.she ? '' : 'sel'}" data-s="0">👴 дедушка</button></div>
-      <button class="fe-x" data-x="g${i}">✕ убрать</button>
+      <div class="picks-g two"><button class="pick-b ${g.she ? 'sel' : ''}" data-s="1">👵 Бабушка</button><button class="pick-b ${g.she ? '' : 'sel'}" data-s="0">👴 Дедушка</button></div>
+      <button class="fe-x" data-x="g${i}">✕ Убрать</button>
     </div>`;
   const form = `<section class="psec"><h2>Семья</h2>
       <label class="prow" for="feName">Название <input id="feName" type="text" maxlength="30" autocomplete="off" placeholder="например, Семья Ивановых" value="${esc(f ? f.name : '')}"></label>
-      <label class="prow" for="feCc">Где живёте: праздники и выходные этой страны будут в календаре <select id="feCc">${ccOptions(f ? f.cc || 'PT' : guessCountry())}</select></label>
-      <label class="prow" for="feCc2">И праздники ещё одной страны (например, где бабушки и дедушки) <select id="feCc2"><option value="">— нет —</option>${ccOptions(f ? f.cc2 || '' : (guessCountry() === 'RU' ? '' : 'RU'))}</select></label></section>
-    <section class="psec"><h2>Дети</h2><p class="muted">Программа подбирается по возрасту, её можно поменять. У каждого ребёнка свои звёздочки, друг и календарь.</p>
+      <label class="prow" for="feCc">Где живёте <select id="feCc">${ccOptions(f ? f.cc || 'PT' : guessCountry())}</select></label>
+      <label class="prow" for="feCc2">Праздники ещё одной страны <select id="feCc2"><option value="">— нет —</option>${ccOptions(f ? f.cc2 || '' : (guessCountry() === 'RU' ? '' : 'RU'))}</select></label></section>
+    <section class="psec"><h2>Дети</h2>
       <div class="fe-list" id="feKids"></div><button class="big ghost" id="feAddKid">＋ Ещё ребёнок</button></section>
-    <section class="psec"><h2>Бабушки и дедушки</h2><p class="muted">Для шахмат онлайн: каждый получит свою ссылку-вход и сможет играть с внуками со своего телефона. Можно добавить позже.</p>
+    <section class="psec"><h2>Бабушки и дедушки</h2>
       <div class="fe-list" id="feGrands"></div><button class="big ghost" id="feAddGrand">＋ Бабушка или дедушка</button></section>
     <p class="fe-err" id="feErr" role="alert"></p>
     <div class="prow-btns"><button class="big" id="feSave">${first ? 'Создать семью' : 'Сохранить'}</button>${first ? '' : '<button class="big ghost" id="feCancel">Отмена</button>'}</div>
@@ -6815,22 +6825,11 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   if (first) {
     document.body.classList.remove('quest');
     app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe">
-      <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1 class="logo">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}</h1>
-        <p>Логопед, чтение, математика и игры. Сначала создайте семью: кто будет заниматься и кто из бабушек и дедушек будет играть с внуками в шахматы.</p></div></header>
       ${form}
-      <details class="psec fe-imp"><summary>У нас уже есть прогресс с другого телефона</summary>
-        <textarea id="feImp" rows="3" placeholder="Вставьте сюда скопированный прогресс"></textarea>
-        <div class="prow-btns"><button class="big ghost" id="feImpGo">Загрузить</button></div></details>
-      <p class="muted fe-note">Всё хранится только на этом телефоне.</p>
     </div></main></div>`;
-    $('#feImpGo').onclick = () => {
-      let ok = false; try { ok = importCode($('#feImp').value); } catch (e) {}
-      if (!ok) { $('#feErr').textContent = 'Не получилось прочитать прогресс. Скопируйте его ещё раз целиком.'; return; }
-      sfx.magic(); liga ? screenLeague(liga) : goHome();
-    };
   } else shell(f ? 'Семья' : 'Новая семья', `<div class="fe">${form}</div>`, { back: screenFamilies, guide: false, raw: true });
   const read = () => {
-    $$('#feKids .fe-row').forEach((r, i) => { const k = kids[i]; k.name = cleanS(r.querySelector('.fe-name').value, 20); k.age = +r.querySelector('.fe-agesel').value; k.track = r.querySelector('.fe-track').value; });
+    $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); });
     $$('#feGrands .fe-row').forEach((r, i) => { grands[i].name = cleanS(r.querySelector('.fe-name').value, 30); });
   };
   const draw = () => { $('#feKids').innerHTML = kids.map(kidRow).join(''); $('#feGrands').innerHTML = grands.map(grandRow).join(''); };
@@ -6838,15 +6837,11 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   $('#feKids').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.k;
     const g = e.target.closest('[data-g]'); if (g) { read(); kids[i].she = g.dataset.g === 'f'; sfx.tick(); draw(); return; }
+    const a = e.target.closest('[data-age]'); if (a) { read(); kids[i].age = +a.dataset.age; kids[i].track = ageTrack(kids[i].age); sfx.tick(); draw(); return; }
     const x = e.target.closest('[data-x]'); if (!x) return;
     read(); const pr = kids[i].id && ROOT.profiles[kids[i].id];
     if (pr && pr.stars > 0 && ask !== 'k' + i) { ask = 'k' + i; draw(); return; }
     ask = ''; kids.splice(i, 1); sfx.pop(); draw();
-  };
-  $('#feKids').onchange = e => {
-    const r = e.target.closest('.fe-row'); if (!r) return; const k = kids[+r.dataset.k];
-    if (e.target.classList.contains('fe-agesel')) { k.age = +e.target.value; if (!k.tt && k.age) { k.track = ageTrack(k.age); r.querySelector('.fe-track').value = k.track; } }
-    if (e.target.classList.contains('fe-track')) { k.track = e.target.value; k.tt = true; }
   };
   $('#feGrands').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.gi;
@@ -6868,11 +6863,12 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
     read();
     const ks = kids.filter(k => k.name), err = $('#feErr');
     if (!ks.length) { err.textContent = 'Впишите имя хотя бы одного ребёнка.'; wiggle(err); return; }
+    const noAge = ks.find(k => !k.age); if (noAge) { err.textContent = `Сколько лет: ${noAge.name}?`; wiggle(err); return; }
     const id = fid || 'f' + rid6(), old = f ? f.kids : [], fresh = [];
     const ids = ks.map(k => {
       let kid = k.id && ROOT.profiles[k.id] ? k.id : null;
       if (!kid) { do kid = 'k' + rid6(); while (ROOT.profiles[kid]); fresh.push(kid); ROOT.profiles[kid] = blankProfile(k.name, k.she ? 'f' : 'm', k.track, ''); ROOT.profiles[kid].book.title = k.track === 'l' ? 'Моя книга' : ''; }
-      Object.assign(ROOT.profiles[kid].settings, { name: k.name, gender: k.she ? 'f' : 'm', track: k.track, age: k.age || 0, nameTouched: true });
+      Object.assign(ROOT.profiles[kid].settings, { name: k.name, gender: k.she ? 'f' : 'm', track: k.age ? ageTrack(k.age) : k.track, age: k.age || 0, nameTouched: true });
       return kid;
     });
     old.filter(x => !ids.includes(x)).forEach(x => delete ROOT.profiles[x]);
@@ -7212,13 +7208,11 @@ LIKES_BASE.forEach(b => { if (!LIKES.some(l => l.id === b.id)) LIKES.push({ ...b
 function kidPicker(name, she, likes, onDone) {
   const ov = document.createElement('div'); ov.className = 'kp-ov';
   let sel = [...likes];
-  ov.innerHTML = `<div class="kp"><header class="kp-h"><span class="kp-ryz">${friendSVG()}</span><div class="kp-ht"><b>${esc(name)}, что ты любишь?</b><small>Нажми на всё, что нравится. Можно много!</small></div>
+  ov.innerHTML = `<div class="kp"><header class="kp-h"><span class="kp-ryz">${friendSVG()}</span><div class="kp-ht"><b>${esc(name)}, что ты любишь?</b></div>
       <button class="big" id="kpOk">Готово <span id="kpN">${sel.length || ''}</span></button></header>
-    <nav class="kp-tabs" id="kpTabs">${LIKE_CATS.map((c, i) => `<button class="chip" data-c="${i}">${c.e} ${esc(c.n)}</button>`).join('')}</nav>
     <div class="kp-grid" id="kpGrid">${LIKE_CATS.map((c, i) => `<h3 class="kp-c" id="kpc${i}">${c.e} ${esc(c.n)}</h3><div class="kp-tiles">${c.items.map(it => `<button class="kp-t ${sel.includes(it.id) ? 'sel' : ''}" data-id="${esc(it.id)}" aria-pressed="${sel.includes(it.id)}"><span>${it.e}</span><b>${esc(it.n)}</b></button>`).join('')}</div>`).join('')}</div></div>`;
   ($('.screen') || document.body).append(ov);
   say(`${name}, что ты любишь? Нажми на всё, что тебе нравится!`);
-  $('#kpTabs', ov).onclick = e => { const b = e.target.closest('[data-c]'); if (!b) return; sfx.tick(); const h = ov.querySelector('#kpc' + b.dataset.c); if (h) h.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   $('#kpGrid', ov).onclick = e => {
     const b = e.target.closest('.kp-t'); if (!b) return; const id = b.dataset.id, on = !sel.includes(id);
     sel = on ? [...sel, id] : sel.filter(x => x !== id); b.classList.toggle('sel', on); b.setAttribute('aria-pressed', on);
@@ -7315,19 +7309,18 @@ function screenWelcome({ liga = '' } = {}) {
   newScreen(); document.body.classList.remove('quest');
   app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe ob">
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1 class="logo">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}</h1>
-      <p>Занятия с логопедом-другом, чтение, математика и игры для детей 4–12 лет.</p></div></header>
+      </div></header>
     <ul class="ob-list">
-      <li><span>🗣️</span><b>Звуки Р, Л, С, З, шипящие</b><small>дыхание, зарядка для языка и игры, где приложение слышит, что сказал ребёнок</small></li>
-      <li><span>💛</span><b>Под интересы ребёнка</b><small>гонки, шахматы, к-поп, рисование, футбол… игры и слова подбираются под них</small></li>
-      <li><span>👵</span><b>Бабушки и дедушки</b><small>играют с внуками в шахматы со своего телефона, даже из другой страны</small></li>
-      <li><span>🏆</span><b>Лига семей и баттлы</b><small>дети разных семей соревнуются и вызывают друг друга</small></li>
+      <li><span>🗣️</span><b>Звуки Р, Л, С, З, шипящие</b></li>
+      <li><span>💛</span><b>Под интересы ребёнка</b></li>
+      <li><span>👵</span><b>Бабушки и дедушки</b></li>
+      <li><span>🏆</span><b>Лига семей и баттлы</b></li>
     </ul>
     ${liga ? '<p class="ob-note">🏆 Вас позвали в лигу семей. Сначала создадим семью, потом вступим.</p>' : ''}
     <button class="big" id="obStart">Создать семью</button>
     <details class="psec fe-imp"><summary>У нас уже есть прогресс с другого телефона</summary>
       <textarea id="feImp" rows="3" placeholder="Вставьте сюда скопированный прогресс"></textarea>
       <div class="prow-btns"><button class="big ghost" id="feImpGo">Загрузить</button></div><p class="fe-err" id="feErr" role="alert"></p></details>
-    <p class="muted fe-note">Всё хранится только на этом телефоне. Займёт пару минут.</p>
   </div></main></div>`;
   $('#obStart').onclick = () => { sfx.pop(); screenFamilyEdit(null, { first: true, liga }); };
   $('#feImpGo').onclick = () => {
@@ -7336,29 +7329,29 @@ function screenWelcome({ liga = '' } = {}) {
     sfx.magic(); liga ? screenLeague(liga) : goHome();
   };
 }
-const kidChip = (on, val, label, attr) => `<button class="chip ${on ? 'sel' : ''}" ${attr}="${val}" aria-pressed="${on}">${label}</button>`;
+const kidChip = (on, val, label, attr) => `<button class="pick-b ${on ? 'sel' : ''}" ${attr}="${val}" aria-pressed="${on}">${label}</button>`;
 function screenKidSetup(id, { queue = [], first = false, liga = '', back = null, idx = 1, total = 1 } = {}) {
   newScreen();
   const pr = ROOT.profiles[id], st = pr.settings, she = st.gender === 'f', name = st.name || 'Ребёнок';
-  let snd = [...soundsOf(pr)], likes = [...(st.likes || [])], mods = [...modsOf(pr)], off = [...(st.off || [])], track = st.track;
+  let snd = [...soundsOf(pr)], likes = [...(st.likes || [])], mods = [...modsOf(pr)], off = [...(st.off || [])], track = st.age ? ageTrack(st.age) : st.track;
   let modsTouched = !!st.mods;
   const body = `<div class="fe ks">
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', st.friend || (she ? 'unicorn' : 'tiger'))}</span><div><h1 class="ks-name">${esc(name)}</h1>
-      <p>${first ? `Ребёнок ${idx} из ${total}. ` : ''}Настроим занятия: звуки, интересы и игры. Всё можно поменять потом в «Для взрослых».</p></div></header>
-    <section class="psec"><h2>Какие звуки тренируем?</h2><p class="muted">По возрасту уже отмечено самое частое. Если логопед сказал другое, отметьте свои.</p>
-      <div class="ks-chips" id="ksSnd"></div></section>
-    <section class="psec"><h2>Что ${she ? 'она' : 'он'} любит?</h2><p class="muted">Лучше всего, если ${esc(name)} выберет ${she ? 'сама' : 'сам'}: каждое название прозвучит вслух. Под интересы подберутся игры, слова для тренировки и друг-персонаж.</p>
+      ${first && total > 1 ? `<p>Ребёнок ${idx} из ${total}</p>` : ''}</div></header>
+    <section class="psec"><h2>Какие звуки тренируем?</h2>
+      <div class="picks-g two" id="ksSnd"></div></section>
+    <section class="psec"><h2>Что ${she ? 'она' : 'он'} любит?</h2>
       <button class="big ks-kid" id="ksKid">${she ? '👧' : '🧒'} Пусть ${esc(name)} выберет ${she ? 'сама' : 'сам'}</button>
       <p class="ks-cnt" id="ksCnt"></p>
       <details class="ks-fine"><summary>Отметить самим</summary><div id="ksLikes"></div></details>
-      <label class="prow" for="ksOwn">Своё, через запятую <input id="ksOwn" type="text" maxlength="200" autocomplete="off" placeholder="например, лошади, барабаны, кот Барсик" value="${esc((st.ownLikes || []).join(', '))}"></label></section>
-    <section class="psec"><h2>День рождения</h2><p class="muted">Необязательно. В этот день друг поздравит, а в календаре будет торт.</p>
-      <label class="prow" for="ksBday">Дата <input id="ksBday" type="date" value="${esc(st.bday || '')}"></label></section>
-    <section class="psec"><h2>Разделы на главном экране</h2><p class="muted">Подобраны по звукам и интересам. Можно включить любые игры, которые мы сделали для Веры и Савы.</p>
-      <div class="ks-mods" id="ksMods"></div>
+      <label class="prow" for="ksOwn">Своё <input id="ksOwn" type="text" maxlength="200" autocomplete="off" placeholder="например, лошади, барабаны, кот Барсик" value="${esc((st.ownLikes || []).join(', '))}"></label></section>
+    <section class="psec"><h2>День рождения</h2>
+      <input id="ksBday" class="ks-date" type="date" aria-label="День рождения" value="${esc(st.bday || '')}"></section>
+    <section class="psec"><h2>Разделы на главном экране</h2>
+      <div class="picks-g one" id="ksMods"></div>
       <details class="ks-fine"><summary>Выбрать отдельные игры</summary><div id="ksGames"></div></details>
-      <label class="prow" for="ksTrack">Оформление и награды <select id="ksTrack">${TRACKS.map(([v]) => `<option value="${v}" ${track === v ? 'selected' : ''}>${v === 'l' ? 'Школьник: тёмная «Миссия», уровни, пояса, сезон' : 'Малыш: яркое, наклейки и звёздочки'}</option>`).join('')}</select></label></section>
-    <section class="psec"><h2>Свои слова для тренировки</h2><p class="muted">Необязательно. Имена друзей, питомцев, любимые вещи: они попадут в игру «Мои слова».</p>
+    </section>
+    <section class="psec"><h2>Свои слова для тренировки</h2>
       <textarea id="ksWords" rows="2" maxlength="600" placeholder="например, Рома, ракушка, самокат">${esc((st.words || []).join(', '))}</textarea></section>
     <div class="prow-btns"><button class="big" id="ksNext">${queue.length ? 'Дальше: ' + esc(ROOT.profiles[queue[0]].settings.name) : first ? 'Готово!' : 'Сохранить'}</button></div>
   </div>`;
@@ -7368,15 +7361,15 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
   } else shell('Интересы и игры', body, { back: back || screenParents, guide: false, raw: true });
   const drawSnd = () => { $('#ksSnd').innerHTML = SOUND_SET.map(([k, n, e]) => kidChip(snd.includes(k), k, `${e} ${n}`, 'data-snd')).join(''); };
   const drawLikes = () => {
-    $('#ksLikes').innerHTML = LIKE_CATS.map(c => `<h3 class="fam-s">${c.e} ${esc(c.n)}</h3><div class="ks-chips">${c.items.map(L => kidChip(likes.includes(L.id), L.id, `${L.e} ${esc(L.n)}`, 'data-like')).join('')}</div>`).join('');
+    $('#ksLikes').innerHTML = LIKE_CATS.map(c => `<h3 class="fam-s">${c.e} ${esc(c.n)}</h3><div class="picks-g">${c.items.map(L => kidChip(likes.includes(L.id), L.id, `${L.e} ${esc(L.n)}`, 'data-like')).join('')}</div>`).join('');
     const ch = likes.map(l => LIKES.find(x => x.id === l)).filter(Boolean);
-    $('#ksCnt').textContent = ch.length ? `Выбрано: ${ch.map(x => x.e + ' ' + x.n).join(', ')}` : 'Пока ничего не выбрано.';
+    $('#ksCnt').textContent = ch.length ? ch.map(x => x.e + ' ' + x.n).join(', ') : '';
   };
   const drawMods = () => {
     $('#ksMods').innerHTML = MODS.map(m => kidChip(mods.includes(m.id), m.id, `${m.e} ${m.n}`, 'data-mod')).join('');
     $('#ksGames').innerHTML = MODS.filter(m => mods.includes(m.id)).map(m => {
       const gs = GAMES.filter(g => m.g.includes(g.grp) && !g.hide);
-      return gs.length ? `<h3 class="fam-s">${m.e} ${m.n}</h3><div class="ks-chips">${gs.map(g => kidChip(!off.includes(g.id), g.id, esc(nm(g.name)), 'data-game')).join('')}</div>` : '';
+      return gs.length ? `<h3 class="fam-s">${m.e} ${m.n}</h3><div class="picks-g">${gs.map(g => kidChip(!off.includes(g.id), g.id, esc(nm(g.name)), 'data-game')).join('')}</div>` : '';
     }).join('');
   };
   drawSnd(); drawLikes(); drawMods();
@@ -7391,7 +7384,6 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
   $('#ksLikes').onclick = e => { const b = e.target.closest('[data-like]'); if (!b) return; const k = b.dataset.like; sfx.tick(); likes = likes.includes(k) ? likes.filter(x => x !== k) : [...likes, k]; drawLikes(); resuggest(); };
   $('#ksMods').onclick = e => { const b = e.target.closest('[data-mod]'); if (!b) return; const k = b.dataset.mod; sfx.tick(); modsTouched = true; mods = mods.includes(k) ? mods.filter(x => x !== k) : [...mods, k]; drawMods(); };
   $('#ksGames').onclick = e => { const b = e.target.closest('[data-game]'); if (!b) return; const k = b.dataset.game; sfx.tick(); off = off.includes(k) ? off.filter(x => x !== k) : [...off, k]; b.classList.toggle('sel', !off.includes(k)); };
-  $('#ksTrack').onchange = e => { track = e.target.value; resuggest(); };
   const list = (v, n, len) => [...new Set(String(v || '').split(/[,;\n]+/).map(x => cleanS(x, len)).filter(Boolean))].slice(0, n);
   $('#ksNext').onclick = () => {
     const bd = $('#ksBday').value; if (/^\d{4}-\d\d-\d\d$/.test(bd)) st.bday = bd; else delete st.bday;
@@ -7413,9 +7405,8 @@ function screenObDone({ liga = '' } = {}) {
     <div class="ob-kids">${f.kids.map(id => { const st = ROOT.profiles[id].settings; return `<div class="ob-kid"><span class="chip-face">${kidFace(id)}</span><span><b>${esc(st.name)}</b>
       <small>звуки: ${soundsOf(ROOT.profiles[id]).map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ')}${(st.likes || []).length ? ' · ' + st.likes.map(l => (LIKES.find(x => x.id === l) || {}).e || '').join('') : ''}</small></span></div>`; }).join('')}</div>
     <button class="big" id="obGo">Начать занятия</button>
-    <button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>${liga ? 'Вступить в лигу друзей' : 'Лига семей'}</b><small>${liga ? 'вас позвали: дети соревнуются, кто больше занимался' : 'позовите друзей: дети соревнуются и вызывают друг друга на баттлы'}</small></span></button>
+    <button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>${liga ? 'Вступить в лигу друзей' : 'Лига семей'}</b></span></button>
     ${f.grands.length ? '<button class="big ghost" id="obChess">♟ Отправить бабушке и дедушке вход в шахматы</button>' : ''}
-    <p class="muted fe-note">Первым делом ребёнок выберет себе друга-персонажа на главном экране.</p>
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
   $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
