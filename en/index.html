@@ -79,6 +79,9 @@ b.r{color:var(--berry)}
 /* buttons */
 .big{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:62px;padding:10px 26px;border:0;border-radius:999px;background:var(--tiger);color:#fff;font:700 24px/1.1 var(--f-display);box-shadow:0 7px 0 var(--tiger-deep);cursor:pointer}
 .big:active{transform:translateY(5px);box-shadow:0 2px 0 var(--tiger-deep)}
+.big{align-self:center;justify-self:center;max-width:100%}
+.lg-cta{align-self:center;justify-self:center;width:auto!important;max-width:min(100%,340px)}
+.home-b{width:48px;height:48px;margin-left:-4px}
 .big.ghost{background:var(--paper);color:var(--ink);box-shadow:0 7px 0 var(--line-strong)}
 .big.danger{background:var(--berry);color:#fff;box-shadow:0 7px 0 #B8305A}
 .big.ghost.danger{background:var(--paper);color:var(--berry);box-shadow:0 7px 0 var(--line-strong)}
@@ -190,7 +193,7 @@ b.r{color:var(--berry)}
 
 /* lessons on the home card */
 .lessons{display:flex;flex-direction:column;gap:10px}
-.lesson{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:10px 12px;border-radius:20px;background:var(--lb)}
+.lesson{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 12px;border-radius:20px;background:var(--lb)}
 .l-ico{width:52px;height:52px;display:grid;place-items:center}
 .l-ico .face{width:52px;height:52px}
 .l-t{display:flex;flex-direction:column;gap:3px;min-width:0}
@@ -200,8 +203,11 @@ b.r{color:var(--berry)}
 .l-bar i{display:block;height:100%;border-radius:inherit;background:var(--lc)}
 .l-n{display:flex;align-items:center;gap:2px;font:900 16px var(--f-body);font-variant-numeric:tabular-nums}
 .l-n .star-i{width:22px;height:22px}
-.l-go{min-height:52px;padding:8px 18px;font-size:19px}
-.l-go svg{width:22px;height:22px}
+.l-go{width:58px;height:58px;flex:none;border:0;border-radius:50%;display:grid;place-items:center;background:var(--tiger);color:#fff;font:900 24px var(--f-body);box-shadow:0 5px 0 var(--tiger-deep);cursor:pointer}
+.l-go:active{transform:translateY(4px);box-shadow:0 1px 0 var(--tiger-deep)}
+.l-go svg{width:26px;height:26px;margin-left:3px}
+.l-go.done{background:var(--leaf);box-shadow:0 5px 0 #1E8A4F}
+.l-st{display:flex;align-items:center;gap:4px;font:800 13px var(--f-body);color:var(--ink-soft)}.l-st svg{width:14px;height:14px}
 .ico-letters{display:flex;align-items:center;gap:2px;font:900 40px/1 var(--f-body)}
 .ico-num{font:900 32px/1 var(--f-body);color:var(--plum);white-space:nowrap}
 .cd em{position:absolute;top:2px;right:4px;font:900 11px var(--f-body);font-style:normal;color:var(--tiger-deep)}
@@ -315,7 +321,6 @@ b.r{color:var(--berry)}
 @keyframes dance{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(6deg) translateY(-8px)}}
 @media (max-width:560px){
   .lesson{grid-template-columns:auto minmax(0,1fr) auto}
-  .l-go{grid-column:1/-1}
   .cmp{grid-template-columns:1fr}
   .cmp-g .frame{font-size:30px}
 }
@@ -1263,7 +1268,10 @@ body.quest .fam-ok{color:#7BE0A0}
 .st-q{font:900 clamp(30px,8vw,46px)/1.2 var(--f-body);text-align:center;min-height:1.3em}
 .st-dots{letter-spacing:4px;font-size:30px;color:var(--sea);word-break:break-all}
 .st-right{color:var(--leaf)}
-.mp{display:flex;flex-direction:column;gap:10px}
+.mp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mp .mp-arrow{display:none}
+.mp .mp-card{flex-direction:column;align-items:flex-start;gap:6px;padding:12px}
+.mp .mp-card .emo{font-size:34px}
 .mp-card{position:relative;display:flex;align-items:center;gap:14px;border:0;border-radius:20px;padding:12px 14px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);text-align:left;cursor:pointer}
 .mp-card .emo{font-size:40px}
 .mp-t{display:flex;flex-direction:column;gap:2px}.mp-t b{font:800 19px var(--f-body);color:var(--ink)}.mp-t small{font:700 15px var(--f-body);color:var(--ink-soft)}.mp-t em{font:800 14px var(--f-body);color:var(--sea);font-style:normal}
@@ -1558,7 +1566,7 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .ol{display:flex;flex-direction:column;gap:12px;width:min(100%,620px)}
 .ol-head{display:flex;justify-content:space-between;font:800 14px var(--f-body);color:var(--ink-soft)}
 .ol-q{margin:0;padding:16px 18px;border-radius:20px;background:var(--paper);box-shadow:0 5px 0 var(--line);font:700 20px/1.45 var(--f-body)}
-.ol-opts{display:flex;flex-direction:column;gap:8px}
+.ol-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ol-o{display:flex;align-items:center;gap:12px;text-align:left;border:0;border-radius:16px;padding:12px 14px;background:var(--paper);color:var(--ink);font:700 18px/1.3 var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
 .ol-o b{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--sun);color:#2A2346;font:900 15px var(--f-body)}
 .ol-o:disabled{opacity:.45;cursor:default}
@@ -2184,7 +2192,8 @@ window.addEventListener('resize', () => { if (resizeFn) resizeFn(); });
 function shell(title, body, { back = null, guide = true, raw = false } = {}) {
   app.innerHTML = `<div class="screen">
     <header class="bar">
-      <button class="ibtn" id="backBtn" aria-label="${back ? "Back" : "To the home screen"}">${back ? ICON.back : ICON.home}</button>
+      <button class="ibtn" id="backBtn" aria-label="Back">${ICON.back}</button>
+      ${back ? `<button class="ibtn home-b" id="homeBtn2" aria-label="Home">${ICON.home}</button>` : ''}
       <h1>${title}</h1>
       <div class="starpill" title="Stars">${ICON.star}<b id="starN">${P.stars}</b></div>
     </header>
@@ -2192,6 +2201,8 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
     ${guide ? `<div class="guide"><button class="guide-ryz" id="ryzBtn" aria-label="Listen again">${friendSVG()}</button><p class="bubble" id="bubble"></p><button class="ibtn" id="replay" aria-label="Repeat">${ICON.speaker}</button></div>` : ''}
   </div>`;
   $('#backBtn').onclick = () => { sfx.pop(); (back || goHome)(); };
+  if ($('#homeBtn2')) $('#homeBtn2').onclick = () => { sfx.pop(); goHome(); };
+  navEnter(back || goHome);
   if (guide) {
     $('#replay').onclick = () => talk(lastLine); $('#ryzBtn').onclick = () => talk(lastLine);
     const st = $('#stage'), f1 = st.firstElementChild, lead = f1 && (f1.matches('p.lead') ? f1 : f1.firstElementChild && f1.firstElementChild.matches('p.lead') ? f1.firstElementChild : null);
@@ -2390,12 +2401,11 @@ function lessonsCard() {
   const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b></span>", math: '<span class="ico-num">1+2</span>', book: pic('📖') };
   const rows = LIDS().map(id => {
     const L = LS()[id], plan = lessonPlan(id), d = td.done[id].length, n = c[id] || 0;
-    const label = id === 'book' ? (n ? "Read today ✓" : `${ICON.play}Mark as read`) : d ? `${ICON.play}Next · ${d}/${plan.length}` : n ? `${ICON.play}Again` : `${ICON.play}Start`;
+    const state = id === 'book' ? (n ? "Read today ✓" : "Mark my reading") : d ? `Next · ${d}/${plan.length}` : n ? "Again" : "Start";
     return `<div class="lesson" style="--lc:${L.color};--lb:${L.bg}">
       <span class="l-ico">${ico[id]}</span>
-      <span class="l-t"><b>${L.name}</b><span class="l-bar"><i style="width:${d / plan.length * 100}%"></i></span></span>
-      <span class="l-n" title="Today">${n ? `${ICON.star}×${n}` : ''}</span>
-      <button class="big l-go" data-l="${id}">${label}</button></div>`;
+      <span class="l-t"><b>${L.name}</b><span class="l-bar"><i style="width:${d / plan.length * 100}%"></i></span><small class="l-st">${state}${n ? ` · ${ICON.star}×${n}` : ''}</small></span>
+      <button class="l-go ${id === 'book' && n ? 'done' : ''}" data-l="${id}" aria-label="${state}">${id === 'book' && n ? '✓' : ICON.play}</button></div>`;
   }).join('');
   return `<section class="today">
     <div class="today-top">
@@ -2484,6 +2494,21 @@ function homeSearch() {
   ov.onclick = e => { if (e.target === ov) close(); const b = e.target.closest('.srch-i'); if (!b) return; sfx.pop(); homeLeave(); close(); GAMES.find(g => g.id === b.dataset.id).go(); };
   setTimeout(() => { try { $('#srchIn').focus(); } catch (e) {} }, 50);
 }
+// one history step while away from home: the phone's back gesture runs the screen's own «back»
+let NAV_BACK = null, NAV_SILENT = false;
+function navEnter(back) {
+  NAV_BACK = back;
+  try { if (!(history.state && history.state.gv)) history.pushState({ gv: 1 }, '', location.pathname + location.search + location.hash); } catch (e) {}
+}
+function navHome() {
+  NAV_BACK = null;
+  try { if (history.state && history.state.gv) { NAV_SILENT = true; history.back(); } } catch (e) {}
+}
+window.addEventListener('popstate', () => {
+  if (NAV_SILENT) { NAV_SILENT = false; return; }
+  const b = NAV_BACK; NAV_BACK = null;
+  if (b) { try { sfx.pop(); } catch (e) {} b(); }
+});
 let LANG_CHECKED = false;
 function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
@@ -2493,6 +2518,7 @@ function goHome() {
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
   newScreen(); ACTIVE = null; BATTLE = null; P = ROOT.profiles[ROOT.cur]; famPeople(); takeBattleHash(); if (Q()) useFreezes();
+  navHome();
   document.body.classList.toggle('quest', Q());
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place)));
