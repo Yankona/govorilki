@@ -346,6 +346,28 @@ b.r{color:var(--berry)}
 .fam-chip{display:flex;align-items:center;gap:6px;padding:4px 14px;border:0;border-radius:999px;background:transparent;font:800 15px var(--f-body);color:var(--ink-soft);cursor:pointer;box-shadow:inset 0 0 0 2px var(--line-strong)}
 .fam-chip .emo{font-size:18px}
 /* families and the league */
+.kids-fam{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.hol-ic{font:700 15px var(--f-emoji),700 15px var(--f-body)}
+.hol-icons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.hi{display:flex;align-items:center;gap:4px;border:0;border-radius:14px;padding:6px 10px;background:var(--sky);color:var(--ink);font:800 16px var(--f-body);cursor:pointer;box-shadow:0 3px 0 var(--line-strong)}
+.hi span{font-size:15px}
+.hi.off{background:var(--t-green)}
+.fe-cc{display:flex;flex-direction:column;gap:6px;font:800 15px var(--f-body)}
+.fe-cc select{font:700 17px var(--f-body);padding:10px 12px;border-radius:14px;border:3px solid var(--line-strong);background:#fff;color:#2A2346}
+.wl{display:flex;flex-direction:column;gap:14px;width:100%;max-width:660px;margin:0 auto;padding-bottom:24px}
+.wl-c{display:flex;flex-direction:column;gap:10px;background:var(--paper);color:var(--ink);border-radius:24px;padding:14px;box-shadow:0 5px 0 var(--line)}
+.wl-h{display:flex;align-items:center;gap:10px}
+.wl-f{font:40px/1 var(--f-emoji)}
+.wl-h b{flex:1;font:800 22px var(--f-body)}
+.wl-t{border:0;border-radius:14px;padding:8px 12px;background:var(--sky);color:var(--ink);font:800 18px var(--f-body);cursor:pointer;box-shadow:0 3px 0 var(--line-strong)}
+.wl-who{display:flex;flex-wrap:wrap;gap:8px}
+.wl-p{display:flex;align-items:center;gap:6px;padding:4px 12px 4px 4px;border-radius:999px;background:var(--sky);font:800 16px var(--f-body)}
+.wl-p .chip-face{width:32px;height:32px}
+.wl-p .emo{font-size:26px;padding-left:4px}
+.wl-say{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wl-say .pick-b{flex-direction:column;gap:2px;font-size:18px}
+.wl-say small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.wl-cap{margin:0;font:700 16px var(--f-body)}
 .picks-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;width:100%}
 .picks-g.two{grid-template-columns:1fr 1fr}
 .picks-g.one{grid-template-columns:1fr}
@@ -2090,7 +2112,7 @@ function screenCalendar(off = 0) {
         <div class="cal-legend">${LIDS().map(id => `<span><i style="background:${LS()[id].color}"></i>${LS()[id].name}</span>`).join('')}</div>
       </div>
       ${mh.length || bds.length ? `<div class="cal-hols"><h3>Праздники месяца</h3>${bds.map(id => `<div class="ch-row bd"><span class="ch-e">🎂</span><span class="ch-t"><b>День рождения: ${esc(ROOT.profiles[id].settings.name)}</b><small>${holDateText(ROOT.profiles[id].settings.bday)}</small></span></div>`).join('')}
-        ${mh.map(z => `<button class="ch-row" data-hol="${esc(z.h.id)}" data-k="${z.k}"><span class="ch-e">${z.h.e}</span><span class="ch-t"><b>${esc(z.h.n)}</b><small>${FLAG(z.h.cc)} ${holDateText(z.k)}${(z.h.len || 1) > 1 ? ` · ${z.h.len} ${plural(z.h.len, ['день', 'дня', 'дней'])}` : ''}${z.h.off ? ' · выходной' : ''}</small></span>${holDone(z.h.id, +z.k.slice(0, 4)) ? '<span class="ch-ok">✓</span>' : '<span class="g-go">▶</span>'}</button>`).join('')}</div>` : ''}
+        ${mh.map(z => `<button class="ch-row" data-hol="${esc(z.h.id)}" data-k="${z.k}"><span class="ch-e">${z.h.e}</span><span class="ch-t"><b>${esc(z.h.n)}</b><small class="hol-ic">${FLAG(z.h.cc)} ${whoIcons(z.h.cc)} ${holDateText(z.k)}${(z.h.len || 1) > 1 ? ` · ${z.h.len} ${plural(z.h.len, ['день', 'дня', 'дней'])}` : ''}${z.h.off ? ' 🏖️' : ''}</small></span>${holDone(z.h.id, +z.k.slice(0, 4)) ? '<span class="ch-ok">✓</span>' : '<span class="g-go">▶</span>'}</button>`).join('')}</div>` : ''}
       <p class="cal-coll">🎉 Праздников в коллекции: <b>${holCollected().length}</b></p>
       <div class="medals">${MEDALS.map(md => `<div class="medal ${P.medals.includes(md.n) ? 'got' : ''}"><span class="emo">${md.e}</span><small>${md.t}</small></div>`).join('')}</div>
       <button class="big" id="calGo">${ICON.play}${dayTotal(tk) ? 'Заниматься ещё' : 'Заниматься сегодня'}</button>
@@ -2235,6 +2257,7 @@ function goHome() {
   $$('.kid').forEach(b => b.onclick = () => { if (b.dataset.k !== ROOT.cur) { sfx.pop(); switchKid(b.dataset.k); } });
   if ($('#duoBtn')) $('#duoBtn').onclick = () => { sfx.pop(); screenDuo(); };
   $('#famChip').onclick = () => { sfx.pop(); screenFamilies(); };
+  $('#worldChip').onclick = () => { sfx.pop(); screenWorld(); };
   bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard();
   $('#parentsBtn').onclick = () => { sfx.pop(); screenParents(); };
   $$('.tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
@@ -3686,7 +3709,8 @@ function teamCard() {
   </section>`;
 }
 const kidsBar = () => `<div class="kids"><div class="kids-in" role="tablist" aria-label="Кто играет">${KIDS.map(id => `<button class="kid ${id === ROOT.cur ? 'sel' : ''}" data-k="${id}" role="tab" aria-selected="${id === ROOT.cur}"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.name)}</button>`).join('')}</div>
-  <button class="fam-chip" id="famChip" aria-label="Семьи: сменить или добавить"><span class="emo">🏠</span>${esc(fam().name)}</button></div>`;
+  <div class="kids-fam"><button class="fam-chip" id="famChip" aria-label="Семьи: сменить или добавить"><span class="emo">🏠</span>${esc(fam().name)}</button>
+  <button class="fam-chip" id="worldChip" aria-label="Где живут наши"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button></div></div>`;
 function switchKid(id) { if (!ROOT.profiles[id]) return; ROOT.cur = id; P = ROOT.profiles[id]; save(); goHome(); }
 function screenDuo() {
   const t = newScreen(), n = KIDS.length, goal = n > 2 ? n * 3 : 8, trk = id => ROOT.profiles[id].settings.track;
@@ -6797,7 +6821,7 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   const t = newScreen(), f = fid ? ROOT.families[fid] : null;
   const kids = f ? f.kids.map(id => { const st = ROOT.profiles[id].settings; return { id, name: st.name || '', she: st.gender === 'f', age: st.age || 0, track: st.track, tt: true }; })
     : [{ id: '', name: '', she: true, age: 0, track: 'r', tt: false }];
-  const grands = f ? f.grands.map(g => ({ ...g })) : [];
+  const grands = f ? f.grands.map(g => ({ ...g, cc: g.cc || f.cc2 || f.cc })) : [];
   let ask = '';
   const kidRow = (k, i) => `<div class="fe-row" data-k="${i}">
       <input class="fe-name" type="text" maxlength="20" autocomplete="off" placeholder="Имя" aria-label="Имя ребёнка" value="${esc(k.name)}">
@@ -6808,12 +6832,13 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   const grandRow = (g, i) => `<div class="fe-row" data-gi="${i}">
       <input class="fe-name" type="text" maxlength="30" autocomplete="off" placeholder="${g.she ? 'Бабушка Нина' : 'Дедушка Саша'}" aria-label="Как ребёнок зовёт" value="${esc(g.name)}">
       <div class="picks-g two"><button class="pick-b ${g.she ? 'sel' : ''}" data-s="1">👵 Бабушка</button><button class="pick-b ${g.she ? '' : 'sel'}" data-s="0">👴 Дедушка</button></div>
+      <label class="fe-cc">Где живёт <select class="fe-gcc">${ccOptions(g.cc || ($('#feCc') ? $('#feCc').value : 'RU'))}</select></label>
       <button class="fe-x" data-x="g${i}">✕ Убрать</button>
     </div>`;
   const form = `<section class="psec"><h2>Семья</h2>
       <label class="prow" for="feName">Название <input id="feName" type="text" maxlength="30" autocomplete="off" placeholder="например, Семья Ивановых" value="${esc(f ? f.name : '')}"></label>
       <label class="prow" for="feCc">Где живёте <select id="feCc">${ccOptions(f ? f.cc || 'PT' : guessCountry())}</select></label>
-      <label class="prow" for="feCc2">Праздники ещё одной страны <select id="feCc2"><option value="">— нет —</option>${ccOptions(f ? f.cc2 || '' : (guessCountry() === 'RU' ? '' : 'RU'))}</select></label></section>
+</section>
     <section class="psec"><h2>Дети</h2>
       <div class="fe-list" id="feKids"></div><button class="big ghost" id="feAddKid">＋ Ещё ребёнок</button></section>
     <section class="psec"><h2>Бабушки и дедушки</h2>
@@ -6829,7 +6854,7 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   } else shell(f ? 'Семья' : 'Новая семья', `<div class="fe">${form}</div>`, { back: screenFamilies, guide: false, raw: true });
   const read = () => {
     $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); });
-    $$('#feGrands .fe-row').forEach((r, i) => { grands[i].name = cleanS(r.querySelector('.fe-name').value, 30); });
+    $$('#feGrands .fe-row').forEach((r, i) => { grands[i].name = cleanS(r.querySelector('.fe-name').value, 30); grands[i].cc = r.querySelector('.fe-gcc').value; });
   };
   const draw = () => { $('#feKids').innerHTML = kids.map(kidRow).join(''); $('#feGrands').innerHTML = grands.map(grandRow).join(''); };
   draw();
@@ -6848,7 +6873,7 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
     if (e.target.closest('[data-x]')) { read(); grands.splice(i, 1); sfx.pop(); draw(); }
   };
   $('#feAddKid').onclick = () => { read(); kids.push({ id: '', name: '', she: false, age: 0, track: 'l', tt: false }); sfx.pop(); draw(); const l = $$('#feKids .fe-name'); l[l.length - 1].focus(); };
-  $('#feAddGrand').onclick = () => { read(); grands.push({ id: '', name: '', she: !grands.some(g => g.she) }); sfx.pop(); draw(); const l = $$('#feGrands .fe-name'); l[l.length - 1].focus(); };
+  $('#feAddGrand').onclick = () => { read(); grands.push({ id: '', name: '', she: !grands.some(g => g.she), cc: grands.length ? grands[grands.length - 1].cc : 'RU' }); sfx.pop(); draw(); const l = $$('#feGrands .fe-name'); l[l.length - 1].focus(); };
   if (!first) $('#feCancel').onclick = () => { sfx.pop(); screenFamilies(); };
   if ($('#feDel')) {
     let sure = false;
@@ -6871,8 +6896,8 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
       return kid;
     });
     old.filter(x => !ids.includes(x)).forEach(x => delete ROOT.profiles[x]);
-    const gs = grands.filter(g => g.name).map(g => ({ id: g.id || 'g' + rid6(), name: g.name, she: !!g.she }));
-    ROOT.families[id] = { ...(f || {}), id, name: cleanS($('#feName').value, 30) || 'Наша семья', cc: $('#feCc').value, cc2: $('#feCc2').value !== $('#feCc').value ? $('#feCc2').value : '', kids: ids, grands: gs };
+    const gs = grands.filter(g => g.name).map(g => ({ id: g.id || 'g' + rid6(), name: g.name, she: !!g.she, cc: g.cc || 'RU' }));
+    ROOT.families[id] = { ...(f || {}), id, name: cleanS($('#feName').value, 30) || 'Наша семья', cc: $('#feCc').value, cc2: gs.length ? '' : (f && f.cc2) || '', kids: ids, grands: gs };
     holYear.c = {};
     useFamily(id); P = ROOT.profiles[ROOT.cur]; famPeople(); save(); sfx.magic();
     if (fresh.length) screenKidSetup(fresh[0], { queue: fresh.slice(1), first, liga, back: first ? null : fid ? screenFamilies : goHome, total: fresh.length });
@@ -7667,7 +7692,32 @@ function holList(cc) {
   (holList.m = holList.m || {})[cc] = out;
   return out;
 }
-const famCountries = () => { const f = fam(); if (!f) return []; return [...new Set([f.cc || 'PT', f.cc2].filter(Boolean))]; };
+const famCountries = () => { const f = fam(); if (!f) return []; return [...new Set([f.cc || 'PT', ...f.grands.map(g => g.cc), f.cc2].filter(Boolean))]; };
+// a capital, the time there, «hello» and «thank you» in the language people speak there: to be curious about each other
+const COUNTRY_INFO = {
+  PT: ['Лиссабон', 'Europe/Lisbon', 'Ола', 'Olá', 'Обригаду', 'Obrigado'], RU: ['Москва', 'Europe/Moscow', 'Привет', '', 'Спасибо', ''],
+  ES: ['Мадрид', 'Europe/Madrid', 'Ола', 'Hola', 'Грасиас', 'Gracias'], CY: ['Никосия', 'Asia/Nicosia', 'Я су', 'Γειά σου', 'Эфхаристо', 'Ευχαριστώ'],
+  GR: ['Афины', 'Europe/Athens', 'Я су', 'Γειά σου', 'Эфхаристо', 'Ευχαριστώ'], DE: ['Берлин', 'Europe/Berlin', 'Халло', 'Hallo', 'Данке', 'Danke'],
+  FR: ['Париж', 'Europe/Paris', 'Бонжур', 'Bonjour', 'Мерси', 'Merci'], IT: ['Рим', 'Europe/Rome', 'Чао', 'Ciao', 'Грацие', 'Grazie'],
+  GB: ['Лондон', 'Europe/London', 'Хэллоу', 'Hello', 'Сэнк ю', 'Thank you'], US: ['Вашингтон', 'America/New_York', 'Хэллоу', 'Hello', 'Сэнк ю', 'Thank you'],
+  CH: ['Берн', 'Europe/Zurich', 'Грюци', 'Grüezi', 'Мерси', 'Merci'], NL: ['Амстердам', 'Europe/Amsterdam', 'Халло', 'Hallo', 'Данк е', 'Dank je'],
+  PL: ['Варшава', 'Europe/Warsaw', 'Чещь', 'Cześć', 'Дзенькуе', 'Dziękuję'], RS: ['Белград', 'Europe/Belgrade', 'Здраво', '', 'Хвала', ''],
+  ME: ['Подгорица', 'Europe/Podgorica', 'Здраво', 'Zdravo', 'Хвала', 'Hvala'], GE: ['Тбилиси', 'Asia/Tbilisi', 'Гамарджоба', 'გამარჯობა', 'Мадлоба', 'მადლობა'],
+  AM: ['Ереван', 'Asia/Yerevan', 'Барев', 'Բարև', 'Шнорхакалутюн', 'Շնորհակալություն'], KZ: ['Астана', 'Asia/Almaty', 'Салем', 'Сәлем', 'Рахмет', ''],
+  TR: ['Анкара', 'Europe/Istanbul', 'Мерхаба', 'Merhaba', 'Тешеккюрлер', 'Teşekkürler'], IL: ['', 'Asia/Jerusalem', 'Шалом', 'שלום', 'Тода', 'תודה'],
+  AE: ['Абу-Даби', 'Asia/Dubai', 'Мархаба', 'مرحبا', 'Шукран', 'شكرا']
+};
+const ccTime = cc => { try { return new Date().toLocaleTimeString('ru-RU', { timeZone: (COUNTRY_INFO[cc] || [])[1], hour: '2-digit', minute: '2-digit' }); } catch (e) { return ''; } };
+const ccHour = cc => +ccTime(cc).slice(0, 2);
+// who lives there: our family, a grandmother, a grandfather
+function whoIn(cc) {
+  const f = fam(); if (!f) return [];
+  const out = []; if ((f.cc || 'PT') === cc) out.push({ e: '🏠', name: 'мы', she: false, us: true });
+  f.grands.filter(g => g.cc === cc).forEach(g => out.push({ e: g.she ? '👵' : '👴', name: g.name, she: g.she }));
+  return out;
+}
+const whoIcons = cc => whoIn(cc).map(w => w.e).join('');
+const whoSay = cc => { const w = whoIn(cc).filter(x => !x.us); const us = whoIn(cc).some(x => x.us); const g = w.map(x => lcFirst(decl(x.name, x.she)[1])); return [us ? 'у нас' : '', g.length ? 'у ' + g.join(' и у ') : ''].filter(Boolean).join(' и '); };
 // the days of a year, each holiday spread over its length
 function holYear(y) {
   const key = y + ':' + famCountries().join(',');
@@ -7699,12 +7749,12 @@ function holidayCard() {
   if (today.length) {
     const x = today[0], h = x.h;
     return `<button class="hol-card" data-hol="${esc(h.id)}" data-k="${x.start}"><span class="hol-ce">${h.e}</span><span class="hol-ct"><b>Сегодня: ${esc(h.n)}</b>
-      <small>${FLAG(h.cc)} ${holDone(h.id, y) ? 'Праздник пройден! ✓' : 'Праздничный день: история, слова и рисунок'}</small></span><span class="g-go">▶</span></button>`;
+      <small class="hol-ic">${FLAG(h.cc)} ${whoIcons(h.cc)}${h.off ? ' 🏖️' : ''}${holDone(h.id, y) ? ' ✅' : ''}</small></span><span class="g-go">▶</span></button>`;
   }
   const up = holUpcoming(7)[0];
   if (!up) return '';
   return `<button class="hol-card soon" data-hol="${esc(up.h.id)}" data-k="${up.k}"><span class="hol-ce">${up.h.e}</span><span class="hol-ct"><b>Скоро: ${esc(up.h.n)}</b>
-    <small>${FLAG(up.h.cc)} ${up.in === 1 ? 'завтра' : `через ${up.in} ${plural(up.in, ['день', 'дня', 'дней'])}`}, ${holDateText(up.k)}${up.h.off ? ' · выходной' : ''}</small></span><span class="g-go">▶</span></button>`;
+    <small class="hol-ic">${FLAG(up.h.cc)} ${whoIcons(up.h.cc)} · ${up.in === 1 ? 'завтра' : `через ${up.in} ${plural(up.in, ['день', 'дня', 'дней'])}`}${up.h.off ? ' 🏖️' : ''}</small></span><span class="g-go">▶</span></button>`;
 }
 function bindHolidayCard() {
   const b = $('.hol-card'); if (!b) return;
@@ -7726,8 +7776,11 @@ function screenHoliday(id, k) {
   k = k || dayKey(); const y = +k.slice(0, 4), p = holProg(id, y), all = p.story && p.words && p.draw;
   shell('Праздник', `<div class="hol">
     <div class="hol-hero"><span class="hol-e">${pic(h.e)}</span><div><h2>${esc(h.n)}</h2>
-      <p>${FLAG(h.cc)} ${esc(COUNTRY_NAMES[h.cc] || '')} · ${holDateText(k)}${(h.len || 1) > 1 ? ` · ${h.len} ${plural(h.len, ['день', 'дня', 'дней'])}` : ''}</p>
-      <p class="hol-off ${h.off ? 'on' : ''}">${h.off ? 'Выходной день: взрослые не работают, дети не учатся' : 'Праздник, но не выходной: работаем и учимся'}</p>${h.local ? `<small>${esc(h.local)}</small>` : ''}</div></div>
+      <div class="hol-icons" id="holIc">
+        <button class="hi" data-say="${esc(`Это праздник страны ${COUNTRY_NAMES[h.cc] || ''}${whoSay(h.cc) ? ': он ' + whoSay(h.cc) : ''}.`)}" aria-label="${esc(COUNTRY_NAMES[h.cc] || '')}">${FLAG(h.cc)}<span>${whoIcons(h.cc)}</span></button>
+        <button class="hi" data-say="${esc(`${holDateText(k)}${(h.len || 1) > 1 ? `, ${h.len} ${plural(h.len, ['день', 'дня', 'дней'])}` : ''}.`)}" aria-label="Дата">📅<span>${holDateText(k).split(' ')[0]}</span></button>
+        <button class="hi ${h.off ? 'off' : ''}" data-say="${h.off ? 'Выходной день: взрослые не работают, дети не учатся.' : 'Праздник, но не выходной: взрослые работают, дети учатся.'}" aria-label="${h.off ? 'Выходной' : 'Обычный день'}">${h.off ? '🏖️' : '🎒'}</button>
+      </div></div></div>
     <div class="hol-steps">
       <button class="hol-step ${p.story ? 'ok' : ''}" data-s="story"><span>📖</span><b>История</b></button>
       <button class="hol-step ${p.words ? 'ok' : ''}" data-s="words"><span>🗣️</span><b>Слова</b></button>
@@ -7736,6 +7789,7 @@ function screenHoliday(id, k) {
     ${all ? `<div class="hol-badge">${pic(h.e)}<b>Праздник пройден!</b><small>Он теперь в твоей коллекции праздников</small></div>` : ''}
   </div>`, { back: () => screenCalendar(monthOff(k)) });
   talk(all ? `${h.n} пройден! Молодец!` : `${h.n}! Узнай, что это за праздник, скажи праздничные слова и нарисуй рисунок.`);
+  $('#holIc').onclick = e => { const b = e.target.closest('[data-say]'); if (b) { sfx.pop(); hopEl(b); talk(b.dataset.say); } };
   $('.hol-steps').onclick = e => {
     const b = e.target.closest('[data-s]'); if (!b) return; sfx.pop();
     const back = () => screenHoliday(id, k), s = b.dataset.s;
@@ -7751,10 +7805,34 @@ function screenHoliday(id, k) {
 // families made before countries existed: ours lives in Portugal and keeps Russian holidays too; Sava's birthday is his goal date
 (() => {
   let ch = false;
-  Object.values(ROOT.families).forEach(f => { if (!f.cc) { f.cc = f.id === 'main' ? 'PT' : guessCountry(); if (f.id === 'main' && f.cc2 === undefined) f.cc2 = 'RU'; ch = true; } });
+  Object.values(ROOT.families).forEach(f => {
+    if (!f.cc) { f.cc = f.id === 'main' ? 'PT' : guessCountry(); if (f.id === 'main' && f.cc2 === undefined) f.cc2 = 'RU'; ch = true; }
+    f.grands.forEach(g => { if (!g.cc) { g.cc = f.cc2 || f.cc; ch = true; } });
+    if (f.grands.length && f.cc2) { f.cc2 = ''; ch = true; }
+  });
   const sv = ROOT.profiles.sava; if (sv && !sv.settings.bday && sv.goal && sv.goal.date) { sv.settings.bday = sv.goal.date; ch = true; }
   if (ch) save();
 })();
+function screenWorld() {
+  newScreen(); famCountries().forEach(holList);
+  const f = fam(), ccs = [...new Set([f.cc || 'PT', ...f.grands.map(g => g.cc).filter(Boolean)])];
+  const nextHol = cc => { const d = new Date(); for (let i = 0; i < 366; i++) { const k = dayKey(d), x = holOn(k).find(z => z.h.cc === cc && z.day === 0); if (x) return { ...x, k, in: i }; d.setDate(d.getDate() + 1); } return null; };
+  shell('Где живут наши', `<div class="wl">${ccs.map(cc => {
+    const I = COUNTRY_INFO[cc] || [], hr = ccHour(cc), nh = nextHol(cc), who = whoIn(cc);
+    return `<section class="wl-c">
+      <header class="wl-h"><span class="wl-f">${FLAG(cc)}</span><b>${esc(COUNTRY_NAMES[cc] || cc)}</b><button class="wl-t" data-say="${esc(`Сейчас ${whoSay(cc) || 'там'} ${ccTime(cc)}. ${hr >= 7 && hr < 21 ? 'Там день.' : 'Там ночь, все спят.'}`)}">${hr >= 7 && hr < 21 ? '☀️' : '🌙'} ${ccTime(cc)}</button></header>
+      <div class="wl-who">${who.map(w => w.us ? KIDS.map(id => `<span class="wl-p"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.name)}</span>`).join('') : `<span class="wl-p"><span class="emo">${w.e}</span>${esc(w.name)}</span>`).join('')}</div>
+      ${cc !== 'RU' || I[2] !== 'Привет' ? `<div class="wl-say"><button class="pick-b" data-say="${esc(I[2] || '')}">👋 ${esc(I[2] || '')}${I[3] ? `<small>${esc(I[3])}</small>` : ''}</button><button class="pick-b" data-say="${esc(I[4] || '')}">🙏 ${esc(I[4] || '')}${I[5] ? `<small>${esc(I[5])}</small>` : ''}</button></div>` : ''}
+      ${I[0] ? `<p class="wl-cap">🏛️ ${esc(I[0])}</p>` : ''}
+      ${nh ? `<button class="ch-row" data-hol="${esc(nh.h.id)}" data-k="${nh.k}"><span class="ch-e">${nh.h.e}</span><span class="ch-t"><b>${esc(nh.h.n)}</b><small class="hol-ic">${nh.in ? `через ${nh.in} ${plural(nh.in, ['день', 'дня', 'дней'])}` : 'сегодня'}${nh.h.off ? ' 🏖️' : ''}</small></span><span class="g-go">▶</span></button>` : ''}
+    </section>`;
+  }).join('')}</div>`);
+  talk(ccs.length > 1 ? 'Где живут наши! Нажми на часы — узнаешь, день там сейчас или ночь. Скажи «привет» на их языке!' : 'Добавь бабушек и дедушек и где они живут — и узнаешь, что у них сейчас.');
+  $('.wl').onclick = e => {
+    const h = e.target.closest('[data-hol]'); if (h) { sfx.pop(); screenHoliday(h.dataset.hol, h.dataset.k); return; }
+    const b = e.target.closest('[data-say]'); if (b && b.dataset.say) { sfx.pop(); hopEl(b); talk(b.dataset.say); }
+  };
+}
 const monthOff = k => { const n = new Date(), [y, m] = k.split('-').map(Number); return (y - n.getFullYear()) * 12 + (m - 1 - n.getMonth()); };
 
 /* ---------- «Опыты на площадке»: three small simulations a child can play with — the swing (a pendulum: fastest at the
