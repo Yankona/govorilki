@@ -1125,6 +1125,12 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .ol-why{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .ol-why p{margin:0;font:700 17px/1.45 var(--f-body)}
 @media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
+.said-card{position:fixed;z-index:44;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + 178px);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(42,35,70,.25);text-align:center;animation:popin .3s both}
+.said-card small{font:800 13px var(--f-body);color:var(--ink-soft)}
+.said-card b{font:400 clamp(22px,6.5vw,34px)/1.15 var(--f-display);letter-spacing:.03em}
+.said-card b .r{color:var(--berry)}
+.said-heard{font:700 14px/1.3 var(--f-body);color:var(--plum);min-height:1em;max-width:30em}
+.m-heard{font:700 13px/1.3 var(--f-body);color:#FFE9A8;min-height:1em;max-width:260px;text-align:center}
 </style>
 </head>
 <body>
@@ -1603,7 +1609,7 @@ function newScreen() {
   tok++; hush(); windStop(); stopMusic(); stopCam(); guardReset(); relayClose();
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
-  $$('.said, .flyer').forEach(x => x.remove());
+  $$('.said, .said-card, .flyer').forEach(x => x.remove());
   return tok;
 }
 function later(fn, ms) { const t = tok; timers.push(setTimeout(() => { if (t === tok) fn(); }, ms)); }
@@ -1706,7 +1712,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
   save(); showToasts(toasts);
   const after = stickerCount(), sticker = after > before ? STK()[after - 1] : null;
   const n = $('#starN'); if (n) n.textContent = P.stars;
-  $$('.said').forEach(x => x.remove());
+  $$('.said, .said-card').forEach(x => x.remove());
   if (doneLesson) { ACTIVE = null; lessonDoneOverlay(doneLesson, sticker, medal); return; }
   const ns = ACTIVE ? nextStepOf(ACTIVE) : null;
   if (ns) { next = () => ns.run(); menu = null; }
@@ -3504,7 +3510,7 @@ function screenCatch() {
     run = false; items.forEach(x => x.el.remove()); items = [];
     const list = [...new Set(caught)].slice(-6);
     ar.insertAdjacentHTML('beforeend', `<div class="arena-end"><b>${win ? 'Ловушка сработала!' : 'Жизни закончились'}</b><span>Поймано: ${score}</span>${list.length ? `<p>${list.map(w => hiS(w, 'л')).join(' · ')}</p>` : ''}</div>`);
-    if (list.length) { await talk(`Поймано ${score}. Теперь скажи эти слова чётко: ${list.join(', ')}.`); if (t !== tok) return; await askSaid(G('Я сказала все слова!', 'Я сказал все слова!')); if (t !== tok) return; }
+    if (list.length) { await talk(`Поймано ${score}. Теперь скажи эти слова чётко: ${list.join(', ')}.`); if (t !== tok) return; await askSaid(G('Я сказала все слова!', 'Я сказал все слова!'), { expect: list.join(' ') }); if (t !== tok) return; }
     finish({ key: 'l-catch', ev: { win }, stars: win ? 3 : 2, line: win ? 'Отличная реакция!' : 'Хорошая попытка, давай ещё!', again: screenCatch });
   }
   $('#ago').onclick = () => {
@@ -3553,7 +3559,7 @@ function screenWordle() {
       win ? sfx.good() : sfx.oops();
       $('#wHint').innerHTML = win ? `Угадано с ${tries.length}-й попытки! ${pic(emo)}` : `Это было слово ${hiS(word, 'л')} ${pic(emo)}`;
       await talk(`${win ? 'Есть!' : 'Это было слово'} ${word.toLowerCase()}. Скажи его три раза чётко.`); if (t !== tok) return;
-      await askSaid(G('Я сказала три раза!', 'Я сказал три раза!')); if (t !== tok) return;
+      await askSaid(G('Я сказала три раза!', 'Я сказал три раза!'), { expect: word.toLowerCase(), times: 3 }); if (t !== tok) return;
       finish({ key: 'l-word', stars: win ? 3 : 2, line: win ? 'Слово разгадано!' : 'В следующий раз получится!', again: screenWordle });
       return;
     }
@@ -4093,13 +4099,21 @@ function fairStars(key, stars) {
 
 // how long the voice must be heard: a word, a phrase said slowly, or three times
 const saidNeed = label => /три раза|все слова|в ритм/.test(label) ? 1.5 : /медленно/.test(label) ? 1.2 : /прочитал/.test(label) ? .9 : .6;
-function askSaid(label = 'Я сказала!', { need = saidNeed(label) } = {}) {
+function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect = '', times = 1 } = {}) {
   return new Promise(res => {
     const scr = $('.screen'); if (!scr) return;
     const t = tok, b = document.createElement('button');
     b.className = 'said wait'; b.disabled = true;
     b.innerHTML = `<span class="said-mic" aria-hidden="true"><i></i><b>🎤</b></span><span class="said-t">${gx(label)}</span>`;
     scr.append(b);
+    // the words to say stay on screen, so they can be read when they were not heard
+    let card = null;
+    if (expect) {
+      card = document.createElement('div'); card.className = 'said-card';
+      card.innerHTML = `<small>${times > 1 ? `Скажи ${times} раза:` : 'Скажи:'}</small><b>${hiS(sayWord(expect, times), Q() ? 'л' : 'ршжчщ')}</b><span class="said-heard"></span>`;
+      scr.append(card);
+    }
+    const heardEl = card && card.querySelector('.said-heard');
     const tx = b.querySelector('.said-t'), bar = b.querySelector('.said-mic i');
     let opened = false;
     const open = () => {
@@ -4108,31 +4122,49 @@ function askSaid(label = 'Я сказала!', { need = saidNeed(label) } = {}) 
     };
     b.onclick = () => {
       if (!opened) return;
-      micRelease(); sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); b.remove(); res();
+      micRelease(); sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); b.remove(); if (card) card.remove(); res();
     };
-    micOn().then(ok => {
-      if (t !== tok || !b.isConnected) return;
-      if (!ok) {
-        // no microphone (inside claude.ai, or switched off by a parent): the button wakes up after the time it takes to say it
-        let quiet = 0;
-        const iv = setInterval(() => { if (t !== tok || !b.isConnected) { clearInterval(iv); return; } if (SAYING) return; quiet += 100; bar.style.transform = `scaleY(${Math.min(1, quiet / (1800 + need * 1500)).toFixed(2)})`; if (quiet >= 1800 + need * 1500) { clearInterval(iv); open(); } }, 100);
-        return;
+    function byLoudness() {
+      micOn().then(ok => {
+        if (t !== tok || !b.isConnected) return;
+        if (!ok) {
+          // no microphone (inside claude.ai, or switched off by a parent): the button wakes up after the time it takes to say it
+          let quiet = 0;
+          const iv = setInterval(() => { if (t !== tok || !b.isConnected) { clearInterval(iv); return; } if (SAYING) return; quiet += 100; bar.style.transform = `scaleY(${Math.min(1, quiet / (1800 + need * 1500)).toFixed(2)})`; if (quiet >= 1800 + need * 1500) { clearInterval(iv); open(); } }, 100);
+          return;
+        }
+        tx.textContent = gx('Скажи вслух!');
+        let heard = 0, listened = 0, floor = .004, last = performance.now(), hinted = false;
+        const iv = setInterval(() => {
+          if (t !== tok || !b.isConnected) { clearInterval(iv); return; }
+          const now = performance.now(), dt = Math.min(.12, (now - last) / 1000); last = now;
+          if (micDeaf()) return;
+          listened += dt;
+          const x = micLevel(), thr = Math.max(.012, floor * 3.2);
+          if (x > thr) heard += dt; else floor = floorStep(floor, x, thr);
+          bar.style.transform = `scaleY(${Math.min(1, heard / need).toFixed(2)})`;
+          if (heard >= need) { clearInterval(iv); open(); }
+          else if (!hinted && listened > 8) { hinted = true; tx.textContent = gx('Скажи погромче!'); }
+          else if (listened > 25) { clearInterval(iv); open(); }
+        }, 50);
+      });
+    }
+    if (!expect || !srOk()) { byLoudness(); return; }
+    tx.textContent = gx('Скажи вслух!');
+    (async () => {
+      let tries = 0;
+      while (t === tok && b.isConnected && !opened) {
+        while (SAYING && t === tok) await wait(150);
+        const r = await hear(expect, { times, onHeard: h => { if (heardEl) heardEl.textContent = `Слышу: «${h}»`; } });
+        if (t !== tok || !b.isConnected) return;
+        if (r.ok) { if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`; bar.style.transform = 'scaleY(1)'; open(); return; }
+        if (HEAR.off) { byLoudness(); return; }
+        tries++;
+        if (heardEl) heardEl.textContent = r.heard ? `Слышу «${r.heard}». А нужно «${expect}»${Q() ? ': кончик языка к верхним зубам!' : '!'}` : 'Не слышно. Скажи громче!';
+        if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
+        if (tries >= 6) { open(); return; }
       }
-      tx.textContent = gx('Скажи вслух!');
-      let heard = 0, listened = 0, floor = .004, last = performance.now(), hinted = false;
-      const iv = setInterval(() => {
-        if (t !== tok || !b.isConnected) { clearInterval(iv); return; }
-        const now = performance.now(), dt = Math.min(.12, (now - last) / 1000); last = now;
-        if (micDeaf()) return;
-        listened += dt;
-        const x = micLevel(), thr = Math.max(.012, floor * 3.2);
-        if (x > thr) heard += dt; else floor = floorStep(floor, x, thr);
-        bar.style.transform = `scaleY(${Math.min(1, heard / need).toFixed(2)})`;
-        if (heard >= need) { clearInterval(iv); open(); }
-        else if (!hinted && listened > 8) { hinted = true; tx.textContent = gx('Скажи погромче!'); }
-        else if (listened > 25) { clearInterval(iv); open(); }
-      }, 50);
-    });
+    })();
   });
 }
 
@@ -4911,18 +4943,28 @@ SECTIONS.splice(SECTIONS.findIndex(x => x.g === 7), 0, { g: 10, h: 'Узнава
 /* ---------- «Л-трасса»: Sava's own motorbike run along a seaside road through traffic.
    Road signs carry words with Л: reading one aloud fires the nitro. Stars unlock bikes in the garage. ---------- */
 const BIKES = [
-  { at: 0, name: 'Самокат', e: '🛴', top: 105, body: '#4DB8FF', suit: '#2E5AAC' },
-  { at: 30, name: 'BMX', e: '🚲', top: 120, body: '#2FA865', suit: '#1E5E3A' },
-  { at: 70, name: 'Мопед', e: '🛵', top: 135, body: '#FFC83A', suit: '#8A5A00' },
-  { at: 130, name: 'Мотоцикл', e: '🏍️', top: 155, body: '#EF4F7E', suit: '#5A1F35' },
-  { at: 220, name: 'Спортбайк', e: '🏍️', top: 180, body: '#8C6CF2', suit: '#2F2468' },
-  { at: 350, name: 'Супербайк «Л-200»', e: '🏍️', top: 205, body: '#FF8A2A', suit: '#1E1A2E' }
+  { at: 0, name: 'Скейт', e: '🛹', top: 95, body: '#FF8A2A', suit: '#2E5AAC', type: 'skate' },
+  { at: 0, name: 'Самокат', e: '🛴', top: 105, body: '#4DB8FF', suit: '#2E5AAC', type: 'scooter' },
+  { at: 30, name: 'BMX', e: '🚲', top: 120, body: '#2FA865', suit: '#1E5E3A', type: 'bike' },
+  { at: 70, name: 'Мопед', e: '🛵', top: 135, body: '#FFC83A', suit: '#8A5A00', type: 'moto' },
+  { at: 130, name: 'Мотоцикл', e: '🏍️', top: 155, body: '#EF4F7E', suit: '#5A1F35', type: 'moto' },
+  { at: 175, name: 'Болид', e: '🏎️', top: 185, body: '#E63946', suit: '#1E1A2E', type: 'car' },
+  { at: 220, name: 'Спортбайк', e: '🏍️', top: 195, body: '#8C6CF2', suit: '#2F2468', type: 'moto' },
+  { at: 280, name: 'Полицейский байк', e: '🚨', top: 205, body: '#F4F6FF', suit: '#1F3A8A', type: 'police' },
+  { at: 350, name: 'Супербайк «Л-200»', e: '🏍️', top: 215, body: '#FF8A2A', suit: '#1E1A2E', type: 'moto' },
+  { at: 450, name: 'Ракетобайк', e: '🚀', top: 240, body: '#C0C7D6', suit: '#2A2346', type: 'rocket' }
 ];
 if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
 const MOTO_WORDS = [...CATCH_L.map(x => x[0]), 'колесо', 'шлем', 'мотоцикл', 'седло', 'ладья', 'волна', 'скала', 'полёт', 'лидер', 'финал'];
 const bikeOpen = i => P.stars >= BIKES[i].at;
 const bestBike = () => BIKES.reduce((k, b, j) => bikeOpen(j) ? j : k, 0);
-const myBike = () => BIKES[P.bike != null && BIKES[P.bike] && bikeOpen(P.bike) ? P.bike : bestBike()];
+// the chosen ride is kept by name, so new rides can be added without mixing up old choices
+const OLD_BIKES = ['Самокат', 'BMX', 'Мопед', 'Мотоцикл', 'Спортбайк', 'Супербайк «Л-200»'];
+function myBike() {
+  if (typeof P.bike === 'number') { P.bikeName = OLD_BIKES[P.bike]; delete P.bike; }
+  const i = BIKES.findIndex(b => b.name === P.bikeName);
+  return BIKES[i >= 0 && bikeOpen(i) ? i : bestBike()];
+}
 function garageCard() {
   const i = BIKES.reduce((k, b, j) => bikeOpen(j) ? j : k, 0), nx = BIKES[i + 1], best = P.motoBest || 0;
   const day = P.motoDay && P.motoDay.d === dayKey() ? P.motoDay : { done: false };
@@ -4939,7 +4981,7 @@ function screenGarage() {
   st.onclick = e => {
     const c = e.target.closest('.bike-c'); if (!c) return; const i = +c.dataset.i;
     if (!bikeOpen(i)) { wiggle(c); talk(`Этот байк откроется, когда наберёшь ${BIKES[i].at} звёзд.`); return; }
-    P.bike = i; save(); sfx.pop(); $$('.bike-c').forEach(x => x.classList.toggle('sel', x === c)); talk(`${BIKES[i].name}! Отличный выбор.`);
+    P.bikeName = BIKES[i].name; save(); sfx.pop(); $$('.bike-c').forEach(x => x.classList.toggle('sel', x === c)); talk(`${BIKES[i].name}! Отличный выбор.`);
   };
   $('#rideBtn').onclick = () => { sfx.pop(); screenMoto(); };
 }
@@ -4949,7 +4991,7 @@ function screenMoto() {
   const bike = { ...myBike(), ...(P.cos && P.cos.bike ? BIKE_SKINS[P.cos.bike] : {}) };
   shell('Л-трасса', `<div class="moto" id="moto"><canvas id="mc"></canvas>
       <div class="m-hud"><span class="m-spd"><b id="mSpd">0</b><small>км/ч</small></span><span class="m-dist" id="mDist">0 м</span><span class="m-cnt"><span id="mOver">0</span> 🚗 · <span id="mWords">0</span> 🗣</span></div>
-      <div class="m-sign" id="mSign" hidden><small>Прочитай вслух — будет нитро!</small><b id="mWord"></b><i class="m-lv"><i id="mLv"></i></i><button class="chip" id="mSaid" hidden>🔥 Прочитал!</button></div>
+      <div class="m-sign" id="mSign" hidden><small>Прочитай вслух — будет нитро!</small><b id="mWord"></b><i class="m-lv"><i id="mLv"></i></i><small class="m-heard" id="mHeard"></small><button class="chip" id="mSaid" hidden>🔥 Прочитал!</button></div>
       <div class="m-pop" id="mPop"></div>
       <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Нажимай слева или справа, чтобы перестраиваться. Читай вслух слова на синих знаках — включится нитро!</p><button class="big" id="mGo">${ICON.play}Поехали!</button></div>
     </div>`, { back: screenGarage, guide: false });
@@ -4989,17 +5031,54 @@ function screenMoto() {
     x.beginPath(); x.roundRect(sx - sw / 2, y - sh * 3.1, sw, sh, sw * .06); x.fill(); x.stroke();
     if (sw > 34) { x.fillStyle = '#FFFFFF'; x.font = `800 ${Math.round(sh * .5)}px Nunito, sans-serif`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s.word.toUpperCase(), sx, y - sh * 2.6, sw * .9); }
   }
+  // the ride from behind: a skateboard, a scooter, a bicycle, a motorbike, a race car, a police bike or a rocket bike
   function drawBike(px) {
-    const by = H - Math.max(18, H * .04), s = Math.min(W * .16, H * .2), lean = (target - pl) * .35;
-    x.save(); x.translate(px, by); x.rotate(lean);
-    if (nitro > 0) { x.fillStyle = `rgba(255,${120 + Math.random() * 80 | 0},40,.9)`; x.beginPath(); x.moveTo(-s * .12, -s * .12); x.lineTo(0, s * (.25 + Math.random() * .2)); x.lineTo(s * .12, -s * .12); x.fill(); }
-    x.fillStyle = '#16131F'; x.beginPath(); x.roundRect(-s * .11, -s * .42, s * .22, s * .44, s * .08); x.fill();
-    x.fillStyle = bike.body; x.beginPath(); x.roundRect(-s * .2, -s * .62, s * .4, s * .26, s * .08); x.fill();
-    x.fillStyle = '#FF3B3B'; x.fillRect(-s * .08, -s * .44, s * .16, s * .05);
-    x.fillStyle = bike.suit; x.beginPath(); x.roundRect(-s * .22, -s * 1.02, s * .44, s * .46, s * .14); x.fill();
-    x.fillStyle = bike.body; x.beginPath(); x.arc(0, -s * 1.12, s * .17, 0, Math.PI * 2); x.fill();
-    x.fillStyle = 'rgba(255,255,255,.35)'; x.beginPath(); x.arc(-s * .05, -s * 1.17, s * .06, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#16131F'; x.fillRect(-s * .42, -s * .74, s * .84, s * .05);
+    const by = H - Math.max(18, H * .04), s = Math.min(W * .16, H * .2), lean = (target - pl) * .35, ty = bike.type || 'moto';
+    const rr = (a, b, c, d, r, col) => { x.fillStyle = col; x.beginPath(); x.roundRect(a, b, c, d, r); x.fill(); };
+    x.save(); x.translate(px, by); x.rotate(ty === 'car' ? lean * .3 : lean);
+    const flame = (w, len) => { x.fillStyle = `rgba(255,${120 + Math.random() * 80 | 0},40,.9)`; x.beginPath(); x.moveTo(-w, -s * .12); x.lineTo(0, s * (len + Math.random() * .2)); x.lineTo(w, -s * .12); x.fill(); };
+    const rider = (y0, h) => {
+      rr(-s * .22, y0 - h, s * .44, h, s * .14, bike.suit);
+      x.fillStyle = bike.body; x.beginPath(); x.arc(0, y0 - h - s * .1, s * .17, 0, Math.PI * 2); x.fill();
+      x.fillStyle = 'rgba(255,255,255,.35)'; x.beginPath(); x.arc(-s * .05, y0 - h - s * .15, s * .06, 0, Math.PI * 2); x.fill();
+    };
+    if (ty === 'skate') {
+      rr(-s * .34, -s * .1, s * .68, s * .07, s * .03, bike.body);
+      x.fillStyle = '#16131F'; [-.26, .26].forEach(k => x.fillRect(s * k - s * .04, -s * .04, s * .08, s * .06));
+      x.fillStyle = bike.suit; x.fillRect(-s * .16, -s * .62, s * .1, s * .52); x.fillRect(s * .06, -s * .62, s * .1, s * .52);
+      rider(-s * .58, s * .42);
+      if (nitro > 0) flame(s * .08, .2);
+    } else if (ty === 'scooter') {
+      if (nitro > 0) flame(s * .1, .25);
+      rr(-s * .07, -s * .16, s * .14, s * .18, s * .06, '#16131F');
+      rr(-s * .2, -s * .2, s * .4, s * .06, s * .03, bike.body);
+      x.fillStyle = '#9AA3B5'; x.fillRect(-s * .02, -s * 1.15, s * .04, s * .95); x.fillRect(-s * .3, -s * 1.15, s * .6, s * .04);
+      x.fillStyle = bike.suit; x.fillRect(-s * .15, -s * .62, s * .1, s * .42); x.fillRect(s * .05, -s * .62, s * .1, s * .42);
+      rider(-s * .58, s * .42);
+    } else if (ty === 'bike') {
+      if (nitro > 0) flame(s * .1, .25);
+      rr(-s * .04, -s * .48, s * .08, s * .5, s * .04, '#16131F');
+      rr(-s * .16, -s * .62, s * .32, s * .08, s * .04, bike.body);
+      x.fillStyle = '#16131F'; x.fillRect(-s * .4, -s * .9, s * .8, s * .04);
+      rider(-s * .6, s * .36);
+    } else if (ty === 'car') {
+      if (nitro > 0) { flame(s * .08, .3); x.save(); x.translate(-s * .3, 0); flame(s * .08, .3); x.restore(); x.save(); x.translate(s * .3, 0); flame(s * .08, .3); x.restore(); }
+      rr(-s * .62, -s * .28, s * .3, s * .3, s * .08, '#16131F'); rr(s * .32, -s * .28, s * .3, s * .3, s * .08, '#16131F');
+      rr(-s * .5, -s * .5, s * 1, s * .34, s * .1, bike.body);
+      x.fillStyle = '#16131F'; x.fillRect(-s * .58, -s * .74, s * 1.16, s * .08); x.fillRect(-s * .5, -s * .7, s * .06, s * .2); x.fillRect(s * .44, -s * .7, s * .06, s * .2);
+      x.fillStyle = '#FF3B3B'; x.fillRect(-s * .4, -s * .4, s * .14, s * .06); x.fillRect(s * .26, -s * .4, s * .14, s * .06);
+      x.fillStyle = bike.body; x.beginPath(); x.arc(0, -s * .62, s * .14, 0, Math.PI * 2); x.fill();
+      x.fillStyle = '#16131F'; x.fillRect(-s * .12, -s * .64, s * .24, s * .05);
+    } else {
+      if (nitro > 0 || ty === 'rocket') flame(s * (ty === 'rocket' ? .16 : .12), ty === 'rocket' ? .45 : .25);
+      rr(-s * .11, -s * .42, s * .22, s * .44, s * .08, '#16131F');
+      rr(-s * .2, -s * .62, s * .4, s * .26, s * .08, bike.body);
+      x.fillStyle = '#FF3B3B'; x.fillRect(-s * .08, -s * .44, s * .16, s * .05);
+      if (ty === 'rocket') { x.fillStyle = '#EF4F4F'; x.beginPath(); x.moveTo(-s * .2, -s * .4); x.lineTo(-s * .4, -s * .2); x.lineTo(-s * .2, -s * .55); x.fill(); x.beginPath(); x.moveTo(s * .2, -s * .4); x.lineTo(s * .4, -s * .2); x.lineTo(s * .2, -s * .55); x.fill(); }
+      rider(-s * .56, s * .46);
+      x.fillStyle = '#16131F'; x.fillRect(-s * .42, -s * .74, s * .84, s * .05);
+      if (ty === 'police') { const on = (performance.now() / 180 | 0) % 2; rr(-s * .3, -s * .8, s * .16, s * .08, s * .03, on ? '#FF2D2D' : '#7A1414'); rr(s * .14, -s * .8, s * .16, s * .08, s * .03, on ? '#1F4BFF' : '#0E1F66'); }
+    }
     x.restore();
   }
   function draw() {
@@ -5034,12 +5113,24 @@ function screenMoto() {
     sign.read = true; words++; nitro = 3.5; score += 100; sfx.magic(); pop('НИТРО! 🔥'); hopEl($('#mSign')); later(() => { $('#mSign').hidden = true; }, 600);
   }
   // reading the sign: the microphone hears the word, or the button stands in where there is no microphone
-  let micOk = false;
+  let mode = 'button';
   function listen(dt) {
     if (!sign || sign.read || sign.d > 150) return;
     const sg = $('#mSign');
-    if (sg.hidden) { sg.hidden = false; $('#mWord').innerHTML = hiS(sign.word.toUpperCase(), 'л'); $('#mSaid').hidden = micOk; heard = 0; $('#mLv').style.width = '0%'; }
-    if (!micOk || micDeaf()) return;
+    if (sg.hidden) { sg.hidden = false; $('#mWord').innerHTML = hiS(sign.word.toUpperCase(), 'л'); $('#mSaid').hidden = mode !== 'button'; $('#mHeard').textContent = mode === 'sr' ? '🎤 слушаю…' : ''; heard = 0; $('#mLv').style.width = '0%'; }
+    if (mode === 'sr') {
+      if (HEAR.off) { mode = 'button'; $('#mSaid').hidden = false; $('#mHeard').textContent = ''; return; }
+      if (sign.busy) return;
+      const sg0 = sign; sg0.busy = true;
+      hear(sg0.word, { maxMs: 5000, onHeard: h => { if (sign === sg0) $('#mHeard').textContent = `Слышу: «${h}»`; } }).then(r => {
+        sg0.busy = false;
+        if (sign !== sg0 || sg0.read) return;
+        if (r.ok) { $('#mLv').style.width = '100%'; fire(); }
+        else if (r.heard) { $('#mHeard').textContent = `Это «${r.heard}», а на знаке «${sg0.word}»!`; wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210); }
+      });
+      return;
+    }
+    if (mode !== 'level' || micDeaf()) return;
     const lv = micLevel(), thr = Math.max(.012, floor * 3.2);
     if (lv > thr) heard += dt; else floor = floorStep(floor, lv, thr);
     $('#mLv').style.width = Math.min(100, heard / .5 * 100) + '%';
@@ -5052,7 +5143,7 @@ function screenMoto() {
     if (!continued) {
       continued = true; const w = pickOne(MOTO_WORDS);
       await talk(`Ничего, ты в шлеме! Чтобы ехать дальше, скажи три раза: ${w}.`); if (t !== tok) return;
-      await askSaid('Я сказал три раза!'); if (t !== tok) return;
+      await askSaid('Я сказал три раза!', { expect: w, times: 3 }); if (t !== tok) return;
       words++; cars = cars.filter(c => c.d > 40); speed = Math.max(60, speed * .6); run = true; sfx.good(); pop('Поехали дальше!'); return;
     }
     over = true; later(end, 900);
@@ -5096,7 +5187,8 @@ function screenMoto() {
   document.addEventListener('keydown', onKey);
   $('#mGo').onclick = async () => {
     $('#mStart').hidden = true; hush(); sfx.pop();
-    micOk = await micOn(); if (t !== tok) return; if (micOk) MIC.keep = tok;
+    if (srOk()) mode = 'sr';
+    else { const ok = await micOn(); if (t !== tok) return; if (ok) { MIC.keep = tok; mode = 'level'; } }
     run = true; speed = 40; tone(110, .4, 'sawtooth', .06); tone(165, .5, 'sawtooth', .05, .15);
   };
   draw(); loop(t, step);
@@ -5187,7 +5279,7 @@ function screenKpop() {
       const [w, e] = deck[k];
       C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), 'рршжчщ')}</b>`;
       await talk(k === 0 ? `Демончик-шалун утащил слово ${w}! Скажи его громко и чётко, и песня Жар-птиц его прогонит. ${cap(w)}!` : `Демончик утащил слово ${w}! Скажи: ${w}.`); if (t !== tok) return;
-      await askSaid(); if (t !== tok) return;
+      await askSaid(undefined, { expect: w }); if (t !== tok) return;
       await attack(false); if (t !== tok) return;
       k++; await talk(pickOne(['Демончик стал звёздочкой!', 'Ура! Ещё одна световая палочка!', 'Песня победила!'])); if (t !== tok) return;
       round(); return;
@@ -5716,6 +5808,47 @@ async function piperAudio(text) {
 // the voice starts loading at the first touch, so nobody downloads it by just glancing at the page
 document.addEventListener('pointerdown', () => { if (piperOn()) piperWarm(); }, { once: true, capture: true });
 
+/* ---------- hearing WHAT was said: the browser's speech recognition (Chrome, Safari) checks the word itself.
+   A slipped Л (лодка → водка) comes back as a different word, and the child sees what was heard.
+   Where recognition is missing or refused, the loudness check stays as before. ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const HEAR = { off: false };
+const srOk = () => !!SR && !EMBEDDED && !ROOT.micOff && !ROOT.srOff && !HEAR.off;
+const normW = s => String(s).toLowerCase().replace(/ё/g, 'е').replace(/[^а-яa-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+function lev(a, b) {
+  const d = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] !== b[j - 1])); p = q; } }
+  return d[b.length];
+}
+const cntL = w => (w.match(/л/g) || []).length;
+// a long word may differ by one letter, but never in the Л sounds being trained
+const wordOk = (h, t) => h === t || (t.length >= 5 && lev(h, t) <= 1 && cntL(h) === cntL(t));
+function matchSay(heard, expect, times = 1) {
+  const hw = normW(heard).split(' ').filter(Boolean), tw = normW(expect).split(' ').filter(Boolean);
+  if (!tw.length) return false;
+  if (tw.length === 1) return hw.filter(w => wordOk(w, tw[0])).length >= Math.min(times, 2);
+  return tw.filter(t => hw.some(w => wordOk(w, t))).length / tw.length >= .6;
+}
+function hear(expect, { times = 1, onHeard, maxMs = 7000 } = {}) {
+  return new Promise(res => {
+    let r = null, best = '', done = false;
+    const end = ok => { if (done) return; done = true; try { r && r.abort(); } catch (e) {} res({ ok, heard: best }); };
+    try { r = new SR(); } catch (e) { HEAR.off = true; res({ ok: false, heard: '' }); return; }
+    r.lang = 'ru-RU'; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
+    r.onresult = e => {
+      let all = ''; const alts = [];
+      for (let i = 0; i < e.results.length; i++) { all += ' ' + e.results[i][0].transcript; for (let j = 0; j < e.results[i].length; j++) alts.push(e.results[i][j].transcript); }
+      best = all.trim(); if (onHeard) onHeard(best);
+      if (matchSay(best, expect, times) || alts.some(a => matchSay(a, expect, times))) end(true);
+    };
+    r.onerror = e => { if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true; end(false); };
+    r.onend = () => end(false);
+    setTimeout(() => end(false), maxMs);
+    try { r.start(); } catch (e) { end(false); }
+  });
+}
+const sayWord = (expect, times) => times > 1 ? Array(times).fill(expect.toUpperCase()).join(' · ') : expect.toUpperCase();
+
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
       <li>«Скорочтение»: слоговые дорожки (ЛА-ЛО-ЛУ, АЛ-ОЛ-УЛ, АЛА-ОЛО) на время и текст на скорость. Игра считает слова в минуту и рисует график. Важно не только быстро, но и чётко.</li>
       <li>«Книга»: после чтения отметьте минуты и страницу. Карточка цели показывает, сколько дней прочитано и сколько осталось до дня рождения. Дату и приз задайте ниже.</li>
@@ -5769,6 +5902,7 @@ function screenParents(focus) {
       <label class="prow" for="devVoice">Голос телефона (бесплатный) <select id="devVoice"><option value="">— автоматически —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Звуки игры</label>
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>Микрофон проверяет, что ребёнок сказал вслух и подул</label>
+      <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Проверять, какое слово сказано (распознавание речи браузера: звук обрабатывает Google в Chrome или Apple в Safari)</label>
       <p class="muted" id="voiceState"></p>
       <div class="prow-btns"><button class="big ghost" id="testVoice">Проверить голос</button></div>
     </section>
@@ -5839,6 +5973,7 @@ function screenParents(focus) {
   $('#slowIn').onchange = e => { P.settings.rate = e.target.checked ? .8 : 1; save(); };
   $('#sfxIn').onchange = e => { P.settings.sfx = e.target.checked; save(); if (P.settings.sfx) sfx.pop(); };
   $('#micIn').onchange = e => { ROOT.micOff = !e.target.checked; save(); };
+  $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   $('#expBtn').onclick = async () => {
     const data = { v: 2, cur: ROOT.cur, fam: ROOT.fam, profiles: Object.fromEntries(KIDS.map(id => [id, { ...ROOT.profiles[id], art: [] }])) };
