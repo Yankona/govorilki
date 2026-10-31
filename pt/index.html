@@ -2502,7 +2502,7 @@ function goHome() {
   const tiles = g => vis(g).map(tileHTML).join('');
   const secs = gs => SECTIONS.filter(x => gs.includes(x.g) && (x.g === 13 || modOnG(x.g)) && (!x.only || x.only === P.settings.track) && vis(x.g).length);
   const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
-  const fy = forYou(), likesE = (P.settings.likes || []).map(l => (LIKES.find(x => x.id === l) || {}).e || '').join(' ');
+  const fy = forYou(), likeEm = (P.settings.likes || []).map(l => (LIKES.find(x => x.id === l) || {}).e || '').filter(Boolean), likesE = likeEm.slice(0, 6).join(' ') + (likeEm.length > 6 ? ` +${likeEm.length - 6}` : '');  // a few of the child's interests, not a wall of them
   const sc = stickerCount(), inboxN = inbox(P).length;
   // the games played last, newest first, the ones with a tile
   const recent = [...new Set((P.recent || []).map(x => x[3]).filter(Boolean))].map(k => GAMES.find(g => g.id === k)).filter(g => g && !gameOff(g.id)).slice(0, 6);
