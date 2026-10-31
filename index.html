@@ -5010,7 +5010,8 @@ function screenFamChess() {
     <div class="fam-card"><h2 class="fam-h">${Object.values(GRAND).map(g => pic(g.e)).join('') || pic('👵')} Партия с родными</h2>
       ${Object.keys(GRAND).length ? '' : `<p class="lead">В семье пока нет бабушек и дедушек. Добавьте их в «Для родителей» → «Семьи».</p>`}
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
-      <div class="fam-who">${Object.entries(GRAND).map(([k, g]) => `<button class="big" data-who="${k}">${g.e} ${g.call}</button>`).join('')}</div>
+      <div class="fam-who">${Object.entries(GRAND).map(([k, g]) => `<button class="big" data-who="${k}">${g.e} ${g.call}</button>`).join('')}
+        ${KIDS.filter(id => id !== ROOT.cur).map(id => `<button class="big ghost" data-local="${id}"><span class="chip-face">${kidFace(id)}</span> ${esc(ROOT.profiles[id].settings.name)} — на этом телефоне</button>`).join('')}</div>
       <p class="fam-out" id="famOut"></p>
     </div>
     ${gamesHTML()}
@@ -5027,6 +5028,7 @@ function screenFamChess() {
   bindGames($('.fam'));
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = P.famSide = b.dataset.s; save(); $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('.fam-who').onclick = async e => {
+    const l = e.target.closest('[data-local]'); if (l) { sfx.pop(); screenLocalChess(l.dataset.local, side); return; }
     const b = e.target.closest('[data-who]'); if (!b || busy) return;
     busy = true; sfx.pop(); $('#famOut').textContent = 'Создаю партию…';
     const { g } = await newGame(b.dataset.who, side); if (t !== tok) return;
@@ -5068,10 +5070,10 @@ function screenGuest() {
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
     <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1></div></header>
     <div class="fam-card"><h2 class="fam-h" id="gKidsH">Как дела у ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
-    <div class="fam-card"><h2 class="fam-h">♟ Приглашения от ${KID.gen}</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
-    <div class="fam-card"><h2 class="fam-h">Позвать ${KID.acc} сыграть</h2>
+    <div class="fam-card"><h2 class="fam-h">♟ Приглашения</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
+    <div class="fam-card"><h2 class="fam-h">♟ Позвать сыграть</h2>
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
-      <button class="big" id="gGo">♟ Начать партию</button><p class="fam-out" id="gOut"></p></div>
+      <div class="fam-who" id="gWho"></div><p class="fam-out" id="gOut"></p></div>
     ${gamesHTML()}
     <div class="fam-card"><h2 class="fam-h">Как играть</h2><ol class="g-steps">
       <li>Нажмите «Играть» или «Начать партию» — доска откроется прямо здесь.</li>
@@ -5087,14 +5089,23 @@ function screenGuest() {
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = b.dataset.s; $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#gKids').onclick = () => { sfx.pop(); GUEST_OFF = true; goHome(); };
   $('#gExit').onclick = () => { try { localStorage.removeItem(GUEST_KEY); } catch (e) {} location.replace(SITE); };
-  $('#gGo').onclick = async () => {
-    if (busy) return; busy = true; sfx.pop(); $('#gOut').textContent = 'Начинаю партию…';
-    const { g: game } = await newGame(KID.id, side); if (t !== tok) return;
+  $('#gWho').onclick = async e => {
+    const b = e.target.closest('[data-who]'); if (!b || busy) return;
+    busy = true; sfx.pop(); $('#gOut').textContent = 'Начинаю партию…';
+    const { g: game } = await newGame(b.dataset.who, side); if (t !== tok) return;
     screenOnline(game.id);
   };
   // the grandchildren: last known progress, praise (sent again for three days, until the children's phone has seen it), hearts back
   let pg = gLoad(GPROG_KEY, null);
-  const learnKids = x => (x && x.kids || []).forEach(k => { KNOWN_KIDS[k.id] = kidOf(k.id, k.n, !!k.s); });
+  // the whole family as the children's phone last described it: the children and the other relatives
+  const learnKids = x => {
+    (x && x.kids || []).forEach(k => { KNOWN_KIDS[k.id] = kidOf(k.id, k.n, !!k.s); });
+    (x && x.kin || []).forEach(k => { if (k.id !== GUEST.who && /^[a-z0-9]{2,12}$/.test(k.id)) GRAND[k.id] = grandOf(k.id, cleanS(k.n, 30), !!k.s, '', k.r); });
+    const w = $('#gWho'); if (!w) return;
+    const kids = x && x.kids && x.kids.length ? x.kids.map(k => KNOWN_KIDS[k.id]) : [KID];
+    const kin = Object.values(GRAND).filter(r => r.id !== GUEST.who);
+    w.innerHTML = [...kids.map(k => `<button class="big" data-who="${esc(k.id)}">${k.e} ${esc(k.name)}</button>`), ...kin.map(r => `<button class="big ghost" data-who="${esc(r.id)}">${r.e} ${esc(r.name)}</button>`)].join('');
+  };
   const drawKids = () => {
     const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg);
     if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = 'Как дела у ' + w.gen; if (k) k.textContent = 'Открыть игру ' + w.gen; }
@@ -5123,7 +5134,7 @@ function screenGuest() {
   relaySub(m => {
     if (t !== tok) return;
     if (m.k === 'prog' && Array.isArray(m.kids) && (!pg || m.at > pg.at)) {
-      pg = { at: m.at, kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), last: (Array.isArray(k.last) ? k.last : []).slice(0, 3) })) };
+      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), last: (Array.isArray(k.last) ? k.last : []).slice(0, 3) })) };
       gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); return;
     }
     if (m.k === 'cheer' && m.to === GUEST.who && m.i && !hearts.has(m.i)) {
@@ -5290,6 +5301,58 @@ function screenOnline(id) {
   later(tick, 30000);
   draw();
   if (!guestOn()) say(myTurn() ? 'Твой ход!' : `Ждём ход: ${lcFirst(opp.name)}.`);
+}
+// two children on one phone: the board stays, the phone goes from hand to hand, the move tells whose turn it is
+function screenLocalChess(oid, side = 'white') {
+  const t = newScreen(), other = ROOT.profiles[oid], meWhite = side !== 'black' ? (side === 'random' ? Math.random() < .5 : true) : false;
+  const W = meWhite ? P : other, B = meWhite ? other : P;
+  let R = chReplay(''), sel = -1, promo = null, over = false;
+  shell('Шахматы вдвоём', `<div class="og">
+      <div class="og-p"><span class="og-e">♚</span><span class="og-n"><b>${esc(B.settings.name)}</b><small>чёрными</small></span></div>
+      <div class="og-wrap"><div class="ch-board" id="lcB"></div></div>
+      <div class="og-p me"><span class="og-e">♔</span><span class="og-n"><b>${esc(W.settings.name)}</b><small>белыми</small></span></div>
+      <p class="og-st" id="lcSt"></p>
+      <div class="og-promo" id="lcPromo" hidden>${'qrbn'.split('').map(x => `<button class="sq l" data-pr="${x}"><span class="pc">${GLYPH[x]}︎</span></button>`).join('')}</div>
+      <div class="og-moves" id="lcM"></div>
+    </div>`, { back: screenFamChess, guide: false });
+  const turnOf = () => R.s.w ? W : B;
+  function draw() {
+    const legal = over ? [] : chLegal(R.s), dests = sel >= 0 ? legal.filter(m => m.a === sel) : [], kc = chInCheck(R.s) ? R.s.b.indexOf(R.s.w ? 'K' : 'k') : -1;
+    $('#lcB').innerHTML = Array.from({ length: 64 }, (_, i) => {
+      const r = i >> 3, f = i & 7, p = R.s.b[i], d = dests.find(m => m.t === i);
+      const lab = (f === 0 ? `<em class="rk">${8 - r}</em>` : '') + (r === 7 ? `<em class="fl">${'abcdefgh'[f]}</em>` : '');
+      return `<button class="sq ${(r + f) % 2 ? 'd' : 'l'} ${i === sel ? 'sel' : ''} ${d ? 'dest' + (p ? ' cap' : '') : ''} ${i === kc ? 'chk' : ''}" data-i="${i}" aria-label="${sqName(i)}">${p ? `<span class="pc ${isW(p) ? 'w' : 'b'}">${GLYPH[p.toLowerCase()]}︎</span>` : ''}${lab}</button>`;
+    }).join('');
+    $('#lcM').innerHTML = R.sans.map((x, j) => `${j % 2 === 0 ? `<i>${j / 2 + 1}.</i>` : ''}<span>${esc(x)}</span>`).join(' ');
+    const st = chStatus(R.s);
+    if (st.over) {
+      over = true;
+      const win = st.win ? (st.win === 'white' ? W : B) : null;
+      $('#lcSt').textContent = win ? `Мат! Победа: ${win.settings.name}!` : `Ничья (${st.draw}).`;
+      if (other) { other.stars += win === other ? 3 : 2; weekAdd(other, win === other ? 3 : 2); save(); }
+      later(() => finish({ key: 'chess-local', stars: win === P ? 3 : 2, line: win ? `Победа: ${win.settings.name}! Спасибо за партию.` : 'Ничья! Хорошая партия.', again: () => screenLocalChess(oid, side), menu: screenFamChess }), 1400);
+      return;
+    }
+    $('#lcSt').textContent = (st.check ? 'Шах! ' : '') + `Ход: ${turnOf().settings.name}`;
+  }
+  function play(m) {
+    sel = -1; promo = null; $('#lcPromo').hidden = true;
+    R = { ...R, sans: [...R.sans, chSan(R.s, m)], s: chApply(R.s, m) }; sfx.pop(); draw();
+    if (!over) talk(`${turnOf().settings.name}, твой ход!`);
+  }
+  $('#lcB').onclick = e => {
+    const c = e.target.closest('.sq'); if (!c || over) return;
+    const i = +c.dataset.i, p = R.s.b[i];
+    if (p && isW(p) === R.s.w) { sel = i; sfx.tick(); draw(); return; }
+    if (sel < 0) return;
+    const ms = chLegal(R.s).filter(m => m.a === sel && m.t === i);
+    if (!ms.length) { sel = -1; draw(); return; }
+    if (ms.length > 1) { promo = ms; $('#lcPromo').hidden = false; return; }
+    play(ms[0]);
+  };
+  $('#lcPromo').onclick = e => { const b = e.target.closest('[data-pr]'); if (b && promo) play(promo.find(m => m.pr === b.dataset.pr)); };
+  draw();
+  say(`Шахматы вдвоём! Белыми играет ${W.settings.name}, чёрными ${B.settings.name}. ${W.settings.name}, твой ход!`);
 }
 /* ---------- «Узнавай»: short true stories about St Petersburg, Portugal, composers and painters, each with a question ----------
    Vera listens (the sentence being read lights up), Sava reads aloud and the microphone checks that he did. a[0] is the right answer. */
@@ -8362,9 +8425,10 @@ const kinOn = () => { const f = fam(); return !!(f && f.grands.length && !guestO
 function postProg(force) {
   if (!kinOn()) return;
   ROOT.progSent = ROOT.progSent || {};
-  const f = fam(), kids = progSnap(), sig = JSON.stringify(kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n])), ps = ROOT.progSent[f.id] || {};
+  const f = fam(), kids = progSnap(), kin = f.grands.map(g => ({ id: g.id, n: g.name, s: g.she ? 1 : 0, r: roleOf(g)[0] }));
+  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n]), kin]), ps = ROOT.progSent[f.id] || {};
   if (!force && sig === ps.sig && Date.now() - (ps.at || 0) < 3 * 3600e3) return;
-  relayPost({ k: 'prog', by: 'kids', kids }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
+  relayPost({ k: 'prog', by: 'kids', kids, kin }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
 }
 let PSOON = 0;
 function progSoon() { clearTimeout(PSOON); PSOON = setTimeout(() => postProg(), 8000); }
