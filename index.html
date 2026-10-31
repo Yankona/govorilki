@@ -346,6 +346,14 @@ b.r{color:var(--berry)}
 .fam-chip{display:flex;align-items:center;gap:6px;padding:4px 14px;border:0;border-radius:999px;background:transparent;font:800 15px var(--f-body);color:var(--ink-soft);cursor:pointer;box-shadow:inset 0 0 0 2px var(--line-strong)}
 .fam-chip .emo{font-size:18px}
 /* families and the league */
+.cc{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.cc-page{width:min(100%,460px);aspect-ratio:1;background:#fff;border-radius:24px;box-shadow:0 5px 0 var(--line-strong);overflow:hidden;touch-action:none}
+.cc-page svg{width:100%;height:100%;display:block}
+.cc-t{font-family:Nunito,'Trebuchet MS',sans-serif;font-weight:900;fill:#2A2346;text-anchor:middle;dominant-baseline:central;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:.6px}
+.cc-sw{display:flex;align-items:center;justify-content:center;width:64px;height:64px;border:0;border-radius:18px;background:var(--c);box-shadow:0 5px 0 rgba(0,0,0,.25);cursor:pointer}
+.cc-sw b{font:900 20px var(--f-body);color:#2A2346;background:#fff;border-radius:10px;padding:2px 6px}
+.cc-sw.sel{outline:5px solid var(--ink);outline-offset:3px}
+.cc-pal{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .picks-g.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .picks-g.three .pick-b{font-size:14px;padding:8px 4px;min-height:44px}
 .cheer{display:flex;align-items:center;gap:10px;background:var(--paper);color:var(--ink);border-radius:22px;padding:10px 12px;margin-bottom:8px;box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px var(--sun)}
@@ -367,7 +375,17 @@ b.r{color:var(--berry)}
 .gk-h .chip-face{width:44px;height:44px}
 .gk-h b{flex:1;font:800 20px var(--f-body)}
 .gk-i{font:800 17px var(--f-body);white-space:nowrap}
-.gk-last{display:flex;flex-direction:column;gap:2px;font:700 15px/1.35 var(--f-body)}
+.gk-last{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font:700 16px/1.35 var(--f-body)}
+.gk-last li{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:1px dashed rgba(0,0,0,.12);padding-bottom:3px}
+.gk-last small{flex:none;font:700 14px var(--f-body);color:var(--ink-soft)}
+.gk-day{margin:0;font:800 18px/1.35 var(--f-body)}
+.gk-sum{margin:0;font:700 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.gk-s{margin:4px 0 0;font:800 16px var(--f-body)}
+.gk-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.gk-d{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;border-radius:10px;background:rgba(255,255,255,.6);font:800 17px var(--f-body);color:var(--ink-soft)}
+.gk-d small{font:800 12px var(--f-body)}
+.gk-d.on{background:#fff;color:var(--ink)}
+.gk-d.now{outline:3px solid var(--sea)}
 .gk-pr{display:flex;flex-wrap:wrap;gap:8px}
 .gk-pr .chip{font-size:24px;padding:6px 14px}
 .gk-at{margin:0;font:700 14px var(--f-body);color:var(--ink-soft)}
@@ -1197,6 +1215,8 @@ body.quest .fam-ok{color:#7BE0A0}
 .g-hero .pic{font-size:64px}
 .g-hero h1{margin:0;font:700 30px/1.1 var(--f-display)}
 .g-hero p{margin:4px 0 0;color:var(--ink-soft)}
+.hg-msg{margin:0;white-space:pre-wrap;font:600 15px/1.45 var(--f-body);background:#fff;border-radius:14px;padding:10px;max-height:260px;overflow:auto}
+.hg .big.ghost{margin-top:10px}
 .hg-steps{margin:0;padding:0;list-style:none;counter-reset:hg;display:flex;flex-direction:column;gap:12px}
 .hg-steps li{counter-increment:hg;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;font:700 20px/1.4 var(--f-body)}
 .hg-steps li::before{content:counter(hg);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--sea);color:#fff;font:900 24px var(--f-body)}
@@ -3228,6 +3248,10 @@ function screenDrawMenu() {
   newScreen();
   const art = P.art || [];
   const st = shell('Рисовалка', `<div class="cards draw-menu">
+      <button class="card" data-m="code-abc" style="--bg:var(--t-pink)"><span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b></span><span>Раскрась по буквам</span>${P.best['code-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
+      <button class="card" data-m="code-syl" style="--bg:var(--t-yellow)"><span class="ico-letters"><b class="L c">Р</b><b class="L v">А</b></span><span>Раскрась по слогам</span>${P.best['code-syl'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
+      <button class="card" data-m="code-math" style="--bg:var(--t-blue)"><span class="ico-num">2+3</span><span>Раскрась по примерам</span>${P.best['code-math'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
+      <button class="card" data-m="dots-abc" style="--bg:var(--t-mint)">${pic('🔤')}<span>Точки по алфавиту</span>${P.best['dots-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="dots" style="--bg:var(--t-green)">${pic('🔢')}<span>Точки по порядку</span>${P.best.dots ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="task" style="--bg:var(--t-lilac)">${pic('📝')}<span>Нарисуй по заданию</span>${P.best['draw-task'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="magic" style="--bg:var(--t-blue)">${pic('🔮')}<span>Волшебный узор</span></button>
@@ -3240,7 +3264,7 @@ function screenDrawMenu() {
   st.onclick = e => {
     const c = e.target.closest('[data-m]'); if (!c) return; sfx.pop();
     const m = c.dataset.m;
-    if (m === 'dots') screenDots(); else if (m === 'color') screenColorMenu(); else screenPaint({ mode: m });
+    if (m === 'dots') screenDots(); else if (m === 'dots-abc') screenDots(0, dotDeck(), true); else if (m.startsWith('code-')) screenCodeColor(m.slice(5)); else if (m === 'color') screenColorMenu(); else screenPaint({ mode: m });
   };
 }
 function screenColorMenu() {
@@ -3392,7 +3416,7 @@ function screenPaint(opts = {}) {
     }
     if (TK) {
       await talk(G(`Какой рисунок! Расскажи, что ты нарисовала. Скажи: я нарисовала ${TK.w}.`, `Какой рисунок! Расскажи, что ты нарисовал. Скажи: я нарисовал ${TK.w}.`)); if (t !== tok) return;
-      await askSaid(); if (t !== tok) return;
+      await askSaid(G('Я сказала!', 'Я сказал!'), { expect: TK.w }); if (t !== tok) return;
       if (opts.done) opts.done();
       finish({ key: taskObj ? 'draw-hol' : 'draw-task', stars: 3, line: 'Рисунок по заданию теперь в альбоме!', again: () => screenPaint(taskObj ? opts : { mode: 'task' }), menu: opts.back || screenDrawMenu });
       return;
@@ -4663,18 +4687,19 @@ function dotDeck() {
   const n = P.plays.dots || 0, pool = DOT_PICS.filter(d => d.pts.length <= (n < 2 ? 10 : n < 5 ? 12 : 13));
   return sample(pool, 2);
 }
-function screenDots(k = 0, deck = dotDeck()) {
-  const t = newScreen(), d = deck[k], n = d.pts.length;
+const ABC_ORDER = 'АБВГДЕЁЖЗИЙКЛМНОП';
+function screenDots(k = 0, deck = dotDeck(), abc = false) {
+  const t = newScreen(), d = deck[k], n = d.pts.length, lab = i => abc ? ABC_ORDER[i] : String(i + 1), nm = i => abc ? lsay(ABC_ORDER[i]) : (NUMW[i + 1] || String(i + 1));
   let next = 0, done = false, drag = false;
-  shell('Точки по порядку', `<div class="dots-wrap"><p class="tw-n">${k + 1} из ${deck.length}</p>
+  shell(abc ? 'Точки по алфавиту' : 'Точки по порядку', `<div class="dots-wrap"><p class="tw-n">${k + 1} из ${deck.length}</p>
     <svg class="dots" id="dots" viewBox="-7 -7 114 114" role="img" aria-label="Соедини точки по порядку">
       <polygon id="dfill" points="${d.pts.map(p => p.join(',')).join(' ')}" fill="${d.col}" opacity="0"/>
       <polyline id="dline" points="" fill="none" stroke="#2A2346" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      ${d.pts.map(([x, y], i) => `<g class="dot ${i === 0 ? 'next' : ''}" data-i="${i}"><circle cx="${x}" cy="${y}" r="5.3"/><text x="${x}" y="${y + 1.9}">${i + 1}</text></g>`).join('')}
+      ${d.pts.map(([x, y], i) => `<g class="dot ${i === 0 ? 'next' : ''}" data-i="${i}"><circle cx="${x}" cy="${y}" r="5.3"/><text x="${x}" y="${y + 1.9}">${lab(i)}</text></g>`).join('')}
     </svg>
     <div class="dots-reveal" id="drev"></div></div>`, { back: screenDrawMenu });
   const svg = $('#dots'), dl = $('#dline'), dots = $$('.dot', svg);
-  talk(k === 0 ? `Соедини точки по порядку: один, два, три. Начни с единицы. Узнаем, что получится!` : 'Ещё картинка! Начни с единицы.');
+  talk(abc ? (k === 0 ? 'Соедини точки по алфавиту: а, бэ, вэ. Начни с буквы а!' : 'Ещё картинка! Начни с буквы а.') : k === 0 ? `Соедини точки по порядку: один, два, три. Начни с единицы. Узнаем, что получится!` : 'Ещё картинка! Начни с единицы.');
   const toSvg = e => { const m = svg.getScreenCTM(); if (!m) return null; const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse()); return [p.x, p.y]; };
   const nearest = (p, max) => { let bi = -1, bd = max; d.pts.forEach(([x, y], i) => { const dd = Math.hypot(x - p[0], y - p[1]); if (dd < bd) { bd = dd; bi = i; } }); return bi; };
   function connect() {
@@ -4682,7 +4707,7 @@ function screenDots(k = 0, deck = dotDeck()) {
     next++;
     dl.setAttribute('points', d.pts.slice(0, next).concat(next === n ? [d.pts[0]] : []).map(p => p.join(',')).join(' '));
     sfx.note(next % 4);
-    if (next < n) { dots[next].classList.add('next'); say(cap(NUMW[next + 1] || String(next + 1))); return; }
+    if (next < n) { dots[next].classList.add('next'); say(cap(nm(next))); return; }
     done = true; reveal();
   }
   async function reveal() {
@@ -4690,8 +4715,8 @@ function screenDots(k = 0, deck = dotDeck()) {
     $('#drev').innerHTML = `${pic(d.e)}<b>${hiS(d.w.toUpperCase(), 'рршжчщсз')}</b>`;
     await talk(`Получилось! Это ${d.w}. Скажи: ${d.w}.`); if (t !== tok) return;
     await askSaid(); if (t !== tok) return;
-    if (k + 1 < deck.length) screenDots(k + 1, deck);
-    else finish({ key: 'dots', stars: 3, line: 'Ты знаешь числа по порядку!', again: () => screenDots(), menu: screenDrawMenu });
+    if (k + 1 < deck.length) screenDots(k + 1, deck, abc);
+    else finish({ key: abc ? 'dots-abc' : 'dots', stars: 3, line: abc ? 'Ты знаешь алфавит по порядку!' : 'Ты знаешь числа по порядку!', again: () => screenDots(0, dotDeck(), abc), menu: screenDrawMenu });
   }
   svg.addEventListener('pointerdown', e => {
     if (done) return; const p = toSvg(e); if (!p) return;
@@ -4699,7 +4724,7 @@ function screenDots(k = 0, deck = dotDeck()) {
     if (i < 0) return;
     if (i === next) { drag = true; try { svg.setPointerCapture(e.pointerId); } catch (x) {} connect(); return; }
     if (i < next) return;
-    wiggle(dots[i]); sfx.oops(); talk(`Это ${NUMW[i + 1]}. Ищи число ${NUMW[next + 1]}.`);
+    wiggle(dots[i]); sfx.oops(); talk(abc ? `Это ${nm(i)}. Ищи букву ${nm(next)}.` : `Это ${NUMW[i + 1]}. Ищи число ${NUMW[next + 1]}.`);
   });
   svg.addEventListener('pointermove', e => {
     if (!drag || done) return; const p = toSvg(e); if (!p) return;
@@ -5063,12 +5088,13 @@ function famBanner() {
 
 // the grandparent's own screen: invitations from Sava, inviting him, the games, how to play
 function screenGuest() {
-  const t = newScreen(), g = GRAND[GUEST.who];
+  const t = newScreen(), g = GRAND[GUEST.who], hgTop = !onHomeScreen() && !gLoad(HG_KEY, 0);
   let side = 'white', busy = false;
   const invites = new Map();
   document.body.classList.remove('quest');
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
     <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1></div></header>
+    ${hgTop ? `<div id="hgBox">${homeGuide(true)}</div>` : ''}
     <div class="fam-card"><h2 class="fam-h" id="gKidsH">Как дела у ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Приглашения</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Позвать сыграть</h2>
@@ -5081,12 +5107,13 @@ function screenGuest() {
       <li>Ход ${KID.gen} появится сам, телефон звякнет. Часов нет — думайте спокойно.</li>
       <li>Можно закрыть страницу и вернуться позже: партия сохранится.</li>
       <li>${KID.name} учится говорить чётко — созвонитесь и попросите называть ходы вслух: «слон», «ладья», «король».</li></ol></div>
-    ${homeGuide()}
+    ${hgTop ? '' : homeGuide()}
     <button class="link-btn" id="gKids">Открыть игру ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</button>
     <button class="link-btn" id="gExit">Это телефон детей — выйти из входа</button>
   </div></main></div>`;
   bindGames($('.fam'));
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = b.dataset.s; $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  if ($('#hgDone')) $('#hgDone').onclick = () => { sfx.pop(); gStore(HG_KEY, Date.now()); screenGuest(); };
   $('#gKids').onclick = () => { sfx.pop(); GUEST_OFF = true; goHome(); };
   $('#gExit').onclick = () => { try { localStorage.removeItem(GUEST_KEY); } catch (e) {} location.replace(SITE); };
   $('#gWho').onclick = async e => {
@@ -5134,7 +5161,7 @@ function screenGuest() {
   relaySub(m => {
     if (t !== tok) return;
     if (m.k === 'prog' && Array.isArray(m.kids) && (!pg || m.at > pg.at)) {
-      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), last: (Array.isArray(k.last) ? k.last : []).slice(0, 3) })) };
+      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9)]).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13)]).filter(x => x[0]) })) };
       gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); return;
     }
     if (m.k === 'cheer' && m.to === GUEST.who && m.i && !hearts.has(m.i)) {
@@ -5149,9 +5176,11 @@ function screenGuest() {
 
 // putting the entry on the home screen: big numbered steps for this very phone, so a grandparent can follow them alone
 const SHARE_ICO = '<svg class="hg-i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="#1F6FEB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10H6a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2" fill="none" stroke="#1F6FEB" stroke-width="2.2" stroke-linecap="round"/></svg>';
-function homeGuide() {
-  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const home = (() => { try { return navigator.standalone || matchMedia('(display-mode: standalone)').matches; } catch (e) { return false; } })();
+const isIOS = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const onHomeScreen = () => { try { return !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches); } catch (e) { return false; } };
+const HG_KEY = 'govorilki-guest-hg';
+function homeGuide(top) {
+  const ios = isIOS(), home = onHomeScreen();
   if (home) return `<div class="fam-card hg"><h2 class="fam-h">✅ Вход уже на экране телефона</h2><p class="lead">В следующий раз просто нажмите на значок на экране телефона.</p></div>`;
   const steps = ios ? [
     `Внизу экрана нажмите кнопку «Поделиться» — квадратик со стрелкой вверх ${SHARE_ICO}. Если её не видно, сначала нажмите «⋯» внизу справа.`,
@@ -5166,8 +5195,25 @@ function homeGuide() {
   ];
   return `<div class="fam-card hg"><h2 class="fam-h">📲 Поставить значок на экран телефона</h2>
     <p class="lead">Один раз — и дальше игра открывается одним нажатием. Если ссылка открылась внутри Ватсапа или Телеграма, сначала нажмите «⋯» или «⋮» и выберите «Открыть в ${ios ? 'Safari' : 'браузере'}».</p>
-    <ol class="hg-steps">${steps.map(x => `<li>${x}</li>`).join('')}</ol></div>`;
+    <ol class="hg-steps">${steps.map(x => `<li>${x}</li>`).join('')}</ol>${top ? `<button class="big ghost" id="hgDone">👍 Уже поставил${GUEST && GRAND[GUEST.who] && GRAND[GUEST.who].she ? 'а' : ''}</button>` : ''}</div>`;
 }
+// the same steps as a message, for the family chat: each relative opens their own invitation link first
+const HOME_STEPS_TEXT = `Как поставить «Говорилки» на экран телефона — один раз, дальше игра открывается одним нажатием.
+
+📱 iPhone:
+1. Откройте свою ссылку-приглашение в Safari. Если она открылась внутри WhatsApp или Telegram — нажмите «⋯» и «Открыть в Safari».
+2. Внизу нажмите «Поделиться» — квадратик со стрелкой вверх.
+3. Прокрутите вниз, нажмите «На экран „Домой“», потом «Добавить».
+
+📱 Android:
+1. Откройте свою ссылку-приглашение в Chrome.
+2. Нажмите три точки ⋮ справа вверху.
+3. Выберите «Добавить на главный экран» (или «Установить») и нажмите «Добавить».
+
+Готово: на экране появится значок «Говорилок». Нажимайте на него.`;
+const HOME_STEPS_SHORT = `Чтобы открывать одним нажатием, поставьте значок на экран телефона:
+• iPhone: откройте ссылку в Safari → «Поделиться» (квадрат со стрелкой вверх) → «На экран „Домой“» → «Добавить».
+• Android: откройте ссылку в Chrome → ⋮ справа вверху → «Добавить на главный экран».`;
 // opening a game straight from a link
 function openGameFromLink(h) {
   if (!guestOn()) {
@@ -8418,15 +8464,18 @@ function recentName(key) {
 }
 function noteRecent(key, stars) {
   const n = recentName(key); if (!n) return;
-  P.recent = [[n, stars, Date.now()], ...(P.recent || []).filter(x => Date.now() - x[2] < 7 * 864e5)].slice(0, 5);
+  P.recent = [[n, stars, Date.now()], ...(P.recent || []).filter(x => Date.now() - x[2] < 7 * 864e5)].slice(0, 12);
 }
-const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, last: (pr.recent || []).slice(0, 3) }; });
+// for the relatives: the last seven days (lessons finished each day), today's lessons by name, the last activities with their times
+const weekOf = pr => [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return dayTotalOf(pr, dayKey(d)); });
+const todayLessons = pr => { const v = pr.days[dayKey()], c = v === true ? { speech: 1 } : (v || {}), L = pr.settings.track === 'l' ? LESSONS_L : LESSONS_R; return Object.keys(c).filter(k => c[k] > 0 && L[k]).map(k => [L[k].name, c[k]]); };
+const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, w7: weekOf(pr), ls: todayLessons(pr), last: (pr.recent || []).slice(0, 8).map(x => [String(x[0]).slice(0, 40), x[1], x[2]]) }; });
 const kinOn = () => { const f = fam(); return !!(f && f.grands.length && !guestOn()); };
 function postProg(force) {
   if (!kinOn()) return;
   ROOT.progSent = ROOT.progSent || {};
   const f = fam(), kids = progSnap(), kin = f.grands.map(g => ({ id: g.id, n: g.name, s: g.she ? 1 : 0, r: roleOf(g)[0] }));
-  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n]), kin]), ps = ROOT.progSent[f.id] || {};
+  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n, (k.last[0] || [])[2]]), kin]), ps = ROOT.progSent[f.id] || {};
   if (!force && sig === ps.sig && Date.now() - (ps.at || 0) < 3 * 3600e3) return;
   relayPost({ k: 'prog', by: 'kids', kids, kin }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
 }
@@ -8472,18 +8521,28 @@ function screenInvite(back) {
       <button class="big" data-inv="${esc(g.id)}">📤 Отправить</button></div>`).join('') : '<p class="lead">Добавьте родных, и у каждого будет своя ссылка.</p>'}
     <div class="iv-out" id="ivOut"></div>
     <button class="big ghost" id="ivAdd">＋ Добавить родного</button>
+    <button class="lg-cta" id="ivHome"><span class="emo">📲</span><span class="lg-t"><b>Как поставить значок на экран — отправить всем</b></span></button>
+    <div class="iv-out" id="ivHomeOut"></div>
     <button class="lg-cta" id="ivKids"><span class="emo">📱</span><span class="lg-t"><b>Ещё телефон, где играют дети</b></span></button>
     <div class="iv-out" id="ivKidsOut"></div>
   </div>`, { back: back || goHome, guide: false, raw: true });
   $('.ivs').addEventListener('click', async e => {
     const b = e.target.closest('[data-inv]'); if (!b) return;
     sfx.pop(); const g = f.grands.find(x => x.id === b.dataset.inv), gg = GRAND[g.id], url = entryLink(g.id);
-    const msg = `${gg.name}, это приглашение в нашу семью в «Говорилках». Здесь видно, как занимаются ${kidsNames}, можно их похвалить и сыграть с ними в шахматы. Откройте ссылку:`;
+    const msg = `${gg.name}, это приглашение в нашу семью в «Говорилках». Здесь видно, чем занимаются ${kidsNames} и как у них дела, можно их похвалить и сыграть с ними в шахматы.\n\n${HOME_STEPS_SHORT}\n\nВаша ссылка:`;
     $('#ivOut').innerHTML = `<div class="fam-steps"><p>${kinE(g)} ${esc(g.name)}</p>${shareRow(msg, url, 'ivShare')}</div>`;
     bindShare('ivShare', msg, url, s => { $('#ivOut').insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`); });
     if (navigator.share) navigator.share({ title: 'Говорилки', text: msg, url }).catch(() => {});
   });
   $('#ivAdd').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
+  $('#ivHome').onclick = () => {
+    sfx.pop();
+    $('#ivHomeOut').innerHTML = `<div class="fam-steps"><pre class="hg-msg">${esc(HOME_STEPS_TEXT)}</pre><div class="fam-row"><button class="big" id="hgShare">📤 Отправить</button><button class="chip" id="hgCopy">📋 Скопировать</button></div><p class="muted" id="hgSaid"></p></div>`;
+    const said = x => { const o = $('#hgSaid'); if (o) o.textContent = x; };
+    const copy = () => navigator.clipboard ? navigator.clipboard.writeText(HOME_STEPS_TEXT).then(() => said('Скопировано. Вставьте в семейный чат.'), () => said('Не получилось скопировать — выделите текст выше.')) : said('Выделите текст выше и скопируйте.');
+    $('#hgShare').onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: 'Говорилки на экран телефона', text: HOME_STEPS_TEXT }).catch(() => {}); else copy(); };
+    $('#hgCopy').onclick = () => { sfx.pop(); copy(); };
+  };
   $('#ivKids').onclick = async () => {
     sfx.pop(); const code = exportCode();
     let ok = false; try { await navigator.clipboard.writeText(code); ok = true; } catch (e) {}
@@ -8502,16 +8561,134 @@ const GPROG_KEY = 'govorilki-guest-prog', GOUT_KEY = 'govorilki-guest-out';
 const gLoad = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } };
 const gStore = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 const KNOWN_KIDS = {};
+const hhmm = at => new Date(at).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+// «в 18:20», «вчера в 9:05», «в среду»: when a thing happened, said simply
+function whenSaid(at) {
+  if (!at) return '';
+  const d = new Date(at), k = dayKey(d), y = new Date(); y.setDate(y.getDate() - 1);
+  if (k === dayKey()) { const m = Math.round((Date.now() - at) / 60000); return m < 2 ? 'только что' : m < 60 ? `${m} мин назад` : 'в ' + hhmm(at); }
+  if (k === dayKey(y)) return 'вчера в ' + hhmm(at);
+  return ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу'][d.getDay()];
+}
 function guestKidsHTML(pg) {
   if (!pg || !pg.kids || !pg.kids.length) return `<p class="lead">Как только ${esc(kinWords(GRAND[GUEST.who] && GRAND[GUEST.who].role).nom)} откроют игру, здесь появятся их успехи.</p>`;
-  const ago = Math.round((Date.now() - pg.at) / 60000);
-  return pg.kids.map(k => `<div class="gk" data-kid="${esc(k.id)}">
-      <div class="gk-h"><span class="chip-face">${friendSVG('', FRIENDS[k.e] ? k.e : 'tiger')}</span><b>${esc(k.n)}</b>
-        <span class="gk-i" title="Сегодня">${k.td ? '✅' : '⬜'}</span><span class="gk-i" title="Дней подряд">🔥${k.sk}</span><span class="gk-i" title="Звёзды за неделю">⭐${k.wk}</span></div>
-      ${(k.last || []).length ? `<div class="gk-last">${k.last.map(x => `<span>${esc(cleanS(x[0], 40))} ${'⭐'.repeat(Math.max(0, Math.min(3, +x[1] || 0)))}</span>`).join('')}</div>` : ''}
-      <div class="gk-pr">${PRAISE.map(([e, x], i) => `<button class="chip" data-pr="${i}" data-to="${esc(k.id)}">${e}</button>`).join('')}<button class="chip" data-chess="${esc(k.id)}">♟</button></div>
-    </div>`).join('') + `<p class="gk-at">🕒 ${ago < 2 ? 'только что' : ago < 60 ? `${ago} мин назад` : ago < 1440 ? `${Math.round(ago / 60)} ч назад` : `${Math.round(ago / 1440)} дн назад`}</p>`;
+  const ago = Math.round((Date.now() - pg.at) / 60000), fresh = dayKey(new Date(pg.at)) === dayKey();
+  const days = [...Array(7)].map((_, i) => { const d = new Date(pg.at); d.setDate(d.getDate() - 6 + i); return d; });
+  return pg.kids.map(k => {
+    const she = !!k.s, w7 = k.w7 && k.w7.length === 7 ? k.w7 : null, on = w7 ? w7.filter(x => x > 0).length : 0;
+    const today = !fresh ? `<p class="gk-day">Сегодня ещё не открывал${she ? 'а' : ''} игру.</p>`
+      : (k.ls || []).length ? `<p class="gk-day">✅ Сегодня: ${k.ls.map(x => esc(x[0]) + (x[1] > 1 ? ' ×' + x[1] : '')).join(', ')}</p>`
+      : k.td ? '<p class="gk-day">✅ Сегодня занимал' + (she ? 'ась' : 'ся') + '</p>'
+      : (k.last || []).some(x => dayKey(new Date(x[2])) === dayKey()) ? `<p class="gk-day">🎮 Сегодня играл${she ? 'а' : ''}, урок ещё впереди</p>`
+      : `<p class="gk-day">⬜ Сегодня ещё не занимал${she ? 'ась' : 'ся'}</p>`;
+    return `<div class="gk" data-kid="${esc(k.id)}">
+      <div class="gk-h"><span class="chip-face">${friendSVG('', FRIENDS[k.e] ? k.e : 'tiger')}</span><b>${esc(k.n)}</b><span class="gk-i">⭐ ${k.st}</span></div>
+      ${today}
+      ${w7 ? `<div class="gk-week" aria-label="Неделя">${days.map((d, i) => `<span class="gk-d${w7[i] ? ' on' : ''}${i === 6 ? ' now' : ''}"><small>${WEEK[(d.getDay() + 6) % 7]}</small>${w7[i] ? '✅' : '·'}</span>`).join('')}</div>` : ''}
+      <p class="gk-sum">${w7 ? `${on} ${plural(on, ['день', 'дня', 'дней'])} из 7 · ` : ''}🔥 ${k.sk} ${plural(k.sk, ['день', 'дня', 'дней'])} подряд${k.wk ? ` · ⭐ ${k.wk} за неделю` : ''}${k.hol ? ` · 🎉 праздников: ${k.hol}` : ''}</p>
+      ${(k.last || []).length ? `<h3 class="gk-s">Чем занимал${she ? 'ась' : 'ся'}</h3><ul class="gk-last">${k.last.map(x => `<li><span>${esc(cleanS(x[0], 40))} ${'⭐'.repeat(Math.max(0, Math.min(3, +x[1] || 0)))}</span>${x[2] ? `<small>${whenSaid(x[2])}</small>` : ''}</li>`).join('')}</ul>` : ''}
+      <div class="gk-pr">${PRAISE.map(([e, x], i) => `<button class="chip" data-pr="${i}" data-to="${esc(k.id)}" aria-label="${esc(x)}">${e}</button>`).join('')}<button class="chip" data-chess="${esc(k.id)}" aria-label="Шахматы">♟</button></div>
+    </div>`;
+  }).join('') + `<p class="gk-at">🕒 Обновлено ${ago < 2 ? 'только что' : ago < 60 ? `${ago} мин назад` : ago < 1440 ? `${Math.round(ago / 60)} ч назад` : `${Math.round(ago / 1440)} дн назад`}</p>`;
 }
+
+/* ---------- drawing that teaches: «Раскрась по коду» — a picture whose parts carry a letter, a syllable or a sum; each
+   code has its colour in the palette, so the child reads (or counts) before painting; a syllable is said aloud the first
+   time its colour is taken. «Точки по алфавиту» joins the dots А, Б, В… ---------- */
+const CODE_COLS = ['#FF4D4D', '#FFD93D', '#4CC261', '#4DB8FF', '#9B5DE5'];
+function codeSet(kind) {
+  const s = mySounds();
+  if (kind === 'abc') {
+    const pool = Q() ? ['Л', 'Р', 'Ш', 'Ж', 'Ч', 'Щ', 'Ц', 'Ы', 'Ё', 'Ю', 'Я', 'Э'] : ['А', 'О', 'У', 'И', 'Ы', 'Э', ...(s.includes('r') ? ['Р'] : []), ...(s.includes('sh') ? ['Ш', 'Ж'] : []), ...(s.includes('l') ? ['Л'] : [])];
+    return sample(pool, 4).map(c => ({ c, say: c, ans: c }));
+  }
+  if (kind === 'syl') {
+    const v = ['А', 'О', 'У', 'Ы'], cons = [...(s.includes('r') ? ['Р'] : []), ...(s.includes('l') ? ['Л'] : []), ...(s.includes('sh') ? ['Ш', 'Ж'] : []), ...(s.includes('sz') ? ['С', 'З'] : [])];
+    const C = cons.length ? cons : ['М', 'П', 'Н'];
+    const all = C.flatMap(c => v.map(x => c + x)).filter(x => !/[ШЖ]Ы/.test(x));
+    return sample(all, 4).map(c => ({ c, say: c.toLowerCase(), ans: c }));
+  }
+  // sums: the regions carry examples, the palette carries the answers
+  const big = Q(), answers = sample(big ? [6, 8, 9, 10, 12, 14, 15, 16, 18, 20] : [2, 3, 4, 5, 6, 7, 8, 9, 10], 4);
+  return answers.map(a => ({ ans: String(a), make: () => { if (big && Math.random() < .5) { const d = [2, 3, 4, 5].filter(x => a % x === 0 && a / x <= 10); if (d.length) { const x = pickOne(d); return `${x}×${a / x}`; } } const x = 1 + Math.floor(Math.random() * (a - 1)); return Math.random() < .3 && a < 10 ? `${a + x}−${x}` : `${x}+${a - x}`; } }));
+}
+const CODE_NAME = { abc: 'Раскрась по буквам', syl: 'Раскрась по слогам', math: 'Раскрась по примерам' };
+function screenCodeColor(kind = 'abc', page, tries = 0) {
+  const t = newScreen(), set = codeSet(kind);
+  page = page || pickOne(PAGES);
+  shell(CODE_NAME[kind], `<div class="cc"><div class="cc-page" id="ccPage">${outlineSVG(pageSVG(page))}</div>
+    <div class="cc-pal" id="ccPal">${set.map((x, i) => `<button class="cc-sw" data-i="${i}" style="--c:${CODE_COLS[i]}" aria-label="${esc(x.ans)}"><b>${esc(x.ans)}</b></button>`).join('')}</div></div>`, { back: screenDrawMenu });
+  const svg = $('#ccPage svg'), NS = 'http://www.w3.org/2000/svg';
+  svg.removeAttribute('width'); svg.removeAttribute('height');
+  let sel = -1, filled = 0, total = 0;
+  const said = new Set();
+  // the parts big enough for a label, and really on top at their centre
+  requestAnimationFrame(() => {
+    if (t !== tok) return;
+    const shapes = [...svg.querySelectorAll('path,circle,ellipse,rect,polygon')].filter(el => (el.getAttribute('fill') || '').toUpperCase() === '#FFFFFF');
+    const m = svg.getScreenCTM(), chosen = [];
+    shapes.map(el => { let b; try { b = el.getBBox(); } catch (e) { return null; } return { el, b, a: b.width * b.height }; }).filter(x => x && x.b.width > 12 && x.b.height > 9).sort((p, q) => q.a - p.a).forEach(x => {
+      if (chosen.length >= 8) return;
+      const cx = x.b.x + x.b.width / 2, cy = x.b.y + x.b.height / 2;
+      if (chosen.some(c => Math.hypot(c.cx - cx, c.cy - cy) < 16)) return;
+      const sp = m ? new DOMPoint(cx, cy).matrixTransform(m) : null, top = sp && document.elementFromPoint(sp.x, sp.y);
+      if (top && top !== x.el) return;
+      chosen.push({ ...x, cx, cy });
+    });
+    const K = Math.min(set.length, Math.max(2, Math.floor(chosen.length / 2)));
+    chosen.forEach((x, i) => {
+      const k = i % K, code = set[k].make ? set[k].make() : set[k].c;
+      x.el.dataset.k = k; x.el.classList.add('cc-r');
+      const tx = document.createElementNS(NS, 'text');
+      tx.setAttribute('x', x.cx); tx.setAttribute('y', x.cy); tx.setAttribute('class', 'cc-t');
+      tx.setAttribute('font-size', Math.max(5, Math.min(13, Math.min(x.b.width / (code.length * .62), x.b.height * .6))));
+      tx.textContent = code; svg.appendChild(tx); x.tx = tx;
+    });
+    // too few parts on this picture: another one
+    if (chosen.length < 4 && tries < 4) { screenCodeColor(kind, pickOne(PAGES.filter(x => x !== page)), tries + 1); return; }
+    const used = new Set(chosen.map(x => +x.el.dataset.k));
+    $$('.cc-sw').forEach(b => { if (!used.has(+b.dataset.i)) b.remove(); });
+    total = chosen.length;
+    talk(kind === 'math' ? 'Реши пример в каждой части картинки. Ответ — в палитре внизу: возьми этот цвет и раскрась!' : kind === 'syl' ? 'В картинке спрятаны слоги. Нажми на цвет внизу, скажи слог и раскрась все такие части!' : 'В картинке спрятаны буквы. Возьми цвет с такой же буквой и раскрась!');
+  });
+  $('#ccPal').onclick = async e => {
+    const b = e.target.closest('.cc-sw'); if (!b) return;
+    const i = +b.dataset.i; sfx.tick();
+    if (kind === 'syl' && !said.has(i)) {
+      $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b)); sel = -1;
+      await talk(`Скажи: ${set[i].say}!`); if (t !== tok) return;
+      await askSaid('Я сказала!', { expect: set[i].say }); if (t !== tok) return;
+      said.add(i);
+    }
+    sel = i; $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b));
+    if (kind === 'abc') say(set[i].say.toLowerCase());
+  };
+  svg.addEventListener('pointerdown', e => {
+    const el = e.target.closest('path,circle,ellipse,rect,polygon'); if (!el || !svg.contains(el)) return;
+    e.preventDefault();
+    if (sel < 0) { wiggle($('#ccPal')); talk('Сначала выбери цвет внизу.'); return; }
+    if (el.dataset.k === undefined) { if ((el.getAttribute('fill') || '').toUpperCase() === '#FFFFFF') { el.style.fill = CODE_COLS[sel]; sfx.pop(); } return; }
+    if (el.dataset.done) return;
+    if (+el.dataset.k !== sel) {
+      sfx.oops(); wiggle($('#ccPage'));
+      const want = set[+el.dataset.k];
+      talk(kind === 'math' ? 'Посчитай ещё раз: ответ другой.' : kind === 'syl' ? 'Прочитай слог в этой части ещё раз!' : `Здесь буква ${want.say.toLowerCase()}. Найди её цвет!`);
+      return;
+    }
+    el.style.fill = CODE_COLS[sel]; el.dataset.done = 1; sfx.star(); filled++;
+    if (kind !== 'abc') say(kind === 'syl' ? set[sel].say : set[sel].ans);
+    if (filled >= total && total) {
+      confetti();
+      later(() => finish({ key: 'code-' + kind, stars: 3, line: kind === 'math' ? 'Все примеры решены — картинка готова!' : 'Ты всё прочитал' + G('а', '') + ' — картинка готова!', again: () => screenCodeColor(kind), menu: screenDrawMenu }), 900);
+    }
+  });
+}
+GAMES.push(
+  { id: 'code-abc', name: 'Раскрась по буквам', sub: 'буква — свой цвет', ico: () => '<span class="ico-letters"><b class="L v">А</b><b class="L c">🖍</b></span>', bg: 'var(--t-pink)', go: () => screenCodeColor('abc'), grp: 4 },
+  { id: 'code-syl', name: 'Раскрась по слогам', sub: 'скажи слог — раскрась', ico: () => '<span class="ico-letters"><b class="L c">Р</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenCodeColor('syl'), grp: 4 },
+  { id: 'code-math', name: 'Раскрась по примерам', sub: 'реши — узнаешь цвет', ico: () => '<span class="ico-num">2+3</span>', bg: 'var(--t-blue)', go: () => screenCodeColor('math'), grp: 4 },
+  { id: 'dots-abc', name: 'Точки по алфавиту', sub: 'А, Б, В… что получится?', ico: () => pic('🔤'), bg: 'var(--t-green)', go: () => screenDots(0, dotDeck(), true), grp: 4 }
+);
 
 /* ---------- start ---------- */
 goHome();
