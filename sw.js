@@ -1,6 +1,6 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. Icons and fonts come from the cache and refresh in the background.
-const CACHE = 'govorilki-v22';
+const CACHE = 'govorilki-v23';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -9,7 +9,7 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== 'govorilki-v22oice').map(k => caches.delete(k))))
+    .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== 'govorilki-voice').map(k => caches.delete(k))))
     .then(() => self.clients.claim()));
 });
 

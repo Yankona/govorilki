@@ -1304,6 +1304,19 @@ async function sayRun(text, { rate = 1 } = {}) {
       return;
     } catch (e) { if (e && (e.status === 401 || e.status === 402 || e.status === 403)) elBroken = true; if (my !== sayTok) return; }
   }
+  // the app's own voice once it has loaded; the next sentence is made while this one plays
+  if (P.settings.voice && piperOn() && PIPER.isReady) {
+    try {
+      const xs = parts.map(x => x.trim()).filter(Boolean), jobs = [], get = i => jobs[i] || (jobs[i] = piperAudio(xs[i]));
+      for (let i = 0; i < xs.length; i++) {
+        get(i); if (i + 1 < xs.length) get(i + 1);
+        const buf = await jobs[i]; if (my !== sayTok) return;
+        await elPlay(buf); if (my !== sayTok) return;
+        if (i < xs.length - 1) await wait(350 * pace());
+      }
+      return;
+    } catch (e) { if (my !== sayTok) return; }
+  }
   for (let i = 0; i < parts.length; i++) {
     const p = parts[i].trim();
     if (!p || my !== sayTok) continue;
@@ -5643,6 +5656,66 @@ function screenOlymp() {
   show();
 }
 
+/* ---------- the app's own voice: Piper (Rhasspy) running in a background worker of the browser, so games never stall.
+   The voice file (about 63 MB) downloads once from Hugging Face and stays on the phone; until it is ready the phone's
+   own voice speaks. Every line said once is kept in the «govorilki-voice» cache and plays instantly next time. ---------- */
+const PIPER_VOICES = [['ru_RU-irina-medium', 'Ирина'], ['ru_RU-denis-medium', 'Денис'], ['ru_RU-dmitri-medium', 'Дмитрий'], ['ru_RU-ruslan-medium', 'Руслан']];
+const PIPER_SRC = `
+let s = null, tts = null, q = Promise.resolve();
+async function run({ id, voice, text }) {
+  try {
+    if (!tts) tts = await import('https://cdn.jsdelivr.net/npm/@mintplex-labs/piper-tts-web@1.0.5/+esm');
+    if (!s || s.voiceId !== voice) {
+      tts.TtsSession._instance = null;
+      s = await tts.TtsSession.create({ voiceId: voice, progress: p => self.postMessage({ progress: p.total ? p.loaded / p.total : 0 }),
+        wasmPaths: { onnxWasm: 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.27.0/dist/', piperData: tts.WASM_BASE + '.data', piperWasm: tts.WASM_BASE + '.wasm' } });
+    }
+    if (!text) { self.postMessage({ id, ok: true }); return; }
+    const buf = await (await s.predict(text)).arrayBuffer();
+    self.postMessage({ id, ok: true, buf }, [buf]);
+  } catch (err) { self.postMessage({ id, ok: false, err: String(err && err.message || err) }); }
+}
+self.onmessage = e => { q = q.then(() => run(e.data)); };`;
+const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, mem: new Map() };
+const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : PIPER_VOICES[0][0];
+const piperName = () => PIPER_VOICES.find(v => v[0] === piperVoice())[1];
+const piperOn = () => !EMBEDDED && (ROOT.engine || 'piper') === 'piper' && !PIPER.failed && typeof Worker === 'function' && typeof WebAssembly === 'object';
+function piperCall(text) {
+  if (!PIPER.w) {
+    try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
+    catch (e) { PIPER.failed = true; return Promise.reject(e); }
+    PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
+    PIPER.w.onerror = () => { PIPER.failed = true; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
+  }
+  const voice = piperVoice();
+  return new Promise((res, rej) => { const id = ++PIPER.n; PIPER.wait[id] = d => d.ok ? res(d.buf) : rej(new Error(d.err)); PIPER.w.postMessage({ id, voice, text }); });
+}
+function piperWarm() {
+  if (!piperOn()) return Promise.resolve(false);
+  const v = piperVoice();
+  if (PIPER.ready && PIPER.readyVoice === v) return PIPER.ready;
+  PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0;
+  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; return true; }, () => { PIPER.failed = true; return false; });
+  return PIPER.ready;
+}
+async function piperAudio(text) {
+  const key = piperVoice() + '|' + text;
+  if (PIPER.mem.has(key)) return PIPER.mem.get(key);
+  const url = 'https://govorilki.local/piper/' + piperVoice() + '/' + encodeURIComponent(text);
+  const job = (async () => {
+    let cache = null; try { cache = await caches.open('govorilki-voice'); } catch (e) {}
+    const hit = cache && await cache.match(url);
+    const buf = hit ? await hit.arrayBuffer() : await piperCall(text);
+    if (!hit && cache) { try { await cache.put(url, new Response(buf.slice(0), { headers: { 'Content-Type': 'audio/wav' } })); } catch (e) {} }
+    return ac().decodeAudioData(buf);
+  })();
+  PIPER.mem.set(key, job); if (PIPER.mem.size > 80) PIPER.mem.delete(PIPER.mem.keys().next().value);
+  job.catch(() => PIPER.mem.delete(key));
+  return job;
+}
+// the voice starts loading at the first touch, so nobody downloads it by just glancing at the page
+document.addEventListener('pointerdown', () => { if (piperOn()) piperWarm(); }, { once: true, capture: true });
+
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
       <li>«Скорочтение»: слоговые дорожки (ЛА-ЛО-ЛУ, АЛ-ОЛ-УЛ, АЛА-ОЛО) на время и текст на скорость. Игра считает слова в минуту и рисует график. Важно не только быстро, но и чётко.</li>
       <li>«Книга»: после чтения отметьте минуты и страницу. Карточка цели показывает, сколько дней прочитано и сколько осталось до дня рождения. Дату и приз задайте ниже.</li>
@@ -5691,6 +5764,8 @@ function screenParents(focus) {
         <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="например, Маша" value="${esc(P.settings.name || '')}"></label>
       <label class="sw" for="voiceIn"><input id="voiceIn" type="checkbox" ${P.settings.voice ? 'checked' : ''}>Друг говорит вслух</label>
       <label class="sw" for="slowIn"><input id="slowIn" type="checkbox" ${P.settings.rate < 1 ? 'checked' : ''}>Говорить ещё медленнее</label>
+      <label class="prow" for="piperSel">Голос приложения (бесплатный, работает без интернета) <select id="piperSel">${PIPER_VOICES.map(([v, n]) => `<option value="${v}" ${(ROOT.engine || 'piper') === 'piper' && piperVoice() === v ? 'selected' : ''}>${n}</option>`).join('')}<option value="device" ${ROOT.engine === 'device' ? 'selected' : ''}>голос телефона</option></select></label>
+      <p class="muted" id="piperState"></p>
       <label class="prow" for="devVoice">Голос телефона (бесплатный) <select id="devVoice"><option value="">— автоматически —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Звуки игры</label>
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>Микрофон проверяет, что ребёнок сказал вслух и подул</label>
@@ -5741,6 +5816,23 @@ function screenParents(focus) {
     $('#devVoice').innerHTML = '<option value="">— автоматически —</option>' + ru.map(v => `<option value="${esc(v.name)}" ${ROOT.devVoice === v.name ? 'selected' : ''}>${esc(v.name)}${/premium|enhanced|улучш|natural|neural|online/i.test(v.name) ? ' ★' : ''}</option>`).join('');
   };
   fillDev(); later(fillDev, 1200);
+  const ps = () => {
+    const el = $('#piperState'); if (!el) return false;
+    el.textContent = EMBEDDED ? 'Внутри claude.ai голос приложения не работает: откройте yankona.github.io/govorilki.'
+      : ROOT.engine === 'device' ? 'Сейчас говорит голос телефона.'
+      : PIPER.failed ? 'Голос приложения не загрузился на этом устройстве, пока говорит голос телефона.'
+      : PIPER.isReady ? `Говорит ${piperName()}. Голос сохранён на телефоне и работает без интернета.`
+      : `Загружаю голос «${piperName()}» (около 63 МБ, один раз): ${Math.round(PIPER.pct * 100)}%. Пока говорит голос телефона.`;
+    return true;
+  };
+  ps(); const psT = setInterval(() => { if (!ps()) clearInterval(psT); }, 700);
+  $('#piperSel').onchange = e => {
+    const v = e.target.value;
+    if (v === 'device') ROOT.engine = 'device'; else { ROOT.engine = 'piper'; ROOT.piperVoice = v; PIPER.failed = false; }
+    save(); ps();
+    if (ROOT.engine === 'piper') piperWarm().then(ok => { ps(); if (ok && P.settings.voice) say(`Привет! Меня зовут ${piperName()}. Теперь я буду говорить в игре.`); });
+    else if (P.settings.voice) say('Привет! Теперь говорит голос телефона.');
+  };
   $('#devVoice').onchange = e => { ROOT.devVoice = e.target.value; save(); pickVoice(); vs(); if (P.settings.voice) say('Привет! Я буду говорить этим голосом.'); };
   $('#nameIn').addEventListener('input', e => { P.settings.name = e.target.value.trim(); P.settings.nameTouched = true; save(); });
   $('#voiceIn').onchange = e => { P.settings.voice = e.target.checked; save(); if (!P.settings.voice) hush(); };
