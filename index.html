@@ -1003,6 +1003,33 @@ body.quest .og-st.mine{color:#7BE0A0}
 .m-start b{font:400 22px var(--f-display)}
 .m-start p{margin:0;font:700 15px/1.35 var(--f-body);color:#D9DAE6}
 @media (prefers-reduced-motion:reduce){.m-pop.on{animation:none;opacity:1}}
+.kp{position:relative;flex:1;width:100%;min-height:440px;border-radius:24px;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#5B3FA8 0%,#2A1B5C 55%,#140C33 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:12px 10px 14px}
+.kp-lights i{position:absolute;top:-20%;width:38%;height:120%;background:linear-gradient(180deg,rgba(255,240,180,.35),rgba(255,240,180,0) 70%);transform-origin:top center;filter:blur(2px);animation:kpsweep 5s ease-in-out infinite alternate}
+.kp-lights i:nth-child(1){left:-6%;--a:-18deg;--b:8deg}
+.kp-lights i:nth-child(2){left:31%;--a:-10deg;--b:10deg;animation-duration:6s;background:linear-gradient(180deg,rgba(255,150,210,.35),rgba(255,150,210,0) 70%)}
+.kp-lights i:nth-child(3){right:-6%;--a:16deg;--b:-8deg;animation-duration:4.5s;background:linear-gradient(180deg,rgba(120,220,255,.35),rgba(120,220,255,0) 70%)}
+@keyframes kpsweep{from{transform:rotate(var(--a))}to{transform:rotate(var(--b))}}
+.kp-demon{position:absolute;left:50%;top:6%;width:min(42%,190px);aspect-ratio:1;transform:translate(-50%,-140%);transition:transform .9s cubic-bezier(.3,1.4,.5,1)}
+.kp-demon.boss{width:min(58%,260px)}
+.kp-demon.in{transform:translate(-50%,0);animation:kpbob 1.6s .9s ease-in-out infinite}
+.kp-demon.pop{animation:kppop .45s ease-in forwards}
+.kp-demon svg{width:100%;height:100%;display:block}
+@keyframes kpbob{50%{transform:translate(-50%,8px) rotate(-3deg)}}
+@keyframes kppop{to{transform:translate(-50%,0) scale(0) rotate(40deg);opacity:0}}
+.kp-card{position:absolute;left:0;right:0;margin-inline:auto;width:max-content;top:calc(6% + min(42vw,190px) + 4px);display:flex;align-items:center;gap:10px;padding:8px 18px;border-radius:18px;background:#FFFFFF;color:#2A2346;box-shadow:0 6px 0 rgba(0,0,0,.25);animation:popin .35s both;max-width:calc(100% - 24px)}
+.kp-card .pic{font-size:44px}
+.kp-card b{font:400 30px/1.1 var(--f-display);letter-spacing:.04em}
+.kp-card b.kp-chant{font-size:22px;letter-spacing:0;text-align:center}
+.kp-card .r{color:#EF4F7E}
+.kp-wave{position:absolute;left:50%;bottom:120px;width:40px;height:40px;border-radius:50%;transform:translateX(-50%);opacity:0;border:6px solid #FFE066;box-shadow:0 0 30px #FF8FD0}
+.kp-wave.go{animation:kpwave .55s ease-out}
+@keyframes kpwave{0%{opacity:1;width:40px;height:40px;bottom:120px}100%{opacity:0;width:320px;height:320px;bottom:180px}}
+.kp-band{position:relative;display:flex;gap:6px;justify-content:center;width:100%}
+.kp-idol{display:flex;flex-direction:column;align-items:center;gap:2px;width:30%;max-width:120px;color:#fff;font:800 15px var(--f-body)}
+.kp-idol svg{width:100%;height:auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))}
+.kp-idol.me b{color:#FFE066}
+.kp-sticks{position:absolute;right:10px;top:10px;display:flex;gap:2px;font-size:24px;filter:drop-shadow(0 0 6px rgba(255,255,255,.6))}
+@media (prefers-reduced-motion:reduce){.kp-lights i,.kp-demon.in{animation:none}}
 </style>
 </head>
 <body>
@@ -5012,6 +5039,111 @@ function screenMoto() {
   draw(); loop(t, step);
   talk(`Л-трасса! Твой байк: ${bike.name}. Нажимай слева или справа, чтобы перестраиваться. На синих знаках слова со звуком Л: прочитай слово вслух, и включится нитро!`);
 }
+
+/* ---------- «Жар-птицы»: Vera's own K-pop girl group of demon hunters. Each name trains one of her sounds:
+   Рина (Р), Шани (Ш), Жасми (Ж). Silly little demons steal words; saying a word aloud turns a demon into stars. ---------- */
+const IDOL_FACE = (hair, extra = '') => `${hair.back}
+  <ellipse cx="60" cy="66" rx="33" ry="35" fill="#FFE2CF"/><ellipse cx="27" cy="70" rx="5" ry="7" fill="#FFD6BF"/><ellipse cx="93" cy="70" rx="5" ry="7" fill="#FFD6BF"/>
+  ${hair.front}${extra}${EYES(48, 72, 68)}${LASH(48, 72, 68)}${BLUSH(80, 23)}
+  <path d="M29 72Q29 94 47 95" stroke="#2A2346" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="48" cy="95" r="3.6" fill="#2A2346"/>`;
+const IDOL_SMILE = '<path d="M54 88q6 5 12 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/>';
+const STAR5 = (x, y, r, c) => `<path transform="translate(${x} ${y})" d="M0 ${-r}L${r * .29} ${-r * .4} ${r * .95} ${-r * .31} ${r * .47} ${r * .15} ${r * .59} ${r * .81} 0 ${r * .5} ${-r * .59} ${r * .81} ${-r * .47} ${r * .15} ${-r * .95} ${-r * .31} ${-r * .29} ${-r * .4}Z" fill="${c}"/>`;
+Object.assign(FRIENDS, {
+  rina: { name: 'Рина', kind: 'певица-охотница', who: 'певица Рина', with: 'певицей Риной', hello: 'Р-р-раз, два, три! Поём и побеждаем!', pitch: 1, pm: 90,
+    puff: { c: '#FFE2CF', x: [30, 90], y: 84 }, smile: IDOL_SMILE,
+    art: IDOL_FACE({
+      back: '<path d="M24 62Q22 20 60 19Q98 20 96 62L97 98Q90 106 84 98L84 72H36L36 98Q30 106 23 98Z" fill="#5B3FA8"/><circle cx="96" cy="82" r="6.5" fill="#3E2A7A"/><circle cx="97" cy="94" r="6" fill="#3E2A7A"/><circle cx="96" cy="105" r="5.5" fill="#3E2A7A"/><circle cx="96" cy="113" r="3" fill="#FFD54A"/>',
+      front: '<path d="M27 60Q29 29 60 27Q91 29 93 60Q84 45 71 47Q62 36 51 46Q37 43 27 60Z" fill="#5B3FA8"/>'
+    }, STAR5(81, 40, 7, '#FFD54A')) },
+  shani: { name: 'Шани', kind: 'певица-охотница', who: 'певица Шани', with: 'певицей Шани', hello: 'Ш-ш-ш! Тише, демончики близко!', pitch: 1, pm: 90,
+    puff: { c: '#FFE2CF', x: [30, 90], y: 84 }, smile: IDOL_SMILE,
+    art: IDOL_FACE({
+      back: '<circle cx="31" cy="29" r="15" fill="#FF6FA3"/><circle cx="89" cy="29" r="15" fill="#FF6FA3"/><path d="M22 22l10 8M98 22l-10 8" stroke="#FFD54A" stroke-width="3" stroke-linecap="round"/><path d="M26 64Q24 28 60 26Q96 28 94 64L94 86Q88 92 84 86L84 68H36L36 86Q32 92 26 86Z" fill="#FF6FA3"/>',
+      front: '<path d="M28 57Q30 30 60 29Q90 30 92 57L86 50 80 57 74 49 68 57 62 49 56 57 50 49 44 57 38 49 32 57Z" fill="#FF6FA3"/>'
+    }, '<path d="M48 22l-6-5v10zM48 22l6-5v10z" fill="#8C6CF2"/>') },
+  zhasmi: { name: 'Жасми', kind: 'певица-охотница', who: 'певица Жасми', with: 'певицей Жасми', hello: 'Ж-ж-ж! Мой голос звенит, как жук!', pitch: 1, pm: 90,
+    puff: { c: '#FFE2CF', x: [30, 90], y: 84 }, smile: IDOL_SMILE,
+    art: IDOL_FACE({
+      back: '<path d="M23 72Q19 25 60 23Q101 25 97 72L97 88Q92 94 86 89L86 72H34L34 89Q28 94 23 88Z" fill="#1F5F7A"/>',
+      front: '<path d="M27 61Q31 27 64 27Q93 31 93 53Q77 40 58 46Q43 50 27 61Z" fill="#1F5F7A"/><path d="M40 47Q58 33 82 35" stroke="#3DD6D0" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    }, '<path d="M36 40l6-10-1 7 5-1-6 10 1-7z" fill="#FFD54A"/><circle cx="27" cy="81" r="3.5" fill="none" stroke="#FFD54A" stroke-width="2"/><circle cx="93" cy="81" r="3.5" fill="none" stroke="#FFD54A" stroke-width="2"/>') }
+});
+PAGES.push('rina', 'shani', 'zhasmi');
+const DEMON = (c = '#7B4FE0') => `<svg viewBox="0 0 120 120" aria-hidden="true"><path d="M33 38 26 12 46 30z" fill="#C3A8FF"/><path d="M87 38l7-26-20 18z" fill="#C3A8FF"/>
+  <path d="M18 70Q18 26 60 26T102 70V100L92 92 82 102 72 92 60 102 48 92 38 102 28 92 18 100Z" fill="${c}"/>
+  <ellipse cx="45" cy="62" rx="11" ry="13" fill="#FFFFFF"/><ellipse cx="75" cy="62" rx="11" ry="13" fill="#FFFFFF"/><circle cx="49" cy="65" r="5" fill="#2A2346"/><circle cx="79" cy="65" r="5" fill="#2A2346"/>
+  <path d="M42 82Q60 94 80 80" stroke="#2A2346" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M52 86l4 7 4-6z" fill="#FFFFFF"/><path d="M68 86q4 10 10 4" fill="#FF8FB0"/>
+  <path d="M40 46l10 5M80 46l-10 5" stroke="#2A2346" stroke-width="3" stroke-linecap="round"/></svg>`;
+const KP_R = [['рыба', '🐟'], ['ракета', '🚀'], ['радуга', '🌈'], ['роза', '🌹'], ['корона', '👑'], ['торт', '🎂'], ['шар', '🎈'], ['сыр', '🧀'], ['барабан', '🥁'], ['микрофон', '🎤'], ['гитара', '🎸'], ['помидор', '🍅']];
+const KP_CHANTS = ['Ра-ра-ра — нам победить пора!', 'Ша-ша-ша — песня хороша!', 'Жу-жу-жу — песней всех освобожу!', 'Ри-ри-ри — демончик, прочь! Раз, два, три!'];
+const STICKS = ['💜', '💖', '💛', '💙', '💚', '🧡'];
+function kpopBeat(bars = 2) {
+  if (!P.settings.sfx || !ac()) return;
+  const bus = musicBus(), b = 60 / 118; let t0 = AC.currentTime + .05;
+  const bell = [784, 988, 1175, 988];
+  for (let i = 0; i < bars * 4; i++) {
+    const t = t0 + i * b;
+    drum('k', t, bus); drum('h', t + b / 2, bus); if (i % 2) drum('s', t, bus);
+    const o = AC.createOscillator(), g = AC.createGain(); o.type = 'triangle'; o.frequency.value = bell[i % 4];
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.08, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + .3);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + .35);
+  }
+  return bars * 4 * b * 1000;
+}
+function screenKpop() {
+  const t = newScreen();
+  const deck = shuffle([...sample(KP_R, 3), ...sample(SH_ITEMS, 2).map(x => [x[1], x[2]])]);
+  let k = 0;
+  shell('Жар-птицы', `<div class="kp">
+      <div class="kp-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="kp-demon" id="kpD"></div>
+      <div class="kp-card" id="kpC" hidden></div>
+      <div class="kp-wave" id="kpW" aria-hidden="true"></div>
+      <div class="kp-band">${['rina', 'shani', 'zhasmi'].map(id => `<div class="kp-idol ${P.settings.friend === id ? 'me' : ''}" data-id="${id}">${friendSVG('', id)}<b>${FRIENDS[id].name}</b></div>`).join('')}</div>
+      <div class="kp-sticks" id="kpS" aria-label="Световые палочки"></div>
+    </div>`);
+  const D = $('#kpD'), C = $('#kpC'), Wv = $('#kpW');
+  async function attack(bigLine) {
+    stopMusic();
+    Wv.classList.remove('go'); void Wv.offsetWidth; Wv.classList.add('go');
+    $$('.kp-idol').forEach((x, i) => later(() => hopEl(x), i * 120));
+    await wait(450); if (t !== tok) return;
+    D.classList.add('pop'); sfx.magic(); const r = D.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 12);
+    await wait(500); if (t !== tok) return;
+    if (!bigLine) { $('#kpS').insertAdjacentHTML('beforeend', `<span>${STICKS[k % STICKS.length]}</span>`); }
+  }
+  async function round() {
+    const big = k >= deck.length;
+    D.className = 'kp-demon' + (big ? ' boss' : ''); D.innerHTML = DEMON(big ? '#5A2DB8' : pickOne(['#7B4FE0', '#E0518A', '#3A7BD5']));
+    C.hidden = true;
+    const beat = kpopBeat(big ? 3 : 2) || 1500;
+    D.classList.add('in');
+    await wait(Math.min(beat, 3200)); if (t !== tok) return;
+    stopMusic();
+    if (!big) {
+      const [w, e] = deck[k];
+      C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), 'рршжчщ')}</b>`;
+      await talk(k === 0 ? `Демончик-шалун утащил слово ${w}! Скажи его громко и чётко, и песня Жар-птиц его прогонит. ${cap(w)}!` : `Демончик утащил слово ${w}! Скажи: ${w}.`); if (t !== tok) return;
+      await askSaid(); if (t !== tok) return;
+      await attack(false); if (t !== tok) return;
+      k++; await talk(pickOne(['Демончик стал звёздочкой!', 'Ура! Ещё одна световая палочка!', 'Песня победила!'])); if (t !== tok) return;
+      round(); return;
+    }
+    const chant = pickOne(KP_CHANTS);
+    C.hidden = false; C.innerHTML = `<b class="kp-chant">${hiS(chant, 'рршжщч')}</b>`;
+    await talk(`Это главный шалун! Споём кричалку все вместе. Повторяй за мной: ${chant}`); if (t !== tok) return;
+    await askSaid('Я спела!', { need: 1.2 }); if (t !== tok) return;
+    await attack(true); if (t !== tok) return;
+    finish({ key: 'kpop', line: 'Все демончики стали звёздочками! Жар-птицы спасли концерт!', again: screenKpop });
+  }
+  talk('Это группа Жар-птицы: Рина, Шани и Жасми. Они поют и прогоняют демончиков-шалунов. Помоги им своим голосом!').then(() => { if (t === tok) round(); });
+}
+GAMES.push(
+  { id: 'kpop', name: 'Концерт против демончиков', sub: 'скажи слово — песня прогонит шалуна', ico: () => `<span class="pic">${friendSVG('', 'rina')}</span>`, bg: 'var(--t-lilac)', go: () => screenKpop(), grp: 11 },
+  { id: 'kpop-pick', name: 'Выбери героиню', sub: 'Рина, Шани или Жасми', ico: () => `<span class="pic">${friendSVG('', 'shani')}</span>`, bg: 'var(--t-pink)', go: () => screenFriends(), grp: 11, prog: () => FRIENDS[P.settings.friend] && ['rina', 'shani', 'zhasmi'].includes(P.settings.friend) ? `с тобой: ${friend().name}` : '' },
+  { id: 'kpop-color', name: 'Раскрась Жар-птиц', sub: 'Рина, Шани и Жасми', ico: () => `<span class="pic">${friendSVG('', 'zhasmi')}</span>`, bg: 'var(--t-yellow)', go: () => screenPaint({ mode: 'color', page: pickOne(['rina', 'shani', 'zhasmi']) }), grp: 11, prog: () => '' }
+);
+SECTIONS.splice(1, 0, { g: 11, h: 'Жар-птицы', p: 'к-поп охотницы прогоняют демончиков голосом', only: 'r' });
 
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
       <li>«Скорочтение»: слоговые дорожки (ЛА-ЛО-ЛУ, АЛ-ОЛ-УЛ, АЛА-ОЛО) на время и текст на скорость. Игра считает слова в минуту и рисует график. Важно не только быстро, но и чётко.</li>
