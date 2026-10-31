@@ -346,6 +346,32 @@ b.r{color:var(--berry)}
 .fam-chip{display:flex;align-items:center;gap:6px;padding:4px 14px;border:0;border-radius:999px;background:transparent;font:800 15px var(--f-body);color:var(--ink-soft);cursor:pointer;box-shadow:inset 0 0 0 2px var(--line-strong)}
 .fam-chip .emo{font-size:18px}
 /* families and the league */
+.picks-g.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.picks-g.three .pick-b{font-size:14px;padding:8px 4px;min-height:44px}
+.cheer{display:flex;align-items:center;gap:10px;background:var(--paper);color:var(--ink);border-radius:22px;padding:10px 12px;margin-bottom:8px;box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px var(--sun)}
+.cheer .emo{font-size:36px;line-height:1}
+.ch-tx{flex:1;display:flex;flex-direction:column;font:700 17px/1.3 var(--f-body)}
+.ch-tx b{font:800 15px var(--f-body);color:var(--ink-soft)}
+.ivs{display:flex;flex-direction:column;gap:10px;width:100%;max-width:660px;margin:0 auto;padding-bottom:24px}
+.iv-row{display:flex;align-items:center;gap:10px;background:var(--paper);color:var(--ink);border-radius:20px;padding:10px 12px;box-shadow:0 4px 0 var(--line)}
+.iv-e{font:36px/1 var(--f-emoji)}
+.iv-t{flex:1;display:flex;flex-direction:column;min-width:0}
+.iv-t b{font:800 18px var(--f-body)}
+.iv-t small{font:700 14px var(--f-body);color:var(--ink-soft)}
+.iv-row .big{padding:10px 14px;font-size:17px}
+.fam-chip.inv{background:var(--t-yellow);color:var(--ink);box-shadow:0 3px 0 #D39A00}
+.iv-out textarea{width:100%;font:600 13px var(--f-body);border-radius:12px;border:3px solid var(--line-strong);padding:8px}
+.gk-box{display:flex;flex-direction:column;gap:10px;width:100%}
+.gk{display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:18px;background:var(--sky)}
+.gk-h{display:flex;align-items:center;gap:8px}
+.gk-h .chip-face{width:44px;height:44px}
+.gk-h b{flex:1;font:800 20px var(--f-body)}
+.gk-i{font:800 17px var(--f-body);white-space:nowrap}
+.gk-last{display:flex;flex-direction:column;gap:2px;font:700 15px/1.35 var(--f-body)}
+.gk-pr{display:flex;flex-wrap:wrap;gap:8px}
+.gk-pr .chip{font-size:24px;padding:6px 14px}
+.gk-at{margin:0;font:700 14px var(--f-body);color:var(--ink-soft)}
+.g-hearts p{margin:4px 0 0;font:700 17px var(--f-body)}
 .kids-fam{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 .hol-ic{font:700 15px var(--f-emoji),700 15px var(--f-body)}
 .hol-icons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -2020,7 +2046,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
     break;
   }
   const toasts = gameHook({ ...ev, key, stars, xp0, lesson: doneLesson });
-  weekAdd(P, P.stars - xp0); save(); showToasts(toasts); leagueSoon();
+  weekAdd(P, P.stars - xp0); noteRecent(key, stars); save(); showToasts(toasts); leagueSoon(); progSoon();
   const after = stickerCount(), sticker = after > before ? STK()[after - 1] : null;
   const n = $('#starN'); if (n) n.textContent = P.stars;
   $$('.said, .said-card').forEach(x => x.remove());
@@ -2236,7 +2262,8 @@ function goHome() {
     </header>
     ${holidayCard()}
     <div id="btBox">${inboxHTML()}</div>
-    ${Q() ? rankCard() + seasonCard() + garageCard() + '<div id="invBanner"></div>' : ''}
+    <div id="invBanner"></div>
+    ${Q() ? rankCard() + seasonCard() + garageCard() : ''}
     ${lessonsCard()}
     ${P.goal ? goalCard() : ''}
     ${KIDS.length > 1 ? teamCard() : ''}
@@ -2258,11 +2285,13 @@ function goHome() {
   if ($('#duoBtn')) $('#duoBtn').onclick = () => { sfx.pop(); screenDuo(); };
   $('#famChip').onclick = () => { sfx.pop(); screenFamilies(); };
   $('#worldChip').onclick = () => { sfx.pop(); screenWorld(); };
+  $('#invChip').onclick = () => { sfx.pop(); screenInvite(); };
   bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard();
   $('#parentsBtn').onclick = () => { sfx.pop(); screenParents(); };
   $$('.tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
   if (GUEST) $('#guestBtn').onclick = () => { sfx.pop(); GUEST_OFF = false; screenGuest(); };
-  if (Q()) { famBanner(); bindSeasonCard(); $('#garageBtn').onclick = () => { sfx.pop(); screenGarage(); }; }
+  homeRelay(); postProg();
+  if (Q()) { bindSeasonCard(); $('#garageBtn').onclick = () => { sfx.pop(); screenGarage(); }; }
 }
 
 /* ---------- breathing ---------- */
@@ -3710,6 +3739,7 @@ function teamCard() {
 }
 const kidsBar = () => `<div class="kids"><div class="kids-in" role="tablist" aria-label="Кто играет">${KIDS.map(id => `<button class="kid ${id === ROOT.cur ? 'sel' : ''}" data-k="${id}" role="tab" aria-selected="${id === ROOT.cur}"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.name)}</button>`).join('')}</div>
   <div class="kids-fam"><button class="fam-chip" id="famChip" aria-label="Семьи: сменить или добавить"><span class="emo">🏠</span>${esc(fam().name)}</button>
+  <button class="fam-chip inv" id="invChip"><span class="emo">📨</span>Пригласить</button>
   <button class="fam-chip" id="worldChip" aria-label="Где живут наши"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button></div></div>`;
 function switchKid(id) { if (!ROOT.profiles[id]) return; ROOT.cur = id; P = ROOT.profiles[id]; save(); goHome(); }
 function screenDuo() {
@@ -4756,7 +4786,7 @@ function kidOf(id, name, she) {
   return { id, name: n, acc, gen, dat, ins, e: she ? '👧' : '🧒', she };
 }
 let GRAND = {}, KID = kidOf('sava', 'Сава', false);
-const who = id => id === KID.id ? KID : GRAND[id] || { name: 'Соперник', e: '♟' };
+const who = id => id === KID.id ? KID : GRAND[id] || (typeof KNOWN_KIDS !== 'undefined' && KNOWN_KIDS[id]) || { name: 'Соперник', e: '♟' };
 const colorName = c => c === 'white' ? 'белыми' : 'чёрными';
 const otherColor = c => c === 'white' ? 'black' : 'white';
 const SITE = EMBEDDED ? 'https://yankona.github.io/govorilki/' : location.origin + location.pathname;
@@ -4972,7 +5002,8 @@ function screenGuest() {
   const invites = new Map();
   document.body.classList.remove('quest');
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
-    <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1><p>Здесь вы играете в шахматы с ${KID.ins}.</p></div></header>
+    <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1></div></header>
+    <div class="fam-card"><h2 class="fam-h">Как дела у внуков</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Приглашения от ${KID.gen}</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
     <div class="fam-card"><h2 class="fam-h">Позвать ${KID.acc} сыграть</h2>
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
@@ -4997,10 +5028,41 @@ function screenGuest() {
     const { g: game } = await newGame(KID.id, side); if (t !== tok) return;
     screenOnline(game.id);
   };
+  // the grandchildren: last known progress, praise (sent again for three days, until the children's phone has seen it), hearts back
+  let pg = gLoad(GPROG_KEY, null);
+  const learnKids = x => (x && x.kids || []).forEach(k => { KNOWN_KIDS[k.id] = kidOf(k.id, k.n, !!k.s); });
+  const drawKids = () => { const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg); };
+  learnKids(pg); drawKids();
+  const out = gLoad(GOUT_KEY, []).filter(c => Date.now() - c.at < 3 * 864e5);
+  out.forEach(c => { if (Date.now() - (c.sent || 0) > 8 * 3600e3) { relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: c.e, x: c.x }); c.sent = Date.now(); } });
+  gStore(GOUT_KEY, out);
+  if (Date.now() - (+gLoad('govorilki-guest-here', 0)) > 2 * 3600e3) { relayPost({ k: 'here', by: GUEST.who, n: GUEST.name }); gStore('govorilki-guest-here', Date.now()); }
+  $('#gKidsBox').onclick = async e => {
+    const pr = e.target.closest('[data-pr]'), ch = e.target.closest('[data-chess]');
+    if (pr) {
+      const [em, x] = PRAISE[+pr.dataset.pr], c = { i: rid(8), to: pr.dataset.to, e: em, x, at: Date.now(), sent: Date.now() };
+      sfx.magic(); hopEl(pr);
+      relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: em, x });
+      const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
+      $('#gPrOut').textContent = `Отправлено: ${em} ${x}`;
+      return;
+    }
+    if (ch && !busy) { busy = true; sfx.pop(); $('#gPrOut').textContent = 'Начинаю партию…'; const { g: game } = await newGame(ch.dataset.chess, side); if (t !== tok) return; screenOnline(game.id); }
+  };
+  const hearts = new Map();
   const known = gamesAll();
   const empty = () => { if (t === tok && !invites.size) $('#gInv').innerHTML = `<p class="lead">Пока приглашений нет. Когда ${KID.name} позовёт вас играть, приглашение появится здесь само.</p>`; };
   later(empty, 4000);
   relaySub(m => {
+    if (t !== tok) return;
+    if (m.k === 'prog' && Array.isArray(m.kids) && (!pg || m.at > pg.at)) {
+      pg = { at: m.at, kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), last: (Array.isArray(k.last) ? k.last : []).slice(0, 3) })) };
+      gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); return;
+    }
+    if (m.k === 'cheer' && m.to === GUEST.who && m.i && !hearts.has(m.i)) {
+      hearts.set(m.i, m); $('#gHearts').innerHTML = [...hearts.values()].sort((a, b) => b.at - a.at).slice(0, 4).map(h => `<p>${esc(cleanS(h.e, 8))} <b>${esc(cleanS(h.n, 20))}</b>: ${esc(cleanS(h.x, 60))}</p>`).join('');
+      return;
+    }
     if (m.k !== 'inv' || m.to !== GUEST.who || !m.g || known[m.g] || Date.now() - m.at > 12 * 3600e3) return;
     invites.set(m.g, m);
     $('#gInv').innerHTML = [...invites.values()].sort((a, b) => b.at - a.at).slice(0, 3).map(invHTML).join('');
@@ -6612,7 +6674,7 @@ function screenParents(focus) {
       ${(() => { const lg = P.likeG || {}, up = Object.keys(lg).filter(k => lg[k] > 0).map(gameName).filter(Boolean), dn = Object.keys(lg).filter(k => lg[k] < 0).map(gameName).filter(Boolean);
         return up.length || dn.length ? `<p class="muted">${up.length ? '👍 Нравится: ' + esc(up.join(', ')) + '. ' : ''}${dn.length ? '👎 Не нравится: ' + esc(dn.join(', ')) + '.' : ''}</p>` : ''; })()}
       ${(P.battles || []).length ? `<p class="muted">⚔️ Баттлы: ${P.battles.filter(b => b.win).length} побед из ${P.battles.length}.</p>` : ''}
-      <div class="prow-btns"><button class="big" id="kidSetup">💛 Интересы и игры: ${esc(P.settings.name)}</button><button class="big ghost" id="famEdit">Изменить семью</button><button class="big ghost" id="famAll">Все семьи</button><button class="big ghost" id="famLg">🏆 Лига семей</button></div>
+      <div class="prow-btns"><button class="big" id="kidSetup">💛 Интересы и игры: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Пригласить родных</button><button class="big ghost" id="famEdit">Изменить семью</button><button class="big ghost" id="famAll">Все семьи</button><button class="big ghost" id="famLg">🏆 Лига семей</button></div>
     </section>
     <section class="psec"><h2>Настройки: ${esc(P.settings.name)}</h2>
       <label class="prow" for="nameIn">Имя ребёнка (друг будет обращаться по имени)
@@ -6698,6 +6760,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
+  $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#kidSetup').onclick = () => { sfx.pop(); screenKidSetup(ROOT.cur, { back: screenParents }); };
   $('#famAll').onclick = () => { sfx.pop(); screenFamilies(); };
   $('#famLg').onclick = () => { sfx.pop(); screenLeague(); };
@@ -6830,8 +6893,8 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
       ${kids.length > 1 ? `<button class="fe-x" data-x="k${i}">${ask === 'k' + i ? 'Точно удалить? Звёздочки пропадут' : '✕ Убрать'}</button>` : ''}
     </div>`;
   const grandRow = (g, i) => `<div class="fe-row" data-gi="${i}">
-      <input class="fe-name" type="text" maxlength="30" autocomplete="off" placeholder="${g.she ? 'Бабушка Нина' : 'Дедушка Саша'}" aria-label="Как ребёнок зовёт" value="${esc(g.name)}">
-      <div class="picks-g two"><button class="pick-b ${g.she ? 'sel' : ''}" data-s="1">👵 Бабушка</button><button class="pick-b ${g.she ? '' : 'sel'}" data-s="0">👴 Дедушка</button></div>
+      <input class="fe-name" type="text" maxlength="30" autocomplete="off" placeholder="${roleOf(g)[2]} и имя" aria-label="Как ребёнок зовёт" value="${esc(g.name)}">
+      <div class="picks-g three">${ROLES.map(r => `<button class="pick-b ${roleOf(g)[0] === r[0] ? 'sel' : ''}" data-role="${r[0]}">${r[1]} ${r[2]}</button>`).join('')}</div>
       <label class="fe-cc">Где живёт <select class="fe-gcc">${ccOptions(g.cc || ($('#feCc') ? $('#feCc').value : 'RU'))}</select></label>
       <button class="fe-x" data-x="g${i}">✕ Убрать</button>
     </div>`;
@@ -6841,8 +6904,8 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
 </section>
     <section class="psec"><h2>Дети</h2>
       <div class="fe-list" id="feKids"></div><button class="big ghost" id="feAddKid">＋ Ещё ребёнок</button></section>
-    <section class="psec"><h2>Бабушки и дедушки</h2>
-      <div class="fe-list" id="feGrands"></div><button class="big ghost" id="feAddGrand">＋ Бабушка или дедушка</button></section>
+    <section class="psec"><h2>Родные</h2>
+      <div class="fe-list" id="feGrands"></div><button class="big ghost" id="feAddGrand">＋ Родной</button></section>
     <p class="fe-err" id="feErr" role="alert"></p>
     <div class="prow-btns"><button class="big" id="feSave">${first ? 'Создать семью' : 'Сохранить'}</button>${first ? '' : '<button class="big ghost" id="feCancel">Отмена</button>'}</div>
     ${f && Object.keys(ROOT.families).length > 1 ? '<div class="prow-btns"><button class="big ghost danger" id="feDel">Удалить эту семью</button></div>' : ''}`;
@@ -6869,7 +6932,7 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   };
   $('#feGrands').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.gi;
-    const s = e.target.closest('[data-s]'); if (s) { read(); grands[i].she = s.dataset.s === '1'; sfx.tick(); draw(); return; }
+    const s = e.target.closest('[data-role]'); if (s) { read(); const r = ROLES.find(x => x[0] === s.dataset.role); Object.assign(grands[i], { role: r[0], she: !!r[3], e: r[1] }); sfx.tick(); draw(); return; }
     if (e.target.closest('[data-x]')) { read(); grands.splice(i, 1); sfx.pop(); draw(); }
   };
   $('#feAddKid').onclick = () => { read(); kids.push({ id: '', name: '', she: false, age: 0, track: 'l', tt: false }); sfx.pop(); draw(); const l = $$('#feKids .fe-name'); l[l.length - 1].focus(); };
@@ -6896,7 +6959,7 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
       return kid;
     });
     old.filter(x => !ids.includes(x)).forEach(x => delete ROOT.profiles[x]);
-    const gs = grands.filter(g => g.name).map(g => ({ id: g.id || 'g' + rid6(), name: g.name, she: !!g.she, cc: g.cc || 'RU' }));
+    const gs = grands.filter(g => g.name).map(g => ({ id: g.id || 'g' + rid6(), name: g.name, she: !!g.she, role: roleOf(g)[0], e: kinE(g), cc: g.cc || 'RU' }));
     ROOT.families[id] = { ...(f || {}), id, name: cleanS($('#feName').value, 30) || 'Наша семья', cc: $('#feCc').value, cc2: gs.length ? '' : (f && f.cc2) || '', kids: ids, grands: gs };
     holYear.c = {};
     useFamily(id); P = ROOT.profiles[ROOT.cur]; famPeople(); save(); sfx.magic();
@@ -6916,7 +6979,8 @@ function screenFamilies() {
         <span class="fam-t"><b>${esc(f.name)}</b><small>${esc(f.kids.map(k => ROOT.profiles[k].settings.name).join(', '))}${f.grands.length ? ' · ' + esc(f.grands.map(g => g.name).join(', ')) : ''}</small></span>
         ${f.id === ROOT.curFam ? '<i class="fam-now">сейчас</i>' : ''}</button>
       <button class="chip" data-edit="${f.id}">✏️</button></div>`).join('')}
-    <button class="big" id="famNew">＋ Новая семья</button>
+    <button class="big" id="famInv">📨 Пригласить родных</button>
+    <button class="big ghost" id="famNew">＋ Новая семья</button>
     <p class="muted">У каждой семьи свои дети, звёздочки, бабушки и дедушки. Всё хранится только на этом телефоне. Обычно у каждой семьи свой телефон: откройте там приложение, и оно предложит создать семью.</p>
     <button class="lg-cta" id="famLeague"><span class="emo">🏆</span><span class="lg-t"><b>Лига семей</b><small>дети разных семей соревнуются, кто больше занимался</small></span></button>
   </div>`, { guide: false, raw: true });
@@ -6925,6 +6989,7 @@ function screenFamilies() {
     const ed = e.target.closest('[data-edit]'); if (ed) { sfx.pop(); screenFamilyEdit(ed.dataset.edit); }
   };
   $('#famNew').onclick = () => { sfx.pop(); screenFamilyEdit(null); };
+  $('#famInv').onclick = () => { sfx.pop(); screenInvite(screenFamilies); };
   $('#famLeague').onclick = () => { sfx.pop(); screenLeague(); };
 }
 
@@ -7430,11 +7495,11 @@ function screenObDone({ liga = '' } = {}) {
       <small>звуки: ${soundsOf(ROOT.profiles[id]).map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ')}${(st.likes || []).length ? ' · ' + st.likes.map(l => (LIKES.find(x => x.id === l) || {}).e || '').join('') : ''}</small></span></div>`; }).join('')}</div>
     <button class="big" id="obGo">Начать занятия</button>
     <button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>${liga ? 'Вступить в лигу друзей' : 'Лига семей'}</b></span></button>
-    ${f.grands.length ? '<button class="big ghost" id="obChess">♟ Отправить бабушке и дедушке вход в шахматы</button>' : ''}
+    ${f.grands.length ? '<button class="big ghost" id="obChess">📨 Пригласить родных</button>' : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
   $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
-  if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenFamChess(); };
+  if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenInvite(goHome); };
 }
 // the race: words on the signs follow the sounds the child trains
 const MOTO_R = ['гонка', 'трасса', 'мотор', 'руль', 'фара', 'рекорд', 'старт', 'турбо', 'гараж', 'трактор', 'ракета', 'робот', 'фургон', 'карта', 'дорога', 'тормоз', 'сирена', 'парковка', 'радар', 'шофёр'];
@@ -7713,7 +7778,7 @@ const ccHour = cc => +ccTime(cc).slice(0, 2);
 function whoIn(cc) {
   const f = fam(); if (!f) return [];
   const out = []; if ((f.cc || 'PT') === cc) out.push({ e: '🏠', name: 'мы', she: false, us: true });
-  f.grands.filter(g => g.cc === cc).forEach(g => out.push({ e: g.she ? '👵' : '👴', name: g.name, she: g.she }));
+  f.grands.filter(g => g.cc === cc).forEach(g => out.push({ e: kinE(g), name: g.name, she: g.she, id: g.id }));
   return out;
 }
 const whoIcons = cc => whoIn(cc).map(w => w.e).join('');
@@ -7821,12 +7886,13 @@ function screenWorld() {
     const I = COUNTRY_INFO[cc] || [], hr = ccHour(cc), nh = nextHol(cc), who = whoIn(cc);
     return `<section class="wl-c">
       <header class="wl-h"><span class="wl-f">${FLAG(cc)}</span><b>${esc(COUNTRY_NAMES[cc] || cc)}</b><button class="wl-t" data-say="${esc(`Сейчас ${whoSay(cc) || 'там'} ${ccTime(cc)}. ${hr >= 7 && hr < 21 ? 'Там день.' : 'Там ночь, все спят.'}`)}">${hr >= 7 && hr < 21 ? '☀️' : '🌙'} ${ccTime(cc)}</button></header>
-      <div class="wl-who">${who.map(w => w.us ? KIDS.map(id => `<span class="wl-p"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.name)}</span>`).join('') : `<span class="wl-p"><span class="emo">${w.e}</span>${esc(w.name)}</span>`).join('')}</div>
+      <div class="wl-who">${who.map(w => w.us ? KIDS.map(id => `<span class="wl-p"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.name)}</span>`).join('') : `<span class="wl-p"><span class="emo">${w.e}</span>${esc(w.name)} ${seenText((f.seen || {})[w.id]).split(' ')[0]}</span>`).join('')}</div>
       ${cc !== 'RU' || I[2] !== 'Привет' ? `<div class="wl-say"><button class="pick-b" data-say="${esc(I[2] || '')}">👋 ${esc(I[2] || '')}${I[3] ? `<small>${esc(I[3])}</small>` : ''}</button><button class="pick-b" data-say="${esc(I[4] || '')}">🙏 ${esc(I[4] || '')}${I[5] ? `<small>${esc(I[5])}</small>` : ''}</button></div>` : ''}
       ${I[0] ? `<p class="wl-cap">🏛️ ${esc(I[0])}</p>` : ''}
       ${nh ? `<button class="ch-row" data-hol="${esc(nh.h.id)}" data-k="${nh.k}"><span class="ch-e">${nh.h.e}</span><span class="ch-t"><b>${esc(nh.h.n)}</b><small class="hol-ic">${nh.in ? `через ${nh.in} ${plural(nh.in, ['день', 'дня', 'дней'])}` : 'сегодня'}${nh.h.off ? ' 🏖️' : ''}</small></span><span class="g-go">▶</span></button>` : ''}
     </section>`;
-  }).join('')}</div>`);
+  }).join('')}<button class="big" id="wlInv">📨 Пригласить родных</button></div>`);
+  $('#wlInv').onclick = () => { sfx.pop(); screenInvite(screenWorld); };
   talk(ccs.length > 1 ? 'Где живут наши! Нажми на часы — узнаешь, день там сейчас или ночь. Скажи «привет» на их языке!' : 'Добавь бабушек и дедушек и где они живут — и узнаешь, что у них сейчас.');
   $('.wl').onclick = e => {
     const h = e.target.closest('[data-hol]'); if (h) { sfx.pop(); screenHoliday(h.dataset.hol, h.dataset.k); return; }
@@ -8141,6 +8207,112 @@ function screenDictQuiz(back) {
   show();
 }
 GAMES.push({ id: 'dict', name: 'Что значит слово?', sub: 'словарь для книжки', ico: () => pic('🔎'), bg: 'var(--t-lilac)', go: () => screenDict(), grp: 6, prog: () => P.vocab && P.vocab.length ? `в словарике ${P.vocab.length}` : '' });
+
+/* ---------- the family on several phones. Each relative gets their own link; on their phone they see how the children
+   are doing (today, the streak, the stars, the last games), send praise that the children hear on their home screen,
+   and play chess. The children's phone posts a small progress note to the family's private relay topic whenever
+   something changes (the relays keep it 12 hours; every phone keeps the last one it saw). ---------- */
+const ROLES = [['gm', '👵', 'Бабушка', 1], ['gf', '👴', 'Дедушка', 0], ['mom', '👩', 'Мама', 1], ['dad', '👨', 'Папа', 0], ['aunt', '👩‍🦰', 'Тётя', 1], ['uncle', '🧔', 'Дядя', 0], ['sis', '👧', 'Сестра', 1], ['bro', '👦', 'Брат', 0], ['kin', '🧑', 'Другой родной', 0]];
+const roleOf = g => ROLES.find(r => r[0] === g.role) || (g.she ? ROLES[0] : ROLES[1]);
+const kinE = g => g.e || roleOf(g)[1];
+const PRAISE = [['👏', 'Молодец!'], ['❤️', 'Люблю тебя!'], ['🌟', 'Умница!'], ['💪', 'Так держать!']];
+// what a finished game was, for the relatives' view
+function recentName(key) {
+  if (key.startsWith('learn:')) { const id = key.slice(6); for (const T of Object.values(LEARN)) { const it = (T.items || []).find(x => x.id === id); if (it) return 'История «' + it.t + '»'; } return 'История'; }
+  if (key.startsWith('breath:')) return 'Дыхание'; if (key.startsWith('artic:')) return 'Зарядка для языка';
+  if (key === 'draw-hol') return 'Праздничный рисунок'; if (key === 'hol-words') return 'Праздничные слова'; if (key === 'draw-task') return 'Рисунок';
+  return gameName(key) || '';
+}
+function noteRecent(key, stars) {
+  const n = recentName(key); if (!n) return;
+  P.recent = [[n, stars, Date.now()], ...(P.recent || []).filter(x => Date.now() - x[2] < 7 * 864e5)].slice(0, 5);
+}
+const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, last: (pr.recent || []).slice(0, 3) }; });
+const kinOn = () => { const f = fam(); return !!(f && f.grands.length && !guestOn()); };
+function postProg(force) {
+  if (!kinOn()) return;
+  ROOT.progSent = ROOT.progSent || {};
+  const f = fam(), kids = progSnap(), sig = JSON.stringify(kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n])), ps = ROOT.progSent[f.id] || {};
+  if (!force && sig === ps.sig && Date.now() - (ps.at || 0) < 3 * 3600e3) return;
+  relayPost({ k: 'prog', by: 'kids', kids }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
+}
+let PSOON = 0;
+function progSoon() { clearTimeout(PSOON); PSOON = setTimeout(() => postProg(), 8000); }
+// the children's home: praise from relatives, chess invitations, and who has opened their link
+function homeRelay() {
+  const f = fam(); if (!kinOn() || !(f.code || f.id === 'main' && ROOT.fam)) return;
+  const known = gamesAll(), t = tok;
+  P.cheerSeen = P.cheerSeen || [];
+  relaySub(m => {
+    if (t !== tok) return;
+    if (m.k === 'here' && f.grands.some(g => g.id === m.by)) { f.seen = f.seen || {}; if (!(f.seen[m.by] >= m.at)) { f.seen[m.by] = m.at; save(); } return; }
+    const el = $('#invBanner'); if (!el) return;
+    if (m.k === 'cheer' && m.to === ROOT.cur && m.i && !P.cheerSeen.includes(m.i) && Date.now() - m.at < 3 * 864e5) {
+      if (el.querySelector(`[data-ch="${CSS.escape(m.i)}"]`)) return;
+      el.insertAdjacentHTML('beforeend', `<div class="cheer" data-ch="${esc(m.i)}"><span class="emo">${esc(cleanS(m.e, 8) || '👏')}</span><span class="ch-tx"><b>${esc(cleanS(m.n, 30))}</b>${esc(cleanS(m.x, 60))}</span>
+        <button class="chip" data-heart="${esc(m.by)}">💛</button><button class="ibtn" data-close aria-label="Закрыть">✕</button></div>`);
+      sfx.star(); say(`${cleanS(m.n, 30)} пишет: ${cleanS(m.x, 60)}`);
+      return;
+    }
+    if (m.k !== 'inv' || !KIDS.includes(m.to) || m.to !== ROOT.cur || !m.g || known[m.g] || Date.now() - m.at > 3 * 3600e3) return;
+    if (el.querySelector('.fam-inv')) return;
+    el.insertAdjacentHTML('afterbegin', `<div class="fam-inv">${invHTML(m)}</div>`); bindGames(el.querySelector('.fam-inv'));
+    if (!SEEN_INV.has(m.g)) { SEEN_INV.add(m.g); say(`${who(m.from).name} зовёт тебя играть в шахматы!`); }
+  });
+  const el = $('#invBanner');
+  if (el) el.addEventListener('click', e => {
+    const c = e.target.closest('.cheer'); if (!c) return;
+    const done = () => { P.cheerSeen = [c.dataset.ch, ...P.cheerSeen].slice(0, 60); save(); c.remove(); };
+    if (e.target.closest('[data-heart]')) { sfx.magic(); relayPost({ k: 'cheer', i: rid(8), to: e.target.closest('[data-heart]').dataset.heart, by: ROOT.cur, n: P.settings.name, e: '💛', x: 'Спасибо!' }); done(); }
+    else if (e.target.closest('[data-close]')) { sfx.pop(); done(); }
+  });
+}
+
+/* inviting relatives: one link each, with their name in it; a tick once they have opened it */
+const seenText = at => { if (!at) return '⏳'; const d = Math.floor((Date.now() - at) / 864e5); return '✅ ' + (d < 1 ? 'сегодня' : d < 2 ? 'вчера' : `${d} ${plural(d, ['день', 'дня', 'дней'])} назад`); };
+function screenInvite(back) {
+  newScreen(); famPeople();
+  const f = fam(), kidsNames = KIDS.map(id => ROOT.profiles[id].settings.name).join(' и ');
+  shell('Пригласить родных', `<div class="ivs">
+    ${f.grands.length ? f.grands.map(g => `<div class="iv-row"><span class="iv-e">${kinE(g)}</span><span class="iv-t"><b>${esc(g.name)}</b><small>${FLAG(g.cc)} ${seenText((f.seen || {})[g.id])}</small></span>
+      <button class="big" data-inv="${esc(g.id)}">📤 Отправить</button></div>`).join('') : '<p class="lead">Добавьте родных, и у каждого будет своя ссылка.</p>'}
+    <div class="iv-out" id="ivOut"></div>
+    <button class="big ghost" id="ivAdd">＋ Добавить родного</button>
+    <button class="lg-cta" id="ivKids"><span class="emo">📱</span><span class="lg-t"><b>Ещё телефон, где играют дети</b></span></button>
+    <div class="iv-out" id="ivKidsOut"></div>
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  $('.ivs').addEventListener('click', async e => {
+    const b = e.target.closest('[data-inv]'); if (!b) return;
+    sfx.pop(); const g = f.grands.find(x => x.id === b.dataset.inv), gg = GRAND[g.id], url = entryLink(g.id);
+    const msg = `${gg.name}, это приглашение в нашу семью в «Говорилках». Здесь видно, как занимаются ${kidsNames}, можно их похвалить и сыграть с ними в шахматы. Откройте ссылку:`;
+    $('#ivOut').innerHTML = `<div class="fam-steps"><p>${kinE(g)} ${esc(g.name)}</p>${shareRow(msg, url, 'ivShare')}</div>`;
+    bindShare('ivShare', msg, url, s => { $('#ivOut').insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`); });
+    if (navigator.share) navigator.share({ title: 'Говорилки', text: msg, url }).catch(() => {});
+  });
+  $('#ivAdd').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
+  $('#ivKids').onclick = async () => {
+    sfx.pop(); const code = exportCode();
+    let ok = false; try { await navigator.clipboard.writeText(code); ok = true; } catch (e) {}
+    $('#ivKidsOut').innerHTML = `<ol class="hg-steps"><li>${ok ? 'Прогресс семьи скопирован.' : 'Скопируйте этот текст:'}</li><li>На другом телефоне откройте yankona.github.io/govorilki.</li><li>«У нас уже есть прогресс» → вставьте → «Загрузить».</li></ol>${ok ? '' : `<textarea rows="3" readonly>${esc(code)}</textarea>`}`;
+  };
+  talk('Нажми на кнопку рядом с именем — и отправь приглашение.');
+}
+
+/* the relative's own screen: how the grandchildren are doing, praise, the chess */
+const GPROG_KEY = 'govorilki-guest-prog', GOUT_KEY = 'govorilki-guest-out';
+const gLoad = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } };
+const gStore = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const KNOWN_KIDS = {};
+function guestKidsHTML(pg) {
+  if (!pg || !pg.kids || !pg.kids.length) return `<p class="lead">Как только внуки откроют игру, здесь появятся их успехи.</p>`;
+  const ago = Math.round((Date.now() - pg.at) / 60000);
+  return pg.kids.map(k => `<div class="gk" data-kid="${esc(k.id)}">
+      <div class="gk-h"><span class="chip-face">${friendSVG('', FRIENDS[k.e] ? k.e : 'tiger')}</span><b>${esc(k.n)}</b>
+        <span class="gk-i" title="Сегодня">${k.td ? '✅' : '⬜'}</span><span class="gk-i" title="Дней подряд">🔥${k.sk}</span><span class="gk-i" title="Звёзды за неделю">⭐${k.wk}</span></div>
+      ${(k.last || []).length ? `<div class="gk-last">${k.last.map(x => `<span>${esc(cleanS(x[0], 40))} ${'⭐'.repeat(Math.max(0, Math.min(3, +x[1] || 0)))}</span>`).join('')}</div>` : ''}
+      <div class="gk-pr">${PRAISE.map(([e, x], i) => `<button class="chip" data-pr="${i}" data-to="${esc(k.id)}">${e}</button>`).join('')}<button class="chip" data-chess="${esc(k.id)}">♟</button></div>
+    </div>`).join('') + `<p class="gk-at">🕒 ${ago < 2 ? 'только что' : ago < 60 ? `${ago} мин назад` : ago < 1440 ? `${Math.round(ago / 60)} ч назад` : `${Math.round(ago / 1440)} дн назад`}</p>`;
+}
 
 /* ---------- start ---------- */
 goHome();
