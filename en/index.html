@@ -1317,6 +1317,7 @@ body.quest .fam-ok{color:#7BE0A0}
 .ai-mis{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .ai-mis li{background:var(--paper);border-radius:14px;padding:8px 12px;font:700 17px/1.4 var(--f-body)}
 .ai-mis span{color:var(--ink-soft)}
+.demo-b{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);z-index:50;padding:4px 12px;border-radius:12px;background:#2A2346;color:#fff;font:800 13px var(--f-body);text-decoration:none;opacity:.85}
 .lang-pick h2{margin:0 0 8px;font:800 18px var(--f-body)}
 .lang-row{display:flex;flex-wrap:wrap;gap:8px}
 .lang-row .lang-b{flex:0 0 auto;width:auto;min-width:0;gap:8px;padding:10px 16px;font:800 18px var(--f-body)}
@@ -1556,7 +1557,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
    swapped by the build, LANG becomes 'en' or 'pt', and LANGDATA carries the content written for that language
    (letters, words with the trained sounds, chants). LX('NAME', russian) takes that language's own version. ---------- */
 const LANG = 'en';
-const LANGDATA = /*__LANGDATA__*/{"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little demon! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"]};
+const LANGDATA = /*__LANGDATA__*/{"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"]};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 const LOC = { ru: 'ru-RU', en: 'en-GB', pt: 'pt-PT' }[LANG];
 const IS_RU = LANG === 'ru';
@@ -1572,7 +1573,10 @@ const numW = (n, g) => g === 'f' ? (n === 1 ? "one" : n === 2 ? "two" : NUM[n]) 
 const plural = (n, f) => { if (!IS_RU) return n === 1 ? f[0] : f[2]; const a = n % 10, b = n % 100; if (a === 1 && b !== 11) return f[0]; if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return f[1]; return f[2]; };
 
 /* ---------- saved progress (this device only): families, each with its children and grandparents; one profile per child ---------- */
-const KEY = 'govorilki-ryzhik-v1', KEY2 = 'govorilki-v2';
+// ?demo: a fresh start to look at, kept apart from the real family: its own save, emptied when a new tab opens it
+const DEMO = /[?&]demo\b/.test(location.search);
+if (DEMO) { try { if (!sessionStorage.getItem('govorilki-demo-on')) { localStorage.removeItem('govorilki-demo'); localStorage.removeItem('govorilki-lang-demo'); sessionStorage.setItem('govorilki-demo-on', '1'); } } catch (e) {} }
+const KEY = DEMO ? 'govorilki-demo-v1' : 'govorilki-ryzhik-v1', KEY2 = DEMO ? 'govorilki-demo' : 'govorilki-v2';
 const EMBEDDED_BOOT = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
 const KID_DEFAULT = { vera: ['Вера', 'f', 'r', ''], sava: ['Сава', 'm', 'l', 'ghost'] };
 const blankProfile = (name, gender, track, friend) => ({ stars: 0, best: {}, plays: {}, days: {}, today: null, medals: [], art: [], reads: [], sylBest: 0,
@@ -2078,19 +2082,19 @@ const ARTIC = [
   { id: 'teeth', name: "Count the bottom teeth", thumb: 'count2', text: "Smile and open your mouth a little. With the tip of your tongue, touch each bottom tooth on the inside.", tip: "Your bottom jaw does not move.", intro: "Smile. Touch your bottom teeth with the tip of your tongue, one by one. I'll do the counting.", steps: [['count0', "One", 1150], ['count1', "Two", 1150], ['count2', "Three", 1150], ['count3', "Four", 1150], ['count4', "Five", 1150], ['count5', "Six", 1250]] },
   { id: 'tube', name: "Little tube", thumb: 'tube', text: "Open your mouth, curl your tongue into a tube and blow through the tube for a long time.", intro: "Open your mouth. Curl your tongue into a tube. And blow through the tube for a long, long time.", steps: [['tube', "Blow!", 1300, 'blow'], ['tube', '', 1200, 'blow'], ['tube', '', 1200, 'blow'], ['tube', '', 1200, 'blow'], ['tube', "Well done!", 900]] }
 ];
-const W = {
+const W = LX('W', {
   korona: ['корона', '👑'], goroh: ['горох', 'svg:peas'], pirog: ['пирог', '🥧'], kraski: ['краски', '🎨'], gitara: ['гитара', '🎸'],
   pero: ['перо', '🪶'], perchatki: ['перчатки', '🧤'], tort: ['торт', '🎂'], piramidka: ['пирамидка', 'svg:pyramid'], kukuruza: ['кукуруза', '🌽'],
   fartuk: ['фартук', 'svg:apron'], vinograd: ['виноград', '🍇'], baraban: ['барабан', '🥁'], morkovka: ['морковка', '🥕']
-};
-const CNT = [
+});
+const CNT = LX('CNT', [
   { id: 'rak', e: '🦞', f: ['рак', 'рака', 'раков'], g: 'm', find: 'Найди всех раков!' },
   { id: 'ryba', e: '🐟', f: ['рыба', 'рыбы', 'рыб'], g: 'f', find: 'Найди всех рыб!' },
   { id: 'robot', e: '🤖', f: ['робот', 'робота', 'роботов'], g: 'm', find: 'Найди всех роботов!' },
   { id: 'raketa', e: '🚀', f: ['ракета', 'ракеты', 'ракет'], g: 'f', find: 'Найди все ракеты!' },
   { id: 'raduga', e: '🌈', f: ['радуга', 'радуги', 'радуг'], g: 'f', find: 'Найди все радуги!' },
   { id: 'ruchka', e: '🖊️', f: ['ручка', 'ручки', 'ручек'], g: 'f', find: 'Найди все ручки!' }
-];
+]);
 const MAGIC = LX('MAGIC', [['кит', '🐋', 'кот', '🐈'], ['лук', '🧅', 'жук', '🪲'], ['стол', 'svg:table', 'стул', '🪑'], ['банан', '🍌', 'баран', '🐏'], ['коза', '🐐', 'роза', '🌹'], ['мышка', '🐭', 'мишка', '🧸']]);
 const BOOK_ITEMS = LX('BOOK_ITEMS', [
   ['РА', 'рак', '🦞'], ['РА', 'ракета', '🚀'], ['РА', 'радуга', '🌈'], ['РА', 'ракушка', '🐚'],
@@ -2099,12 +2103,12 @@ const BOOK_ITEMS = LX('BOOK_ITEMS', [
   ['РЫ', 'рыба', '🐟'], ['РЫ', 'рысь', 'svg:lynx'], ['РЫ', 'Рыжик', 'svg:ryzhik']
 ]);
 const SYL = LX('SYL', [['кры', 'КРЫ', 'крыса', '🐀'], ['про', 'ПРО', 'пробка', 'svg:cork'], ['кру', 'КРУ', 'кружка', 'svg:mug'], ['кра', 'КРА', 'краски', '🎨'], ['гру', 'ГРУ', 'груша', '🍐'], ['гра', 'ГРА', 'гранат', 'svg:pomegranate'], ['пру', 'ПРУ', 'пружина', 'svg:spring'], ['гра', 'ГРА', 'градусник', '🌡️'], ['кра', 'КРА', 'краб', '🦀']]);
-const HOUSE = [
+const HOUSE = LX('HOUSE', [
   ['рыба', '🐟', 0], ['ракета', '🚀', 0], ['рука', '✋', 0], ['рысь', 'svg:lynx', 0], ['радуга', '🌈', 0],
   ['корова', '🐄', 1], ['морковка', '🥕', 1], ['корона', '👑', 1], ['барабан', '🥁', 1], ['баран', '🐏', 1],
   ['мухомор', '🍄', 2], ['бобр', '🦫', 2], ['помидор', '🍅', 2], ['топор', '🪓', 2], ['комар', '🦟', 2], ['сыр', '🧀', 2]
-];
-const BOXI = [
+]);
+const BOXI = LX('BOXI', [
   { e: '🐯', f: ['тигр', 'тигра', 'тигров'], g: 'm' }, { e: '🎸', f: ['гитара', 'гитары', 'гитар'], g: 'f' },
   { e: '🚂', f: ['паровоз', 'паровоза', 'паровозов'], g: 'm' }, { e: '🐚', f: ['ракушка', 'ракушки', 'ракушек'], g: 'f' },
   { e: '🥁', f: ['барабан', 'барабана', 'барабанов'], g: 'm' }, { e: '🚚', f: ['грузовик', 'грузовика', 'грузовиков'], g: 'm' },
@@ -2112,7 +2116,7 @@ const BOXI = [
   { e: '🏗️', f: ['кран', 'крана', 'кранов'], g: 'm' }, { e: '🚤', f: ['катер', 'катера', 'катеров'], g: 'm' },
   { e: '🤖', f: ['робот', 'робота', 'роботов'], g: 'm' }, { e: 'svg:pyramid', f: ['пирамидка', 'пирамидки', 'пирамидок'], g: 'f' },
   { e: '🥕', f: ['морковка', 'морковки', 'морковок'], g: 'f' }, { e: '🚀', f: ['ракета', 'ракеты', 'ракет'], g: 'f' }
-];
+]);
 const BALLC = ['#7CC8FF', '#FF6B6B', '#FFD43B', '#51CF66', '#B197FC', '#FF922B', '#F783AC', '#66D9E8'];
 const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 
@@ -2365,17 +2369,17 @@ const GAMES = [
   { id: 'artic', name: () => Q() ? "Tongue workout" : "Tongue workout", sub: () => P.settings.track === 'l' ? "in front of the mirror · the L sound" : "in front of the mirror · the S and Z sounds", ico: () => faceSVG('spatula'), bg: 'var(--t-pink)', go: () => screenArticMenu(), grp: 0, prog: () => `${ICON.star}${doneOf('artic:', AL())} of ${AL().length}` },
   { id: 'sounds', name: "Where to put your tongue", sub: "diagrams for S, Z and R", ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[2].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(), grp: 1, info: 1, prog: () => '' },
   { id: 'vera', name: () => kidNames("Vera's Box"), sub: () => kidNames("“In Vera's box…”"), ico: () => pic('📦'), bg: 'var(--t-peach)', go: () => screenVera(), grp: 1 },
-  { id: 'count', name: "Find and count", sub: "rabbit, robot, rocket, rose…", ico: () => pic('🔍'), bg: 'var(--t-yellow)', go: () => screenCount(), grp: 1 },
+  { id: 'count', name: "Find and count", sub: "rabbit, robot, rocket, rainbow…", ico: () => pic('🔍'), bg: 'var(--t-yellow)', go: () => screenCount(), grp: 1 },
   { id: 'magic', name: "Wizard", sub: "cat → hat: one letter", ico: () => pic('🧙'), bg: 'var(--t-lilac)', go: () => screenMagic(), grp: 1 },
-  { id: 'books', name: "Books RA RO RU RI", sub: "which book is the picture from?", ico: () => pic('📚'), bg: 'var(--t-green)', go: () => screenBooks(), grp: 1 },
-  { id: 'syll', name: "Syllables and words", sub: "ra-ra-ra… rabbit!", ico: () => `<span class="syl-ico"><i style="background:${BALLC[0]}">RAB</i><i style="background:${BALLC[2]}">BIT</i></span>`, bg: 'var(--t-mint)', go: () => screenSyll(), grp: 1 },
+  { id: 'books', name: "RA RI RO RU books", sub: "which book is the picture from?", ico: () => pic('📚'), bg: 'var(--t-green)', go: () => screenBooks(), grp: 1 },
+  { id: 'syll', name: "Syllables and words", sub: "croc-croc-croc… crocodile!", ico: () => `<span class="syl-ico"><i style="background:${BALLC[0]}">RAB</i><i style="background:${BALLC[2]}">BIT</i></span>`, bg: 'var(--t-mint)', go: () => screenSyll(), grp: 1 },
   { id: 'house', name: "Where does the R sound live?", sub: "at the start, in the middle, at the end", ico: () => pic('🏠'), bg: 'var(--t-blue)', go: () => screenHouse(), grp: 1 },
   { id: 'boxes', name: "Counting boxes", sub: "“I see two robots in the box”", ico: () => `<span class="mini-crate">${CRATE}<em>2</em></span>`, bg: 'var(--t-pink)', go: () => screenBoxes(), grp: 1 },
   { id: 'abc', name: "Alphabet", sub: "all the letters with pictures", ico: () => "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b><b class=\"L c\">C</b></span>", bg: 'var(--t-yellow)', go: () => screenABC(), grp: 2, prog: () => '' },
   { id: 'abc-find', name: "Find the letter", sub: "listen and tap", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b>?</span>", bg: 'var(--t-blue)', go: () => screenFindLetter(), grp: 2 },
   { id: 'abc-first', name: "First letter", sub: "what letter does the word start with?", ico: () => pic('🍉'), bg: 'var(--t-pink)', go: () => screenFirstLetter(), grp: 2 },
-  { id: 'read-merge', name: "Letters make friends", sub: "M + A = MA", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b><b class=\"L v\">A</b></span>", bg: 'var(--t-green)', go: () => screenMerge(), grp: 2 },
-  { id: 'read-words', name: "Reading words", sub: "c-a-t, s-u-n, d-o-g", ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenReadWords(), grp: 2 },
+  { id: 'read-merge', name: "Letters make words", sub: "c + at = cat", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b><b class=\"L v\">A</b></span>", bg: 'var(--t-green)', go: () => screenMerge(), grp: 2 },
+  { id: 'read-words', name: "Reading words", sub: "cat, sun-set, pan-da", ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenReadWords(), grp: 2 },
   { id: 'read-pick', name: "Read and find", sub: "word → picture", ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenReadPick(), grp: 2 },
   { id: 'write', name: "Writing letters", sub: "trace with your finger", ico: () => pic('✏️'), bg: 'var(--t-mint)', go: () => screenPaint({ mode: 'write' }), grp: 2, prog: () => '' },
   { id: 'math-count', name: "How many?", sub: "counting to ten", ico: () => pic('🐼'), bg: 'var(--t-green)', go: () => screenMathCount(), grp: 3 },
@@ -2386,13 +2390,13 @@ const GAMES = [
   { id: 'xylo', name: "Xylophone", sub: "play some tunes", ico: () => pic('🎶'), bg: 'var(--t-yellow)', go: () => screenXylo(), grp: 4, prog: () => '' },
   { id: 'draw', name: "Drawing", sub: "tasks, dot-to-dot and a magic pattern", ico: () => pic('🎨'), bg: 'var(--t-peach)', go: () => screenDrawMenu(), grp: 4, prog: () => `${(P.art || []).length ? `${(P.art || []).length} in the album` : ''}` },
   { id: 'color', name: "Colouring pages", sub: "koala, panda, unicorn…", ico: () => pic('🖍️'), bg: 'var(--t-blue)', go: () => screenColorMenu(), grp: 4, prog: () => '' },
-  { id: 'sounds-l', name: "Where to put your tongue", sub: "diagram of the L sound", ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx("L")].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx("L")), grp: 5, info: 1, prog: () => '' },
+  { id: 'sounds-l', name: "Where to put your tongue", sub: "diagram of the L sound", ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx(RU('Л'))].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx(RU('Л'))), grp: 5, info: 1, prog: () => '' },
   { id: 'l-chist', name: "Sound chants", sub: "la-la-la, al-al-al", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">L</b><b class=\"L v\">A</b></span>", bg: 'var(--t-yellow)', go: () => screenChist(), grp: 5 },
   { id: 'l-twist', name: "Tongue twisters", sub: "slowly, then quickly", ico: () => pic('🌪️'), bg: 'var(--t-pink)', go: () => screenTwist(), grp: 5 },
-  { id: 'l-house', name: "Where does the L sound live?", sub: "at the start, in the middle, at the end", ico: () => pic('🏠'), bg: 'var(--t-blue)', go: () => screenHouse("L"), grp: 5 },
+  { id: 'l-house', name: "Where does the L sound live?", sub: "at the start, in the middle, at the end", ico: () => pic('🏠'), bg: 'var(--t-blue)', go: () => screenHouse(RU('Л')), grp: 5 },
   { id: 'book', name: "Book", sub: () => P.book.title, ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenBook(), grp: 6, prog: () => { const n = Object.keys(P.book.log).length; return n ? `${n} ${plural(n, ["day", "days", "days"])} with the book` : ''; } },
   { id: 'speed', name: "Read at speed", sub: "words per minute", ico: () => pic('⏱️'), bg: 'var(--t-green)', go: () => screenSpeedMenu(), grp: 6, prog: () => bestWpm() ? `best: ${bestWpm()} wpm` : '' },
-  { id: 'l-syll', name: "Syllable tracks", sub: "LA-LO-LU against the clock", ico: () => "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">L</b></span>", bg: 'var(--t-peach)', go: () => screenLSyll(), grp: 6, prog: () => P.sylBest ? `best: ${fmtSec(P.sylBest)}` : '' },
+  { id: 'l-syll', name: "Syllable tracks", sub: "la-lee-loo against the clock", ico: () => "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">L</b></span>", bg: 'var(--t-peach)', go: () => screenLSyll(), grp: 6, prog: () => P.sylBest ? `best: ${fmtSec(P.sylBest)}` : '' },
   { id: 'duo', hide: () => KIDS.length < 2, name: "Tongue twisters for two", sub: () => KIDS.map(k => ROOT.profiles[k].settings.name).join(" and ") + " take turns", ico: () => pic('🤝'), bg: 'var(--t-mint)', go: () => screenDuo(), grp: 7, prog: () => '' },
   { id: 'l-rap', name: "Rap battle", sub: "MC name, beats, S rating", ico: () => pic('🎤'), bg: 'var(--t-lilac)', go: () => screenRap(), grp: 5 },
   { id: 'l-moto', name: () => motoName(), sub: "motorbike race: read the signs aloud to get nitro", ico: () => pic('🏍️'), bg: 'var(--t-yellow)', go: () => screenMoto(), grp: 5, prog: () => P.motoBest ? `best ${(P.motoBest / 1000).toFixed(1).replace('.', ',')} km` : '' },
@@ -2404,16 +2408,17 @@ const GAMES = [
   { id: 'chess', name: "Chess puzzles", sub: "checkmate in 1 and 2 moves", ico: () => pic('♟️'), bg: 'var(--t-yellow)', go: () => screenChess(), grp: 8, prog: () => P.chessSolved ? `solved: ${P.chessSolved}` : '' },
   { id: 'm-sprint', name: "Maths sprint", sub: "how many sums in a minute", ico: () => '<span class="ico-num">7×8</span>', bg: 'var(--t-blue)', go: () => screenSprint(), grp: 8, prog: () => P.mathBest ? `best: ${P.mathBest}` : '' },
   { id: 'piano', name: "Piano", sub: "Beethoven, Jingle Bells — and sing “la”", ico: () => pic('🎹'), bg: 'var(--t-lilac)', go: () => screenPiano(), grp: 8, prog: () => '' },
-  { id: 'r-end', name: "R at the end", sub: "car, door, tiger", ico: () => pic('🎈'), bg: 'var(--t-yellow)', go: () => screenSyll(SYL_REND, 'r-end', "R at the end of a word", "r"), grp: 1 },
-  { id: 'beauty', name: "Beauty salon", sub: "rouge, ribbon, crown", ico: () => pic('💄'), bg: 'var(--t-pink)', go: () => screenBeauty(), grp: 1 },
-  { id: 'sounds-sh', name: "Where to put your tongue", sub: "diagrams for SH and J", ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx("SH")].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx("SH")), grp: 9, info: 1, prog: () => '' },
-  { id: 'sh-syll', name: "SH syllables", sub: "shi-shi-shi… ship!", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">SH</b><b class=\"L v\">A</b></span>", bg: 'var(--t-yellow)', go: () => screenSyll(SYL_SH, 'sh-syll', "SH syllables", "shcj"), grp: 9 },
-  { id: 'sh-sort', name: "Snake or beetle?", sub: "SH, CH or J", ico: () => pic('🐍'), bg: 'var(--t-green)', go: () => screenSort(), grp: 9 },
-  { id: 'sh-house', name: "Where does the SH sound live?", sub: "at the start, in the middle, at the end", ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse("SH"), grp: 9 }
+  { id: 'r-end', name: "R at the end", sub: "carrot, parrot, zebra", ico: () => pic('🎈'), bg: 'var(--t-yellow)', go: () => screenSyll(SYL_REND, 'r-end', "R in the last part of the word", RU('р')), grp: 1 },
+  { id: 'beauty', name: "Beauty salon", sub: "blusher, lipstick, crown", ico: () => pic('💄'), bg: 'var(--t-pink)', go: () => screenBeauty(), grp: 1 },
+  { id: 'sounds-sh', name: "Where to put your tongue", sub: "diagrams for SH and CH", ico: () => `<span class="ico-prof">${profileSVG(SOUNDS[sndIdx(RU('Ш'))].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx(RU('Ш'))), grp: 9, info: 1, prog: () => '' },
+  { id: 'sh-syll', name: "SH syllables", sub: "sha-sha-sha… shark!", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">SH</b><b class=\"L v\">A</b></span>", bg: 'var(--t-yellow)', go: () => screenSyll(SYL_SH, 'sh-syll', "SH syllables", RU('шжчщ')), grp: 9 },
+  { id: 'sh-sort', name: "Hush or jump?", sub: "SH, CH or J", ico: () => pic('🐍'), bg: 'var(--t-green)', go: () => screenSort(), grp: 9 },
+  { id: 'sh-house', name: "Where does the SH sound live?", sub: "at the start, in the middle, at the end", ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse(RU('Ш')), grp: 9 }
 ];
 let LANG_CHECKED = false;
 function goHome() {
-  if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return; }
+  if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
+    if (DEMO) document.body.insertAdjacentHTML('beforeend', `<a class="demo-b" href="${SITE_ROOT}">${"Trial run · exit"}</a>`); }
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
@@ -2873,9 +2878,10 @@ function screenSyll(src = SYL, key = 'syll', title = "Syllables and words", hl =
 }
 
 /* ---------- where does R live ---------- */
-function screenHouse(S = "R") {
+function screenHouse(S0 = RU('Р')) {
+  const S = SOUNDS[sndIdx(S0)].L;
   const t = newScreen(), posW = ["at the start", "in the middle", "at the end"];
-  const H = S === "L" ? HOUSE_L : S === "SH" ? HOUSE_SH : HOUSE, deck = shuffle([...sample(H.filter(h => h[2] === 0), 3), ...sample(H.filter(h => h[2] === 1), 3), ...sample(H.filter(h => h[2] === 2), 2)]);
+  const H = S0 === RU('Л') ? HOUSE_L : S0 === RU('Ш') ? HOUSE_SH : HOUSE, n3 = H.some(h => h[2] === 2) ? 3 : 4, deck = shuffle([...sample(H.filter(h => h[2] === 0), n3), ...sample(H.filter(h => h[2] === 1), n3), ...sample(H.filter(h => h[2] === 2), 2)]);
   let k = 0, busy = false, miss = 0;
   shell(`Where does the ${S} sound live?`, `<div class="house">
       <div class="house-top"><div class="roof"></div><div class="attic" id="attic"></div></div>
@@ -2906,7 +2912,7 @@ function screenHouse(S = "R") {
     hword.innerHTML = hiS(w.toUpperCase(), S);
     await talk(`${cap(w)}: the ${S} sound is ${posW[pos]}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: S === "L" ? 'l-house' : S === "SH" ? 'sh-house' : 'house', line: `You found where the ${S} sound lives!`, again: () => screenHouse(S) });
+    if (k >= deck.length) finish({ key: S0 === RU('Л') ? 'l-house' : S0 === RU('Ш') ? 'sh-house' : 'house', line: `You found where the ${S} sound lives!`, again: () => screenHouse(S0) });
     else later(show, 300);
   };
   show();
@@ -3225,7 +3231,7 @@ function screenMathCompare() {
 }
 
 /* ---------- songs: folk nursery rhymes and our own Р song, melodies written for this game ---------- */
-const SONGS = [
+const SONGS = LX('SONGS', [
   { id: 'rrr', title: 'Песенка про звук Р', e: '🐯', by: 'песенка друзей', lines: [
     ['Тиг|рё|нок ры|чит: р-|р-|р!', 'C4 E4 G4 G4 A4 G4 G4 G4:2'],
     ['Мо|тор та|рах|тит: р-|р-|р!', 'C4 E4 G4 G4 A4 G4 G4 G4:2'],
@@ -3260,7 +3266,7 @@ const SONGS = [
     ['вы|гля|ни в о|ко|шеч|ко!', 'A4 A4 G4 E4 G4 E4 D4:2'],
     ['Тво|и дет|ки пла|чут,', 'E4 E4 G4 G4 E4 D4:2'],
     ['по ка|муш|кам ска|чут.', 'D4 E4 F4 E4 D4 C4:2']] }
-];
+]);
 function songTokens(sg) {
   const out = [];
   sg.lines.forEach(([text, notes], li) => {
@@ -3634,7 +3640,7 @@ function profileSVG(c) {
     ${(c.marks || []).map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="7.5" fill="#FFC83A" stroke="#2A2346" stroke-width="1.5"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#2A2346" font-family="Nunito, sans-serif">${n}</text>`).join('')}
   </svg>`;
 }
-const SOUNDS = [
+const SOUNDS = LX('SOUNDS', [
   { L: 'С', pose: 'frog',
     prof: { j: 2, lips: 'smile', tip: [165, 104], hump: [126, 66], air: 'M60 74Q110 56 150 72Q170 80 216 86', marks: [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]] },
     steps: ['Губы в улыбке, видно зубки.', 'Зубки почти сомкнуты — узенькая щёлочка.', 'Широкий кончик языка упирается в нижние зубки.', 'Спинка языка горкой, посередине желобок. По нему бежит холодный ветерок — его можно почувствовать ладошкой.', 'Горлышко молчит: ладошка на горле не дрожит.'],
@@ -3647,7 +3653,7 @@ const SOUNDS = [
     prof: { j: 12, lips: 'neutral', tip: [158, 58], hump: [118, 86], air: 'M58 98Q120 86 150 66Q170 82 216 98', vib: [160, 56], voice: 1, marks: [[212, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]] },
     steps: ['Рот открыт, губы чуть-чуть в улыбке.', 'Широкий кончик языка поднят к бугоркам за верхними зубками.', 'Края языка прижаты к верхним боковым зубкам — язык как чашечка.', 'Сильно подуй на кончик языка — он задрожит.', 'Горлышко работает.'],
     line: 'Звук Р. Открой рот. Подними широкий кончик языка к бугоркам за верхними зубками. Сильно подуй на кончик. Он задрожит, как моторчик. Если пока не получается — делаем зарядку для язычка, и всё получится!' }
-];
+]);
 
 /* ---------- camera as a mirror (works where the browser gives the page a camera: the phone app version) ---------- */
 let camStream = null;
@@ -3681,7 +3687,7 @@ function bindCam(stage) {
     }
   };
 }
-function screenSounds(si = P.settings.track === 'l' ? sndIdx("L") : 0) {
+function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {
   newScreen();
   const S = SOUNDS[si];
   const st = shell("Where to put your tongue", `<div class="snd-tabs" id="sndTabs">${SOUNDS.map((x, i) => `<button class="snd-tab ${i === si ? 'sel' : ''}" data-i="${i}" aria-label="Sound ${x.L}">${Lspan(x.L)}</button>`).join('')}</div>
@@ -3715,10 +3721,10 @@ Object.assign(PROF, {
   paintBack: { j: 14, lips: 'smile', tip: [138, 54], hump: [110, 80] },
   ship: { j: 10, lips: 'neutral', tip: [160, 116], hump: [92, 66] }
 });
-SOUNDS.push({ L: 'Л', pose: 'swingUp',
+SOUNDS.push(LX('SOUND_L', { L: 'Л', pose: 'swingUp',
   prof: { j: 8, lips: 'neutral', tip: [168, 64], hump: [96, 72], dip: 104, air: 'M58 100Q110 112 150 104Q174 98 216 100', voice: 1, marks: [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]] },
   steps: ['Рот приоткрыт, губы в лёгкой улыбке.', 'Широкий кончик языка упирается в верхние зубы или бугорки за ними.', 'Середина языка опущена, а корень приподнят — язык как седло.', 'Воздух проходит по бокам языка.', 'Горлышко работает: л-л-л, как пароход гудит.'],
-  line: 'Звук Л. Приоткрой рот. Кончик языка упри в верхние зубы. Середину языка опусти, как седло. Пусть горлышко гудит, как пароход.' });
+  line: 'Звук Л. Приоткрой рот. Кончик языка упри в верхние зубы. Середину языка опусти, как седло. Пусть горлышко гудит, как пароход.' }));
 
 const count5 = pose => ["One", "Two", "Three", "Four", "Five"].map((w, i) => [pose, w, i === 4 ? 1300 : 1200]);
 const ARTIC_L = [
@@ -3742,19 +3748,35 @@ const AL = () => {
   return out.length ? out : ARTIC;
 };
 
-const CHIST_L = ['Ла-ла-ла — наша Мила весела.', 'Ло-ло-ло — на улице тепло.', 'Лу-лу-лу — стол стоит в углу.', 'Лы-лы-лы — мы помыли все полы.',
+const CHIST_L = LX('CHIST_L', ['Ла-ла-ла — наша Мила весела.', 'Ло-ло-ло — на улице тепло.', 'Лу-лу-лу — стол стоит в углу.', 'Лы-лы-лы — мы помыли все полы.',
   'Ал-ал-ал — Сава мяч достал.', 'Ол-ол-ол — накрываем стол.', 'Ул-ул-ул — Сава сел на стул.', 'Ыл-ыл-ыл — я посуду мыл.',
-  'Ала-ала — лодка к берегу приплыла.', 'Ло-ло-ло — нам в лодке весело.', 'Лу-лу-лу — дятел долбит по стволу.', 'Ла-ло-лу — белка прыгает в дупло.'];
-const TWIST_L = ['Мила мыла мишку мылом, мыло Мила уронила.', 'Около кола колокола.', 'Полили лилию — видели Лидию.', 'Лена искала булавку, а булавка упала под лавку.',
-  'Клала Клава лук на полку, кликнула к себе Николку.', 'Белый снег, белый мел, белый заяц тоже бел.', 'Волки рыщут — пищу ищут.', 'У ёлки иголки колки.', 'Ел Валера вареники, а Валюша — оладушки.'];
-const CHIST_R = ['Ра-ра-ра — начинается игра.', 'Ро-ро-ро — у нас новое ведро.', 'Ру-ру-ру — продолжаем мы игру.', 'Ры-ры-ры — у Веры шары.',
-  'Ар-ар-ар — закипает самовар.', 'Ор-ор-ор — красный помидор.', 'Ур-ур-ур — кормит Вера кур.', 'Ыр-ыр-ыр — у мышонка сыр.'];
-const HOUSE_L = [
+  'Ала-ала — лодка к берегу приплыла.', 'Ло-ло-ло — нам в лодке весело.', 'Лу-лу-лу — дятел долбит по стволу.', 'Ла-ло-лу — белка прыгает в дупло.']);
+const TWIST_L = LX('TWIST_L', ['Мила мыла мишку мылом, мыло Мила уронила.', 'Около кола колокола.', 'Полили лилию — видели Лидию.', 'Лена искала булавку, а булавка упала под лавку.',
+  'Клала Клава лук на полку, кликнула к себе Николку.', 'Белый снег, белый мел, белый заяц тоже бел.', 'Волки рыщут — пищу ищут.', 'У ёлки иголки колки.', 'Ел Валера вареники, а Валюша — оладушки.']);
+const CHIST_R = LX('CHIST_R', ['Ра-ра-ра — начинается игра.', 'Ро-ро-ро — у нас новое ведро.', 'Ру-ру-ру — продолжаем мы игру.', 'Ры-ры-ры — у Веры шары.',
+  'Ар-ар-ар — закипает самовар.', 'Ор-ор-ор — красный помидор.', 'Ур-ур-ур — кормит Вера кур.', 'Ыр-ыр-ыр — у мышонка сыр.']);
+const HOUSE_L = LX('HOUSE_L', [
   ['лодка', '🛶', 0], ['лампа', '💡', 0], ['лук', '🧅', 0], ['ложка', '🥄', 0], ['лапа', '🐾', 0], ['лыжи', '🎿', 0],
   ['белка', '🐿️', 1], ['пчела', '🐝', 1], ['волк', '🐺', 1], ['молоко', '🥛', 1], ['голубь', '🕊️', 1], ['яблоко', '🍎', 1], ['слон', '🐘', 1],
-  ['стул', '🪑', 2], ['футбол', '⚽', 2], ['орёл', '🦅', 2], ['козёл', '🐐', 2], ['стол', 'svg:table', 2]];
+  ['стул', '🪑', 2], ['футбол', '⚽', 2], ['орёл', '🦅', 2], ['козёл', '🐐', 2], ['стол', 'svg:table', 2]]);
 const LROWS = LX('LROWS', [['ЛА', 'ЛО', 'ЛУ', 'ЛЫ', 'ЛЭ'], ['АЛ', 'ОЛ', 'УЛ', 'ЫЛ', 'ЭЛ'], ['АЛА', 'ОЛО', 'УЛУ', 'ЫЛЫ', 'ЭЛЭ'], ['ПЛА', 'КЛО', 'ГЛУ', 'БЛЫ', 'ФЛА'], ['ЛАЛ', 'ЛОЛ', 'ЛУЛ', 'ЛЫЛ', 'ЛЭЛ']]);
-const hiS = (s, ch) => esc(s).replace(new RegExp('[' + ch.toLowerCase() + ch.toUpperCase() + ']', 'g'), '<b class="r">$&</b>');
+// which letters to highlight: in Russian the letters themselves; elsewhere LANGDATA.HI_RE gives a regex per sound key
+// (r, l, sh, ch, j, sz, shf = the whole hushing family, and the SND_HI groups); Russian code letters map to those keys
+const HI_RE = LX('HI_RE', null);
+function hiRe(ch) {
+  if (!HI_RE) return new RegExp('[' + ch.toLowerCase() + ch.toUpperCase() + ']', 'g');
+  const s = ch.toLowerCase().replace(/[шжчщ]{2,}/g, 'shf').replace(/[рлшжчщсз]/g, c => ({ 'р': 'r', 'л': 'l', 'ш': 'sh', 'ж': 'j', 'ч': 'ch', 'щ': 'sh', 'с': 'sz', 'з': 'sz' })[c]);
+  const keys = Object.keys(HI_RE), byLen = [...keys].sort((a, b) => b.length - a.length), got = new Set(), extra = [];
+  for (let i = 0; i < s.length;) {
+    const k = byLen.find(x => s.startsWith(x, i));
+    if (k) { got.add(k); i += k.length; continue; }
+    if (/\p{L}/u.test(s[i]) && !extra.includes(s[i])) extra.push(s[i]);
+    i++;
+  }
+  const parts = [...new Set([...keys.filter(k => got.has(k)).map(k => HI_RE[k]), ...extra])];
+  return new RegExp(parts.join('|') || '(?!)', 'giu');
+}
+const hiS = (s, ch) => esc(s).replace(hiRe(ch), '<b class="r">$&</b>');
 const fmtDate = k => k.split('-').reverse().join('.');
 const fmtSec = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -4022,7 +4044,7 @@ async function elPlay(buffer) {
 const SECTIONS = [
   { g: 0, h: () => Q() ? "Warming up" : "Warm-up", p: () => Q() ? "breathing and a tongue workout before training" : "breathing and the tongue first" },
   { g: 1, h: "Playing with the R sound", p: "r-r-r, like a tiger cub", only: 'r' },
-  { g: 9, h: "Hushing sounds: SH CH J", p: "snake, beetle, steam train and little brush", only: 'r' },
+  { g: 9, h: "SH, CH and J", p: "snake, beetle, steam train and little brush", only: 'r' },
   { g: 5, h: "L Arena", p: "beat, arcade, boss and tongue twisters", only: 'l' },
   { g: 6, h: "Reading", p: "a little every day", only: 'l' },
   { g: 8, h: "Chess, maths and piano", p: "olympiad, flash counting, mate puzzles and online games", only: 'l' },
@@ -4050,17 +4072,17 @@ function drum(type, t, bus) {
   g.gain.setValueAtTime(snare ? .55 : .16, t); g.gain.exponentialRampToValueAtTime(.001, t + len);
   s.connect(f); f.connect(g); g.connect(bus); s.start(t); s.stop(t + len + .02);
 }
-const RAP = [
+const RAP = LX('RAP', [
   { bpm: 80, words: ['ЛА', 'ЛО', 'ЛУ', 'ЛЫ', 'ЛА', 'ЛО', 'ЛУ', 'ЛЫ'] },
   { bpm: 88, words: ['АЛ', 'ОЛ', 'УЛ', 'ЫЛ', 'АЛ', 'ОЛ', 'УЛ', 'ЫЛ'] },
   { bpm: 94, words: ['АЛА', 'ОЛО', 'УЛУ', 'ЫЛЫ', 'ПЛА', 'КЛО', 'ГЛУ', 'БЛЫ'] },
   { bpm: 100, words: ['Мила', 'мыла', 'мишку', 'мылом,', 'мыло', 'Мила', 'уронила!', 'Йо!'] }
-];
+]);
 /* arcade: tap only the falling things that have Л in their name */
-const CATCH_L = [['лодка', '🛶'], ['лампа', '💡'], ['лук', '🧅'], ['ложка', '🥄'], ['лапа', '🐾'], ['лыжи', '🎿'], ['белка', '🐿️'], ['пчела', '🐝'], ['волк', '🐺'], ['молоко', '🥛'],
-  ['голубь', '🕊️'], ['яблоко', '🍎'], ['слон', '🐘'], ['стул', '🪑'], ['футбол', '⚽'], ['орёл', '🦅'], ['клоун', '🤡'], ['самолёт', '✈️'], ['лимон', '🍋'], ['лев', '🦁']];
-const CATCH_X = [['рыба', '🐟'], ['кот', '🐈'], ['дом', '🏠'], ['машина', '🚗'], ['ракета', '🚀'], ['торт', '🎂'], ['гриб', '🍄'], ['сыр', '🧀'], ['зонт', '☂️'], ['часы', '⏰'],
-  ['собака', '🐕'], ['кит', '🐋'], ['арбуз', '🍉'], ['банан', '🍌'], ['тигр', '🐯'], ['жук', '🪲'], ['ёжик', '🦔'], ['утка', '🦆'], ['роза', '🌹'], ['мяч', '🏀']];
+const CATCH_L = LX('CATCH_L', [['лодка', '🛶'], ['лампа', '💡'], ['лук', '🧅'], ['ложка', '🥄'], ['лапа', '🐾'], ['лыжи', '🎿'], ['белка', '🐿️'], ['пчела', '🐝'], ['волк', '🐺'], ['молоко', '🥛'],
+  ['голубь', '🕊️'], ['яблоко', '🍎'], ['слон', '🐘'], ['стул', '🪑'], ['футбол', '⚽'], ['орёл', '🦅'], ['клоун', '🤡'], ['самолёт', '✈️'], ['лимон', '🍋'], ['лев', '🦁']]);
+const CATCH_X = LX('CATCH_X', [['рыба', '🐟'], ['кот', '🐈'], ['дом', '🏠'], ['машина', '🚗'], ['ракета', '🚀'], ['торт', '🎂'], ['гриб', '🍄'], ['сыр', '🧀'], ['зонт', '☂️'], ['часы', '⏰'],
+  ['собака', '🐕'], ['кит', '🐋'], ['арбуз', '🍉'], ['банан', '🍌'], ['тигр', '🐯'], ['жук', '🪲'], ['ёжик', '🦔'], ['утка', '🦆'], ['роза', '🌹'], ['мяч', '🏀']]);
 function screenCatch() {
   const t = newScreen(), goal = 15; noGuard();
   let score = 0, lives = 3, run = false, items = [], spawnIn = 0, time = 0, caught = [];
@@ -4164,12 +4186,12 @@ function screenBoss() {
   const t = newScreen();
   let hp = 100;
   const pool = [
-    () => ["Ap chagi — front kick", "LA — LO — LU — LI", "Say it clearly: la, lo, lu, li."],
-    () => ["Dollyo chagi — roundhouse kick", "AL — OL — UL — IL", "Say: al, ol, ul, il."],
+    () => ["Ap chagi — front kick", ...LX('BOSS_1', ['ЛА — ЛО — ЛУ — ЛЫ', 'Скажи чётко: ла, ло, лу, лы.'])],
+    () => ["Dollyo chagi — roundhouse kick", ...LX('BOSS_2', ['АЛ — ОЛ — УЛ — ЫЛ', 'Скажи: ал, ол, ул, ыл.'])],
     () => { const w = pickOne(HOUSE_L)[0]; return ["Yeop chagi — side kick", `${w.toUpperCase()} ×3`, `Say three times: ${w}.`]; },
     () => { const s = pickOne(TWIST_L); return ["Combo tongue twister", s, `Combo! ${s}`]; },
     () => { const s = pickOne(CHIST_L); return ["Block", s, s]; },
-    () => ["Final series", "LAMP · LEAF · LION · LEMON", "Quickly and clearly: lamp, leaf, lion, lemon."]
+    () => ["Final series", ...LX('BOSS_F', ['ЛОДКА · ЛАМПА · ЛОЖКА · ЛЫЖИ', 'Быстро и чётко: лодка, лампа, ложка, лыжи.'])]
   ];
   const tasks = [...shuffle(pool.slice(0, 5)).slice(0, 4), pool[5]].map(f => f());
   shell("Sparring: the Mix-Up Master", `<div class="boss-wrap">
@@ -4235,13 +4257,13 @@ function screenRec() {
 }
 
 /* Sava's hobbies in the content: skate, bike, surf, chess, taekwondo, piano, his lizard */
-CHIST_L.push('Ла-ла-ла — по волне летит доска.', 'Лу-лу-лу — слон шагает по углу.', 'Лы-лы-лы — у ящерицы Лизы лапки малы.', 'Ал-ал-ал — Сава шахматы достал.',
-  'Ол-ол-ол — тренер в зал пришёл.', 'Ул-ул-ул — Сава ногу подтянул.', 'Ыл-ыл-ыл — Сава пианино открыл.');
-TWIST_L.push('Слон ходит по диагонали, ладья — по линиям, а король — куда велели.', 'Ящерица Лиза лежала на валуне и ловила лучи на лапах и спине.',
+CHIST_L.push(...LX('CHIST_L2', ['Ла-ла-ла — по волне летит доска.', 'Лу-лу-лу — слон шагает по углу.', 'Лы-лы-лы — у ящерицы Лизы лапки малы.', 'Ал-ал-ал — Сава шахматы достал.',
+  'Ол-ол-ол — тренер в зал пришёл.', 'Ул-ул-ул — Сава ногу подтянул.', 'Ыл-ыл-ыл — Сава пианино открыл.']));
+TWIST_L.push(...LX('TWIST_L2', ['Слон ходит по диагонали, ладья — по линиям, а король — куда велели.', 'Ящерица Лиза лежала на валуне и ловила лучи на лапах и спине.',
   'Волна за волной, Сава на доске — ловко лавирует, как лодка в реке.', 'Клавиши белые, клавиши чёрные, мелодии звонкие, ловкие, вольные.',
-  'Велосипед летит, колёса шуршат, педали ловко ноги крутят.', 'Лихо Сава на скейте летал, ловко с лавочки трюк выполнял.');
-CATCH_L.push(['велосипед', '🚲'], ['шлем', '⛑️'], ['клавиши', '🎹'], ['волна', '🌊'], ['пляж', '🏖️'], ['колесо', '🛞'], ['мелодия', '🎵'], ['ладья', '♜']);
-CATCH_X.push(['скейт', '🛹'], ['самокат', '🛴'], ['ящерица', '🦎'], ['черепаха', '🐢'], ['сёрфер', '🏄'], ['пешка', '♟️']);
+  'Велосипед летит, колёса шуршат, педали ловко ноги крутят.', 'Лихо Сава на скейте летал, ловко с лавочки трюк выполнял.']));
+CATCH_L.push(...LX('CATCH_L2', [['велосипед', '🚲'], ['шлем', '⛑️'], ['клавиши', '🎹'], ['волна', '🌊'], ['пляж', '🏖️'], ['колесо', '🛞'], ['мелодия', '🎵'], ['ладья', '♜']]));
+CATCH_X.push(...LX('CATCH_X2', [['скейт', '🛹'], ['самокат', '🛴'], ['ящерица', '🦎'], ['черепаха', '🐢'], ['сёрфер', '🏄'], ['пешка', '♟️']]));
 WORDS5.push(...LX('WORDS5_PUSH', [['ЛАДЬЯ', '♜'], ['ЛИДЕР', '🏆'], ['ЛИМОН', '🍋']]));
 PASSAGES.push(
   { id: 'skate', title: "The Skate Park", text: "On Saturday Sava took a skateboard, a helmet and knee pads and went to the skate park. First Sava rolled around the flat area for a long time. Then Sava tried going down a small ramp. The wheels rattled loudly, but Sava kept balance. Nearby, kids were riding scooters and bikes. One boy showed Sava a new trick. Sava tried again and again, and by evening it worked." },
@@ -4400,7 +4422,7 @@ function screenSprint() {
 }
 
 // a very active boy: move and say Л at the same time
-const MOVES = [
+const MOVES = LX('MOVES', [
   ['🛹', 'Встань, как на скейте, и сделай пять приседаний. На каждом говори: ЛА!', 'ЛА × 5'],
   ['🥋', 'Стойка тхэквондо! Пять ударов ногой вперёд. На каждом ударе: ЛО!', 'ЛО × 5'],
   ['🚲', 'Ляг на спину и покрути «велосипед» ногами десять раз: лу-лу-лу!', 'ЛУ × 10'],
@@ -4410,7 +4432,7 @@ const MOVES = [
   ['🦎', 'Проползи, как ящерица, пять шагов и скажи: ящерица Лиза ловкая!', 'ящерица Лиза ловкая'],
   ['🎹', 'Сыграй пальцами по столу, как на пианино, и пой: ла-ла-ла-ла-ла!', 'ла-ла-ла-ла-ла'],
   ['🥋', 'Блок руками вверх и вниз пять раз. Вверх — АЛ, вниз — ОЛ!', 'АЛ — ОЛ × 5']
-];
+]);
 function screenMove() {
   const t = newScreen(), deck = sample(MOVES, 5);
   let k = 0;
@@ -4432,8 +4454,8 @@ Object.assign(PROF, {
   cup: { j: 10, lips: 'smile', tip: [204, 100], hump: [122, 92], out: 1 },
   horn: { j: 3, lips: 'round', tip: [152, 58], hump: [112, 80] }
 });
-const sndIdx = L => Math.max(0, SOUNDS.findIndex(x => x.L === L));
-SOUNDS.push(
+const sndIdx = L => { const i = SOUNDS.findIndex(x => x.L === L); return Math.max(0, i >= 0 ? i : RU('СЗРЛШЖ').indexOf(L)); };
+SOUNDS.push(...LX('SOUNDS_SH', [
   { L: 'Ш', pose: 'horn',
     prof: { j: 3, lips: 'round', tip: [152, 58], hump: [112, 80], air: 'M60 78Q118 64 150 66Q172 74 218 80', marks: [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]] },
     steps: ['Губы округлены и вытянуты вперёд, как рупор.', 'Зубки почти сомкнуты.', 'Широкий кончик языка поднят к бугоркам за верхними зубками — язык как чашечка.', 'По середине языка идёт тёплый воздух: ш-ш-ш, как змейка шипит.', 'Горлышко молчит.'],
@@ -4442,7 +4464,7 @@ SOUNDS.push(
     prof: { j: 3, lips: 'round', tip: [152, 58], hump: [112, 80], air: 'M60 78Q118 64 150 66Q172 74 218 80', voice: 1, marks: [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [34, 114, 5]] },
     steps: ['Губы округлены и вытянуты вперёд, как рупор.', 'Зубки почти сомкнуты.', 'Широкий кончик языка поднят к бугоркам за верхними зубками — язык как чашечка.', 'По середине языка идёт тёплый воздух.', 'Горлышко работает: ж-ж-ж, как жук жужжит.'],
     line: 'Звук Ж — как звук Ш, только с голосом. Губки рупором, язычок чашечкой наверху. Пусть горлышко жужжит, как жук.' }
-);
+]));
 const ARTIC_SH = [
   { id: 'sh-cup', name: "Little cup", thumb: 'cup', text: "Smile and open your mouth. Stick out your wide tongue and lift its edges — it makes a little cup. Hold it while we count to five.", tip: "The lips do not help; the tongue stays wide.", intro: "Let's make a little cup with your tongue! Stick out your wide tongue and lift the edges. We hold it to five.", steps: count5('cup') },
   { id: 'sh-mushroom', name: "Little mushroom", thumb: 'swingUp', text: "Smile and open your mouth. Suck your wide tongue up to the roof of your mouth: the tongue is the mushroom cap, and the little string under it is the stalk. Hold it to five.", intro: "Stick your tongue to the roof of your mouth like a mushroom cap. We hold it to five.", steps: count5('swingUp') },
@@ -4452,19 +4474,19 @@ const ARTIC_SH = [
   { id: 'sh-focus', name: "Magic trick", thumb: 'lickUp', text: "Rest your tongue like a little cup on your top lip and blow towards the tip of your nose. You can blow a bit of cotton wool off your nose.", intro: "Magic trick! Tongue like a little cup on your top lip. Blow on your nose!", steps: [['lickUp', "Blow!", 1500], ['lickUp', '', 1100], ['lickUp', "Blow!", 1500], ['lickUp', '', 1000]] },
   { id: 'sh-horn', name: "Megaphone", thumb: 'horn', text: "Close your teeth together and stretch your lips forward like a megaphone. Hold it while we count to five.", intro: "Lips like a megaphone, as if we are calling: hey! We hold it to five.", steps: count5('horn') }
 ];
-const SYL_SH = [['ша', 'ША', 'шапка', '🧢'], ['шу', 'ШУ', 'шуба', '🧥'], ['ши', 'ШИ', 'шина', '🛞'], ['шо', 'ШО', 'шоколад', '🍫'], ['жа', 'ЖА', 'жаба', '🐸'], ['жу', 'ЖУ', 'жук', '🪲'],
-  ['жи', 'ЖИ', 'жираф', '🦒'], ['ча', 'ЧА', 'чайник', '🫖'], ['чу', 'ЧУ', 'чулок', '🧦'], ['щё', 'ЩЁ', 'щётка', '🪥'], ['ще', 'ЩЕ', 'щенок', '🐶']];
-const SYL_REND = [['ар', 'АР', 'шар', '🎈'], ['ыр', 'ЫР', 'сыр', '🧀'], ['ор', 'ОР', 'помидор', '🍅'], ['ар', 'АР', 'комар', '🦟'], ['ор', 'ОР', 'мухомор', '🍄'],
-  ['ор', 'ОР', 'топор', '🪓'], ['ор', 'ОР', 'светофор', '🚦'], ['ер', 'ЕР', 'ветер', '🌬️'], ['ар', 'АР', 'повар', '🧑‍🍳']];
-const HOUSE_SH = [['шапка', '🧢', 0], ['шуба', '🧥', 0], ['шар', '🎈', 0], ['шина', '🛞', 0], ['мышка', '🐭', 1], ['кошка', '🐈', 1], ['мишка', '🧸', 1], ['машина', '🚗', 1], ['каша', '🥣', 1],
-  ['душ', '🚿', 2], ['малыш', '👶', 2], ['карандаш', '✏️', 2]];
-const SH_ITEMS = [['Ш', 'шапка', '🧢'], ['Ш', 'шуба', '🧥'], ['Ш', 'шар', '🎈'], ['Ш', 'шина', '🛞'], ['Ш', 'мышка', '🐭'], ['Ш', 'кошка', '🐈'],
+const SYL_SH = LX('SYL_SH', [['ша', 'ША', 'шапка', '🧢'], ['шу', 'ШУ', 'шуба', '🧥'], ['ши', 'ШИ', 'шина', '🛞'], ['шо', 'ШО', 'шоколад', '🍫'], ['жа', 'ЖА', 'жаба', '🐸'], ['жу', 'ЖУ', 'жук', '🪲'],
+  ['жи', 'ЖИ', 'жираф', '🦒'], ['ча', 'ЧА', 'чайник', '🫖'], ['чу', 'ЧУ', 'чулок', '🧦'], ['щё', 'ЩЁ', 'щётка', '🪥'], ['ще', 'ЩЕ', 'щенок', '🐶']]);
+const SYL_REND = LX('SYL_REND', [['ар', 'АР', 'шар', '🎈'], ['ыр', 'ЫР', 'сыр', '🧀'], ['ор', 'ОР', 'помидор', '🍅'], ['ар', 'АР', 'комар', '🦟'], ['ор', 'ОР', 'мухомор', '🍄'],
+  ['ор', 'ОР', 'топор', '🪓'], ['ор', 'ОР', 'светофор', '🚦'], ['ер', 'ЕР', 'ветер', '🌬️'], ['ар', 'АР', 'повар', '🧑‍🍳']]);
+const HOUSE_SH = LX('HOUSE_SH', [['шапка', '🧢', 0], ['шуба', '🧥', 0], ['шар', '🎈', 0], ['шина', '🛞', 0], ['мышка', '🐭', 1], ['кошка', '🐈', 1], ['мишка', '🧸', 1], ['машина', '🚗', 1], ['каша', '🥣', 1],
+  ['душ', '🚿', 2], ['малыш', '👶', 2], ['карандаш', '✏️', 2]]);
+const SH_ITEMS = LX('SH_ITEMS', [['Ш', 'шапка', '🧢'], ['Ш', 'шуба', '🧥'], ['Ш', 'шар', '🎈'], ['Ш', 'шина', '🛞'], ['Ш', 'мышка', '🐭'], ['Ш', 'кошка', '🐈'],
   ['Ж', 'жук', '🪲'], ['Ж', 'жираф', '🦒'], ['Ж', 'жаба', '🐸'], ['Ж', 'ёжик', '🦔'], ['Ж', 'лыжи', '🎿'], ['Ж', 'ножницы', '✂️'],
   ['Ч', 'чайник', '🫖'], ['Ч', 'черепаха', '🐢'], ['Ч', 'часы', '⏰'], ['Ч', 'мяч', '⚽'], ['Ч', 'ключ', '🔑'], ['Ч', 'очки', '👓'],
-  ['Щ', 'щётка', '🪥'], ['Щ', 'щенок', '🐶'], ['Щ', 'ящик', '📦'], ['Щ', 'овощи', '🥕'], ['Щ', 'щука', '🐟']];
-const SH_BINS = { 'Ш': ['🐍', 'змейка шипит'], 'Ж': ['🪲', 'жук жужжит'], 'Ч': ['🚂', 'паровоз пыхтит'], 'Щ': ['🪥', 'щёточка чистит'] };
+  ['Щ', 'щётка', '🪥'], ['Щ', 'щенок', '🐶'], ['Щ', 'ящик', '📦'], ['Щ', 'овощи', '🥕'], ['Щ', 'щука', '🐟']]);
+const SH_BINS = LX('SH_BINS', { 'Ш': ['🐍', 'змейка шипит'], 'Ж': ['🪲', 'жук жужжит'], 'Ч': ['🚂', 'паровоз пыхтит'], 'Щ': ['🪥', 'щёточка чистит'] });
 function screenSort() {
-  const t = newScreen(), pair = pickOne([["SH", "J"], ["SH", "S"], ["CH", "S"], ["J", "SH"]]);
+  const t = newScreen(), pair = pickOne(LX('SH_PAIRS', [['Ш', 'Ж'], ['Ш', 'Щ'], ['Ч', 'Щ'], ['Ж', 'Ш']]));
   const deck = shuffle(pair.flatMap(L => sample(SH_ITEMS.filter(x => x[0] === L), 3)));
   let k = 0, busy = false;
   shell("Snake or beetle?", `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
@@ -4525,7 +4547,7 @@ function beautySVG(st = {}) {
 SVGS.beauty = beautySVG({});
 PAGES.push('svg:beauty');
 STICKERS.splice(5, 0, '💄'); STICKERS.splice(9, 0, '💅'); STICKERS.splice(14, 0, '💍');
-const BEAUTY = [
+const BEAUTY = LX('BEAUTY', [
   { id: 'blush', name: 'румяна', e: '🌸', line: 'Скажи: розовые румяна.' },
   { id: 'lips', name: 'помада', e: '💄', colors: [['красная', '#E0234E'], ['розовая', '#FF6FA3'], ['вишнёвая', '#9E1A4A']], line: c => `Скажи: ${c} помада.` },
   { id: 'shadow', name: 'тени', e: '🎨', colors: [['сиреневые', '#B79CFF'], ['изумрудные', '#3FBF92'], ['перламутровые', '#E3D3F5']], line: c => `Скажи: ${c} тени.` },
@@ -4535,7 +4557,7 @@ const BEAUTY = [
   { id: 'earrings', name: 'серёжки', e: '💎', line: 'Скажи: серёжки.' },
   { id: 'necklace', name: 'ожерелье', e: '📿', line: 'Скажи: жемчужное ожерелье.' },
   { id: 'crown', name: 'корона', e: '👑', line: 'Скажи: корона.' }
-];
+]).map(b => typeof b.line === 'string' && b.line.includes('{c}') ? { ...b, line: c => b.line.split('{c}').join(c) } : b);
 function screenBeauty() {
   const t = newScreen(), st = {}, done = new Set();
   let busy = false;
@@ -5053,8 +5075,10 @@ const OLD_GRANDS = { nina: ['Бабушка Нина', true], sasha: ['Деду�
 let GUEST = null, GUEST_OFF = false, HASH_GAME = null;
 try {
   const h = location.hash, arg = k => { const m = h.match(new RegExp('[#&]' + k + '=([^&]*)')); return m ? decodeURIComponent(m[1]) : ''; };
+  // #kids on a phone that once opened a relative's link: back to the children's game for good
+  if (/^#(kids|deti)$/.test(h)) { try { localStorage.removeItem(GUEST_KEY); } catch (e) {} history.replaceState(null, '', location.pathname + location.search); }
   const m = h.match(/vhod=([a-z0-9]{2,12})\.([a-z0-9]{8,40})/);
-  if (m) {
+  if (DEMO) { /* a fresh start: no relative's entry */ } else if (m) {
     const old = OLD_GRANDS[m[1]] || ["Granny", true], kk = (arg('k') || "sava~Sava~m").split('~');
     GUEST = { who: m[1], fam: m[2], role: arg('r') || '', name: (arg('n') || old[0]).slice(0, 40), she: arg('n') ? arg('s') === '1' : old[1], kid: kk[0].replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'sava', kidName: (kk[1] || "Sava").slice(0, 30), kidShe: kk[2] === 'f' };
     localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST));
@@ -6011,7 +6035,7 @@ const BIKES = [
   { at: 450, name: "Rocket bike", e: '🚀', top: 240, body: '#C0C7D6', suit: '#2A2346', type: 'rocket' }
 ];
 if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
-const MOTO_WORDS = [...CATCH_L.map(x => x[0]), 'колесо', 'шлем', 'мотоцикл', 'седло', 'ладья', 'волна', 'скала', 'полёт', 'лидер', 'финал'];
+const MOTO_WORDS = [...CATCH_L.map(x => x[0]), ...LX('MOTO_WORDS', ['колесо', 'шлем', 'мотоцикл', 'седло', 'ладья', 'волна', 'скала', 'полёт', 'лидер', 'финал'])];
 const bikeOpen = i => P.stars >= BIKES[i].at;
 const bestBike = () => BIKES.reduce((k, b, j) => bikeOpen(j) ? j : k, 0);
 // the chosen ride is kept by name, so new rides can be added without mixing up old choices
@@ -6314,8 +6338,8 @@ const DEMON = (c = '#7B4FE0') => `<svg viewBox="0 0 120 120" aria-hidden="true">
   <ellipse cx="45" cy="62" rx="11" ry="13" fill="#FFFFFF"/><ellipse cx="75" cy="62" rx="11" ry="13" fill="#FFFFFF"/><circle cx="49" cy="65" r="5" fill="#2A2346"/><circle cx="79" cy="65" r="5" fill="#2A2346"/>
   <path d="M42 82Q60 94 80 80" stroke="#2A2346" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M52 86l4 7 4-6z" fill="#FFFFFF"/><path d="M68 86q4 10 10 4" fill="#FF8FB0"/>
   <path d="M40 46l10 5M80 46l-10 5" stroke="#2A2346" stroke-width="3" stroke-linecap="round"/></svg>`;
-const KP_R = [['рыба', '🐟'], ['ракета', '🚀'], ['радуга', '🌈'], ['роза', '🌹'], ['корона', '👑'], ['торт', '🎂'], ['шар', '🎈'], ['сыр', '🧀'], ['барабан', '🥁'], ['микрофон', '🎤'], ['гитара', '🎸'], ['помидор', '🍅']];
-const KP_CHANTS = ['Ра-ра-ра — нам победить пора!', 'Ша-ша-ша — песня хороша!', 'Жу-жу-жу — песней всех освобожу!', 'Ри-ри-ри — демончик, прочь! Раз, два, три!'];
+const KP_R = LX('KP_R', [['рыба', '🐟'], ['ракета', '🚀'], ['радуга', '🌈'], ['роза', '🌹'], ['корона', '👑'], ['торт', '🎂'], ['шар', '🎈'], ['сыр', '🧀'], ['барабан', '🥁'], ['микрофон', '🎤'], ['гитара', '🎸'], ['помидор', '🍅']]);
+const KP_CHANTS = LX('KP_CHANTS', ['Ра-ра-ра — нам победить пора!', 'Ша-ша-ша — песня хороша!', 'Жу-жу-жу — песней всех освобожу!', 'Ри-ри-ри — демончик, прочь! Раз, два, три!']);
 const STICKS = ['💜', '💖', '💛', '💙', '💚', '🧡'];
 function kpopBeat(bars = 2) {
   if (!P.settings.sfx || !ac()) return;
@@ -6362,7 +6386,7 @@ function screenKpop() {
     stopMusic();
     if (!big) {
       const [w, e] = deck[k];
-      C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), "rshcj")}</b>`;
+      C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), RU('рршжчщ'))}</b>`;
       await talk(k === 0 ? `A naughty little demon has snatched the word ${w}! Say it loud and clear, and the Firebirds' song will chase it away. ${cap(w)}!` : `A little demon has snatched the word ${w}! Say: ${w}.`); if (t !== tok) return;
       await askSaid(undefined, { expect: w }); if (t !== tok) return;
       await attack(false); if (t !== tok) return;
@@ -6370,7 +6394,7 @@ function screenKpop() {
       round(); return;
     }
     const chant = pickOne(KP_CHANTS);
-    C.hidden = false; C.innerHTML = `<b class="kp-chant">${hiS(chant, "rshcj")}</b>`;
+    C.hidden = false; C.innerHTML = `<b class="kp-chant">${hiS(chant, RU('рршжщч'))}</b>`;
     await talk(`This is the chief troublemaker! Let's sing the chant all together. Repeat after me: ${chant}`); if (t !== tok) return;
     await askSaid("I sang it!", { need: 1.2 }); if (t !== tok) return;
     await attack(true); if (t !== tok) return;
@@ -6671,7 +6695,7 @@ function screenProfile() {
   };
   $('#mcBtn').onclick = () => { sfx.pop(); screenMcName(screenProfile); };
 }
-const MC_NAMES = ['MC Лава', 'Лил Лёва', 'Л-Бой', 'Слон Флоу', 'Лорд Бит', 'Лис Л', 'Big Л', 'Лёд Рэп'];
+const MC_NAMES = LX('MC_NAMES', ['MC Лава', 'Лил Лёва', 'Л-Бой', 'Слон Флоу', 'Лорд Бит', 'Лис Л', 'Big Л', 'Лёд Рэп']);
 function screenMcName(back) {
   newScreen();
   const nm = P.settings.name ? [`MC ${P.settings.name}`, `Lil ${P.settings.name}`] : [];
@@ -6688,14 +6712,14 @@ const BEATS = {
   drive: { name: "Drive", bpm: 104, k: 'x...x...x...x...', s: '....x.......x..x', h: '..x...x...x...x.', bass: [40, 0, 40, 0, 43, 0, 40, 0, 45, 0, 43, 0, 40, 0, 38, 0] },
   lofi: { name: "Lo-fi", bpm: 78, k: 'x......x..x.....', s: '....x.......x...', h: 'x.xx.x.xx.x.xx.x', bass: [45, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 43, 0, 0, 0] }
 };
-const VERSES = [
+const VERSES = LX('VERSES', [
   ['Лови мой флоу — он лёгкий, как лёд,', 'Ладья на доске, и слон идёт вперёд.', 'Я ловкий, как ящерица Лиза в скале,', 'Мой голос звучит, мой Л — на высоте!'],
   ['Колёса летят, ладони на руле,', 'Я лидер заезда на этой земле.', 'Слева машина, справа — скала,', 'Лёгкий манёвр — и победа пришла!'],
   ['Белый пояс — было, теперь я в игре,', 'Удар ногой — и ладья на доске.', 'Слон по диагонали, король в углу,', 'Мат в два хода — я это могу!'],
   ['Лови волну, держи баланс,', 'Солнце и ветер — это наш шанс.', 'Доска летит, и белая пена,', 'Лёгкий полёт — я лучший, наверно!']
-];
-const HOOK = ['Л-Л-Л — это мой флоу,', 'Ла-ла-лэй — слышишь, как легко?'];
-const HYPE = ['ЧИСТО!', 'ФЛОУ!', 'ЖАРА!', 'ЛЕГЕНДА!', 'ОГОНЬ!'];
+]);
+const HOOK = LX('HOOK', ['Л-Л-Л — это мой флоу,', 'Ла-ла-лэй — слышишь, как легко?']);
+const HYPE = LX('HYPE', ['ЧИСТО!', 'ФЛОУ!', 'ЖАРА!', 'ЛЕГЕНДА!', 'ОГОНЬ!']);
 const midiHz = m => 440 * Math.pow(2, (m - 69) / 12);
 function bassNote(m, t, len, bus, boom) {
   const o = AC.createOscillator(), g = AC.createGain(), f = AC.createBiquadFilter();
@@ -7917,9 +7941,9 @@ function screenObDone({ liga = '' } = {}) {
   if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenInvite(goHome); };
 }
 // the race: words on the signs follow the sounds the child trains
-const MOTO_R = ['гонка', 'трасса', 'мотор', 'руль', 'фара', 'рекорд', 'старт', 'турбо', 'гараж', 'трактор', 'ракета', 'робот', 'фургон', 'карта', 'дорога', 'тормоз', 'сирена', 'парковка', 'радар', 'шофёр'];
-const MOTO_SH = ['машина', 'шина', 'шоссе', 'шлем', 'жук', 'шофёр', 'ёжик', 'чайка', 'щётка', 'шарф', 'флажок', 'пешеход', 'шлагбаум', 'лужа', 'дождь', 'ключ', 'мяч', 'часы'];
-const MOTO_SZ = ['скорость', 'самокат', 'светофор', 'сирена', 'скейт', 'звезда', 'зебра', 'заправка', 'насос', 'колесо', 'автобус', 'мост', 'знак', 'зонт', 'сигнал', 'стоп'];
+const MOTO_R = LX('MOTO_R', ['гонка', 'трасса', 'мотор', 'руль', 'фара', 'рекорд', 'старт', 'турбо', 'гараж', 'трактор', 'ракета', 'робот', 'фургон', 'карта', 'дорога', 'тормоз', 'сирена', 'парковка', 'радар', 'шофёр']);
+const MOTO_SH = LX('MOTO_SH', ['машина', 'шина', 'шоссе', 'шлем', 'жук', 'шофёр', 'ёжик', 'чайка', 'щётка', 'шарф', 'флажок', 'пешеход', 'шлагбаум', 'лужа', 'дождь', 'ключ', 'мяч', 'часы']);
+const MOTO_SZ = LX('MOTO_SZ', ['скорость', 'самокат', 'светофор', 'сирена', 'скейт', 'звезда', 'зебра', 'заправка', 'насос', 'колесо', 'автобус', 'мост', 'знак', 'зонт', 'сигнал', 'стоп']);
 function motoWords() {
   const s = mySounds(), w = [];
   if (s.includes('l')) w.push(...MOTO_WORDS);
@@ -8902,7 +8926,7 @@ function codeSet(kind) {
   const big = Q(), answers = sample(big ? [6, 8, 9, 10, 12, 14, 15, 16, 18, 20] : [2, 3, 4, 5, 6, 7, 8, 9, 10], 4);
   return answers.map(a => ({ ans: String(a), make: () => { if (big && Math.random() < .5) { const d = [2, 3, 4, 5].filter(x => a % x === 0 && a / x <= 10); if (d.length) { const x = pickOne(d); return `${x}×${a / x}`; } } const x = 1 + Math.floor(Math.random() * (a - 1)); return Math.random() < .3 && a < 10 ? `${a + x}−${x}` : `${x}+${a - x}`; } }));
 }
-const CODE_NAME = { abc: "Colour by letters", syl: "Colour by syllables", math: "Colour by sums" };
+const CODE_NAME = { abc: "Colour by letters", syl: "Colour by words", math: "Colour by sums" };
 function screenCodeColor(kind = 'abc', page, tries = 0) {
   const t = newScreen(), set = codeSet(kind);
   page = page || pickOne(PAGES);
@@ -9890,7 +9914,7 @@ INTEREST_CAT.forEach(cat => (cat.items || []).forEach(i => { if (Array.isArray(i
 /* ---------- the three languages. Each language is its own page (/, /en/, /pt/) built from this one; the progress is
    shared, because the pages live on one site. The choice is remembered on the phone: the welcome screen asks first,
    the parents' settings and the relatives' screen can change it. ---------- */
-const LANG_KEY = 'govorilki-lang';
+const LANG_KEY = DEMO ? 'govorilki-lang-demo' : 'govorilki-lang';
 const langWant = () => { try { return localStorage.getItem(LANG_KEY) || ''; } catch (e) { return ''; } };
 const SITE_ROOT = location.pathname.replace(/index\.html$/, '').replace(/(en|pt)\/$/, '');
 const langPath = l => (LANGS.find(x => x[0] === l) || LANGS[0])[3];
