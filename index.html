@@ -4792,11 +4792,22 @@ function chSan(s, m) {
    The grandparents live in Russia, where Lichess (behind Cloudflare) often does not open and WhatsApp is blocked,
    so the game is played on our own board. Invitations and moves travel through a private topic named by the family
    code on three public ntfy servers at once (kept there 12 hours); each phone also keeps its games. */
-const lcFirst = x => x[0].toLowerCase() + x.slice(1);
+// «Бабушка Нина» → «бабушка Нина» inside a sentence; a name like «Миша» or «Сава» keeps its capital letter
+const lcFirst = x => /^(Бабушк|Дедушк|Мам|Пап|Т[её]т|Дяд|Сестр|Брат|Друг)/.test(x) ? x[0].toLowerCase() + x.slice(1) : x;
 // a grandparent and the child, with their names in every case the sentences need
-function grandOf(id, name, she, e) {
+const KIN_IDS = ['gm', 'gf', 'mom', 'dad', 'aunt', 'uncle', 'sis', 'bro', 'kin'];
+// from the name when the link is old: «Бабушка Нина» is a grandmother, «Папа» is a father
+const roleGuess = (name, she) => /^бабушк/i.test(name) ? 'gm' : /^дедушк/i.test(name) ? 'gf' : /^мам/i.test(name) ? 'mom' : /^пап/i.test(name) ? 'dad' : /^т[её]т/i.test(name) ? 'aunt' : /^дяд/i.test(name) ? 'uncle' : 'kin';
+function grandOf(id, name, she, e, role) {
   const [n, , dat, acc] = decl(name, she);
-  return { id, name: n, to: lcFirst(dat), hi: `Привет, ${lcFirst(n)}!`, call: `Позвать ${lcFirst(acc)}`, e: e || (she ? '👵' : '👴'), she: she ? 1 : 0 };
+  return { id, name: n, to: lcFirst(dat), hi: `Привет, ${lcFirst(n)}!`, call: `Позвать ${lcFirst(acc)}`, e: e || (she ? '👵' : '👴'), she: she ? 1 : 0, role: KIN_IDS.includes(role) ? role : roleGuess(n, she) };
+}
+// what the children are to this relative: grandchildren, children, nephews and nieces, or simply their names
+function kinWords(role, kids) {
+  const W = { gm: ['внуки', 'внуков'], gf: ['внуки', 'внуков'], mom: ['дети', 'детей'], dad: ['дети', 'детей'], aunt: ['племянники', 'племянников'], uncle: ['племянники', 'племянников'] }[role];
+  if (W) return { nom: W[0], gen: W[1] };
+  const ks = (kids && kids.length ? kids : [{ n: KID.name, s: KID.she }]).slice(0, 3);
+  return { nom: ks.map(k => k.n).join(' и '), gen: ks.map(k => decl(k.n, !!k.s)[1]).join(' и ') };
 }
 function kidOf(id, name, she) {
   const [n, gen, dat, acc, ins] = decl(name || 'Внук', she);
@@ -4822,7 +4833,7 @@ try {
   const m = h.match(/vhod=([a-z0-9]{2,12})\.([a-z0-9]{8,40})/);
   if (m) {
     const old = OLD_GRANDS[m[1]] || ['Бабушка', true], kk = (arg('k') || 'sava~Сава~m').split('~');
-    GUEST = { who: m[1], fam: m[2], name: (arg('n') || old[0]).slice(0, 40), she: arg('n') ? arg('s') === '1' : old[1], kid: kk[0].replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'sava', kidName: (kk[1] || 'Сава').slice(0, 30), kidShe: kk[2] === 'f' };
+    GUEST = { who: m[1], fam: m[2], role: arg('r') || '', name: (arg('n') || old[0]).slice(0, 40), she: arg('n') ? arg('s') === '1' : old[1], kid: kk[0].replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'sava', kidName: (kk[1] || 'Сава').slice(0, 30), kidShe: kk[2] === 'f' };
     localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST));
   } else { const g = JSON.parse(localStorage.getItem(GUEST_KEY) || 'null'); if (g && g.who && g.fam) GUEST = { name: (OLD_GRANDS[g.who] || ['Бабушка'])[0], she: (OLD_GRANDS[g.who] || [0, true])[1], kid: 'sava', kidName: 'Сава', kidShe: false, ...g }; }
   const gm = h.match(/[#&]g=([a-z0-9]{6,12})\.(white|black)(?:\.([a-z0-9]{2,12}))?(?:\.([a-z0-9_]{2,16}))?/);
@@ -4831,12 +4842,12 @@ try {
 // the family phone: the grandparents of the current family and the child who is playing now (or the first one who plays chess)
 function famPeople() {
   if (GUEST) {
-    GRAND = { [GUEST.who]: grandOf(GUEST.who, GUEST.name, GUEST.she) };
+    GRAND = { [GUEST.who]: grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role) };
     KID = kidOf(GUEST.kid, GUEST.kidName, GUEST.kidShe);
     return;
   }
   const f = fam();
-  GRAND = Object.fromEntries((f ? f.grands : []).map(g => [g.id, grandOf(g.id, g.name, g.she, g.e)]));
+  GRAND = Object.fromEntries((f ? f.grands : []).map(g => [g.id, grandOf(g.id, g.name, g.she, g.e, g.role)]));
   const k = ROOT.cur && ROOT.profiles[ROOT.cur] ? ROOT.cur : KIDS[0];
   if (k) { const st = ROOT.profiles[k].settings; KID = kidOf(k, st.name, st.gender === 'f'); }
 }
@@ -4856,7 +4867,7 @@ function famCode() {
   if (!f.code) { f.code = f.id === 'main' && ROOT.fam ? ROOT.fam : rid(15); save(); }
   return f.code;
 }
-const nameArgs = w => `&n=${encodeURIComponent(GRAND[w].name)}&s=${GRAND[w].she ? 1 : 0}&k=${KID.id}~${encodeURIComponent(KID.name)}~${KID.she ? 'f' : 'm'}`;
+const nameArgs = w => `&n=${encodeURIComponent(GRAND[w].name)}&s=${GRAND[w].she ? 1 : 0}&r=${GRAND[w].role || ''}&k=${KID.id}~${encodeURIComponent(KID.name)}~${KID.she ? 'f' : 'm'}`;
 const entryLink = w => `${SITE}#vhod=${w}.${famCode()}${nameArgs(w)}`;
 const gameLink = (g, forWho) => forWho === KID.id ? `${SITE}#g=${g.id}.${otherColor(g.me)}.${myId()}.${KID.id}` : `${SITE}#vhod=${forWho}.${famCode()}${nameArgs(forWho)}&g=${g.id}.${otherColor(g.me)}`;
 
@@ -4960,19 +4971,19 @@ function screenFamChess() {
   const invites = new Map();
   shell('Шахматы онлайн', `<div class="fam">
     <div class="fam-inv" id="famInv"></div>
-    <div class="fam-card"><h2 class="fam-h">${Object.values(GRAND).map(g => pic(g.e)).join('') || pic('👵')} Партия с бабушкой и дедушкой</h2>
+    <div class="fam-card"><h2 class="fam-h">${Object.values(GRAND).map(g => pic(g.e)).join('') || pic('👵')} Партия с родными</h2>
       ${Object.keys(GRAND).length ? '' : `<p class="lead">В семье пока нет бабушек и дедушек. Добавьте их в «Для родителей» → «Семьи».</p>`}
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
       <div class="fam-who">${Object.entries(GRAND).map(([k, g]) => `<button class="big" data-who="${k}">${g.e} ${g.call}</button>`).join('')}</div>
       <p class="fam-out" id="famOut"></p>
     </div>
     ${gamesHTML()}
-    <div class="fam-card"><h3 class="fam-s">Вход для бабушки и дедушки</h3>
-      <p class="lead">Отправьте один раз. По своей ссылке бабушка и дедушка увидят приглашения и смогут сами позвать ${esc(KID.acc)}.</p>
+    <div class="fam-card"><h3 class="fam-s">Вход для родных</h3>
+      <p class="lead">Отправьте один раз. По своей ссылке родные увидят приглашения и смогут сами позвать ${esc(KID.acc)}.</p>
       <div class="fam-row">${Object.entries(GRAND).map(([k, g]) => `<button class="chip" data-entry="${k}">${g.e} Вход ${g.to}</button>`).join('')}</div>
       <div class="fam-out" id="famEntry"></div></div>
     <details class="fam-card fam-lichess"><summary class="fam-s">Lichess: задачи и уроки</summary>
-      <p class="lead">В Португалии Lichess работает, а в России часто не открывается, поэтому партии с бабушкой и дедушкой идут на нашей доске.</p>
+      <p class="lead">В Португалии Lichess работает, а в России часто не открывается, поэтому партии с родными идут на нашей доске.</p>
       <div class="fam-more">${[['🧩', 'Задачи Lichess', 'https://lichess.org/training'], ['🎓', 'Учимся играть', 'https://lichess.org/learn'], ['🏋️', 'Тренировка', 'https://lichess.org/practice']].map(([e, n, u]) => `<a class="fam-link" href="${u}" target="_blank" rel="noopener">${pic(e)}<span><b>${n}</b></span></a>`).join('')}</div></details>
   </div>`);
   const gl = Object.values(GRAND).map(g => g.call.replace('Позвать ', ''));
@@ -5020,7 +5031,7 @@ function screenGuest() {
   document.body.classList.remove('quest');
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
     <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1></div></header>
-    <div class="fam-card"><h2 class="fam-h">Как дела у внуков</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
+    <div class="fam-card"><h2 class="fam-h" id="gKidsH">Как дела у ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Приглашения от ${KID.gen}</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
     <div class="fam-card"><h2 class="fam-h">Позвать ${KID.acc} сыграть</h2>
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
@@ -5033,7 +5044,7 @@ function screenGuest() {
       <li>Можно закрыть страницу и вернуться позже: партия сохранится.</li>
       <li>${KID.name} учится говорить чётко — созвонитесь и попросите называть ходы вслух: «слон», «ладья», «король».</li></ol></div>
     ${homeGuide()}
-    <button class="link-btn" id="gKids">Открыть игру внуков</button>
+    <button class="link-btn" id="gKids">Открыть игру ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</button>
     <button class="link-btn" id="gExit">Это телефон детей — выйти из входа</button>
   </div></main></div>`;
   bindGames($('.fam'));
@@ -5048,7 +5059,10 @@ function screenGuest() {
   // the grandchildren: last known progress, praise (sent again for three days, until the children's phone has seen it), hearts back
   let pg = gLoad(GPROG_KEY, null);
   const learnKids = x => (x && x.kids || []).forEach(k => { KNOWN_KIDS[k.id] = kidOf(k.id, k.n, !!k.s); });
-  const drawKids = () => { const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg); };
+  const drawKids = () => {
+    const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg);
+    if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = 'Как дела у ' + w.gen; if (k) k.textContent = 'Открыть игру ' + w.gen; }
+  };
   learnKids(pg); drawKids();
   const out = gLoad(GOUT_KEY, []).filter(c => Date.now() - c.at < 3 * 864e5);
   out.forEach(c => { if (Date.now() - (c.sent || 0) > 8 * 3600e3) { relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: c.e, x: c.x }); c.sent = Date.now(); } });
@@ -5166,7 +5180,7 @@ function screenOnline(id) {
     if (!w.hidden && !w.innerHTML) {
       const forWho = g.opp, url = gameLink(g, forWho);
       const msg = forWho === KID.id ? `${KID.name}, ${lcFirst(me.name)} зовёт тебя сыграть в шахматы! Открой ссылку:` : `${who(forWho).name}, это ${KID.name}! Давай сыграем в шахматы. Открой ссылку:`;
-      w.innerHTML = `<p class="lead">${opp.name} ещё не открыл${opp.she ? 'а' : ''} партию. Приглашение уже ${forWho === KID.id ? 'в игре у ' + KID.gen : 'во входе ' + (opp.she ? 'бабушки' : 'дедушки')}. Можно ещё отправить ссылку:</p>${shareRow(msg, url, 'ogShare')}`;
+      w.innerHTML = `<p class="lead">${opp.name} ещё не открыл${opp.she ? 'а' : ''} партию. Приглашение уже ${forWho === KID.id ? 'в игре у ' + KID.gen : 'во входе у ' + lcFirst(decl(opp.name, opp.she)[1])}. Можно ещё отправить ссылку:</p>${shareRow(msg, url, 'ogShare')}`;
       bindShare('ogShare', msg, url, s => { $('#ogNet').textContent = s; });
     }
   }
@@ -5651,7 +5665,7 @@ GAMES.push(
   { id: 'olymp', name: 'Олимпиада', sub: 'хитрые задачи: логика, числа, шахматы', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, prog: () => P.olymp ? `решено ${P.olymp.solved.length}/${OLYMP.length}` : '' },
   { id: 'flash', name: 'Флеш-счёт', sub: 'ментальная арифметика', ico: () => pic('⚡'), bg: 'var(--t-yellow)', go: () => screenFlash(), grp: 8, prog: () => `уровень ${P.flashLv || 1}` },
   { id: 'dots', name: 'Точки по порядку', sub: 'соедини и узнай, что получится', ico: () => pic('🔢'), bg: 'var(--t-green)', go: () => screenDots(), grp: 4 },
-  { id: 'chess-online', name: 'Шахматы онлайн', sub: 'партия с бабушкой и дедушкой', ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => screenFamChess(), grp: 8,
+  { id: 'chess-online', name: 'Шахматы онлайн', sub: 'партия с родными', ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => screenFamChess(), grp: 8,
     prog: () => { const n = Object.keys(gamesAll()).length; return n ? `партий: ${n}` : ''; } },
   ...Object.keys(LEARN).map(k => ({ id: 'learn-' + k, name: LEARN[k].name, sub: LEARN_SUB[k], ico: () => pic(LEARN[k].e), bg: LEARN[k].bg, go: () => screenLearn(k), grp: 10, prog: () => learnProg(k) }))
 );
@@ -8365,7 +8379,7 @@ const gLoad = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'nu
 const gStore = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 const KNOWN_KIDS = {};
 function guestKidsHTML(pg) {
-  if (!pg || !pg.kids || !pg.kids.length) return `<p class="lead">Как только внуки откроют игру, здесь появятся их успехи.</p>`;
+  if (!pg || !pg.kids || !pg.kids.length) return `<p class="lead">Как только ${esc(kinWords(GRAND[GUEST.who] && GRAND[GUEST.who].role).nom)} откроют игру, здесь появятся их успехи.</p>`;
   const ago = Math.round((Date.now() - pg.at) / 60000);
   return pg.kids.map(k => `<div class="gk" data-kid="${esc(k.id)}">
       <div class="gk-h"><span class="chip-face">${friendSVG('', FRIENDS[k.e] ? k.e : 'tiger')}</span><b>${esc(k.n)}</b>
