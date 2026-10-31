@@ -423,13 +423,12 @@ b.r{color:var(--berry)}
 .hol-hero small{font:700 14px var(--f-body);color:var(--ink-soft);font-style:italic}
 .hol-off{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--sky)}
 .hol-off.on{background:var(--t-green);color:var(--ink)}
-.hol-steps{display:flex;flex-direction:column;gap:10px}
-.hol-step{display:grid;grid-template-columns:48px 1fr;align-items:center;column-gap:10px;border:0;border-radius:20px;padding:12px 14px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);text-align:left;font:inherit;cursor:pointer}
-.hol-step span{grid-row:span 2;font:38px/1 var(--f-emoji);text-align:center}
-.hol-step b{font:800 19px var(--f-body)}
-.hol-step small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
+.hol-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;max-width:400px;margin:0 auto}
+.hol-step{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;aspect-ratio:1;border:0;border-radius:24px;padding:10px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);font:inherit;cursor:pointer}
+.hol-step span{font:46px/1 var(--f-emoji)}
+.hol-step b{font:800 17px var(--f-body)}
 .hol-step.ok{box-shadow:0 5px 0 #1E8A4F,inset 0 0 0 3px var(--leaf)}
-.hol-step.ok b::after{content:' ✓';color:var(--leaf)}
+.hol-step.ok::after{content:'✓';position:absolute;top:6px;right:10px;font:900 20px var(--f-body);color:var(--leaf)}
 .hol-badge{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border-radius:24px;background:var(--t-yellow);color:var(--ink)}
 .hol-badge .pic{font-size:64px}
 .hol-badge b{font:800 22px var(--f-body)}
@@ -7730,9 +7729,9 @@ function screenHoliday(id, k) {
       <p>${FLAG(h.cc)} ${esc(COUNTRY_NAMES[h.cc] || '')} · ${holDateText(k)}${(h.len || 1) > 1 ? ` · ${h.len} ${plural(h.len, ['день', 'дня', 'дней'])}` : ''}</p>
       <p class="hol-off ${h.off ? 'on' : ''}">${h.off ? 'Выходной день: взрослые не работают, дети не учатся' : 'Праздник, но не выходной: работаем и учимся'}</p>${h.local ? `<small>${esc(h.local)}</small>` : ''}</div></div>
     <div class="hol-steps">
-      <button class="hol-step ${p.story ? 'ok' : ''}" data-s="story"><span>📖</span><b>История праздника</b><small>почему он есть и как его празднуют</small></button>
-      <button class="hol-step ${p.words ? 'ok' : ''}" data-s="words"><span>🗣️</span><b>Праздничные слова</b><small>скажи их вслух</small></button>
-      <button class="hol-step ${p.draw ? 'ok' : ''}" data-s="draw"><span>🎨</span><b>Праздничный рисунок</b><small>${esc(h.draw || 'нарисуй праздник')}</small></button>
+      <button class="hol-step ${p.story ? 'ok' : ''}" data-s="story"><span>📖</span><b>История</b></button>
+      <button class="hol-step ${p.words ? 'ok' : ''}" data-s="words"><span>🗣️</span><b>Слова</b></button>
+      <button class="hol-step ${p.draw ? 'ok' : ''}" data-s="draw"><span>🎨</span><b>Рисунок</b></button>
     </div>
     ${all ? `<div class="hol-badge">${pic(h.e)}<b>Праздник пройден!</b><small>Он теперь в твоей коллекции праздников</small></div>` : ''}
   </div>`, { back: () => screenCalendar(monthOff(k)) });
