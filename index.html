@@ -973,6 +973,36 @@ body.quest .og-st.mine{color:#7BE0A0}
 .screen.guest .chip{min-height:52px;font-size:18px}
 .screen.guest .starpill{display:none}
 @media (max-width:360px){.fam-card{padding:12px}.g-hero h1{font-size:25px}.og-promo{grid-template-columns:repeat(4,56px)}.fam-h{font-size:21px}}
+.garage{display:flex;align-items:center;gap:12px;width:100%;border:0;text-align:left;cursor:pointer;padding:12px 16px;border-radius:22px;color:var(--ink);background:linear-gradient(100deg,#2B2F45,#1E2235);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 2px rgba(255,138,42,.45)}
+.g-bike{font-size:44px;line-height:1}
+.g-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.g-t b{font:400 21px/1.1 var(--f-display);color:#FFB15C}
+.g-t small{font:700 13px/1.3 var(--f-body);color:#C9CBDA}
+.g-t .g-day{color:#9FE3B4}
+.g-go{flex:none;display:grid;place-items:center;width:48px;height:48px;font:400 20px/1 var(--f-display);color:#1E1A2E;background:#FF9D4D;border-radius:50%;box-shadow:0 4px 0 #C2621A}
+.bike-c small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.bike-c.locked{filter:grayscale(.9);opacity:.6}
+.bike-c.sel{box-shadow:0 0 0 4px #FF9D4D,0 6px 0 var(--line-strong)}
+.moto{position:relative;flex:1;width:100%;min-height:380px;border-radius:20px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.moto canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.m-hud{position:absolute;left:10px;right:10px;top:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;pointer-events:none;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.45)}
+.m-spd{display:flex;align-items:baseline;gap:4px;background:rgba(20,18,36,.55);border-radius:14px;padding:6px 10px}
+.m-spd b{font:400 34px/1 var(--f-display);font-variant-numeric:tabular-nums;min-width:2.2em;text-align:right}
+.m-spd small{font:800 12px var(--f-body)}
+.m-dist,.m-cnt{background:rgba(20,18,36,.55);border-radius:14px;padding:8px 10px;font:800 16px/1 var(--f-body);font-variant-numeric:tabular-nums}
+.m-sign{position:absolute;left:50%;top:64px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px 12px;border-radius:16px;background:#2D6CDF;color:#fff;border:3px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.3);max-width:calc(100% - 20px)}
+.m-sign small{font:800 12px var(--f-body);opacity:.9}
+.m-sign b{font:400 34px/1 var(--f-display);letter-spacing:.04em}
+.m-sign b .r{color:#FFE066}
+.m-lv{display:block;width:140px;height:6px;border-radius:9px;background:rgba(255,255,255,.3);overflow:hidden}
+.m-lv i{display:block;height:100%;width:0;background:#7BE0A0;transition:width .1s}
+.m-pop{position:absolute;left:0;right:0;top:42%;text-align:center;font:400 30px var(--f-display);color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.35);opacity:0;pointer-events:none}
+.m-pop.on{animation:mpop 1.1s ease-out}
+@keyframes mpop{0%{opacity:0;transform:scale(.6)}15%{opacity:1;transform:scale(1.1)}70%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
+.m-start{position:absolute;inset:auto 12px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:16px;border-radius:20px;background:rgba(20,18,36,.82);color:#fff}
+.m-start b{font:400 22px var(--f-display)}
+.m-start p{margin:0;font:700 15px/1.35 var(--f-body);color:#D9DAE6}
+@media (prefers-reduced-motion:reduce){.m-pop.on{animation:none;opacity:1}}
 </style>
 </head>
 <body>
@@ -1694,6 +1724,7 @@ const GAMES = [
   { id: 'l-syll', name: 'Слоговые дорожки', sub: 'ЛА-ЛО-ЛУ на время', ico: () => '<span class="ico-letters"><b class="L v">А</b><b class="L c">Л</b></span>', bg: 'var(--t-peach)', go: () => screenLSyll(), grp: 6, prog: () => P.sylBest ? `рекорд: ${fmtSec(P.sylBest)}` : '' },
   { id: 'duo', name: 'Скороговорки вдвоём', sub: () => KIDS.map(k => ROOT.profiles[k].settings.name).join(' и ') + ' по очереди', ico: () => pic('🤝'), bg: 'var(--t-mint)', go: () => screenDuo(), grp: 7, prog: () => '' },
   { id: 'l-rap', name: 'Рэп-битва', sub: 'слоги с Л под бит', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => screenRap(), grp: 5 },
+  { id: 'l-moto', name: 'Л-трасса', sub: 'мотогонка: читай знаки вслух — будет нитро', ico: () => pic('🏍️'), bg: 'var(--t-yellow)', go: () => screenMoto(), grp: 5, prog: () => P.motoBest ? `рекорд ${(P.motoBest / 1000).toFixed(1).replace('.', ',')} км` : '' },
   { id: 'l-catch', name: 'Л-ловушка', sub: 'аркада на реакцию', ico: () => pic('🎯'), bg: 'var(--t-green)', go: () => screenCatch(), grp: 5 },
   { id: 'l-word', name: 'Угадай слово', sub: '5 букв, в слове есть Л', ico: () => '<span class="ico-letters"><b class="L c">Л</b><b class="L v">О</b><b class="L c">Д</b></span>', bg: 'var(--t-yellow)', go: () => screenWordle(), grp: 5 },
   { id: 'l-boss', name: 'Спарринг', sub: 'тхэквондо против путаника', ico: () => pic('🥋'), bg: 'var(--t-pink)', go: () => screenBoss(), grp: 5 },
@@ -1733,7 +1764,7 @@ function goHome() {
         <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? 'Мой друг' : 'Выбери друга!'}</button>
       </div>
     </header>
-    ${Q() ? rankCard() + '<div id="invBanner"></div>' : ''}
+    ${Q() ? rankCard() + garageCard() + '<div id="invBanner"></div>' : ''}
     ${lessonsCard()}
     ${P.goal ? goalCard() : ''}
     ${teamCard()}
@@ -1753,7 +1784,7 @@ function goHome() {
   $('#parentsBtn').onclick = () => { sfx.pop(); screenParents(); };
   $$('.tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
   if (GUEST) $('#guestBtn').onclick = () => { sfx.pop(); GUEST_OFF = false; screenGuest(); };
-  if (Q()) famBanner();
+  if (Q()) { famBanner(); $('#garageBtn').onclick = () => { sfx.pop(); screenGarage(); }; }
 }
 
 /* ---------- breathing ---------- */
@@ -4787,6 +4818,201 @@ GAMES.push(
   ...Object.keys(LEARN).map(k => ({ id: 'learn-' + k, name: LEARN[k].name, sub: LEARN_SUB[k], ico: () => pic(LEARN[k].e), bg: LEARN[k].bg, go: () => screenLearn(k), grp: 10, prog: () => learnProg(k) }))
 );
 SECTIONS.splice(SECTIONS.findIndex(x => x.g === 7), 0, { g: 10, h: 'Узнавай', p: () => Q() ? 'читай вслух истории о городах, музыке и картинах' : 'истории о городах, музыке и картинах' });
+/* ---------- «Л-трасса»: Sava's own motorbike run along a seaside road through traffic.
+   Road signs carry words with Л: reading one aloud fires the nitro. Stars unlock bikes in the garage. ---------- */
+const BIKES = [
+  { at: 0, name: 'Самокат', e: '🛴', top: 105, body: '#4DB8FF', suit: '#2E5AAC' },
+  { at: 30, name: 'BMX', e: '🚲', top: 120, body: '#2FA865', suit: '#1E5E3A' },
+  { at: 70, name: 'Мопед', e: '🛵', top: 135, body: '#FFC83A', suit: '#8A5A00' },
+  { at: 130, name: 'Мотоцикл', e: '🏍️', top: 155, body: '#EF4F7E', suit: '#5A1F35' },
+  { at: 220, name: 'Спортбайк', e: '🏍️', top: 180, body: '#8C6CF2', suit: '#2F2468' },
+  { at: 350, name: 'Супербайк «Л-200»', e: '🏍️', top: 205, body: '#FF8A2A', suit: '#1E1A2E' }
+];
+if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
+const MOTO_WORDS = [...CATCH_L.map(x => x[0]), 'колесо', 'шлем', 'мотоцикл', 'седло', 'ладья', 'волна', 'скала', 'полёт', 'лидер', 'финал'];
+const bikeOpen = i => P.stars >= BIKES[i].at;
+const bestBike = () => BIKES.reduce((k, b, j) => bikeOpen(j) ? j : k, 0);
+const myBike = () => BIKES[P.bike != null && BIKES[P.bike] && bikeOpen(P.bike) ? P.bike : bestBike()];
+function garageCard() {
+  const i = BIKES.reduce((k, b, j) => bikeOpen(j) ? j : k, 0), nx = BIKES[i + 1], best = P.motoBest || 0;
+  const day = P.motoDay && P.motoDay.d === dayKey() ? P.motoDay : { done: false };
+  return `<button class="garage" id="garageBtn"><span class="g-bike">${myBike().e}</span><span class="g-t"><b>Гараж: ${myBike().name}</b>
+    <small>${best ? `рекорд ${(best / 1000).toFixed(2).replace('.', ',')} км · ` : ''}${nx ? `«${nx.name}» через ${nx.at - P.stars} ⭐` : 'все байки открыты!'}</small>
+    <small class="g-day">${day.done ? '✅ Заезд дня выполнен' : '🏁 Заезд дня: 5 знаков вслух'}</small></span><span class="g-go">▶</span></button>`;
+}
+function screenGarage() {
+  newScreen();
+  const st = shell('Гараж', `<p class="lead">Звёзды за занятия открывают новые байки. Чем быстрее байк, тем сложнее трасса.</p>
+    <div class="cards">${BIKES.map((b, i) => `<button class="card bike-c ${bikeOpen(i) ? '' : 'locked'} ${myBike() === b ? 'sel' : ''}" data-i="${i}" style="--bg:${b.body}33">${pic(b.e)}<span>${b.name}</span><small>${bikeOpen(i) ? `до ${b.top} км/ч` : `🔒 ${b.at} ⭐`}</small></button>`).join('')}</div>
+    <button class="big" id="rideBtn">🏍️ На трассу!</button>`);
+  talk(`Это твой гараж. Сейчас у тебя ${myBike().name}. Выбери байк и поехали!`);
+  st.onclick = e => {
+    const c = e.target.closest('.bike-c'); if (!c) return; const i = +c.dataset.i;
+    if (!bikeOpen(i)) { wiggle(c); talk(`Этот байк откроется, когда наберёшь ${BIKES[i].at} звёзд.`); return; }
+    P.bike = i; save(); sfx.pop(); $$('.bike-c').forEach(x => x.classList.toggle('sel', x === c)); talk(`${BIKES[i].name}! Отличный выбор.`);
+  };
+  $('#rideBtn').onclick = () => { sfx.pop(); screenMoto(); };
+}
+
+function screenMoto() {
+  const t = newScreen(); noGuard();
+  const bike = myBike();
+  shell('Л-трасса', `<div class="moto" id="moto"><canvas id="mc"></canvas>
+      <div class="m-hud"><span class="m-spd"><b id="mSpd">0</b><small>км/ч</small></span><span class="m-dist" id="mDist">0 м</span><span class="m-cnt"><span id="mOver">0</span> 🚗 · <span id="mWords">0</span> 🗣</span></div>
+      <div class="m-sign" id="mSign" hidden><small>Прочитай вслух — будет нитро!</small><b id="mWord"></b><i class="m-lv"><i id="mLv"></i></i><button class="chip" id="mSaid" hidden>🔥 Прочитал!</button></div>
+      <div class="m-pop" id="mPop"></div>
+      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Нажимай слева или справа, чтобы перестраиваться. Читай вслух слова на синих знаках — включится нитро!</p><button class="big" id="mGo">${ICON.play}Поехали!</button></div>
+    </div>`, { back: screenGarage, guide: false });
+  const box = $('#moto'), cv = $('#mc'), x = cv.getContext('2d');
+  let W = 0, H = 0, dpr = 1, hor = 0;
+  function fit() { const r = box.getBoundingClientRect(); dpr = Math.min(2, window.devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0); hor = H * .3; }
+  fit(); resizeFn = fit;
+  const D0 = 30, ZMAX = 230, PD = 3;
+  const tOf = d => D0 / (D0 + Math.max(-2, d)), yOf = t => hor + t * (H - hor) * 1.02, hw = t => W * (.03 + .52 * t);
+  const laneX = (l, t) => W / 2 + l * (2 * hw(t) / 3);
+  let run = false, over = false, speed = 0, dist = 0, pl = 0, target = 0, cars = [], nextCar = 40, overtakes = 0, words = 0, score = 0;
+  let sign = null, nextSign = 260, nitro = 0, heard = 0, floor = .004, shake = 0, continued = false, popT = 0, wordIdx = Math.floor(Math.random() * MOTO_WORDS.length);
+  const CAR_COLORS = ['#3D8BFD', '#2FA865', '#FFFFFF', '#2A2346', '#C0392B', '#F2C200', '#8E9AAF', '#16A085'];
+  function pop(text) { const p = $('#mPop'); p.textContent = text; p.classList.remove('on'); void p.offsetWidth; p.classList.add('on'); }
+  function spawnCar() {
+    const busy = cars.filter(c => c.d > ZMAX - 18).map(c => c.lane);
+    const free = [-1, 0, 1].filter(l => !busy.includes(l)); if (free.length <= 1 && busy.length >= 2) return;
+    cars.push({ lane: pickOne(free.length ? free : [-1, 0, 1]), d: ZMAX, v: rnd(48, 82), col: pickOne(CAR_COLORS), van: Math.random() < .25, passed: false });
+  }
+  function spawnSign() { sign = { d: ZMAX, word: MOTO_WORDS[wordIdx++ % MOTO_WORDS.length], read: false }; heard = 0; }
+  // drawing: sky, sea on the left, sand, road with lanes, posts, signs, cars and the bike from behind
+  function quad(x1, y1, w1, x2, y2, w2, col) { x.fillStyle = col; x.beginPath(); x.moveTo(x1 - w1, y1); x.lineTo(x1 + w1, y1); x.lineTo(x2 + w2, y2); x.lineTo(x2 - w2, y2); x.closePath(); x.fill(); }
+  function drawCar(c) {
+    const tt = tOf(c.d), y = yOf(tt), cx = laneX(c.lane, tt), w = 2 * hw(tt) / 3 * .74, h = w * (c.van ? .95 : .7);
+    if (y < hor - 2 || y > H + h) return;
+    x.fillStyle = 'rgba(0,0,0,.25)'; x.fillRect(cx - w / 2, y - h * .08, w, h * .12);
+    x.fillStyle = c.col; x.beginPath(); x.roundRect(cx - w / 2, y - h, w, h * .9, w * .12); x.fill();
+    x.fillStyle = 'rgba(20,24,40,.75)'; x.beginPath(); x.roundRect(cx - w * .36, y - h * .92, w * .72, h * .32, w * .06); x.fill();
+    x.fillStyle = '#FF3B3B'; x.fillRect(cx - w * .46, y - h * .45, w * .16, h * .1); x.fillRect(cx + w * .3, y - h * .45, w * .16, h * .1);
+    x.fillStyle = '#1E1A2E'; x.fillRect(cx - w * .44, y - h * .12, w * .18, h * .14); x.fillRect(cx + w * .26, y - h * .12, w * .18, h * .14);
+  }
+  function drawSign(s) {
+    const tt = tOf(s.d), y = yOf(tt), sx = W / 2 + hw(tt) * 1.18, sw = W * .5 * tt, sh = sw * .42;
+    if (y < hor) return;
+    x.fillStyle = '#9AA3B5'; x.fillRect(sx - sw * .03, y - sh * 2.2, sw * .06, sh * 2.2);
+    x.fillStyle = s.read ? '#2FA865' : '#2D6CDF'; x.strokeStyle = '#FFFFFF'; x.lineWidth = Math.max(1, sw * .03);
+    x.beginPath(); x.roundRect(sx - sw / 2, y - sh * 3.1, sw, sh, sw * .06); x.fill(); x.stroke();
+    if (sw > 34) { x.fillStyle = '#FFFFFF'; x.font = `800 ${Math.round(sh * .5)}px Nunito, sans-serif`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s.word.toUpperCase(), sx, y - sh * 2.6, sw * .9); }
+  }
+  function drawBike(px) {
+    const by = H - Math.max(18, H * .04), s = Math.min(W * .16, H * .2), lean = (target - pl) * .35;
+    x.save(); x.translate(px, by); x.rotate(lean);
+    if (nitro > 0) { x.fillStyle = `rgba(255,${120 + Math.random() * 80 | 0},40,.9)`; x.beginPath(); x.moveTo(-s * .12, -s * .12); x.lineTo(0, s * (.25 + Math.random() * .2)); x.lineTo(s * .12, -s * .12); x.fill(); }
+    x.fillStyle = '#16131F'; x.beginPath(); x.roundRect(-s * .11, -s * .42, s * .22, s * .44, s * .08); x.fill();
+    x.fillStyle = bike.body; x.beginPath(); x.roundRect(-s * .2, -s * .62, s * .4, s * .26, s * .08); x.fill();
+    x.fillStyle = '#FF3B3B'; x.fillRect(-s * .08, -s * .44, s * .16, s * .05);
+    x.fillStyle = bike.suit; x.beginPath(); x.roundRect(-s * .22, -s * 1.02, s * .44, s * .46, s * .14); x.fill();
+    x.fillStyle = bike.body; x.beginPath(); x.arc(0, -s * 1.12, s * .17, 0, Math.PI * 2); x.fill();
+    x.fillStyle = 'rgba(255,255,255,.35)'; x.beginPath(); x.arc(-s * .05, -s * 1.17, s * .06, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#16131F'; x.fillRect(-s * .42, -s * .74, s * .84, s * .05);
+    x.restore();
+  }
+  function draw() {
+    const sk = x.createLinearGradient(0, 0, 0, hor); sk.addColorStop(0, '#6EC6FF'); sk.addColorStop(1, '#FFE3B3');
+    x.fillStyle = sk; x.fillRect(0, 0, W, hor);
+    x.fillStyle = '#FFD36B'; x.beginPath(); x.arc(W * .78, hor * .45, Math.min(W, H) * .06, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#2B8AC8'; x.fillRect(0, hor - H * .02, W, H * .02);
+    x.fillStyle = '#E9C98E'; x.fillRect(0, hor, W, H - hor);
+    const tF = tOf(ZMAX), tN = 1.12;
+    x.fillStyle = '#2F8FD0'; x.beginPath(); x.moveTo(0, hor); x.lineTo(W / 2 - hw(tF) * 2.2, hor); x.lineTo(0, yOf(.55)); x.fill();
+    quad(W / 2, yOf(tF), hw(tF) * 1.12, W / 2, yOf(tN), hw(tN) * 1.12, '#F4F1EA');
+    quad(W / 2, yOf(tF), hw(tF), W / 2, yOf(tN), hw(tN), '#4A4D5C');
+    const off = dist % 14;
+    for (let k = 0; k < 18; k++) {
+      const d1 = k * 14 - off, d2 = d1 + 6; if (d2 < -1) continue;
+      const t1 = tOf(d1), t2 = tOf(d2);
+      for (const b of [-1, 1]) { const bx1 = W / 2 + b * hw(t1) / 3, bx2 = W / 2 + b * hw(t2) / 3; quad(bx1, yOf(t1), Math.max(.6, hw(t1) * .012), bx2, yOf(t2), Math.max(.4, hw(t2) * .012), '#F7F7F2'); }
+      const pd = k * 14 - (dist % 28) * .5; const tp = tOf(pd);
+      if (pd > 0) for (const b of [-1, 1]) { const ppx = W / 2 + b * hw(tp) * 1.2, ph = H * .07 * tp; x.fillStyle = '#FFFFFF'; x.fillRect(ppx - ph * .1, yOf(tp) - ph, ph * .2, ph); x.fillStyle = '#EF4F4F'; x.fillRect(ppx - ph * .1, yOf(tp) - ph, ph * .2, ph * .25); }
+    }
+    const things = [...cars.map(c => ({ d: c.d, f: () => drawCar(c) })), ...(sign ? [{ d: sign.d, f: () => drawSign(sign) }] : [])].sort((a, b) => b.d - a.d);
+    things.forEach(o => o.f());
+    if (nitro > 0) { x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = 2; for (let i = 0; i < 10; i++) { const yy = rnd(hor, H), xx = Math.random() < .5 ? rnd(0, W * .15) : rnd(W * .85, W); x.beginPath(); x.moveTo(xx, yy); x.lineTo(xx, yy + 40); x.stroke(); } }
+    drawBike(laneX(pl, tOf(PD)));
+  }
+  function hud() {
+    $('#mSpd').textContent = Math.round(speed); $('#mDist').textContent = dist < 1000 ? `${Math.round(dist)} м` : `${(dist / 1000).toFixed(2).replace('.', ',')} км`;
+    $('#mOver').textContent = overtakes; $('#mWords').textContent = words;
+  }
+  function fire() {
+    if (!sign || sign.read) return;
+    sign.read = true; words++; nitro = 3.5; score += 100; sfx.magic(); pop('НИТРО! 🔥'); hopEl($('#mSign')); later(() => { $('#mSign').hidden = true; }, 600);
+  }
+  // reading the sign: the microphone hears the word, or the button stands in where there is no microphone
+  let micOk = false;
+  function listen(dt) {
+    if (!sign || sign.read || sign.d > 150) return;
+    const sg = $('#mSign');
+    if (sg.hidden) { sg.hidden = false; $('#mWord').innerHTML = hiS(sign.word.toUpperCase(), 'л'); $('#mSaid').hidden = micOk; heard = 0; $('#mLv').style.width = '0%'; }
+    if (!micOk || micDeaf()) return;
+    const lv = micLevel(), thr = Math.max(.012, floor * 3.2);
+    if (lv > thr) heard += dt; else floor = floorStep(floor, lv, thr);
+    $('#mLv').style.width = Math.min(100, heard / .5 * 100) + '%';
+    if (heard >= .5) fire();
+  }
+  $('#mSaid').onclick = e => { e.stopPropagation(); fire(); };
+  async function crash() {
+    run = false; shake = .5; sfx.oops(); tone(90, .5, 'sawtooth', .12); try { navigator.vibrate && navigator.vibrate(200); } catch (e) {}
+    pop('Бум! 💥');
+    if (!continued) {
+      continued = true; const w = pickOne(MOTO_WORDS);
+      await talk(`Ничего, ты в шлеме! Чтобы ехать дальше, скажи три раза: ${w}.`); if (t !== tok) return;
+      await askSaid('Я сказал три раза!'); if (t !== tok) return;
+      words++; cars = cars.filter(c => c.d > 40); speed = Math.max(60, speed * .6); run = true; sfx.good(); pop('Поехали дальше!'); return;
+    }
+    over = true; later(end, 900);
+  }
+  function end() {
+    micRelease(true);
+    const km = dist / 1000, rec = dist > (P.motoBest || 0);
+    if (rec) P.motoBest = Math.round(dist); P.motoKm = +((P.motoKm || 0) + km).toFixed(2);
+    let bonus = '';
+    if (words >= 5 && !(P.motoDay && P.motoDay.d === dayKey() && P.motoDay.done)) { P.motoDay = { d: dayKey(), done: true }; P.stars += 2; bonus = ' Заезд дня выполнен: плюс две звезды!'; }
+    save();
+    finish({ key: 'l-moto', stars: words >= 4 ? 3 : words >= 2 ? 2 : 1, again: screenMoto, menu: screenGarage,
+      line: `${km.toFixed(2).replace('.', ',')} км, обгонов: ${overtakes}, слов вслух: ${words}.${rec ? ' Новый рекорд!' : ''}${bonus}` });
+  }
+  function step(dt) {
+    if (shake > 0) { shake -= dt; box.style.transform = `translate(${rnd(-6, 6)}px,${rnd(-4, 4)}px)`; } else box.style.transform = '';
+    if (!run) { draw(); return; }
+    const top = bike.top + Math.min(40, dist / 150) + (nitro > 0 ? 45 : 0);
+    speed += ((nitro > 0 ? top : Math.min(top, 70 + dist / 25)) - speed) * Math.min(1, dt * .9);
+    if (nitro > 0) nitro -= dt;
+    const ms = speed / 3.6; dist += ms * dt; score += ms * dt * .1;
+    pl += (target - pl) * Math.min(1, dt * 9);
+    for (const c of cars) {
+      c.d -= (ms - c.v / 3.6) * dt;
+      if (!c.passed && c.d < PD - 1.6) {
+        c.passed = true; overtakes++; score += 10;
+        const gap = Math.abs(c.lane - pl); if (gap < 1.1 && gap >= .62) { score += 50; pop('Впритирку! +50'); sfx.whoosh(.25, .15); }
+      }
+      if (c.d > PD - 1.6 && c.d < PD + 1.4 && Math.abs(c.lane - pl) < .62) { crash(); break; }
+    }
+    cars = cars.filter(c => c.d > -6);
+    nextCar -= ms * dt; if (nextCar <= 0) { spawnCar(); nextCar = Math.max(16, 46 - dist / 140) * rnd(.7, 1.3); }
+    if (sign) { sign.d -= ms * dt; if (sign.d < -4) { if (!sign.read) $('#mSign').hidden = true; sign = null; } }
+    nextSign -= ms * dt; if (nextSign <= 0 && !sign) { spawnSign(); nextSign = rnd(300, 420); }
+    listen(dt);
+    draw(); hud();
+  }
+  const steer = dir => { if (!run) return; target = Math.max(-1, Math.min(1, Math.round(target) + dir)); sfx.tick(); };
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); const r = cv.getBoundingClientRect(); steer(e.clientX - r.left < r.width / 2 ? -1 : 1); });
+  const onKey = e => { if (t !== tok) { document.removeEventListener('keydown', onKey); return; } if (e.key === 'ArrowLeft') steer(-1); if (e.key === 'ArrowRight') steer(1); };
+  document.addEventListener('keydown', onKey);
+  $('#mGo').onclick = async () => {
+    $('#mStart').hidden = true; hush(); sfx.pop();
+    micOk = await micOn(); if (t !== tok) return; if (micOk) MIC.keep = tok;
+    run = true; speed = 40; tone(110, .4, 'sawtooth', .06); tone(165, .5, 'sawtooth', .05, .15);
+  };
+  draw(); loop(t, step);
+  talk(`Л-трасса! Твой байк: ${bike.name}. Нажимай слева или справа, чтобы перестраиваться. На синих знаках слова со звуком Л: прочитай слово вслух, и включится нитро!`);
+}
+
 const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражнения, 9 упражнений для звука Л со схемой положения языка и 2 игры: чистоговорки, скороговорки или «Где живёт звук Л». Около 15 минут.</li>
       <li>«Скорочтение»: слоговые дорожки (ЛА-ЛО-ЛУ, АЛ-ОЛ-УЛ, АЛА-ОЛО) на время и текст на скорость. Игра считает слова в минуту и рисует график. Важно не только быстро, но и чётко.</li>
       <li>«Книга»: после чтения отметьте минуты и страницу. Карточка цели показывает, сколько дней прочитано и сколько осталось до дня рождения. Дату и приз задайте ниже.</li>
