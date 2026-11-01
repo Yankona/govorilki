@@ -1696,7 +1696,8 @@ const IS_RU = LANG === 'ru';
 const HASH0 = location.hash;   // the link as it was opened, before the page reads and clears it
 // RU('…') keeps a text the same in every language (the build leaves it alone)
 function RU(s) { return s; }
-const LANGS = [['ru', RU('Русский'), '🇷🇺', ''], ['en', 'English', '🇬🇧', 'en/'], ['pt', 'Português', '🇵🇹', 'pt/']];
+// English is the main page (the site's own address), where everyone picks a language; Russian and Portuguese live one folder down
+const LANGS = [['en', 'English', '🇬🇧', ''], ['ru', RU('Русский'), '🇷🇺', 'ru/'], ['pt', 'Português', '🇵🇹', 'pt/']];
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const hiR = s => esc(s).replace(IS_RU ? /[рР]/g : /[rR]/g, '<b class="r">$&</b>');
@@ -10466,12 +10467,12 @@ function guestPlayed(key, stars) {
   const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
 }
 
-/* ---------- the three languages. Each language is its own page (/, /en/, /pt/) built from this one; the progress is
-   shared, because the pages live on one site. The choice is remembered on the phone: the welcome screen asks first,
-   the parents' settings and the relatives' screen can change it. ---------- */
+/* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
+   links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
+   the phone: the welcome screen asks first, the parents' settings and the relatives' screen can change it. ---------- */
 const LANG_KEY = DEMO ? 'govorilki-lang-demo' : 'govorilki-lang';
 const langWant = () => { try { return localStorage.getItem(LANG_KEY) || ''; } catch (e) { return ''; } };
-const SITE_ROOT = location.pathname.replace(/index\.html$/, '').replace(/(en|pt)\/$/, '');
+const SITE_ROOT = location.pathname.replace(/index\.html$/, '').replace(/(en|pt|ru)\/$/, '');
 const langPath = l => (LANGS.find(x => x[0] === l) || LANGS[0])[3];
 // go to the page of language l (true when the page is being left)
 function langGo(l, hash = location.hash) {
@@ -10482,17 +10483,21 @@ function langGo(l, hash = location.hash) {
   location.replace(SITE_ROOT + langPath(l) + location.search + hash);
   return true;
 }
-// at the first start: the language chosen on this phone before, or the phone's own language for a new family
+// at the first start: the language chosen on this phone before. A plain visit to the main page starts in English, where
+// the welcome screen asks for the language; a link from someone (a grandparent's entry, the league, a game) opens in the
+// phone's own language; the first family, which played before there were languages, stays Russian
 function langRedirect() {
   if (EMBEDDED) return false;
   let want = langWant();
-  if (!want && !(ROOT.families && Object.keys(ROOT.families).length) && !GUEST) {
+  const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
+  if (!want && ROOT.families && ROOT.families.main) want = 'ru';
+  else if (!want && !fams && (GUEST || HASH0.length > 1)) {
     const nav = (navigator.languages || [navigator.language || '']).map(x => String(x).slice(0, 2).toLowerCase());
     want = nav.find(x => LANGS.some(l => l[0] === x)) || '';
   }
   if (want && want !== LANG) return langGo(want, HASH0);
   // a family that has been playing in this language keeps it: a link from a child in another language opens here
-  if (!want && ((ROOT.families && Object.keys(ROOT.families).length) || GUEST)) { try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} }
+  if (!want && (fams || GUEST)) { try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} }
   return false;
 }
 const langChips = () => `<div class="lang-row" role="group" aria-label="${RU('Язык · Language · Língua')}">${LANGS.map(([l, n, f]) => `<button class="pick-b lang-b ${l === LANG ? 'sel' : ''}" data-lang="${l}" aria-pressed="${l === LANG}"><span class="lang-f">${f}</span>${n}</button>`).join('')}</div>`;
