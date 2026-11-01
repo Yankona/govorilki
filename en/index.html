@@ -1665,6 +1665,9 @@ body.pv-on #app{padding-top:52px}
 .g-games{display:flex;flex-wrap:wrap;gap:10px}.g-games .big{display:inline-flex;align-items:center;gap:10px}.g-games .chip-face{width:34px;height:34px}
 .gk-try{flex:none;min-width:40px;min-height:34px;padding:4px 10px;font-size:15px}
 .g-back{display:block;width:100%;margin:0 0 8px;border:0;border-radius:16px;padding:10px 14px;background:var(--t-yellow);color:var(--ink);font:800 16px/1.2 var(--f-body);text-align:left;box-shadow:0 4px 0 var(--line);cursor:pointer}
+.pv-who{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
+.pv-ad.kid{padding:0;background:transparent;box-shadow:none}.pv-ad.kid .pv-acts{padding:0 4px}
+.pg-sum{margin:0;font:800 30px/1.2 var(--f-body);color:var(--ink)}
 </style>
 </head>
 <body>
@@ -2592,6 +2595,7 @@ function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) document.body.insertAdjacentHTML('beforeend', `<a class="demo-b" href="${SITE_ROOT}">${"Trial run · exit"}</a>`); }
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
+  if (!PULT_BOOTED) { PULT_BOOTED = true; if (ROOT.parentPhone && !GUEST && !DEMO && !LIGA_HASH && fam() && KIDS.length) { screenPult(); return; } }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
@@ -2671,9 +2675,10 @@ function goHome() {
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
-  on('#homeGear', () => { sfx.pop(); homeLeave(); screenParents(); });
+  on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; screenParents(); });
+  on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
   if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); }
-  on('#parentsBtn', () => { sfx.pop(); screenParents(); });
+  on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   if (GUEST) on('#guestTop', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
@@ -4164,7 +4169,7 @@ function teamCard() {
     <button class="big" id="duoBtn">${KIDS.length > 2 ? "Tongue twisters in turns" : "Tongue twisters for two"}</button>
   </section>`;
 }
-const kidsBar = () => `<div class="kids"><div class="kids-top"><button class="ibtn kb-ic" id="homeSearch" aria-label="Find a game">🔍</button><div class="kids-in" role="tablist" aria-label="Who is playing">${KIDS.map(id => `<button class="kid ${id === ROOT.cur ? 'sel' : ''}" data-k="${id}" role="tab" aria-selected="${id === ROOT.cur}"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.label || ROOT.profiles[id].settings.name)}</button>`).join('')}</div><button class="ibtn kb-ic" id="homeGear" aria-label="For grown-ups">⚙️</button></div>
+const kidsBar = () => `<div class="kids"><div class="kids-top"><button class="ibtn kb-ic" id="homeSearch" aria-label="Find a game">🔍</button><div class="kids-in" role="tablist" aria-label="Who is playing">${KIDS.map(id => `<button class="kid ${id === ROOT.cur ? 'sel' : ''}" data-k="${id}" role="tab" aria-selected="${id === ROOT.cur}"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.label || ROOT.profiles[id].settings.name)}</button>`).join('')}</div>${GUEST ? '' : "<button class=\"ibtn kb-ic\" id=\"homePult\" aria-label=\"Family control panel\">👑</button>"}<button class="ibtn kb-ic" id="homeGear" aria-label="For grown-ups">⚙️</button></div>
   <div class="kids-fam"><button class="fam-chip" id="famChip" aria-label="Families: switch or add"><span class="emo">🏠</span>${esc(fam().name)}</button>
   <button class="fam-chip inv" id="invChip"><span class="emo">📨</span>Invite</button>
   <button class="fam-chip" id="worldChip" aria-label="Where our family lives"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button>
@@ -5281,7 +5286,7 @@ const rid = (n = 8) => { const a = new Uint8Array(n); crypto.getRandomValues(a);
 // the first links (Nina and Sasha, Sava) had no names and still work
 const GUEST_KEY = 'govorilki-guest';
 const OLD_GRANDS = { nina: ['Бабушка Нина', true], sasha: ['Дедушка Саша', false] };
-let GUEST = null, GUEST_OFF = false, HASH_GAME = null, PULT_HASH = null;
+let GUEST = null, GUEST_OFF = false, HASH_GAME = null, PULT_HASH = null, PULT_BOOTED = false;
 try {
   const h = location.hash, arg = k => { const m = h.match(new RegExp('[#&]' + k + '=([^&]*)')); return m ? decodeURIComponent(m[1]) : ''; };
   // #kids on a phone that once opened a relative's link: back to the children's game for good
@@ -7320,6 +7325,7 @@ function screenAlbum() {
 }
 
 /* ---------- for grown-ups ---------- */
+var PAR_BACK = null;
 function screenParents(focus) {
   newScreen();
   shell("For grown-ups", `<div class="parents">
@@ -7380,7 +7386,7 @@ function screenParents(focus) {
       <li>In the breathing exercises the child really blows, and holds the button with a finger while the breath goes out. Make sure the breath in is through the nose and the shoulders do not rise.</li>
       <li>Praise the effort. Every 5 stars unlock a new sticker.</li>
 `}    </ul></section>
-    </div>`, { guide: false });
+    </div>`, { guide: false, back: PAR_BACK });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   const vs = () => { $('#voiceState').textContent = VOICE ? `Voice: ${VOICE.name}.` : "No English voice has been found on this device yet. On iPhone and iPad: Settings → Accessibility → Spoken Content → Voices → English. On a computer, Chrome sounds best."; };
   vs(); later(vs, 1200);
@@ -10218,10 +10224,10 @@ INTEREST_CAT.forEach(cat => (cat.items || []).forEach(i => { if (Array.isArray(i
 /* ---------- the family control panel: every account of every family on this phone, behind a code ---------- */
 // children: their numbers and their game; adults (grandparents, mum, dad…): when they last opened their link, their link,
 // and their screen exactly as they see it, in a preview that sends nothing and does not tie this phone to them
-var PREVIEW = null;
+var PREVIEW = null, PG_KEY = null;
 const PV_KEYS = [GPROG_KEY, GOUT_KEY, HG_KEY, 'govorilki-guest-here'];
 const pinHash = s => { let h = 5381; for (const c of 'govorilki-pult:' + s) h = (h * 33 + c.charCodeAt(0)) >>> 0; return h.toString(36); };
-function pultOpen() { try { return !!ROOT.pultPin && sessionStorage.getItem('govorilki-pult') === ROOT.pultPin; } catch (e) { return false; } }
+function pultOpen() { if (ROOT.parentPhone) return true; try { return !!ROOT.pultPin && sessionStorage.getItem('govorilki-pult') === ROOT.pultPin; } catch (e) { return false; } }
 function pultLetIn() { try { sessionStorage.setItem('govorilki-pult', ROOT.pultPin); } catch (e) {} }
 function famCodeOf(f) {
   if (!f.code) { f.code = f.id === 'main' && ROOT.fam ? ROOT.fam : rid(15); save(); }
@@ -10235,10 +10241,11 @@ function pultLink(f, g) {
 const pultAgo = at => { const m = Math.round((Date.now() - at) / 60000); return m < 2 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`; };
 function pultKid(f, id) {
   const pr = ROOT.profiles[id], st = pr.settings, last = (pr.recent || [])[0], sk = streakOf(pr), wl = weekLessons(pr), she = st.gender === 'f';
-  return `<button class="pv-row" data-kid="${id}" data-fam="${f.id}"><span class="pv-face">${kidFace(id)}</span>
+  return `<div class="pv-ad kid"><button class="pv-row" data-kid="${id}" data-fam="${f.id}"><span class="pv-face">${kidFace(id)}</span>
     <span class="pv-t"><b>${esc(st.name)}${st.age ? `, ${st.age} ${plural(st.age, ["year", "years", "years"])}` : ''}</b>
       <small>⭐ ${pr.stars} · 🔥 ${sk} ${plural(sk, ["day", "days", "days"])} in a row · 📚 ${wl} ${plural(wl, ["lesson", "lessons", "lessons"])} this week</small>
-      <small>${last ? `Last: ${esc(last[0])}, ${pultAgo(last[2])}` : she ? "Has not played yet" : "Has not played yet"}</small></span><span class="g-go">▶</span></button>`;
+      <small>${last ? `Last: ${esc(last[0])}, ${pultAgo(last[2])}` : she ? "Has not played yet" : "Has not played yet"}</small></span><span class="g-go">▶</span></button>
+    <div class="pv-acts"><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Settings, interests, voice</button></div></div>`;
 }
 function pultAdult(f, g) {
   const at = (f.seen || {})[g.id], she = !!g.she, games = Object.values(gamesAll()).filter(x => x.opp === g.id).length;
@@ -10264,21 +10271,35 @@ async function pultPoll() {
   return ch;
 }
 function screenPult() {
-  if (!pultOpen()) { pultGate(); return; }
-  const t = newScreen(), fs = Object.values(ROOT.families).sort((a, b) => (b.id === ROOT.curFam) - (a.id === ROOT.curFam));
-  const draw = () => `<p class="muted">Everyone from your families on this phone who plays or visits. Tap a child to open their game. «👀 Screen» shows what an adult sees on their own phone.</p>
+  if (!pultOpen()) { if (!ROOT.pultPin && ROOT.parentPhone === undefined) pultWho(); else pultGate(); return; }
+  const t = newScreen(), fs = Object.values(ROOT.families).filter(f => !f.guest).sort((a, b) => (b.id === ROOT.curFam) - (a.id === ROOT.curFam));
+  const draw = () => `${ROOT.parentPhone === undefined ? `<section class="psec pv-who"><h2>📱 Is this your phone?</h2>
+      <p>If it is, the app will open with the control panel and will not ask for the code here. If the children play on this phone, keep the code.</p>
+      <div class="prow-btns"><button class="big" id="pvMine">Yes, it is my phone</button><button class="big ghost" id="pvKids">The children play here</button></div></section>` : ''}
+    <p class="muted">Everyone from your families on this phone who plays or visits. Tap a child to open their game. «👀 Screen» shows what an adult sees on their own phone.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">There is no family on this phone yet.</p>"}
-    <section class="psec"><h2>Control panel</h2><div class="prow-btns"><button class="big ghost" id="pvPin">🔑 Change the code</button><button class="big ghost" id="pvLock">🔒 Lock the panel</button></div>
-    <p class="muted">The panel opens from «For grown-ups» or with the link ${esc(SITE)}#pult — it also works on a phone that has a grandparent's entry open.</p></section>`;
-  shell("Family control panel", `<div class="pult" id="pult">${draw()}</div>`, { back: () => screenParents(), guide: false, raw: true });
+    <section class="psec"><h2>For grown-ups</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ All settings</button><button class="big ghost" id="pvInv">📨 Invite family</button><button class="big ghost" id="pvFams">🏠 Families</button><button class="big ghost" id="pvLg">🏆 Family league</button></div></section>
+    <section class="psec"><h2>This phone</h2>${ROOT.parentPhone
+      ? `<p>📱 This is your phone: the app opens with the control panel, no code needed. The panel is always under the 👑 button at the top of the main screen.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 The children play here: lock the panel with a code</button></div>`
+      : `<p>The panel is locked with a code. Open it with the 👑 button at the top of the main screen${ROOT.parentPhone === false ? '' : " or from «For grown-ups»"}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 This is my phone: no code</button><button class="big ghost" id="pvPin">🔑 Change the code</button><button class="big ghost" id="pvLock">🔒 Lock the panel</button></div>`}</section>`;
+  shell("Family control panel", `<div class="pult" id="pult">${draw()}</div>`, { back: () => goHome(), guide: false, raw: true });
   const box = $('#pult');
+  const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
   const bind = () => {
-    $('#pvPin').onclick = () => { sfx.pop(); pultGate(true); };
-    $('#pvLock').onclick = () => { sfx.pop(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} goHome(); };
+    on1('pvPin', () => pultGate(true));
+    on1('pvLock', () => { try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} goHome(); });
+    on1('pvMine', () => { ROOT.parentPhone = true; save(); screenPult(); });
+    on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
+    on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
+    on1('pvInv', () => screenInvite(screenPult));
+    on1('pvFams', () => screenFamilies());
+    on1('pvLg', () => screenLeague());
   };
   bind();
   box.onclick = e => {
     const k = e.target.closest('[data-kid]'), v = e.target.closest('[data-view]'), l = e.target.closest('[data-link]'), a = e.target.closest('[data-add]');
+    const ks = e.target.closest('[data-kset]');
+    if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; screenParents(); return; }
     if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
     if (a) { sfx.pop(); useFamily(a.dataset.add); P = ROOT.profiles[ROOT.cur] || P; famPeople(); save(); screenFamilyEdit(a.dataset.add); return; }
@@ -10294,20 +10315,43 @@ function screenPult() {
   };
   pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); } });
 }
+// the first visit: the parent's own phone opens with the panel and needs no code; a phone the children play on gets a code
+function pultWho() {
+  newScreen();
+  shell("Family control panel", `<div class="pult-gate">
+    <p class="lead">Whose phone is this?</p>
+    <button class="big" id="pwMine">📱 Mine: open with the panel, no code</button>
+    <button class="big ghost" id="pwKids">🧒 The children play here: lock the panel with a code</button>
+    <p class="muted">You can change this at the bottom of the panel.</p></div>`, { back: () => goHome(), guide: false, raw: true });
+  $('#pwMine').onclick = () => { sfx.pop(); ROOT.parentPhone = true; save(); screenPult(); };
+  $('#pwKids').onclick = () => { sfx.pop(); ROOT.parentPhone = false; save(); pultGate(true); };
+}
 // the code: made up once on this phone, asked once per visit; four dots and a keypad, like a phone's lock
 function pultGate(change) {
   newScreen();
-  let step = change || !ROOT.pultPin ? 1 : 0, first = '', code = '';
+  let step = change || !ROOT.pultPin ? 1 : 0, first = '', code = '', ask = null;
   shell("Family control panel", `<div class="pult-gate">
     <p class="lead pg-t" id="pgT"></p>
     <div class="pg-dots" id="pgD"></div>
     <p class="pg-out" id="pgOut" aria-live="polite"></p>
+    <p class="pg-sum" id="pgSum" hidden></p>
     <div class="pg-pad" id="pgPad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'del'].map(k => k === '' ? '<span></span>' : k === 'del' ? "<button class=\"pg-k del\" data-k=\"del\" aria-label=\"Delete\">⌫</button>" : `<button class="pg-k" data-k="${k}">${k}</button>`).join('')}</div>
-  </div>`, { back: () => screenParents(), guide: false, raw: true });
-  const T = ["Enter the panel code", "Choose a 4-digit code — it keeps the panel closed to the children", "Enter the same code again"];
-  const draw = () => { $('#pgT').textContent = T[step]; $('#pgD').innerHTML = [0, 1, 2, 3].map(i => `<i class="${i < code.length ? 'on' : ''}"></i>`).join(''); };
+    ${step ? '' : "<button class=\"link-btn\" id=\"pgForgot\">Forgot the code?</button>"}
+  </div>`, { back: () => goHome(), guide: false, raw: true });
+  const T = ["Enter the panel code", "Choose a 4-digit code — it keeps the panel closed to the children", "Enter the same code again", "To choose a new code, solve a sum for grown-ups"];
+  const draw = () => {
+    $('#pgT').textContent = T[step]; const sm = $('#pgSum'); sm.hidden = step !== 3;
+    if (step === 3) { sm.textContent = `${ask[0]} × ${ask[1]} = ${code || '?'}`; $('#pgD').innerHTML = ''; return; }
+    $('#pgD').innerHTML = [0, 1, 2, 3].map(i => `<i class="${i < code.length ? 'on' : ''}"></i>`).join('');
+  };
+  const newAsk = () => { ask = [23 + Math.floor(Math.random() * 67), 23 + Math.floor(Math.random() * 67)]; };
+  const fg = $('#pgForgot'); if (fg) fg.onclick = () => { sfx.pop(); newAsk(); step = 3; code = ''; fg.hidden = true; $('#pgOut').textContent = ''; draw(); };
   const say = x => { $('#pgOut').textContent = x; };
   const done = () => {
+    if (step === 3) {
+      if (+code === ask[0] * ask[1]) { code = ''; step = 1; say(''); draw(); return; }
+      newAsk(); code = ''; say("Not quite. Here is another one."); draw(); return;
+    }
     if (step === 1) { first = code; code = ''; step = 2; draw(); return; }
     if (step === 2) {
       if (code !== first) { first = ''; code = ''; step = 1; say("The codes do not match. Choose the code again."); wiggle($('#pgD')); draw(); return; }
@@ -10317,13 +10361,16 @@ function pultGate(change) {
     pultLetIn(); sfx.pop(); screenPult();
   };
   const key = k => {
-    if (code.length === 4) return; // the code is being checked
+    const need = step === 3 ? String(ask[0] * ask[1]).length : 4;
+    if (code.length === need) return; // the code is being checked
     if (k === 'del') code = code.slice(0, -1); else code += k;
     sfx.tick(); say(''); draw();
-    if (code.length === 4) later(done, 200);
+    if (code.length === need) later(done, 200);
   };
   $('#pgPad').onclick = e => { const b = e.target.closest('[data-k]'); if (b) key(b.dataset.k); };
-  const onKey = e => { if (!document.getElementById('pgPad')) { document.removeEventListener('keydown', onKey); return; } if (/^\d$/.test(e.key)) key(e.key); else if (e.key === 'Backspace') key('del'); };
+  // one keyboard listener at a time, however often the code screen opens
+  if (PG_KEY) document.removeEventListener('keydown', PG_KEY);
+  const onKey = PG_KEY = e => { if (!document.getElementById('pgPad')) { document.removeEventListener('keydown', onKey); PG_KEY = null; return; } if (/^\d$/.test(e.key)) key(e.key); else if (e.key === 'Backspace') key('del'); };
   document.addEventListener('keydown', onKey);
   draw();
 }
