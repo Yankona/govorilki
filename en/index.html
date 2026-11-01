@@ -1265,6 +1265,11 @@ body.quest .fam-ok{color:#7BE0A0}
 .st-step{flex:none;width:40px;height:40px;border:0;border-radius:12px;background:var(--paper);font:900 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
 .st-step.done{background:var(--t-green)}.st-step.sel{outline:3px solid var(--sea)}.st-step[disabled]{opacity:.45}
 .st-name{margin:0;font:700 17px/1.35 var(--f-body);text-align:center}
+.st-intro{display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--paper);border-radius:22px;padding:16px 14px;text-align:center;width:100%;box-shadow:0 5px 0 var(--line-strong)}
+.st-intro p{margin:0;font:700 18px/1.4 var(--f-body)}.st-ex b{font-size:24px;color:var(--sea)}.st-how{font-size:15px!important;color:var(--ink-soft)}
+.st-play{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.st-play[hidden],.st-intro[hidden]{display:none!important}
+.quest .st-intro{background:#20284A}
 .st-q{font:900 clamp(30px,8vw,46px)/1.2 var(--f-body);text-align:center;min-height:1.3em}
 .st-dots{letter-spacing:4px;font-size:30px;color:var(--sea);word-break:break-all}
 .st-right{color:var(--leaf)}
@@ -1278,6 +1283,34 @@ body.quest .fam-ok{color:#7BE0A0}
 .mp-card.rec{outline:3px solid #F5B400}.mp-rec{position:absolute;top:8px;right:12px;font-size:22px}
 .mp-arrow{text-align:center;font-size:22px}
 .art{display:flex;flex-direction:column;gap:10px}
+.art-v{gap:8px}
+.av-wrap{position:relative}
+.av-arr{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;border:0;border-radius:14px;background:rgba(255,255,255,.82);color:var(--ink);font:900 34px/1 var(--f-body);box-shadow:0 3px 10px rgba(0,0,0,.25);cursor:pointer}
+.av-arr.l{left:6px}.av-arr.r{right:6px}
+.art-v{overflow-x:hidden}
+.av-pic{position:relative;display:block;width:100%;border:0;padding:0;background:#222;border-radius:16px;overflow:hidden;cursor:zoom-in}
+.av-pic img{display:block;width:100%;height:calc(100svh - 330px);min-height:200px;max-height:62vh;object-fit:contain}
+.av-zoom{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.45);color:#fff;border-radius:12px;padding:2px 6px;font-size:16px}
+.av-info .art-t{margin:0;font:800 20px/1.2 var(--f-body)}.av-info .art-a{margin:2px 0 0;font-size:14px}
+.av-bar{position:sticky;bottom:0;z-index:4;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--sky) 30%)}
+.av-bar .ibtn{width:52px;height:52px}.av-bar .ibtn.sel{background:#FFE1E8}
+.av-bar .big{min-height:56px;padding:8px 20px;font-size:21px}
+.art.al{display:flex;flex-direction:column;gap:8px;height:calc(100svh - 92px)}
+.al .al-pic{flex:1;min-height:0;display:block;width:100%;border:0;padding:0;background:#222;border-radius:16px;position:relative;overflow:hidden;cursor:zoom-in}
+.al .al-pic img{width:100%;height:100%;max-height:none;object-fit:contain;border-radius:0}
+.al-card{flex:none;background:var(--paper);border-radius:20px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -2px 14px rgba(0,0,0,.08)}
+.al-dots{display:flex;gap:6px;justify-content:center;margin-bottom:6px}.al-dots i{width:9px;height:9px;border-radius:50%;background:var(--line-strong)}.al-dots i.done{background:var(--leaf)}.al-dots i.now{background:var(--tiger);transform:scale(1.3)}
+.al-card .al-q{display:flex;gap:8px;align-items:flex-start;margin:0 0 8px;font:800 18px/1.35 var(--f-body);text-align:left}.al-card .al-q .emo{font-size:24px;flex:none}
+.al-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.al-opts .pick-b{font-size:15px;padding:8px 6px;min-height:46px}
+.al-opts .pick-b.ok{background:#D6F5E0;box-shadow:0 3px 0 #2FA865}.al-opts .pick-b.no{background:#FFD9DC}
+.al-w{margin:8px 0 0;font:700 16px/1.4 var(--f-body)}
+.al-hint{margin:0;text-align:center;font:800 17px var(--f-body);color:var(--sea)}
+.al-card .og-btns{margin-top:8px}
+.art-fs{position:fixed;inset:0;z-index:70;background:#111;overflow:auto;-webkit-overflow-scrolling:touch}
+.art-fs-in img{display:block;width:200%;max-width:none;height:auto}
+@media (orientation:landscape){.art-fs-in img{width:150%}}
+.art-fs-x{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:71}
+.quest .av-bar{background:linear-gradient(transparent,#141834 30%)}.quest .al-card{background:#20284A}
 .art-note{background:var(--paper);border-radius:14px;padding:8px 12px}
 .art-note b{font:800 16px var(--f-body)}.art-note p{margin:4px 0 0;font:600 16px/1.45 var(--f-body)}
 .art-how{display:flex;flex-direction:column;gap:8px}
@@ -4511,9 +4544,9 @@ function screenSprint() {
   let task = mathTask(), input = '', score = 0, combo = 0, run = false, stop = null;
   shell("Maths sprint", `<div class="sprint">
       <div class="sp-hud"><span class="sp-time" id="spT">1:00</span><span>Solved: <b id="spS">0</b></span><span id="spC"></span></div>
+      <button class="big" id="spGo">${ICON.play}Start</button>
       <div class="sp-q" id="spQ">${task.q} = <span id="spA">?</span></div>
       <div class="keypad" id="kp">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 'del', 0, 'ok'].map(k => `<button class="kp-k ${k === 'ok' ? 'ok' : ''}" data-k="${k}">${k === 'del' ? '⌫' : k === 'ok' ? 'OK' : k}</button>`).join('')}</div>
-      <button class="big" id="spGo">${ICON.play}Start</button>
       <p class="lead" id="spBest">${P.mathBest ? `Record: ${P.mathBest} in a minute` : "No record yet"}</p>
     </div>`);
   talk("Maths sprint! Adding, taking away, multiplying and dividing. How many sums can you solve in a minute?");
@@ -4525,7 +4558,8 @@ function screenSprint() {
     task = mathTask(); input = ''; show();
   }
   $('#kp').onclick = e => {
-    const b = e.target.closest('.kp-k'); if (!b || !run) return;
+    const b = e.target.closest('.kp-k'); if (!b) return;
+    if (!run) { if (!stop && $('#spGo')) $('#spGo').click(); return; }
     const k = b.dataset.k;
     if (k === 'ok') submit(); else if (k === 'del') { input = input.slice(0, -1); show(); } else if (input.length < 3) { input += k; show(); }
   };
@@ -9391,11 +9425,13 @@ INTEREST_CAT.forEach(c => (c.items || []).forEach(i => { if (Array.isArray(i.til
    names in the page's language. The list (art/art-<lang>.json) is loaded when the museum is opened; the pictures come
    from Wikimedia Commons, the story about a painting from Wikipedia in the page's language. A painting of the day,
    museums, painters, «Мой музей» (the ones the child liked) and a quiz. ---------- */
-const ART = { data: null, load: null, notes: {} };
+const ART = { data: null, load: null, notes: {}, tours: {} };
 function artLoad() {
   if (ART.load) return ART.load;
   // what to look at and what is special, for the most famous paintings (written for children, in each language)
   fetch(SITE_ROOT + 'art/notes-' + LANG + '.json').then(r => r.ok ? r.json() : {}).then(n => { ART.notes = n || {}; }).catch(() => {});
+  // a short tour of every painting: what to find, the feeling, a question, the secret
+  fetch(SITE_ROOT + 'art/tours-' + LANG + '.json').then(r => r.ok ? r.json() : {}).then(n => { ART.tours = n || {}; }).catch(() => {});
   ART.load = fetch(SITE_ROOT + 'art/art-' + LANG + '.json').then(r => r.ok ? r.json() : Promise.reject(r.status)).then(d => {
     ART.data = { m: d.m, p: d.p.map(([q, t, a, y, m, f, w, l], i) => ({ q, t, a, y, m, f, w, l, i })) };
     return ART.data;
@@ -9410,7 +9446,8 @@ const artThumbs = list => `<div class="art-grid">${list.map(x => `<button class=
 // the story of a painting: what we know, and the first sentences of its Wikipedia article in the page's language
 async function artStory(x) {
   let s = `«${x.t}». ` + (x.a ? `Artist: ${x.a}. ` : '') + (x.y ? `Year: ${x.y > 0 ? x.y : -x.y + " BC"}. ` : '') + (artMus(x) ? `Museum: ${artMus(x)}.` : '');
-  const nt = ART.notes[x.q];
+  const tr = ART.tours[x.q], nt = ART.notes[x.q];
+  if (tr) return s + ' ' + tr.s + ' ' + tr.f[0];
   if (nt) return s + ' ' + nt[1] + ' ' + nt[0];
   if (x.w) {
     try {
@@ -9475,28 +9512,6 @@ function screenMuseum(tab = 'day', arg = null) {
     }
   }, () => { if (t === tok) $('#artBox').innerHTML = "<p class=\"lead\">To open the museum you need the internet. Try again when you have it.</p>"; });
 }
-function screenArtView(x, list, back) {
-  const t = newScreen(), my = artMy();
-  if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
-  const k = list.indexOf(x), prev = list[(k - 1 + list.length) % list.length], next = list[(k + 1) % list.length];
-  const liked = () => my.likes.includes(x.q);
-  shell("World Museum", `<div class="art art-v">
-      <a class="art-big" href="${artImg(x.f, 1920)}" target="_blank" rel="noopener"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"></a>
-      <h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p>
-      ${ART.notes[x.q] ? `<div class="art-note"><b>👀 What to look at</b><p>${esc(ART.notes[x.q][0])}</p></div><div class="art-note"><b>✨ What’s the secret</b><p>${esc(ART.notes[x.q][1])}</p></div>` : ''}
-      <div class="og-btns"><button class="big" id="avTell">${ICON.speaker}Tell me</button><button class="big ghost" id="avLook">👀 Look closely</button><button class="chip ${liked() ? 'sel' : ''}" id="avLike">❤️</button><button class="chip" id="avDraw">🖌️ I’ll draw it too</button></div>
-      <p class="art-story" id="avStory"></p>
-      <div class="og-btns">${list.length > 1 ? `<button class="chip" id="avPrev">◀</button><button class="chip" id="avNext">▶</button>` : ''}
-        ${x.w ? `<a class="chip" href="https://${LANG}.wikipedia.org/wiki/${encodeURIComponent(x.w)}" target="_blank" rel="noopener">Wikipedia ↗</a>` : ''}</div>
-      <p class="art-src">Image: Wikimedia Commons</p>
-    </div>`, { back });
-  $('#avTell').onclick = async () => { sfx.pop(); $('#avStory').textContent = '…'; const s = await artStory(x); if (t !== tok) return; $('#avStory').textContent = s; talk(s); };
-  $('#avLike').onclick = () => { sfx.magic(); my.likes = liked() ? my.likes.filter(q => q !== x.q) : [x.q, ...my.likes]; save(); $('#avLike').classList.toggle('sel', liked()); if (liked()) talk("The painting is now in your museum!"); };
-  $('#avDraw').onclick = () => { sfx.pop(); screenPaint(); };
-  $('#avLook').onclick = () => { sfx.pop(); screenArtLook(x, () => screenArtView(x, list, back)); };
-  if ($('#avPrev')) { $('#avPrev').onclick = () => { sfx.tick(); screenArtView(prev, list, back); }; $('#avNext').onclick = () => { sfx.tick(); screenArtView(next, list, back); }; }
-  talk(`“${x.t}”. ${x.a ? x.a + '.' : ''} Tap “Tell me” and I will tell you about this painting.`);
-}
 // how to look at any painting: five simple secrets, then a walk through one painting step by step
 const ART_HOW = [
   ['🔍', "First, just look", "Take your time! Look at the painting for a whole minute, like a detective, and find three things you did not notice at first."],
@@ -9505,36 +9520,107 @@ const ART_HOW = [
   ['😊', "Guess the mood", "A painting can be cheerful, sad, calm or amazing. There is no right answer: it speaks to everyone in its own way."],
   ['🎬', "Bring the painting to life", "Imagine what happened a minute before and what will happen next. Every painting is like a frame from a cartoon!"]
 ];
+// the painting: the picture and the main buttons on one screen; the notes and the story below for whoever scrolls
+function artFull(x) {
+  const ov = document.createElement('div'); ov.className = 'art-fs';
+  ov.innerHTML = `<button class="ibtn art-fs-x" aria-label="Close">✕</button><div class="art-fs-in"><img src="${artImg(x.f, 1920)}" alt="${esc(x.t)}"></div>`;
+  document.body.append(ov); sfx.pop();
+  ov.onclick = e => { if (e.target.closest('.art-fs-x') || e.target === ov) ov.remove(); };
+}
+function screenArtView(x, list, back) {
+  const t = newScreen(), my = artMy(), tr = ART.tours[x.q], nt = ART.notes[x.q];
+  if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+  const k = list.indexOf(x), prev = list[(k - 1 + list.length) % list.length], next = list[(k + 1) % list.length];
+  const liked = () => my.likes.includes(x.q);
+  const look = tr ? tr.f[0] : nt ? nt[0] : '', secret = tr ? tr.s : nt ? nt[1] : '';
+  shell("World Museum", `<div class="art art-v">
+      <div class="av-wrap"><button class="av-pic" id="avPic" aria-label="Open the whole painting"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"><span class="av-zoom">🔍</span></button>
+        ${list.length > 1 ? `<button class="av-arr l" id="avPrev" aria-label="Previous">‹</button><button class="av-arr r" id="avNext" aria-label="Next">›</button>` : ''}</div>
+      <div class="av-info"><h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p></div>
+      <div class="av-bar">
+        <button class="big" id="avLook">👀 Look closely</button>
+        <button class="ibtn" id="avTell" aria-label="Tell me">${ICON.speaker}</button>
+        <button class="ibtn ${liked() ? 'sel' : ''}" id="avLike" aria-label="I like it">❤️</button>
+      </div>
+      ${look ? `<div class="art-note"><b>👀 What to look at</b><p>${esc(look)}</p></div>` : ''}
+      ${secret ? `<div class="art-note"><b>✨ The secret</b><p>${esc(secret)}</p></div>` : ''}
+      <p class="art-story" id="avStory"></p>
+      <div class="og-btns"><button class="chip" id="avDraw">🖌️ I will paint it too</button>${x.w ? `<a class="chip" href="https://${LANG}.wikipedia.org/wiki/${encodeURIComponent(x.w)}" target="_blank" rel="noopener">Wikipedia ↗</a>` : ''}</div>
+      <p class="art-src">Image: Wikimedia Commons</p>
+    </div>`, { back, guide: false });
+  $('#avPic').onclick = () => artFull(x);
+  $('#avLook').onclick = () => { sfx.pop(); screenArtLook(x, () => screenArtView(x, list, back)); };
+  $('#avTell').onclick = async () => { sfx.pop(); $('#avStory').textContent = '…'; const s = await artStory(x); if (t !== tok) return; $('#avStory').textContent = s; talk(s); };
+  $('#avLike').onclick = () => { sfx.magic(); my.likes = liked() ? my.likes.filter(q => q !== x.q) : [x.q, ...my.likes]; save(); $('#avLike').classList.toggle('sel', liked()); if (liked()) talk("The painting is now in your museum!"); };
+  $('#avDraw').onclick = () => { sfx.pop(); screenPaint(); };
+  if ($('#avPrev')) { $('#avPrev').onclick = () => { sfx.tick(); screenArtView(prev, list, back); }; $('#avNext').onclick = () => { sfx.tick(); screenArtView(next, list, back); }; }
+  talk(`«${x.t}». ${x.a ? x.a + '.' : ''} Tap «Look closely» and I will show you what is interesting in it.`);
+}
+// a tour of one painting: the picture stays on top, one step at a time in the card below
 function screenArtLook(x, back) {
-  const t = newScreen();
-  shell("Look closely at the painting", `<div class="art al"><div class="al-pic" id="alPic"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"></div>
-      <p class="art-a"><b>${esc(x.t)}</b> · ${esc(artLine(x))}</p><div id="alStep"></div></div>`, { back });
-  const step = $('#alStep'), nt = ART.notes[x.q];
-  const steps = [
-    { q: "What do you see? Say three things in the painting out loud.", say: true },
-    { q: "What are the main colours here?", opts: [['☀️', "Warm"], ['💧', "Cold"], ['🌈', "Both"]], a: "Warm colours make a painting happy and cosy, cold ones make it calm. And together they argue and play!" },
-    { q: "Find the brightest spot and tap it.", tap: true, a: "Great! That is exactly where the artist wanted you to look first." },
-    { q: "What is the mood of the painting?", opts: [['😊', "Happy"], ['😌', "Calm"], ['😢', "Sad"], ['😮', "Amazing"]], a: "There is no right answer: a painting speaks to everyone in its own way. I think so too!" },
-    { q: "Imagine: what happened a minute before? And what will happen next?", say: true }
+  const t = newScreen(), tr = ART.tours[x.q], nt = ART.notes[x.q];
+  const steps = tr ? [
+    { k: 'find', e: '🔍', q: tr.f[0] }, { k: 'find', e: '🔍', q: tr.f[1] },
+    { k: 'pick', e: '💭', q: tr.m.q, o: tr.m.o, a: tr.m.a, w: tr.m.w },
+    { k: 'pick', e: '🤔', q: tr.x.q, o: tr.x.o, a: tr.x.a, w: tr.x.w },
+    { k: 'read', e: '✨', q: tr.s },
+    { k: 'say', e: '🎬', q: tr.i }
+  ] : [
+    { k: 'say', e: '🔍', q: "What do you see? Say three things in the painting out loud." },
+    { k: 'tap', e: '💡', q: "Find the brightest spot and tap it.", w: "That is exactly where the painter wanted you to look first." },
+    { k: 'pick', e: '💭', q: "What is the mood of the painting?", o: ["Happy", "Calm", "Sad"], a: -1, w: "There is no wrong answer: a painting speaks to everyone in its own way." },
+    ...(nt ? [{ k: 'read', e: '👀', q: nt[0] }, { k: 'read', e: '✨', q: nt[1] }] : []),
+    { k: 'say', e: '🎬', q: "Imagine: what happened a minute before? And what will happen next?" }
   ];
-  if (nt) steps.push({ q: '👀 ' + nt[0], ok: true }, { q: '✨ ' + nt[1], ok: true });
-  let k = 0;
+  shell("Look closely at the painting", `<div class="art al">
+      <button class="al-pic" id="alPic" aria-label="Open the whole painting"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"></button>
+      <div class="al-card" id="alCard"><div class="al-dots" id="alDots"></div><div id="alStep"></div></div>
+    </div>`, { back, guide: false });
+  const card = $('#alStep'), dots = $('#alDots');
+  let k = 0, busy = false;
+  const said = () => G("Found it!", "Found it!");
   async function show() {
-    if (k >= steps.length) { finish({ key: 'art-look', stars: 3, line: "You looked at" + G("", '') + " the painting like a real art expert!", again: () => screenArtLook(x, back), menu: back }); return; }
+    if (t !== tok) return;
+    if (k >= steps.length) {
+      const my = artMy(); my.toured = my.toured || []; if (!my.toured.includes(x.q)) { my.toured.push(x.q); save(); }
+      finish({ key: 'art-look', stars: 3, line: `You looked at «${x.t}» like a real art expert!${G("", '')}`, again: () => screenArtLook(x, back), menu: back });
+      return;
+    }
+    busy = false;
     const S = steps[k];
-    step.innerHTML = `<p class="al-q">${esc(S.q)}</p>` + (S.opts ? `<div class="picks-g two">${S.opts.map(([e, n]) => `<button class="pick-b" data-o="1">${e} ${n}</button>`).join('')}</div>` : S.ok ? `<button class="big" id="alNext">Next</button>` : S.tap ? '' : '');
-    await talk(S.q); if (t !== tok) return;
-    if (S.say) { await askSaid(G("I named them!", "I named them!"), {}); if (t !== tok) return; sfx.good(); k++; show(); }
+    dots.innerHTML = steps.map((_, i) => `<i class="${i < k ? 'done' : i === k ? 'now' : ''}"></i>`).join('');
+    card.innerHTML = `<p class="al-q"><span class="emo">${S.e}</span>${esc(S.q)}</p>` + (
+      S.k === 'pick' ? `<div class="al-opts">${S.o.map((o, i) => `<button class="pick-b" data-o="${i}">${esc(o)}</button>`).join('')}</div><p class="al-w" id="alW" hidden></p>`
+      : S.k === 'find' ? `<div class="og-btns"><button class="big" id="alOk">${said()}</button></div>`
+      : S.k === 'tap' ? `<p class="al-hint">👆 Tap the painting</p>`
+      : S.k === 'say' ? `<div class="og-btns"><button class="big" id="alOk">${G("I thought of it!", "I thought of it!")}</button></div>`
+      : `<div class="og-btns"><button class="big" id="alOk">Next</button></div>`);
+    talk(S.q);
   }
-  step.onclick = async e => {
-    if (e.target.closest('#alNext')) { sfx.pop(); k++; show(); return; }
-    if (e.target.closest('[data-o]')) { sfx.good(); step.querySelectorAll('[data-o]').forEach(b => b.disabled = true); await talk(steps[k].a); if (t !== tok) return; k++; show(); }
+  const nextStep = () => { if (busy) return; busy = true; sfx.pop(); k++; later(show, 150); };
+  card.onclick = async e => {
+    if (e.target.closest('#alOk')) { nextStep(); return; }
+    if (e.target.closest('#alNext')) { nextStep(); return; }
+    const b = e.target.closest('[data-o]'); if (!b || busy) return;
+    const S = steps[k], i = +b.dataset.o, right = S.a < 0 || i === S.a;
+    busy = true;
+    card.querySelectorAll('[data-o]').forEach(x => { x.disabled = true; if (S.a >= 0 && +x.dataset.o === S.a) x.classList.add('ok'); });
+    if (!right) b.classList.add('no');
+    right ? sfx.good() : sfx.oops();
+    const w = (S.a < 0 ? '' : right ? "Yes! " : `More like «${S.o[S.a]}». `) + S.w;
+    const p = $('#alW'); p.hidden = false; p.textContent = w;
+    card.insertAdjacentHTML('beforeend', `<div class="og-btns"><button class="big" id="alNext">Next</button></div>`);
+    busy = false;
+    await talk(w);
   };
   $('#alPic').onclick = async e => {
-    if (!steps[k] || !steps[k].tap) return;
-    const r = $('#alPic').getBoundingClientRect(), m = document.createElement('span');
-    m.className = 'al-mark'; m.textContent = '✨'; m.style.left = (e.clientX - r.left) + 'px'; m.style.top = (e.clientY - r.top) + 'px'; $('#alPic').append(m);
-    sfx.magic(); await talk(steps[k].a); if (t !== tok) return; k++; show();
+    const S = steps[k];
+    if (S && S.k === 'tap') {
+      const r = $('#alPic').getBoundingClientRect(), m = document.createElement('span');
+      m.className = 'al-mark'; m.textContent = '✨'; m.style.left = (e.clientX - r.left) + 'px'; m.style.top = (e.clientY - r.top) + 'px'; $('#alPic').append(m);
+      sfx.magic(); await talk(S.w); if (t !== tok) return; nextStep(); return;
+    }
+    artFull(x);
   };
   show();
 }
@@ -9750,18 +9836,26 @@ function screenSteps(lv) {
   let k = 0, right = 0, input = '', task = null, t0 = 0, timer = 0, busy = true;
   shell("Step by Step", `<div class="sprint st">
       <div class="st-ladder" id="stLad">${STEPS.map((x, i) => `<button class="st-step ${i + 1 === lv ? 'sel' : ''} ${i + 1 < top ? 'done' : ''}" data-lv="${i + 1}" ${i + 1 > top ? 'disabled' : ''} aria-label="${i + 1}. ${esc(x.n)}">${i + 1 > top ? '🔒' : i + 1 < top ? '✓' : i + 1}</button>`).join('')}</div>
-      <p class="st-name">Step ${lv}: <b>${esc(S.n)}</b> · ⏱️ ${S.t} s</p>
-      <div class="sp-hud"><span>Sum <b id="stK">1</b>/10</span><span>Correct <b id="stOk">0</b></span><span>⏱️ <b id="stT">0</b></span></div>
-      <div class="st-q" id="stQ">?</div>
-      <div class="sp-q">= <span id="stA">?</span></div>
-      ${keypadHTML('stKp')}
-      <button class="big" id="stGo">${ICON.play}Start</button>
+      <p class="st-name">Step ${lv}: <b>${esc(S.n)}</b></p>
+      <div class="st-intro" id="stIntro">
+        <p class="st-goal">🎯 Solve <b>10 sums</b>. You pass the step with <b>9 right</b> in under <b>${S.t} seconds</b>.</p>
+        <p class="st-ex">For example: <b>${(ex => `${ex.q} = ${ex.a}`)(S.g())}</b></p>
+        <p class="st-how">Type the answer with the number buttons and press <b>OK</b>.</p>
+        <button class="big" id="stGo">${ICON.play}Start</button>
+      </div>
+      <div class="st-play" id="stPlay" hidden>
+        <div class="sp-hud"><span>Sum <b id="stK">1</b>/10</span><span>Right <b id="stOk">0</b></span><span>⏱️ <b id="stT">0</b> / ${S.t} s</span></div>
+        <div class="st-q" id="stQ">?</div>
+        <div class="sp-q">= <span id="stA">?</span></div>
+        ${keypadHTML('stKp')}
+      </div>
     </div>`, { back: screenMathPath });
   $('#stLad').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); screenSteps(+b.dataset.lv); };
   const sel = $('#stLad .sel'); if (sel) later(() => sel.scrollIntoView({ inline: 'center', block: 'nearest' }), 50);
   function show() { task = S.g(); input = ''; $('#stQ').innerHTML = task.q; $('#stA').textContent = '?'; $('#stK').textContent = k + 1; }
   function tick() { if (t !== tok || busy) return; $('#stT').textContent = Math.floor((performance.now() - t0) / 1000); timer = setTimeout(tick, 250); }
-  $('#stGo').onclick = () => { sfx.pop(); $('#stGo').hidden = true; busy = false; t0 = performance.now(); show(); tick(); talk(task.say || "Off we go! Solve it and press OK."); };
+  const start = () => { if (!busy || t0) return; sfx.pop(); $('#stIntro').hidden = true; $('#stPlay').hidden = false; busy = false; t0 = performance.now(); show(); tick(); talk(task.say || "Off we go! Solve it and press OK."); };
+  $('#stGo').onclick = start;
   $('#stKp').onclick = e => {
     const b = e.target.closest('[data-k]'); if (!b || busy) return; const key = b.dataset.k; sfx.tick();
     if (key === 'del') input = input.slice(0, -1);
@@ -9784,7 +9878,7 @@ function screenSteps(lv) {
     const line = pass ? `Step passed: ${right} out of 10 in ${secs} s!${opened ? ` Step ${lv + 1} unlocked: ${STEPS[lv].n.replace(/[?!.]$/, '')}.` : ''}` : right >= 9 ? `${right} out of 10 correct! Now a little faster: you need to finish within ${S.t} s, and it took ${secs} s.` : `${right} out of 10. To pass a step you need 9 correct. Let’s try again!`;
     finish({ key: 'steps', stars: pass ? 3 : right >= 7 ? 2 : 1, line, again: () => screenSteps(opened ? lv + 1 : lv), menu: screenMathPath });
   }
-  talk(`Step ${lv}: ${S.n}. Ten sums: you need to get nine right in ${S.t} seconds. Tap “Start”.`);
+  talk(`Step ${lv}: ${S.n}. Solve ten sums. Get nine right in under ${S.t} seconds and the next step opens. Tap «Start».`);
 }
 
 /* the path: where the child is on each of the three steps, and which one fits the age */
