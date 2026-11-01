@@ -1652,8 +1652,13 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .pv-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}.pv-t b{font-size:17px}.pv-t small{font-size:14px;color:var(--ink-soft);line-height:1.3}
 .pv-ad{display:flex;flex-direction:column;gap:8px;border-radius:20px;padding:10px 12px;background:var(--t-lilac);box-shadow:0 4px 0 var(--line)}
 .pv-acts{display:flex;gap:8px;flex-wrap:wrap}.pv-url{word-break:break-all;font-size:12px}
-.pult-gate{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,420px);margin:0 auto;text-align:center}
-.pg-in{width:200px;font:800 32px/1 var(--f-body);letter-spacing:.4em;text-align:center;padding:12px;border-radius:16px;border:3px solid var(--line-strong);background:var(--paper);color:var(--ink)}
+.pult-gate{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,420px);margin:0 auto;padding-top:12px;text-align:center}
+.pg-t{margin:0;min-height:2.6em}
+.pg-dots{display:flex;gap:18px;justify-content:center}.pg-dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--ink-soft);transition:background .15s}.pg-dots i.on{background:var(--ink);border-color:var(--ink)}
+.pg-out{margin:0;min-height:1.3em;color:var(--berry);font:700 16px/1.3 var(--f-body)}
+.pg-pad{display:grid;grid-template-columns:repeat(3,76px);gap:14px;justify-content:center}
+.pg-k{width:76px;height:76px;border-radius:50%;border:0;background:var(--paper);color:var(--ink);font:800 30px/1 var(--f-body);box-shadow:0 4px 0 var(--line-strong);cursor:pointer;touch-action:manipulation}
+.pg-k:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line-strong)}.pg-k.del{background:transparent;box-shadow:none;font-size:26px}
 .pv-bar{position:fixed;z-index:60;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;background:#2A2346;color:#fff;font:700 14px/1.3 var(--f-body)}
 .pv-bar .chip{flex:none;background:#FFC83A;color:#2A2346;box-shadow:none}
 body.pv-on #app{padding-top:52px}
@@ -10284,31 +10289,38 @@ function screenPult() {
   };
   pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); } });
 }
-// the code: made up once on this phone, asked once per visit
+// the code: made up once on this phone, asked once per visit; four dots and a keypad, like a phone's lock
 function pultGate(change) {
   newScreen();
-  const make = change || !ROOT.pultPin;
+  let step = change || !ROOT.pultPin ? 1 : 0, first = '', code = '';
   shell('Пульт семьи', `<div class="pult-gate">
-    <p class="lead">${make ? 'Придумайте код из 4 цифр: он закроет пульт от детей.' : 'Введите код пульта.'}</p>
-    <input id="pgA" class="pg-in" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Код">
-    ${make ? '<input id="pgB" class="pg-in" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Код ещё раз" placeholder="ещё раз">' : ''}
-    <button class="big" id="pgGo">${make ? 'Сохранить код' : 'Открыть'}</button>
-    <p class="muted" id="pgOut"></p></div>`, { back: () => screenParents(), guide: false, raw: true });
-  const A = $('#pgA'), B = $('#pgB'), out = $('#pgOut');
-  [A, B].forEach(x => x && x.addEventListener('input', () => { x.value = x.value.replace(/\D/g, '').slice(0, 4); }));
-  const go = () => {
-    const a = A.value;
-    if (!/^\d{4}$/.test(a)) { out.textContent = 'Нужно 4 цифры.'; return; }
-    if (make) {
-      if (B.value !== a) { out.textContent = 'Коды не совпадают. Введите ещё раз.'; B.value = ''; B.focus(); return; }
-      ROOT.pultPin = pinHash(a); save(); pultLetIn(); sfx.good(); screenPult(); return;
+    <p class="lead pg-t" id="pgT"></p>
+    <div class="pg-dots" id="pgD"></div>
+    <p class="pg-out" id="pgOut" aria-live="polite"></p>
+    <div class="pg-pad" id="pgPad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'del'].map(k => k === '' ? '<span></span>' : k === 'del' ? '<button class="pg-k del" data-k="del" aria-label="Стереть">⌫</button>' : `<button class="pg-k" data-k="${k}">${k}</button>`).join('')}</div>
+  </div>`, { back: () => screenParents(), guide: false, raw: true });
+  const T = ['Введите код пульта', 'Придумайте код из 4 цифр — он закроет пульт от детей', 'Повторите этот код'];
+  const draw = () => { $('#pgT').textContent = T[step]; $('#pgD').innerHTML = [0, 1, 2, 3].map(i => `<i class="${i < code.length ? 'on' : ''}"></i>`).join(''); };
+  const say = x => { $('#pgOut').textContent = x; };
+  const done = () => {
+    if (step === 1) { first = code; code = ''; step = 2; draw(); return; }
+    if (step === 2) {
+      if (code !== first) { first = ''; code = ''; step = 1; say('Коды не совпадают. Придумайте код ещё раз.'); wiggle($('#pgD')); draw(); return; }
+      ROOT.pultPin = pinHash(code); save(); pultLetIn(); sfx.good(); screenPult(); return;
     }
-    if (pinHash(a) !== ROOT.pultPin) { out.textContent = 'Не тот код.'; A.value = ''; sfx.tick(); return; } // no tap guard: an adult's screen
+    if (pinHash(code) !== ROOT.pultPin) { code = ''; say('Не тот код. Попробуйте ещё раз.'); wiggle($('#pgD')); draw(); return; }
     pultLetIn(); sfx.pop(); screenPult();
   };
-  $('#pgGo').onclick = go;
-  [A, B].forEach(x => x && x.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
-  setTimeout(() => { try { A.focus(); } catch (e) {} }, 50);
+  const key = k => {
+    if (code.length === 4) return; // the code is being checked
+    if (k === 'del') code = code.slice(0, -1); else code += k;
+    sfx.tick(); say(''); draw();
+    if (code.length === 4) later(done, 200);
+  };
+  $('#pgPad').onclick = e => { const b = e.target.closest('[data-k]'); if (b) key(b.dataset.k); };
+  const onKey = e => { if (!document.getElementById('pgPad')) { document.removeEventListener('keydown', onKey); return; } if (/^\d$/.test(e.key)) key(e.key); else if (e.key === 'Backspace') key('del'); };
+  document.addEventListener('keydown', onKey);
+  draw();
 }
 // the adult's screen as their phone shows it, with this phone's fresh numbers of the children
 function pultView(fid, gid) {
