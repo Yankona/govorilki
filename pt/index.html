@@ -1687,6 +1687,9 @@ body.pv-on #app{padding-top:52px}
 .pv-who{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
 .pv-ad.kid{padding:0;background:transparent;box-shadow:none}.pv-ad.kid .pv-acts{padding:0 4px}
 .pg-sum{margin:0;font:800 30px/1.2 var(--f-body);color:var(--ink)}
+.ivw,.ivf{display:flex;flex-direction:column;gap:16px;width:min(100%,720px);margin:0 auto}
+.ivf-mode{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ivf .lang-row{display:flex;flex-wrap:wrap;gap:8px}
+.ivf .hg-msg{white-space:pre-wrap;word-break:break-word;margin:0}
 </style>
 </head>
 <body>
@@ -2691,7 +2694,7 @@ function goHome() {
   on('#duoBtn', () => { sfx.pop(); screenDuo(); });
   on('#famChip', () => { sfx.pop(); screenFamilies(); });
   on('#worldChip', () => { sfx.pop(); screenWorld(); });
-  on('#invChip', () => { sfx.pop(); screenInvite(); });
+  on('#invChip', () => { sfx.pop(); screenInviteWho(); });
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
@@ -7354,7 +7357,7 @@ function screenParents(focus) {
       ${(() => { const lg = P.likeG || {}, up = Object.keys(lg).filter(k => lg[k] > 0).map(gameName).filter(Boolean), dn = Object.keys(lg).filter(k => lg[k] < 0).map(gameName).filter(Boolean);
         return up.length || dn.length ? `<p class="muted">${up.length ? "👍 Gosta de: " + esc(up.join(', ')) + '. ' : ''}${dn.length ? "👎 Não gosta de: " + esc(dn.join(', ')) + '.' : ''}</p>` : ''; })()}
       ${(P.battles || []).length ? `<p class="muted">⚔️ Batalhas: ${P.battles.filter(b => b.win).length} vitórias em ${P.battles.length}.</p>` : ''}
-      <div class="prow-btns"><button class="big" id="pultBtn">👑 Painel da família: todas as contas</button><button class="big ghost" id="kidSetup">💛 Interesses e jogos: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Convidar familiares</button><button class="big ghost" id="famEdit">Alterar a família</button><button class="big ghost" id="famAll">Todas as famílias</button><button class="big ghost" id="famLg">🏆 Liga das famílias</button></div>
+      <div class="prow-btns"><button class="big" id="pultBtn">👑 Painel da família: todas as contas</button><button class="big ghost" id="kidSetup">💛 Interesses e jogos: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Convidar familiares</button><button class="big ghost" id="famInvF">👪 Convidar outra família</button><button class="big ghost" id="famEdit">Alterar a família</button><button class="big ghost" id="famAll">Todas as famílias</button><button class="big ghost" id="famLg">🏆 Liga das famílias</button></div>
     </section>
     <section class="psec lang-pick" id="langSec"><h2>🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</section>
     <section class="psec"><h2>Definições: ${esc(P.settings.name)}</h2>
@@ -7443,6 +7446,7 @@ function screenParents(focus) {
   $('#testVoice').onclick = () => say(greet());
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
+  $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
   $('#kidSetup').onclick = () => { sfx.pop(); screenKidSetup(ROOT.cur, { back: screenParents }); };
   $('#famAll').onclick = () => { sfx.pop(); screenFamilies(); };
   $('#pultBtn').onclick = () => { sfx.pop(); screenPult(); };
@@ -7716,10 +7720,11 @@ function importCode(raw) {
 }
 
 /* ---------- the league ---------- */
-let LIGA_HASH = null;
+let LIGA_HASH = null, LIGA_FROM = '';
 try {
-  const m = location.hash.match(/liga=([a-z0-9]{8,24})/);
+  const m = location.hash.match(/liga=([a-z0-9]{8,24})/), tm = location.hash.match(/[#&]t=([^&]*)/);
   if (m) { LIGA_HASH = m[1]; history.replaceState(null, '', location.pathname + location.search); }
+  if (m && tm) LIGA_FROM = cleanS(decodeURIComponent(tm[1]), 24);
 } catch (e) {}
 const league = () => { const f = fam(); return f && f.league || null; };
 function lcache(code) { ROOT.lcache = ROOT.lcache || {}; return ROOT.lcache[code] = ROOT.lcache[code] || {}; }
@@ -7814,17 +7819,16 @@ function screenLeague(join) {
   if (!f) { goHome(); return; }
   if (!f.league || join && join !== f.league.code) { screenLeagueJoin(join); return; }
   const L = f.league; let tab = ROOT.ltab || 'ws';
-  const url = `${SITE}#liga=${L.code}`, msg = "Junte-se à nossa liga nas «Tagarelas»: as crianças competem para ver quem treinou mais esta semana. Abra o link:";
   shell("Liga das Famílias", `<div class="lg">
       <div class="lg-tabs" id="lgTabs" role="tablist">${LTABS.map(([k, n]) => `<button class="chip ${k === tab ? 'sel' : ''}" data-t="${k}" role="tab">${n}</button>`).join('')}</div>
       <p class="lg-sub" id="lgSub"></p>
       <div id="lgBody"></div>
       <div class="fam-card"><h3 class="fam-s">Convidar uma família para a liga</h3>
-        <p class="lead">Envie o link aos pais dos amigos. Código da liga: <b>${L.code}</b></p>${shareRow(msg, url, 'lgShare')}</div>
+        <p class="lead">Envie um convite aos pais dos amigos. Código da liga: <b>${L.code}</b></p><div class="prow-btns"><button class="big" id="lgInv">👪 Convidar uma família</button></div></div>
       <p class="muted lg-note" id="lgNet">A atualizar a tabela…</p>
       <div class="prow-btns"><button class="big ghost" id="lgSet">Alcunhas e definições da liga</button></div>
     </div>`, { guide: false, raw: true });
-  bindShare('lgShare', msg, url, s => { $('#lgNet').textContent = s; });
+  $('#lgInv').onclick = () => { sfx.pop(); screenInviteFamily(() => screenLeague()); };
   const mine = () => new Set(mySnaps(L.code).map(s => s.u));
   const row = (s, i, unit, my) => `<div class="lg-row ${my.has(s.u) ? 'me' : ''}"><span class="lg-pl">${['🥇', '🥈', '🥉'][i] || `<i>${i + 1}</i>`}</span>
       <span class="chip-face">${friendSVG('', s.e)}</span>
@@ -8091,7 +8095,7 @@ function screenWelcome({ liga = '' } = {}) {
       <li><span>👵</span><b>Avós e avôs</b></li>
       <li><span>🏆</span><b>Liga das Famílias e batalhas</b></li>
     </ul>
-    ${liga ? "<p class=\"ob-note\">🏆 A sua família foi convidada para uma liga de famílias. Primeiro criamos a família e depois entramos.</p>" : ''}
+    ${liga ? `<p class="ob-note">🏆 ${LIGA_FROM ? `A família «${esc(LIGA_FROM)}» convida-vos para o Tagarelas e para a sua liga.` : "Foram convidados para uma liga de famílias."} Primeiro criamos a vossa família e depois entramos.</p>` : ''}
     <button class="big" id="obStart">Criar família</button>
     <details class="psec fe-imp"><summary>Já temos progresso de outro telemóvel</summary>
       <textarea id="feImp" rows="3" placeholder="Cole aqui o progresso copiado"></textarea>
@@ -8180,8 +8184,8 @@ function screenObDone({ liga = '' } = {}) {
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1>Pronto!</h1><p>A família «${esc(f.name)}» foi criada. O ecrã principal já está preparado para cada criança.</p></div></header>
     <div class="ob-kids">${f.kids.map(id => { const st = ROOT.profiles[id].settings; return `<div class="ob-kid"><span class="chip-face">${kidFace(id)}</span><span><b>${esc(st.name)}</b>
       <small>sons: ${soundsOf(ROOT.profiles[id]).map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ')}${(st.likes || []).length ? ' · ' + st.likes.map(l => (LIKES.find(x => x.id === l) || {}).e || '').join('') : ''}</small></span></div>`; }).join('')}</div>
-    <button class="big" id="obGo">Começar as lições</button>
-    <button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>${liga ? "Entrar na liga de amigos" : "Liga das Famílias"}</b></span></button>
+    ${liga ? `<button class="big" id="obLeague">🏆 ${LIGA_FROM ? `Entrar na liga da família «${esc(LIGA_FROM)}»` : "Entrar na liga de amigos"}</button><button class="big ghost" id="obGo">Começar as lições</button>`
+      : `<button class="big" id="obGo">Começar as lições</button><button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>Liga das Famílias</b></span></button>`}
     ${f.grands.length ? "<button class=\"big ghost\" id=\"obChess\">📨 Convidar a família</button>" : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
@@ -10298,7 +10302,7 @@ function screenPult() {
       <div class="prow-btns"><button class="big" id="pvMine">Sim, é o meu telemóvel</button><button class="big ghost" id="pvKids">As crianças jogam aqui</button></div></section>` : ''}
     <p class="muted">Todos das suas famílias neste telemóvel que jogam ou visitam. Toque numa criança para abrir o seu jogo. «👀 Ecrã» mostra o que um adulto vê no seu telemóvel.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">Ainda não há nenhuma família neste telemóvel.</p>"}
-    <section class="psec"><h2>Para adultos</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ Todas as definições</button><button class="big ghost" id="pvInv">📨 Convidar a família</button><button class="big ghost" id="pvFams">🏠 Famílias</button><button class="big ghost" id="pvLg">🏆 Liga das famílias</button></div></section>
+    <section class="psec"><h2>Para adultos</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ Todas as definições</button><button class="big ghost" id="pvInv">📨 Convidar a família</button><button class="big ghost" id="pvInvF">👪 Convidar outra família</button><button class="big ghost" id="pvFams">🏠 Famílias</button><button class="big ghost" id="pvLg">🏆 Liga das famílias</button></div></section>
     <section class="psec"><h2>Este telemóvel</h2>${ROOT.parentPhone
       ? `<p>📱 Este é o seu telemóvel: a aplicação abre no painel, sem código. O painel está sempre no botão 👑 no topo do ecrã principal.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 As crianças jogam aqui: fechar o painel com código</button></div>`
       : `<p>O painel está fechado com código. Abra-o com o botão 👑 no topo do ecrã principal${ROOT.parentPhone === false ? '' : " ou em «Para adultos»"}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 Este é o meu telemóvel: sem código</button><button class="big ghost" id="pvPin">🔑 Mudar o código</button><button class="big ghost" id="pvLock">🔒 Fechar o painel</button></div>`}</section>`;
@@ -10312,6 +10316,7 @@ function screenPult() {
     on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
     on1('pvInv', () => screenInvite(screenPult));
+    on1('pvInvF', () => screenInviteFamily(screenPult));
     on1('pvFams', () => screenFamilies());
     on1('pvLg', () => screenLeague());
   };
@@ -10484,6 +10489,83 @@ function guestPlayed(key, stars) {
   const c = { i: rid(8), to, e: '🎮', x, p: '', at: Date.now(), sent: Date.now() };
   relayPostTo(GUEST.fam, { k: 'cheer', i: c.i, to, by: GUEST.who, n: GUEST.name, e: c.e, x, p: '' });
   const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
+}
+
+/* ---------- inviting another family: friends, classmates, neighbours ---------- */
+// the message is ready in the three languages (friends may speak another one than ours); the link opens the main page in
+// the friend's phone language, and with our league code the new family joins our league right after it is made
+const INV_MSG = {
+  en: [RU("Hi! We've been playing Chatterbox: speech, reading, maths, chess, art and music games for children aged 4–12. It's free and works in English, Russian and Portuguese."), RU('Join our family league: the children compete on who practised most this week.'), RU('Open the link:')],
+  ru: [RU('Привет! Мы занимаемся в «Говорилках»: логопедия, чтение, математика, шахматы, живопись и музыка для детей 4–12 лет. Бесплатно, на русском, английском и португальском.'), RU('Присоединяйтесь к нашей лиге семей: дети соревнуются, кто больше занимался за неделю.'), RU('Откройте ссылку:')],
+  pt: [RU('Olá! Andamos a jogar o Tagarelas: fala, leitura, matemática, xadrez, arte e música para crianças dos 4 aos 12 anos. É grátis e funciona em português, inglês e russo.'), RU('Juntem-se à nossa liga de famílias: as crianças competem para ver quem praticou mais esta semana.'), RU('Abram a ligação:')]
+};
+const siteMain = () => EMBEDDED ? 'https://yankona.github.io/govorilki/' : location.origin + SITE_ROOT;
+// whom to invite: our relatives (each with an entry of their own) or another family
+function screenInviteWho(back) {
+  newScreen();
+  shell("Convidar", `<div class="ivw">
+    <button class="lg-cta" id="iwFam"><span class="emo">👪</span><span class="lg-t"><b>Outra família</b><small>amigos, colegas de turma, vizinhos: os filhos deles jogam em casa e a liga mostra quem praticou mais</small></span><span class="g-go">▶</span></button>
+    <button class="lg-cta" id="iwKin"><span class="emo">👵</span><span class="lg-t"><b>Avós e familiares</b><small>cada um tem a sua entrada: vê como estão as crianças, pode elogiá-las, jogar xadrez e os mesmos jogos</small></span><span class="g-go">▶</span></button>
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  $('#iwKin').onclick = () => { sfx.pop(); screenInvite(() => screenInviteWho(back)); };
+  $('#iwFam').onclick = () => { sfx.pop(); screenInviteFamily(() => screenInviteWho(back)); };
+}
+function screenInviteFamily(back) {
+  newScreen();
+  const f = fam(); if (!f) { goHome(); return; }
+  let mode = 'liga', ml = LANG;
+  const code = f.league ? f.league.code : rid(10);
+  shell("Convidar uma família", `<div class="ivf">
+    <div class="lg-hero">${pic('💌')}<div><h2>Outra família</h2><p>Os amigos abrem a ligação, escolhem a língua e criam a sua família — e os filhos podem começar. É tudo grátis.</p></div></div>
+    <section class="psec"><h2>Como convidar</h2>
+      <div class="picks-g ivf-mode" id="ivfMode"><button class="pick-b sel" data-mode="liga">🏆 Para a nossa liga</button><button class="pick-b" data-mode="app">🔗 Só recomendar a app</button></div>
+      <p class="muted" id="ivfModeTx"></p>
+      <label class="sw" id="ivfOkRow" for="ivfOk"><input id="ivfOk" type="checkbox" ${f.league ? 'checked disabled' : ''}>Sou pai/mãe e aceito mostrar na liga os nomes das crianças (podem ser alcunhas), o avatar, a idade e os pontos</label>
+    </section>
+    <section class="psec"><h2>Mensagem</h2>
+      <label class="prow" for="ivfTeam">Como assinar o convite (os amigos veem este nome no convite e na liga) <input id="ivfTeam" type="text" maxlength="24" autocomplete="off" value="${esc(f.league && f.league.team || f.name)}"></label>
+      <div class="lang-row" id="ivfLang">${LANGS.map(([l, n, fl]) => `<button class="pick-b lang-b ${l === ml ? 'sel' : ''}" data-ml="${l}"><span class="lang-f">${fl}</span>${n}</button>`).join('')}</div>
+      <pre class="hg-msg" id="ivfMsg"></pre>
+      <div class="fam-row"><button class="big" id="ivfSend">📤 Enviar</button><a class="chip" id="ivfWa" href="#" target="_blank" rel="noopener">WhatsApp</a><button class="chip" id="ivfCopy">📋 Copiar</button></div>
+      <p class="fe-err" id="ivfOut" role="status"></p>
+    </section>
+    ${f.league ? `<div class="prow-btns"><button class="big ghost" id="ivfLg">🏆 A nossa liga: ${esc(f.league.team || f.name)}</button></div>` : ''}
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  const team = () => cleanS($('#ivfTeam').value, 24) || f.name;
+  const url = () => siteMain() + (mode === 'liga' ? `#liga=${code}&t=${encodeURIComponent(team())}` : '');
+  const text = () => { const p = INV_MSG[ml] || INV_MSG.en; return mode === 'liga' ? `${p[0]} ${p[1]} ${p[2]}` : `${p[0]} ${p[2]}`; };
+  const draw = () => {
+    $('#ivfMsg').textContent = text() + '\n' + url();
+    $('#ivfModeTx').textContent = mode === 'liga' ? "A nova família entra logo na vossa liga: as crianças veem-se na tabela e podem fazer batalhas." : "Só uma ligação para a app, sem liga.";
+    $('#ivfOkRow').hidden = mode !== 'liga';
+    $('#ivfWa').href = 'https://wa.me/?text=' + encodeURIComponent(text() + ' ' + url());
+  };
+  // the league is made with the first invitation, once a parent has agreed to show the children's names and points
+  const ready = () => {
+    if (mode === 'liga' && f.league && f.league.team !== team()) { f.league.team = team(); save(); later(() => lshare(code, true), 500); }
+    if (mode !== 'liga' || f.league) return true;
+    if (!$('#ivfOk').checked) { const o = $('#ivfOut'); o.textContent = "Marque a caixa: um pai ou mãe aceita mostrar estes dados na liga."; wiggle(o); return false; }
+    f.league = { code, team: team(), nick: {}, at: Date.now() }; save(); later(() => lshare(code, true), 500);
+    return true;
+  };
+  const said = x => { $('#ivfOut').textContent = x; };
+  $('#ivfTeam').addEventListener('input', draw);
+  $('#ivfMode').onclick = e => { const b = e.target.closest('[data-mode]'); if (!b) return; mode = b.dataset.mode; $$('#ivfMode .pick-b').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); draw(); };
+  $('#ivfLang').onclick = e => { const b = e.target.closest('[data-ml]'); if (!b) return; ml = b.dataset.ml; $$('#ivfLang .pick-b').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); draw(); };
+  $('#ivfSend').onclick = async () => {
+    if (!ready()) return; sfx.pop();
+    if (navigator.share) { try { await navigator.share({ title: { en: 'Chatterbox', ru: RU('Говорилки'), pt: 'Tagarelas' }[ml], text: text(), url: url() }); said("Enviado. Quando os amigos criarem a família, os filhos vão aparecer na liga."); } catch (e) {} return; }
+    $('#ivfCopy').click();
+  };
+  $('#ivfWa').onclick = e => { if (!ready()) { e.preventDefault(); return; } draw(); };
+  $('#ivfCopy').onclick = () => {
+    if (!ready()) return; sfx.pop();
+    const all = text() + ' ' + url();
+    if (navigator.clipboard) navigator.clipboard.writeText(all).then(() => said("Copiado. Cole numa mensagem aos amigos."), () => said("Não foi possível copiar: selecione o texto acima."));
+    else said("Selecione o texto acima e copie-o.");
+  };
+  if ($('#ivfLg')) $('#ivfLg').onclick = () => { sfx.pop(); screenLeague(); };
+  draw();
 }
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old

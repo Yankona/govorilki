@@ -1687,6 +1687,9 @@ body.pv-on #app{padding-top:52px}
 .pv-who{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
 .pv-ad.kid{padding:0;background:transparent;box-shadow:none}.pv-ad.kid .pv-acts{padding:0 4px}
 .pg-sum{margin:0;font:800 30px/1.2 var(--f-body);color:var(--ink)}
+.ivw,.ivf{display:flex;flex-direction:column;gap:16px;width:min(100%,720px);margin:0 auto}
+.ivf-mode{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ivf .lang-row{display:flex;flex-wrap:wrap;gap:8px}
+.ivf .hg-msg{white-space:pre-wrap;word-break:break-word;margin:0}
 </style>
 </head>
 <body>
@@ -2691,7 +2694,7 @@ function goHome() {
   on('#duoBtn', () => { sfx.pop(); screenDuo(); });
   on('#famChip', () => { sfx.pop(); screenFamilies(); });
   on('#worldChip', () => { sfx.pop(); screenWorld(); });
-  on('#invChip', () => { sfx.pop(); screenInvite(); });
+  on('#invChip', () => { sfx.pop(); screenInviteWho(); });
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
@@ -7354,7 +7357,7 @@ function screenParents(focus) {
       ${(() => { const lg = P.likeG || {}, up = Object.keys(lg).filter(k => lg[k] > 0).map(gameName).filter(Boolean), dn = Object.keys(lg).filter(k => lg[k] < 0).map(gameName).filter(Boolean);
         return up.length || dn.length ? `<p class="muted">${up.length ? "👍 Likes: " + esc(up.join(', ')) + '. ' : ''}${dn.length ? "👎 Doesn't like: " + esc(dn.join(', ')) + '.' : ''}</p>` : ''; })()}
       ${(P.battles || []).length ? `<p class="muted">⚔️ Battles: ${P.battles.filter(b => b.win).length} wins out of ${P.battles.length}.</p>` : ''}
-      <div class="prow-btns"><button class="big" id="pultBtn">👑 Family control panel: all accounts</button><button class="big ghost" id="kidSetup">💛 Interests and games: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Invite relatives</button><button class="big ghost" id="famEdit">Edit family</button><button class="big ghost" id="famAll">All families</button><button class="big ghost" id="famLg">🏆 Family league</button></div>
+      <div class="prow-btns"><button class="big" id="pultBtn">👑 Family control panel: all accounts</button><button class="big ghost" id="kidSetup">💛 Interests and games: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Invite relatives</button><button class="big ghost" id="famInvF">👪 Invite another family</button><button class="big ghost" id="famEdit">Edit family</button><button class="big ghost" id="famAll">All families</button><button class="big ghost" id="famLg">🏆 Family league</button></div>
     </section>
     <section class="psec lang-pick" id="langSec"><h2>🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</section>
     <section class="psec"><h2>Settings: ${esc(P.settings.name)}</h2>
@@ -7443,6 +7446,7 @@ function screenParents(focus) {
   $('#testVoice').onclick = () => say(greet());
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
+  $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
   $('#kidSetup').onclick = () => { sfx.pop(); screenKidSetup(ROOT.cur, { back: screenParents }); };
   $('#famAll').onclick = () => { sfx.pop(); screenFamilies(); };
   $('#pultBtn').onclick = () => { sfx.pop(); screenPult(); };
@@ -7716,10 +7720,11 @@ function importCode(raw) {
 }
 
 /* ---------- the league ---------- */
-let LIGA_HASH = null;
+let LIGA_HASH = null, LIGA_FROM = '';
 try {
-  const m = location.hash.match(/liga=([a-z0-9]{8,24})/);
+  const m = location.hash.match(/liga=([a-z0-9]{8,24})/), tm = location.hash.match(/[#&]t=([^&]*)/);
   if (m) { LIGA_HASH = m[1]; history.replaceState(null, '', location.pathname + location.search); }
+  if (m && tm) LIGA_FROM = cleanS(decodeURIComponent(tm[1]), 24);
 } catch (e) {}
 const league = () => { const f = fam(); return f && f.league || null; };
 function lcache(code) { ROOT.lcache = ROOT.lcache || {}; return ROOT.lcache[code] = ROOT.lcache[code] || {}; }
@@ -7814,17 +7819,16 @@ function screenLeague(join) {
   if (!f) { goHome(); return; }
   if (!f.league || join && join !== f.league.code) { screenLeagueJoin(join); return; }
   const L = f.league; let tab = ROOT.ltab || 'ws';
-  const url = `${SITE}#liga=${L.code}`, msg = "Join our league in “Chatterbox”: the children compete to see who has practised the most this week. Open the link:";
   shell("Family League", `<div class="lg">
       <div class="lg-tabs" id="lgTabs" role="tablist">${LTABS.map(([k, n]) => `<button class="chip ${k === tab ? 'sel' : ''}" data-t="${k}" role="tab">${n}</button>`).join('')}</div>
       <p class="lg-sub" id="lgSub"></p>
       <div id="lgBody"></div>
       <div class="fam-card"><h3 class="fam-s">Invite a family to the league</h3>
-        <p class="lead">Send the link to your friends’ parents. League code: <b>${L.code}</b></p>${shareRow(msg, url, 'lgShare')}</div>
+        <p class="lead">Send an invitation to your friends’ parents. League code: <b>${L.code}</b></p><div class="prow-btns"><button class="big" id="lgInv">👪 Invite a family</button></div></div>
       <p class="muted lg-note" id="lgNet">Updating the table…</p>
       <div class="prow-btns"><button class="big ghost" id="lgSet">Nicknames and league settings</button></div>
     </div>`, { guide: false, raw: true });
-  bindShare('lgShare', msg, url, s => { $('#lgNet').textContent = s; });
+  $('#lgInv').onclick = () => { sfx.pop(); screenInviteFamily(() => screenLeague()); };
   const mine = () => new Set(mySnaps(L.code).map(s => s.u));
   const row = (s, i, unit, my) => `<div class="lg-row ${my.has(s.u) ? 'me' : ''}"><span class="lg-pl">${['🥇', '🥈', '🥉'][i] || `<i>${i + 1}</i>`}</span>
       <span class="chip-face">${friendSVG('', s.e)}</span>
@@ -8091,7 +8095,7 @@ function screenWelcome({ liga = '' } = {}) {
       <li><span>👵</span><b>Grannies and grandpas</b></li>
       <li><span>🏆</span><b>Family League and battles</b></li>
     </ul>
-    ${liga ? "<p class=\"ob-note\">🏆 You have been invited to a family league. First we will create a family, then we will join.</p>" : ''}
+    ${liga ? `<p class="ob-note">🏆 ${LIGA_FROM ? `The “${esc(LIGA_FROM)}” family invites you to Chatterbox and to their league.` : "You have been invited to a family league."} First we will create your family, then join.</p>` : ''}
     <button class="big" id="obStart">Create a family</button>
     <details class="psec fe-imp"><summary>We already have progress from another phone</summary>
       <textarea id="feImp" rows="3" placeholder="Paste the copied progress here"></textarea>
@@ -8180,8 +8184,8 @@ function screenObDone({ liga = '' } = {}) {
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1>All done!</h1><p>The “${esc(f.name)}” family has been created. The home screen is already set up for each child.</p></div></header>
     <div class="ob-kids">${f.kids.map(id => { const st = ROOT.profiles[id].settings; return `<div class="ob-kid"><span class="chip-face">${kidFace(id)}</span><span><b>${esc(st.name)}</b>
       <small>sounds: ${soundsOf(ROOT.profiles[id]).map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ')}${(st.likes || []).length ? ' · ' + st.likes.map(l => (LIKES.find(x => x.id === l) || {}).e || '').join('') : ''}</small></span></div>`; }).join('')}</div>
-    <button class="big" id="obGo">Start the lessons</button>
-    <button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>${liga ? "Join the friends’ league" : "Family League"}</b></span></button>
+    ${liga ? `<button class="big" id="obLeague">🏆 ${LIGA_FROM ? `Join the “${esc(LIGA_FROM)}” family league` : "Join the friends’ league"}</button><button class="big ghost" id="obGo">Start the lessons</button>`
+      : `<button class="big" id="obGo">Start the lessons</button><button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>Family League</b></span></button>`}
     ${f.grands.length ? "<button class=\"big ghost\" id=\"obChess\">📨 Invite your family</button>" : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
@@ -10298,7 +10302,7 @@ function screenPult() {
       <div class="prow-btns"><button class="big" id="pvMine">Yes, it is my phone</button><button class="big ghost" id="pvKids">The children play here</button></div></section>` : ''}
     <p class="muted">Everyone from your families on this phone who plays or visits. Tap a child to open their game. «👀 Screen» shows what an adult sees on their own phone.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">There is no family on this phone yet.</p>"}
-    <section class="psec"><h2>For grown-ups</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ All settings</button><button class="big ghost" id="pvInv">📨 Invite family</button><button class="big ghost" id="pvFams">🏠 Families</button><button class="big ghost" id="pvLg">🏆 Family league</button></div></section>
+    <section class="psec"><h2>For grown-ups</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ All settings</button><button class="big ghost" id="pvInv">📨 Invite family</button><button class="big ghost" id="pvInvF">👪 Invite another family</button><button class="big ghost" id="pvFams">🏠 Families</button><button class="big ghost" id="pvLg">🏆 Family league</button></div></section>
     <section class="psec"><h2>This phone</h2>${ROOT.parentPhone
       ? `<p>📱 This is your phone: the app opens with the control panel, no code needed. The panel is always under the 👑 button at the top of the main screen.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 The children play here: lock the panel with a code</button></div>`
       : `<p>The panel is locked with a code. Open it with the 👑 button at the top of the main screen${ROOT.parentPhone === false ? '' : " or from «For grown-ups»"}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 This is my phone: no code</button><button class="big ghost" id="pvPin">🔑 Change the code</button><button class="big ghost" id="pvLock">🔒 Lock the panel</button></div>`}</section>`;
@@ -10312,6 +10316,7 @@ function screenPult() {
     on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
     on1('pvInv', () => screenInvite(screenPult));
+    on1('pvInvF', () => screenInviteFamily(screenPult));
     on1('pvFams', () => screenFamilies());
     on1('pvLg', () => screenLeague());
   };
@@ -10484,6 +10489,83 @@ function guestPlayed(key, stars) {
   const c = { i: rid(8), to, e: '🎮', x, p: '', at: Date.now(), sent: Date.now() };
   relayPostTo(GUEST.fam, { k: 'cheer', i: c.i, to, by: GUEST.who, n: GUEST.name, e: c.e, x, p: '' });
   const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
+}
+
+/* ---------- inviting another family: friends, classmates, neighbours ---------- */
+// the message is ready in the three languages (friends may speak another one than ours); the link opens the main page in
+// the friend's phone language, and with our league code the new family joins our league right after it is made
+const INV_MSG = {
+  en: [RU("Hi! We've been playing Chatterbox: speech, reading, maths, chess, art and music games for children aged 4–12. It's free and works in English, Russian and Portuguese."), RU('Join our family league: the children compete on who practised most this week.'), RU('Open the link:')],
+  ru: [RU('Привет! Мы занимаемся в «Говорилках»: логопедия, чтение, математика, шахматы, живопись и музыка для детей 4–12 лет. Бесплатно, на русском, английском и португальском.'), RU('Присоединяйтесь к нашей лиге семей: дети соревнуются, кто больше занимался за неделю.'), RU('Откройте ссылку:')],
+  pt: [RU('Olá! Andamos a jogar o Tagarelas: fala, leitura, matemática, xadrez, arte e música para crianças dos 4 aos 12 anos. É grátis e funciona em português, inglês e russo.'), RU('Juntem-se à nossa liga de famílias: as crianças competem para ver quem praticou mais esta semana.'), RU('Abram a ligação:')]
+};
+const siteMain = () => EMBEDDED ? 'https://yankona.github.io/govorilki/' : location.origin + SITE_ROOT;
+// whom to invite: our relatives (each with an entry of their own) or another family
+function screenInviteWho(back) {
+  newScreen();
+  shell("Invite", `<div class="ivw">
+    <button class="lg-cta" id="iwFam"><span class="emo">👪</span><span class="lg-t"><b>Another family</b><small>friends, classmates, neighbours: their children play at home, and the league shows who practised most</small></span><span class="g-go">▶</span></button>
+    <button class="lg-cta" id="iwKin"><span class="emo">👵</span><span class="lg-t"><b>Grandparents and relatives</b><small>each has their own entry: they see how the children are doing, can praise them, play chess and the same games</small></span><span class="g-go">▶</span></button>
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  $('#iwKin').onclick = () => { sfx.pop(); screenInvite(() => screenInviteWho(back)); };
+  $('#iwFam').onclick = () => { sfx.pop(); screenInviteFamily(() => screenInviteWho(back)); };
+}
+function screenInviteFamily(back) {
+  newScreen();
+  const f = fam(); if (!f) { goHome(); return; }
+  let mode = 'liga', ml = LANG;
+  const code = f.league ? f.league.code : rid(10);
+  shell("Invite a family", `<div class="ivf">
+    <div class="lg-hero">${pic('💌')}<div><h2>Another family</h2><p>Your friends open the link, choose a language and create their family — and their children can start. It is all free.</p></div></div>
+    <section class="psec"><h2>How to invite</h2>
+      <div class="picks-g ivf-mode" id="ivfMode"><button class="pick-b sel" data-mode="liga">🏆 To our league</button><button class="pick-b" data-mode="app">🔗 Just recommend the app</button></div>
+      <p class="muted" id="ivfModeTx"></p>
+      <label class="sw" id="ivfOkRow" for="ivfOk"><input id="ivfOk" type="checkbox" ${f.league ? 'checked disabled' : ''}>I am a parent and agree to show the children’s names (they can be nicknames), avatar, age and points in the league</label>
+    </section>
+    <section class="psec"><h2>Message</h2>
+      <label class="prow" for="ivfTeam">How to sign the invitation (friends see this name in the invitation and in the league) <input id="ivfTeam" type="text" maxlength="24" autocomplete="off" value="${esc(f.league && f.league.team || f.name)}"></label>
+      <div class="lang-row" id="ivfLang">${LANGS.map(([l, n, fl]) => `<button class="pick-b lang-b ${l === ml ? 'sel' : ''}" data-ml="${l}"><span class="lang-f">${fl}</span>${n}</button>`).join('')}</div>
+      <pre class="hg-msg" id="ivfMsg"></pre>
+      <div class="fam-row"><button class="big" id="ivfSend">📤 Send</button><a class="chip" id="ivfWa" href="#" target="_blank" rel="noopener">WhatsApp</a><button class="chip" id="ivfCopy">📋 Copy</button></div>
+      <p class="fe-err" id="ivfOut" role="status"></p>
+    </section>
+    ${f.league ? `<div class="prow-btns"><button class="big ghost" id="ivfLg">🏆 Our league: ${esc(f.league.team || f.name)}</button></div>` : ''}
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  const team = () => cleanS($('#ivfTeam').value, 24) || f.name;
+  const url = () => siteMain() + (mode === 'liga' ? `#liga=${code}&t=${encodeURIComponent(team())}` : '');
+  const text = () => { const p = INV_MSG[ml] || INV_MSG.en; return mode === 'liga' ? `${p[0]} ${p[1]} ${p[2]}` : `${p[0]} ${p[2]}`; };
+  const draw = () => {
+    $('#ivfMsg').textContent = text() + '\n' + url();
+    $('#ivfModeTx').textContent = mode === 'liga' ? "The new family joins your league straight away: the children see each other in the table and can hold battles." : "Just a link to the app, without the league.";
+    $('#ivfOkRow').hidden = mode !== 'liga';
+    $('#ivfWa').href = 'https://wa.me/?text=' + encodeURIComponent(text() + ' ' + url());
+  };
+  // the league is made with the first invitation, once a parent has agreed to show the children's names and points
+  const ready = () => {
+    if (mode === 'liga' && f.league && f.league.team !== team()) { f.league.team = team(); save(); later(() => lshare(code, true), 500); }
+    if (mode !== 'liga' || f.league) return true;
+    if (!$('#ivfOk').checked) { const o = $('#ivfOut'); o.textContent = "Tick the box: a parent agrees to show this in the league."; wiggle(o); return false; }
+    f.league = { code, team: team(), nick: {}, at: Date.now() }; save(); later(() => lshare(code, true), 500);
+    return true;
+  };
+  const said = x => { $('#ivfOut').textContent = x; };
+  $('#ivfTeam').addEventListener('input', draw);
+  $('#ivfMode').onclick = e => { const b = e.target.closest('[data-mode]'); if (!b) return; mode = b.dataset.mode; $$('#ivfMode .pick-b').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); draw(); };
+  $('#ivfLang').onclick = e => { const b = e.target.closest('[data-ml]'); if (!b) return; ml = b.dataset.ml; $$('#ivfLang .pick-b').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); draw(); };
+  $('#ivfSend').onclick = async () => {
+    if (!ready()) return; sfx.pop();
+    if (navigator.share) { try { await navigator.share({ title: { en: 'Chatterbox', ru: RU('Говорилки'), pt: 'Tagarelas' }[ml], text: text(), url: url() }); said("Sent. When your friends create their family, their children will appear in the league."); } catch (e) {} return; }
+    $('#ivfCopy').click();
+  };
+  $('#ivfWa').onclick = e => { if (!ready()) { e.preventDefault(); return; } draw(); };
+  $('#ivfCopy').onclick = () => {
+    if (!ready()) return; sfx.pop();
+    const all = text() + ' ' + url();
+    if (navigator.clipboard) navigator.clipboard.writeText(all).then(() => said("Copied. Paste it into a message to your friends."), () => said("Could not copy: select the text above."));
+    else said("Select the text above and copy it.");
+  };
+  if ($('#ivfLg')) $('#ivfLg').onclick = () => { sfx.pop(); screenLeague(); };
+  draw();
 }
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
