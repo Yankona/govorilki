@@ -1301,15 +1301,39 @@ body.quest .fam-ok{color:#7BE0A0}
 .al-card{flex:none;background:var(--paper);border-radius:20px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -2px 14px rgba(0,0,0,.08)}
 .al-dots{display:flex;gap:6px;justify-content:center;margin-bottom:6px}.al-dots i{width:9px;height:9px;border-radius:50%;background:var(--line-strong)}.al-dots i.done{background:var(--leaf)}.al-dots i.now{background:var(--tiger);transform:scale(1.3)}
 .al-card .al-q{display:flex;gap:8px;align-items:flex-start;margin:0 0 8px;font:800 18px/1.35 var(--f-body);text-align:left}.al-card .al-q .emo{font-size:24px;flex:none}
-.al-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.al-opts .pick-b{font-size:15px;padding:8px 6px;min-height:46px}
+.al-opts{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px}.al-opts .pick-b[hidden]{display:none}.al-opts .pick-b{font-size:15px;padding:8px 6px;min-height:46px}
 .al-opts .pick-b.ok{background:#D6F5E0;box-shadow:0 3px 0 #2FA865}.al-opts .pick-b.no{background:#FFD9DC}
 .al-w{margin:8px 0 0;font:700 16px/1.4 var(--f-body)}
 .al-hint{margin:0;text-align:center;font:800 17px var(--f-body);color:var(--sea)}
 .al-card .og-btns{margin-top:8px}
-.art-fs{position:fixed;inset:0;z-index:70;background:#111;overflow:auto;-webkit-overflow-scrolling:touch}
-.art-fs-in img{display:block;width:200%;max-width:none;height:auto}
-@media (orientation:landscape){.art-fs-in img{width:150%}}
+.art-fs{position:fixed;inset:0;z-index:70;background:#111}
+.art-fs-in{position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch;display:grid;place-items:center;cursor:zoom-in}
+.art-fs-in img{display:block;max-width:100vw;max-height:100svh;width:auto;height:auto;object-fit:contain}
+.art-fs.zoom .art-fs-in{place-items:start;cursor:zoom-out}
+.art-fs.zoom .art-fs-in img{max-width:none;max-height:none;width:260vw}
 .art-fs-x{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:71}
+.art-fs-hint{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);margin:0;text-align:center;color:#fff;font:800 16px var(--f-body);text-shadow:0 1px 3px #000;pointer-events:none}
+.mem{display:flex;flex-direction:column;height:100svh;padding:calc(env(safe-area-inset-top,0px) + 6px) 8px calc(env(safe-area-inset-bottom,0px) + 8px);box-sizing:border-box;gap:8px}
+.mem-bar{display:flex;align-items:center;gap:8px}.mem-bar .ibtn{width:48px;height:48px}
+.mem-n{flex:1;display:flex;gap:14px;justify-content:center;font:900 20px var(--f-body);color:var(--ink)}
+.quest .mem-n{color:#fff}
+.mem-sz{display:flex;gap:4px;background:var(--paper);border-radius:14px;padding:3px}
+.mem-sz button{border:0;background:none;border-radius:10px;padding:6px 9px;font:900 15px var(--f-body);color:var(--ink-soft);cursor:pointer}.mem-sz button.sel{background:var(--tiger);color:#fff}
+.mem-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--cols),1fr);grid-template-rows:repeat(var(--rows),1fr);gap:8px}
+.mc{position:relative;border:0;padding:0;background:none;perspective:900px;cursor:pointer;min-height:0}
+.mc-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.3,1.4,.5,1)}
+.mc.up .mc-in{transform:rotateY(180deg)}
+.mc-back,.mc-front{position:absolute;inset:0;border-radius:16px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.mc-back{display:grid;place-items:center;background:repeating-linear-gradient(45deg,#FF8A3D 0 14px,#FFB347 14px 28px);border:4px solid #F5C542}
+.mc:nth-child(3n+2) .mc-back{background:repeating-linear-gradient(45deg,#7C5CFF 0 14px,#9F86FF 14px 28px)}
+.mc:nth-child(3n) .mc-back{background:repeating-linear-gradient(45deg,#1FB5A3 0 14px,#4FD1C1 14px 28px)}
+.mc-frame{display:grid;place-items:center;width:62%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#FFF6D8,#FFE08A);box-shadow:0 0 0 5px #D9A520,0 0 0 9px #FFE08A,0 4px 10px rgba(0,0,0,.25)}
+.mc-face{width:80%;aspect-ratio:1}.mc-face svg{width:100%;height:100%}
+.mc-st{position:absolute;font-style:normal;font-size:18px}.mc-st.s1{top:6px;left:8px}.mc-st.s2{bottom:6px;right:8px}.mc-st.s3{top:6px;right:8px;font-size:15px}
+.mc-front{transform:rotateY(180deg);background:#222}.mc-front img{width:100%;height:100%;object-fit:cover;display:block}
+.mc.done .mc-front{box-shadow:0 0 0 4px var(--leaf),0 4px 0 rgba(0,0,0,.18)}
+.mc.done .mc-in{animation:mcpop .5s ease-out}@keyframes mcpop{50%{transform:rotateY(180deg) scale(1.08)}}
+.mem-toast{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);margin:0;padding:10px 14px;border-radius:16px;background:rgba(30,26,46,.9);color:#fff;font:800 16px/1.35 var(--f-body);text-align:center;z-index:20}
 .quest .av-bar{background:linear-gradient(transparent,#141834 30%)}.quest .al-card{background:#20284A}
 .art-note{background:var(--paper);border-radius:14px;padding:8px 12px}
 .art-note b{font:800 16px var(--f-body)}.art-note p{margin:4px 0 0;font:600 16px/1.45 var(--f-body)}
@@ -9523,9 +9547,17 @@ const ART_HOW = [
 // the painting: the picture and the main buttons on one screen; the notes and the story below for whoever scrolls
 function artFull(x) {
   const ov = document.createElement('div'); ov.className = 'art-fs';
-  ov.innerHTML = `<button class="ibtn art-fs-x" aria-label="Fechar">✕</button><div class="art-fs-in"><img src="${artImg(x.f, 1920)}" alt="${esc(x.t)}"></div>`;
+  ov.innerHTML = `<div class="art-fs-in" id="fsIn"><img id="fsImg" src="${artImg(x.f, 1920)}" alt="${esc(x.t)}"></div>
+    <button class="ibtn art-fs-x" aria-label="Fechar">✕</button><p class="art-fs-hint">👆 ${"Toca na pintura para aproximar"}</p>`;
   document.body.append(ov); sfx.pop();
-  ov.onclick = e => { if (e.target.closest('.art-fs-x') || e.target === ov) ov.remove(); };
+  const box = ov.querySelector('#fsIn'), img = ov.querySelector('#fsImg');
+  ov.querySelector('.art-fs-x').onclick = () => { sfx.pop(); ov.remove(); };
+  box.onclick = e => {
+    const r = img.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    const zoom = !ov.classList.contains('zoom'); ov.classList.toggle('zoom', zoom); sfx.tick();
+    const h = ov.querySelector('.art-fs-hint'); if (h) h.remove();
+    if (zoom) requestAnimationFrame(() => { box.scrollLeft = img.offsetWidth * Math.min(1, Math.max(0, fx)) - box.clientWidth / 2; box.scrollTop = img.offsetHeight * Math.min(1, Math.max(0, fy)) - box.clientHeight / 2; });
+  };
 }
 function screenArtView(x, list, back) {
   const t = newScreen(), my = artMy(), tr = ART.tours[x.q], nt = ART.notes[x.q];
@@ -9559,10 +9591,12 @@ function screenArtView(x, list, back) {
 // a tour of one painting: the picture stays on top, one step at a time in the card below
 function screenArtLook(x, back) {
   const t = newScreen(), tr = ART.tours[x.q], nt = ART.notes[x.q];
+  // options in a new order every time, so the right one is never in a fixed place
+  const mix = m => { const ord = shuffle(m.o.map((_, i) => i)); return { q: m.q, w: m.w, o: ord.map(i => m.o[i]), a: m.a < 0 ? -1 : ord.indexOf(m.a) }; };
   const steps = tr ? [
     { k: 'find', e: '🔍', q: tr.f[0] }, { k: 'find', e: '🔍', q: tr.f[1] },
-    { k: 'pick', e: '💭', q: tr.m.q, o: tr.m.o, a: tr.m.a, w: tr.m.w },
-    { k: 'pick', e: '🤔', q: tr.x.q, o: tr.x.o, a: tr.x.a, w: tr.x.w },
+    { k: 'pick', e: '💭', ...mix(tr.m) },
+    { k: 'pick', e: '🤔', ...mix(tr.x) },
     { k: 'read', e: '✨', q: tr.s },
     { k: 'say', e: '🎬', q: tr.i }
   ] : [
@@ -9604,9 +9638,9 @@ function screenArtLook(x, back) {
     const b = e.target.closest('[data-o]'); if (!b || busy) return;
     const S = steps[k], i = +b.dataset.o, right = S.a < 0 || i === S.a;
     busy = true;
-    card.querySelectorAll('[data-o]').forEach(x => { x.disabled = true; if (S.a >= 0 && +x.dataset.o === S.a) x.classList.add('ok'); });
+    card.querySelectorAll('[data-o]').forEach(x => { x.disabled = true; if (S.a >= 0 && +x.dataset.o === S.a) x.classList.add('ok'); else if (x !== b) x.hidden = true; });
     if (!right) b.classList.add('no');
-    right ? sfx.good() : sfx.oops();
+    right ? sfx.good() : tone(300, .2, 'sine', .13, 0, 210); // no tap guard here: the answer is explained either way
     const w = (S.a < 0 ? '' : right ? "Sim! " : `Mais «${S.o[S.a]}». `) + S.w;
     const p = $('#alW'); p.hidden = false; p.textContent = w;
     card.insertAdjacentHTML('beforeend', `<div class="og-btns"><button class="big" id="alNext">Seguinte</button></div>`);
@@ -9628,26 +9662,38 @@ function screenArtLook(x, back) {
 function screenArtMemory(size) {
   const t = newScreen();
   size = size || (Q() ? 8 : 4);
-  shell("Jogo da memória: pinturas", `<div class="art am"><div class="ai-lv" id="amLv">${[4, 6, 8].map(n => `<button class="chip ${n === size ? 'sel' : ''}" data-n="${n}">${n * 2} cartas</button>`).join('')}</div>
-      <div class="sp-hud"><span>Jogadas <b id="amM">0</b></span><span>Pares <b id="amP">0</b>/${size}</span></div><div class="am-grid c${size}" id="amG"><p class="lead">A abrir o museu…</p></div><p class="art-a" id="amOut"></p></div>`, { back: () => screenMuseum() });
+  const cols = size === 4 ? 2 : size === 6 ? 3 : 4, back = () => screenMuseum();
+  document.body.classList.toggle('quest', Q());
+  app.innerHTML = `<div class="screen mem"><div class="mem-bar">
+      <button class="ibtn" id="memBack" aria-label="Voltar">${ICON.back}</button>
+      <div class="mem-n"><span>🃏 <b id="amP">0</b>/${size}</span><span>👣 <b id="amM">0</b></span></div>
+      <div class="mem-sz" id="amLv">${[4, 6, 8].map(n => `<button class="${n === size ? 'sel' : ''}" data-n="${n}" aria-label="${n * 2}">${n * 2}</button>`).join('')}</div>
+    </div>
+    <div class="mem-grid" id="amG" style="--cols:${cols};--rows:${size * 2 / cols}"></div>
+    <p class="mem-toast" id="amOut" hidden></p></div>`;
+  navEnter(back);
+  $('#memBack').onclick = () => { sfx.pop(); back(); };
   $('#amLv').onclick = e => { const b = e.target.closest('[data-n]'); if (b) { sfx.pop(); screenArtMemory(+b.dataset.n); } };
+  const backFace = `<span class="mc-back"><span class="mc-frame"><span class="mc-face">${friendSVG()}</span></span><i class="mc-st s1">⭐</i><i class="mc-st s2">✨</i><i class="mc-st s3">🎨</i></span>`;
   artLoad().then(D => {
     if (t !== tok) return;
     const pics = sample(D.p.slice(0, 150), size), cards = sample([...pics, ...pics].map((x, i) => ({ x, i })), size * 2);
-    let open = [], moves = 0, pairs = 0, busy = false;
-    $('#amG').innerHTML = cards.map((c, j) => `<button class="am-c" data-j="${j}" aria-label="Carta ${j + 1}"><span class="am-back">🖼️</span><img src="${artImg(c.x.f, 330)}" alt=""></button>`).join('');
+    let open = [], moves = 0, pairs = 0, busy = false, toastT = 0;
+    $('#amG').innerHTML = cards.map((c, j) => `<button class="mc" data-j="${j}" aria-label="${j + 1}"><span class="mc-in">${backFace}<span class="mc-front"><img src="${artImg(c.x.f, 330)}" alt=""></span></span></button>`).join('');
     talk("Jogo da memória! Vira duas cartas de cada vez e procura as pinturas iguais.");
-    $('#amG').onclick = async e => {
-      const b = e.target.closest('.am-c'); if (!b || busy || b.classList.contains('up')) return;
+    const toast = txt => { const o = $('#amOut'); if (!o) return; o.textContent = txt; o.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { if (o) o.hidden = true; }, 2600); };
+    $('#amG').onclick = e => {
+      const b = e.target.closest('.mc'); if (!b || busy || b.classList.contains('up')) return;
       b.classList.add('up'); sfx.tick(); open.push(b);
       if (open.length < 2) return;
       moves++; $('#amM').textContent = moves; busy = true;
       const [a, c] = open, x = cards[+a.dataset.j].x;
       if (x === cards[+c.dataset.j].x) {
-        a.classList.add('done'); c.classList.add('done'); pairs++; $('#amP').textContent = pairs; sfx.good(); open = []; busy = false;
-        $('#amOut').textContent = `«${x.t}» — ${x.a || ''}`; say(`«${x.t}».`);
+        later(() => { a.classList.add('done'); c.classList.add('done'); }, 350);
+        pairs++; $('#amP').textContent = pairs; sfx.good(); open = []; busy = false;
+        toast(`«${x.t}»${x.a ? ' — ' + x.a : ''}`); say(`«${x.t}».`);
         const my = artMy(); if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
-        if (pairs === size) later(() => finish({ key: 'art-memory', stars: moves <= size * 1.6 ? 3 : moves <= size * 2.5 ? 2 : 1, line: `Encontraste todos os pares em ${moves} ${plural(moves, ["jogada", "jogadas", "jogadas"])}!`, again: () => screenArtMemory(size), menu: () => screenMuseum() }), 1200);
+        if (pairs === size) later(() => { confetti(); finish({ key: 'art-memory', stars: moves <= size * 1.6 ? 3 : moves <= size * 2.5 ? 2 : 1, line: `Encontraste todos os pares em ${moves} ${plural(moves, ["jogada", "jogadas", "jogadas"])}!`, again: () => screenArtMemory(size), menu: back }); }, 1300);
       } else later(() => { a.classList.remove('up'); c.classList.remove('up'); open = []; busy = false; }, 1100);
     };
   }, () => { if (t === tok) $('#amG').innerHTML = "<p class=\"lead\">Para abrir o museu, é preciso internet.</p>"; });
