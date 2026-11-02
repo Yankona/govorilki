@@ -1401,7 +1401,7 @@ body.quest .fam-ok{color:#7BE0A0}
 .ai-mis{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .ai-mis li{background:var(--paper);border-radius:14px;padding:8px 12px;font:700 17px/1.4 var(--f-body)}
 .ai-mis span{color:var(--ink-soft)}
-.demo-b{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);z-index:50;padding:4px 12px;border-radius:12px;background:#2A2346;color:#fff;font:800 13px var(--f-body);text-decoration:none;opacity:.85}
+.demo-b{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);z-index:50;padding:4px 12px;border-radius:12px;background:#2A2346;color:#fff;font:800 13px var(--f-body);text-decoration:none;opacity:.92;white-space:nowrap}.demo-b button,.demo-b a{background:none;border:0;padding:0;color:#FFC83A;font:inherit;text-decoration:underline;cursor:pointer}
 .kids-top{display:flex;align-items:center;gap:8px;width:100%;justify-content:center}
 .kids-top .kids-in{flex:1;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;justify-content:center}
 .kb-ic{flex:none;width:44px;height:44px;font-size:20px}
@@ -1694,6 +1694,7 @@ body.pv-on #app{padding-top:52px}
 .at-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;border:0;border-radius:22px;padding:12px 14px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line);font:inherit;text-align:left;cursor:pointer}
 .at-card .at-h{display:flex;align-items:center;gap:8px;font:800 18px/1.1 var(--f-body)}.at-card .emo{font-size:24px}.at-card small{color:var(--ink-soft);font:700 14px var(--f-body)}
 .at-ex{display:flex;gap:4px;max-width:100%;overflow:hidden}.at-ex .tile-ico{flex:none;width:34px;height:34px;font-size:22px;display:grid;place-items:center;overflow:hidden}.at-ex .tile-ico svg,.at-ex .tile-ico img{width:30px;height:30px}
+.pv-demo{display:flex;flex-direction:column;gap:8px}.pv-demo .big{text-align:left}
 </style>
 </head>
 <body>
@@ -1734,13 +1735,35 @@ const plural = (n, f) => { if (!IS_RU) return n === 1 ? f[0] : f[2]; const a = n
 /* ---------- saved progress (this device only): families, each with its children and grandparents; one profile per child ---------- */
 // ?demo: a fresh start to look at, kept apart from the real family: its own save, emptied when a new tab opens it
 const DEMO = /[?&]demo\b/.test(location.search);
-if (DEMO) { try { if (!sessionStorage.getItem('govorilki-demo-on')) { localStorage.removeItem('govorilki-demo'); localStorage.removeItem('govorilki-lang-demo'); sessionStorage.setItem('govorilki-demo-on', '1'); } } catch (e) {} }
+// the test sandbox («как видят другие»): its own storage, it sends nothing anywhere, the real family stays as it is.
+// as = new (a new family from the first screen), kid5 / kid9 (a child of that age, straight on the home screen),
+// liga (a family invited by our link), gran (a grandparent opening our link); lang = the language of that phone
+const demoClear = () => { Object.keys(localStorage).filter(k => k.startsWith('govorilki-demo')).forEach(k => localStorage.removeItem(k)); localStorage.removeItem('govorilki-lang-demo'); };
+function demoStart(o = {}) {
+  const q = new URLSearchParams(location.search), as = o.as || q.get('as') || 'new', lang = o.lang || q.get('lang') || LANG;
+  try { demoClear(); sessionStorage.removeItem('govorilki-demo-on'); if (o.prog) localStorage.setItem('govorilki-demo-guest-prog', JSON.stringify(o.prog)); } catch (e) {}
+  const root = location.pathname.replace(/index\.html$/, '').replace(/(en|pt|ru)\/$/, ''), dir = { ru: 'ru/', pt: 'pt/' }[lang] || '';
+  location.href = root + dir + `?demo&as=${as}&lang=${lang}&t=${Date.now()}` + (o.hash !== undefined ? o.hash : DEMO ? location.hash : '');
+}
+let DEMO_AGE = 0;
+if (DEMO) { try { if (!sessionStorage.getItem('govorilki-demo-on')) {
+  const q = new URLSearchParams(location.search), age = DEMO_AGE = { kid5: 5, kid9: 9 }[q.get('as')] || 0;
+  if (!q.get('as')) demoClear();
+  sessionStorage.setItem('govorilki-demo-on', '1');
+  if (q.get('lang')) localStorage.setItem('govorilki-lang-demo', q.get('lang'));
+  if (age) localStorage.setItem('govorilki-lang-demo', q.get('lang') || LANG);
+} } catch (e) {} }
 const KEY = DEMO ? 'govorilki-demo-v1' : 'govorilki-ryzhik-v1', KEY2 = DEMO ? 'govorilki-demo' : 'govorilki-v2';
 const EMBEDDED_BOOT = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
 const KID_DEFAULT = { vera: ['Вера', 'f', 'r', ''], sava: ['Сава', 'm', 'l', 'ghost'] };
 const blankProfile = (name, gender, track, friend) => ({ stars: 0, best: {}, plays: {}, days: {}, today: null, medals: [], art: [], reads: [], sylBest: 0,
   book: { title: track === 'l' ? "The Canterville Ghost" : '', log: {} }, goal: null, settings: { voice: true, sfx: true, rate: 1, name, gender, track, friend } });
 const rid6 = () => Math.random().toString(36).slice(2, 8);
+// the sandbox's child of that age in a test family, straight on the home screen
+if (DEMO_AGE) { try {
+  const pr = blankProfile("Test", 'm', DEMO_AGE < 7 ? 'r' : 'l', DEMO_AGE < 7 ? 'tiger' : 'ghost'); pr.settings.age = DEMO_AGE;
+  localStorage.setItem('govorilki-demo', JSON.stringify({ cur: 't1', curFam: 'tf', families: { tf: { id: 'tf', name: "Test family", cc: 'PT', kids: ['t1'], grands: [] } }, profiles: { t1: pr } }));
+} catch (e) {} }
 let ROOT = null;
 try { ROOT = JSON.parse(localStorage.getItem(KEY2) || 'null'); } catch (e) {}
 const FRESH = !ROOT || !ROOT.profiles;
@@ -2620,7 +2643,7 @@ window.addEventListener('popstate', () => {
 let LANG_CHECKED = false;
 function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
-    if (DEMO) document.body.insertAdjacentHTML('beforeend', `<a class="demo-b" href="${SITE_ROOT}">${"Trial run · exit"}</a>`); }
+    if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Test from scratch · <button id="demoAgain">again</button> · <a href="${SITE_ROOT}">exit</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
   if (!PULT_BOOTED) { PULT_BOOTED = true; if (ROOT.parentPhone && !GUEST && !DEMO && !LIGA_HASH && fam() && KIDS.length) { screenPult(); return; } }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
@@ -5322,7 +5345,7 @@ const rid = (n = 8) => { const a = new Uint8Array(n); crypto.getRandomValues(a);
 // the grandparent's entry: #vhod=<who>.<family code>, remembered on that phone; &g=<game>.<colour> opens a game
 // the link also carries the names (&n= grandparent, &k= child id~name~f|m), so the grandparent's phone needs no setup;
 // the first links (Nina and Sasha, Sava) had no names and still work
-const GUEST_KEY = 'govorilki-guest';
+const GUEST_KEY = DEMO ? 'govorilki-demo-guest' : 'govorilki-guest';
 const OLD_GRANDS = { nina: ['Бабушка Нина', true], sasha: ['Дедушка Саша', false] };
 let GUEST = null, GUEST_OFF = false, HASH_GAME = null, PULT_HASH = null, PULT_BOOTED = false;
 try {
@@ -5332,7 +5355,7 @@ try {
   // #pult: the family control panel, also on a phone that once opened a relative's link; #pult-new forgets its code
   if (/^#pult(-new)?$/.test(h)) { try { localStorage.removeItem(GUEST_KEY); } catch (e) {} PULT_HASH = h === '#pult-new' ? 'new' : 'open'; history.replaceState(null, '', location.pathname + location.search); }
   const m = h.match(/vhod=([a-z0-9]{2,12})\.([a-z0-9]{8,40})/);
-  if (DEMO) { /* a fresh start: no relative's entry */ } else if (m) {
+  if (m) {
     const old = OLD_GRANDS[m[1]] || ["Granny", true], kk = (arg('k') || "sava~Sava~m").split('~');
     GUEST = { who: m[1], fam: m[2], role: arg('r') || '', name: (arg('n') || old[0]).slice(0, 40), she: arg('n') ? arg('s') === '1' : old[1], kid: kk[0].replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'sava', kidName: (kk[1] || "Sava").slice(0, 30), kidShe: kk[2] === 'f' };
     localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST));
@@ -5376,7 +5399,7 @@ const gameLink = (g, forWho) => forWho === KID.id ? `${SITE}#g=${g.id}.${otherCo
 let SUBS = [];
 function relayClose() { SUBS.forEach(s => { try { s.close(); } catch (e) {} }); SUBS = []; }
 async function relayPost(msg) {
-  if (PREVIEW) return true; // the control panel's preview of a relative's screen sends nothing
+  if (PREVIEW || DEMO) return true; // the control panel's preview and the test sandbox send nothing
   const body = JSON.stringify({ ...msg, at: Date.now() }), topic = 'govorilki-' + famCode();
   const res = await Promise.allSettled(RELAYS.map(r => fetch(r + topic, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
   return res.some(x => x.status === 'fulfilled');
@@ -5411,7 +5434,7 @@ function relaySub(onMsg, onNet) {
 }
 
 /* games kept on this phone */
-const GKEY = 'govorilki-games';
+const GKEY = DEMO ? 'govorilki-demo-games' : 'govorilki-games';
 const gamesAll = () => { try { return JSON.parse(localStorage.getItem(GKEY) || '{}'); } catch (e) { return {}; } };
 function gameSave(g) {
   const all = gamesAll(); all[g.id] = g;
@@ -7776,6 +7799,7 @@ function lmerge(code, list) {
 }
 const ltopic = code => 'govorilki-liga-' + code;
 async function lpost(code, msg) {
+  if (DEMO) return true; // the test sandbox stays out of the real leagues
   const body = JSON.stringify({ ...msg, at: Date.now() });
   const r = await Promise.allSettled(RELAYS.map(u => fetch(u + ltopic(code), { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
   return r.some(x => x.status === 'fulfilled');
@@ -9142,8 +9166,9 @@ Your link:`;
 })();
 /* the relative's own screen: how the grandchildren are doing, praise, the chess */
 const GPROG_KEY = 'govorilki-guest-prog', GOUT_KEY = 'govorilki-guest-out';
-const gLoad = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } };
-const gStore = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const gKey = k => DEMO && /^govorilki-(guest|games)/.test(k) ? 'govorilki-demo-' + k.slice(10) : k;
+const gLoad = (k, d) => { try { return JSON.parse(localStorage.getItem(gKey(k)) || 'null') || d; } catch (e) { return d; } };
+const gStore = (k, v) => { try { localStorage.setItem(gKey(k), JSON.stringify(v)); } catch (e) {} };
 const KNOWN_KIDS = {};
 const hhmm = at => new Date(at).toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' });
 // «в 18:20», «вчера в 9:05», «в среду»: when a thing happened, said simply
@@ -10317,6 +10342,7 @@ async function pultPoll() {
 }
 function screenPult() {
   if (!pultOpen()) { if (!ROOT.pultPin && ROOT.parentPhone === undefined) pultWho(); else pultGate(); return; }
+  let demoLang = LANG;
   const t = newScreen(), fs = Object.values(ROOT.families).filter(f => !f.guest).sort((a, b) => (b.id === ROOT.curFam) - (a.id === ROOT.curFam));
   const draw = () => `${ROOT.parentPhone === undefined ? `<section class="psec pv-who"><h2>📱 Is this your phone?</h2>
       <p>If it is, the app will open with the control panel and will not ask for the code here. If the children play on this phone, keep the code.</p>
@@ -10324,6 +10350,10 @@ function screenPult() {
     <p class="muted">Everyone from your families on this phone who plays or visits. Tap a child to open their game. «👀 Screen» shows what an adult sees on their own phone.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">There is no family on this phone yet.</p>"}
     <section class="psec"><h2>For grown-ups</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ All settings</button><button class="big ghost" id="pvInv">📨 Invite family</button><button class="big ghost" id="pvInvF">👪 Invite another family</button><button class="big ghost" id="pvFams">🏠 Families</button><button class="big ghost" id="pvLg">🏆 Family league</button></div></section>
+    <section class="psec"><h2>🧪 How others see it</h2><p>A test in a separate sandbox: your children and their progress do not change, and nothing goes to grandparents or the league. The phone’s language:</p>
+      <div class="lang-row" id="pvDemoLang">${LANGS.map(([l, n, fl]) => `<button class="pick-b lang-b ${l === demoLang ? 'sel' : ''}" data-dl="${l}"><span class="lang-f">${fl}</span>${n}</button>`).join('')}</div>
+      <div class="pv-demo"><button class="big ghost" data-das="new">🆕 A new family: from the very start</button><button class="big ghost" data-das="kid5">🧒 A child of 5</button><button class="big ghost" data-das="kid9">🧑 A child of 9</button><button class="big ghost" data-das="liga">👪 A family you invited</button><button class="big ghost" data-das="gran">👵 Granny with your link</button></div>
+      <p class="muted">In the test, the bar at the top has «again» and «exit».</p></section>
     <section class="psec"><h2>This phone</h2>${ROOT.parentPhone
       ? `<p>📱 This is your phone: the app opens with the control panel, no code needed. The panel is always under the 👑 button at the top of the main screen.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 The children play here: lock the panel with a code</button></div>`
       : `<p>The panel is locked with a code. Open it with the 👑 button at the top of the main screen${ROOT.parentPhone === false ? '' : " or from «For grown-ups»"}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 This is my phone: no code</button><button class="big ghost" id="pvPin">🔑 Change the code</button><button class="big ghost" id="pvLock">🔒 Lock the panel</button></div>`}</section>`;
@@ -10336,6 +10366,7 @@ function screenPult() {
     on1('pvMine', () => { ROOT.parentPhone = true; save(); screenPult(); });
     on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
+
     on1('pvInv', () => screenInvite(screenPult));
     on1('pvInvF', () => screenInviteFamily(screenPult));
     on1('pvFams', () => screenFamilies());
@@ -10344,6 +10375,9 @@ function screenPult() {
   bind();
   box.onclick = e => {
     const k = e.target.closest('[data-kid]'), v = e.target.closest('[data-view]'), l = e.target.closest('[data-link]'), a = e.target.closest('[data-add]');
+    const dl = e.target.closest('[data-dl]'), das = e.target.closest('[data-das]');
+    if (dl) { demoLang = dl.dataset.dl; $$('#pvDemoLang [data-dl]').forEach(x => x.classList.toggle('sel', x === dl)); sfx.tick(); return; }
+    if (das) { sfx.pop(); pultDemo(das.dataset.das, demoLang); return; }
     const ks = e.target.closest('[data-kset]');
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; screenParents(); return; }
     if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
@@ -10371,6 +10405,16 @@ function pultWho() {
     <p class="muted">You can change this at the bottom of the panel.</p></div>`, { back: () => goHome(), guide: false, raw: true });
   $('#pwMine').onclick = () => { sfx.pop(); ROOT.parentPhone = true; save(); screenPult(); };
   $('#pwKids').onclick = () => { sfx.pop(); ROOT.parentPhone = false; save(); pultGate(true); };
+}
+// how the game opens for someone else, in the sandbox: our league link, a grandparent's link of our family (or a made-up
+// grandmother), with our children's progress as their phones would get it
+function pultDemo(as, lang) {
+  const f = fam(); if (as === 'new' || as === 'kid5' || as === 'kid9' || !f) { demoStart({ as, lang, hash: '' }); return; }
+  if (as === 'liga') { demoStart({ as, lang, hash: `#liga=${f.league ? f.league.code : 'test' + rid(6)}&t=${encodeURIComponent(cleanS(f.league && f.league.team || f.name, 24))}` }); return; }
+  famPeople();
+  const g = f.grands.find(x => roleOf(x)[0] === 'gm') || f.grands[0] || { id: 'babushka', name: "Granny", she: true, role: 'gm' };
+  const kin = f.grands.map(x => ({ id: x.id, n: x.name, s: x.she ? 1 : 0, r: roleOf(x)[0] }));
+  demoStart({ as, lang, hash: '#' + pultLink(f, g).split('#')[1], prog: { at: Date.now(), kids: progSnap(), kin } });
 }
 // the code: made up once on this phone, asked once per visit; four dots and a keypad, like a phone's lock
 function pultGate(change) {
@@ -10496,6 +10540,7 @@ const guestGamesBtns = pg => {
 };
 // a relative's game reaches the grandchild as a note: «I played it too… shall we play together?» (once a game a day)
 async function relayPostTo(code, msg) {
+  if (DEMO) return true;
   const body = JSON.stringify({ ...msg, at: Date.now() });
   const res = await Promise.allSettled(RELAYS.map(r => fetch(r + 'govorilki-' + code, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
   return res.some(x => x.status === 'fulfilled');
@@ -10605,15 +10650,17 @@ function langGo(l, hash = location.hash) {
   location.replace(SITE_ROOT + langPath(l) + location.search + hash);
   return true;
 }
-// at the first start: the language chosen on this phone before. A plain visit to the main page starts in English, where
-// the welcome screen asks for the language; a link from someone (a grandparent's entry, the league, a game) opens in the
-// phone's own language; the first family, which played before there were languages, stays Russian
+// at the first start: the language chosen on this phone before. Someone new on the main address, or with a link from
+// someone (a grandparent's entry, the league, a game), gets the phone's own language when we have it, else English; the
+// welcome screen still offers all three. The /ru/ and /pt/ addresses keep their language; the first family, which played
+// before there were languages, stays Russian
 function langRedirect() {
   if (EMBEDDED) return false;
   let want = langWant();
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
+  const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';
   if (!want && ROOT.families && ROOT.families.main) want = 'ru';
-  else if (!want && !fams && (GUEST || HASH0.length > 1)) {
+  else if (!want && !fams && (GUEST || HASH0.length > 1 || onMain)) {
     const nav = (navigator.languages || [navigator.language || '']).map(x => String(x).slice(0, 2).toLowerCase());
     want = nav.find(x => LANGS.some(l => l[0] === x)) || '';
   }
