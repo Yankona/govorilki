@@ -1,7 +1,7 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
 // page kept under its own address. Icons and fonts come from the cache and refresh in the background.
-const CACHE = 'govorilki-v64';
+const CACHE = 'govorilki-v65';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -18,6 +18,11 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  // the voice's program (Piper, ONNX runtime) from the CDN: kept once, never fetched again for each phrase
+  if (/^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {
+    e.respondWith(caches.open('govorilki-voice').then(async c => (await c.match(req)) || fetch(req).then(res => { if (res && res.ok) c.put(req, res.clone()); return res; })));
+    return;
+  }
   const font = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if (url.origin !== location.origin && !font) return;
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html')) {

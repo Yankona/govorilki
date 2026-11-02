@@ -92,7 +92,10 @@ b.r{color:var(--berry)}
 .guide-ryz{width:66px;height:66px;flex:none;border:0;padding:0;background:none;cursor:pointer}
 .guide-ryz svg{width:100%;height:100%}
 .guide-ryz.talking svg{animation:bob .7s ease-in-out 2}
-.bubble{position:relative;flex:1;min-width:0;margin:0;background:var(--paper);border-radius:20px;padding:10px 16px;font:700 17px/1.3 var(--f-body);box-shadow:0 4px 0 var(--line)}
+.bubble{position:relative;flex:1;min-width:0;margin:0;background:var(--paper);border-radius:20px;padding:10px 16px;font:700 17px/1.3 var(--f-body);box-shadow:0 4px 0 var(--line);max-height:calc(3.9em + 20px);overflow:hidden}
+.bubble.more{cursor:pointer;-webkit-mask-image:linear-gradient(#000 62%,rgba(0,0,0,.25));mask-image:linear-gradient(#000 62%,rgba(0,0,0,.25))}
+.bubble.open{max-height:42vh;overflow-y:auto;-webkit-mask-image:none;mask-image:none}
+@media (max-height:780px){.guide{padding-block:4px 8px;gap:8px}.guide-ryz{width:52px;height:52px}.guide .ibtn{width:46px;height:46px}.bubble{font-size:16px;padding:8px 14px;max-height:calc(2.6em + 16px)}}
 .guide .bubble::before{content:"";position:absolute;left:-10px;top:50%;margin-top:-10px;border:10px solid transparent;border-right-color:var(--paper);border-left:0}
 
 /* buttons */
@@ -105,7 +108,7 @@ b.r{color:var(--berry)}
 .big.danger{background:var(--berry);color:#fff;box-shadow:0 7px 0 #B8305A}
 .big.ghost.danger{background:var(--paper);color:var(--berry);box-shadow:0 7px 0 var(--line-strong)}
 .big svg{width:28px;height:28px}
-.said{position:fixed;z-index:45;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + 100px);display:flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:14px 30px 14px 18px;background:var(--sun);color:var(--ink);font:700 28px/1 var(--f-display);box-shadow:0 7px 0 #D39A00,0 14px 30px rgba(42,35,70,.25);cursor:pointer;animation:popin .4s both,pulse 1.6s .5s ease-in-out infinite}
+.said{position:fixed;z-index:45;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + var(--guide-h,96px) + 10px);display:flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:14px 30px 14px 18px;background:var(--sun);color:var(--ink);font:700 28px/1 var(--f-display);box-shadow:0 7px 0 #D39A00,0 14px 30px rgba(42,35,70,.25);cursor:pointer;animation:popin .4s both,pulse 1.6s .5s ease-in-out infinite}
 .said .star-i{width:40px;height:40px}
 .said:active{box-shadow:0 2px 0 #D39A00}
 
@@ -246,7 +249,7 @@ b.r{color:var(--berry)}
 .abc-big{display:flex;gap:4px;font:900 clamp(64px,14vmin,104px)/1 var(--f-body)}
 .abc-pic{font-size:clamp(54px,12vmin,86px)}
 .abc-w{margin:0;min-height:1.2em;font:900 clamp(22px,5vmin,32px)/1.2 var(--f-body);letter-spacing:.08em}
-.abc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:8px;width:100%}
+.abc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:7px;width:100%}
 .abc-k{aspect-ratio:1;border:0;border-radius:16px;background:var(--paper);font:900 30px/1 var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
 .lt-ask{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;min-height:96px;padding:14px 22px;border:0;border-radius:24px;background:var(--paper);color:var(--ink);font:700 22px var(--f-display);cursor:pointer;box-shadow:0 5px 0 var(--line)}
 .lt-ask>svg{width:36px;height:36px;color:var(--plum)}
@@ -265,7 +268,7 @@ b.r{color:var(--berry)}
 .merge.joined .mg-c{box-shadow:0 7px 0 var(--line-strong)}
 .mg-loco{position:absolute;bottom:-16px;left:4px;font-size:40px;line-height:1;filter:drop-shadow(0 2px 0 rgba(42,35,70,.2))}
 .abc-trains{width:min(100%,560px)}.abc-tt{margin:2px 0 6px;font:800 16px var(--f-body);color:var(--ink-soft)}
-.trn-row{display:flex;flex-wrap:wrap;gap:8px}
+.trn-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px}.trn-row::-webkit-scrollbar{display:none}.trn{flex:none}
 .trn{position:relative;display:flex;align-items:center;gap:12px;border:0;border-radius:14px;padding:6px 12px 12px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);cursor:pointer;font:900 30px/1 var(--f-body)}
 .trn::after{content:'';position:absolute;left:12px;right:12px;bottom:4px;height:5px;border-radius:3px;background:radial-gradient(circle,var(--ink) 0 2.5px,transparent 3px) 0 0/14px 5px repeat-x;opacity:.45}
 .trn-loco{font-size:22px}.trn .trn-c,.trn .trn-w{display:inline-block;padding:3px 7px;border-radius:9px;background:#F4F1FF;transition:transform .45s cubic-bezier(.5,0,.3,1.3)}
@@ -361,7 +364,7 @@ b.r{color:var(--berry)}
 .cam video{display:block;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
 .cam-l{position:absolute;bottom:7%;left:50%;translate:-50% 0;padding:2px 12px;background:var(--paper);border-radius:99px;font:800 15px var(--f-body)}
 .artic-stage.cam-on .mirror,.artic-stage.cam-on .cam{width:min(44vw,320px,40vh)}
-.snd-tabs{display:flex;gap:12px;justify-content:center}
+.snd-tabs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
 .snd-tab{width:76px;height:76px;border:0;border-radius:22px;background:var(--paper);font:900 46px/1 var(--f-body);cursor:pointer;box-shadow:0 5px 0 var(--line-strong)}
 .snd-tab.sel{background:var(--t-yellow);box-shadow:0 5px 0 #D39A00,inset 0 0 0 4px var(--sun)}
 .snd-steps{margin:0;padding:14px 18px 14px 40px;background:var(--paper);border-radius:20px;box-shadow:0 4px 0 var(--line);display:flex;flex-direction:column;gap:6px;font:700 16px/1.4 var(--f-body)}
@@ -1033,8 +1036,8 @@ body.quest .ch-note b{color:var(--sun)}
 .card-slot{min-height:clamp(150px,30vmin,220px);display:grid;place-items:center}
 .pcard{background:#fff;padding:14px 16px 10px;border-radius:16px;box-shadow:0 10px 24px rgba(42,35,70,.18);rotate:var(--rot);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:clamp(76px,16vmin,124px);animation:popin .4s}
 .pcard .w{font:900 22px/1 var(--f-body);letter-spacing:.06em;min-height:22px}
-.books{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;width:min(100%,680px)}
-.book{position:relative;aspect-ratio:1.3;border:0;border-radius:10px 10px 14px 14px;background:var(--c);padding:8px 8px 12px;cursor:pointer;box-shadow:0 7px 0 rgba(42,35,70,.25)}
+.books{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;width:min(100%,680px)}
+.book{position:relative;min-width:0;aspect-ratio:1.3;border:0;border-radius:10px 10px 14px 14px;background:var(--c);padding:8px 8px 12px;cursor:pointer;box-shadow:0 7px 0 rgba(42,35,70,.25)}
 .book .pages{position:absolute;inset:8px 8px 12px;border-radius:4px 4px 8px 8px;background:linear-gradient(90deg,#FFF9EC 0 48%,#E9DCC2 49% 51%,#FFF9EC 52%)}
 .book b{position:relative;display:grid;place-items:center;height:100%;font:900 clamp(30px,7vmin,48px)/1 var(--f-body);color:var(--c);letter-spacing:.04em}
 .book .got{position:absolute;left:0;right:0;bottom:-6px;display:flex;justify-content:center;font-size:24px}
@@ -1100,6 +1103,17 @@ body.quest .ch-note b{color:var(--sun)}
 .new-sticker{display:flex;align-items:center;gap:12px;background:var(--t-yellow);border-radius:20px;padding:8px 18px;font:700 20px var(--f-display)}
 .new-sticker .emo{font-size:52px;line-height:1;animation:hop .6s .6s}
 .win-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:6px}
+/* a phone like the iPhone 11 in Safari (715 px of page): the game and its buttons fit without scrolling */
+@media (max-height:780px){
+  .abc-card{padding:8px 16px;gap:10px}.abc-big{font-size:56px}.abc-pic{font-size:46px}.abc-w{font-size:20px}.abc-k{font-size:26px;border-radius:13px}.trn{font-size:24px;padding:4px 10px 10px}
+  .wd-row{grid-template-columns:repeat(5,min(44px,12vw))}.wd-c{font-size:22px;border-radius:8px}.wd-grid{gap:5px}.wd-row{gap:5px}.kb-k{height:44px}.wd-wrap{gap:8px}
+  .og{gap:6px}.og-wrap,.og-p{width:min(100%,46vh,520px)}.og-st{font-size:19px;min-height:1.2em}.og-e{font-size:26px}
+  .og.ai>.ai-lv{order:8}.og.ai>.ai-side{order:9}
+  .og.ai .og-wrap,.og.ai .og-p{width:min(100%,41vh,520px)}.og.ai .og-btns{gap:6px}.og.ai .og-btns .chip{font-size:14px;padding:6px 10px}.og.ai .og-p small{display:none}
+  .lab-box{height:min(44vh,380px)}
+}
+@media (max-height:780px){.winbox{gap:6px;padding:14px 16px 16px;border-radius:26px}.winbox .ryz-w{width:68px;height:68px}.winbox h2{font-size:30px}.win-stars .star-i{width:38px;height:38px}
+  .new-sticker{padding:4px 12px;font-size:17px}.new-sticker .emo{font-size:34px}.win-btns{gap:8px;margin-top:2px}.winbox .big{min-height:50px;padding:8px 20px;font-size:20px}.win-line{font-size:16px}}
 
 /* album & parents */
 .album{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
@@ -1448,7 +1462,8 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .gpw-l{display:grid;gap:10px}
 .demo-b{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);z-index:50;padding:4px 12px;border-radius:12px;background:#2A2346;color:#fff;font:800 13px var(--f-body);text-decoration:none;opacity:.92;white-space:nowrap}.demo-b button,.demo-b a{background:none;border:0;padding:0;color:#FFC83A;font:inherit;text-decoration:underline;cursor:pointer}
 .kids-top{display:flex;align-items:center;gap:8px;width:100%;justify-content:center}
-.kids-top .kids-in{flex:1;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;justify-content:center}
+.kids-top .kids-in{flex:1;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+.kids-top .kids-in>:first-child{margin-left:auto}.kids-top .kids-in>:last-child{margin-right:auto}
 .kb-ic{flex:none;width:44px;height:44px;font-size:20px}
 .home-t .kid{padding:4px 14px 4px 6px;font-size:16px}.home-t .kid .chip-face{width:34px;height:34px}
 .home-t .kids-fam .fam-chip{padding:3px 10px;font-size:13px}
@@ -1470,7 +1485,7 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .quest .tabbar{background:#20284A}.quest .tb{color:#A8B0D8}.quest .tb.sel{background:#2E3866;color:#fff}
 .tab-head{display:flex;align-items:center;gap:10px;margin:6px 4px 8px}
 .tab-head .emo{font-size:34px}.tab-head h1{flex:1;margin:0;font:900 28px var(--f-display,var(--f-body))}
-.sec-nav{position:sticky;top:-1px;z-index:5;display:flex;align-items:center;gap:6px;overflow-x:auto;padding:8px 4px 12px;margin:0 -4px 6px;background:rgba(205,238,246,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);scrollbar-width:none;border-radius:0 0 16px 16px}
+.sec-nav{flex:none;position:sticky;top:-1px;z-index:5;display:flex;align-items:center;gap:6px;overflow-x:auto;padding:8px 4px 12px;margin:0 -4px 6px;background:rgba(205,238,246,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);scrollbar-width:none;border-radius:0 0 16px 16px}
 .quest .sec-nav{background:rgba(20,24,52,.94)}
 .sec-nav .chip{flex:none;padding:7px 14px;font-size:15px;line-height:1.2;box-shadow:0 3px 0 var(--line-strong)}
 .mini-tiles{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
@@ -1498,8 +1513,8 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .hg-msg{margin:0;white-space:pre-wrap;font:600 15px/1.45 var(--f-body);background:#fff;border-radius:14px;padding:10px;max-height:260px;overflow:auto}
 .hg .big.ghost{margin-top:10px}
 .hg-steps{margin:0;padding:0;list-style:none;counter-reset:hg;display:flex;flex-direction:column;gap:12px}
-.hg-steps li{counter-increment:hg;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;font:700 20px/1.4 var(--f-body)}
-.hg-steps li::before{content:counter(hg);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--sea);color:#fff;font:900 24px var(--f-body)}
+.hg-steps li{counter-increment:hg;position:relative;display:block;min-height:44px;padding-left:56px;font:700 20px/1.4 var(--f-body)}
+.hg-steps li::before{content:counter(hg);position:absolute;left:0;top:0;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--sea);color:#fff;font:900 24px var(--f-body)}
 .hg-i{width:26px;height:26px;vertical-align:-6px}
 .g-steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font:700 18px/1.4 var(--f-body)}
 #invBanner{width:100%}
@@ -1528,6 +1543,8 @@ body.quest .og-st.mine{color:#7BE0A0}
 .og-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .og-wait{width:min(100%,520px);display:flex;flex-direction:column;gap:8px}
 .og-net{margin:0;font:700 14px var(--f-body);color:var(--ink-soft);text-align:center}
+.pv-note{position:fixed;z-index:60;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 6px);max-width:calc(100% - 24px);padding:5px 12px;border-radius:12px;background:rgba(42,35,70,.88);color:#fff;font:800 13px var(--f-body);pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.og-msg{margin:0;min-height:0;font:800 16px var(--f-body);color:var(--plum);text-align:center}.og-msg:empty{display:none}
 .g-list{display:flex;flex-direction:column;gap:8px;width:100%}
 .g-row{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:18px;padding:10px 12px;background:var(--sky);color:var(--ink);text-align:left;cursor:pointer;font:inherit}
 .g-row > span:first-child{font-size:28px}
@@ -1696,7 +1713,7 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .ol-why{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .ol-why p{margin:0;font:700 17px/1.45 var(--f-body)}
 @media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
-.said-card{position:fixed;z-index:44;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + 178px);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(42,35,70,.25);text-align:center;animation:popin .3s both}
+.said-card{position:fixed;z-index:44;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + var(--guide-h,96px) + 88px);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(42,35,70,.25);text-align:center;animation:popin .3s both}
 .said-card small{font:800 13px var(--f-body);color:var(--ink-soft)}
 .said-card b{font:400 clamp(22px,6.5vw,34px)/1.15 var(--f-display);letter-spacing:.03em}
 .said-card b .r{color:var(--berry)}
@@ -2379,6 +2396,34 @@ function loop(t, fn) {
 }
 window.addEventListener('resize', () => { if (resizeFn) resizeFn(); });
 
+// a main button that appears below the visible part after an answer («Дальше», «Итог») scrolls into view by itself;
+// a whole list drawn anew, or a button far down a long list, does not move the screen
+function stageFollow(st) {
+  if (!st || !window.MutationObserver) return;
+  const t0 = performance.now();
+  const mo = new MutationObserver(ms => {
+    if (!st.isConnected) { mo.disconnect(); return; }
+    if (performance.now() - t0 < 800) return;
+    const cand = [];
+    ms.forEach(m => {
+      if (m.type === 'childList') m.addedNodes.forEach(n => { if (n.nodeType === 1) { if (n.matches('button.big')) cand.push(n); else cand.push(...n.querySelectorAll('button.big')); } });
+      else if (!m.target.hidden) { if (m.target.matches('button.big')) cand.push(m.target); else cand.push(...m.target.querySelectorAll('button.big')); }
+    });
+    const vis = cand.filter(x => x.isConnected && x.offsetParent); if (!vis.length || vis.length > 2) return;
+    const b = vis[vis.length - 1], r = b.getBoundingClientRect(), sr = st.getBoundingClientRect();
+    if (r.bottom > sr.bottom - 4 && r.bottom - sr.bottom < 400) b.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+  mo.observe(st, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden'] });
+}
+// how tall the friend's corner is, for what stands above it («Я сказал!», the words to say)
+let GUIDE_RO = null;
+function guideWatch() {
+  const g = $('.guide'), set = h => document.documentElement.style.setProperty('--guide-h', Math.round(h) + 'px');
+  if (GUIDE_RO) GUIDE_RO.disconnect();
+  if (!g) { set(8); return; }
+  set(g.offsetHeight);
+  if (window.ResizeObserver) { GUIDE_RO = new ResizeObserver(() => { if (g.isConnected) set(g.offsetHeight); }); GUIDE_RO.observe(g); }
+}
 function shell(title, body, { back = null, guide = true, raw = false } = {}) {
   app.innerHTML = `<div class="screen">
     <header class="bar">
@@ -2393,8 +2438,12 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
   $('#backBtn').onclick = () => { sfx.pop(); (back || goHome)(); };
   if ($('#homeBtn2')) $('#homeBtn2').onclick = () => { sfx.pop(); goHome(); };
   navEnter(back || goHome);
+  stageFollow($('#stage'));
+  if (!guide) guideWatch();
   if (guide) {
     $('#replay').onclick = () => talk(lastLine); $('#ryzBtn').onclick = () => talk(lastLine);
+    $('#bubble').onclick = e => { const b = e.currentTarget; if (b.classList.contains('more') || b.classList.contains('open')) { b.classList.toggle('open'); b.classList.toggle('more', !b.classList.contains('open')); } };
+    guideWatch();
     const st = $('#stage'), f1 = st.firstElementChild, lead = f1 && (f1.matches('p.lead') ? f1 : f1.firstElementChild && f1.firstElementChild.matches('p.lead') ? f1.firstElementChild : null);
     if (lead && !lead.id) lead.remove();
   }
@@ -2402,7 +2451,7 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
 }
 function talk(text, opts) {
   lastLine = text;
-  const b = $('#bubble'); if (b) b.textContent = gx(text);
+  const b = $('#bubble'); if (b) { b.textContent = gx(text); b.classList.remove('open'); b.scrollTop = 0; b.classList.toggle('more', b.scrollHeight > b.clientHeight + 3); }
   const r = $('.guide-ryz'); if (r) { r.classList.remove('talking'); void r.offsetWidth; r.classList.add('talking'); }
   return say(text, opts);
 }
@@ -2670,7 +2719,7 @@ let HOME_POS = null;
 function homeLeave() { const st = $('#stage'); if (st && $('#tabBar')) HOME_POS = { tab: P.homeTab || 'today', y: st.scrollTop, kid: ROOT.cur }; }
 // every game the child can open, found by a part of its name
 function homeSearch() {
-  const all = [...new Set(SECTIONS.filter(x => x.g === 13 || modOnG(x.g)).flatMap(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id) && !(g.place && !placeOn(g.place)) && (!x.only || x.only === P.settings.track))))];
+  const all = [...new Set(SECTIONS.filter(x => x.g === 13 || modOnG(x.g)).flatMap(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id) && !(g.place && !placeOn(g.place)) && (!x.only || x.only === P.settings.track || P.settings.allGames))))];
   const ov = document.createElement('div'); ov.className = 'srch';
   ov.innerHTML = `<div class="srch-box"><div class="srch-row"><input id="srchIn" type="search" placeholder="Find a game…" autocomplete="off" enterkeyhint="search"><button class="ibtn" id="srchX" aria-label="Close">✕</button></div><div class="srch-list" id="srchList"></div></div>`;
   document.body.append(ov);
@@ -3084,7 +3133,12 @@ function screenCount() {
     btns.forEach((b, i) => {
       const c = cells[i], m = meta[i], size = Math.min(cw, ch) * m.s / 1.2;
       const x = ((c % cols) + .5 + m.jx) * cw, y = (Math.floor(c / cols) + .5 + m.jy) * ch;
-      Object.assign(b.style, { fontSize: size + 'px', left: (x - size * .6) + 'px', top: (y - size * .6) + 'px', transform: `rotate(${m.r}deg)` });
+      b.style.fontSize = size + 'px';
+      // the real size of the picture (an emoji is taller than its font size), turned a little: kept inside the field
+      const ow = b.offsetWidth || size * 1.2, oh = b.offsetHeight || size * 1.2, a = Math.abs(m.r) * Math.PI / 180, k = Math.cos(a) + Math.sin(a);
+      const cx = Math.max(ow * k / 2 + 3, Math.min(Wd - ow * k / 2 - 3, x)), cy = Math.max(oh * k / 2 + 3, Math.min(Ht - oh * k / 2 - 3, y));
+      const L0 = cx - ow / 2, T0 = cy - oh / 2;
+      Object.assign(b.style, { left: L0 + 'px', top: T0 + 'px', transform: `rotate(${m.r}deg)` });
     });
   }
   layout(); resizeFn = layout;
@@ -5108,6 +5162,7 @@ function fairStars(key, stars) {
 const SAID_SLOW = [new RegExp("three times|all the words|to the beat|in rhythm", 'i'), new RegExp("slowly", 'i'), new RegExp("I read|read it", 'i')];
 const saidNeed = label => SAID_SLOW[0].test(label) ? 1.5 : SAID_SLOW[1].test(label) ? 1.2 : SAID_SLOW[2].test(label) ? .9 : .6;
 function askSaid(label = "I said it!", { need = saidNeed(label), expect = '', times = 1 } = {}) {
+  if (expect) expect = gx(expect);
   return new Promise(res => {
     const scr = $('.screen'); if (!scr) return;
     const t = tok, b = document.createElement('button');
@@ -5682,7 +5737,7 @@ function screenGuest() {
     if (gp) { sfx.pop(); guestGames(gp.dataset.gplay); return; }
     if (tr) { const g = GAMES.find(x => x.id === tr.dataset.try); if (!g) return; sfx.pop(); guestGames(tr.dataset.tk, () => g.go()); }
   });
-  $('#gExit').onclick = () => { try { localStorage.removeItem(GUEST_KEY); } catch (e) {} location.replace(SITE); };
+  $('#gExit').onclick = () => { guestLeave(); try { localStorage.removeItem(GUEST_KEY); } catch (e) {} location.replace(SITE); };
   $('#gWho').onclick = async e => {
     const b = e.target.closest('[data-who]'); if (!b || busy) return;
     busy = true; sfx.pop(); $('#gOut').textContent = "Starting the game…";
@@ -5706,7 +5761,7 @@ function screenGuest() {
     if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = "News of " + w.gen; if (k) k.textContent = "Open the game of " + w.gen; }
   };
   learnKids(pg); drawKids();
-  const out = gLoad(GOUT_KEY, []).filter(c => Date.now() - c.at < 3 * 864e5);
+  const out = gLoad(GOUT_KEY, []).filter(c => Date.now() - c.at < 3 * 864e5 && c.to !== 'all');
   out.forEach(c => { if (Date.now() - (c.sent || 0) > 8 * 3600e3) { relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: c.e, x: c.x, p: c.p, ...(c.g ? { g: c.g, st: c.st, gn: c.gn } : {}) }); c.sent = Date.now(); } });
   gStore(GOUT_KEY, out);
   if (Date.now() - (+gLoad('govorilki-guest-here', 0)) > 2 * 3600e3) { relayPost({ k: 'here', by: GUEST.who, n: GUEST.name }); gStore('govorilki-guest-here', Date.now()); }
@@ -5811,6 +5866,7 @@ function screenOnline(id) {
       <div class="og-moves" id="ogM"></div>
       <div class="og-btns"><button class="chip" id="ogDraw">🤝 Offer a draw</button><button class="chip" id="ogResign">🏳️ Give up</button></div>
       <div class="og-wait" id="ogWait" hidden></div>
+      <p class="og-msg" id="ogMsg" role="status"></p>
       <p class="og-net" id="ogNet">Connecting…</p>
     </div>`, { back, guide: false });
   if (guestOn()) $('.screen').classList.add('guest');
@@ -5842,7 +5898,7 @@ function screenOnline(id) {
       const forWho = g.opp, url = gameLink(g, forWho);
       const msg = forWho === KID.id ? `${KID.name}, ${lcFirst(me.name)} is calling you to play chess! Open the link:` : `${who(forWho).name}, it's ${KID.name}! Let's play chess. Open the link:`;
       w.innerHTML = `<p class="lead">${opp.name} hasn't opened${opp.she ? "" : ''} the game yet. The invitation is already ${forWho === KID.id ? "with " + KID.gen : "with " + lcFirst(decl(opp.name, opp.she)[1])}. You can still send the link:</p>${shareRow(msg, url, 'ogShare')}`;
-      bindShare('ogShare', msg, url, s => { $('#ogNet').textContent = s; });
+      bindShare('ogShare', msg, url, s => { $('#ogMsg').textContent = s; });
     }
   }
   async function send(msg) {
@@ -5880,7 +5936,7 @@ function screenOnline(id) {
     play(ms[0]);
   };
   $('#ogPromo').onclick = e => { const b = e.target.closest('[data-pr]'); if (b && promo) play(promo.find(m => m.pr === b.dataset.pr)); };
-  $('#ogDraw').onclick = () => { sfx.pop(); send({ k: 'draw', a: 'offer' }); $('#ogNet').textContent = "You offered a draw. Waiting for an answer."; };
+  $('#ogDraw').onclick = () => { sfx.pop(); send({ k: 'draw', a: 'offer' }); $('#ogMsg').textContent = "You offered a draw. Waiting for an answer."; };
   $('#ogResign').onclick = () => {
     sfx.pop();
     if (!resignAsk) { resignAsk = true; $('#ogResign').textContent = "🏳️ Really give up?"; later(() => { resignAsk = false; const b = $('#ogResign'); if (b) b.textContent = "🏳️ Give up"; }, 4000); return; }
@@ -5906,7 +5962,7 @@ function screenOnline(id) {
     } else if (m.k === 'draw' && m.a === 'offer' && m.at > offerFrom && Date.now() - m.at < 600000 && !gameResult(g).over) {
       offerFrom = m.at; const o = $('#ogOffer'); o.hidden = false;
       o.innerHTML = `<p>${opp.name} offers a draw.</p><button class="big" data-a="yes">🤝 Accept</button><button class="chip" data-a="no">Keep playing</button>`;
-    } else if (m.k === 'draw' && m.a === 'no' && Date.now() - m.at < 600000) $('#ogNet').textContent = `${opp.name} wants to keep playing.`;
+    } else if (m.k === 'draw' && m.a === 'no' && Date.now() - m.at < 600000) $('#ogMsg').textContent = `${opp.name} wants to keep playing.`;
   }, ok => { const n = $('#ogNet'); if (n && !pending) n.textContent = ok ? "📶 Connected" : "No connection. Check your internet. Your moves will be saved."; });
   // say hello (the other side sees «в игре») and share what this phone knows
   const hello = () => { if (t !== tok) return; relayPost({ k: g.h ? 'mv' : 'hi', h: g.h, g: id, by: myId() }); later(hello, 90000); };
@@ -6289,7 +6345,7 @@ function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
   const st = shell(T.name, `<p class="lead">${Q() ? "Read aloud, and then answer the question." : "Listen to the story and answer the question."}</p>
-    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
+    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
   talk(Q() ? "Choose a story. Read it aloud and answer the question." : "Choose a story. I will tell it, and you will answer the question.");
   st.onclick = e => { const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
@@ -6297,7 +6353,7 @@ function screenStory(k, i, o = {}) {
   const t = newScreen(), T = LEARN[k], items = learnItems(k), it = items[i], parts = sentences(it.s), back = o.back || (() => screenLearn(k));
   let miss = 0, rd = 0, reading = 0;
   shell(T.name, `<article class="story">
-      ${learnImg(it.id) ? `<figure class="story-img"><img src="${esc(learnImg(it.id)[3] || `img/learn/${it.id}.webp`)}" onerror="this.parentNode.hidden = true" alt="${esc(it.t)}"><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">source</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
+      ${learnImg(it.id) ? `<figure class="story-img"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.parentNode.hidden = true" alt="${esc(it.t)}"><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">source</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
       <p class="story-t" id="stT">${parts.map((p, j) => `<span class="ss" data-j="${j}">${esc(p)}</span>`).join('')}</p>
       ${it.try ? `<p class="story-try"><b>🧪 Try it yourself</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
@@ -6399,7 +6455,7 @@ GAMES.push(
   { id: 'olymp', name: "Puzzle Cup", sub: "tricky puzzles: thinking, numbers, chess", ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, prog: () => P.olymp ? `solved ${P.olymp.solved.length}/${OLYMP.length}` : '' },
   { id: 'flash', name: "Quick Count", sub: "counting in your head", ico: () => pic('⚡'), bg: 'var(--t-yellow)', go: () => screenFlash(), grp: 8, prog: () => `level ${P.flashLv || 1}` },
   { id: 'dots', name: "Dots in order", sub: "join them up and find out what you get", ico: () => pic('🔢'), bg: 'var(--t-green)', go: () => screenDots(), grp: 4 },
-  { id: 'chess-online', name: "Chess online", sub: "a game with the family", ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => screenFamChess(), grp: 8,
+  { id: 'chess-online', name: "Chess online", sub: "a game with the family", ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => screenFamChess(), grp: 8, hide: () => ROOT.curFam === 'gk',
     prog: () => { const n = Object.keys(gamesAll()).length; return n ? `games: ${n}` : ''; } },
   ...Object.keys(LEARN).map(k => ({ id: 'learn-' + k, place: LEARN[k].place ? k : null, name: LEARN[k].name, sub: LEARN_SUB[k] || LEARN[k].sub || '', ico: () => pic(LEARN[k].e), bg: LEARN[k].bg, go: () => screenLearn(k), grp: 10, prog: () => learnProg(k) }))
 );
@@ -7317,12 +7373,21 @@ self.onmessage = e => { q = q.then(() => run(e.data)); };`;
 const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, mem: new Map() };
 const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : PIPER_VOICES[0][0];
 const piperName = () => PIPER_VOICES.find(v => v[0] === piperVoice())[1];
-const piperOn = () => !EMBEDDED && (ROOT.engine || 'piper') === 'piper' && !PIPER.failed && typeof Worker === 'function' && typeof WebAssembly === 'object';
+const piperLean = () => { try { const c = navigator.connection; return !!(c && (c.saveData || c.type === 'cellular')); } catch (e) { return false; } };
+const engineNow = () => ROOT.engine || ((GUEST || piperLean()) ? 'device' : 'piper');
+const piperOn = () => !EMBEDDED && engineNow() === 'piper' && !PIPER.failed && typeof Worker === 'function' && typeof WebAssembly === 'object';
+// while the voice downloads (about 60 MB, once): a small note with the percent
+function piperNote() {
+  let n = $('#pvNote');
+  if (PIPER.isReady || PIPER.failed || !PIPER.ready) { if (n) n.remove(); return; }
+  if (!n) { n = document.createElement('div'); n.id = 'pvNote'; n.className = 'pv-note'; document.body.append(n); }
+  n.textContent = `🔊 Downloading the friend's voice (60 MB, only once): ${Math.round(PIPER.pct * 100)}%`;
+}
 function piperCall(text) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; return Promise.reject(e); }
-    PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
+    PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
     PIPER.w.onerror = () => { PIPER.failed = true; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
   const voice = piperVoice();
@@ -7333,7 +7398,7 @@ function piperWarm() {
   const v = piperVoice();
   if (PIPER.ready && PIPER.readyVoice === v) return PIPER.ready;
   PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0;
-  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; return true; }, () => { PIPER.failed = true; return false; });
+  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { PIPER.failed = true; piperNote(); return false; });
   return PIPER.ready;
 }
 async function piperAudio(text) {
@@ -7501,7 +7566,7 @@ function screenParents(focus) {
         <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="for example, Masha" value="${esc(P.settings.name || '')}"></label>
       <label class="sw" for="voiceIn"><input id="voiceIn" type="checkbox" ${P.settings.voice ? 'checked' : ''}>The friend talks out loud</label>
       <label class="sw" for="slowIn"><input id="slowIn" type="checkbox" ${P.settings.rate < 1 ? 'checked' : ''}>Speak even slower</label>
-      <label class="prow" for="piperSel">App voice (free, works without internet) <select id="piperSel">${PIPER_VOICES.map(([v, n]) => `<option value="${v}" ${(ROOT.engine || 'piper') === 'piper' && piperVoice() === v ? 'selected' : ''}>${n}</option>`).join('')}<option value="device" ${ROOT.engine === 'device' ? 'selected' : ''}>phone voice</option></select></label>
+      <label class="prow" for="piperSel">App voice (free, works without internet) <select id="piperSel">${PIPER_VOICES.map(([v, n]) => `<option value="${v}" ${engineNow() === 'piper' && piperVoice() === v ? 'selected' : ''}>${n}</option>`).join('')}<option value="device" ${engineNow() === 'device' ? 'selected' : ''}>phone voice</option></select></label>
       <p class="muted" id="piperState"></p>
       <label class="prow" for="devVoice">Phone voice (free) <select id="devVoice"><option value="">— automatic —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Game sounds</label>
@@ -7562,7 +7627,7 @@ function screenParents(focus) {
   const ps = () => {
     const el = $('#piperState'); if (!el) return false;
     el.textContent = EMBEDDED ? "Inside claude.ai the app’s voice does not work: open yankona.github.io/govorilki."
-      : ROOT.engine === 'device' ? "The phone’s voice is speaking now."
+      : engineNow() === 'device' ? "The phone’s voice is speaking now."
       : PIPER.failed ? "The app’s voice did not load on this device; the phone’s voice is speaking for now."
       : PIPER.isReady ? `${piperName()} is speaking. The voice is saved on the phone and works without internet.`
       : `Downloading the voice “${piperName()}” (about 63 MB, once only): ${Math.round(PIPER.pct * 100)}%. The phone’s voice is speaking meanwhile.`;
@@ -8466,7 +8531,7 @@ function resultExtras(ov, { key, stars, line, title, ev, inLesson }) {
     <p class="res-msg" id="resMsg" role="status"></p><div class="res-sheet" id="resSheet" hidden></div>`;
   const main = ov.querySelector('.win-main');
   if (!inLesson) { const sb = document.createElement('button'); sb.className = 'big share'; sb.dataset.r = 'share'; sb.innerHTML = "📤 Share"; main.append(sb); sb.onclick = e => box.onclick({ target: sb, stopPropagation: () => e.stopPropagation() }); }
-  main.after(box);
+  ov.querySelector('.winbox').append(box);
   const msg = m => { const e = ov.querySelector('#resMsg'); if (e) e.textContent = m; };
   const info = { title, line, stars, game: gameName(key) };
   let card = null; const getCard = () => card || (card = resultCard(info).catch(() => null));
@@ -10546,7 +10611,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '64';
+const APP_VER = '65';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -10703,6 +10768,14 @@ function cleanCf(c) {
   return { a: clampN(c.a, 18), md: ids(c.md, 30), off: ids(c.off, 80) || [], so: ids(c.so, 10), lk: ids(c.lk, 30) || [] };
 }
 // one set of games per grandchild, in a family of its own on this phone; the relative plays as themselves, with own stars
+// this phone is the children's: the relative's games family goes, the phone's own family comes back
+function guestLeave() {
+  const back = ROOT.preGk && ROOT.families[ROOT.preGk.fam] ? ROOT.preGk : null;
+  delete ROOT.families.gk; Object.keys(ROOT.profiles).filter(k => k.startsWith('gk_')).forEach(k => delete ROOT.profiles[k]); delete ROOT.preGk;
+  const fid = back ? back.fam : Object.keys(ROOT.families)[0];
+  if (fid) { ROOT.curFam = fid; const f = ROOT.families[fid]; ROOT.cur = back && f.kids.includes(back.cur) ? back.cur : f.kids[0]; }
+  try { localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {}
+}
 function guestGames(kidId, then) {
   const pg = gLoad(GPROG_KEY, null) || {}, she = !!GUEST.she;
   const kids = pg.kids && pg.kids.length ? pg.kids : [{ id: GUEST.kid, n: GUEST.kidName, s: GUEST.kidShe ? 1 : 0, e: 'tiger', tr: 'r' }];
@@ -10723,6 +10796,7 @@ function guestGames(kidId, then) {
   Object.assign(ROOT.profiles.gk_all.settings, { name: GUEST.name, gender: she ? 'f' : 'm', track: 'r', age: 7, label: "All games", allGames: true, mods: MODS.map(m => m.id), sounds: ['r', 'l', 'sh', 'sz'], off: [], langs: ML_LANGS.map(x => x[0]) });
   if (kidId === '*') pick = 'gk_all';
   ROOT.families.gk = { ...(ROOT.families.gk || {}), id: 'gk', name: "Grandchildren's games", cc: 'PT', kids: ['gk_all', ...ids], grands: [], guest: 1 };
+  if (ROOT.curFam !== 'gk' && ROOT.families[ROOT.curFam]) ROOT.preGk = { fam: ROOT.curFam, cur: ROOT.cur };
   useFamily('gk'); ROOT.cur = pick || ids[0]; P = ROOT.profiles[ROOT.cur]; GUEST_OFF = true; save();
   (then || goHome)();
 }
@@ -10743,10 +10817,15 @@ function guestPlayed(key, stars) {
   const day = dayKey(), sent = gLoad('govorilki-guest-played', {});
   if (sent[key] === day) return;
   Object.keys(sent).forEach(k => { if (sent[k] !== day) delete sent[k]; }); sent[key] = day; gStore('govorilki-guest-played', sent);
-  const to = String(ROOT.cur).replace(/^gk_/, ''), x = `${GUEST.she ? "I played it too" : "I played it too"}: «${n}» ${'⭐'.repeat(Math.max(1, Math.min(3, stars)))} Shall we play?`;
-  const c = { i: rid(8), to, e: '🎮', x, p: '', at: Date.now(), sent: Date.now(), g: key, st: clampN(stars, 3), gn: n };
-  relayPostTo(GUEST.fam, { k: 'cheer', i: c.i, to, by: GUEST.who, n: GUEST.name, e: c.e, x, p: '', g: c.g, st: c.st, gn: c.gn });
-  const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
+  const one = String(ROOT.cur).replace(/^gk_/, ''), pg = gLoad(GPROG_KEY, null) || {};
+  const tos = one === 'all' ? ((pg.kids && pg.kids.length ? pg.kids.map(k => k.id) : [GUEST.kid]).slice(0, 6)) : [one];
+  const x = `${GUEST.she ? "I played it too" : "I played it too"}: «${n}» ${'⭐'.repeat(Math.max(1, Math.min(3, stars)))} Shall we play?`, o = gLoad(GOUT_KEY, []);
+  tos.forEach(to => {
+    const c = { i: rid(8), to, e: '🎮', x, p: '', at: Date.now(), sent: Date.now(), g: key, st: clampN(stars, 3), gn: n };
+    relayPostTo(GUEST.fam, { k: 'cheer', i: c.i, to, by: GUEST.who, n: GUEST.name, e: c.e, x, p: '', g: c.g, st: c.st, gn: c.gn });
+    o.push(c);
+  });
+  gStore(GOUT_KEY, o.slice(-30));
 }
 
 /* ---------- inviting another family: friends, classmates, neighbours ---------- */
