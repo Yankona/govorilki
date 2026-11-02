@@ -1690,6 +1690,10 @@ body.pv-on #app{padding-top:52px}
 .ivw,.ivf{display:flex;flex-direction:column;gap:16px;width:min(100%,720px);margin:0 auto}
 .ivf-mode{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ivf .lang-row{display:flex;flex-wrap:wrap;gap:8px}
 .ivf .hg-msg{white-space:pre-wrap;word-break:break-word;margin:0}
+.at-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.at-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;border:0;border-radius:22px;padding:12px 14px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line);font:inherit;text-align:left;cursor:pointer}
+.at-card .at-h{display:flex;align-items:center;gap:8px;font:800 18px/1.1 var(--f-body)}.at-card .emo{font-size:24px}.at-card small{color:var(--ink-soft);font:700 14px var(--f-body)}
+.at-ex{display:flex;gap:4px;max-width:100%;overflow:hidden}.at-ex .tile-ico{flex:none;width:34px;height:34px;font-size:22px;display:grid;place-items:center;overflow:hidden}.at-ex .tile-ico svg,.at-ex .tile-ico img{width:30px;height:30px}
 </style>
 </head>
 <body>
@@ -2627,7 +2631,8 @@ function goHome() {
   navHome();
   document.body.classList.toggle('quest', Q());
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
-  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place)));
+  const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
+  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b));
   const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
@@ -2636,6 +2641,13 @@ function goHome() {
   const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
   const fy = forYou(), likeEm = (P.settings.likes || []).map(l => (LIKES.find(x => x.id === l) || {}).e || '').filter(Boolean), likesE = likeEm.slice(0, 6).join(' ') + (likeEm.length > 6 ? ` +${likeEm.length - 6}` : '');  // a few of the child's interests, not a wall of them
   const sc = stickerCount(), inboxN = inbox(P).length;
+  // every tab with its games: a new child sees at once how much there is
+  const tabGames = t => [...new Set(secs(t.g).flatMap(x => vis(x.g)))];
+  const allHTML = () => `<section class="group alltabs"><div class="group-head"><h2>🎮 Todos os jogos</h2><p>toca para abrir</p></div><div class="at-grid">${HOME_TABS.filter(t => t.g).map(t => { const gs = tabGames(t); return gs.length ? `<button class="at-card" data-at="${t.id}"><span class="at-h"><span class="emo">${t.e}</span><b>${nm(t.n)}</b></span><small>${gs.length} ${plural(gs.length, ["jogo", "jogos", "jogos"])}</small><span class="at-ex">${gs.slice(0, 4).map(x => `<span class="tile-ico">${x.ico()}</span>`).join('')}</span></button>` : ''; }).join('')}</div></section>`;
+  // the first days: a few of the most loved games from different tabs
+  const TRY = Q() ? ['museum', 'phys-lab', 'chess-ai', 'l-moto', 'composers', 'm-sprint'] : ['museum', 'phys-lab', 'draw', 'songs', 'count', 'composers'];
+  const allVis = new Set(HOME_TABS.filter(t => t.g).flatMap(t => tabGames(t).map(x => x.id)));
+  const tryHTML = () => { if ((P.recent || []).length >= 4) return ''; const gs = TRY.filter(id => allVis.has(id) && !fy.includes(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean); return gs.length ? `<section class="group tryit"><div class="group-head"><h2>✨ Experimenta</h2><p>museu, experiências, desenho, música</p></div><div class="tiles">${gs.map(tileHTML).join('')}</div></section>` : ''; };
   // the games played last, newest first, the ones with a tile
   const recent = [...new Set((P.recent || []).map(x => x[3]).filter(Boolean))].map(k => GAMES.find(g => g.id === k)).filter(g => g && !gameOff(g.id)).slice(0, 6);
   let body = '';
@@ -2657,6 +2669,8 @@ function goHome() {
     <div id="btBox">${inboxHTML()}</div>
     ${Q() ? rankCard() + seasonCard() + garageCard() : ''}
     ${lessonsCard()}
+    ${tryHTML()}
+    ${allHTML()}
     ${recent.length ? `<section class="group recent"><div class="group-head"><h2>🕘 Jogaste há pouco</h2><p>continua onde paraste${G("", "")}</p></div><div class="mini-tiles">${recent.map(g => `<button class="mini" data-id="${g.id}" style="--bg:${g.bg}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b></button>`).join('')}</div></section>` : ''}
     ${P.goal ? goalCard() : ''}
     ${KIDS.length > 1 ? teamCard() : ''}
@@ -2703,6 +2717,7 @@ function goHome() {
   if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); }
   on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
+  $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   if (GUEST) on('#guestTop', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   $('#tabBar').onclick = e => {
@@ -6249,12 +6264,18 @@ LEARN.spb.place = 'RU'; LEARN.pt.place = 'PT';
 PLACE_DATA.forEach((pl, i) => { LEARN[pl.id] = { name: pl.n, e: pl.e, bg: PLACE_BG[i % PLACE_BG.length], place: pl.cc, sub: "histórias para crianças", items: pl.items }; });
 const PLACES = () => Object.keys(LEARN).filter(k => LEARN[k].place);
 // the family's choice, or the places of the countries where its people live (ours: Petersburg and Portugal)
-function famPlaces(f = fam()) {
+// the places of the countries where the family's people live (ours: Petersburg and Portugal)
+function ownPlaces(f = fam()) {
   if (!f) return ['spb', 'pt'];
-  if (Array.isArray(f.places)) return f.places;
   if (f.id === 'main') return ['spb', 'pt'];
-  const ccs = [f.cc, ...f.grands.map(g => g.cc)], m = PLACES().filter(k => ccs.includes(LEARN[k].place));
-  return m.length ? m : PLACES();
+  const ccs = [f.cc, ...f.grands.map(g => g.cc)];
+  return PLACES().filter(k => ccs.includes(LEARN[k].place));
+}
+// every child can discover every city and country; a family's own choice (f.places) still limits them
+function famPlaces(f = fam()) {
+  if (f && Array.isArray(f.places)) return f.places;
+  const mine = ownPlaces(f);
+  return [...mine, ...PLACES().filter(k => !mine.includes(k))];
 }
 const placeOn = k => famPlaces().includes(k);
 /* ---------- the new tiles on the home screen ---------- */
