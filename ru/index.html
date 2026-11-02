@@ -10355,7 +10355,7 @@ function screenPult() {
     <p class="muted">Все, кто играет и заходит из ваших семей на этом телефоне. Нажмите на ребёнка, чтобы открыть его игру. «👀 Экран» показывает, что видит взрослый на своём телефоне.</p>
     ${fs.map(pultFam).join('') || '<p class="lead">На этом телефоне пока нет семьи.</p>'}
     <section class="psec"><h2>Для взрослых</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ Все настройки</button><button class="big ghost" id="pvInv">📨 Пригласить родных</button><button class="big ghost" id="pvInvF">👪 Пригласить другую семью</button><button class="big ghost" id="pvFams">🏠 Семьи</button><button class="big ghost" id="pvLg">🏆 Лига семей</button></div></section>
-    <section class="psec"><h2>Этот телефон</h2><p class="muted" id="pvVer">Версия приложения: …</p><div class="prow-btns"><button class="big ghost" id="pvUpd">🔄 Проверить обновление</button></div>${ROOT.parentPhone
+    <section class="psec"><h2>Этот телефон</h2>${ROOT.adminKey ? '' : authorHTML()}<p class="muted" id="pvVer">Версия приложения: …</p><div class="prow-btns"><button class="big ghost" id="pvUpd">🔄 Проверить обновление</button></div>${ROOT.parentPhone
       ? `<p>📱 Это ваш телефон: приложение открывается с пульта, код не нужен. Пульт всегда под кнопкой 👑 вверху главного экрана.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 Здесь играют дети: закрыть пульт кодом</button></div>`
       : `<p>Пульт закрыт кодом. Открыть его можно кнопкой 👑 вверху главного экрана${ROOT.parentPhone === false ? '' : ' или из «Для взрослых»'}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 Это мой телефон: без кода</button><button class="big ghost" id="pvPin">🔑 Сменить код</button><button class="big ghost" id="pvLock">🔒 Закрыть пульт</button></div>`}</section>`;
   shell('Пульт семьи', `<div class="pult" id="pult">${draw()}</div>`, { back: () => goHome(), guide: false, raw: true });
@@ -10369,6 +10369,8 @@ function screenPult() {
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
     on1('pvTest', () => screenPultTest());
     on1('pvAdm', () => screenAdmin());
+    on1('pvAuthor', () => { const bx = document.getElementById('pvAuthorBox'); if (bx) { bx.hidden = !bx.hidden; if (!bx.hidden) $('#pvKey').focus(); } });
+    on1('pvKeyGo', () => { const v = ($('#pvKey').value || '').trim().replace(/^.*admin=/, ''); if (!/^[A-Za-z0-9_-]{30,60}$/.test(v)) { $('#pvKeyOut').textContent = authorBad(); return; } adminPrivate(v).then(() => { ROOT.adminKey = v; save(); screenAdmin(); }, () => { $('#pvKeyOut').textContent = authorBad(); }); });
     on1('pvUpd', () => appUpdate($('#pvVer')));
 
     on1('pvInv', () => screenInvite(screenPult));
@@ -10399,7 +10401,10 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '57';
+const APP_VER = '58';
+// the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
+const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: ввести ключ</button></div><div id="pvAuthorBox" hidden><label class="prow" for="pvKey">Ключ автора или ссылка с ним <input id="pvKey" type="password" autocomplete="off"></label><div class="prow-btns"><button class="big" id="pvKeyGo">Открыть «Все семьи»</button></div><p class="fe-err" id="pvKeyOut"></p></div>`;
+const authorBad = () => 'Ключ не подходит.';
 function appVer(el) { if (el) el.textContent = APP_VER ? `Версия приложения: ${APP_VER}` : ''; }
 function appUpdate(el) {
   if (el) el.textContent = 'Проверяю обновление…';
