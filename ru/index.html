@@ -2079,6 +2079,7 @@ function ac() {
 let SR_ON = 0;
 let AC_FAIL = 0;
 document.addEventListener('pointerdown', () => {
+  soundOut();
   if (!AC) return;
   // iOS leaves the page sound «interrupted» after a call, a notification or another app; if waking it did not help
   // last time, a new one is made right here, inside the touch, where iPhone allows it to start
@@ -2091,7 +2092,13 @@ document.addEventListener('pointerdown', () => {
   if (AC.state !== 'running') AC.resume().catch(() => {});
 }, { capture: true });
 // iOS: while the microphone is on, sound goes to the quiet earpiece; back to the speaker as soon as it is off
-const audioSession = type => { try { if (navigator.audioSession) navigator.audioSession.type = type; } catch (e) {} };
+const audioSession = type => { try { if (navigator.audioSession && navigator.audioSession.type !== type) navigator.audioSession.type = type; } catch (e) {} };
+// the loud speaker and «playback» whenever nothing records; a recognition that never said it ended does not keep the
+// sound in the earpiece (a new screen, a song and every touch put it back)
+function soundOut(force) {
+  if (force && !MIC.stream) SR_ON = 0;
+  if (!MIC.stream && !SR_ON) audioSession('playback');
+}
 function tone(f, d = .15, type = 'sine', v = .12, when = 0, f2 = 0) {
   if (!P.settings.sfx) return; const a = ac(); if (!a) return;
   MIC.quietUntil = Math.max(MIC.quietUntil, performance.now() + (when + d) * 1000 + 200);
@@ -2382,7 +2389,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
-  tok++; hush(); windStop(); motorStop(); compStop(); stopMusic(); stopCam(); guardReset(); relayClose(); liveStop();
+  tok++; hush(); windStop(); motorStop(); compStop(); stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
@@ -3708,6 +3715,7 @@ function mallet(f, t, len, bus, v = .2) {
 }
 const bassFor = note => 'CEG'.includes(note[0]) ? 'C3' : 'FA'.includes(note[0]) ? 'F3' : 'G3';
 function playSong(sg, { bpm = 84, onNote, onEnd }) {
+  soundOut(true);
   const bus = musicBus(); if (!bus) { if (onEnd) later(onEnd, 300); return; }
   const toks = songTokens(sg), beat = 60 / bpm;
   let tt = AC.currentTime + .35, acc = 0;
@@ -10606,7 +10614,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '66';
+const APP_VER = '67';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
