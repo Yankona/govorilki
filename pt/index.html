@@ -2675,7 +2675,7 @@ function goHome() {
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
   const tiles = g => vis(g).map(tileHTML).join('');
-  const secs = gs => SECTIONS.filter(x => gs.includes(x.g) && (x.g === 13 || modOnG(x.g)) && (!x.only || x.only === P.settings.track) && vis(x.g).length);
+  const secs = gs => SECTIONS.filter(x => gs.includes(x.g) && (x.g === 13 || modOnG(x.g)) && (!x.only || x.only === P.settings.track || P.settings.allGames) && vis(x.g).length);
   const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
   const fy = forYou(), likeEm = (P.settings.likes || []).map(l => (LIKES.find(x => x.id === l) || {}).e || '').filter(Boolean), likesE = likeEm.slice(0, 6).join(' ') + (likeEm.length > 6 ? ` +${likeEm.length - 6}` : '');  // a few of the child's interests, not a wall of them
   const sc = stickerCount(), inboxN = inbox(P).length;
@@ -10418,7 +10418,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '60';
+const APP_VER = '61';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -10547,7 +10547,13 @@ document.addEventListener('click', e => {
   const stop = () => { e.stopPropagation(); e.preventDefault(); };
   if (e.target.closest('#gKids')) { stop(); pultExit(goHome); return; }
   if (e.target.closest('#gExit')) { stop(); pultExit(); return; }
-  if (e.target.closest('[data-who],[data-chess],[data-pr],[data-gplay],[data-try]')) {
+  if (e.target.closest('#pvToDemo')) { stop(); sfx.pop(); pultExit(() => pultDemo('gran', LANG)); return; }
+  if (e.target.closest('[data-gplay],[data-try]')) {
+    stop(); sfx.tick();
+    const o = $('#gPrOut') || $('#gOut'); if (o) o.innerHTML = `Isto é uma pré-visualização: aqui os jogos não começam. Pode jogar como ${esc(lcFirst(decl(GUEST.name, GUEST.she)[3]))} num teste — os seus dados não mudam.<br><button class="big" id="pvToDemo">🧪 Jogar num teste</button>`;
+    return;
+  }
+  if (e.target.closest('[data-who],[data-chess],[data-pr]')) {
     stop(); sfx.tick();
     const o = e.target.closest('[data-who]') ? $('#gOut') : $('#gPrOut'); if (o) o.textContent = "Isto é uma pré-visualização: daqui nada é enviado. É assim que o botão aparece no telemóvel do adulto.";
   }
@@ -10584,13 +10590,17 @@ function guestGames(kidId, then) {
     if (k.id === kidId) pick = id;
     return id;
   });
-  ROOT.families.gk = { ...(ROOT.families.gk || {}), id: 'gk', name: "Jogos dos netos", cc: 'PT', kids: ids, grands: [], guest: 1 };
+  // «Все игры»: every section of every age, every sound, nothing switched off
+  if (!ROOT.profiles.gk_all) ROOT.profiles.gk_all = blankProfile(GUEST.name, she ? 'f' : 'm', 'r', 'tiger');
+  Object.assign(ROOT.profiles.gk_all.settings, { name: GUEST.name, gender: she ? 'f' : 'm', track: 'r', age: 7, label: "Todos os jogos", allGames: true, mods: MODS.map(m => m.id), sounds: ['r', 'l', 'sh', 'sz'], off: [], langs: ML_LANGS.map(x => x[0]) });
+  if (kidId === '*') pick = 'gk_all';
+  ROOT.families.gk = { ...(ROOT.families.gk || {}), id: 'gk', name: "Jogos dos netos", cc: 'PT', kids: ['gk_all', ...ids], grands: [], guest: 1 };
   useFamily('gk'); ROOT.cur = pick || ids[0]; P = ROOT.profiles[ROOT.cur]; GUEST_OFF = true; save();
   (then || goHome)();
 }
 const guestGamesBtns = pg => {
   const kids = pg && pg.kids && pg.kids.length ? pg.kids : [{ id: GUEST.kid, n: GUEST.kidName, s: GUEST.kidShe ? 1 : 0, e: 'tiger' }];
-  return kids.map(k => `<button class="big" data-gplay="${esc(k.id)}"><span class="chip-face">${friendSVG('', FRIENDS[k.e] ? k.e : 'tiger')}</span>Jogos de ${esc(kidOf(k.id, k.n, !!k.s).gen)}</button>`).join('');
+  return `<button class="big" data-gplay="*"><span class="chip-face">🎮</span>Todos os jogos de uma vez</button>` + kids.map(k => `<button class="big ghost" data-gplay="${esc(k.id)}"><span class="chip-face">${friendSVG('', FRIENDS[k.e] ? k.e : 'tiger')}</span>Jogos de ${esc(kidOf(k.id, k.n, !!k.s).gen)}</button>`).join('');
 };
 // a relative's game reaches the grandchild as a note: «I played it too… shall we play together?» (once a game a day)
 async function relayPostTo(code, msg) {
