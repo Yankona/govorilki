@@ -1509,6 +1509,9 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .lang-row{display:flex;flex-wrap:wrap;gap:8px}
 .lang-row .lang-b{flex:0 0 auto;width:auto;min-width:0;gap:8px;padding:10px 16px;font:800 18px var(--f-body)}
 .lang-b .lang-f{font-size:24px;line-height:1}
+.ml-lrows{display:grid;gap:6px;margin-top:6px}.ml-lr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 6px 12px;border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
+.ml-lr.on{box-shadow:inset 0 0 0 3px var(--sun)}.ml-ln{display:flex;align-items:center;gap:8px;font:800 17px var(--f-body)}.ml-seg{display:flex;gap:6px}.ml-seg .chip{padding:6px 12px;font-size:15px}
+.ml-seg .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}.ml-learn{font:800 13px var(--f-body);color:var(--plum);background:var(--t-lilac);border-radius:8px;padding:1px 7px;vertical-align:middle}
 .fe .lang-pick{margin:4px 0 6px}
 .hg-msg{margin:0;white-space:pre-wrap;font:600 15px/1.45 var(--f-body);background:#fff;border-radius:14px;padding:10px;max-height:260px;overflow:auto}
 .hg .big.ghost{margin-top:10px}
@@ -8298,6 +8301,7 @@ function speechPlanMine(n, s) {
   if (!m) return;
   if (v && !v.settings.likes) { v.settings.likes = ['kpop', 'beauty', 'unicorn', 'draw']; if (!v.settings.age) v.settings.age = 5; }
   if (sv && !sv.settings.likes) { sv.settings.likes = ['chess', 'rap', 'race', 'sport', 'fight', 'music', 'math', 'books']; if (!sv.settings.age) sv.settings.age = 9; }
+  if (sv && !sv.settings.deAdded) { const L = Array.isArray(sv.settings.langs) && sv.settings.langs.length ? sv.settings.langs : ['ru', 'pt', 'en']; if (!L.includes('de')) L.push('de'); sv.settings.langs = L; sv.settings.learn = [...new Set([...(sv.settings.learn || []), 'de'])]; sv.settings.deAdded = 1; }
   save();
 })();
 
@@ -10619,7 +10623,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '67';
+const APP_VER = '68';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -11009,7 +11013,8 @@ function screenAdmin() {
 // One sound lives differently in each language: the Russian Р trills with the tongue tip, the Portuguese rr and the
 // German R roll in the throat, the English r does not trill at all. A child who feels the difference controls the
 // tongue better in each of them. Words and their sounds stay as they are in every build of the app (RU keeps them).
-const ML_LANGS = [['ru', '🇷🇺', RU('Русский'), 'ru-RU'], ['pt', '🇵🇹', RU('Português'), 'pt-PT'], ['en', '🇬🇧', RU('English'), 'en-GB'], ['de', '🇩🇪', RU('Deutsch'), 'de-DE']];
+const ML_LANGS = [['ru', '🇷🇺', RU('Русский'), 'ru-RU'], ['uk', '🇺🇦', RU('Українська'), 'uk-UA'], ['pt', '🇵🇹', RU('Português'), 'pt-PT'], ['en', '🇬🇧', RU('English'), 'en-GB'],
+  ['de', '🇩🇪', RU('Deutsch'), 'de-DE'], ['es', '🇪🇸', RU('Español'), 'es-ES'], ['fr', '🇫🇷', RU('Français'), 'fr-FR'], ['it', '🇮🇹', RU('Italiano'), 'it-IT']];
 const mlInfo = c => ML_LANGS.find(x => x[0] === c) || ML_LANGS[0];
 // the same thing in four languages; c: the words sound alike (good for «guess the language»)
 const ML_WORDS = JSON.parse(RU(`[
@@ -11024,6 +11029,18 @@ const ML_WORDS = JSON.parse(RU(`[
 ["👟","ботинок","sapato","shoe","Schuh",0],["⏰","часы","relógio","clock","Uhr",0],["🐍","змея","cobra","snake","Schlange",0],["🌸","цветок","flor","flower","Blume",0],
 ["💡","лампа","lâmpada","lamp","Lampe",1],["📻","радио","rádio","radio","Radio",1],["🐊","крокодил","crocodilo","crocodile","Krokodil",1]
 ]`)).map(([e, ru, pt, en, de, c]) => ({ e, w: { ru, pt, en, de }, c: !!c }));
+// the same words in Spanish, French, Italian and Ukrainian
+const ML_MORE = JSON.parse(RU(`{"🌹":["rosa","rose","rosa","троянда"],"🐟":["pez","poisson","pesce","риба"],"🦒":["jirafa","girafe","giraffa","жирафа"],"🦓":["cebra","zèbre","zebra","зебра"],
+"🌞":["sol","soleil","sole","сонце"],"🍫":["chocolate","chocolat","cioccolato","шоколад"],"🐯":["tigre","tigre","tigre","тигр"],"🦁":["león","lion","leone","лев"],
+"🍋":["limón","citron","limone","лимон"],"🚀":["cohete","fusée","razzo","ракета"],"⚽":["pelota","ballon","palla","м'яч"],"🐭":["ratón","souris","topo","миша"],
+"🦋":["mariposa","papillon","farfalla","метелик"],"🍉":["sandía","pastèque","anguria","кавун"],"🌙":["luna","lune","luna","місяць"],"🎵":["música","musique","musica","музика"],
+"🐸":["rana","grenouille","rana","жаба"],"🍓":["fresa","fraise","fragola","полуниця"],"🧀":["queso","fromage","formaggio","сир"],"🦊":["zorro","renard","volpe","лисиця"],
+"🐻":["oso","ours","orso","ведмідь"],"🌧️":["lluvia","pluie","pioggia","дощ"],"🏠":["casa","maison","casa","дім"],"🐶":["perro","chien","cane","собака"],
+"🍎":["manzana","pomme","mela","яблуко"],"🌳":["árbol","arbre","albero","дерево"],"🚂":["tren","train","treno","потяг"],"🐑":["oveja","mouton","pecora","вівця"],
+"🎂":["pastel","gâteau","torta","торт"],"🍌":["plátano","banane","banana","банан"],"🏫":["escuela","école","scuola","школа"],"⭐":["estrella","étoile","stella","зірка"],
+"👟":["zapato","chaussure","scarpa","черевик"],"⏰":["reloj","horloge","orologio","годинник"],"🐍":["serpiente","serpent","serpente","змія"],"🌸":["flor","fleur","fiore","квітка"],
+"💡":["lámpara","lampe","lampada","лампа"],"📻":["radio","radio","radio","радіо"],"🐊":["cocodrilo","crocodile","coccodrillo","крокодил"]}`));
+ML_WORDS.forEach(x => { const m = ML_MORE[x.e]; if (m) Object.assign(x.w, { es: m[0], fr: m[1], it: m[2], uk: m[3] }); });
 // the letters of each sound in each language
 const ML_HL = {
   r: { ru: /[рР]/g, pt: /rr|r/gi, en: /r/gi, de: /r/gi },
@@ -11031,8 +11048,15 @@ const ML_HL = {
   sh: { ru: /[шжчщШЖЧЩ]/g, pt: /ch|x|j|g(?=[eéií])/gi, en: /sh|ch|j/gi, de: /t?sch|^s(?=[tp])/gi },
   sz: { ru: /[сзСЗ]/g, pt: /ss|ç|s|z|c(?=[eéií])/gi, en: /s|z/gi, de: /ss|ß|s|z/gi }
 };
-const mlHas = (snd, c, w) => { const re = (ML_HL[snd] || {})[c]; if (!re) return false; re.lastIndex = 0; return re.test(w); };
-const mlHl = (snd, c, w) => { const re = (ML_HL[snd] || {})[c]; return `<span class="ml-wd">${re ? esc(w).replace(re, m => `<b class="ml-hl">${m}</b>`) : esc(w)}</span>`; };
+Object.assign(ML_HL.r, { uk: /[рР]/g, es: /rr|r/gi, fr: /r/gi, it: /rr|r/gi });
+Object.assign(ML_HL.l, { uk: /[лЛ]/g, es: /ll|l/gi, fr: /ill|l/gi, it: /l/gi });
+Object.assign(ML_HL.sh, { uk: /[шжчщШЖЧЩ]/g, es: /ch/gi, fr: /ch|j|g(?=[eéiy])/gi, it: /sc(?=[ei])|c(?=[ei])|g(?=[ei])/gi });
+Object.assign(ML_HL.sz, { uk: /[сзСЗ]/g, es: /s|z|c(?=[eéií])/gi, fr: /ss|s|z|ç|c(?=[eéiy])/gi, it: /ss|s|zz|z/gi });
+// letters that look like the sound and are another one: Spanish ll is «й», French ill too
+const ML_NOT = { l: { es: ['ll'], fr: ['ill'] } };
+const mlSkip = (snd, c) => (ML_NOT[snd] || {})[c] || [];
+const mlHas = (snd, c, w) => { const re = (ML_HL[snd] || {})[c]; if (!re) return false; const sk = mlSkip(snd, c); return (String(w).match(new RegExp(re.source, 'g' + (re.ignoreCase ? 'i' : ''))) || []).some(m => !sk.includes(m.toLowerCase())); };
+const mlHl = (snd, c, w) => { const re = (ML_HL[snd] || {})[c], sk = mlSkip(snd, c); return `<span class="ml-wd">${re ? esc(w).replace(re, m => sk.includes(m.toLowerCase()) ? m : `<b class="ml-hl">${m}</b>`) : esc(w)}</span>`; };
 // how the sound is made in each language, and what to feel
 const ML_TIPS = {
   r: { ru: "The tip of the tongue trembles behind the top teeth: r-r-r, like a little motor.", pt: "Between vowels, r is one quick tap of the tongue tip: cara, para. But rr and r at the start of a word growl in the throat: rato, carro.", en: "The tongue does not tremble or touch the top of the mouth, and the lips go a little forward: red, rain. At the end of a word you hardly hear the r: car, star.", de: "R growls at the back, in the throat, like gargling: Rose, rot. At the end of a word it is almost an «a»: Mutter, Vater.",
@@ -11044,6 +11068,14 @@ const ML_TIPS = {
   sz: { ru: "С: the tongue tip behind the bottom teeth, a smile, a cool little wind: сок, сова. З is the same with your voice on: зебра, зонт.", pt: "S at the start of a word sounds like S: sol, sapo. S between vowels sounds like Z: casa, rosa. Z is Z too: zebra.", en: "S is like С: sun, snake. Z is like З: zoo, zebra. At the end of a word s often sounds like Z: dogs.", de: "S before a vowel sounds like Z: Sonne, Saft. Ss and ß sound like S: Wasser, Fuß. And the German Z is «ts»: Zebra, Zoo!",
     feel: "Say «zebra» in Russian, English and German. In German the Z becomes «ts»! Where else does one letter sound different?" }
 };
+Object.assign(ML_TIPS.r, { uk: "Like the Russian Р: the tongue tip trembles behind the top teeth: риба, ракета.", es: "Between vowels, r is one tap of the tongue tip: pera, caro. But rr and r at the start of a word are a long r-r-r, like the Russian one: perro, rana.",
+  fr: "The French R is made in the throat, and the tongue tip rests behind the bottom teeth: rose, renard.", it: "The Italian r trembles with the tongue tip, like the Russian one: rana, rosa. Double rr is even longer: torre, carro." });
+Object.assign(ML_TIPS.l, { uk: "Hard Л as in Russian: лампа, стіл. Soft ЛЬ: the back of the tongue goes up: лисиця, сіль.", es: "The Spanish l is always light and easy: luna, sol. But ll is a different sound, almost a y: lluvia, estrella.",
+  fr: "The French l is light and soft, even at the end of a word: lune, ciel. But ill often sounds like a y: papillon, grenouille.", it: "The Italian l is light and clear: luna, sole. Hold double ll a little longer: stella, palla." });
+Object.assign(ML_TIPS.sh, { uk: "Ш, Ж and Ч are hard, as in Russian: шапка, жаба. And Ukrainian Щ sounds like \"shch\": щука, \"shchuka\".", es: "Spanish has no sh sound! Ch is a short \"ch\": chocolate, noche. Try saying it with no hissing at all.",
+  fr: "Ch is a soft sh: chien, chocolat. J, and g before e or i, sound like the s in \"measure\": jardin, girafe.", it: "Sc before e or i is sh: pesce, scimmia. C before e or i is \"ch\": cioccolato. G before e or i is \"j\": giraffa." });
+Object.assign(ML_TIPS.sz, { uk: "С and З as in Russian: сонце, зебра. Soft СЬ and ЗЬ: with a wide smile: сіль.", es: "S is like s: sol, sopa. But z, and c before e or i, sound like English th in Spain, with the tongue between the teeth: zapato, cebra. In Latin America they are just s.",
+  fr: "S at the start of a word is s: soleil. S between vowels is z: rose, maison. Z sounds like z: zèbre, and ç like s: garçon.", it: "S usually sounds like s: sole, serpente, and between vowels often like z: rosa. And the Italian z is ts or dz: zebra, pizza!" });
 const ML_SND = [['r', "R"], ['l', "L"], ['sh', "SH"], ['sz', "S and Z"]];
 // the languages a child speaks: set by the parents; our first family's children speak several
 function myLangs(pr = P) {
@@ -11051,10 +11083,12 @@ function myLangs(pr = P) {
   if (Array.isArray(st.langs) && st.langs.length) return st.langs.filter(c => ML_LANGS.some(x => x[0] === c));
   const id = Object.keys(ROOT.profiles).find(k => ROOT.profiles[k] === pr);
   if (fam() && fam().id === 'main' && id === 'vera') return ['ru', 'pt', 'en', 'de'];
-  if (fam() && fam().id === 'main' && id === 'sava') return ['ru', 'pt', 'en'];
+  if (fam() && fam().id === 'main' && id === 'sava') return ['ru', 'pt', 'en', 'de'];
   return [ML_LANGS.some(x => x[0] === LANG) ? LANG : 'ru'];
 }
 const mlOn = () => myLangs().length >= 2;
+// a language the child learns (not speaks yet): marked in the cards, said a little slower
+const mlLearns = (c, pr = P) => (pr.settings.learn || []).includes(c);
 const mlSounds = () => { const s = mySounds().filter(k => ML_TIPS[k]); return s.length ? s : ['r']; };
 // a voice for each language from the phone; without one, the word is only shown
 const mlVoice = c => { try { const L = mlInfo(c)[3], vs = speechSynthesis.getVoices(); return vs.find(v => v.lang === L) || vs.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(c)) || null; } catch (e) { return null; } };
@@ -11062,20 +11096,24 @@ function sayIn(c, text, rate = .8) {
   return new Promise(res => {
     const v = 'speechSynthesis' in window ? mlVoice(c) : null; if (!v) { res(false); return; }
     let done = false; const fin = ok => { if (!done) { done = true; res(ok); } };
-    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = mlInfo(c)[3]; try { u.voice = v; } catch (e) {} u.rate = rate; u.onend = () => fin(true); u.onerror = () => fin(false); setTimeout(() => fin(true), 1800 + text.length * 160); speechSynthesis.speak(u); } catch (e) { fin(false); }
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = mlInfo(c)[3]; try { u.voice = v; } catch (e) {} u.rate = mlLearns(c) ? Math.min(rate, .7) : rate; u.onend = () => fin(true); u.onerror = () => fin(false); setTimeout(() => fin(true), 1800 + text.length * 160); speechSynthesis.speak(u); } catch (e) { fin(false); }
   });
 }
 const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in window && !mlVoice(c)); return no.length ? `<p class="muted ml-nov">🔈 This phone has no voice for: ${no.map(c => mlInfo(c)[2]).join(', ')}. The words are shown, and you can hear them once you add a voice: on iPhone — Settings → Accessibility → Spoken Content → Voices.</p>` : ''; };
 // the parents' choice of the child's languages, in the settings and in the setup of a new child
-const mlLangsHTML = (id, pr) => { const on = myLangs(pr); return `<div class="ml-langs"><p class="prow">Which languages does ${esc(pr.settings.name || '')} speak? The speech practice will use them all.</p><div class="lang-row" id="${id}">${ML_LANGS.map(([c, f, n]) => `<button class="pick-b lang-b ${on.includes(c) ? 'sel' : ''}" data-ml="${c}"><span class="lang-f">${f}</span>${n}</button>`).join('')}</div></div>`; };
+const mlLangsHTML = (id, pr) => { const on = myLangs(pr); return `<div class="ml-langs"><p class="prow">Which languages does ${esc(pr.settings.name || '')} speak or learn? Speech practice will use them all.</p><div class="ml-lrows" id="${id}">${ML_LANGS.map(([c, f, n]) => { const st = on.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : ''; return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg"><button class="chip ${st === 'speak' ? 'sel' : ''}" data-ml="${c}" data-st="speak">speaks</button><button class="chip ${st === 'learn' ? 'sel' : ''}" data-ml="${c}" data-st="learn">learns</button></span></div>`; }).join('')}</div></div>`; };
 function bindMlLangs(id, pr) {
   const row = document.getElementById(id); if (!row) return;
   row.onclick = e => {
     const b = e.target.closest('[data-ml]'); if (!b) return;
-    const cur = myLangs(pr), c = b.dataset.ml, next = cur.includes(c) ? cur.filter(x => x !== c) : [...cur, c];
+    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = cur.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : '';
+    const next = was === want ? cur.filter(x => x !== c) : cur.includes(c) ? cur : [...cur, c];
     if (!next.length) return;
-    pr.settings.langs = ML_LANGS.map(x => x[0]).filter(x => next.includes(x)); save(); sfx.tick();
-    row.querySelectorAll('[data-ml]').forEach(x => x.classList.toggle('sel', pr.settings.langs.includes(x.dataset.ml)));
+    pr.settings.langs = ML_LANGS.map(x => x[0]).filter(x => next.includes(x));
+    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x)));
+    if (was !== want && want === 'learn') learn.add(c); else learn.delete(c);
+    pr.settings.learn = [...learn]; save(); sfx.tick();
+    row.querySelectorAll('.ml-lr').forEach(r => { const k = r.querySelector('[data-ml]').dataset.ml, st = pr.settings.langs.includes(k) ? (pr.settings.learn.includes(k) ? 'learn' : 'speak') : ''; r.classList.toggle('on', !!st); r.querySelectorAll('[data-st]').forEach(x => x.classList.toggle('sel', x.dataset.st === st)); });
   };
 }
 // 1. one sound, different languages: how it is made in each of the child's languages, words to hear and say
@@ -11086,7 +11124,7 @@ function screenMlSound(sndArg) {
   const draw = () => {
     const T = ML_TIPS[snd], words = c => ML_WORDS.filter(x => mlHas(snd, c, x.w[c])).slice(0, 4);
     return `${sounds.length > 1 ? `<div class="lang-row" id="mlSnd">${ML_SND.filter(x => sounds.includes(x[0])).map(([k, n]) => `<button class="pick-b ${k === snd ? 'sel' : ''}" data-snd="${k}">${n}</button>`).join('')}</div>` : ''}
-      ${langs.map(c => { const [, f, n] = mlInfo(c); return `<div class="ml-card"><h3>${f} ${n}</h3><p>${T[c]}</p><div class="ml-words">${words(c).map(x => `<button class="chip" data-say="${c}" data-w="${esc(x.w[c])}">${x.e} ${mlHl(snd, c, x.w[c])} 🔊</button>`).join('')}</div></div>`; }).join('')}
+      ${langs.map(c => { const [, f, n] = mlInfo(c); return `<div class="ml-card"><h3>${f} ${n}${mlLearns(c) ? " <small class=\"ml-learn\">learning</small>" : ''}</h3><p>${T[c]}</p><div class="ml-words">${words(c).map(x => `<button class="chip" data-say="${c}" data-w="${esc(x.w[c])}">${x.e} ${mlHl(snd, c, x.w[c])} 🔊</button>`).join('')}</div></div>`; }).join('')}
       <div class="ml-feel"><b>✋ Feel the difference</b><p>${T.feel}</p></div>
       ${mlNoVoice(langs)}
       <div class="prow-btns"><button class="big" id="mlDone">${G("I tried it!", "I tried it!")}</button></div>`;
@@ -11127,7 +11165,8 @@ function screenMlSay() {
   };
 }
 // 3. guess the language: a word that sounds alike in several languages, said in one of them
-const ML_R_SHORT = { ru: "the Russian Р trembles with the tongue tip", pt: "the Portuguese r growls in the throat at the start of a word, and is one tap between vowels", en: "the English r is soft, the tongue does not tremble", de: "the German R growls in the throat" };
+const ML_R_SHORT = { ru: "the Russian Р trembles with the tongue tip", pt: "the Portuguese r growls in the throat at the start of a word, and is one tap between vowels", en: "the English r is soft, the tongue does not tremble", de: "the German R growls in the throat",
+  uk: "the Ukrainian Р trembles with the tongue tip, like the Russian one", es: "the Spanish r is one tap between vowels, and rr is a long trill", fr: "the French R is made in the throat", it: "the Italian r trembles with the tongue tip" };
 function screenMlGuess() {
   const t = newScreen(), langs = myLangs().filter(c => !('speechSynthesis' in window) || mlVoice(c));
   if (langs.length < 2) {
