@@ -271,6 +271,8 @@ b.r{color:var(--berry)}
 .say-list{display:flex;flex-wrap:wrap;gap:8px}.say-w{display:inline-flex;align-items:center;gap:2px;background:var(--paper);border-radius:12px;box-shadow:0 2px 0 var(--line-strong)}
 .say-play,.say-del{border:0;background:none;font:800 16px var(--f-body);padding:8px 10px;cursor:pointer;color:var(--ink)}.say-del{color:var(--ink-soft);font-size:20px;padding:4px 10px}
 .ml-tr{display:block;font:700 12px var(--f-body);color:var(--ink-soft);margin-top:1px}
+.cmp-fxs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}.cmp-fxs:empty{display:none}.cmp-fx{text-decoration:none;white-space:normal;max-width:100%;text-align:left;line-height:1.25}
+.cmp-t.hint{box-shadow:0 0 0 3px var(--sun,#FFC94A)}
 .mg-loco{position:absolute;bottom:-16px;left:4px;font-size:40px;line-height:1;filter:drop-shadow(0 2px 0 rgba(42,35,70,.2))}
 .abc-trains{width:min(100%,560px)}.abc-tt{margin:2px 0 6px;font:800 16px var(--f-body);color:var(--ink-soft)}
 .trn-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px}.trn-row::-webkit-scrollbar{display:none}.trn{flex:none}
@@ -10544,6 +10546,69 @@ function playTune(id, { tempo = null, onNote = null, quiet = false } = {}) {
   });
 }
 
+// the works a fact names, in Russian, English and Portuguese: a theme the app plays, or [titles], [search ru, search en]
+const CF_WORKS = {
+  mozart: [[/волшебн\S* флейт|magic flute|flauta mágica/i, ['«Волшебная флейта»', '“The Magic Flute”', '«A Flauta Mágica»'], ['Моцарт Волшебная флейта Папагено', 'Mozart Magic Flute Papageno']],
+    [/звёздочк|twinkle|estrelinha/i, 'twinkle'], [/серенад|serenade|serenata/i, 'nacht'], [/турецк|turkish|turca/i, 'turca']],
+  tchaikovsky: [[/щелкунчик|nutcracker|quebra-nozes/i, ['«Щелкунчик»', '“The Nutcracker”', '«O Quebra-Nozes»'], ['Чайковский Щелкунчик Танец Феи Драже', 'Tchaikovsky Nutcracker Sugar Plum Fairy']],
+    [/детск\S* альбом|children.s album|álbum para crianças/i, ['«Детский альбом»', '“Album for the Young”', '«Álbum para Crianças»'], ['Чайковский Детский альбом', 'Tchaikovsky Album for the Young']],
+    [/спящ\S* красавиц|sleeping beauty|bela adormecida/i, ['«Спящая красавица»', '“The Sleeping Beauty”', '«A Bela Adormecida»'], ['Чайковский Спящая красавица вальс', 'Tchaikovsky Sleeping Beauty waltz']],
+    [/лебедин|swan lake|lago dos cisnes/i, 'swan'],
+    [/времена года|the seasons|as estações/i, ['«Времена года»', '“The Seasons”', '«As Estações»'], ['Чайковский Времена года Октябрь', 'Tchaikovsky The Seasons October']],
+    [/1812/, ['«Увертюра 1812 года»', '“1812 Overture”', '«Abertura 1812»'], ['Чайковский Увертюра 1812 год', 'Tchaikovsky 1812 Overture']]],
+  beethoven: [[/элиз|elise|elisa/i, 'elise'], [/к радости|to joy|à alegria/i, 'joy'], [/пят\S* симфони|fifth symphony|quinta sinfonia/i, 'fifth']],
+  bach: [[/кофейн|coffee|café/i, ['«Кофейная кантата»', '“Coffee Cantata”', '«Cantata do Café»'], ['Бах Кофейная кантата', 'Bach Coffee Cantata']],
+    [/гольдберг|goldberg/i, ['«Гольдберг-вариации»', '“Goldberg Variations”', '«Variações Goldberg»'], ['Бах Гольдберг-вариации ария', 'Bach Goldberg Variations aria']],
+    [/струне соль|g string|corda sol/i, ['«Ария на струне соль»', '“Air on the G String”', '«Ária na Corda Sol»'], ['Бах Ария на струне соль', 'Bach Air on the G String']],
+    [/матфе|matthew|mateus/i, ['«Страсти по Матфею»', '“St Matthew Passion”', '«Paixão segundo São Mateus»'], ['Бах Страсти по Матфею', 'Bach St Matthew Passion']],
+    [/токкат|toccata|tocata/i, 'toccata']],
+  vivaldi: [[/[«“"](зим|winter|inverno)/i, ['«Зима»', '“Winter”', '«Inverno»'], ['Вивальди Времена года Зима', 'Vivaldi Four Seasons Winter']],
+    [/[«“"](лет|summer|verão)/i, ['«Лето»', '“Summer”', '«Verão»'], ['Вивальди Времена года Лето', 'Vivaldi Four Seasons Summer']],
+    [/[«“"](осен|autumn|outono)/i, ['«Осень»', '“Autumn”', '«Outono»'], ['Вивальди Времена года Осень', 'Vivaldi Four Seasons Autumn']],
+    [/[«“"](весн|spring|a primavera)/i, 'spring'], [/времен\S* года|seasons|estações/i, 'spring']],
+  grieg: [[/горного короля|mountain king|rei da montanha/i, 'king'], [/[«“"]утро|morning|manhã/i, 'morning'],
+    [/лирическ|lyric|líricas/i, ['«Лирические пьесы»', '“Lyric Pieces”', '«Peças Líricas»'], ['Григ Лирические пьесы Бабочка', 'Grieg Lyric Pieces Butterfly']], [/пер гюнт|peer gynt/i, 'morning']],
+  haydn: [[/сюрприз|surprise|surpresa/i, 'surprise'],
+    [/прощальн|farewell|adeus/i, ['«Прощальная симфония»', 'the “Farewell” Symphony', '«Sinfonia do Adeus»'], ['Гайдн Прощальная симфония финал', 'Haydn Farewell Symphony finale']],
+    [/[«“"]час|[«“"](the )?clock|relógio/i, ['Симфония «Часы»', 'the “Clock” Symphony', 'Sinfonia «O Relógio»'], ['Гайдн симфония Часы', 'Haydn Clock Symphony']],
+    [/сотворение мира|creation|criação/i, ['«Сотворение мира»', '“The Creation”', '«A Criação»'], ['Гайдн Сотворение мира', 'Haydn The Creation']]],
+  rossini: [[/вильгельм|william tell|guilherme tell/i, 'tell'], [/крещендо|crescendo/i, 'tell'],
+    [/цирюльн|фигаро|barber|figaro|barbeiro|fígaro/i, ['«Севильский цирюльник»', '“The Barber of Seville”', '«O Barbeiro de Sevilha»'], ['Россини Севильский цирюльник Фигаро', 'Rossini Barber of Seville Largo al factotum']],
+    [/золушк|cinderella|cinderela/i, ['«Золушка»', '“Cinderella”', '«A Cinderela»'], ['Россини Золушка', 'Rossini La Cenerentola']]],
+  strauss: [[/пиццикато|pizzicato/i, ['«Полька-пиццикато»', 'the “Pizzicato Polka”', '«Polca Pizzicato»'], ['Штраус Полька-пиццикато', 'Strauss Pizzicato Polka']],
+    [/гром и молни|thunder and lightning|trovões/i, ['«Гром и молния»', '“Thunder and Lightning”', '«Trovões e Relâmpagos»'], ['Штраус полька Гром и молния', 'Strauss Thunder and Lightning polka']],
+    [/летуч\S* мыш|the bat|fledermaus|morcego/i, ['«Летучая мышь»', '“Die Fledermaus”', '«O Morcego»'], ['Штраус Летучая мышь увертюра', 'Strauss Die Fledermaus overture']],
+    [/дуна|danube|danúbio|вальс|waltz|valsa/i, 'danube']],
+  rimsky: [[/шмел|bumblebee|moscardão/i, 'bee'],
+    [/во саду ли|in the garden|no jardim/i, ['«Во саду ли, в огороде»', 'the squirrel’s song', '«No jardim, na horta»'], ['Римский-Корсаков Сказка о царе Салтане белочка', 'Rimsky-Korsakov Tsar Saltan squirrel']],
+    [/снегурочк|садко|snow maiden|sadko|donzela da neve/i, ['«Снегурочка»', '“The Snow Maiden”', '«A Donzela da Neve»'], ['Римский-Корсаков Снегурочка Пляска скоморохов', 'Rimsky-Korsakov Snow Maiden Dance of the Tumblers']],
+    [/петуш|cock-a-doodle|cockerel|galo de ouro/i, ['«Золотой петушок»', '“The Golden Cockerel”', '«O Galo de Ouro»'], ['Римский-Корсаков Золотой петушок', 'Rimsky-Korsakov Golden Cockerel']],
+    [/шехеразад|scheherazade|sherazade/i, ['«Шехеразада»', '“Scheherazade”', '«Sherazade»'], ['Римский-Корсаков Шехеразада', 'Rimsky-Korsakov Scheherazade']]],
+  mussorgsky: [[/гном|gnom/i, ['«Гном»', '“Gnomus”', '«Gnomo»'], ['Мусоргский Картинки с выставки Гном', 'Mussorgsky Pictures at an Exhibition Gnomus']],
+    [/невылупивш|unhatched|pintainhos/i, ['«Балет невылупившихся птенцов»', '“Ballet of the Unhatched Chicks”', '«Bailado dos Pintainhos»'], ['Мусоргский Балет невылупившихся птенцов', 'Mussorgsky Ballet of the Unhatched Chicks']],
+    [/тюильри|tuileries|tulherias/i, ['«Тюильрийский сад»', '“Tuileries”', '«As Tulherias»'], ['Мусоргский Тюильрийский сад', 'Mussorgsky Tuileries']],
+    [/богатырск|great gate|grande porta/i, ['«Богатырские ворота»', '“The Great Gate of Kyiv”', '«A Grande Porta de Kiev»'], ['Мусоргский Богатырские ворота', 'Mussorgsky Great Gate of Kyiv']],
+    [/[«“"]детская|nursery|quarto das crianças/i, ['«Детская»', '“The Nursery”', '«O Quarto das Crianças»'], ['Мусоргский Детская', 'Mussorgsky The Nursery']],
+    [/прогулк|картинк|promenade|pictures|quadros/i, 'promenade']],
+  brahms: [[/колыбельн|lullaby|embalar/i, 'lullaby'],
+    [/венгерск|hungarian|húngaras/i, ['«Венгерские танцы»', '“Hungarian Dances”', '«Danças Húngaras»'], ['Брамс Венгерский танец 5', 'Brahms Hungarian Dance No 5']]]
+};
+function cfWork(c, f) {
+  for (const [re, a, q] of CF_WORKS[c.id] || []) {
+    if (!re.test(f)) continue;
+    if (typeof a === 'string') return c.tunes.includes(a) ? { t: a } : null;
+    return { n: a[IS_RU ? 0 : LANG === 'pt' ? 2 : 1], q: q[IS_RU ? 0 : 1] };
+  }
+  return null;
+}
+// under the fact: its music, and the theme lights up in the list
+function cfWorkHTML(c, f) {
+  const w = cfWork(c, f);
+  $$('.cmp-t').forEach(x => x.classList.toggle('hint', !!w && x.dataset.t === w.t));
+  if (!w) return '';
+  return w.t ? `<button class="chip cmp-fx" data-t="${w.t}">▶ Play: ${esc(CTUNES[w.t].n)}</button>`
+    : `<a class="chip cmp-fx" href="https://www.youtube.com/results?search_query=${encodeURIComponent(w.q)}" target="_blank" rel="noopener">🎧 ${esc(w.n)}: a recording, with a grown-up</a>`;
+}
 function screenComposers() {
   if (!CF.data) { cfLoad().then(() => screenComposers()); return; }
   newScreen();
@@ -10570,7 +10635,10 @@ function screenComposer(id, first) {
       <div class="og-btns"><button class="big" id="cmpPlay">🎹 Play with ${esc(c.n)}</button><button class="big ghost" id="cmpCond1">🪄 Conductor</button></div>
       <p class="art-src">Portrait: Wikimedia Commons</p>
     </div>`, { back: screenComposers });
-  $('#cmpNextF').onclick = () => { sfx.pop(); const f = cfNext(c); $('#cmpF p').textContent = f; talk(f); };
+  $('#cmpNextF').insertAdjacentHTML('beforebegin', '<span class="cmp-fxs" id="cmpFX"></span>');
+  const fx = f => { $('#cmpFX').innerHTML = cfWorkHTML(c, f); };
+  $('#cmpFX').onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; const row = document.querySelector(`.cmp-t[data-t="${b.dataset.t}"]`); if (row) row.click(); };
+  $('#cmpNextF').onclick = () => { sfx.pop(); const f = cfNext(c); $('#cmpF p').textContent = f; fx(f); talk(f); };
   $('.cmp-tunes').onclick = async e => {
     const b = e.target.closest('[data-t]'); if (!b) return;
     if (b.classList.contains('on')) { compStop(); b.classList.remove('on'); return; }
@@ -10578,6 +10646,7 @@ function screenComposer(id, first) {
     await playTune(b.dataset.t); if (t !== tok) return; b.classList.remove('on');
     if (CTUNES[b.dataset.t].surprise) talk("Did that scare you? That is Haydn’s surprise!");
   };
+  fx(f0);
   $('#cmpPlay').onclick = () => { sfx.pop(); screenPlayWith(c.tunes[0]); };
   $('#cmpCond1').onclick = () => { sfx.pop(); screenConductor(c.tunes[0]); };
   talk(`${c.full}. ${f0} Tap a tune to hear it.`);
@@ -10781,7 +10850,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '71';
+const APP_VER = '72';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
