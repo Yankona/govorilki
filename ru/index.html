@@ -270,6 +270,7 @@ b.r{color:var(--berry)}
 .say-own input{flex:1;min-width:0;font:700 18px var(--f-body);padding:10px 12px;border-radius:12px;border:2px solid var(--line-strong)}
 .say-list{display:flex;flex-wrap:wrap;gap:8px}.say-w{display:inline-flex;align-items:center;gap:2px;background:var(--paper);border-radius:12px;box-shadow:0 2px 0 var(--line-strong)}
 .say-play,.say-del{border:0;background:none;font:800 16px var(--f-body);padding:8px 10px;cursor:pointer;color:var(--ink)}.say-del{color:var(--ink-soft);font-size:20px;padding:4px 10px}
+.ml-tr{display:block;font:700 12px var(--f-body);color:var(--ink-soft);margin-top:1px}
 .mg-loco{position:absolute;bottom:-16px;left:4px;font-size:40px;line-height:1;filter:drop-shadow(0 2px 0 rgba(42,35,70,.2))}
 .abc-trains{width:min(100%,560px)}.abc-tt{margin:2px 0 6px;font:800 16px var(--f-body);color:var(--ink-soft)}
 .trn-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px}.trn-row::-webkit-scrollbar{display:none}.trn{flex:none}
@@ -10775,7 +10776,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '70';
+const APP_VER = '71';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -11166,7 +11167,8 @@ function screenAdmin() {
 // German R roll in the throat, the English r does not trill at all. A child who feels the difference controls the
 // tongue better in each of them. Words and their sounds stay as they are in every build of the app (RU keeps them).
 const ML_LANGS = [['ru', '🇷🇺', RU('Русский'), 'ru-RU'], ['uk', '🇺🇦', RU('Українська'), 'uk-UA'], ['pt', '🇵🇹', RU('Português'), 'pt-PT'], ['en', '🇬🇧', RU('English'), 'en-GB'],
-  ['de', '🇩🇪', RU('Deutsch'), 'de-DE'], ['es', '🇪🇸', RU('Español'), 'es-ES'], ['fr', '🇫🇷', RU('Français'), 'fr-FR'], ['it', '🇮🇹', RU('Italiano'), 'it-IT']];
+  ['de', '🇩🇪', RU('Deutsch'), 'de-DE'], ['es', '🇪🇸', RU('Español'), 'es-ES'], ['fr', '🇫🇷', RU('Français'), 'fr-FR'], ['it', '🇮🇹', RU('Italiano'), 'it-IT'],
+  ['he', '🇮🇱', RU('עברית'), 'he-IL'], ['tr', '🇹🇷', RU('Türkçe'), 'tr-TR'], ['zh', '🇨🇳', RU('中文'), 'zh-CN']];
 const mlInfo = c => ML_LANGS.find(x => x[0] === c) || ML_LANGS[0];
 // the same thing in four languages; c: the words sound alike (good for «guess the language»)
 const ML_WORDS = JSON.parse(RU(`[
@@ -11193,6 +11195,23 @@ const ML_MORE = JSON.parse(RU(`{"🌹":["rosa","rose","rosa","троянда"],"
 "👟":["zapato","chaussure","scarpa","черевик"],"⏰":["reloj","horloge","orologio","годинник"],"🐍":["serpiente","serpent","serpente","змія"],"🌸":["flor","fleur","fiore","квітка"],
 "💡":["lámpara","lampe","lampada","лампа"],"📻":["radio","radio","radio","радіо"],"🐊":["cocodrilo","crocodile","coccodrillo","крокодил"]}`));
 ML_WORDS.forEach(x => { const m = ML_MORE[x.e]; if (m) Object.assign(x.w, { es: m[0], fr: m[1], it: m[2], uk: m[3] }); });
+// Hebrew, Turkish and Chinese; Hebrew and Chinese carry how they sound in Latin letters after «|» (pinyin for Chinese):
+// the voice says the first part, the card shows both, and the sounds are marked where they can be seen
+const ML_MORE3 = JSON.parse(RU(`{"🌹":["ורד|vered","gül","玫瑰|méigui"],"🐟":["דג|dag","balık","鱼|yú"],"🦒":["ג׳ירפה|jiráfa","zürafa","长颈鹿|chángjǐnglù"],
+"🦓":["זברה|zébra","zebra","斑马|bānmǎ"],"🌞":["שמש|shémesh","güneş","太阳|tàiyáng"],"🍫":["שוקולד|shokolád","çikolata","巧克力|qiǎokèlì"],
+"🐯":["נמר|namér","kaplan","老虎|lǎohǔ"],"🦁":["אריה|aryé","aslan","狮子|shīzi"],"🍋":["לימון|limón","limon","柠檬|níngméng"],
+"🚀":["רקטה|rakéta","roket","火箭|huǒjiàn"],"⚽":["כדור|kadúr","top","球|qiú"],"🐭":["עכבר|akhbár","fare","老鼠|lǎoshǔ"],
+"🦋":["פרפר|parpár","kelebek","蝴蝶|húdié"],"🍉":["אבטיח|avatíakh","karpuz","西瓜|xīguā"],"🌙":["ירח|yaréakh","ay","月亮|yuèliang"],
+"🎵":["מוזיקה|múzika","müzik","音乐|yīnyuè"],"🐸":["צפרדע|tsfardéa","kurbağa","青蛙|qīngwā"],"🍓":["תות|tut","çilek","草莓|cǎoméi"],
+"🧀":["גבינה|gviná","peynir","奶酪|nǎilào"],"🦊":["שועל|shuál","tilki","狐狸|húli"],"🐻":["דוב|dov","ayı","熊|xióng"],
+"🌧️":["גשם|géshem","yağmur","雨|yǔ"],"🏠":["בית|báyit","ev","房子|fángzi"],"🐶":["כלב|kélev","köpek","狗|gǒu"],
+"🍎":["תפוח|tapúakh","elma","苹果|píngguǒ"],"🌳":["עץ|ets","ağaç","树|shù"],"🚂":["רכבת|rakévet","tren","火车|huǒchē"],
+"🐑":["כבשה|kivsá","koyun","羊|yáng"],"🎂":["עוגה|ugá","pasta","蛋糕|dàngāo"],"🍌":["בננה|banána","muz","香蕉|xiāngjiāo"],
+"🏫":["בית ספר|beit séfer","okul","学校|xuéxiào"],"⭐":["כוכב|kokháv","yıldız","星星|xīngxing"],"👟":["נעל|náal","ayakkabı","鞋|xié"],
+"⏰":["שעון|shaón","saat","钟|zhōng"],"🐍":["נחש|nakhásh","yılan","蛇|shé"],"🌸":["פרח|perakh","çiçek","花|huā"],
+"💡":["מנורה|menorá","lamba","灯|dēng"],"📻":["רדיו|rádyo","radyo","收音机|shōuyīnjī"],"🐊":["תנין|tanín","timsah","鳄鱼|èyú"]}`));
+ML_WORDS.forEach(x => { const m = ML_MORE3[x.e]; if (m) Object.assign(x.w, { he: m[0], tr: m[1], zh: m[2] }); });
+const mlText = w => String(w || '').split('|')[0];
 // the letters of each sound in each language
 const ML_HL = {
   r: { ru: /[рР]/g, pt: /rr|r/gi, en: /r/gi, de: /r/gi },
@@ -11204,11 +11223,19 @@ Object.assign(ML_HL.r, { uk: /[рР]/g, es: /rr|r/gi, fr: /r/gi, it: /rr|r/gi })
 Object.assign(ML_HL.l, { uk: /[лЛ]/g, es: /ll|l/gi, fr: /ill|l/gi, it: /l/gi });
 Object.assign(ML_HL.sh, { uk: /[шжчщШЖЧЩ]/g, es: /ch/gi, fr: /ch|j|g(?=[eéiy])/gi, it: /sc(?=[ei])|c(?=[ei])|g(?=[ei])/gi });
 Object.assign(ML_HL.sz, { uk: /[сзСЗ]/g, es: /s|z|c(?=[eéií])/gi, fr: /ss|s|z|ç|c(?=[eéiy])/gi, it: /ss|s|zz|z/gi });
+// Hebrew: the letters (ר ל ש ס ז צ); Turkish: its letters; Chinese: the pinyin
+Object.assign(ML_HL.r, { he: /ר/g, tr: /r/gi, zh: /r/g });
+Object.assign(ML_HL.l, { he: /ל/g, tr: /l/gi, zh: /l/g });
+Object.assign(ML_HL.sh, { he: /ש|[צגז]׳/g, tr: /ş|ç|c|j/gi, zh: /zh|ch|sh|x|q|j/g });
+Object.assign(ML_HL.sz, { he: /ס|ז(?!׳)|צ(?!׳)/g, tr: /s|z/gi, zh: /[zcs](?!h)/g });
 // letters that look like the sound and are another one: Spanish ll is «й», French ill too
 const ML_NOT = { l: { es: ['ll'], fr: ['ill'] } };
 const mlSkip = (snd, c) => (ML_NOT[snd] || {})[c] || [];
 const mlHas = (snd, c, w) => { const re = (ML_HL[snd] || {})[c]; if (!re) return false; const sk = mlSkip(snd, c); return (String(w).match(new RegExp(re.source, 'g' + (re.ignoreCase ? 'i' : ''))) || []).some(m => !sk.includes(m.toLowerCase())); };
-const mlHl = (snd, c, w) => { const re = (ML_HL[snd] || {})[c], sk = mlSkip(snd, c); return `<span class="ml-wd">${re ? esc(w).replace(re, m => sk.includes(m.toLowerCase()) ? m : `<b class="ml-hl">${m}</b>`) : esc(w)}</span>`; };
+const mlHl = (snd, c, w) => {
+  const re = (ML_HL[snd] || {})[c], sk = mlSkip(snd, c), [a, b] = (re ? esc(w).replace(re, m => sk.includes(m.toLowerCase()) ? m : `<b class="ml-hl">${m}</b>`) : esc(w)).split('|');
+  return `<span class="ml-wd" dir="auto">${a}</span>${b ? `<small class="ml-tr">${b}</small>` : ''}`;
+};
 // how the sound is made in each language, and what to feel
 const ML_TIPS = {
   r: { ru: 'Кончик языка дрожит за верхними зубами: р-р-р, как моторчик.', pt: 'Между гласными r — один быстрый удар кончиком языка: cara, para. А rr и r в начале слова рычат в горле: rato, carro.', en: 'Язык не дрожит и не касается нёба, губы чуть вперёд: red, rain. В конце слова r почти не слышно: car, star.', de: 'R рычит сзади, в горле, как полоскание: Rose, rot. В конце слова оно почти «а»: Mutter, Vater.',
@@ -11226,6 +11253,18 @@ Object.assign(ML_TIPS.l, { uk: 'Твёрдое Л как в русском: ла
   fr: 'Французское l светлое и мягкое, даже в конце слова: lune, ciel. А ill часто звучит как «й»: papillon, grenouille.', it: 'Итальянское l светлое и чистое: luna, sole. Двойное ll держим чуть дольше: stella, palla.' });
 Object.assign(ML_TIPS.sh, { uk: 'Ш, Ж, Ч твёрдые, как в русском: шапка, жаба. А Щ в украинском звучит как «шч»: щука — «шчука».', es: 'В испанском нет звука Ш! Ch звучит как короткое «ч»: chocolate, noche. Попробуй сказать совсем без шипения.',
   fr: 'Ch — мягкое Ш: chien, chocolat. J и g перед e, i — как Ж: jardin, girafe.', it: 'Sc перед e, i — это Ш: pesce, scimmia. C перед e, i — «ч»: cioccolato. G перед e, i — «дж»: giraffa.' });
+Object.assign(ML_TIPS.r, { he: 'В иврите ר (рейш) картавая: звук идёт из горла, как во французском, а кончик языка спокойно лежит внизу: רכבת (ракевет), אריה (арье).',
+  tr: 'Турецкое r — короткий удар кончиком языка, как в «рыба». В конце слова оно тихое, почти шёпотом: bir, kar, yağmur.',
+  zh: 'В китайском нет дрожащего Р! Буква r в пиньине — язык загнут назад, звук похож на мягкое Ж: rè, ròu. Р-р-р тренируем в других языках.' });
+Object.assign(ML_TIPS.l, { he: 'ל (ламед) — светлое, лёгкое Л, кончик языка за верхними зубами: לימון (лимон), כלב (келев).',
+  tr: 'Рядом с e, i, ö, ü турецкое l мягкое: limon, el, kelebek. Рядом с a, ı, o, u — твёрдое, как русское: balık, kol, lamba.',
+  zh: 'Китайское l светлое и лёгкое, и бывает только в начале слога: lǎohǔ, lán. В конце слога l не бывает.' });
+Object.assign(ML_TIPS.sh, { he: 'ש (шин) — Ш, но мягче русского: שמש (шемеш), נחש (нахаш). Ч пишут צ׳, Ж — ז׳, а ДЖ — ג׳: ג׳ירפה (джирафа).',
+  tr: 'Ş — это Ш: güneş, şeker. Ç — Ч: çiçek, çilek. А буква c — это ДЖ: ceket. J — Ж, встречается редко: jeton.',
+  zh: 'В китайском шипящих две семьи. zh, ch, sh — язык загнут назад: zhōng, chē, shù. j, q, x — язык плоский, звук мягкий, как ДЬ, ТЬ, СЬ: jiā, qiú, xīguā.' });
+Object.assign(ML_TIPS.sz, { he: 'ס (самех) — С, ז (заин) — З, а צ (цади) — Ц: ציפור (ципор), צפרדע (цфардеа).',
+  tr: 'S и Z как в русском: su, sabah, zebra, deniz. В турецком они всегда твёрдые, даже рядом с i.',
+  zh: 's — С: sān, sì. z — Ц без выдоха: zǎo. c — Ц с сильным выдохом, как будто дуешь на свечку: cài, cǎoméi. Звука З в китайском нет.' });
 Object.assign(ML_TIPS.sz, { uk: 'С и З как в русском: сонце, зебра. Мягкие СЬ и ЗЬ — с широкой улыбкой: сіль.', es: 'S — как С: sol, sopa. А z и c перед e, i в Испании звучат как английское th, язык между зубами: zapato, cebra. В Латинской Америке это просто С.',
   fr: 'S в начале слова — С: soleil. S между гласными — З: rose, maison. Z — как З: zèbre, а ç — как С: garçon.', it: 'S обычно звучит как С: sole, serpente, а между гласными часто как З: rosa. А итальянское z — это Ц или ДЗ: zebra, pizza!' });
 const ML_SND = [['r', 'Р'], ['l', 'Л'], ['sh', 'Ш'], ['sz', 'С и З']];
@@ -11248,7 +11287,7 @@ function sayIn(c, text, rate = .8) {
   return new Promise(res => {
     const v = 'speechSynthesis' in window ? mlVoice(c) : null; if (!v) { res(false); return; }
     let done = false; const fin = ok => { if (!done) { done = true; res(ok); } };
-    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = mlInfo(c)[3]; try { u.voice = v; } catch (e) {} u.rate = mlLearns(c) ? Math.min(rate, .7) : rate; u.onend = () => fin(true); u.onerror = () => fin(false); setTimeout(() => fin(true), 1800 + text.length * 160); speechSynthesis.speak(u); } catch (e) { fin(false); }
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(mlText(text)); u.lang = mlInfo(c)[3]; try { u.voice = v; } catch (e) {} u.rate = mlLearns(c) ? Math.min(rate, .7) : rate; u.onend = () => fin(true); u.onerror = () => fin(false); setTimeout(() => fin(true), 1800 + text.length * 160); speechSynthesis.speak(u); } catch (e) { fin(false); }
   });
 }
 const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in window && !mlVoice(c)); return no.length ? `<p class="muted ml-nov">🔈 На этом телефоне нет голоса для: ${no.map(c => mlInfo(c)[2]).join(', ')}. Слова видны, а прослушать их можно, если добавить голос: на iPhone — Настройки → Универсальный доступ → Устный контент → Голоса.</p>` : ''; };
@@ -11299,7 +11338,7 @@ function screenMlSay() {
   const draw = () => {
     const x = deck[k];
     return `<p class="ml-step">${k + 1} / ${deck.length}</p><div class="ml-pic">${pic(x.e)}</div>
-      <div class="ml-say">${langs.map(c => { const [, f] = mlInfo(c), hs = sounds.find(s => mlHas(s, c, x.w[c])); return `<button class="ml-w ${said.has(c) ? 'done' : ''}" data-l="${c}"><span class="lang-f">${f}</span><b>${hs ? mlHl(hs, c, x.w[c]) : esc(x.w[c])}</b><span class="ml-act">${said.has(c) ? '✅' : '🔊'}</span></button>`; }).join('')}</div>
+      <div class="ml-say">${langs.map(c => { const [, f] = mlInfo(c), hs = sounds.find(s => mlHas(s, c, x.w[c])); return `<button class="ml-w ${said.has(c) ? 'done' : ''}" data-l="${c}"><span class="lang-f">${f}</span><b>${mlHl(hs || '', c, x.w[c])}</b><span class="ml-act">${said.has(c) ? '✅' : '🔊'}</span></button>`; }).join('')}</div>
       <p class="muted">Нажми на слово — послушай и скажи сам${G('а', '')}. Выделены звуки, которые ты тренируешь.</p>
       ${mlNoVoice(langs)}`;
   };
@@ -11319,6 +11358,7 @@ function screenMlSay() {
 // 3. guess the language: a word that sounds alike in several languages, said in one of them
 const ML_R_SHORT = { ru: 'русское Р дрожит кончиком языка', pt: 'португальское r: в начале слова рычит в горле, между гласными — один удар', en: 'английское r мягкое, язык не дрожит', de: 'немецкое R рычит в горле',
   uk: 'украинское Р дрожит кончиком языка, как русское', es: 'испанское r между гласными — один удар, rr — долгое дрожание', fr: 'французское R картавое, в горле', it: 'итальянское r дрожит кончиком языка' };
+Object.assign(ML_R_SHORT, { he: 'ивритская ר картавая, в горле', tr: 'турецкое r — короткий удар, в конце слова тихое', zh: 'в китайском r похоже на мягкое Ж, язык не дрожит' });
 function screenMlGuess() {
   const t = newScreen(), langs = myLangs().filter(c => !('speechSynthesis' in window) || mlVoice(c));
   if (langs.length < 2) {
@@ -11349,7 +11389,7 @@ function screenMlGuess() {
 }
 GAMES.push(
   { id: 'ml-sound', hide: () => !mlOn(), name: 'Один звук — разные языки', sub: 'как звук живёт в каждом твоём языке', ico: () => pic('🌍'), bg: 'var(--t-mint)', go: () => screenMlSound(), grp: 14 },
-  { id: 'ml-say', hide: () => !mlOn(), name: 'Скажи на всех языках', sub: () => myLangs().map(c => ML_WORDS[0].w[c]).join(', '), ico: () => pic('🗣️'), bg: 'var(--t-yellow)', go: () => screenMlSay(), grp: 14 },
+  { id: 'ml-say', hide: () => !mlOn(), name: 'Скажи на всех языках', sub: () => myLangs().map(c => mlText(ML_WORDS[0].w[c])).join(', '), ico: () => pic('🗣️'), bg: 'var(--t-yellow)', go: () => screenMlSay(), grp: 14 },
   { id: 'ml-guess', hide: () => !mlOn(), name: 'Угадай язык', sub: 'послушай слово — чей это язык?', ico: () => pic('👂'), bg: 'var(--t-lilac)', go: () => screenMlGuess(), grp: 14 }
 );
 SECTIONS.splice(1, 0, { g: 14, h: 'Мои языки', p: 'один звук в разных языках: почувствуй разницу' });
