@@ -1956,7 +1956,7 @@ function lessonPlan(id) {
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
-      const o = 2 * n + 2 * s, lg = ['l-rap', 'chess', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house'];
+      const o = 2 * n + 2 * s, lg = ['l-rap', 'l-rec', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house'];
       for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
       const art = s === 0 ? ARTIC_L.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC_L.length);
       art.forEach(i => steps.push({ key: 'artic:' + ARTIC_L[i].id, kind: 'artic', name: ARTIC_L[i].name, run: () => screenArtic(i, true) }));
@@ -10611,7 +10611,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '65';
+const APP_VER = '66';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
