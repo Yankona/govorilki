@@ -1695,6 +1695,7 @@ body.pv-on #app{padding-top:52px}
 .at-card .at-h{display:flex;align-items:center;gap:8px;font:800 18px/1.1 var(--f-body)}.at-card .emo{font-size:24px}.at-card small{color:var(--ink-soft);font:700 14px var(--f-body)}
 .at-ex{display:flex;gap:4px;max-width:100%;overflow:hidden}.at-ex .tile-ico{flex:none;width:34px;height:34px;font-size:22px;display:grid;place-items:center;overflow:hidden}.at-ex .tile-ico svg,.at-ex .tile-ico img{width:30px;height:30px}
 .pv-demo{display:flex;flex-direction:column;gap:8px}.pv-demo .big{text-align:left}
+.pv-test{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--plum)}
 </style>
 </head>
 <body>
@@ -1743,7 +1744,9 @@ function demoStart(o = {}) {
   const q = new URLSearchParams(location.search), as = o.as || q.get('as') || 'new', lang = o.lang || q.get('lang') || LANG;
   try { demoClear(); sessionStorage.removeItem('govorilki-demo-on'); if (o.prog) localStorage.setItem('govorilki-demo-guest-prog', JSON.stringify(o.prog)); } catch (e) {}
   const root = location.pathname.replace(/index\.html$/, '').replace(/(en|pt|ru)\/$/, ''), dir = { ru: 'ru/', pt: 'pt/' }[lang] || '';
-  location.href = root + dir + `?demo&as=${as}&lang=${lang}&t=${Date.now()}` + (o.hash !== undefined ? o.hash : DEMO ? location.hash : '');
+  const tail = dir + `?demo&as=${as}&lang=${lang}&t=${Date.now()}` + (o.hash !== undefined ? o.hash : DEMO ? location.hash : '');
+  if (window.self !== window.top) { try { window.open('https://yankona.github.io/govorilki/' + tail, '_blank', 'noopener'); } catch (e) {} return; }
+  location.href = root + tail;
 }
 let DEMO_AGE = 0;
 if (DEMO) { try { if (!sessionStorage.getItem('govorilki-demo-on')) {
@@ -10342,19 +10345,15 @@ async function pultPoll() {
 }
 function screenPult() {
   if (!pultOpen()) { if (!ROOT.pultPin && ROOT.parentPhone === undefined) pultWho(); else pultGate(); return; }
-  let demoLang = LANG;
   const t = newScreen(), fs = Object.values(ROOT.families).filter(f => !f.guest).sort((a, b) => (b.id === ROOT.curFam) - (a.id === ROOT.curFam));
   const draw = () => `${ROOT.parentPhone === undefined ? `<section class="psec pv-who"><h2>📱 Este telemóvel é seu?</h2>
       <p>Se for, a aplicação vai abrir no painel e aqui não vai pedir o código. Se as crianças jogam neste telemóvel, mantenha o código.</p>
       <div class="prow-btns"><button class="big" id="pvMine">Sim, é o meu telemóvel</button><button class="big ghost" id="pvKids">As crianças jogam aqui</button></div></section>` : ''}
+    <button class="lg-cta pv-test" id="pvTest"><span class="emo">🧪</span><span class="lg-t"><b>Como os outros veem</b><small>abrir o jogo como uma família nova, uma criança de 5 ou 9 anos, uma família convidada ou a avó — num teste, os seus dados não mudam</small></span><span class="g-go">▶</span></button>
     <p class="muted">Todos das suas famílias neste telemóvel que jogam ou visitam. Toque numa criança para abrir o seu jogo. «👀 Ecrã» mostra o que um adulto vê no seu telemóvel.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">Ainda não há nenhuma família neste telemóvel.</p>"}
     <section class="psec"><h2>Para adultos</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ Todas as definições</button><button class="big ghost" id="pvInv">📨 Convidar a família</button><button class="big ghost" id="pvInvF">👪 Convidar outra família</button><button class="big ghost" id="pvFams">🏠 Famílias</button><button class="big ghost" id="pvLg">🏆 Liga das famílias</button></div></section>
-    <section class="psec"><h2>🧪 Como os outros veem</h2><p>Um teste numa área à parte: os seus filhos e o progresso não mudam, e nada vai para os avós nem para a liga. A língua do telemóvel:</p>
-      <div class="lang-row" id="pvDemoLang">${LANGS.map(([l, n, fl]) => `<button class="pick-b lang-b ${l === demoLang ? 'sel' : ''}" data-dl="${l}"><span class="lang-f">${fl}</span>${n}</button>`).join('')}</div>
-      <div class="pv-demo"><button class="big ghost" data-das="new">🆕 Uma família nova: desde o início</button><button class="big ghost" data-das="kid5">🧒 Uma criança de 5 anos</button><button class="big ghost" data-das="kid9">🧑 Uma criança de 9 anos</button><button class="big ghost" data-das="liga">👪 Uma família que convidou</button><button class="big ghost" data-das="gran">👵 A avó com a sua ligação</button></div>
-      <p class="muted">No teste, a barra de cima tem «de novo» e «sair».</p></section>
-    <section class="psec"><h2>Este telemóvel</h2>${ROOT.parentPhone
+    <section class="psec"><h2>Este telemóvel</h2><p class="muted" id="pvVer">Versão da app: …</p><div class="prow-btns"><button class="big ghost" id="pvUpd">🔄 Procurar atualização</button></div>${ROOT.parentPhone
       ? `<p>📱 Este é o seu telemóvel: a aplicação abre no painel, sem código. O painel está sempre no botão 👑 no topo do ecrã principal.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 As crianças jogam aqui: fechar o painel com código</button></div>`
       : `<p>O painel está fechado com código. Abra-o com o botão 👑 no topo do ecrã principal${ROOT.parentPhone === false ? '' : " ou em «Para adultos»"}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 Este é o meu telemóvel: sem código</button><button class="big ghost" id="pvPin">🔑 Mudar o código</button><button class="big ghost" id="pvLock">🔒 Fechar o painel</button></div>`}</section>`;
   shell("Painel da família", `<div class="pult" id="pult">${draw()}</div>`, { back: () => goHome(), guide: false, raw: true });
@@ -10366,6 +10365,8 @@ function screenPult() {
     on1('pvMine', () => { ROOT.parentPhone = true; save(); screenPult(); });
     on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
+    on1('pvTest', () => screenPultTest());
+    on1('pvUpd', () => appUpdate($('#pvVer')));
 
     on1('pvInv', () => screenInvite(screenPult));
     on1('pvInvF', () => screenInviteFamily(screenPult));
@@ -10375,9 +10376,6 @@ function screenPult() {
   bind();
   box.onclick = e => {
     const k = e.target.closest('[data-kid]'), v = e.target.closest('[data-view]'), l = e.target.closest('[data-link]'), a = e.target.closest('[data-add]');
-    const dl = e.target.closest('[data-dl]'), das = e.target.closest('[data-das]');
-    if (dl) { demoLang = dl.dataset.dl; $$('#pvDemoLang [data-dl]').forEach(x => x.classList.toggle('sel', x === dl)); sfx.tick(); return; }
-    if (das) { sfx.pop(); pultDemo(das.dataset.das, demoLang); return; }
     const ks = e.target.closest('[data-kset]');
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; screenParents(); return; }
     if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
@@ -10393,7 +10391,36 @@ function screenPult() {
       bindShare(id, msg, url, s => out.insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`));
     }
   };
-  pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); } });
+  pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); appVer($('#pvVer')); } });
+  appVer($('#pvVer'));
+}
+// the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
+const APP_VER = '56';
+function appVer(el) { if (el) el.textContent = APP_VER ? `Versão da app: ${APP_VER}` : ''; }
+function appUpdate(el) {
+  if (el) el.textContent = "A procurar atualização…";
+  const done = () => { if (el) { appVer(el); later(() => { if (el.isConnected) el.textContent += " — esta é a versão mais recente"; }, 300); } };
+  if (!navigator.serviceWorker) { location.reload(); return; }
+  navigator.serviceWorker.getRegistration().then(r => r ? r.update().then(() => later(done, 2500)) : location.reload()).catch(() => location.reload());
+}
+// «как видят другие»: the phone's language and whom to open the game as, all in the test sandbox
+function screenPultTest() {
+  newScreen();
+  let lang = LANG;
+  shell("Como os outros veem", `<div class="pult">
+    <section class="psec"><h2>🧪 Um teste numa área à parte</h2><p>Os seus filhos e o progresso não mudam, e nada vai para os avós nem para a liga. No teste, a barra de cima tem «de novo» e «sair».</p>
+      <h3 class="pf-h">A língua do telemóvel</h3>
+      <div class="lang-row" id="ptLang">${LANGS.map(([l, n, fl]) => `<button class="pick-b lang-b ${l === lang ? 'sel' : ''}" data-dl="${l}"><span class="lang-f">${fl}</span>${n}</button>`).join('')}</div>
+      <h3 class="pf-h">Abrir o jogo como</h3>
+      <div class="pv-demo" id="ptAs">
+        <button class="lg-cta" data-das="new"><span class="emo">🆕</span><span class="lg-t"><b>Uma família nova</b><small>desde o início: língua, família, interesses</small></span><span class="g-go">▶</span></button>
+        <button class="lg-cta" data-das="kid5"><span class="emo">🧒</span><span class="lg-t"><b>Uma criança de 5 anos</b><small>logo o ecrã principal</small></span><span class="g-go">▶</span></button>
+        <button class="lg-cta" data-das="kid9"><span class="emo">🧑</span><span class="lg-t"><b>Uma criança de 9 anos</b><small>o modo dos mais velhos</small></span><span class="g-go">▶</span></button>
+        <button class="lg-cta" data-das="liga"><span class="emo">👪</span><span class="lg-t"><b>Uma família que convidou</b><small>o que um amigo vê com a sua ligação</small></span><span class="g-go">▶</span></button>
+        <button class="lg-cta" data-das="gran"><span class="emo">👵</span><span class="lg-t"><b>A avó com a sua ligação</b><small>o ecrã dela com os seus filhos e os jogos deles</small></span><span class="g-go">▶</span></button>
+      </div></section></div>`, { back: () => screenPult(), guide: false, raw: true });
+  $('#ptLang').onclick = e => { const b = e.target.closest('[data-dl]'); if (!b) return; lang = b.dataset.dl; $$('#ptLang [data-dl]').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  $('#ptAs').onclick = e => { const b = e.target.closest('[data-das]'); if (!b) return; sfx.pop(); pultDemo(b.dataset.das, lang); };
 }
 // the first visit: the parent's own phone opens with the panel and needs no code; a phone the children play on gets a code
 function pultWho() {
