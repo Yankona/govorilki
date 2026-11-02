@@ -323,6 +323,7 @@ b.r{color:var(--berry)}
 .swatches{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .swc{width:40px;height:40px;border:0;border-radius:50%;background:var(--c);cursor:pointer;box-shadow:inset 0 0 0 3px rgba(42,35,70,.15)}
 .swc.sel{box-shadow:0 0 0 4px #FFFFFF,0 0 0 7px var(--ink)}
+.swc .swl{font:900 17px/1 var(--f-body);color:#fff;text-shadow:0 0 2px #2A2346,0 0 2px #2A2346,0 1px 0 #2A2346;pointer-events:none}
 .tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
 .tool{width:52px;height:52px;border:0;border-radius:16px;background:var(--paper);display:grid;place-items:center;font-size:24px;cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
 .tool i{display:block;width:var(--d);height:var(--d);border-radius:50%;background:var(--ink)}
@@ -1355,6 +1356,14 @@ body.quest .fam-ok{color:#7BE0A0}
 .mem-toast{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);margin:0;padding:10px 14px;border-radius:16px;background:rgba(30,26,46,.9);color:#fff;font:800 16px/1.35 var(--f-body);text-align:center;z-index:20}
 .quest .av-bar{background:linear-gradient(transparent,#141834 30%)}.quest .al-card{background:#20284A}
 .art-note{background:var(--paper);border-radius:14px;padding:8px 12px}
+.ag{display:grid;gap:8px}.ag-c{position:relative;padding-right:56px;min-height:52px}
+.ag-say{position:absolute;right:8px;top:8px;width:40px;height:40px;border:0;border-radius:12px;background:var(--t-blue);color:var(--ink);display:grid;place-items:center;cursor:pointer}.ag-say svg{width:22px;height:22px}
+.ag-sw{display:flex;gap:6px;margin-top:8px}.ag-sw i{width:34px;height:34px;border-radius:10px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5),0 1px 3px rgba(0,0,0,.25)}
+.ag-pic{position:relative;display:block;width:fit-content;max-width:100%;margin:0 auto;padding:0;border:0;background:none;line-height:0;cursor:zoom-in}
+.ag-pic img{max-width:100%;max-height:46vh;border-radius:14px}
+.ag-ring{position:absolute;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;border:4px solid #FFD93D;box-shadow:0 0 0 3px rgba(42,35,70,.55),inset 0 0 0 3px rgba(42,35,70,.55);animation:agRing 1.6s ease-in-out infinite;pointer-events:none}
+@keyframes agRing{50%{transform:scale(1.25);opacity:.65}}
+.ag-how{margin-top:6px}.ag-how summary{cursor:pointer;font:800 16px var(--f-body);padding:8px 2px}
 .art-note b{font:800 16px var(--f-body)}.art-note p{margin:4px 0 0;font:600 16px/1.45 var(--f-body)}
 .art-how{display:flex;flex-direction:column;gap:8px}
 .al-pic{position:relative}.al-pic img{width:100%;max-height:50vh;object-fit:contain;border-radius:14px;background:#222;display:block}
@@ -1401,6 +1410,17 @@ body.quest .fam-ok{color:#7BE0A0}
 .ai-mis{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .ai-mis li{background:var(--paper);border-radius:14px;padding:8px 12px;font:700 17px/1.4 var(--f-body)}
 .ai-mis span{color:var(--ink-soft)}
+.gplay-b{position:relative;z-index:50;height:30px;padding-top:env(safe-area-inset-top,0px);display:flex;align-items:center;justify-content:center;background:#7A3EB1;color:#fff;font:800 14px var(--f-body);white-space:nowrap}
+body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
+.gplay-b button{background:#fff;border:0;border-radius:8px;margin-left:6px;padding:1px 7px;color:#7A3EB1;font:900 13px var(--f-body);cursor:pointer}
+.gp-now,.rf-card{display:flex;gap:10px;align-items:center;border-radius:20px;padding:10px 12px;margin:10px 0;background:#F1E8FF;border:2px solid #9B5DE5}
+.gp-now>.emo,.rf-card>.emo{font-size:34px}
+.gp-t,.rf-t{flex:1;min-width:0}.gp-t b,.rf-t b{display:block;font-size:17px}.gp-t small,.rf-t small{display:block;color:var(--ink-soft);font-size:14px;line-height:1.3}
+.rf-card{background:#FFF1BF;border-color:#FFC83A}.rf-card.soft{background:#FFFBEA;border-style:dashed}
+.relp-l{display:grid;gap:8px}
+.relp-r{display:flex;gap:10px;align-items:center;background:var(--paper);border-radius:16px;padding:8px 10px;box-shadow:0 3px 0 var(--line-strong)}
+.relp-r>.emo{font-size:28px}.relp-t{flex:1;min-width:0}.relp-t b{display:block}.relp-t small{color:var(--ink-soft)}
+.gpw-l{display:grid;gap:10px}
 .demo-b{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);z-index:50;padding:4px 12px;border-radius:12px;background:#2A2346;color:#fff;font:800 13px var(--f-body);text-decoration:none;opacity:.92;white-space:nowrap}.demo-b button,.demo-b a{background:none;border:0;padding:0;color:#FFC83A;font:inherit;text-decoration:underline;cursor:pointer}
 .kids-top{display:flex;align-items:center;gap:8px;width:100%;justify-content:center}
 .kids-top .kids-in{flex:1;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;justify-content:center}
@@ -1726,7 +1746,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
    swapped by the build, LANG becomes 'en' or 'pt', and LANGDATA carries the content written for that language
    (letters, words with the trained sounds, chants). LX('NAME', russian) takes that language's own version. ---------- */
 const LANG = 'en';
-const LANGDATA = /*__LANGDATA__*/{"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"]};
+const LANGDATA = /*__LANGDATA__*/{"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"], "PAL_WORDS": [["r", "red"], ["o", "orange"], ["y", "yellow"], ["g", "green"], ["t", "turquoise"], ["s", "sky blue"], ["b", "blue"], ["p", "purple"], ["p", "pink"], ["b", "brown"], ["b", "black"], ["w", "white"]]};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 const LOC = { ru: 'ru-RU', en: 'en-GB', pt: 'pt-PT' }[LANG];
 const IS_RU = LANG === 'ru';
@@ -1916,7 +1936,7 @@ function lessonPlan(id) {
     steps.push(gameStep(games[o % games.length].id, 'game'));
     if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   } else if (id === 'read') {
-    ['abc-find', 'abc-first', 'read-merge', (n + s) % 2 ? 'read-pick' : 'read-words'].forEach(g => steps.push(gameStep(g, 'read')));
+    ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
     ['math-count', 'math-digits', 'math-add', 'math-compare'].forEach(g => steps.push(gameStep(g, 'math')));
   }
@@ -2430,7 +2450,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
     break;
   }
   const toasts = gameHook({ ...ev, key, stars, xp0, lesson: doneLesson });
-  weekAdd(P, P.stars - xp0); noteRecent(key, stars); save(); showToasts(toasts); leagueSoon(); progSoon(); guestPlayed(key, stars);
+  weekAdd(P, P.stars - xp0); noteRecent(key, stars); save(); showToasts(toasts); leagueSoon(); progSoon(); guestPlayed(key, stars); gplayPlayed(key, stars); readMark(key);
   const after = stickerCount(), sticker = after > before ? STK()[after - 1] : null;
   const n = $('#starN'); if (n) n.textContent = P.stars;
   $$('.said, .said-card').forEach(x => x.remove());
@@ -2664,7 +2684,10 @@ function goHome() {
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
-  newScreen(); ACTIVE = null; BATTLE = null; P = ROOT.profiles[ROOT.cur]; famPeople(); takeBattleHash(); if (Q()) useFreezes();
+  newScreen(); ACTIVE = null; BATTLE = null;
+  if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
+  P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
+  const RF = readFineCheck();
   navHome();
   setTimeout(() => statPing(), 4000);
   document.body.classList.toggle('quest', Q());
@@ -2704,6 +2727,8 @@ function goHome() {
       </div>
     </header>
     ${holidayCard()}
+    <div id="relpBox">${relpHTML()}</div>
+    ${readFineHTML()}
     <div id="btBox">${inboxHTML()}</div>
     ${Q() ? rankCard() + seasonCard() + garageCard() : ''}
     ${lessonsCard()}
@@ -2716,6 +2741,7 @@ function goHome() {
     <div id="leagueBox">${leagueCard()}</div>
     ${fy.length ? `<section class="group foryou"><div class="group-head"><h2>For you</h2><p>${likesE || "your words"}</p></div><div class="tiles">${fy.map(id => tileHTML(GAMES.find(g => g.id === id))).join('')}</div></section>` : ''}
     <button class="link-btn" id="parentsBtn">For grown-ups: voice, settings, how to practise</button>
+    ${GUEST || GPLAY ? '' : `<button class="link-btn" id="gpBtn">👵 Grandma or Grandpa wants to play ${esc(kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f').gen)}'s games</button>`}
     ${GUEST ? `<button class="link-btn" id="guestBtn">${GRAND[GUEST.who].e} Go back to the page for ${esc(lcFirst(decl(GUEST.name, GUEST.she)[1]))}</button>` : ''}`;
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
@@ -2752,7 +2778,8 @@ function goHome() {
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
   on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; screenParents(); });
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
-  if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); }
+  if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); bindRelp(); bindReadFine(RF); }
+  on('#gpBtn', () => { sfx.pop(); homeLeave(); screenGplayWho(); });
   on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
   $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
@@ -3677,7 +3704,7 @@ const PALETTE = ['#FF4D4D', '#FF9F1C', '#FFD93D', '#4CC261', '#2BB3A3', '#4DB8FF
 const PAGES = ['koala', 'unicorn', 'panda', 'redpanda', 'alpaca', 'tiger', 'svg:train', 'svg:pyramid', 'svg:mug', 'svg:pinwheel'];
 function pageSVG(p) {
   if (!p.startsWith('svg:')) return friendSVG('', p);
-  const k = p.slice(4); return k === 'train' ? TRAIN : k === 'pinwheel' ? PINWHEEL : SVGS[k];
+  const k = p.slice(4); return k === 'train' ? TRAIN : k === 'pinwheel' ? PINWHEEL : CPAGES[k] || SVGS[k];
 }
 // a colouring page: dark features stay, every other shape turns white with a dark outline
 function outlineSVG(svg) {
@@ -3699,6 +3726,8 @@ function screenDrawMenu() {
   newScreen();
   const art = P.art || [];
   const st = shell("Drawing", `<div class="cards draw-menu">
+      <button class="card" data-m="code-col" style="--bg:var(--t-peach)"><span class="ico-letters"><b class="L" style="color:#FF4D4D">${esc(PAL_WORDS[0][0])}</b><b class="L" style="color:#E0A800">${esc(PAL_WORDS[2][0])}</b></span><span>Letter colours</span>${P.best['code-col'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
+      <button class="card" data-m="code-colw" style="--bg:var(--t-green)">${pic('📖')}<span>Read the colour</span>${P.best['code-colw'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-abc" style="--bg:var(--t-pink)"><span class="ico-letters"><b class="L v">A</b><b class="L c">B</b></span><span>Colour by letters</span>${P.best['code-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-syl" style="--bg:var(--t-yellow)"><span class="ico-letters"><b class="L c">R</b><b class="L v">A</b></span><span>Colour by syllables</span>${P.best['code-syl'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-math" style="--bg:var(--t-blue)"><span class="ico-num">2+3</span><span>Colour by sums</span>${P.best['code-math'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
@@ -3729,12 +3758,12 @@ function screenPaint(opts = {}) {
   const t = newScreen(), TK = mode === 'task' ? taskObj || DRAW_TASKS[task ?? nextDrawTask()] : null;
   const title = mode === 'color' ? "Colouring page" : mode === 'write' ? "Writing letters" : TK ? "Drawing task" : mode === 'magic' ? "Magic pattern" : "Drawing";
   const back = opts.back || (mode === 'color' ? screenColorMenu : mode === 'write' ? null : screenDrawMenu);
-  const L = ABC[li];
+  const L = ABC[li], palL = !Q() && mode !== 'magic' && mode !== 'write';
   shell(title, `<div class="paint">
       ${TK ? `<div class="task-card" id="taskCard"><span class="emo">📝</span><p>${TK.t}</p></div>` : ''}
       ${mode === 'write' ? `<div class="wr-head"><button class="ibtn" id="prevL" aria-label="Previous letter">${ICON.back}</button><span class="wr-ex">${pic(L[2])}<span>${hiLetter(L[1], L[0])}</span></span><button class="ibtn" id="nextL" aria-label="Next letter">${ICON.fwd}</button></div>` : ''}
       <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
-      <div class="swatches" id="sw">${mode === 'magic' ? "<button class=\"swc sel rainbow\" data-c=\"rainbow\" aria-label=\"Rainbow\"></button>" : ''}${PALETTE.map((c, i) => `<button class="swc ${i === 0 && mode !== 'magic' ? 'sel' : ''}" data-c="${c}" style="--c:${c}" aria-label="Colour"></button>`).join('')}</div>
+      <div class="swatches" id="sw">${mode === 'magic' ? "<button class=\"swc sel rainbow\" data-c=\"rainbow\" aria-label=\"Rainbow\"></button>" : ''}${PALETTE.map((c, i) => `<button class="swc ${i === 0 && mode !== 'magic' ? 'sel' : ''}" data-c="${c}" style="--c:${c}" aria-label="${esc(PAL_WORDS[i] ? PAL_WORDS[i][1] : "Colour")}">${palL && PAL_WORDS[i] ? `<b class="swl">${esc(PAL_WORDS[i][0])}</b>` : ''}</button>`).join('')}</div>
       <div class="tools" id="tools">
         <button class="tool" data-t="brush" data-s="6" aria-label="Thin brush"><i style="--d:8px"></i></button>
         <button class="tool" data-t="brush" data-s="14" aria-label="Brush"><i style="--d:14px"></i></button>
@@ -3839,8 +3868,9 @@ function screenPaint(opts = {}) {
   ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(n => cB.addEventListener(n, () => { drawing = false; }));
   $('#sw').onclick = e => {
     const b = e.target.closest('.swc'); if (!b) return;
-    color = b.dataset.c; if (tool === 'eraser') tool = mode === 'color' ? 'fill' : 'brush';
+    const was = color; color = b.dataset.c; if (tool === 'eraser') tool = mode === 'color' ? 'fill' : 'brush';
     $$('.swc').forEach(x => x.classList.toggle('sel', x === b)); markTool(); sfx.tick();
+    const w = palL && was !== color && PAL_WORDS[PALETTE.indexOf(color)]; if (w) say(`${lsay(w[0]).toLowerCase()}… ${w[1]}`);
   };
   $('#tools').onclick = e => {
     const b = e.target.closest('.tool[data-t]'); if (!b) return;
@@ -4250,7 +4280,7 @@ const kidsBar = () => `<div class="kids"><div class="kids-top"><button class="ib
   <button class="fam-chip inv" id="invChip"><span class="emo">📨</span>Invite</button>
   <button class="fam-chip" id="worldChip" aria-label="Where our family lives"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button>
   </div></div>`;
-function switchKid(id) { if (!ROOT.profiles[id]) return; ROOT.cur = id; P = ROOT.profiles[id]; save(); goHome(); }
+function switchKid(id) { if (!ROOT.profiles[id]) return; GPLAY = null; ROOT.cur = id; P = ROOT.profiles[id]; save(); goHome(); }
 function screenDuo() {
   const t = newScreen(), n = KIDS.length, goal = n > 2 ? n * 3 : 8, trk = id => ROOT.profiles[id].settings.track;
   const decks = Object.fromEntries(KIDS.map(id => [id, shuffle(trk(id) === 'l' ? [...TWIST_L, ...CHIST_L] : [...CHIST_R])])), pts = Object.fromEntries(KIDS.map(id => [id, 0]));
@@ -5630,7 +5660,7 @@ function screenGuest() {
   };
   learnKids(pg); drawKids();
   const out = gLoad(GOUT_KEY, []).filter(c => Date.now() - c.at < 3 * 864e5);
-  out.forEach(c => { if (Date.now() - (c.sent || 0) > 8 * 3600e3) { relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: c.e, x: c.x, p: c.p }); c.sent = Date.now(); } });
+  out.forEach(c => { if (Date.now() - (c.sent || 0) > 8 * 3600e3) { relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: c.e, x: c.x, p: c.p, ...(c.g ? { g: c.g, st: c.st, gn: c.gn } : {}) }); c.sent = Date.now(); } });
   gStore(GOUT_KEY, out);
   if (Date.now() - (+gLoad('govorilki-guest-here', 0)) > 2 * 3600e3) { relayPost({ k: 'here', by: GUEST.who, n: GUEST.name }); gStore('govorilki-guest-here', Date.now()); }
   $('#gKidsBox').onclick = async e => {
@@ -7428,6 +7458,7 @@ function screenParents(focus) {
       <p class="muted" id="piperState"></p>
       <label class="prow" for="devVoice">Phone voice (free) <select id="devVoice"><option value="">— automatic —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Game sounds</label>
+      <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>A day without reading costs 10 stars (a reading lesson, the book or a reading game counts for the day)</label>
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>The microphone checks that the child spoke out loud and blew</label>
       <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Check which word was said (the browser's speech recognition: the sound is processed by Google in Chrome or by Apple in Safari)</label>
       <p class="muted" id="voiceState"></p>
@@ -7502,6 +7533,7 @@ function screenParents(focus) {
   $('#voiceIn').onchange = e => { P.settings.voice = e.target.checked; save(); if (!P.settings.voice) hush(); };
   $('#slowIn').onchange = e => { P.settings.rate = e.target.checked ? .8 : 1; save(); };
   $('#sfxIn').onchange = e => { P.settings.sfx = e.target.checked; save(); if (P.settings.sfx) sfx.pop(); };
+  $('#rfIn').onchange = e => { P.settings.readFine = e.target.checked; if (e.target.checked) { P.readFrom = dayKey(); delete P.readPaid; } save(); sfx.tick(); };
   $('#micIn').onchange = e => { ROOT.micOff = !e.target.checked; save(); };
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
@@ -8377,7 +8409,7 @@ function resultExtras(ov, { key, stars, line, title, ev, inLesson }) {
   const b = BATTLES[key], val = b ? b.v(ev) : 0, like = (P.likeG || {})[key] || 0, bt = BATTLE && BATTLE.g === key ? BATTLE : null;
   if (bt && bt.done) BATTLE = null;
   const box = document.createElement('div'); box.className = 'res-x';
-  box.innerHTML = `<div class="res-sub">${!inLesson && b ? `<button class="chip res-bt" data-r="battle">⚔️ ${bt && bt.done && bt.via === 'link' ? "Reply to the battle" : "Challenge to a battle"}</button>` : ''}
+  box.innerHTML = `<div class="res-sub">${!inLesson && b && !GPLAY ? `<button class="chip res-bt" data-r="battle">⚔️ ${bt && bt.done && bt.via === 'link' ? "Reply to the battle" : "Challenge to a battle"}</button>` : ''}
       ${inLesson || EMBEDDED ? '' : "<button class=\"chip\" data-r=\"save\">💾 Save</button>"}
       <span class="res-like" role="group" aria-label="Did you like the game?"><button class="chip ${like > 0 ? 'sel' : ''}" data-r="up" aria-label="Like">👍</button><button class="chip ${like < 0 ? 'sel' : ''}" data-r="down" aria-label="Dislike">👎</button></span></div>
     <p class="res-msg" id="resMsg" role="status"></p><div class="res-sheet" id="resSheet" hidden></div>`;
@@ -9113,6 +9145,7 @@ function homeRelay() {
   relaySub(m => {
     if (t !== tok) return;
     if (m.k === 'here' && f.grands.some(g => g.id === m.by)) { f.seen = f.seen || {}; if (!(f.seen[m.by] >= m.at)) { f.seen[m.by] = m.at; save(); } return; }
+    if (m.k === 'cheer' && m.g && relPlayFromNote(f, m) && m.to === ROOT.cur && !GPLAY) { const bx = $('#relpBox'); if (bx) { bx.innerHTML = relpHTML(); bindRelp(); } }
     const el = $('#invBanner'); if (!el) return;
     if (m.k === 'cheer' && m.to === ROOT.cur && m.i && !P.cheerSeen.includes(m.i) && Date.now() - m.at < 3 * 864e5) {
       if (el.querySelector(`[data-ch="${CSS.escape(m.i)}"]`)) return;
@@ -9244,44 +9277,80 @@ function codeSet(kind) {
   const big = Q(), answers = sample(big ? [6, 8, 9, 10, 12, 14, 15, 16, 18, 20] : [2, 3, 4, 5, 6, 7, 8, 9, 10], 4);
   return answers.map(a => ({ ans: String(a), make: () => { if (big && Math.random() < .5) { const d = [2, 3, 4, 5].filter(x => a % x === 0 && a / x <= 10); if (d.length) { const x = pickOne(d); return `${x}×${a / x}`; } } const x = 1 + Math.floor(Math.random() * (a - 1)); return Math.random() < .3 && a < 10 ? `${a + x}−${x}` : `${x}+${a - x}`; } }));
 }
-const CODE_NAME = { abc: "Colour by letters", syl: "Colour by words", math: "Colour by sums" };
+const CODE_NAME = { abc: "Colour by letters", syl: "Colour by words", math: "Colour by sums", col: "Letter colours", colw: "Read the colour" };
+const CC_FEW = {};   // pictures that had too little room for this kind of label, in this session
 function screenCodeColor(kind = 'abc', page, tries = 0) {
-  const t = newScreen(), set = codeSet(kind);
-  page = page || pickOne(PAGES);
+  const t = newScreen(), cw = kind === 'col' || kind === 'colw', set = cw ? colSet(kind) : codeSet(kind), colOf = i => set[i].col || CODE_COLS[i];
+  // «Буква — цвет» after three pictures: the palette loses its letters, the child hears the colour and finds its first letter
+  const hideL = kind === 'colw' || (kind === 'col' && (P.plays['code-col'] || 0) >= 3);
+  const few = CC_FEW[kind] = CC_FEW[kind] || [];
+  page = page || pickOne(PAGES.filter(x => !few.includes(x))) || pickOne(PAGES);
   shell(CODE_NAME[kind], `<div class="cc"><div class="cc-page" id="ccPage">${outlineSVG(pageSVG(page))}</div>
-    <div class="cc-pal" id="ccPal">${set.map((x, i) => `<button class="cc-sw" data-i="${i}" style="--c:${CODE_COLS[i]}" aria-label="${esc(x.ans)}"><b>${esc(x.ans)}</b></button>`).join('')}</div></div>`, { back: screenDrawMenu });
+    <div class="cc-pal" id="ccPal">${set.map((x, i) => `<button class="cc-sw" data-i="${i}" style="--c:${colOf(i)}" aria-label="${esc(cw ? x.name : x.ans)}">${hideL ? '' : `<b>${esc(x.ans)}</b>`}</button>`).join('')}</div></div>`, { back: screenDrawMenu });
   const svg = $('#ccPage svg'), NS = 'http://www.w3.org/2000/svg';
   svg.removeAttribute('width'); svg.removeAttribute('height');
   let sel = -1, filled = 0, total = 0;
-  const said = new Set();
-  // the parts big enough for a label, and really on top at their centre
+  const said = new Set(), miss = new Map();
   requestAnimationFrame(() => {
     if (t !== tok) return;
+    const m = svg.getScreenCTM();
+    const at = (x, y) => { if (!m) return null; const p = new DOMPoint(x, y).matrixTransform(m); return document.elementFromPoint(p.x, p.y); };
+    // how wide the longest label is, per unit of font size
+    const probe = document.createElementNS(NS, 'text'); probe.setAttribute('class', 'cc-t'); probe.setAttribute('font-size', 10); svg.appendChild(probe);
+    const Wn = Math.max(.5, ...(kind === 'math' ? ['18−9'] : set.map(x => String(x.c))).map(c => { probe.textContent = c; let w = 0; try { w = probe.getComputedTextLength(); } catch (e) {} return (w || c.length * 7.4) / 10; }));
+    probe.remove();
+    const SZ = [13, 10.5, 8.5, 7, 5.8, 4.8, 4.2].filter(f => f >= (kind === 'colw' ? 4.2 : 4.8));
+    // where a label fits inside a part: a grid over the part tells which points are really on it (not under another
+    // part); the label goes where its box is on the part at the largest size, nearest the middle, checked once more
+    const spot = (el, b) => {
+      const N = 12, sx = b.width / N, sy = b.height / N, g = [];
+      let seen = false;
+      for (let i = 0; i <= N; i++) { g[i] = []; for (let j = 0; j <= N; j++) { const h = at(b.x + i * sx, b.y + j * sy); g[i][j] = h === el; if (h) seen = true; } }
+      if (!seen) return { x: b.x + b.width / 2, y: b.y + b.height / 2, fs: Math.max(SZ[SZ.length - 1], Math.min(13, b.width / Wn, b.height * .6)) };
+      const fits = (x, y, hw, hh) => {
+        if (x - hw < b.x || x + hw > b.x + b.width || y - hh < b.y || y + hh > b.y + b.height) return false;
+        for (let i = Math.ceil((x - hw - b.x) / sx); i <= Math.floor((x + hw - b.x) / sx); i++) for (let j = Math.ceil((y - hh - b.y) / sy); j <= Math.floor((y + hh - b.y) / sy); j++) if (!g[i] || !g[i][j]) return false;
+        return true;
+      };
+      const opts = [];
+      for (let i = 0; i <= N; i++) for (let j = 0; j <= N; j++) {
+        if (!g[i][j]) continue;
+        const x = b.x + i * sx, y = b.y + j * sy, fs = SZ.find(f => fits(x, y, Wn * f / 2 + .4, f * .55));
+        if (fs) opts.push({ x, y, fs, d: Math.hypot(i - N / 2, j - N / 2) });
+      }
+      opts.sort((p, q) => q.fs - p.fs || p.d - q.d);
+      for (const o of opts.slice(0, 10)) for (const fs of SZ.filter(f => f <= o.fs)) {
+        const hw = Wn * fs / 2, hh = fs * .5;
+        if ([[-hw, -hh], [0, -hh], [hw, -hh], [-hw, 0], [hw, 0], [-hw, hh], [0, hh], [hw, hh]].every(([dx, dy]) => at(o.x + dx, o.y + dy) === el)) return { x: o.x, y: o.y, fs };
+      }
+      return null;
+    };
     const shapes = [...svg.querySelectorAll('path,circle,ellipse,rect,polygon')].filter(el => (el.getAttribute('fill') || '').toUpperCase() === '#FFFFFF');
-    const m = svg.getScreenCTM(), chosen = [];
-    shapes.map(el => { let b; try { b = el.getBBox(); } catch (e) { return null; } return { el, b, a: b.width * b.height }; }).filter(x => x && x.b.width > 12 && x.b.height > 9).sort((p, q) => q.a - p.a).forEach(x => {
+    const chosen = [];
+    shapes.map(el => { let b; try { b = el.getBBox(); } catch (e) { return null; } return { el, b, a: b.width * b.height }; }).filter(x => x && x.b.width > 10 && x.b.height > 8).sort((p, q) => q.a - p.a).slice(0, 18).forEach(x => {
       if (chosen.length >= 8) return;
-      const cx = x.b.x + x.b.width / 2, cy = x.b.y + x.b.height / 2;
-      if (chosen.some(c => Math.hypot(c.cx - cx, c.cy - cy) < 16)) return;
-      const sp = m ? new DOMPoint(cx, cy).matrixTransform(m) : null, top = sp && document.elementFromPoint(sp.x, sp.y);
-      if (top && top !== x.el) return;
-      chosen.push({ ...x, cx, cy });
+      const s = spot(x.el, x.b); if (!s) return;
+      if (chosen.some(c => Math.hypot(c.cx - s.x, c.cy - s.y) < 14)) return;
+      chosen.push({ ...x, cx: s.x, cy: s.y, fs: s.fs });
     });
-    const K = Math.min(set.length, Math.max(2, Math.floor(chosen.length / 2)));
+    // too few parts on this picture: another one
+    if (chosen.length < (kind === 'colw' ? 3 : 4) && tries < 10) { few.push(page); screenCodeColor(kind, pickOne(PAGES.filter(x => x !== page && !few.includes(x))) || pickOne(PAGES), tries + 1); return; }
+    // reading colours: every labelled part its own word
+    const K = kind === 'colw' ? Math.min(set.length, chosen.length) : Math.min(set.length, Math.max(2, Math.floor(chosen.length / 2)));
     chosen.forEach((x, i) => {
       const k = i % K, code = set[k].make ? set[k].make() : set[k].c;
       x.el.dataset.k = k; x.el.classList.add('cc-r');
       const tx = document.createElementNS(NS, 'text');
       tx.setAttribute('x', x.cx); tx.setAttribute('y', x.cy); tx.setAttribute('class', 'cc-t');
-      tx.setAttribute('font-size', Math.max(5, Math.min(13, Math.min(x.b.width / (code.length * .62), x.b.height * .6))));
+      tx.setAttribute('font-size', x.fs);
       tx.textContent = code; svg.appendChild(tx); x.tx = tx;
     });
-    // too few parts on this picture: another one
-    if (chosen.length < 4 && tries < 4) { screenCodeColor(kind, pickOne(PAGES.filter(x => x !== page)), tries + 1); return; }
     const used = new Set(chosen.map(x => +x.el.dataset.k));
     $$('.cc-sw').forEach(b => { if (!used.has(+b.dataset.i)) b.remove(); });
     total = chosen.length;
-    talk(kind === 'math' ? "Solve the sum in each part of the picture. The answer is one of the colours below: pick that colour and colour it in!" : kind === 'syl' ? "Syllables are hidden in the picture. Tap a colour below, say the syllable and colour in all the parts that match!" : "Letters are hidden in the picture. Pick the colour with the same letter and colour it in!");
+    talk(kind === 'math' ? "Solve the sum in each part of the picture. The answer is one of the colours below: pick that colour and colour it in!" : kind === 'syl' ? "Syllables are hidden in the picture. Tap a colour below, say the syllable and colour in all the parts that match!"
+      : kind === 'col' ? (hideL ? "The picture has letters, and the colours are below. Tap a colour to hear its name. Which letter does it start with? Colour that part!" : `The letter tells you the colour: ${set[0].ans} is for ${set[0].name}. Take the colour with the same letter and colour in!`)
+      : kind === 'colw' ? "Colour words are written in the picture. Read the word and use that colour!" : "Letters are hidden in the picture. Pick the colour with the same letter and colour it in!");
   });
   $('#ccPal').onclick = async e => {
     const b = e.target.closest('.cc-sw'); if (!b) return;
@@ -9294,21 +9363,25 @@ function screenCodeColor(kind = 'abc', page, tries = 0) {
     }
     sel = i; $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b));
     if (kind === 'abc') say(set[i].say.toLowerCase());
+    else if (kind === 'col') say(hideL ? set[i].name : `${set[i].say.toLowerCase()}… ${set[i].name}`);
+    else if (kind === 'colw') say(set[i].name);
   };
   svg.addEventListener('pointerdown', e => {
     const el = e.target.closest('path,circle,ellipse,rect,polygon'); if (!el || !svg.contains(el)) return;
     e.preventDefault();
     if (sel < 0) { wiggle($('#ccPal')); talk("First choose a colour below."); return; }
-    if (el.dataset.k === undefined) { if ((el.getAttribute('fill') || '').toUpperCase() === '#FFFFFF') { el.style.fill = CODE_COLS[sel]; sfx.pop(); } return; }
+    if (el.dataset.k === undefined) { if ((el.getAttribute('fill') || '').toUpperCase() === '#FFFFFF') { el.style.fill = colOf(sel); sfx.pop(); } return; }
     if (el.dataset.done) return;
     if (+el.dataset.k !== sel) {
       sfx.oops(); wiggle($('#ccPage'));
-      const want = set[+el.dataset.k];
-      talk(kind === 'math' ? "Count again: the answer is different." : kind === 'syl' ? "Read the syllable in this part again!" : `Here is the letter ${want.say.toLowerCase()}. Find its colour!`);
+      const want = set[+el.dataset.k], n = (miss.get(el) || 0) + 1; miss.set(el, n);
+      talk(kind === 'math' ? "Count again: the answer is different." : kind === 'syl' ? "Read the syllable in this part again!"
+        : kind === 'col' ? (n > 1 ? `${want.ans} — ${want.name}!` : `This is the letter ${want.say.toLowerCase()}. Which colour starts with it?`)
+        : kind === 'colw' ? (n > 1 ? `It says: ${want.name}.` : "Read the word again: which colour is it?") : `Here is the letter ${want.say.toLowerCase()}. Find its colour!`);
       return;
     }
-    el.style.fill = CODE_COLS[sel]; el.dataset.done = 1; sfx.star(); filled++;
-    if (kind !== 'abc') say(kind === 'syl' ? set[sel].say : set[sel].ans);
+    el.style.fill = colOf(sel); el.dataset.done = 1; sfx.star(); filled++;
+    if (cw) say(set[sel].name); else if (kind !== 'abc') say(kind === 'syl' ? set[sel].say : set[sel].ans);
     if (filled >= total && total) {
       confetti();
       later(() => finish({ key: 'code-' + kind, stars: 3, line: kind === 'math' ? "All the sums are solved — the picture is ready!" : "You read it all" + G("", '') + " — the picture is ready!", again: () => screenCodeColor(kind), menu: screenDrawMenu }), 900);
@@ -9602,16 +9675,8 @@ const artThumbs = list => `<div class="art-grid">${list.map(x => `<button class=
 // the story of a painting: what we know, and the first sentences of its Wikipedia article in the page's language
 async function artStory(x) {
   let s = `«${x.t}». ` + (x.a ? `Artist: ${x.a}. ` : '') + (x.y ? `Year: ${x.y > 0 ? x.y : -x.y + " BC"}. ` : '') + (artMus(x) ? `Museum: ${artMus(x)}.` : '');
-  const tr = ART.tours[x.q], nt = ART.notes[x.q];
-  if (tr) return s + ' ' + tr.s + ' ' + tr.f[0];
-  if (nt) return s + ' ' + nt[1] + ' ' + nt[0];
-  if (x.w) {
-    try {
-      const d = await fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(x.w)}`).then(r => r.ok ? r.json() : null);
-      if (d && d.extract) s += ' ' + d.extract.split(/(?<=[.!?])\s/).slice(0, 3).join(' ');
-    } catch (e) {}
-  }
-  return s;
+  const tr = ART.tours[x.q], nt = ART.notes[x.q], w = await artWiki(x, Q() ? 4 : 3);
+  return [s, tr && tr.s, nt && nt[1], w, tr && tr.x.w].filter(Boolean).reduce((all, p) => artSame(all, p) ? all : all + ' ' + p);
 }
 function screenMuseum(tab = 'day', arg = null) {
   const t = newScreen(), my = artMy();
@@ -9637,10 +9702,19 @@ function screenMuseum(tab = 'day', arg = null) {
         <p class="art-cnt">👀 You have looked at ${my.seen.length} of ${P2.length} paintings${G("", '')}</p>`;
       talk(`Painting of the day: “${x.t}”. Tap the painting to take a closer look and hear its story.`);
     } else if (tab === 'how') {
-      const d = new Date(), n = Math.floor(d.getTime() / 864e5 - d.getTimezoneOffset() / 1440), pool = Q() ? P2 : P2.slice(0, 300), x = pool[(n * 7919) % pool.length];
-      box.innerHTML = `<div class="art-how">${ART_HOW.map(([e, h, p]) => `<div class="art-note"><b>${e} ${h}</b><p>${p}</p></div>`).join('')}</div><button class="big" id="artTry">👀 Let’s try it on the painting of the day</button>`;
-      $('#artTry').onclick = () => { sfx.pop(); screenArtLook(x, () => screenMuseum('how')); };
-      talk("Five secrets for looking at a painting. " + ART_HOW.map(h => h[1] + '. ' + h[2]).join(' '));
+      const d = new Date(), n = Math.floor(d.getTime() / 864e5 - d.getTimezoneOffset() / 1440), pool = Q() ? P2 : P2.slice(0, 300), k0 = (n * 7919) % pool.length;
+      const x = (arg && P2.find(p => p.q === arg)) || pool[k0], k = pool.indexOf(x), next = pool[((k < 0 ? k0 : k) + 1) % pool.length], tr = ART.tours[x.q];
+      if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+      box.innerHTML = `<button class="ag-pic" id="agPic" aria-label="Open the whole painting"><img id="agImg" src="${artImg(x.f, 960)}" alt="${esc(x.t)}"><span class="ag-ring" id="agRing" hidden></span></button>
+        <h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p>
+        <div class="og-btns"><button class="big" id="artTry">👀 Look closely, step by step</button><button class="big ghost" id="agNext">Another painting ›</button></div>
+        ${artGuideHTML(x)}
+        <details class="ag-how"><summary>Five secrets for any painting</summary><div class="art-how">${ART_HOW.map(([e, h, p]) => `<div class="art-note"><b>${e} ${h}</b><p>${p}</p></div>`).join('')}</div></details>`;
+      bindArtGuide(box, x, $('#agImg'), $('#agRing'));
+      $('#agPic').onclick = () => artFull(x);
+      $('#artTry').onclick = () => { sfx.pop(); screenArtLook(x, () => screenMuseum('how', x.q)); };
+      $('#agNext').onclick = () => { sfx.pop(); screenMuseum('how', next.q); };
+      talk(`«${x.t}». ${x.a ? x.a + '. ' : ''}${tr ? tr.f[0] : "Find the brightest place in the painting."}`);
     } else if (tab === 'mus' && !arg) {
       const cnt = {}; P2.forEach(x => { if (x.m) cnt[x.m] = (cnt[x.m] || 0) + 1; });
       const ms = Object.keys(cnt).filter(k => D.m[k] && cnt[k] >= 3).sort((a, b) => cnt[b] - cnt[a]);
@@ -9696,9 +9770,8 @@ function screenArtView(x, list, back) {
   if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
   const k = list.indexOf(x), prev = list[(k - 1 + list.length) % list.length], next = list[(k + 1) % list.length];
   const liked = () => my.likes.includes(x.q);
-  const look = tr ? tr.f[0] : nt ? nt[0] : '', secret = tr ? tr.s : nt ? nt[1] : '';
   shell("World Museum", `<div class="art art-v">
-      <div class="av-wrap"><button class="av-pic" id="avPic" aria-label="Open the whole painting"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"><span class="av-zoom">🔍</span></button>
+      <div class="av-wrap"><button class="av-pic" id="avPic" aria-label="Open the whole painting"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"><span class="av-zoom">🔍</span><span class="ag-ring" id="avRing" hidden></span></button>
         ${list.length > 1 ? `<button class="av-arr l" id="avPrev" aria-label="Previous">‹</button><button class="av-arr r" id="avNext" aria-label="Next">›</button>` : ''}</div>
       <div class="av-info"><h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p></div>
       <div class="av-bar">
@@ -9706,19 +9779,19 @@ function screenArtView(x, list, back) {
         <button class="ibtn" id="avTell" aria-label="Tell me">${ICON.speaker}</button>
         <button class="ibtn ${liked() ? 'sel' : ''}" id="avLike" aria-label="I like it">❤️</button>
       </div>
-      ${look ? `<div class="art-note"><b>👀 What to look at</b><p>${esc(look)}</p></div>` : ''}
-      ${secret ? `<div class="art-note"><b>✨ The secret</b><p>${esc(secret)}</p></div>` : ''}
+      ${artGuideHTML(x)}
       <p class="art-story" id="avStory"></p>
       <div class="og-btns"><button class="chip" id="avDraw">🖌️ I will paint it too</button>${x.w ? `<a class="chip" href="https://${LANG}.wikipedia.org/wiki/${encodeURIComponent(x.w)}" target="_blank" rel="noopener">Wikipedia ↗</a>` : ''}</div>
       <p class="art-src">Image: Wikimedia Commons</p>
     </div>`, { back, guide: false });
+  bindArtGuide($('.art-v'), x, $('#avPic img'), $('#avRing'));
   $('#avPic').onclick = () => artFull(x);
   $('#avLook').onclick = () => { sfx.pop(); screenArtLook(x, () => screenArtView(x, list, back)); };
   $('#avTell').onclick = async () => { sfx.pop(); $('#avStory').textContent = '…'; const s = await artStory(x); if (t !== tok) return; $('#avStory').textContent = s; talk(s); };
   $('#avLike').onclick = () => { sfx.magic(); my.likes = liked() ? my.likes.filter(q => q !== x.q) : [x.q, ...my.likes]; save(); $('#avLike').classList.toggle('sel', liked()); if (liked()) talk("The painting is now in your museum!"); };
   $('#avDraw').onclick = () => { sfx.pop(); screenPaint(); };
   if ($('#avPrev')) { $('#avPrev').onclick = () => { sfx.tick(); screenArtView(prev, list, back); }; $('#avNext').onclick = () => { sfx.tick(); screenArtView(next, list, back); }; }
-  talk(`«${x.t}». ${x.a ? x.a + '.' : ''} Tap «Look closely». I will show you what is fun to see.`);
+  talk(`«${x.t}». ${x.a ? x.a + '.' : ''} ${tr ? tr.f[0] : nt ? nt[0] : ''} Tap «Look closely». I will show you what is fun to see.`);
 }
 // a tour of one painting: the picture stays on top, one step at a time in the card below
 function screenArtLook(x, back) {
@@ -10418,7 +10491,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '61';
+const APP_VER = '62';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -10616,8 +10689,8 @@ function guestPlayed(key, stars) {
   if (sent[key] === day) return;
   Object.keys(sent).forEach(k => { if (sent[k] !== day) delete sent[k]; }); sent[key] = day; gStore('govorilki-guest-played', sent);
   const to = String(ROOT.cur).replace(/^gk_/, ''), x = `${GUEST.she ? "I played it too" : "I played it too"}: «${n}» ${'⭐'.repeat(Math.max(1, Math.min(3, stars)))} Shall we play?`;
-  const c = { i: rid(8), to, e: '🎮', x, p: '', at: Date.now(), sent: Date.now() };
-  relayPostTo(GUEST.fam, { k: 'cheer', i: c.i, to, by: GUEST.who, n: GUEST.name, e: c.e, x, p: '' });
+  const c = { i: rid(8), to, e: '🎮', x, p: '', at: Date.now(), sent: Date.now(), g: key, st: clampN(stars, 3), gn: n };
+  relayPostTo(GUEST.fam, { k: 'cheer', i: c.i, to, by: GUEST.who, n: GUEST.name, e: c.e, x, p: '', g: c.g, st: c.st, gn: c.gn });
   const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
 }
 
@@ -10948,6 +11021,325 @@ GAMES.push(
 );
 SECTIONS.splice(1, 0, { g: 14, h: "My languages", p: "one sound in different languages: feel the difference" });
 HOME_TABS.find(x => x.id === 'speak').g.splice(1, 0, 14);
+
+/* ---------- more colouring pages, and colours that teach reading ---------- */
+// simple pictures drawn for colouring: each part is its own shape, light fills turn white with an outline (outlineSVG),
+// dark details (eyes, wheels) stay
+const CPAGES = {
+  house: '<svg viewBox="0 0 100 100"><circle cx="86" cy="14" r="9" fill="#FFD93D"/><rect x="64" y="18" width="9" height="20" fill="#B0505A"/><rect x="0" y="86" width="100" height="14" fill="#7BC74D"/><rect x="20" y="46" width="60" height="42" fill="#FFD9A0"/><path d="M12 48 50 14l38 34z" fill="#E86A5A"/><rect x="42" y="64" width="16" height="24" rx="2" fill="#A86B3C"/><rect x="25" y="55" width="13" height="13" fill="#BFE6FF"/><rect x="62" y="55" width="13" height="13" fill="#BFE6FF"/><circle cx="54" cy="77" r="1.6" fill="#2A2346"/></svg>',
+  fish: '<svg viewBox="0 0 100 100"><circle cx="14" cy="22" r="5" fill="#CFE8FF"/><circle cx="8" cy="10" r="3.5" fill="#CFE8FF"/><path d="M66 50 94 28v44z" fill="#FF9F1C"/><path d="M36 32q12-20 30-4z" fill="#FF9F1C"/><path d="M40 68q12 18 24 2z" fill="#FF9F1C"/><ellipse cx="44" cy="50" rx="32" ry="22" fill="#FFC83A"/><path d="M52 29q8 21 0 42h8q8-21 0-42z" fill="#FFF3C4"/><path d="M28 34q-8 16 0 32" fill="none" stroke="#E08A00" stroke-width="2"/><circle cx="22" cy="45" r="4" fill="#2A2346"/><path d="M13 56q4 3 8 0" fill="none" stroke="#2A2346" stroke-width="1.6"/><path d="M0 94q12-6 25 0t25 0 25 0 25 0v6H0z" fill="#9DD6F2"/></svg>',
+  butterfly: '<svg viewBox="0 0 100 100"><path d="M50 48C34 8 4 10 8 36c3 16 24 18 42 12z" fill="#FF77B7"/><path d="M50 48C66 8 96 10 92 36c-3 16-24 18-42 12z" fill="#FF77B7"/><path d="M50 52C34 54 12 66 20 84c8 12 26 2 30-32z" fill="#9B5DE5"/><path d="M50 52C66 54 88 66 80 84c-8 12-26 2-30-32z" fill="#9B5DE5"/><circle cx="20" cy="26" r="6" fill="#FFD93D"/><circle cx="80" cy="26" r="6" fill="#FFD93D"/><circle cx="28" cy="76" r="5" fill="#FFF3C4"/><circle cx="72" cy="76" r="5" fill="#FFF3C4"/><path d="M48 32q-4-14-12-20M52 32q4-14 12-20" fill="none" stroke="#2A2346" stroke-width="2" stroke-linecap="round"/><circle cx="36" cy="11" r="2.5" fill="#2A2346"/><circle cx="64" cy="11" r="2.5" fill="#2A2346"/><ellipse cx="50" cy="54" rx="4.5" ry="24" fill="#5A3A20"/></svg>',
+  flower: '<svg viewBox="0 0 100 100"><rect x="0" y="92" width="100" height="8" fill="#B5E58A"/><rect x="47" y="46" width="6" height="48" fill="#4CC261"/><path d="M50 84q-22-18-34-6 14 14 34 6z" fill="#7BC74D"/><path d="M50 72q22-18 34-6-14 14-34 6z" fill="#7BC74D"/><circle cx="67" cy="34" r="12" fill="#FF77B7"/><circle cx="58.5" cy="48.7" r="12" fill="#FF77B7"/><circle cx="41.5" cy="48.7" r="12" fill="#FF77B7"/><circle cx="33" cy="34" r="12" fill="#FF77B7"/><circle cx="41.5" cy="19.3" r="12" fill="#FF77B7"/><circle cx="58.5" cy="19.3" r="12" fill="#FF77B7"/><circle cx="50" cy="34" r="10" fill="#FFD93D"/></svg>',
+  car: '<svg viewBox="0 0 100 100"><circle cx="14" cy="14" r="8" fill="#FFD93D"/><path d="M60 18q0-8 8-7 3-6 10-4 6 0 7 6 5 1 4 7H62q-3 0-2-2z" fill="#E8EEF6"/><rect x="0" y="76" width="100" height="8" fill="#C7CEDA"/><path d="M6 66V52q0-8 10-10l14-16h34l16 16q14 2 14 12v12z" fill="#FF4D4D"/><path d="M33 30h13v13H21z" fill="#BFE6FF"/><path d="M51 30h11l12 13H51z" fill="#BFE6FF"/><path d="M48 46v18" stroke="#2A2346" stroke-width="1.2"/><circle cx="28" cy="68" r="11" fill="#2A2346"/><circle cx="28" cy="68" r="5" fill="#E8EEF6"/><circle cx="74" cy="68" r="11" fill="#2A2346"/><circle cx="74" cy="68" r="5" fill="#E8EEF6"/><rect x="86" y="48" width="8" height="6" rx="2" fill="#FFD93D"/><rect x="6" y="50" width="6" height="5" rx="2" fill="#FF9F1C"/></svg>',
+  rocket: '<svg viewBox="0 0 100 100"><circle cx="14" cy="18" r="3" fill="#FFD93D"/><circle cx="86" cy="30" r="2.5" fill="#FFD93D"/><circle cx="80" cy="10" r="2" fill="#FFD93D"/><path d="M30 52 14 70v14h16z" fill="#FF9F1C"/><path d="M70 52l16 18v14H70z" fill="#FF9F1C"/><path d="M38 80h24l-12 18z" fill="#FFD93D"/><path d="M50 6q20 16 20 50v26H30V56q0-34 20-50z" fill="#E8EEF6"/><path d="M50 6q12 9 17 24H33q5-15 17-24z" fill="#FF4D4D"/><circle cx="50" cy="48" r="8" fill="#4DB8FF"/><rect x="30" y="70" width="40" height="6" fill="#FF4D4D"/></svg>',
+  castle: '<svg viewBox="0 0 100 100"><path d="M50 8v32" stroke="#2A2346" stroke-width="2"/><path d="M51 8h15l-4 5 4 5H51z" fill="#FF4D4D"/><rect x="27" y="33" width="9" height="8" fill="#D9D2C5"/><rect x="45" y="33" width="10" height="8" fill="#D9D2C5"/><rect x="64" y="33" width="9" height="8" fill="#D9D2C5"/><rect x="18" y="40" width="64" height="50" fill="#D9D2C5"/><rect x="5" y="30" width="22" height="60" fill="#C7BFB0"/><rect x="73" y="30" width="22" height="60" fill="#C7BFB0"/><path d="M3 31 16 6l13 25z" fill="#9B5DE5"/><path d="M71 31 84 6l13 25z" fill="#9B5DE5"/><path d="M41 90V79q9-10 18 0v11z" fill="#A86B3C"/><circle cx="50" cy="55" r="6" fill="#BFE6FF"/><rect x="12" y="44" width="8" height="12" rx="4" fill="#BFE6FF"/><rect x="80" y="44" width="8" height="12" rx="4" fill="#BFE6FF"/><rect x="0" y="90" width="100" height="10" fill="#7BC74D"/></svg>',
+  cat: '<svg viewBox="0 0 100 100"><path d="M70 88q24 2 22-28-1-6 5-4 4 36-27 40z" fill="#FFB866"/><ellipse cx="50" cy="70" rx="26" ry="22" fill="#FFB866"/><ellipse cx="50" cy="83" rx="13" ry="9" fill="#FFE2BF"/><path d="M28 26 30 6l15 12z" fill="#FFB866"/><path d="M72 26 70 6 55 18z" fill="#FFB866"/><circle cx="50" cy="36" r="22" fill="#FFB866"/><path d="M32 20l1-9 7 6z" fill="#FF9EB8"/><path d="M68 20l-1-9-7 6z" fill="#FF9EB8"/><ellipse cx="41" cy="34" rx="3.5" ry="5" fill="#2A2346"/><ellipse cx="59" cy="34" rx="3.5" ry="5" fill="#2A2346"/><path d="M47 42h6l-3 4z" fill="#FF77B7"/><path d="M50 46q-3 4-7 2M50 46q3 4 7 2M30 42l-12-2M30 46l-12 2M70 42l12-2M70 46l12 2" fill="none" stroke="#2A2346" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="37" cy="91" rx="8" ry="5" fill="#FFB866"/><ellipse cx="63" cy="91" rx="8" ry="5" fill="#FFB866"/></svg>',
+  owl: '<svg viewBox="0 0 100 100"><rect x="4" y="86" width="92" height="7" rx="3.5" fill="#A86B3C"/><path d="M24 26 18 6l18 12z" fill="#C98E4E"/><path d="M76 26l6-20-18 12z" fill="#C98E4E"/><ellipse cx="50" cy="52" rx="30" ry="34" fill="#C98E4E"/><path d="M22 44q-10 22 4 38 6-20-4-38z" fill="#A8733F"/><path d="M78 44q10 22-4 38-6-20 4-38z" fill="#A8733F"/><ellipse cx="50" cy="70" rx="17" ry="14" fill="#F2D5A8"/><circle cx="38" cy="38" r="11" fill="#FFFFFF"/><circle cx="62" cy="38" r="11" fill="#FFFFFF"/><circle cx="38" cy="38" r="5" fill="#2A2346"/><circle cx="62" cy="38" r="5" fill="#2A2346"/><path d="M45 46h10l-5 9z" fill="#FF9F1C"/><path d="M40 86v-5M46 86v-5M54 86v-5M60 86v-5" stroke="#FF9F1C" stroke-width="3" stroke-linecap="round"/></svg>',
+  icecream: '<svg viewBox="0 0 100 100"><path d="M31 50 50 97 69 50z" fill="#E8B26A"/><path d="M38 66h24M43 80h14" fill="none" stroke="#C08A40" stroke-width="1.2"/><circle cx="37" cy="46" r="15" fill="#FF9EB8"/><circle cx="63" cy="46" r="15" fill="#9DE0B0"/><circle cx="50" cy="28" r="16" fill="#FFF3C4"/><circle cx="50" cy="10" r="5" fill="#E0234E"/><path d="M50 5q2-5 7-5" fill="none" stroke="#3E8A27" stroke-width="1.6"/></svg>',
+  boat: '<svg viewBox="0 0 100 100"><circle cx="84" cy="16" r="9" fill="#FFD93D"/><rect x="48" y="8" width="4" height="64" fill="#5A3A20"/><path d="M53 8h14l-4 4 4 4H53z" fill="#FF4D4D"/><path d="M46 14Q22 42 16 64h30z" fill="#F4F7FB"/><path d="M54 20q20 24 26 44H54z" fill="#FFD93D"/><path d="M10 70h80l-12 16H22z" fill="#C0702F"/><circle cx="30" cy="77" r="3" fill="#FFF3C4"/><circle cx="70" cy="77" r="3" fill="#FFF3C4"/><path d="M0 86q12-6 25 0t25 0 25 0 25 0v14H0z" fill="#4DB8FF"/></svg>',
+  snail: '<svg viewBox="0 0 100 100"><path d="M22 50l-6-16M30 50l2-16" stroke="#2A2346" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="33" r="3" fill="#2A2346"/><circle cx="32" cy="33" r="3" fill="#2A2346"/><rect x="0" y="86" width="100" height="14" fill="#7BC74D"/><path d="M6 86q0-10 12-12V56q0-10 8-10t8 10v18h48q14 0 16 12z" fill="#B5E58A"/><circle cx="62" cy="52" r="26" fill="#FFB866"/><circle cx="66" cy="55" r="16" fill="#FFD9A0"/><circle cx="69" cy="57" r="7" fill="#FFB866"/><circle cx="24" cy="58" r="2" fill="#2A2346"/><path d="M20 66q4 3 8 0" fill="none" stroke="#2A2346" stroke-width="1.5"/></svg>',
+  balloons: '<svg viewBox="0 0 100 100"><path d="M30 56Q36 72 50 84M53 48q-3 18-3 36M74 62q-10 14-24 22" fill="none" stroke="#7A8597" stroke-width="1.2"/><ellipse cx="30" cy="35" rx="16" ry="20" fill="#FF77B7"/><ellipse cx="74" cy="41" rx="16" ry="20" fill="#FFD93D"/><ellipse cx="53" cy="27" rx="16" ry="20" fill="#4DB8FF"/><rect x="36" y="82" width="28" height="16" rx="2" fill="#9B5DE5"/><rect x="47" y="82" width="6" height="16" fill="#FFD93D"/><path d="M50 82q-8-8-12-2 4 4 12 2 8-8 12-2-4 4-12 2z" fill="#FFD93D"/></svg>',
+  turtle: '<svg viewBox="0 0 100 100"><ellipse cx="26" cy="76" rx="9" ry="8" fill="#B5E58A"/><ellipse cx="70" cy="76" rx="9" ry="8" fill="#B5E58A"/><path d="M14 62 4 66l10 4z" fill="#B5E58A"/><circle cx="86" cy="56" r="11" fill="#B5E58A"/><path d="M14 66q2-38 36-38t36 38z" fill="#4CC261"/><path d="M50 34l9 5v10l-9 5-9-5V39z" fill="#9DE0B0"/><path d="M30 46l8 4v9l-8 4-8-4v-9z" fill="#9DE0B0"/><path d="M70 46l8 4v9l-8 4-8-4v-9z" fill="#9DE0B0"/><path d="M12 64h76v6q-38 8-76 0z" fill="#FFD93D"/><circle cx="90" cy="53" r="2.5" fill="#2A2346"/><path d="M88 61q3 2 6 0" fill="none" stroke="#2A2346" stroke-width="1.4"/></svg>',
+  tree: '<svg viewBox="0 0 100 100"><circle cx="88" cy="12" r="8" fill="#FFD93D"/><rect x="0" y="88" width="100" height="12" fill="#7BC74D"/><path d="M44 92V58h12v34z" fill="#A86B3C"/><circle cx="50" cy="36" r="30" fill="#4CC261"/><circle cx="26" cy="48" r="14" fill="#7BC74D"/><circle cx="74" cy="48" r="14" fill="#7BC74D"/><circle cx="36" cy="22" r="5" fill="#FF4D4D"/><circle cx="62" cy="18" r="5" fill="#FF4D4D"/><circle cx="54" cy="46" r="5" fill="#FF4D4D"/><circle cx="82" cy="54" r="5" fill="#FF4D4D"/><circle cx="18" cy="56" r="5" fill="#FF4D4D"/></svg>',
+  cupcake: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="94" rx="40" ry="5" fill="#C7CEDA"/><path d="M24 58h52l-8 36H32z" fill="#FF9EB8"/><path d="M40 60l2 34M60 60l-2 34" fill="none" stroke="#E0567A" stroke-width="1.4"/><path d="M16 60q-2-18 16-22 2-18 18-18t18 18q18 4 16 22z" fill="#FFF3C4"/><path d="M32 38q0-16 18-16t18 16z" fill="#FFD9A0"/><circle cx="50" cy="15" r="7" fill="#E0234E"/><rect x="62" y="44" width="7" height="3" rx="1.5" fill="#4DB8FF"/><rect x="30" y="50" width="7" height="3" rx="1.5" fill="#4CC261"/><rect x="40" y="27" width="7" height="3" rx="1.5" fill="#9B5DE5"/></svg>',
+  rainbow: '<svg viewBox="0 0 100 100"><circle cx="18" cy="16" r="9" fill="#FFD93D"/><path d="M6 72a44 44 0 0 1 88 0h-7a37 37 0 0 0-74 0z" fill="#FF4D4D"/><path d="M13 72a37 37 0 0 1 74 0h-7a30 30 0 0 0-60 0z" fill="#FF9F1C"/><path d="M20 72a30 30 0 0 1 60 0h-7a23 23 0 0 0-46 0z" fill="#FFD93D"/><path d="M27 72a23 23 0 0 1 46 0h-7a16 16 0 0 0-32 0z" fill="#4CC261"/><path d="M34 72a16 16 0 0 1 32 0h-7a9 9 0 0 0-18 0z" fill="#4DB8FF"/><path d="M2 80q0-10 10-9 4-8 12-5 8-1 10 6 6 2 4 9H4q-3 0-2-1z" fill="#E8EEF6"/><path d="M64 80q0-10 10-9 4-8 12-5 8-1 10 6 4 2 2 9H66q-3 0-2-1z" fill="#E8EEF6"/></svg>',
+  umbrella: '<svg viewBox="0 0 100 100"><path d="M50 50v34q0 8-7 8t-7-7" fill="none" stroke="#5A3A20" stroke-width="3" stroke-linecap="round"/><path d="M8 50Q10 12 50 10q40 2 42 40-7-6-14 0-7-6-14 0-7-6-14 0-7-6-14 0-7-6-14 0-7-6-14 0z" fill="#FF77B7"/><path d="M50 10Q36 18 36 50q7-6 14 0z" fill="#FFD93D"/><path d="M50 10Q64 18 64 50q-7-6-14 0z" fill="#4DB8FF"/><ellipse cx="50" cy="93" rx="40" ry="6" fill="#9DD6F2"/><circle cx="50" cy="8" r="3" fill="#5A3A20"/><path d="M14 66v6M24 76v6M76 70v6M86 62v6M66 84v6" stroke="#4DB8FF" stroke-width="2.5" stroke-linecap="round"/></svg>',
+  mushroom: '<svg viewBox="0 0 100 100"><rect x="0" y="88" width="100" height="12" fill="#7BC74D"/><path d="M38 56h24l4 34H34z" fill="#FFF3C4"/><path d="M10 58Q12 16 50 14q38 2 40 44z" fill="#FF4D4D"/><circle cx="32" cy="34" r="6" fill="#FFFFFF"/><circle cx="66" cy="30" r="7" fill="#FFFFFF"/><circle cx="50" cy="24" r="4" fill="#FFFFFF"/><circle cx="76" cy="48" r="4.5" fill="#FFFFFF"/><circle cx="22" cy="50" r="4" fill="#FFFFFF"/><path d="M78 88q2-14 10-16-2 10-10 16z" fill="#4CC261"/><path d="M14 88q-2-12-10-14 2 10 10 14z" fill="#4CC261"/></svg>',
+  ladybug: '<svg viewBox="0 0 100 100"><circle cx="86" cy="14" r="9" fill="#FFD93D"/><path d="M4 44q14-20 30-8-14 18-30 8z" fill="#4CC261"/><path d="M8 92q20-30 46-18 24-8 38 18z" fill="#7BC74D"/><path d="M40 24q-6-12-14-14M60 24q6-12 14-14" fill="none" stroke="#2A2346" stroke-width="2" stroke-linecap="round"/><circle cx="50" cy="30" r="12" fill="#2A2346"/><path d="M50 36C26 36 18 56 22 70q8 14 28 14z" fill="#FF4D4D"/><path d="M50 36c24 0 32 20 28 34q-8 14-28 14z" fill="#FF4D4D"/><circle cx="36" cy="52" r="5" fill="#2A2346"/><circle cx="64" cy="52" r="5" fill="#2A2346"/><circle cx="36" cy="70" r="4" fill="#2A2346"/><circle cx="64" cy="70" r="4" fill="#2A2346"/><circle cx="45" cy="27" r="2.6" fill="#FFFFFF"/><circle cx="55" cy="27" r="2.6" fill="#FFFFFF"/></svg>',
+  whale: '<svg viewBox="0 0 100 100"><path d="M50 22q-2-10-8-12M50 22q2-10 8-12M50 22v-12" fill="none" stroke="#4DB8FF" stroke-width="2.5" stroke-linecap="round"/><path d="M80 52q8-14 16-18-2 12-8 20 8 4 10 14-12-2-20-8z" fill="#3D6BFF"/><path d="M6 56q2-28 40-30 36 2 40 28-6 24-42 24Q8 78 6 56z" fill="#4D8BFF"/><path d="M10 62q18 14 38 12 22-2 34-14-6 18-36 18Q16 78 10 62z" fill="#BFE6FF"/><path d="M40 62q8 10-2 14-8-6 2-14z" fill="#3D6BFF"/><circle cx="24" cy="48" r="3" fill="#2A2346"/><path d="M0 92q12-6 25 0t25 0 25 0 25 0v8H0z" fill="#9DD6F2"/></svg>',
+  hotair: '<svg viewBox="0 0 100 100"><path d="M50 6C24 6 14 26 18 44q4 16 22 28h20q18-12 22-28C86 26 76 6 50 6z" fill="#FF4D4D"/><path d="M50 6c-10 0-14 20-12 38q2 16 6 28h12q4-12 6-28C64 26 60 6 50 6z" fill="#FFD93D"/><path d="M40 72l2 12M60 72l-2 12" stroke="#5A3A20" stroke-width="1.6"/><rect x="40" y="84" width="20" height="12" rx="2" fill="#C0702F"/><path d="M4 30q0-6 6-6 2-6 8-4 6 0 6 6 4 2 2 6H6q-3 0-2-2z" fill="#E8EEF6"/><path d="M76 66q0-6 6-6 2-6 8-4 6 0 6 6 4 2 2 6H78q-3 0-2-2z" fill="#E8EEF6"/></svg>',
+  bear: '<svg viewBox="0 0 100 100"><circle cx="26" cy="20" r="11" fill="#C98E4E"/><circle cx="74" cy="20" r="11" fill="#C98E4E"/><circle cx="26" cy="20" r="5" fill="#F2D5A8"/><circle cx="74" cy="20" r="5" fill="#F2D5A8"/><ellipse cx="50" cy="74" rx="26" ry="22" fill="#C98E4E"/><ellipse cx="50" cy="78" rx="14" ry="13" fill="#F2D5A8"/><ellipse cx="22" cy="68" rx="8" ry="12" fill="#B07A45" transform="rotate(25 22 68)"/><ellipse cx="78" cy="68" rx="8" ry="12" fill="#B07A45" transform="rotate(-25 78 68)"/><circle cx="50" cy="36" r="24" fill="#C98E4E"/><ellipse cx="50" cy="45" rx="10" ry="8" fill="#F2D5A8"/><ellipse cx="41" cy="32" rx="3" ry="4" fill="#2A2346"/><ellipse cx="59" cy="32" rx="3" ry="4" fill="#2A2346"/><ellipse cx="50" cy="41" rx="4" ry="3" fill="#2A2346"/><path d="M46 48q4 3 8 0" fill="none" stroke="#2A2346" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="34" cy="94" rx="10" ry="5" fill="#B07A45"/><ellipse cx="66" cy="94" rx="10" ry="5" fill="#B07A45"/></svg>',
+  dino: '<svg viewBox="0 0 100 100"><path d="M30 26l6-10 6 10M42 30l7-11 6 11M55 36l8-10 4 12M66 46l9-8 2 12" fill="#FF9F1C"/><path d="M14 74q-12-2-12-10 8 2 18-2z" fill="#4CC261"/><path d="M14 66q4-38 36-40 16 0 24 14 6 10 4 22l14-18q8-6 6 4-2 18-20 30-8 6-26 6H22q-10 0-8-18z" fill="#4CC261"/><path d="M26 68q6 14 26 14 20 0 28-10-4 14-28 14-22 0-26-18z" fill="#B5E58A"/><rect x="28" y="80" width="10" height="14" rx="4" fill="#4CC261"/><rect x="56" y="80" width="10" height="14" rx="4" fill="#4CC261"/><circle cx="86" cy="42" r="2.5" fill="#2A2346"/><path d="M83 52q4 3 8 0" fill="none" stroke="#2A2346" stroke-width="1.4"/><circle cx="40" cy="52" r="4" fill="#9DE0B0"/><circle cx="54" cy="44" r="5" fill="#9DE0B0"/><circle cx="62" cy="60" r="4" fill="#9DE0B0"/></svg>'
+};
+PAGES.push(...Object.keys(CPAGES).map(k => 'svg:' + k));
+
+// every colour of the palette by name, with the letter it starts with (one per PALETTE colour, in its order); the
+// dark one and white never go into a code
+const PAL_WORDS = LX('PAL_WORDS', [['К', RU('красный')], ['О', RU('оранжевый')], ['Ж', RU('жёлтый')], ['З', RU('зелёный')], ['Б', RU('бирюзовый')], ['Г', RU('голубой')], ['С', RU('синий')], ['Ф', RU('фиолетовый')], ['Р', RU('розовый')], ['К', RU('коричневый')], ['Ч', RU('чёрный')], ['Б', RU('белый')]]);
+const cwShow = w => LANG === 'en' ? w : w.toUpperCase();
+// «Буква — цвет»: the part carries a letter, the colour whose name starts with it paints it (four colours, all
+// different letters); «Прочитай цвет»: the part carries the colour's name, short words for the little ones
+function colSet(kind) {
+  const pool = shuffle(PAL_WORDS.slice(0, 10).map(([l, w], i) => ({ l, w, col: PALETTE[i] })).filter((x, i) => i !== 4 && (kind !== 'colw' || Q() || x.w.length <= 7)));
+  const seen = new Set(), out = [];
+  pool.forEach(x => { const k = kind === 'col' ? x.l.toUpperCase() : x.w; if (out.length < 4 && !seen.has(k)) { seen.add(k); out.push(x); } });
+  return out.map(x => ({ c: kind === 'col' ? x.l : cwShow(x.w), ans: kind === 'col' ? x.l : x.w, col: x.col, name: x.w, say: kind === 'col' ? lsay(x.l) : x.w }));
+}
+GAMES.push(
+  { id: 'code-col', name: "Letter colours", sub: "which letter does the colour start with?", ico: () => `<span class="ico-letters"><b class="L" style="color:#FF4D4D">${esc(PAL_WORDS[0][0])}</b><b class="L v">🖍</b></span>`, bg: 'var(--t-peach)', go: () => screenCodeColor('col'), grp: 4, also: [2] },
+  { id: 'code-colw', name: "Read the colour", sub: "read the word, colour it in", ico: () => pic('📖'), bg: 'var(--t-green)', go: () => screenCodeColor('colw'), grp: 4, also: [2] }
+);
+
+/* ---------- a grown-up plays in a child's profile: the child's own games, nothing counts for the child ---------- */
+// GPLAY = { kid, fam, who, n, e, she, p, kidName, kidGen }: p is a copy of the child's profile with the child's settings
+// (age, sounds, sections, languages) and none of the results; it is never saved. What the grown-up did goes to
+// fam().relPlays, and the child sees it on the home screen with a «play it too» button. A relative's game on their own
+// phone («Игры внуков») comes the same way, with the note it sends.
+let GPLAY = null;
+const relAgo = at => { const d = Math.round((new Date(dayKey()) - new Date(dayKey(new Date(at)))) / 864e5); return d < 1 ? "today" : d < 2 ? "yesterday" : `${d} ${plural(d, ["day", "days", "days"])} ago`; };
+const relPlaysOf = kid => { const f = fam(); return ((f && f.relPlays) || []).filter(x => x.kid === kid && Date.now() - x.at < 7 * 864e5); };
+function relPlayAdd(f, r) {
+  if (!f || (f.relPlays || []).some(x => x.i === r.i)) return false;
+  f.relPlays = [r, ...(f.relPlays || []).filter(x => Date.now() - x.at < 14 * 864e5)].slice(0, 40); save();
+  return true;
+}
+function gplayStart(g) {
+  const kid = ROOT.cur, src = ROOT.profiles[kid]; if (!src || GUEST) return;
+  const k = kidOf(kid, src.settings.name, src.settings.gender === 'f'), b = blankProfile(g.n, g.she ? 'f' : 'm', src.settings.track, src.settings.friend);
+  const p = { ...b, book: { title: (src.book && src.book.title) || b.book.title, log: {} }, settings: { ...JSON.parse(JSON.stringify(src.settings)), name: g.n, gender: g.she ? 'f' : 'm' }, homeTab: 'today' };
+  GPLAY = { kid, fam: ROOT.curFam, who: g.id || 'adult', n: g.n, e: g.e, she: !!g.she, p, kidName: k.name, kidGen: k.gen };
+  HOME_POS = null; goHome();
+}
+function gplayStop() { GPLAY = null; gplayBanner(); HOME_POS = null; goHome(); }
+function gplayBanner() {
+  let b = $('#gplayB');
+  document.body.classList.toggle('gplay', !!GPLAY);
+  if (!GPLAY) { if (b) b.remove(); return; }
+  if (!b) { b = document.createElement('div'); b.id = 'gplayB'; b.className = 'gplay-b'; document.body.prepend(b); }
+  b.innerHTML = `${esc(GPLAY.e)} ${esc(GPLAY.n)} is playing · not counted <button id="gplayX" aria-label="Exit">✕</button>`;
+  $('#gplayX').onclick = () => { sfx.pop(); gplayStop(); };
+}
+function gplayPlayed(key, stars) {
+  if (!GPLAY) return;
+  const n = recentName(key); if (!n) return;
+  relPlayAdd(ROOT.families[GPLAY.fam], { i: rid(8), kid: GPLAY.kid, who: GPLAY.who, n: GPLAY.n, e: GPLAY.e, she: GPLAY.she ? 1 : 0, key, g: n, st: clampN(stars, 3), at: Date.now() });
+}
+// a relative's game from their own phone, from the note it sends to the family
+function relPlayFromNote(f, m) {
+  const g = f.grands.find(x => x.id === m.by); if (!g || !m.g || !KIDS.includes(m.to)) return false;
+  const key = cleanS(m.g, 40);
+  return relPlayAdd(f, { i: cleanS(m.i, 20), kid: m.to, who: g.id, n: g.name, e: kinE(g), she: g.she ? 1 : 0, key, g: recentName(key) || cleanS(m.gn, 40) || key, st: clampN(m.st, 3), at: Math.min(Date.now(), +m.at || Date.now()) });
+}
+function screenGplayWho() {
+  newScreen();
+  const f = fam(), k = kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f');
+  const people = [...(f ? f.grands : []).map(g => ({ id: g.id, n: g.name, e: kinE(g), she: !!g.she })), { id: 'adult', n: "Grown-up", e: '🧑', she: false }];
+  shell("A grown-up plays", `<div class="gpw">
+    <div class="lg-hero">${pic('👵')}<div><h2>Play ${esc(k.gen)}'s games</h2><p>The same games ${esc(k.gen)} plays. ${esc(k.gen)}'s stars stay the same. Later ${esc(k.name)} will see what you played and how many stars you got.</p></div></div>
+    <h2 class="sec-h">Who is playing?</h2>
+    <div class="gpw-l" id="gpwL">${people.map((g, i) => `<button class="big" data-gp="${i}"><span class="emo">${esc(g.e)}</span> ${esc(g.n)}</button>`).join('')}</div>
+  </div>`, { back: goHome, guide: false });
+  $('#gpwL').onclick = e => { const b = e.target.closest('[data-gp]'); if (!b) return; sfx.magic(); gplayStart(people[+b.dataset.gp]); };
+}
+// on the home screen: while a grown-up plays, who it is and the way out; otherwise what the relatives played this week
+function relpHTML() {
+  if (GPLAY) return `<div class="gp-now"><span class="emo">${esc(GPLAY.e)}</span><span class="gp-t"><b>${esc(GPLAY.n)} is playing now</b><small>The same games ${esc(GPLAY.kidGen)} plays. ${esc(GPLAY.kidGen)}'s stars stay the same. Later ${esc(GPLAY.kidName)} will see how you did.</small></span><button class="chip" id="gpStop">✕ Exit</button></div>`;
+  const L = relPlaysOf(ROOT.cur); if (!L.length) return '';
+  const rows = [];
+  L.forEach(x => { const r = rows.find(y => y.who === x.who && y.key === x.key); if (r) r.st = Math.max(r.st, x.st); else rows.push({ ...x }); });
+  const people = [...new Map(L.map(x => [x.who, x])).values()];
+  const verb = people.length > 1 ? "played" : people[0].she ? "played" : "played";
+  return `<section class="group relp"><div class="group-head"><h2>${people.map(x => esc(x.e)).join('')} ${people.map(x => esc(x.n)).join(', ')} ${verb}</h2><p>your games. Play too: who gets more stars?</p></div>
+    <div class="relp-l">${rows.slice(0, 6).map(r => { const g = GAMES.find(x => x.id === r.key), mine = P.best[r.key] || 0;
+      return `<div class="relp-r"><span class="emo">${esc(r.e)}</span><span class="relp-t"><b>${esc(r.g)}</b><small>${esc(r.n)}: ${'⭐'.repeat(r.st) || '·'} · ${relAgo(r.at)}${mine ? ` · you: ${'⭐'.repeat(Math.min(3, mine))}` : ''}</small></span>${g && !gameOff(g.id) && !(g.hide && g.hide()) ? `<button class="chip" data-relp="${esc(g.id)}">▶ Play</button>` : ''}</div>`; }).join('')}</div></section>`;
+}
+function bindRelp() {
+  const st = $('#gpStop'); if (st) st.onclick = () => { sfx.pop(); gplayStop(); };
+  $$('[data-relp]').forEach(b => b.onclick = () => { const g = GAMES.find(x => x.id === b.dataset.relp); if (g) { sfx.pop(); homeLeave(); g.go(); } });
+  // the friend tells about a new one once
+  const L = relPlaysOf(ROOT.cur);
+  if (!GPLAY && L.length && L[0].at > (P.relpSeen || 0)) {
+    P.relpSeen = L[0].at; save();
+    const r = L[0];
+    later(() => { if ($('#relpBox')) say(`${r.n} also ${r.she ? "played" : "played"} «${r.g}»${r.st ? ` and ${r.she ? "got" : "got"} ${r.st} ${plural(r.st, ["star", "stars", "stars"])}` : ''}! Will you play?`); }, 1500);
+  }
+}
+
+/* ---------- reading every day: a day without reading costs ten stars ---------- */
+// from the day the rule first meets the child (never backwards); a day counts as read with the reading lesson, the book,
+// or any reading game; a frozen day is free; at most the last seven days are charged at once; never below zero stars;
+// a parent can switch it off in «Для взрослых»
+const READ_KEYS = ['book', 'speed', 'l-syll', 'code-abc', 'code-syl', 'code-col', 'code-colw', 'dots-abc'];
+const isReadKey = key => READ_KEYS.includes(key) || GAMES.some(g => g.id === key && (g.grp === 2 || g.grp === 6 || (g.also || []).some(a => a === 2 || a === 6)));
+const READ_FINE = 10;
+const readFineOn = () => !GPLAY && !GUEST && !PREVIEW && ROOT.curFam !== 'gk' && P.settings.readFine !== false;
+const readOn = d => { const c = dayCounts(d); return !!(c.read || c.book || (P.readDays || {})[d] || (P.frozen || []).includes(d)); };
+function readMark(key) {
+  if (GPLAY || !isReadKey(key)) return;
+  const d = dayKey(); P.readDays = P.readDays || {};
+  if (P.readDays[d]) return;
+  P.readDays[d] = 1;
+  Object.keys(P.readDays).forEach(k => { if (Date.now() - new Date(k) > 40 * 864e5) delete P.readDays[k]; });
+  save();
+}
+function readFineCheck() {
+  if (!readFineOn()) return [];
+  const today = dayKey();
+  if (!P.readFrom) { P.readFrom = today; save(); return []; }
+  const y = new Date(); y.setDate(y.getDate() - 1); const yk = dayKey(y);
+  if (P.readPaid && P.readPaid >= yk) return [];
+  const fines = [], d = new Date(y);
+  for (let i = 0; i < 7; i++) {
+    const k = dayKey(d); if (k < P.readFrom || (P.readPaid && k <= P.readPaid)) break;
+    if (!readOn(k)) { const s = Math.min(READ_FINE, P.stars); P.stars -= s; fines.push({ d: k, s, at: Date.now() }); }
+    d.setDate(d.getDate() - 1);
+  }
+  P.readPaid = yk;
+  if (fines.length) P.readFines = [...fines, ...(P.readFines || [])].slice(0, 20);
+  save();
+  return fines;
+}
+// the card on the home screen: the fine charged today, or in the afternoon a reminder that today has no reading yet
+function readFineHTML() {
+  if (!readFineOn() || !P.readFrom) return '';
+  const today = dayKey(), now = (P.readFines || []).filter(x => dayKey(new Date(x.at)) === today), done = readOn(today);
+  if (now.length) {
+    const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
+    return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ["day", "days", "days"])} without reading` : "No reading yesterday"}: −${sum} ⭐</b><small>${done ? "You have read today. Well done!" : "Read today, and tomorrow you keep your stars."}</small></span>${done ? '' : "<button class=\"chip\" id=\"rfGo\">📖 Read</button>"}</div>`;
+  }
+  if (!done && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>No reading yet today</b><small>A day without reading costs ${READ_FINE} stars. One «Reading» lesson or the book, and all is well.</small></span><button class="chip" id="rfGo">📖 Read</button></div>`;
+  return '';
+}
+function bindReadFine(fines) {
+  const g = $('#rfGo'); if (g) g.onclick = () => { sfx.pop(); homeLeave(); startLesson(LIDS().includes('read') ? 'read' : 'book'); };
+  if (fines && fines.length) {
+    const sum = fines.reduce((a, x) => a + x.s, 0);
+    if (sum) later(() => say(`${fines.length > 1 ? `${fines.length} ${plural(fines.length, ["day", "days", "days"])} without reading` : "No reading yesterday"}, minus ${sum} ${plural(sum, ["star", "stars", "stars"])}. Let's read today!`), 900);
+  }
+}
+
+/* ---------- one painting explained: what to find in THIS painting, its colours and its light (measured from the picture
+   itself), the mood and how it was made, its story, and more from Wikipedia in the page's language ---------- */
+const ART_AN = {}, ART_WIKI = {};
+const artHsl = (r, g, b) => {
+  const R = r / 255, G2 = g / 255, B = b / 255, mx = Math.max(R, G2, B), mn = Math.min(R, G2, B), l = (mx + mn) / 2, d = mx - mn;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+  let h = 0; if (d) { h = mx === R ? 60 * (((G2 - B) / d) % 6) : mx === G2 ? 60 * ((B - R) / d + 2) : 60 * ((R - G2) / d + 4); if (h < 0) h += 360; }
+  return [h, s, l];
+};
+function artColName(r, g, b) {
+  const [h, s, l] = artHsl(r, g, b);
+  if (l < .13) return "black"; if (l > .9 && s < .3) return "white"; if (s < .14) return "grey";
+  if (h < 18 || h >= 340) return l > .72 ? "pink" : l < .3 || s < .35 ? "brown" : "red";
+  if (h < 45) return l < .42 || s < .3 ? "brown" : l > .78 ? "beige" : "orange";
+  if (h < 68) return l < .38 ? "brown" : s < .3 ? "beige" : "yellow";
+  if (h < 160) return "green";
+  if (h < 250) return l > .6 ? "light blue" : "blue";
+  if (h < 295) return "purple";
+  return l > .6 ? "pink" : "purple";
+}
+const ART_POS = [["at the top left", "at the top in the middle", "at the top right"], ["on the left", "right in the middle", "on the right"], ["at the bottom left", "at the bottom in the middle", "at the bottom right"]];
+// md5 of a file name: Commons keeps its pictures in folders named after it
+const md5 = (() => {
+  const K = Array.from({ length: 64 }, (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 2 ** 32) >>> 0);
+  const R = [7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21];
+  return str => {
+    const b = new TextEncoder().encode(str), n = ((b.length + 8) >> 6) + 1, w = new Uint32Array(n * 16);
+    b.forEach((v, i) => { w[i >> 2] |= v << ((i % 4) * 8); });
+    w[b.length >> 2] |= 0x80 << ((b.length % 4) * 8); w[n * 16 - 2] = (b.length * 8) >>> 0;
+    let a0 = 0x67452301, b0 = 0xefcdab89, c0 = 0x98badcfe, d0 = 0x10325476;
+    for (let o = 0; o < w.length; o += 16) {
+      let A = a0, B = b0, C = c0, D = d0;
+      for (let i = 0; i < 64; i++) {
+        const r = i >> 4, F = r === 0 ? (B & C) | (~B & D) : r === 1 ? (D & B) | (~D & C) : r === 2 ? B ^ C ^ D : C ^ (B | ~D);
+        const g = r === 0 ? i : r === 1 ? (5 * i + 1) % 16 : r === 2 ? (3 * i + 5) % 16 : (7 * i) % 16, sh = R[r * 4 + (i % 4)];
+        const x = (A + F + K[i] + w[o + g]) >>> 0;
+        A = D; D = C; C = B; B = (B + ((x << sh) | (x >>> (32 - sh)))) >>> 0;
+      }
+      a0 = (a0 + A) >>> 0; b0 = (b0 + B) >>> 0; c0 = (c0 + C) >>> 0; d0 = (d0 + D) >>> 0;
+    }
+    return [a0, b0, c0, d0].map(v => [0, 8, 16, 24].map(s => ((v >>> s) & 255).toString(16).padStart(2, '0')).join('')).join('');
+  };
+})();
+// a small copy of the picture straight from the Commons thumbnail server (it lets a page read the colours; the short
+// links of artImg redirect first, and a redirect does not)
+const artThumb = (f, w = 120) => {
+  const n = f.replace(/ /g, '_'), h = md5(n), e = (n.split('.').pop() || '').toLowerCase(), u = encodeURIComponent(n);
+  const file = e === 'svg' ? `${w}px-${u}.png` : e === 'tif' || e === 'tiff' ? `lossy-page1-${w}px-${u}.jpg` : `${w}px-${u}`;
+  return `https://upload.wikimedia.org/wikipedia/commons/thumb/${h[0]}/${h.slice(0, 2)}/${u}/${file}`;
+};
+function artAnalyse(x) {
+  if (ART_AN[x.q]) return ART_AN[x.q];
+  return ART_AN[x.q] = (async () => {
+    const u = artThumb(x.f);
+    const img = await new Promise((res, rej) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = u; });
+    const W = 48, H = Math.max(8, Math.min(96, Math.round(48 * img.height / img.width))), c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(img, 0, 0, W, H);
+    const px = g.getImageData(0, 0, W, H).data, N = 6, cell = Array(N * N).fill(0), cnt = Array(N * N).fill(0), box = new Map();
+    let warm = 0, cool = 0, sumL = 0;
+    for (let y = 0; y < H; y++) for (let xx = 0; xx < W; xx++) {
+      const i = (y * W + xx) * 4, r = px[i], gg = px[i + 1], b = px[i + 2], [h, s, l] = artHsl(r, gg, b), L = (.299 * r + .587 * gg + .114 * b) / 255;
+      sumL += L;
+      const k = Math.min(N - 1, Math.floor(xx / W * N)) + N * Math.min(N - 1, Math.floor(y / H * N)); cell[k] += L; cnt[k]++;
+      if (s > .18 && l > .1 && l < .93) { if (h < 70 || h >= 330) warm++; else cool++; }
+      const q = (r >> 5) << 6 | (gg >> 5) << 3 | (b >> 5), o = box.get(q) || { n: 0, r: 0, g: 0, b: 0 }; o.n++; o.r += r; o.g += gg; o.b += b; box.set(q, o);
+    }
+    const all = W * H, top = [];
+    [...box.values()].sort((p, q) => q.n - p.n).map(o => [Math.round(o.r / o.n), Math.round(o.g / o.n), Math.round(o.b / o.n), o.n])
+      .forEach(c2 => { if (top.length < 5 && c2[3] > all * .02 && top.every(t => Math.hypot(t[0] - c2[0], t[1] - c2[1], t[2] - c2[2]) > 70)) top.push(c2); });
+    // the light: the brightest part of a 6×6 grid, each cell with its neighbours
+    const avg = cell.map((v, i) => v / Math.max(1, cnt[i])), at = (cx, cy) => cx < 0 || cy < 0 || cx >= N || cy >= N ? null : avg[cx + N * cy];
+    const sm = avg.map((v, i) => { const cx = i % N, cy = Math.floor(i / N), nb = [at(cx - 1, cy), at(cx + 1, cy), at(cx, cy - 1), at(cx, cy + 1)].filter(z => z !== null); return v * .6 + nb.reduce((a, z) => a + z, 0) / nb.length * .4; });
+    let bi = 0; sm.forEach((v, i) => { if (v > sm[bi]) bi = i; });
+    const bc = bi % N, br = Math.floor(bi / N);
+    return { top: top.map(c2 => '#' + c2.slice(0, 3).map(v => v.toString(16).padStart(2, '0')).join('')), names: [...new Set(top.map(c2 => artColName(c2[0], c2[1], c2[2])))],
+      warm: warm / Math.max(1, warm + cool), vivid: (warm + cool) / all, mean: sumL / all, bx: (bc + .5) / N, by: (br + .5) / N, pos: ART_POS[Math.floor(br / 2)][Math.floor(bc / 2)] };
+  })().catch(() => null);
+}
+function artColorText(a) {
+  const mood = a.vivid < .15 ? "There are few bright colours here: more dark, brown and grey ones. This makes the painting quieter and more serious."
+    : a.warm > .66 ? "There are more warm colours here, like the sun, fire and autumn leaves. They make the painting feel warm."
+    : a.warm < .34 ? "There are more cool colours here, like water, sky and ice. They make the painting feel cool."
+    : "Warm and cool colours are almost equal here: they argue with each other, and that makes the painting lively.";
+  return `Main colours: ${a.names.slice(0, 3).join(', ')}. ${mood}`;
+}
+function artLightText(a) {
+  const m = a.mean < .3 ? " The painting is dark, and the light falls only on the main thing: that is how the painter makes it stand out." : a.mean > .62 ? " The painting is light, as if it were full of sunshine." : '';
+  return `The brightest place is ${a.pos}, where the yellow ring is. The painter wants you to look there first${G("", '')}. What is there?${m}`;
+}
+// the beginning of the painting's Wikipedia article, without the brackets (dates, other names), a few sentences
+async function artWiki(x, n) {
+  if (!x.w) return '';
+  if (ART_WIKI[x.q] === undefined) ART_WIKI[x.q] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(x.w)}`)
+    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+  const s = await ART_WIKI[x.q];
+  return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, n).join(' ') : '';
+}
+// a text that mostly repeats another one (its longer words are there already)
+const artWords = s => new Set((String(s).toLowerCase().match(/\p{L}{5,}/gu) || []));
+const artSame = (a, b) => { const A = artWords(a), B = artWords(b); let n = 0; B.forEach(w => { if (A.has(w)) n++; }); return B.size > 0 && n / B.size > .4; };
+const artAns = m => (m.a >= 0 && m.o[m.a] ? m.o[m.a] + '. ' : '') + m.w;
+function artGuideHTML(x) {
+  const tr = ART.tours[x.q], nt = ART.notes[x.q], cards = [];
+  const find = tr ? tr.f : nt ? [nt[0]] : [];
+  if (find.length) cards.push(['🔍', "Find in the painting", find.join(' ')]);
+  cards.push(['🎨', "The colours of this painting", '', 'col'], ['💡', "Where the light is", '', 'light']);
+  const story = [tr && tr.s, nt && nt[1]].filter(Boolean).join(' ');
+  if (tr) cards.push(['💭', tr.m.q, artAns(tr.m)]);
+  if (tr && !artSame(story, tr.x.w)) cards.push(['🤔', tr.x.q, artAns(tr.x)]);
+  if (story) cards.push(['✨', "Story and secret", story]);
+  if (x.w) cards.push(['📖', "More about it", '', 'wiki']);
+  if (tr) cards.push(['🎬', "Imagine", tr.i]);
+  return `<div class="ag">${cards.map(([e, h, p, k]) => `<div class="art-note ag-c" data-agk="${k || ''}"><b>${e} ${esc(h)}</b><p class="ag-p">${k ? '…' : esc(p)}</p>${k === 'col' ? '<div class="ag-sw"></div>' : ''}<button class="ag-say" aria-label="Read aloud">${ICON.speaker}</button></div>`).join('')}</div>`;
+}
+// the ring on the brightest place, on the picture as it is drawn (a picture fitted into its box may have empty sides)
+function artRing(img, ring, a) {
+  const put = () => {
+    if (!img.naturalWidth || !ring.isConnected) return;
+    const w = img.clientWidth, h = img.clientHeight, ar = img.naturalWidth / img.naturalHeight;
+    const contain = getComputedStyle(img).objectFit === 'contain', rw = contain && w / h > ar ? h * ar : w, rh = contain && w / h <= ar ? w / ar : h;
+    ring.style.left = img.offsetLeft + (w - rw) / 2 + a.bx * rw + 'px'; ring.style.top = img.offsetTop + (h - rh) / 2 + a.by * rh + 'px'; ring.hidden = false;
+  };
+  if (img.complete) put(); else img.addEventListener('load', put, { once: true });
+  window.addEventListener('resize', put);
+}
+function bindArtGuide(root, x, img, ring) {
+  const t = tok, box = root.querySelector('.ag'); if (!box) return;
+  const fill = (k, txt, more) => { const c = box.querySelector(`[data-agk="${k}"]`); if (!c) return; if (!txt) { c.remove(); return; } c.querySelector('.ag-p').textContent = txt; if (more) more(c); };
+  artAnalyse(x).then(a => {
+    if (t !== tok) return;
+    if (!a) { fill('col', "Look: are there more warm colours, like the sun and fire, or cool ones, like water and ice?"); fill('light', "Find the brightest place. The painter wants you to look there first."); return; }
+    fill('col', artColorText(a), c => { c.querySelector('.ag-sw').innerHTML = a.top.map(h => `<i style="background:${h}"></i>`).join(''); });
+    fill('light', artLightText(a));
+    if (img && ring) artRing(img, ring, a);
+  });
+  artWiki(x, Q() ? 4 : 2).then(s => { if (t === tok) fill('wiki', s); });
+  box.onclick = e => {
+    const b = e.target.closest('.ag-say'); if (!b) return; sfx.tick();
+    const c = b.closest('.ag-c'), h = c.querySelector('b').textContent.replace(/^\S+\s/, '').trim();
+    talk(h + (/[.!?]$/.test(h) ? ' ' : '. ') + c.querySelector('.ag-p').textContent);
+  };
+}
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
    links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
