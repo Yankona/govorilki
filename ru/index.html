@@ -1696,6 +1696,8 @@ body.pv-on #app{padding-top:52px}
 .at-ex{display:flex;gap:4px;max-width:100%;overflow:hidden}.at-ex .tile-ico{flex:none;width:34px;height:34px;font-size:22px;display:grid;place-items:center;overflow:hidden}.at-ex .tile-ico svg,.at-ex .tile-ico img{width:30px;height:30px}
 .pv-demo{display:flex;flex-direction:column;gap:8px}.pv-demo .big{text-align:left}
 .pv-test{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--plum)}
+.adm-k{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px dashed var(--line)}.adm-k small{color:var(--ink-soft);font:700 14px/1.3 var(--f-body)}
+.adm-f{gap:6px}.share-box{display:flex;flex-direction:column;gap:4px;margin:4px 0}.pv-adm{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
 </style>
 </head>
 <body>
@@ -2648,6 +2650,7 @@ function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Тест с нуля · <button id="demoAgain">заново</button> · <a href="${SITE_ROOT}">выйти</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
+  if (ADMIN_HASH) { const d = ADMIN_HASH; ADMIN_HASH = ''; adminActivate(d); return; }
   if (!PULT_BOOTED) { PULT_BOOTED = true; if (ROOT.parentPhone && !GUEST && !DEMO && !LIGA_HASH && fam() && KIDS.length) { screenPult(); return; } }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
@@ -2655,6 +2658,7 @@ function goHome() {
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
   newScreen(); ACTIVE = null; BATTLE = null; P = ROOT.profiles[ROOT.cur]; famPeople(); takeBattleHash(); if (Q()) useFreezes();
   navHome();
+  setTimeout(() => statPing(), 4000);
   document.body.classList.toggle('quest', Q());
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
@@ -7458,6 +7462,7 @@ function screenParents(focus) {
 `}    </ul></section>
     </div>`, { guide: false, back: PAR_BACK });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
+  const exS = $('#expState'); if (exS) { exS.insertAdjacentHTML('afterend', shareHTML('shareIn')); bindShareBox('shareIn'); }
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
   vs(); later(vs, 1200);
   const fillDev = () => {
@@ -8237,6 +8242,7 @@ function screenObDone({ liga = '' } = {}) {
     ${f.grands.length ? '<button class="big ghost" id="obChess">📨 Пригласить родных</button>' : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
+  $('#obGo').insertAdjacentHTML('beforebegin', shareHTML('obShare')); bindShareBox('obShare'); statPing(true);
   $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
   if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenInvite(goHome); };
 }
@@ -10344,6 +10350,7 @@ function screenPult() {
   const draw = () => `${ROOT.parentPhone === undefined ? `<section class="psec pv-who"><h2>📱 Это ваш телефон?</h2>
       <p>Если да, приложение будет открываться с пульта, а код здесь спрашиваться не будет. Если на этом телефоне играют дети, оставьте код.</p>
       <div class="prow-btns"><button class="big" id="pvMine">Да, мой телефон</button><button class="big ghost" id="pvKids">Здесь играют дети</button></div></section>` : ''}
+    ${ROOT.adminKey ? '<button class="lg-cta pv-adm" id="pvAdm"><span class="emo">👑</span><span class="lg-t"><b>Все семьи</b><small>все, кто играет в «Говорилки», и как у них идут дела</small></span><span class="g-go">▶</span></button>' : ''}
     <button class="lg-cta pv-test" id="pvTest"><span class="emo">🧪</span><span class="lg-t"><b>Как видят другие</b><small>открыть игру как новая семья, ребёнок 5 или 9 лет, приглашённая семья или бабушка — в тесте, ваши данные не меняются</small></span><span class="g-go">▶</span></button>
     <p class="muted">Все, кто играет и заходит из ваших семей на этом телефоне. Нажмите на ребёнка, чтобы открыть его игру. «👀 Экран» показывает, что видит взрослый на своём телефоне.</p>
     ${fs.map(pultFam).join('') || '<p class="lead">На этом телефоне пока нет семьи.</p>'}
@@ -10361,6 +10368,7 @@ function screenPult() {
     on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
     on1('pvTest', () => screenPultTest());
+    on1('pvAdm', () => screenAdmin());
     on1('pvUpd', () => appUpdate($('#pvVer')));
 
     on1('pvInv', () => screenInvite(screenPult));
@@ -10387,10 +10395,11 @@ function screenPult() {
     }
   };
   pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); appVer($('#pvVer')); } });
+  setTimeout(() => statPing(), 4000);
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '56';
+const APP_VER = '57';
 function appVer(el) { if (el) el.textContent = APP_VER ? `Версия приложения: ${APP_VER}` : ''; }
 function appUpdate(el) {
   if (el) el.textContent = 'Проверяю обновление…';
@@ -10654,6 +10663,96 @@ function screenInviteFamily(back) {
   };
   if ($('#ivfLg')) $('#ivfLg').onclick = () => { sfx.pop(); screenLeague(); };
   draw();
+}
+
+/* ---------- the author's view: every family that plays, and how it is going ---------- */
+// each phone sends a short summary every few hours, sealed with the author's public key: only her phone can open it.
+// Without the parents' tick there are no names in it — ages, language, country, stars, lessons, the games played most
+const ADMIN_PUB = { kty: 'EC', crv: 'P-256', x: 'vbENcZJaSfBgLM57M9sDYemRjIvuuH-Lj-XyJcz7FrQ', y: 'pqIyDghZp5t6XpQSeSJyeLU8s9SNdiaYYbPC9BeD0Wk' };
+const ST_TOPIC = 'govorilki-st-q7m2x9';
+const stB64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const stUnB64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0));
+const ST_EC = { name: 'ECDH', namedCurve: 'P-256' };
+async function sealForAdmin(obj) {
+  const S = crypto.subtle, pub = await S.importKey('jwk', ADMIN_PUB, ST_EC, false, []);
+  const eph = await S.generateKey(ST_EC, true, ['deriveKey']);
+  const key = await S.deriveKey({ name: 'ECDH', public: pub }, eph.privateKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await S.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(obj)));
+  const e = await S.exportKey('jwk', eph.publicKey);
+  return { k: 'st', ex: e.x, ey: e.y, iv: stB64(iv), ct: stB64(ct) };
+}
+async function adminPrivate(d) { return crypto.subtle.importKey('jwk', { ...ADMIN_PUB, d }, ST_EC, false, ['deriveKey']); }
+async function openForAdmin(m, prv) {
+  const S = crypto.subtle, eph = await S.importKey('jwk', { kty: 'EC', crv: 'P-256', x: m.ex, y: m.ey }, ST_EC, false, []);
+  const key = await S.deriveKey({ name: 'ECDH', public: eph }, prv, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  return JSON.parse(new TextDecoder().decode(await S.decrypt({ name: 'AES-GCM', iv: stUnB64(m.iv) }, key, stUnB64(m.ct))));
+}
+function statSnap() {
+  const ok = !!ROOT.share;
+  const fams = Object.values(ROOT.families).filter(f => !f.guest).map(f => ({ n: ok ? cleanS(f.name, 30) : '', cc: f.cc || '', gr: f.grands.length, lg: f.league ? 1 : 0,
+    kids: f.kids.filter(id => ROOT.profiles[id]).map(id => { const pr = ROOT.profiles[id], st = pr.settings, pl = pr.plays || {};
+      return { n: ok ? cleanS(st.name, 20) : '', a: st.age || 0, tr: st.track === 'l' ? 'l' : 'r', st: pr.stars || 0, sk: streakOf(pr), wl: weekLessons(pr), td: dayTotalOf(pr, dayKey()),
+        last: ((pr.recent || [])[0] || [])[2] || 0, top: Object.keys(pl).sort((a, b) => pl[b] - pl[a]).slice(0, 4) }; }) }));
+  return { v: 1, id: ROOT.sid, at: Date.now(), made: ROOT.made, ver: APP_VER, lang: LANG, ok: ok ? 1 : 0, fams };
+}
+async function statPing(force) {
+  if (DEMO || GUEST || PREVIEW || EMBEDDED || !window.crypto || !crypto.subtle || !fam() || !KIDS.length) return;
+  if (!ROOT.sid) { ROOT.sid = rid(12); ROOT.made = ROOT.made || Date.now(); save(); }
+  if (!force && Date.now() - (ROOT.stAt || 0) < 3 * 3600e3) return;
+  try {
+    const body = JSON.stringify({ ...(await sealForAdmin(statSnap())), at: Date.now() });
+    const r = await Promise.allSettled(RELAYS.map(u => fetch(u + ST_TOPIC, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
+    if (r.some(x => x.status === 'fulfilled')) { ROOT.stAt = Date.now(); save(); }
+  } catch (e) {}
+}
+// the parents' choice: names go to the author only with this tick
+const shareHTML = id => `<div class="share-box"><label class="sw" for="${id}"><input id="${id}" type="checkbox" ${ROOT.share ? 'checked' : ''}>Показывать автору «Говорилок» имена семьи и детей</label><p class="muted">Автор приложения видит, сколько семей играет и как идут занятия: возраст детей, звёзды, игры — чтобы делать «Говорилки» лучше. Без галочки — без имён. Всё зашифровано: прочитать может только автор.</p></div>`;
+function bindShareBox(id) { const el = document.getElementById(id); if (el) el.onchange = () => { ROOT.share = el.checked; save(); statPing(true); }; }
+// the author's own link (#admin=…) opens the view once on her phone; the phone remembers it
+let ADMIN_HASH = '';
+try { const m = location.hash.match(/[#&]admin=([A-Za-z0-9_-]{30,60})/); if (m && !DEMO) { ADMIN_HASH = m[1]; history.replaceState(null, '', location.pathname + location.search); } } catch (e) {}
+async function adminActivate(d) {
+  try { await adminPrivate(d); ROOT.adminKey = d; save(); screenAdmin(); } catch (e) { goHome(); }
+}
+async function adminPoll() {
+  const seen = ROOT.adminSeen = ROOT.adminSeen || {}; let n = 0;
+  const prv = await adminPrivate(ROOT.adminKey);
+  await Promise.allSettled(RELAYS.map(r => fetch(`${r}${ST_TOPIC}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : '').then(async txt => {
+    for (const l of txt.split('\n')) {
+      try { const x = JSON.parse(l); if (x.event !== 'message') continue; const m = JSON.parse(x.message); if (m.k !== 'st') continue;
+        const s = await openForAdmin(m, prv); if (!s || !s.id || !Array.isArray(s.fams)) continue;
+        if (!seen[s.id] || seen[s.id].at < s.at) { seen[s.id] = s; n++; } } catch (e) {}
+    }
+  })));
+  const ids = Object.keys(seen); if (ids.length > 600) ids.sort((a, b) => seen[a].at - seen[b].at).slice(0, ids.length - 600).forEach(k => delete seen[k]);
+  if (n) save();
+  return n;
+}
+function screenAdmin() {
+  if (!ROOT.adminKey) { goHome(); return; }
+  const t = newScreen();
+  const lastOf = s => Math.max(s.at || 0, ...s.fams.flatMap(f => f.kids.map(k => k.last || 0)));
+  const draw = () => {
+    const all = Object.values(ROOT.adminSeen || {}).sort((a, b) => lastOf(b) - lastOf(a));
+    const kids = all.flatMap(s => s.fams.flatMap(f => f.kids)), day = dayKey();
+    const today = all.filter(s => s.fams.some(f => f.kids.some(k => k.last && dayKey(new Date(k.last)) === day))).length;
+    const week = all.filter(s => s.fams.some(f => f.kids.some(k => k.wl > 0))).length;
+    const L = { ru: 'русский', en: 'English', pt: 'português' };
+    const kidRow = k => `<div class="adm-k"><b>${esc(k.n || 'Ребёнок')}${k.a ? `, ${k.a} ${plural(k.a, ['год', 'года', 'лет'])}` : ''}</b>
+      <small>⭐ ${k.st} · 🔥 ${k.sk} ${plural(k.sk, ['день', 'дня', 'дней'])} подряд · 📚 ${k.wl} ${plural(k.wl, ['занятие', 'занятия', 'занятий'])} за неделю${k.last ? ` · последняя игра ${pultAgo(k.last)}` : ''}</small>
+      ${(k.top || []).length ? `<small>Чаще всего: ${esc(k.top.map(x => recentName(x) || x).join(', '))}</small>` : ''}</div>`;
+    return `<section class="psec"><h2>👑 Все семьи</h2><p>Установок: <b>${all.length}</b> · детей: <b>${kids.length}</b> · играли сегодня: <b>${today}</b> · занимались на этой неделе: <b>${week}</b></p>
+      <p class="muted">Каждое приложение присылает сводку раз в несколько часов. Сервер хранит сводки 12 часов, а этот телефон копит их у себя — открывайте этот экран хотя бы раз в день. Имена видны только у семей, которые разрешили.</p>
+      <div class="prow-btns"><button class="big ghost" id="admRe">🔄 Обновить</button></div><p class="muted" id="admOut"></p></section>
+      ${all.map(s => s.fams.map(f => `<section class="psec adm-f"><h2>${f.n ? esc(f.n) : 'Семья без имени'}</h2>
+        <p class="muted">${FLAG(f.cc || 'PT')} ${L[s.lang] || esc(s.lang || '')} · с нами с ${s.made ? new Date(s.made).toLocaleDateString(LOC) : '—'} · сводка ${pultAgo(s.at)} · версия ${esc(String(s.ver || '—'))}${f.gr ? ` · родных: ${f.gr}` : ''}${f.lg ? ' · в лиге' : ''}</p>
+        ${f.kids.map(kidRow).join('') || '<p class="muted">Пока без детей.</p>'}</section>`).join('')).join('') || '<p class="lead">Пока ни одной сводки. Они появятся, когда семьи откроют приложение.</p>'}`;
+  };
+  shell('Все семьи', `<div class="pult" id="adm">${draw()}</div>`, { back: () => screenPult(), guide: false, raw: true });
+  const bind = () => { const b = $('#admRe'); if (b) b.onclick = () => { sfx.pop(); $('#admOut').textContent = 'Обновляю…'; run(); }; };
+  const run = () => adminPoll().then(n => { if (t !== tok) return; $('#adm').innerHTML = draw(); bind(); $('#admOut').textContent = n ? `Новых сводок: ${n}` : 'Новых сводок нет'; }, () => { if (t === tok) $('#admOut').textContent = 'Не получилось открыть сводки'; });
+  bind(); run();
 }
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
