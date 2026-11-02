@@ -266,6 +266,10 @@ b.r{color:var(--berry)}
 .mg-path{flex:1;align-self:stretch;margin:50px -6px 40px;background:linear-gradient(to bottom right,transparent calc(50% - 4px),var(--ink-soft) calc(50% - 4px),var(--ink-soft) calc(50% + 4px),transparent calc(50% + 4px));opacity:.3;border-radius:8px}
 .merge.joined .mg-path{opacity:0}
 .merge.joined .mg-c{box-shadow:0 7px 0 var(--line-strong)}
+.say-own{margin-top:14px}.say-own h3{margin:0 0 4px;font:900 18px var(--f-head)}
+.say-own input{flex:1;min-width:0;font:700 18px var(--f-body);padding:10px 12px;border-radius:12px;border:2px solid var(--line-strong)}
+.say-list{display:flex;flex-wrap:wrap;gap:8px}.say-w{display:inline-flex;align-items:center;gap:2px;background:var(--paper);border-radius:12px;box-shadow:0 2px 0 var(--line-strong)}
+.say-play,.say-del{border:0;background:none;font:800 16px var(--f-body);padding:8px 10px;cursor:pointer;color:var(--ink)}.say-del{color:var(--ink-soft);font-size:20px;padding:4px 10px}
 .mg-loco{position:absolute;bottom:-16px;left:4px;font-size:40px;line-height:1;filter:drop-shadow(0 2px 0 rgba(42,35,70,.2))}
 .abc-trains{width:min(100%,560px)}.abc-tt{margin:2px 0 6px;font:800 16px var(--f-body);color:var(--ink-soft)}
 .trn-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px}.trn-row::-webkit-scrollbar{display:none}.trn{flex:none}
@@ -2035,7 +2039,7 @@ async function say(text, opts) {
 }
 async function sayRun(text, { rate = 1 } = {}) {
   const my = ++sayTok;
-  const parts = String(gx(text || '')).match(/[^.!?…]+[.!?…]*/g) || [];
+  const parts = sayParts(gx(text || ''));
   if (P.settings.voice && elOn()) {
     const jobs = parts.map(x => x.trim()).filter(Boolean).map(x => elAudio(x));
     try {
@@ -7366,9 +7370,120 @@ const PIPER_VOICES = LANG === 'en' ? [['en_GB-jenny_dioco-medium', 'Jenny'], ['e
   : LANG === 'pt' ? [['pt_PT-tugão-medium', 'Tugão']]
   : [['ru_RU-irina-medium', "Irina"], ['ru_RU-denis-medium', "Denis"], ['ru_RU-dmitri-medium', "Dmitri"], ['ru_RU-ruslan-medium', "Ruslan"]];
 const PIPER_SRC = `
-let s = null, tts = null, q = Promise.resolve();
-async function run({ id, voice, text }) {
+let s = null, tts = null, q = Promise.resolve(), ORT = null, PATCH = null, MAP = null, MAPV = null;
+// the voice reads text through its phonemizer, then a neural net turns phoneme numbers into sound; the stress of the
+// words the phonemizer gets wrong is fixed in those numbers, just before the net (the same ONNX runtime module)
+const ORT_URL = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.27.0/wasm/+esm';
+const PH_URL = 'https://cdn.jsdelivr.net/npm/@mintplex-labs/piper-tts-web@1.0.5/dist/piper-o91UDS6e.js/+esm';
+const ACC = String.fromCharCode(0x301), VL = 'аеёиоуыэюя', VI = 'aɑeɛiɪoɔuyʌɵ';
+async function hook() {
+  if (ORT !== null) return;
   try {
+    ORT = await import(ORT_URL);
+    const P = ORT.InferenceSession.prototype, run0 = P.run;
+    P.run = function (feeds, ...rest) {
+      if (PATCH && feeds && feeds.input) {
+        try {
+          const ids = PATCH(Array.from(feeds.input.data, Number));
+          if (ids) feeds = Object.assign({}, feeds, { input: new ORT.Tensor('int64', BigInt64Array.from(ids, x => BigInt(x)), [1, ids.length]), input_lengths: new ORT.Tensor('int64', BigInt64Array.from([BigInt(ids.length)]), [1]) });
+        } catch (e) {}
+      }
+      return run0.call(this, feeds, ...rest);
+    };
+  } catch (e) { ORT = false; }
+}
+async function idMap(voice) {
+  if (MAPV === voice) return MAP;
+  let cfg = null;
+  try { const dir = await (await navigator.storage.getDirectory()).getDirectoryHandle('piper'); cfg = JSON.parse(await (await (await dir.getFileHandle(voice + '.onnx.json')).getFile()).text()); } catch (e) {}
+  if (!cfg) try { cfg = await (await fetch(tts.HF_BASE + '/' + tts.PATH_MAP[voice] + '.json')).json(); } catch (e) {}
+  MAP = cfg && cfg.phoneme_id_map || null; MAPV = voice;
+  return MAP;
+}
+// [from, to] phoneme strings → a function that swaps them in the numbers, only as whole words (each number is followed by a pause number 0)
+function makePatch(pairs, map) {
+  const id = c => map[c] ? map[c][0] : null, pad = x => { const o = []; x.forEach(v => o.push(v, 0)); return o; };
+  const P = [];
+  for (const [f, t] of pairs) {
+    const a = [...f].map(id), b = [...t].map(id);
+    if (a.length && !a.includes(null) && !b.includes(null)) P.push([pad(a), pad(b)]);
+  }
+  if (!P.length) return null;
+  const B = new Set([...' ,.!?:;()-$^'].map(id).filter(x => x !== null));
+  return ids => {
+    let hit = false;
+    for (const [a, b] of P) {
+      for (let i = 2; i + a.length <= ids.length; i++) {
+        if (ids[i - 1] !== 0 || !B.has(ids[i - 2])) continue;
+        let ok = true;
+        for (let j = 0; j < a.length; j++) if (ids[i + j] !== a[j]) { ok = false; break; }
+        if (!ok || !B.has(ids[i + a.length])) continue;
+        ids.splice(i, a.length, ...b); i += b.length - 1; hit = true;
+      }
+    }
+    return hit ? ids : null;
+  };
+}
+// a word the family added («здо́рово»): its phonemes, and the phonemes with the stress where they put it — the vowel
+// written as ё makes the phonemizer stress it and reduce the others, then ё becomes the vowel it stands for
+async function phon(text) {
+  const { createPiperPhonemize } = await import(PH_URL);
+  return new Promise(async (res, rej) => {
+    try {
+      const m = await createPiperPhonemize({ print: d => { try { res([].concat(JSON.parse(d).phonemes).flat().join('')); } catch (e) { rej(e); } }, printErr: () => {},
+        locateFile: u => tts.WASM_BASE + (u.endsWith('.wasm') ? '.wasm' : '.data') });
+      m.callMain(['-l', 'ru', '--input', JSON.stringify([{ text }]), '--espeak_data', '/espeak-ng-data']);
+    } catch (e) { rej(e); }
+  });
+}
+function toks(p) {
+  const out = [];
+  for (let i = 0; i < p.length; i++) {
+    const c = p[i];
+    if (VI.includes(c) && p[i + 1] === '^') { out.push(['C', c + '^']); i++; continue; }
+    if (VI.includes(c)) { let t = c; if (p[i + 1] === '"') { t += '"'; i++; } out.push(['V', t]); }
+    else if (c === 'ˈ' || c === 'ˌ') out.push(['M', c]);
+    else if (c === 'ʲ' && out.length && out[out.length - 1][0] === 'C') out[out.length - 1][1] += c;
+    else out.push(['C', c]);
+  }
+  return out;
+}
+function vowelAt(w, k) { let n = 0; for (let i = 0; i < w.length; i++) if (VL.includes(w[i])) { if (n === k) return i; n++; } return -1; }
+function stressed(word, k) {
+  const i = vowelAt(word, k), V = word[i], prev = i > 0 ? word[i - 1] : '';
+  const iot = prev === '' || (VL + 'ъь').includes(prev), hard = prev !== '' && 'жшц'.includes(prev), last = i === word.length - 1;
+  if (V === 'а' || V === 'я') return V === 'я' && iot ? 'a' : 'ɑ';
+  return { о: 'o', у: 'u', ю: iot ? 'u' : 'u"', ы: 'y', э: 'ɛ', е: hard ? 'ɛ' : 'e', и: hard ? 'y' : last ? 'ɪ' : 'i', ё: 'ɵ' }[V];
+}
+function target(orig, prox, word, k) {
+  const a = toks(orig).filter(t => t[0] !== 'M'), bv = prox ? toks(prox).filter(t => t[0] === 'V').map(t => t[1]) : null;
+  const nv = a.filter(t => t[0] === 'V').length;
+  if (k >= nv || (bv && bv.length !== nv)) return null;
+  const out = []; let vi = 0;
+  for (const [kind, s] of a) {
+    if (kind !== 'V') { out.push(s); continue; }
+    if (vi === k) {
+      const V = word[vowelAt(word, k)];
+      if ((V === 'я' || V === 'ю') && out[out.length - 1] === 'j') out.splice(out.length - 1, 0, 'ˈ'); else out.push('ˈ');
+      out.push(stressed(word, k));
+    } else out.push(bv ? bv[vi].replace('ɵ', 'o') : s);
+    vi++;
+  }
+  return out.join('');
+}
+async function ownPair(f) {
+  const at = f.indexOf(ACC); if (at < 1) return '';
+  const word = f.split(ACC).join(''), k = [...f.slice(0, at)].filter(c => VL.includes(c)).length - 1;
+  const orig = await phon(word);
+  let t;
+  if (word.includes('ё')) t = target(orig, null, word, k);
+  else { const i = vowelAt(word, k); t = target(orig, await phon(word.slice(0, i) + 'ё' + word.slice(i + 1)), word, k); }
+  return t && t !== orig ? orig + '|' + t : '';
+}
+async function run({ id, voice, text, pairs, need }) {
+  let learned = null;
+  try {
+    await hook();
     if (!tts) tts = await import('https://cdn.jsdelivr.net/npm/@mintplex-labs/piper-tts-web@1.0.5/+esm');
     if (!s || s.voiceId !== voice) {
       tts.TtsSession._instance = null;
@@ -7376,11 +7491,21 @@ async function run({ id, voice, text }) {
         wasmPaths: { onnxWasm: 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.27.0/dist/', piperData: tts.WASM_BASE + '.data', piperWasm: tts.WASM_BASE + '.wasm' } });
     }
     if (!text) { self.postMessage({ id, ok: true }); return; }
-    const buf = await (await s.predict(text)).arrayBuffer();
-    self.postMessage({ id, ok: true, buf }, [buf]);
-  } catch (err) { self.postMessage({ id, ok: false, err: String(err && err.message || err) }); }
+    pairs = pairs || [];
+    if (need && need.length) {
+      learned = {};
+      for (const f of need) { try { learned[f] = await ownPair(f); if (learned[f]) learned[f].split('¦').forEach(x => pairs.push(x.split('|'))); } catch (e) {} }
+    }
+    const map = pairs.length && ORT ? await idMap(voice) : null;
+    PATCH = map ? makePatch(pairs, map) : null;
+    let buf;
+    // a phrase the phonemizer chokes on must not hold up every phrase after it
+    try { buf = await Promise.race([s.predict(text).then(b => b.arrayBuffer()), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 30000))]); } finally { PATCH = null; }
+    self.postMessage({ id, ok: true, buf, learned }, [buf]);
+  } catch (err) { self.postMessage({ id, ok: false, err: String(err && err.message || err), learned }); }
 }
-self.onmessage = e => { q = q.then(() => run(e.data)); };`;
+self.onmessage = e => { q = q.then(() => run(e.data)); };
+`;
 const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, mem: new Map() };
 const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : PIPER_VOICES[0][0];
 const piperName = () => PIPER_VOICES.find(v => v[0] === piperVoice())[1];
@@ -7388,13 +7513,36 @@ const piperLean = () => { try { const c = navigator.connection; return !!(c && (
 const engineNow = () => ROOT.engine || ((GUEST || piperLean()) ? 'device' : 'piper');
 const piperOn = () => !EMBEDDED && engineNow() === 'piper' && !PIPER.failed && typeof Worker === 'function' && typeof WebAssembly === 'object';
 // while the voice downloads (about 60 MB, once): a small note with the percent
+function sayOwnHTML() {
+  const own = ROOT.sayOwn || {};
+  return `<div class="say-own" id="sayOwn"><h3>Голос ошибается в слове?</h3>
+    <p class="muted">Напишите слово, как его надо сказать: «+» перед ударной гласной, буква «ё», где она нужна. Например: <b>зд+орово</b>, <b>Лёва</b>, <b>Мон+е</b>. Исправление сразу работает во всех играх, у голоса приложения и у голоса телефона.</p>
+    <div class="prow-btns"><input id="sayIn" type="text" maxlength="30" autocomplete="off" autocapitalize="off" placeholder="зд+орово"><button class="big" id="sayAdd">Исправить</button></div>
+    <p class="muted" id="sayMsg"></p>
+    <div class="say-list" id="sayList">${Object.entries(own).map(([k, f]) => `<span class="say-w"><button class="say-play" data-f="${esc(f)}">🔊 ${esc(f)}</button><button class="say-del" data-k="${esc(k)}" aria-label="Убрать">×</button></span>`).join('')}</div></div>`;
+}
+function bindSayOwn() {
+  const box = $('#sayOwn'); if (!box) return;
+  const redo = () => { box.outerHTML = sayOwnHTML(); bindSayOwn(); };
+  $('#sayAdd').onclick = () => {
+    const raw = $('#sayIn').value, f = sayOwnAdd(raw);
+    if (!f) { $('#sayMsg').textContent = 'Одно слово русскими буквами и один «+» перед ударной гласной: зд+орово.'; return; }
+    sfx.good(); redo(); $('#sayMsg').textContent = 'Готово! Послушайте:'; say(f[0].toUpperCase() + f.slice(1) + '.');
+  };
+  $('#sayIn').onkeydown = e => { if (e.key === 'Enter') $('#sayAdd').click(); };
+  $('#sayList').onclick = e => {
+    const p = e.target.closest('.say-play'), d = e.target.closest('.say-del');
+    if (p) say(p.dataset.f[0].toUpperCase() + p.dataset.f.slice(1) + '.');
+    if (d) { delete ROOT.sayOwn[d.dataset.k]; save(); sfx.tick(); redo(); }
+  };
+}
 function piperNote() {
   let n = $('#pvNote');
   if (PIPER.isReady || PIPER.failed || !PIPER.ready) { if (n) n.remove(); return; }
   if (!n) { n = document.createElement('div'); n.id = 'pvNote'; n.className = 'pv-note'; document.body.append(n); }
   n.textContent = `🔊 Downloading the friend's voice (60 MB, only once): ${Math.round(PIPER.pct * 100)}%`;
 }
-function piperCall(text) {
+function piperCall(text, fix) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; return Promise.reject(e); }
@@ -7402,7 +7550,14 @@ function piperCall(text) {
     PIPER.w.onerror = () => { PIPER.failed = true; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
   const voice = piperVoice();
-  return new Promise((res, rej) => { const id = ++PIPER.n; PIPER.wait[id] = d => d.ok ? res(d.buf) : rej(new Error(d.err)); PIPER.w.postMessage({ id, voice, text }); });
+  return new Promise((res, rej) => {
+    const id = ++PIPER.n;
+    PIPER.wait[id] = d => {
+      if (d.learned && Object.keys(d.learned).length) { ROOT.sayOwnPh = Object.assign(ROOT.sayOwnPh || {}, d.learned); save(); }
+      d.ok ? res(d.buf) : rej(new Error(d.err));
+    };
+    PIPER.w.postMessage({ id, voice, text: text.replace(/\u0301/g, ''), pairs: fix ? fix.pairs : [], need: fix ? fix.need : [] });
+  });
 }
 function piperWarm() {
   if (!piperOn()) return Promise.resolve(false);
@@ -7419,7 +7574,8 @@ async function piperAudio(text) {
   const job = (async () => {
     let cache = null; try { cache = await caches.open('govorilki-voice'); } catch (e) {}
     const hit = cache && await cache.match(url);
-    const buf = hit ? await hit.arrayBuffer() : await piperCall(text);
+    // a phrase the voice does not answer within 40 s is said by the phone's voice instead
+    const buf = hit ? await hit.arrayBuffer() : await Promise.race([piperCall(text, IS_RU ? sayPatches(text) : null), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 40000))]);
     if (!hit && cache) { try { await cache.put(url, new Response(buf.slice(0), { headers: { 'Content-Type': 'audio/wav' } })); } catch (e) {} }
     return ac().decodeAudioData(buf);
   })();
@@ -7664,6 +7820,7 @@ function screenParents(focus) {
   $('#micIn').onchange = e => { ROOT.micOff = !e.target.checked; save(); };
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
+  if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -10623,7 +10780,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '68';
+const APP_VER = '69';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -11839,6 +11996,318 @@ GAMES.push(
   { id: 'cmp-tf', name: "True or made up?", sub: "about composers", ico: () => pic('🤔'), bg: 'var(--t-yellow)', go: () => screenCmpTF(), grp: 4, also: [13] },
   { id: 'trip', name: "Getting ready for a trip", sub: () => { const t = tripOf(); return t ? `${t.n}: ${tripWhen(t)}` : ''; }, ico: () => pic('✈️'), bg: 'var(--t-blue)', go: () => screenTrip(), grp: 10, hide: () => !tripOf() }
 );
+
+/* ---------- Russian pronunciation before every voice (the app's Piper voices, the phone's voice, ElevenLabs).
+   Piper reads text through the espeak-ng phonemizer: it ignores stress marks, knows no context (здорово, замок,
+   города), guesses foreign names and reads numbers only in the nominative («в одна тысяча восемьсот двенадцать
+   году»). So: numbers become words in the case and gender the sentence asks for; a dictionary made at build time
+   (build/say_ru.py checks every phrase of the app against a stress dictionary with the voice's own phonemizer) marks
+   the stress of the words the voice gets wrong; Piper then gets those words as corrected phonemes, the other voices
+   as text with the stress mark (U+0301). The family can add their own words in the voice settings. ---------- */
+const SAYRU = /*__SAYRU__*/null;   // { w: {word: form}, b: {'previous word': form}, c: {name with a capital: form}, s: {hash: 'word#n=form;…'}, p: {form: 'from|to'} }
+const ACC = '́';
+
+// numbers in words: case (nom gen dat acc ins prep) and gender (m f n, pl for ordinals)
+const RUNUM = (() => {
+  const soft = w => [w, w.slice(0, -1) + 'и', w.slice(0, -1) + 'и', w + 'ю', w.slice(0, -1) + 'и'];
+  const U = [['ноль', 'ноля', 'нолю', 'нолём', 'ноле'], ['один', 'одного', 'одному', 'одним', 'одном'], ['два', 'двух', 'двум', 'двумя', 'двух'],
+    ['три', 'трёх', 'трём', 'тремя', 'трёх'], ['четыре', 'четырёх', 'четырём', 'четырьмя', 'четырёх'], soft('пять'), soft('шесть'), soft('семь'),
+    ['восемь', 'восьми', 'восьми', 'восемью', 'восьми'], soft('девять'), soft('десять'),
+    ...['одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'].map(soft)];
+  const T = [null, null, soft('двадцать'), soft('тридцать'), ['сорок', 'сорока', 'сорока', 'сорока', 'сорока'],
+    ['пятьдесят', 'пятидесяти', 'пятидесяти', 'пятьюдесятью', 'пятидесяти'], ['шестьдесят', 'шестидесяти', 'шестидесяти', 'шестьюдесятью', 'шестидесяти'],
+    ['семьдесят', 'семидесяти', 'семидесяти', 'семьюдесятью', 'семидесяти'], ['восемьдесят', 'восьмидесяти', 'восьмидесяти', 'восемьюдесятью', 'восьмидесяти'],
+    ['девяносто', 'девяноста', 'девяноста', 'девяноста', 'девяноста']];
+  const H = [null, ['сто', 'ста', 'ста', 'ста', 'ста'], ['двести', 'двухсот', 'двумстам', 'двумястами', 'двухстах'], ['триста', 'трёхсот', 'трёмстам', 'тремястами', 'трёхстах'],
+    ['четыреста', 'четырёхсот', 'четырёмстам', 'четырьмястами', 'четырёхстах'], ['пятьсот', 'пятисот', 'пятистам', 'пятьюстами', 'пятистах'],
+    ['шестьсот', 'шестисот', 'шестистам', 'шестьюстами', 'шестистах'], ['семьсот', 'семисот', 'семистам', 'семьюстами', 'семистах'],
+    ['восемьсот', 'восьмисот', 'восьмистам', 'восемьюстами', 'восьмистах'], ['девятьсот', 'девятисот', 'девятистам', 'девятьюстами', 'девятистах']];
+  const CI = { nom: 0, gen: 1, dat: 2, acc: 0, ins: 3, prep: 4 };
+  const ONE = { m: ['один', 'одного', 'одному', 'один', 'одним', 'одном'], n: ['одно', 'одного', 'одному', 'одно', 'одним', 'одном'], f: ['одна', 'одной', 'одной', 'одну', 'одной', 'одной'] };
+  const C6 = { nom: 0, gen: 1, dat: 2, acc: 3, ins: 4, prep: 5 };
+  // the word of 1..999 in a case; g: gender of the counted thing
+  function tri(n, cs, g) {
+    const out = [], h = Math.floor(n / 100), r = n % 100;
+    if (h) out.push(H[h][CI[cs]]);
+    if (r >= 20) { out.push(T[Math.floor(r / 10)][CI[cs]]); if (r % 10) out.push(unit(r % 10, cs, g)); }
+    else if (r) out.push(unit(r, cs, g));
+    return out;
+  }
+  function unit(u, cs, g) {
+    if (u === 1) return ONE[g === 'f' ? 'f' : g === 'n' ? 'n' : 'm'][C6[cs]];
+    if (u === 2 && g === 'f' && (cs === 'nom' || cs === 'acc')) return 'две';
+    return U[u][CI[cs]];
+  }
+  const SCALE = [
+    ['тысяча', 'тысячи', 'тысяче', 'тысячу', 'тысячей', 'тысяче', 'тысячи', 'тысяч', 'тысячам', 'тысячами', 'тысячах', 'f'],
+    ['миллион', 'миллиона', 'миллиону', 'миллион', 'миллионом', 'миллионе', 'миллиона', 'миллионов', 'миллионам', 'миллионами', 'миллионах', 'm'],
+    ['миллиард', 'миллиарда', 'миллиарду', 'миллиард', 'миллиардом', 'миллиарде', 'миллиарда', 'миллиардов', 'миллиардам', 'миллиардами', 'миллиардах', 'm']];
+  // the noun after a number: one/few/many in a case
+  function scaleWord(sc, k, cs) {
+    const one = k % 10 === 1 && k % 100 !== 11, few = [2, 3, 4].includes(k % 10) && ![12, 13, 14].includes(k % 100);
+    if (cs === 'nom' || cs === 'acc') return one ? sc[C6[cs]] : few ? sc[6] : sc[7];
+    if (one) return sc[C6[cs]];
+    return { gen: sc[7], dat: sc[8], ins: sc[9], prep: sc[10] }[cs];
+  }
+  function card(n, cs = 'nom', g = 'm') {
+    if (n === 0) return U[0][CI[cs]];
+    const out = [];
+    const parts = [[Math.floor(n / 1e9) % 1000, SCALE[2]], [Math.floor(n / 1e6) % 1000, SCALE[1]], [Math.floor(n / 1e3) % 1000, SCALE[0]]];
+    for (const [k, sc] of parts) {
+      if (!k) continue;
+      if (k !== 1) out.push(...tri(k, cs, sc[11]));
+      out.push(scaleWord(sc, k, cs));
+    }
+    if (n % 1000) out.push(...tri(n % 1000, cs, g));
+    return out.join(' ');
+  }
+  const OU = ['нулев', 'перв', 'втор', 'трет', 'четвёрт', 'пят', 'шест', 'седьм', 'восьм', 'девят', 'десят', 'одиннадцат', 'двенадцат', 'тринадцат',
+    'четырнадцат', 'пятнадцат', 'шестнадцат', 'семнадцат', 'восемнадцат', 'девятнадцат'];
+  const OT = [null, null, 'двадцат', 'тридцат', 'сороков', 'пятидесят', 'шестидесят', 'семидесят', 'восьмидесят', 'девяност'];
+  const OH = [null, 'сот', 'двухсот', 'трёхсот', 'четырёхсот', 'пятисот', 'шестисот', 'семисот', 'восьмисот', 'девятисот'];
+  const STRESSED = ['нулев', 'втор', 'шест', 'седьм', 'восьм', 'сороков'];
+  const END = {
+    m: ['ый', 'ого', 'ому', 'ый', 'ым', 'ом'], f: ['ая', 'ой', 'ой', 'ую', 'ой', 'ой'], n: ['ое', 'ого', 'ому', 'ое', 'ым', 'ом'], pl: ['ые', 'ых', 'ым', 'ые', 'ыми', 'ых'] };
+  const SOFT = { m: ['ий', 'ьего', 'ьему', 'ий', 'ьим', 'ьем'], f: ['ья', 'ьей', 'ьей', 'ью', 'ьей', 'ьей'], n: ['ье', 'ьего', 'ьему', 'ье', 'ьим', 'ьем'], pl: ['ьи', 'ьих', 'ьим', 'ьи', 'ьими', 'ьих'] };
+  const ordEnd = (stem, cs, g) => {
+    if (stem === 'трет') return stem + SOFT[g][C6[cs]];
+    let e = END[g][C6[cs]];
+    if (g === 'm' && (cs === 'nom' || cs === 'acc') && STRESSED.includes(stem)) e = 'ой';
+    return stem + e;
+  };
+  // ordinal: only the last part changes (тысяча восемьсот двенадцатом); round thousands make one word (двухтысячном)
+  function ord(n, cs = 'nom', g = 'm') {
+    if (n >= 1000 && n % 1000 === 0 && n < 1e6) {
+      const k = n / 1000, pre = k === 1 ? '' : card(k, 'gen').replace(/ /g, '').replace(/^одного/, 'одно');
+      return ordEnd(pre + 'тысячн', cs, g);
+    }
+    const r = n % 100, h = n % 1000 - r;
+    let head = n - n % 100, stem;
+    if (r === 0) { stem = OH[h / 100]; head = n - h; }
+    else if (r < 20) stem = OU[r];
+    else if (r % 10 === 0) stem = OT[r / 10];
+    else { stem = OU[r % 10]; head = n - r % 10; }
+    const lead = head ? card(head) + ' ' : '';
+    return lead + ordEnd(stem, cs, g);
+  }
+  return { card, ord, scaleWord };
+})();
+
+const RU_MON_GEN = 'января февраля марта апреля мая июня июля августа сентября октября ноября декабря'.split(' ');
+const RU_MON_PREP = 'январе феврале марте апреле мае июне июле августе сентябре октябре ноябре декабре'.split(' ');
+const PREP_CASE = (() => {
+  const o = {};
+  const set = (list, cs) => list.split(' ').forEach(p => o[p] = cs);
+  set('с со из от до у без для около возле после кроме вместо среди против вокруг мимо вдоль внутри напротив посреди больше меньше более менее свыше старше младше дороже дешевле длиннее короче выше ниже раньше позже позднее накануне из-за из-под', 'gen');
+  set('к ко благодаря навстречу согласно', 'dat');
+  set('в во на за через про сквозь', 'acc');
+  set('между над под перед', 'ins');
+  set('о об обо при', 'prep');
+  return o;
+})();
+const MASC_A = /^(папа|дедушка|дядя|дядюшка|мужчина|юноша|судья|слуга|воевода|старейшина|мальчишка)$/;
+const FEM_SOFT = /^(тетрадь|лошадь|мышь|ночь|дверь|вещь|кровать|площадь|часть|соль|морковь|цепь|медаль|ступень|роль|жизнь|осень|печь|ель|сирень|рысь|лань|тень|сеть|кисть|кость|мысль|радость|новость|скорость|область|модель|постель|форель|акварель|пыль|ось|речь|дочь|мать|любовь|церковь|рожь|тишь|ширь|глушь|мелочь|помощь|сельдь|степь|бровь|кровь|грудь|дробь|деталь|цель|опасность|победа)$/;
+// gender and case of the thing counted, from the word after the number (only 1 and 2 have genders)
+function numNoun(next, cs, k) {
+  const w = (next || '').toLowerCase();
+  let c = cs, g = 'm';
+  if (!/^[а-яё]/.test(w)) return { g, cs: c };
+  if (/(ами|ями)$/.test(w)) c = 'ins';
+  else if (/(ам|ям)$/.test(w) && w.length > 3) c = 'dat';
+  else if (/(ах|ях)$/.test(w) && w.length > 3 && c !== 'gen') c = 'prep';
+  const one = k % 10 === 1 && k % 100 !== 11, two = k % 10 === 2 && k % 100 !== 12;
+  if (one) {
+    if (c === 'nom') g = /[ая]$/.test(w) && !MASC_A.test(w) ? 'f' : /[оеё]$/.test(w) ? 'n' : /ь$/.test(w) && FEM_SOFT.test(w) ? 'f' : 'm';
+    else if (c === 'acc') g = /[ую]$/.test(w) ? 'f' : /[оеё]$/.test(w) ? 'n' : 'm';
+    else if (c === 'gen') g = /[ыи]$/.test(w) ? 'f' : 'm';
+    else if (c === 'ins') g = /(ой|ей|ью)$/.test(w) ? 'f' : 'm';
+    else if (c === 'dat') g = /[еи]$/.test(w) ? 'f' : 'm';
+  } else if (two && (c === 'nom' || c === 'acc')) g = /[ыи]$/.test(w) ? 'f' : 'm';
+  return { g, cs: c };
+}
+const UNITS = {
+  '%': ['процент', 'процента', 'проценту', 'процент', 'процентом', 'проценте', 'процента', 'процентов', 'процентам', 'процентами', 'процентах', 'm'],
+  'ч': ['час', 'часа', 'часу', 'час', 'часом', 'часе', 'часа', 'часов', 'часам', 'часами', 'часах', 'm'],
+  'мин': ['минута', 'минуты', 'минуте', 'минуту', 'минутой', 'минуте', 'минуты', 'минут', 'минутам', 'минутами', 'минутах', 'f'],
+  'сек': ['секунда', 'секунды', 'секунде', 'секунду', 'секундой', 'секунде', 'секунды', 'секунд', 'секундам', 'секундами', 'секундах', 'f'],
+  'км': ['километр', 'километра', 'километру', 'километр', 'километром', 'километре', 'километра', 'километров', 'километрам', 'километрами', 'километрах', 'm'],
+  'м': ['метр', 'метра', 'метру', 'метр', 'метром', 'метре', 'метра', 'метров', 'метрам', 'метрами', 'метрах', 'm'],
+  'см': ['сантиметр', 'сантиметра', 'сантиметру', 'сантиметр', 'сантиметром', 'сантиметре', 'сантиметра', 'сантиметров', 'сантиметрам', 'сантиметрами', 'сантиметрах', 'm'],
+  'кг': ['килограмм', 'килограмма', 'килограмму', 'килограмм', 'килограммом', 'килограмме', 'килограмма', 'килограммов', 'килограммам', 'килограммами', 'килограммах', 'm'],
+  '°': ['градус', 'градуса', 'градусу', 'градус', 'градусом', 'градусе', 'градуса', 'градусов', 'градусам', 'градусами', 'градусах', 'm']
+};
+const YEAR_CASE = { 'год': 'nom', 'года': 'gen', 'году': 'prep', 'годом': 'ins', 'годе': 'prep', 'годы': 'nom', 'годов': 'gen', 'годам': 'dat', 'годами': 'ins', 'годах': 'prep' };
+function prevWord(s, i) { const m = s.slice(0, i).match(/([А-Яа-яЁё-]+)[\s\u00a0]*$/); return m ? m[1].toLowerCase() : ''; }
+function prepCase(s, i, dflt = 'nom') {
+  const p = prevWord(s, i);
+  return PREP_CASE[p] || dflt;
+}
+function ruNums(text) {
+  let s = String(text);
+  if (!/[\dIVX]/.test(s)) return s;
+  // 10 000, 1 000 000
+  s = s.replace(/(^|[^\d,.])(\d{1,3}(?:[ \u00a0\u202f]\d{3})+)(?![\d,])/g, (m, a, n) => a + n.replace(/[ \u00a0\u202f]/g, ''));
+  // dates: 9 мая, с 1 сентября, 1 апреля 1955 года
+  s = s.replace(new RegExp('(\\d{1,2})[\\s\\u00a0]+(' + RU_MON_GEN.join('|') + ')(?:[\\s\\u00a0]+(\\d{3,4})(?:[\\s\\u00a0]*(года|г\\.))?)?', 'g'), (m, d, mon, y, yw, i) => {
+    const p = prevWord(s, i), after = s.slice(i + m.length);
+    let cs = PREP_CASE[p] === 'gen' ? 'gen' : PREP_CASE[p] === 'dat' ? 'dat' : (p === 'на' || p === 'в' || p === 'про' || p === 'через') ? 'acc'
+      : (/^(сегодня|завтра|вчера|это|было|будет|наступило|наступит|наступает|пришло|придёт)$/.test(p) || /^[\s\u00a0]*[—–:]/.test(after) || !p && !/[а-яё]/i.test(after.slice(0, 3))) ? 'nom' : 'gen';
+    if (/^[\s\u00a0]*[—–]/.test(after)) cs = 'nom';
+    return RUNUM.ord(+d, cs, 'n') + ' ' + mon + (y ? ' ' + RUNUM.ord(+y, 'gen') + ' года' + (yw === 'г.' && /^\s*([А-ЯЁA-Z]|$)/.test(after) ? '.' : '') : '');
+  });
+  // в марте 1917 (года)
+  s = s.replace(new RegExp('(' + RU_MON_PREP.join('|') + ')[\\s\\u00a0]+(\\d{3,4})(?!\\d)(?![\\s\\u00a0]*(?:год|г\\.))', 'g'), (m, mon, y) => mon + ' ' + RUNUM.ord(+y, 'gen') + ' года');
+  // с 1895 по 1910 год
+  s = s.replace(/(с|со|от)[\s\u00a0]+(\d{3,4})[\s\u00a0]+(по|до)[\s\u00a0]+(\d{3,4})[\s\u00a0]*(год|годы|года|г\.)/g, (m, a, y1, b, y2, w) =>
+    a + ' ' + RUNUM.ord(+y1, 'gen') + ' ' + b + ' ' + RUNUM.ord(+y2, b === 'до' ? 'gen' : 'acc', w === 'годы' ? 'pl' : 'm') + ' ' + (w === 'г.' ? (b === 'до' ? 'года' : 'год') : w));
+  // years: в 1812 году, 1703 год, с 1991 года, в 1990-х годах, 1756–1791 годах
+  s = s.replace(/(\d{3,4})(?:[\s\u00a0]*[–—-][\s\u00a0]*(\d{2,4}))?(-[а-яё]+)?[\s\u00a0]*(годами|годах|годам|годов|годом|годы|года|году|годе|год|г\.)(?![а-яё])/gi, (m, y1, y2, suf, w, i) => {
+    const p = prevWord(s, i);
+    let wl = w.toLowerCase(), cs = YEAR_CASE[wl] || 'nom', g = /^год(ы|ов|ам|ами|ах)$/.test(wl) || y2 || suf && /^-(е|х|ми)$/.test(suf) ? 'pl' : 'm';
+    if (wl === 'г.') { cs = p === 'в' || p === 'во' ? 'prep' : PREP_CASE[p] === 'gen' ? 'gen' : 'nom'; wl = { nom: 'год', gen: 'года', prep: 'году' }[cs] + (/^\s*([А-ЯЁA-Z]|$)/.test(s.slice(i + m.length)) ? '.' : ''); }
+    if (wl === 'году' && (p === 'к' || p === 'по')) cs = 'dat';
+    if (cs === 'nom' && (p === 'в' || p === 'на' || p === 'за' || p === 'про' || p === 'через')) cs = 'acc';
+    const one = (n, gg) => RUNUM.ord(+n, cs, gg);
+    let y2n = y2 && +y2; if (y2n && y2.length < y1.length) y2n = +(y1.slice(0, y1.length - y2.length) + y2);
+    return (y2 ? one(y1, 'm') + ' — ' + one(y2n, 'm') : one(y1, g === 'pl' && !y2 ? 'pl' : 'm')) + ' ' + wl;
+  });
+  // Roman numerals: XIX век, в XVIII веке, Филиппа IV
+  const ROM = r => { const v = { I: 1, V: 5, X: 10, L: 50, C: 100 }; let n = 0; for (let k = 0; k < r.length; k++) { const a = v[r[k]], b = v[r[k + 1]] || 0; n += a < b ? -a : a; } return n; };
+  s = s.replace(/\b([IVXLC]{1,7})(?:[\s\u00a0]*[–—-][\s\u00a0]*([IVXLC]{1,7}))?[\s\u00a0]+(века|веку|веком|веке|веков|векам|веках|век|вв\.|в\.)(?![а-яё])/g, (m, a, b, w, i) => {
+    const cs = { 'век': prepCase(s, i, 'nom'), 'века': 'gen', 'веку': 'dat', 'веком': 'ins', 'веке': 'prep', 'веков': 'gen', 'векам': 'dat', 'веках': 'prep' }[w] || 'nom';
+    const word = w === 'вв.' ? 'веков' : w === 'в.' ? 'век' : w;
+    return RUNUM.ord(ROM(a), cs) + (b ? ' — ' + RUNUM.ord(ROM(b), cs) : '') + ' ' + word;
+  });
+  s = s.replace(/([А-ЯЁ][а-яё]+)[\s\u00a0]+([IVX]{1,5})(?![A-Za-z])/g, (m, name, r) => {
+    const n = ROM(r), w = name.toLowerCase();
+    let g = 'm', cs = 'nom';
+    if (/^(екатерин|елизавет|анн|мари|изабелл|виктори|маргарит)/.test(w)) { g = 'f'; cs = /[ая]$/.test(w) ? 'nom' : /[ыи]$/.test(w) ? 'gen' : /[ую]$/.test(w) ? 'acc' : /(ой|ей)$/.test(w) ? 'ins' : 'dat'; }
+    else cs = /[ая]$/.test(w) ? 'gen' : /[ую]$/.test(w) ? 'dat' : /(ом|ем)$/.test(w) ? 'ins' : /е$/.test(w) ? 'prep' : 'nom';
+    return name + ' ' + RUNUM.ord(n, cs, g).replace(/^./, c => c.toUpperCase());
+  });
+  // 26-летний, 1-й, 3-го, 1990-х
+  s = s.replace(/(\d+)-(летн|этажн|метров|кратн|минутн|часов|дневн|недельн|месячн|градусн|процентн|серийн)([а-яё]*)/g, (m, n, root, end) => {
+    const k = +n, pre = k === 1 ? 'одно' : k === 100 ? 'сто' : RUNUM.card(k, 'gen').replace(/ /g, '').replace(/^девяноста/, 'девяносто').replace(/^ста(?=.)/, 'сто');
+    return pre + root + end;
+  });
+  s = s.replace(/(\d+)-(ыми|ого|ому|ой|ый|ий|ая|ое|ые|ых|ым|ом|ем|ей|ья|ье|ьи|ую|ью|го|му|ми|й|я|е|х|м|ю)(?![а-яё])/g, (m, n, suf, i) => {
+    const k = +n, p = prevWord(s, i), next = s.slice(i + m.length).match(/^[\s\u00a0]*([а-яё]+)/i);
+    const tries = [];
+    const pc = PREP_CASE[p];
+    const forms = pc === 'acc' || pc === 'prep' ? ['prep', 'acc', 'nom', 'gen', 'dat', 'ins'] : pc ? [pc, 'nom', 'gen', 'dat', 'acc', 'ins', 'prep'] : ['nom', 'gen', 'dat', 'acc', 'ins', 'prep'];
+    let order = ['m', 'f', 'n', 'pl'];
+    if (suf === 'й' && (PREP_CASE[p] && PREP_CASE[p] !== 'acc' || next && /[ыие]$|ой$|ей$|ю$/.test(next[1]))) order = ['f', 'm', 'n', 'pl'];
+    if (suf === 'м' && PREP_CASE[p] === 'dat') order = ['pl', 'm', 'n', 'f'];
+    for (const g of order) for (const cs of forms) tries.push(RUNUM.ord(k, cs, g));
+    return tries.find(w => w.endsWith(suf)) || RUNUM.ord(k);
+  });
+  // time 10:30, 1:25; a score 2 : 1
+  s = s.replace(/(^|[^\d:])(\d{1,2}):(\d{2})(?![\d:])/g, (m, a, h, mm, i) => {
+    if (+h > 24 || +mm > 59) return m;
+    const cs = prepCase(s, i + a.length, 'nom');
+    return a + (+mm === 0 ? RUNUM.card(+h, cs) + ' ' + RUNUM.scaleWord(UNITS['ч'], +h, cs) : RUNUM.card(+h, cs) + ' ' + (+mm < 10 ? 'ноль ' : '') + RUNUM.card(+mm, 'nom', 'f'));
+  });
+  // decimals 1,5 and 2.5
+  s = s.replace(/(\d+)[,.](\d{1,2})(?!\d)/g, (m, a, b) => {
+    const den = b.length === 1 ? ['десятая', 'десятых'] : ['сотая', 'сотых'], k = +b, last = k % 10 === 1 && k % 100 !== 11;
+    return RUNUM.card(+a, 'nom', 'f') + ' ' + (+a % 10 === 1 && +a % 100 !== 11 ? 'целая' : 'целых') + ' ' + RUNUM.card(k, 'nom', 'f') + ' ' + (last ? den[0] : den[1]);
+  });
+  // maths: 16 × 2 = 32, 2 + 3, 12 : 3, 7 − 2; a size 3 × 3 is «три на три»
+  s = s.replace(/(\d+)[\s\u00a0]*([×x*+−\-÷:=])[\s\u00a0]*(?=\d)/g, (m, a, op, i) => {
+    const rest = s.slice(i + m.length);
+    const word = { '×': /^\d+[\s\u00a0]*=/.test(rest) ? 'умножить на' : 'на', 'x': /^\d+[\s\u00a0]*=/.test(rest) ? 'умножить на' : 'на', '*': 'умножить на', '+': 'плюс', '−': 'минус', '-': /\s/.test(m) ? 'минус' : '—', '÷': 'разделить на', ':': /^\d+[\s\u00a0]*=/.test(rest) ? 'разделить на' : '—', '=': 'равно' }[op];
+    return a + ' ' + word + ' ';
+  });
+  s = s.replace(/(\d+)[\s\u00a0]*=/g, '$1 равно');
+  // ranges 1840–1893, 4–12
+  s = s.replace(/(\d+)[\s\u00a0]*[–—][\s\u00a0]*(\d+)/g, (m, a, b, i) => {
+    const p = prevWord(s, i), after = s.slice(i + m.length);
+    if (a.length >= 4 || PREP_CASE[p] || /\($/.test(s.slice(0, i)) || !/^[\s\u00a0]*[а-яё]/i.test(after)) return a + ' — ' + b;
+    return 'от ' + RUNUM.card(+a, 'gen') + ' до ' + RUNUM.card(+b, 'gen');
+  });
+  // units: 45%, 1 ч 15 мин, 540 м
+  s = s.replace(/(\d+)[\s\u00a0]*(%|°|км|кг|см|мин|сек|ч|м)(?![а-яёa-z])/gi, (m, n, u, i) => {
+    const U = UNITS[u.toLowerCase()]; if (!U) return m;
+    const cs = prepCase(s, i, 'nom');
+    return RUNUM.card(+n, cs, U[11]) + ' ' + RUNUM.scaleWord(U, +n, cs);
+  });
+  s = s.replace(/№[\s\u00a0]*(\d+)/g, 'номер $1');
+  const FILES = { a: 'а', b: 'бэ', c: 'цэ', d: 'дэ', e: 'е', f: 'эф', g: 'жэ', h: 'аш' };
+  s = s.replace(/(^|[^A-Za-z])([a-h])([1-8])(?![\dA-Za-z])/g, (m, a, f, r) => a + FILES[f] + ' ' + r);
+  // everything else: the case from the preposition before, the gender from the word after
+  s = s.replace(/\d+/g, (n, i) => {
+    if (n.length > 1 && n[0] === '0') return [...n].map(d => RUNUM.card(+d)).join(' ');
+    const k = +n; if (k >= 1e12) return [...n].map(d => RUNUM.card(+d)).join(' ');
+    let cs = prepCase(s, i, 'nom');
+    if (prevWord(s, i) === 'по' && k % 10 === 1 && k % 100 !== 11) cs = 'dat';
+    const next = s.slice(i + n.length).match(/^[\s\u00a0]*([А-Яа-яЁё]+)/);
+    const nn = numNoun(next && next[1], cs, k);
+    return RUNUM.card(k, nn.cs, nn.g);
+  });
+  return s;
+}
+
+// the stress of each word of a sentence: the family's own words, then this sentence's choice, then the app's dictionary
+const sayKey = w => w.toLowerCase().replace(/ё/g, 'е');
+function sayHash(t) { let h = 0x811c9dc5; for (const ch of t) h = Math.imul(h ^ ch.codePointAt(0), 0x01000193) >>> 0; return h.toString(36); }
+// f: a lower-case word with its ё and stress mark; the capitals of t stay
+function sayForm(t, f) {
+  let out = '', j = 0;
+  for (const c of f) {
+    if (c === ACC) { out += ACC; continue; }
+    const o = t[j++];
+    if (o === undefined || sayKey(o) !== sayKey(c)) return t;
+    out += o === o.toLowerCase() ? c : c.toUpperCase();
+  }
+  return j === t.length ? out : t;
+}
+function sayMark(sent) {
+  const D = SAYRU || { w: {}, s: {} }, own = (ROOT && ROOT.sayOwn) || {}, pick = {}, seen = {};
+  const row = D.s[sayHash(sent)];
+  if (row) row.split(';').forEach(x => { const i = x.indexOf('='); pick[x.slice(0, i)] = x.slice(i + 1); });
+  let prev = '', idx = 0;
+  return sent.replace(/[А-Яа-яЁё]+/g, t => {
+    const lw = t.toLowerCase(); seen[lw] = (seen[lw] || 0) + 1;
+    // a capital inside a sentence is a name (Лев Толсто́й, вокруг Земли́)
+    const cap = idx++ > 0 && t[0] !== lw[0] && D.c && D.c[lw];
+    const f = own[sayKey(t)] || pick[lw + '#' + seen[lw]] || cap || (D.b && D.b[prev + ' ' + lw]) || D.w[lw];
+    prev = lw;
+    return f ? sayForm(t, f) : t;
+  });
+}
+// the text a voice gets: numbers in words, then sentence by sentence with the stress marks
+function sayParts(text) {
+  const t = IS_RU ? ruNums(text) : String(text);
+  return (t.match(/[^.!?…]+[.!?…]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => IS_RU ? sayMark(x) : x);
+}
+// for Piper: the corrected phonemes of the marked words; words of the family not yet worked out go to the voice to work out
+function sayPatches(marked) {
+  const D = (SAYRU && SAYRU.p) || {}, own = (ROOT && ROOT.sayOwnPh) || {}, pairs = [], need = [];
+  for (const m of marked.matchAll(/[А-Яа-яЁё́]+/g)) {
+    if (!m[0].includes(ACC)) continue;
+    const f = m[0].toLowerCase(), p = f in D ? D[f] : own[f];
+    if (p === undefined) { if (!need.includes(f)) need.push(f); continue; }
+    if (p) p.split('¦').forEach(x => pairs.push(x.split('|')));
+  }
+  return { pairs, need };
+}
+// the family's own fixes: «зд+орово» or «здо+рово» (the plus before or after the stressed vowel), «Лёва»
+function sayOwnAdd(raw) {
+  const s = String(raw || '').trim().toLowerCase().replace(/[\u0301']/g, '+'), V = 'аеёиоуыэюя';
+  if (!/^[а-яё+]+$/.test(s) || (s.match(/\+/g) || []).length > 1) return null;
+  const word = s.replace(/\+/g, ''), at = s.indexOf('+');
+  if (!/[аеёиоуыэюя]/.test(word)) return null;
+  // the stressed letter: the vowel after the plus, else the vowel before it
+  let k = -1;
+  if (at >= 0) k = V.includes(s[at + 1] || '') ? at : V.includes(s[at - 1] || '') ? at - 1 : -2;
+  if (k === -2) return null;
+  const f = k < 0 ? word : word.slice(0, k + 1) + ACC + word.slice(k + 1);
+  if (!ROOT.sayOwn) ROOT.sayOwn = {};
+  ROOT.sayOwn[sayKey(word)] = f;
+  if (ROOT.sayOwnPh) delete ROOT.sayOwnPh[f];
+  save();
+  return f;
+}
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
    links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
