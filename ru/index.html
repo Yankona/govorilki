@@ -263,6 +263,14 @@ b.r{color:var(--berry)}
 .mg-path{flex:1;align-self:stretch;margin:50px -6px 40px;background:linear-gradient(to bottom right,transparent calc(50% - 4px),var(--ink-soft) calc(50% - 4px),var(--ink-soft) calc(50% + 4px),transparent calc(50% + 4px));opacity:.3;border-radius:8px}
 .merge.joined .mg-path{opacity:0}
 .merge.joined .mg-c{box-shadow:0 7px 0 var(--line-strong)}
+.mg-loco{position:absolute;bottom:-16px;left:4px;font-size:40px;line-height:1;filter:drop-shadow(0 2px 0 rgba(42,35,70,.2))}
+.abc-trains{width:min(100%,560px)}.abc-tt{margin:2px 0 6px;font:800 16px var(--f-body);color:var(--ink-soft)}
+.trn-row{display:flex;flex-wrap:wrap;gap:8px}
+.trn{position:relative;display:flex;align-items:center;gap:12px;border:0;border-radius:14px;padding:6px 12px 12px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);cursor:pointer;font:900 30px/1 var(--f-body)}
+.trn::after{content:'';position:absolute;left:12px;right:12px;bottom:4px;height:5px;border-radius:3px;background:radial-gradient(circle,var(--ink) 0 2.5px,transparent 3px) 0 0/14px 5px repeat-x;opacity:.45}
+.trn-loco{font-size:22px}.trn .trn-c,.trn .trn-w{display:inline-block;padding:3px 7px;border-radius:9px;background:#F4F1FF;transition:transform .45s cubic-bezier(.5,0,.3,1.3)}
+.trn.go .trn-c{transform:translateX(13px)}.trn.go .trn-loco{animation:trnPuff .45s}
+@keyframes trnPuff{50%{transform:translateY(-3px) rotate(-6deg)}}
 .merge-syl{margin:0;min-height:1.1em;font:900 clamp(52px,12vmin,84px)/1 var(--f-body);letter-spacing:.06em}
 .rw-word{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:6px}
 .syl-chip{border:0;border-radius:20px;background:var(--paper);padding:10px 16px 14px;font:900 clamp(44px,10vmin,72px)/1 var(--f-body);letter-spacing:.04em;cursor:pointer;box-shadow:0 6px 0 var(--line-strong),inset 0 -8px 0 var(--chipc)}
@@ -2613,7 +2621,7 @@ const GAMES = [
   { id: 'abc', name: 'Азбука', sub: 'все буквы с картинками', ico: () => '<span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b><b class="L c">В</b></span>', bg: 'var(--t-yellow)', go: () => screenABC(), grp: 2, prog: () => '' },
   { id: 'abc-find', name: 'Найди букву', sub: 'слушай и нажимай', ico: () => '<span class="ico-letters"><b class="L c">М</b>?</span>', bg: 'var(--t-blue)', go: () => screenFindLetter(), grp: 2 },
   { id: 'abc-first', name: 'Первая буква', sub: 'с какой буквы слово?', ico: () => pic('🍉'), bg: 'var(--t-pink)', go: () => screenFirstLetter(), grp: 2 },
-  { id: 'read-merge', name: 'Буквы дружат', sub: 'М + А = МА', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b></span>', bg: 'var(--t-green)', go: () => screenMerge(), grp: 2 },
+  { id: 'read-merge', name: 'Слоги-паровозики', sub: 'М бежит к А — МА!', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b></span>', bg: 'var(--t-green)', go: () => screenMerge(), grp: 2 },
   { id: 'read-words', name: 'Читаем слова', sub: 'ма-ма, ры-ба, ко-а-ла', ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenReadWords(), grp: 2 },
   { id: 'read-pick', name: 'Прочитай и найди', sub: 'слово → картинка', ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenReadPick(), grp: 2 },
   { id: 'write', name: 'Пишем буквы', sub: 'обведи пальчиком', ico: () => pic('✏️'), bg: 'var(--t-mint)', go: () => screenPaint({ mode: 'write' }), grp: 2, prog: () => '' },
@@ -3307,19 +3315,36 @@ function abcLine(i) {
   if (L === 'Й') return `И краткое. Как в слове ${w}.`;
   return `${L}. ${cap(w)}.`;
 }
+// the syllables of a letter: a consonant pulls each vowel (МА, МО, МУ, МЫ, МИ), a vowel is pulled by the consonants;
+// English, whose blending is a sound and a word family (c + at), takes the words of M_LIST with that letter
+const TRAIN_BAD = LX('TRAIN_BAD', RU('КЫ ГЫ ХЫ ШЫ ЖЫ ЧЫ ЩЫ').split(' '));
+function letterTrains(L) {
+  if (M_LIST) { const l = L.toLowerCase(); return M_LIST.filter(w => VOWELS.includes(L) ? w.slice(1).includes(l) : w[0] === l).slice(0, 6); }
+  const cons = IS_RU ? ABC.map(a => a[0]).filter(c => !VOWELS.includes(c) && !RU('ЙЪЬ').includes(c)) : M_CONS;
+  const out = VOWELS.includes(L) ? M_CONS.slice(0, 8).map(c => c + L) : cons.includes(L) ? M_VOW.map(v => L + v) : [];
+  return out.filter(s => !M_BAD.includes(s) && !TRAIN_BAD.includes(s));
+}
+const trainHTML = s => `<button class="trn" data-s="${esc(s)}"><span class="trn-loco" aria-hidden="true">🚂</span><b class="trn-c">${M_LIST ? esc(s[0]) : Lspan(s[0])}</b><b class="trn-w">${M_LIST ? esc(s.slice(1)) : [...s.slice(1)].map(Lspan).join('')}</b></button>`;
 function screenABC() {
   newScreen();
-  shell('Азбука', `<div class="abc-card" id="abcCard"></div>
+  shell('Азбука', `<div class="abc-card" id="abcCard"></div><div class="abc-trains" id="abcTr"></div>
     <div class="abc-grid" id="abcGrid">${ABC.map((a, i) => `<button class="abc-k" data-i="${i}" aria-label="${lsay(a[0])}">${Lspan(a[0])}</button>`).join('')}</div>`);
   const card = $('#abcCard');
   const show = (i, speak) => {
     const [L, w, e] = ABC[i];
     card.innerHTML = `<span class="abc-big">${Lspan(L)}${Lspan(L.toLowerCase())}</span><span class="abc-pic">${pic(e)}</span><span class="abc-w">${hiLetter(w, L)}</span>`;
     card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop');
+    const tr = letterTrains(L);
+    $('#abcTr').innerHTML = tr.length ? `<p class="abc-tt">🚂 Слоги-паровозики: нажми на вагончик — буквы поедут вместе</p><div class="trn-row">${tr.map(trainHTML).join('')}</div>` : '';
     if (speak) talk(abcLine(i));
   };
   show(0, false);
-  talk('Нажми на букву. Я скажу, как она называется. Красные буквы — гласные, синие — согласные.');
+  talk('Нажми на букву. Я скажу, как она называется. Красные буквы — гласные, синие — согласные.' + ' ' + 'Под буквой — слоги-паровозики: нажми на вагончик!');
+  $('#abcTr').onclick = async e => {
+    const b = e.target.closest('.trn'); if (!b) return;
+    sfx.whoosh(.35, .12); b.classList.remove('go'); void b.offsetWidth; b.classList.add('go');
+    await wait(450); say(M_LIST ? b.dataset.s : sylSay(b.dataset.s));
+  };
   $('#abcGrid').onclick = e => { const b = e.target.closest('.abc-k'); if (b) { sfx.pop(); show(+b.dataset.i, true); } };
 }
 function screenFindLetter() {
@@ -3380,12 +3405,12 @@ function screenMerge() {
   const t = newScreen(), deck = [];
   while (deck.length < 6) { const s = M_LIST ? pickOne(M_LIST) : pickOne(M_CONS) + pickOne(M_VOW); if (!M_BAD.includes(s) && !deck.includes(s)) deck.push(s); }
   let k = 0, busy = false;
-  shell('Буквы дружат', `<div class="merge" id="mg"></div><p class="merge-syl" id="ms"></p>`);
+  shell('Слоги-паровозики', `<div class="merge" id="mg"></div><p class="merge-syl" id="ms"></p>`);
   const mg = $('#mg'), ms = $('#ms');
   function show() {
     busy = false; const s = deck[k];
     mg.classList.remove('joined');
-    mg.innerHTML = `<button class="mg-l mg-c" id="mc" aria-label="Буква ${lsay(s[0])}">${Lspan(s[0])}</button><span class="mg-path" aria-hidden="true"></span><span class="mg-l mg-v" id="mv">${s.length > 2 ? `<b class="L v">${s.slice(1)}</b>` : Lspan(s[1])}</span>`;
+    mg.innerHTML = `<button class="mg-l mg-c" id="mc" aria-label="Буква ${lsay(s[0])}"><span class="mg-loco" aria-hidden="true">🚂</span>${Lspan(s[0])}</button><span class="mg-path" aria-hidden="true"></span><span class="mg-l mg-v" id="mv">${s.length > 2 ? `<b class="L v">${s.slice(1)}</b>` : Lspan(s[1])}</span>`;
     ms.textContent = '';
     talk(k === 0 ? (LX('M_INTRO', '') ? LX('M_INTRO', '').replace('{0}', lsay(s[0])).replace('{1}', s.slice(1)) : `Буква ${lsay(s[0])} бежит к букве ${lsay(s.slice(1))}. Нажми на синюю букву.`) : 'Нажми на синюю букву.');
     $('#mc').onclick = run;
@@ -10516,7 +10541,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '63';
+const APP_VER = '64';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
