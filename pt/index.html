@@ -1410,6 +1410,23 @@ body.quest .fam-ok{color:#7BE0A0}
 .ai-mis{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .ai-mis li{background:var(--paper);border-radius:14px;padding:8px 12px;font:700 17px/1.4 var(--f-body)}
 .ai-mis span{color:var(--ink-soft)}
+.art-find{width:100%;padding:10px 14px;border-radius:14px;border:2px solid var(--line-strong);font:700 17px var(--f-body);background:var(--paper);color:var(--ink)}
+.mus-city{font:700 15px var(--f-body);color:var(--ink-soft)}
+.gu-box .gu-q{font:900 26px var(--f-body);margin:8px 0}.gu-in{width:100%;max-width:220px;padding:10px 12px;border-radius:12px;border:2px solid var(--line-strong);font:800 22px var(--f-body);text-align:center}
+.bk-days{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.bk-days .chip.on{opacity:.55}
+.rf-list{margin:6px 0 4px}.rf-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0}
+.cmp-day{display:flex;gap:12px;align-items:center;width:100%;border:0;border-radius:18px;padding:10px;background:var(--t-yellow);box-shadow:0 3px 0 var(--line-strong);text-align:left;cursor:pointer;margin:6px 0}
+.cmp-day img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none}.cmp-day span{display:flex;flex-direction:column;gap:2px}.cmp-day b{font:800 17px var(--f-body);color:var(--ink)}.cmp-day small{font:600 16px/1.35 var(--f-body);color:var(--ink)}
+.tfq{display:flex;flex-direction:column;gap:12px}.tfq-head{display:flex;align-items:center;gap:10px}.tfq-head img{width:64px;height:64px;border-radius:50%;object-fit:cover}.tfq-head .emo{font-size:40px}.tfq-head b{flex:1;font:800 18px var(--f-body)}.tfq-head small{color:var(--ink-soft)}
+.tfq-s{font:800 21px/1.35 var(--f-body);background:var(--paper);border-radius:18px;padding:14px;margin:0}
+.tfq-b .big.ok,.al-opts .pick-b.ok{background:#4CC261;color:#fff}.tfq-b .big.no,.al-opts .pick-b.no{background:#FF8C8C;color:#fff}
+.trip-card{display:flex;gap:10px;align-items:center;width:100%;border:0;border-radius:20px;padding:12px;margin:10px 0;background:linear-gradient(135deg,#DCEDFF,#E3F5D0);box-shadow:0 4px 0 var(--line-strong);text-align:left;cursor:pointer}
+.trip-card>.emo{font-size:38px}.trip-t{flex:1;display:flex;flex-direction:column}.trip-t b{font:800 18px var(--f-body);color:var(--ink)}.trip-t small{font:700 14px var(--f-body);color:var(--ink-soft)}
+.trip{display:flex;flex-direction:column;gap:10px}.trip-cd{display:flex;align-items:center;gap:10px;font:800 20px var(--f-body)}.trip-cd .emo{font-size:36px}
+.tp-words{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tp-w{display:flex;flex-direction:column;gap:2px;border:0;border-radius:16px;padding:10px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong);text-align:left;cursor:pointer}
+.tp-w b{font:900 20px var(--f-body);color:var(--ink)}.tp-w small{color:var(--ink-soft)}.tp-w .tp-h{font:700 14px var(--f-body);color:#7A3EB1}.tp-w .tp-m{font:700 15px var(--f-body);color:var(--ink-soft)}.tp-w.on{outline:4px solid #FFD93D}
+.tp-ev small{display:block;margin-top:4px;color:var(--ink-soft);font:700 14px var(--f-body)}
 .gplay-b{position:relative;z-index:50;height:30px;padding-top:env(safe-area-inset-top,0px);display:flex;align-items:center;justify-content:center;background:#7A3EB1;color:#fff;font:800 14px var(--f-body);white-space:nowrap}
 body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .gplay-b button{background:#fff;border:0;border-radius:8px;margin-left:6px;padding:1px 7px;color:#7A3EB1;font:900 13px var(--f-body);cursor:pointer}
@@ -2728,6 +2745,7 @@ function goHome() {
     </header>
     ${holidayCard()}
     <div id="relpBox">${relpHTML()}</div>
+    ${tripCardHTML()}
     ${readFineHTML()}
     <div id="btBox">${inboxHTML()}</div>
     ${Q() ? rankCard() + seasonCard() + garageCard() : ''}
@@ -2780,6 +2798,7 @@ function goHome() {
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
   if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); bindRelp(); bindReadFine(RF); }
   on('#gpBtn', () => { sfx.pop(); homeLeave(); screenGplayWho(); });
+  on('#tripCard', () => { sfx.pop(); homeLeave(); screenTrip(); });
   on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
   $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
@@ -4243,13 +4262,16 @@ function screenBook() {
         <div class="mins" id="likes">${["😐 mais ou menos", "🙂 gostei", "😍 adorei!"].map((x, i) => `<button class="chip lk ${like === i ? 'sel' : ''}" data-l="${i}">${x}</button>`).join('')}</div>
         <button class="big" id="logBtn">${e ? "Atualizar registo" : "Registar"}</button>
       </section>
-      <div class="days14">${days.map(d => { const k = dayKey(d); return `<span class="d14 ${P.book.log[k] ? 'on' : ''} ${k === tk ? 'now' : ''}"><small>${WEEK[(d.getDay() + 6) % 7]}</small><i>${P.book.log[k] ? ICON.star : d.getDate()}</i></span>`; }).join('')}</div>
+      <div class="days14">${days.map(d => { const k = dayKey(d); return `<span class="d14 ${P.book.log[k] ? 'on' : ''} ${k === tk ? 'now' : ''}" data-k="${k}"><small>${WEEK[(d.getDay() + 6) % 7]}</small><i>${P.book.log[k] ? ICON.star : d.getDate()}</i></span>`; }).join('')}</div>
+      <button class="link-btn" id="bkBackBtn">👪 Para adultos: registar um dia passado</button>
+      <section class="psec bk-back" id="bkBack" hidden></section>
     </div>`);
   talk(e ? `Hoje já ${G("leste", "leste")} ${e.pages ? `${e.pages} ${pgW(e.pages)}` : "um pouco"}. Que bom!` : `Lê o teu livro com prazer. Depois regista quantas páginas ${G("leste", "leste")}.`);
   $('#pgs').onclick = ev => { const b = ev.target.closest('.mn'); if (!b) return; pages = +b.dataset.p; $('#pageIn').value = ''; $$('#pgs .mn').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#pageIn').addEventListener('input', ev => { pages = Math.max(0, Math.round(+ev.target.value || 0)); $$('#pgs .mn').forEach(x => x.classList.remove('sel')); });
   $('#likes').onclick = ev => { const b = ev.target.closest('.lk'); if (!b) return; like = +b.dataset.l; $$('#likes .lk').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#dictBtn').onclick = () => { sfx.pop(); screenDict({ back: screenBook }); };
+  $('#bkBackBtn').onclick = () => grownUp(() => { const b = $('#bkBack'); b.hidden = false; $('#bkBackBtn').hidden = true; bookBackfill(b); b.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, "Só um adulto pode registar a leitura de um dia passado.");
   $('#logBtn').onclick = () => {
     if (!pages) { talk("Regista quantas páginas."); wiggle($('#pgs')); return; }
     P.book.log[tk] = { pages, like: like >= 0 ? like : null }; save(); sfx.pop();
@@ -7459,6 +7481,7 @@ function screenParents(focus) {
       <label class="prow" for="devVoice">Voz do telemóvel (gratuita) <select id="devVoice"><option value="">— automática —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Sons do jogo</label>
       <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>Um dia sem leitura custa 10 estrelas (uma lição de leitura, o livro ou um jogo de leitura contam para o dia)</label>
+      ${readFinesHTML()}
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>O microfone verifica se a criança falou em voz alta e soprou</label>
       <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Verificar que palavra foi dita (reconhecimento de voz do navegador: o som é processado pela Google no Chrome ou pela Apple no Safari)</label>
       <p class="muted" id="voiceState"></p>
@@ -7470,6 +7493,7 @@ function screenParents(focus) {
       <label class="prow" for="goalDate">Aniversário: até esta data lemos todos os dias <input id="goalDate" type="date" value="${P.goal.date || ''}"></label>
       <p class="muted">Os dias contam-se a partir de ${fmtDate(P.goal.start || dayKey())}. O jogo só mostra o caminho até ao objetivo; a decisão sobre a prenda cabe a si.</p>` : ''}
     </section>` : ''}
+    ${tripSetHTML()}
     <section class="psec" id="elSec"><h2>A voz do amigo: ElevenLabs</h2>
       ${EMBEDDED ? "<p>Aqui, dentro do claude.ai, não é possível ligar a voz da ElevenLabs. Abra a aplicação em <a href=\"https://yankona.github.io/govorilki/\" target=\"_blank\" rel=\"noopener\">yankona.github.io/govorilki</a> e toque no botão «Voz» no ecrã principal.</p>" : `<p class="muted">Uma voz natural em vez da voz do telemóvel, partilhada por todas as crianças neste telemóvel. É preciso uma chave API da sua conta ElevenLabs (Profile → API Keys). A chave fica guardada apenas neste dispositivo e é enviada apenas para a ElevenLabs. As frases ditas ficam guardadas no telemóvel: as repetições são gratuitas e ouvem-se sem internet.</p>
       <label class="prow" for="elKey">Chave API <input id="elKey" type="password" autocomplete="off" value="${esc(ROOT.eleven.key)}"></label>
@@ -7533,6 +7557,8 @@ function screenParents(focus) {
   $('#voiceIn').onchange = e => { P.settings.voice = e.target.checked; save(); if (!P.settings.voice) hush(); };
   $('#slowIn').onchange = e => { P.settings.rate = e.target.checked ? .8 : 1; save(); };
   $('#sfxIn').onchange = e => { P.settings.sfx = e.target.checked; save(); if (P.settings.sfx) sfx.pop(); };
+  bindReadFines();
+  $('#tripSetBtn').onclick = () => { sfx.pop(); screenTripSet(); };
   $('#rfIn').onchange = e => { P.settings.readFine = e.target.checked; if (e.target.checked) { P.readFrom = dayKey(); delete P.readPaid; } save(); sfx.tick(); };
   $('#micIn').onchange = e => { ROOT.micOff = !e.target.checked; save(); };
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
@@ -9716,13 +9742,11 @@ function screenMuseum(tab = 'day', arg = null) {
       $('#agNext').onclick = () => { sfx.pop(); screenMuseum('how', next.q); };
       talk(`«${x.t}». ${x.a ? x.a + '. ' : ''}${tr ? tr.f[0] : "Encontra o sítio mais claro na pintura."}`);
     } else if (tab === 'mus' && !arg) {
-      const cnt = {}; P2.forEach(x => { if (x.m) cnt[x.m] = (cnt[x.m] || 0) + 1; });
-      const ms = Object.keys(cnt).filter(k => D.m[k] && cnt[k] >= 3).sort((a, b) => cnt[b] - cnt[a]);
-      box.innerHTML = `<div class="art-list">${ms.map(k => { const top = P2.find(x => x.m === k); return `<button class="art-row" data-mus="${k}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(D.m[k])}</b><small>${cnt[k]} ${plural(cnt[k], ["pintura", "pinturas", "pinturas"])}</small></span></button>`; }).join('')}</div>`;
+      artMusList(box, D, P2);
       talk("Escolhe um museu.");
     } else if (tab === 'mus') {
       const list = P2.filter(x => x.m === arg); box._list = list;
-      box.innerHTML = `<button class="link-btn" data-tab-back>← Todos os museus</button><h2 class="art-h">🏛️ ${esc(D.m[arg] || '')}</h2>${artThumbs(list)}`;
+      box.innerHTML = `<button class="link-btn" data-tab-back>← Todos os museus</button><h2 class="art-h">🏛️ ${esc(D.m[arg] || '')}${musCity(arg) ? ` <small class="mus-city">${FLAG(musCC(arg))} ${esc(musCity(arg))}</small>` : ''}</h2>${artThumbs(list)}`;
       box.querySelector('[data-tab-back]').onclick = () => screenMuseum('mus');
       talk(`${D.m[arg] || "Museu"}. Aqui há ${list.length} ${plural(list.length, ["pintura", "pinturas", "pinturas"])}.`);
     } else if (tab === 'who' && !arg) {
@@ -10261,26 +10285,32 @@ function playTune(id, { tempo = null, onNote = null, quiet = false } = {}) {
 }
 
 function screenComposers() {
+  if (!CF.data) { cfLoad().then(() => screenComposers()); return; }
   newScreen();
+  const fc = pickOne(COMPOSERS), ff = cfNext(fc);
   shell("Compositores Divertidos", `<div class="cmp">
-      <div class="og-btns"><button class="big" id="cmpGuess">🎧 Adivinha o compositor</button><button class="big ghost" id="cmpCond">🪄 Maestro</button></div>
+      <div class="og-btns"><button class="big" id="cmpGuess">🎧 Adivinha o compositor</button><button class="big ghost" id="cmpTF">🤔 Verdade ou invenção?</button><button class="big ghost" id="cmpCond">🪄 Maestro</button></div>
+      <button class="cmp-day" id="cmpDay"><img src="${portrait(fc, 200)}" alt=""><span><b>😄 ${esc(fc.n)}</b><small>${esc(ff)}</small></span></button>
       <div class="cmp-grid">${COMPOSERS.map(c => `<button class="cmp-c" data-c="${c.id}"><img loading="lazy" src="${portrait(c)}" alt=""><b>${esc(c.n)}</b><small>${FLAG(c.cc)} ${c.y}</small></button>`).join('')}</div>
     </div>`);
   $('.cmp-grid').onclick = e => { const b = e.target.closest('[data-c]'); if (b) { sfx.pop(); screenComposer(b.dataset.c); } };
   $('#cmpGuess').onclick = () => { sfx.pop(); screenGuessComposer(); };
   $('#cmpCond').onclick = () => { sfx.pop(); screenConductor(); };
+  $('#cmpTF').onclick = () => { sfx.pop(); screenCmpTF(); };
+  $('#cmpDay').onclick = () => { sfx.pop(); screenComposer(fc.id, ff); };
   talk("Compositores divertidos! Escolhe um compositor, ouve a música dele e descobre histórias engraçadas sobre ele.");
 }
-function screenComposer(id) {
-  const t = newScreen(), c = COMPOSERS.find(x => x.id === id); let fi = 0;
+function screenComposer(id, first) {
+  if (!CF.data) { cfLoad().then(() => screenComposer(id, first)); return; }
+  const t = newScreen(), c = COMPOSERS.find(x => x.id === id), f0 = first || cfNext(c);
   shell(c.n, `<div class="cmp cmp-one">
       <div class="cmp-head"><img src="${portrait(c, 500)}" alt="${esc(c.full)}"><div><h2>${esc(c.full)}</h2><p>${FLAG(c.cc)} ${c.y}</p></div></div>
-      <div class="cmp-fact" id="cmpF"><p>${esc(c.f[0])}</p><button class="chip" id="cmpNextF">😄 Mais um facto</button></div>
+      <div class="cmp-fact" id="cmpF"><p>${esc(f0)}</p><button class="chip" id="cmpNextF">😄 Mais um facto</button></div>
       <div class="cmp-tunes">${c.tunes.map(tid => `<button class="cmp-t" data-t="${tid}"><span class="cmp-eq"><i></i><i></i><i></i></span><b>${esc(CTUNES[tid].n)}</b><span>▶</span></button>`).join('')}</div>
       <div class="og-btns"><button class="big" id="cmpPlay">🎹 Toca com ${esc(c.n)}</button><button class="big ghost" id="cmpCond1">🪄 Maestro</button></div>
       <p class="art-src">Retrato: Wikimedia Commons</p>
     </div>`, { back: screenComposers });
-  $('#cmpNextF').onclick = () => { sfx.pop(); fi = (fi + 1) % c.f.length; $('#cmpF p').textContent = c.f[fi]; talk(c.f[fi]); };
+  $('#cmpNextF').onclick = () => { sfx.pop(); const f = cfNext(c); $('#cmpF p').textContent = f; talk(f); };
   $('.cmp-tunes').onclick = async e => {
     const b = e.target.closest('[data-t]'); if (!b) return;
     if (b.classList.contains('on')) { compStop(); b.classList.remove('on'); return; }
@@ -10290,7 +10320,7 @@ function screenComposer(id) {
   };
   $('#cmpPlay').onclick = () => { sfx.pop(); screenPlayWith(c.tunes[0]); };
   $('#cmpCond1').onclick = () => { sfx.pop(); screenConductor(c.tunes[0]); };
-  talk(`${c.full}. ${c.f[0]} Carrega numa melodia para a ouvires.`);
+  talk(`${c.full}. ${f0} Carrega numa melodia para a ouvires.`);
 }
 // guess who wrote the theme: three portraits
 function screenGuessComposer() {
@@ -10491,7 +10521,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '62';
+const APP_VER = '63';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -11182,7 +11212,7 @@ function readFineCheck() {
 // the card on the home screen: the fine charged today, or in the afternoon a reminder that today has no reading yet
 function readFineHTML() {
   if (!readFineOn() || !P.readFrom) return '';
-  const today = dayKey(), now = (P.readFines || []).filter(x => dayKey(new Date(x.at)) === today), done = readOn(today);
+  const today = dayKey(), now = (P.readFines || []).filter(x => !x.back && dayKey(new Date(x.at)) === today), done = readOn(today);
   if (now.length) {
     const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
     return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ["dia", "dias", "dias"])} sem leitura` : "Ontem não houve leitura"}: −${sum} ⭐</b><small>${done ? "Hoje já leste. Muito bem!" : "Lê hoje, e amanhã ficas com as tuas estrelas."}</small></span>${done ? '' : "<button class=\"chip\" id=\"rfGo\">📖 Ler</button>"}</div>`;
@@ -11340,6 +11370,324 @@ function bindArtGuide(root, x, img, ring) {
     talk(h + (/[.!?]$/.test(h) ? ' ' : '. ') + c.querySelector('.ag-p').textContent);
   };
 }
+
+/* ---------- museums: where each one is; the museums of the family's countries first, and a search ---------- */
+const MUS_CITY = {
+  Q180788: ['GB', RU('Лондон'), 'London', 'Londres'], Q160112: ['ES', RU('Мадрид'), 'Madrid', 'Madrid'], Q132783: ['RU', RU('Санкт-Петербург'), 'Saint Petersburg', 'São Petersburgo'],
+  Q19675: ['FR', RU('Париж'), 'Paris', 'Paris'], Q160236: ['US', RU('Нью-Йорк'), 'New York', 'Nova Iorque'], Q51252: ['IT', RU('Флоренция'), 'Florence', 'Florença'],
+  Q23402: ['FR', RU('Париж'), 'Paris', 'Paris'], Q214867: ['US', RU('Вашингтон'), 'Washington', 'Washington'], Q183334: ['RU', RU('Москва'), 'Moscow', 'Moscovo'],
+  Q95569: ['AT', RU('Вена'), 'Vienna', 'Viena'], Q211043: ['RU', RU('Санкт-Петербург'), 'Saint Petersburg', 'São Petersburgo'], Q165631: ['DE', RU('Берлин'), 'Berlin', 'Berlim'],
+  Q190804: ['NL', RU('Амстердам'), 'Amsterdam', 'Amesterdão'], Q224124: ['NL', RU('Амстердам'), 'Amsterdam', 'Amesterdão'], Q812285: ['DE', RU('Мюнхен'), 'Munich', 'Munique'],
+  Q653002: ['DE', RU('Дрезден'), 'Dresden', 'Dresden'], Q49133: ['US', RU('Бостон'), 'Boston', 'Boston'], Q866498: ['IT', RU('Флоренция'), 'Florence', 'Florença'],
+  Q3044768: ['FR', RU('Париж'), 'Paris', 'Paris'], Q150066: ['IT', RU('Милан'), 'Milan', 'Milão'], Q162111: ['DE', RU('Берлин'), 'Berlin', 'Berlim'],
+  Q239303: ['US', RU('Чикаго'), 'Chicago', 'Chicago'], Q731126: ['US', RU('Лос-Анджелес'), 'Los Angeles', 'Los Angeles'], Q338330: ['IT', RU('Венеция'), 'Venice', 'Veneza'],
+  Q4872: ['RU', RU('Москва'), 'Moscow', 'Moscovo'], Q649: ['RU', RU('Москва'), 'Moscow', 'Moscovo'], Q682827: ['US', RU('Нью-Йорк'), 'New York', 'Nova Iorque'],
+  Q188740: ['US', RU('Нью-Йорк'), 'New York', 'Nova Iorque'], Q290549: ['IT', RU('Неаполь'), 'Naples', 'Nápoles'], Q153306: ['PL', RU('Варшава'), 'Warsaw', 'Varsóvia'],
+  Q1051928: ['NL', RU('Оттерло'), 'Otterlo', 'Otterlo'], Q1327919: ['GB', RU('Лондон'), 'London', 'Londres'], Q8012: ['GB', RU('Дерби'), 'Derby', 'Derby'],
+  Q683074: ['IT', RU('Рим'), 'Rome', 'Roma'], Q1459037: ['GB', RU('Лондон'), 'London', 'Londres'], Q774940: ['VA', RU('Ватикан'), 'Vatican City', 'Vaticano'],
+  Q430682: ['GB', RU('Лондон'), 'London', 'Londres'], Q211262: ['PT', RU('Лиссабон'), 'Lisbon', 'Lisboa'], Q12110695: ['GB', RU('Лондон'), 'London', 'Londres'],
+  Q841506: ['IT', RU('Рим'), 'Rome', 'Roma'], Q163804: ['DE', RU('Франкфурт-на-Майне'), 'Frankfurt', 'Frankfurt'], Q671384: ['DK', RU('Копенгаген'), 'Copenhagen', 'Copenhaga'],
+  Q1586957: ['GB', RU('Порт-Санлайт'), 'Port Sunlight', 'Port Sunlight'], Q842858: ['SE', RU('Стокгольм'), 'Stockholm', 'Estocolmo'], Q221092: ['NL', RU('Гаага'), 'The Hague', 'Haia'],
+  Q169542: ['DE', RU('Гамбург'), 'Hamburg', 'Hamburgo'], Q377500: ['BE', RU('Брюссель'), 'Brussels', 'Bruxelas'], Q2638817: ['GB', RU('Манчестер'), 'Manchester', 'Manchester'],
+  Q1201549: ['US', RU('Детройт'), 'Detroit', 'Detroit'], Q1203458: ['IT', RU('Рим'), 'Rome', 'Roma'], Q1519002: ['FR', RU('Монпелье'), 'Montpellier', 'Montpellier'],
+  Q176251: ['ES', RU('Мадрид'), 'Madrid', 'Madrid'], Q1419555: ['CZ', RU('Прага'), 'Prague', 'Praga'], Q2946: ['FR', RU('Версаль'), 'Versailles', 'Versalhes'],
+  Q1132918: ['NO', RU('Осло'), 'Oslo', 'Oslo'], Q1499958: ['NL', RU('Гаага'), 'The Hague', 'Haia'], Q756098: ['PL', RU('Варшава'), 'Warsaw', 'Varsóvia'],
+  Q1140507: ['DK', RU('Копенгаген'), 'Copenhagen', 'Copenhaga'], Q1471477: ['BE', RU('Антверпен'), 'Antwerp', 'Antuérpia'], Q1700481: ['US', RU('Миннеаполис'), 'Minneapolis', 'Mineápolis'],
+  Q1770313: ['NO', RU('Берген'), 'Bergen', 'Bergen']
+};
+const musCC = k => (MUS_CITY[k] || [])[0] || '';
+const musCity = k => { const c = MUS_CITY[k]; return c ? c[LANG === 'ru' ? 1 : LANG === 'pt' ? 3 : 2] : ''; };
+function artMusList(box, D, P2) {
+  const cnt = {}; P2.forEach(x => { if (x.m) cnt[x.m] = (cnt[x.m] || 0) + 1; });
+  const home = famCountries();
+  const ms = Object.keys(cnt).filter(k => D.m[k] && (cnt[k] >= 3 || home.includes(musCC(k)))).sort((a, b) => cnt[b] - cnt[a]);
+  const row = k => { const top = P2.find(x => x.m === k), city = musCity(k);
+    return `<button class="art-row" data-mus="${k}" data-s="${esc((D.m[k] + ' ' + city).toLowerCase())}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(D.m[k])}</b><small>${city ? `${FLAG(musCC(k))} ${esc(city)} · ` : ''}${cnt[k]} ${plural(cnt[k], ["pintura", "pinturas", "pinturas"])}</small></span></button>`; };
+  const mine = ms.filter(k => home.includes(musCC(k))), rest = ms.filter(k => !mine.includes(k));
+  box.innerHTML = `<input class="art-find" id="musFind" type="search" placeholder="🔎 Procurar um museu ou uma cidade" autocomplete="off">
+    ${mine.length ? `<h2 class="art-h mus-h">🏠 Museus dos nossos países</h2><div class="art-list">${mine.map(row).join('')}</div><h2 class="art-h mus-h">🌍 Todos os museus do mundo</h2>` : ''}
+    <div class="art-list">${rest.map(row).join('')}</div><p class="lead mus-none" id="musNone" hidden>Não há esse museu. Experimenta outra palavra.</p>`;
+  $('#musFind').oninput = e => {
+    const q = e.target.value.trim().toLowerCase(); let n = 0;
+    $$('#artBox .art-row').forEach(r => { r.hidden = !!q && !r.dataset.s.includes(q); if (!r.hidden) n++; });
+    $$('#artBox .mus-h').forEach(h => { h.hidden = !!q; }); $('#musNone').hidden = n > 0;
+  };
+}
+
+/* ---------- something only a grown-up decides: the code of the family control panel, or a sum too hard for a child ---------- */
+let GROWN_OK = false;
+function grownUp(then, why) {
+  if (GROWN_OK) { then(); return; }
+  const pin = !!ROOT.pultPin, a = 23 + Math.floor(Math.random() * 67), b = 23 + Math.floor(Math.random() * 67);
+  const ov = document.createElement('div'); ov.className = 'overlay';
+  ov.innerHTML = `<div class="winbox gu-box" role="dialog" aria-label="Para adultos"><h2>👪 Para adultos</h2><p>${esc(why || "Isto é decidido pelos adultos.")}</p>
+    <p class="gu-q">${pin ? "O código do painel da família" : `${a} × ${b} = ?`}</p><input class="gu-in" id="guIn" type="${pin ? 'password' : 'number'}" inputmode="numeric" autocomplete="off" maxlength="6">
+    <p class="fe-err" id="guErr" role="alert"></p>
+    <div class="og-btns"><button class="big" id="guOk">Pronto</button><button class="big ghost" id="guNo">Cancelar</button></div></div>`;
+  document.body.append(ov); sfx.pop();
+  const inp = ov.querySelector('#guIn'); setTimeout(() => inp.focus(), 50);
+  const close = () => ov.remove();
+  ov.querySelector('#guNo').onclick = () => { sfx.tick(); close(); };
+  const ok = () => {
+    const v = inp.value.trim();
+    if (pin ? pinHash(v) === ROOT.pultPin : +v === a * b) { GROWN_OK = true; close(); sfx.good(); then(); return; }
+    ov.querySelector('#guErr').textContent = pin ? "Código errado." : "Não está certo. Conte outra vez (pode usar a calculadora)."; inp.value = ''; wiggle(inp);
+  };
+  ov.querySelector('#guOk').onclick = ok;
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') ok(); });
+}
+
+/* ---------- reading of past days: a grown-up writes in the pages read on a day that was not marked; the fine of that
+   day comes back ---------- */
+function readFineBack(k) {
+  let back = 0;
+  (P.readFines || []).forEach(x => { if (x.d === k && !x.back) { x.back = 1; back += x.s; } });
+  if (back) P.stars += back;
+  P.readDays = P.readDays || {}; P.readDays[k] = 1;
+  return back;
+}
+const dayLabel = k => { const d = new Date(k + 'T12:00:00'); return `${WEEK[(d.getDay() + 6) % 7]}, ${d.getDate()} ${MONTHS_GEN[d.getMonth()]}`; };
+const MONTHS_GEN = ["de janeiro", "de fevereiro", "de março", "de abril", "de maio", "de junho", "de julho", "de agosto", "de setembro", "de outubro", "de novembro", "de dezembro"];
+function bookBackfill(box) {
+  const tk = dayKey(), days = Array.from({ length: 14 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 14 + i); return dayKey(d); }).filter(k => k !== tk);
+  let sel = days.filter(k => !P.book.log[k]).pop() || null, pages = 0;
+  const pgW = n => plural(n, ["página", "páginas", "páginas"]);
+  const draw = () => {
+    box.innerHTML = `<p class="muted">Se ${esc(P.settings.name || "a criança")} leu${G("", '')} mas não marcou${G("", '')}, escolha o dia e quantas páginas. Isto não dá estrelas, mas a multa desse dia é devolvida.</p>
+      <div class="bk-days">${days.map(k => `<button class="chip ${k === sel ? 'sel' : ''} ${P.book.log[k] ? 'on' : ''}" data-k="${k}" ${P.book.log[k] ? 'disabled' : ''}>${P.book.log[k] ? '✓ ' : ''}${esc(dayLabel(k))}</button>`).join('')}</div>
+      ${sel ? `<div class="mins" id="bkPg">${[1, 2, 3, 5, 10, 20].map(n => `<button class="chip mn ${pages === n ? 'sel' : ''}" data-p="${n}">${n} ${pgW(n)}</button>`).join('')}</div>
+      <label class="prow" for="bkPgIn">Ou escreva <input id="bkPgIn" type="number" inputmode="numeric" min="1" max="500"></label>
+      <button class="big" id="bkSave">Registar para ${esc(dayLabel(sel))}</button>` : "<p class=\"muted\">Todos os dias das últimas duas semanas já estão marcados.</p>"}
+      <p class="fe-err" id="bkOut" role="status"></p>`;
+  };
+  draw();
+  box.onclick = e => {
+    const d = e.target.closest('[data-k]'); if (d && !d.disabled) { sel = d.dataset.k; pages = 0; sfx.tick(); draw(); return; }
+    const p = e.target.closest('[data-p]'); if (p) { pages = +p.dataset.p; $$('#bkPg .mn').forEach(x => x.classList.toggle('sel', x === p)); const i = $('#bkPgIn'); if (i) i.value = ''; sfx.tick(); return; }
+    if (e.target.closest('#bkSave')) {
+      const typed = Math.round(+($('#bkPgIn') || {}).value || 0), n = typed > 0 ? Math.min(500, typed) : pages;
+      if (!n || !sel) { $('#bkOut').textContent = "Escolha quantas páginas."; return; }
+      P.book.log[sel] = { pages: n, like: null, late: 1 };
+      const c = { ...dayCounts(sel) }; c.book = (c.book || 0) + 1; P.days[sel] = c;
+      const back = readFineBack(sel); save(); sfx.good();
+      const msg = `Registado: ${dayLabel(sel)}, ${n} ${pgW(n)}.${back ? ` A multa desse dia foi devolvida: +${back} ⭐` : ''}`;
+      const k = sel; sel = days.filter(x => !P.book.log[x]).pop() || null; pages = 0; draw();
+      $('#bkOut').textContent = msg; const sn = $('#starN'); if (sn) sn.textContent = P.stars;
+      $$('.d14').forEach(x => { if (x.dataset.k === k) { x.classList.add('on'); const i = x.querySelector('i'); if (i) i.innerHTML = ICON.star; } });
+    }
+  };
+}
+// «Для взрослых»: the fines of the last two weeks; one can be given back when the child did read (a paper book, at
+// granny's) and it was not marked
+function readFinesHTML() {
+  const L = (P.readFines || []).filter(x => !x.back && Date.now() - new Date(x.d + 'T12:00:00') < 15 * 864e5);
+  return L.length ? `<div class="rf-list" id="rfList"><p class="muted">Descontado por dias sem leitura. Se a criança leu mas não marcou, pode devolver a multa:</p>${L.map(x => `<div class="rf-row"><span>📖 ${esc(dayLabel(x.d))}: −${x.s} ⭐</span><button class="chip" data-rfb="${x.d}">↩ Devolver</button></div>`).join('')}</div>` : '';
+}
+function bindReadFines() {
+  const l = $('#rfList'); if (!l) return;
+  l.onclick = e => {
+    const b = e.target.closest('[data-rfb]'); if (!b) return;
+    grownUp(() => { const back = readFineBack(b.dataset.rfb); save(); const r = b.closest('.rf-row'); if (r) r.innerHTML = `<span>📖 ${esc(dayLabel(b.dataset.rfb))}: devolvido +${back} ⭐</span>`; }, "Só um adulto pode devolver as estrelas de um dia.");
+  };
+}
+
+/* ---------- composers: twelve facts each, the ones this child has not heard come first; «true or invented?» ---------- */
+const CF = { data: null, load: null };
+function cfLoad() { if (CF.load) return CF.load; return CF.load = fetch(SITE_ROOT + 'art/cfacts-' + LANG + '.json').then(r => r.ok ? r.json() : {}).catch(() => ({})).then(d => (CF.data = d || {})); }
+const cfOf = c => { const d = CF.data && CF.data[c.id]; return d && d.f && d.f.length ? d.f : c.f; };
+function cfNext(c) {
+  const fs = cfOf(c), all = P.cfSeen = P.cfSeen || {}, seen = all[c.id] = (all[c.id] || []).filter(i => i < fs.length);
+  let left = fs.map((_, i) => i).filter(i => !seen.includes(i));
+  if (!left.length) { seen.length = 0; left = fs.map((_, i) => i); }
+  const i = pickOne(left); seen.push(i); save();
+  return fs[i];
+}
+// a quiz of statements, each true or invented, with what is really true after the answer
+function screenTF({ title, key, items, back, again, n = 6 }) {
+  const t = newScreen(), qs = sample(items, Math.min(n, items.length)); let k = 0, ok = 0, busy = false;
+  shell(title, `<div class="tfq"><div class="tfq-head" id="tfH"></div><p class="tfq-s" id="tfS"></p>
+    <div class="og-btns tfq-b" id="tfB"><button class="big" data-v="1">👍 Verdade</button><button class="big ghost" data-v="0">🙃 Invenção</button></div>
+    <p class="al-w" id="tfW" hidden></p><div class="og-btns"><button class="big" id="tfNext" hidden>Seguinte</button></div></div>`, { back, guide: false });
+  const show = () => {
+    if (t !== tok) return;
+    const q = qs[k]; busy = false;
+    $('#tfH').innerHTML = `${q.img ? `<img src="${q.img}" alt="">` : `<span class="emo">${q.e || '🤔'}</span>`}<b>${esc(q.head || '')}</b><small>${k + 1} / ${qs.length}</small>`;
+    $('#tfS').textContent = q.s; $('#tfW').hidden = true; $('#tfNext').hidden = true;
+    $$('#tfB button').forEach(b => { b.disabled = false; b.classList.remove('ok', 'no'); });
+    talk(`${q.s} Verdade ou invenção?`);
+  };
+  $('#tfB').onclick = e => {
+    const b = e.target.closest('[data-v]'); if (!b || busy) return; busy = true;
+    const q = qs[k], right = (b.dataset.v === '1') === q.t;
+    if (right) { ok++; sfx.good(); } else tone(300, .2, 'sine', .13, 0, 210);
+    b.classList.add(right ? 'ok' : 'no'); $$('#tfB button').forEach(x => { x.disabled = true; });
+    const w = `${right ? "Certo!" : "Não acertaste" + G("", '') + '!'} ${q.t ? "É verdade." : "É invenção."} ${q.w}`;
+    $('#tfW').textContent = w; $('#tfW').hidden = false; $('#tfNext').hidden = false; talk(w);
+  };
+  $('#tfNext').onclick = () => {
+    sfx.pop(); k++;
+    if (k >= qs.length) { finish({ key, stars: ok >= qs.length - 1 ? 3 : ok >= qs.length / 2 ? 2 : 1, line: `Acertaste ${ok} de ${qs.length}!`, again, menu: back }); return; }
+    show();
+  };
+  show();
+}
+function screenCmpTF() {
+  if (!CF.data) { cfLoad().then(screenCmpTF); return; }
+  const items = COMPOSERS.flatMap(c => ((CF.data[c.id] || {}).tf || []).map(x => ({ ...x, head: c.n, img: portrait(c, 200) })));
+  if (!items.length) { screenComposers(); return; }
+  screenTF({ title: "Verdade ou invenção?", key: 'cmp-tf', items, back: screenComposers, again: screenCmpTF });
+}
+
+/* ---------- getting ready for a trip: a grown-up enters the place and the dates; the children count the days and learn
+   the words of the language there (said by the phone's voice in that language), facts, what happens there at that time
+   of the year, and a «true or invented?» quiz ---------- */
+const TRIP = { data: null, load: null };
+function tripLoad() {
+  if (TRIP.load) return TRIP.load;
+  return TRIP.load = fetch(SITE_ROOT + 'trips/trip-' + LANG + '.json').then(r => r.ok ? r.json() : Promise.reject(r.status)).then(d => (TRIP.data = d)).catch(e => { TRIP.load = null; throw e; });
+}
+const tripOf = () => { const f = fam(), t = f && f.trip; return t && t.to && t.to >= dayKey() ? t : null; };
+const tripDays = t => Math.round((new Date(t.from + 'T12:00:00') - new Date(dayKey() + 'T12:00:00')) / 864e5);
+function tripWhen(t) {
+  const d = tripDays(t);
+  return d > 1 ? `daqui a ${d} ${plural(d, ["dia", "dias", "dias"])}` : d === 1 ? "amanhã!" : d === 0 ? "hoje!" : "já estamos cá!";
+}
+function tripCardHTML() {
+  const t = tripOf(); if (!t || GPLAY || GUEST) return '';
+  return `<button class="trip-card" id="tripCard"><span class="emo">${esc(t.e || '✈️')}</span><span class="trip-t"><b>${esc(t.n)}: ${tripWhen(t)}</b><small>${tripDays(t) > 0 ? "a preparar: palavras, factos e o que lá acontece" : "palavras, factos e o que acontece aqui"}</small></span><span class="g-go">▶</span></button>`;
+}
+// the phone's own voice for the place's language; without one the word stays written with its hint
+function tripVoice(L) { try { const vs = speechSynthesis.getVoices(), p = L.slice(0, 2).toLowerCase(); return vs.find(v => v.lang === L) || vs.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(p)) || null; } catch (e) { return null; } }
+function tripSay(L, text) {
+  return new Promise(res => {
+    const v = 'speechSynthesis' in window ? tripVoice(L) : null; if (!v) { res(false); return; }
+    let done = false; const fin = ok => { if (!done) { done = true; res(ok); } };
+    try { hush(); const u = new SpeechSynthesisUtterance(text); u.lang = L; try { u.voice = v; } catch (e) {} u.rate = .8; u.onend = () => fin(true); u.onerror = () => fin(false); speechSynthesis.speak(u); setTimeout(() => fin(true), 1800 + text.length * 120); } catch (e) { fin(false); }
+  });
+}
+function tripMonths(t) { const out = new Set(), d = new Date(t.from + 'T12:00:00'), e = new Date(t.to + 'T12:00:00'); while (d <= e && out.size < 12) { out.add(d.getMonth() + 1); d.setDate(d.getDate() + 1); } return [...out]; }
+const MONTHS_IN = ["em janeiro", "em fevereiro", "em março", "em abril", "em maio", "em junho", "em julho", "em agosto", "em setembro", "em outubro", "em novembro", "em dezembro"];
+async function tripWiki(name) {
+  try {
+    const d = await fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`).then(r => r.ok ? r.json() : null);
+    const s = d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
+    return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, 4) : [];
+  } catch (e) { return []; }
+}
+function screenTrip(tab = 'words') {
+  const t = tripOf(); if (!t) { goHome(); return; }
+  const t0 = newScreen();
+  shell(t.n, `<div class="trip"><div class="trip-cd"><span class="emo">${esc(t.e || '✈️')}</span><b>${esc(t.n)}: ${tripWhen(t)}</b></div>
+    <div class="art-tabs" id="tpTabs">${[['words', "🗣️ Palavras"], ['facts', "⭐ Factos"], ['events', "📅 O que acontece"], ['quiz', "🤔 Verdade ou invenção"]].map(([k, n]) => `<button class="chip ${k === tab ? 'sel' : ''}" data-tab="${k}">${n}</button>`).join('')}</div>
+    <div id="tpBox"><p class="lead">A abrir…</p></div></div>`, { back: goHome });
+  $('#tpTabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (!b) return; sfx.pop(); if (b.dataset.tab === 'quiz') tripQuiz(); else screenTrip(b.dataset.tab); };
+  tripLoad().then(async D => {
+    if (t0 !== tok) return;
+    const box = $('#tpBox'), p = D.places[t.p], lc = p ? p.lang : t.lang, lg = lc && lc !== LANG ? D.langs[lc] : null;
+    if (tab === 'words') {
+      if (!lg) { box.innerHTML = "<p class=\"lead\">Lá fala-se a nossa língua, não é preciso aprender palavras!</p>"; return; }
+      const voice = !!tripVoice(lg.voice);
+      box.innerHTML = `<p class="lead">A língua de lá: <b>${esc(lg.name)}</b>. Toca numa palavra para ouvires como soa.</p>
+        ${voice ? '' : `<p class="muted">🔈 Este telemóvel não tem voz para ${esc(lg.name)}: lê a dica.</p>`}
+        <button class="big" id="tpGame">🎧 Jogo: ${voice ? "ouve" : "lê"} e escolhe</button>
+        <div class="tp-words">${lg.items.map((x, i) => `<button class="tp-w" data-i="${i}"><b>${esc(x.w)}</b>${x.lat !== x.w ? `<small>${esc(x.lat)}</small>` : ''}<span class="tp-h">🗣️ ${esc(x.hint)}</span><span class="tp-m">${esc(x.m)}</span></button>`).join('')}</div>`;
+      box.querySelector('.tp-words').onclick = e => { const b = e.target.closest('[data-i]'); if (!b) return; const x = lg.items[+b.dataset.i]; b.classList.add('on'); setTimeout(() => b.classList.remove('on'), 600); tripSay(lg.voice, x.w.replace('…', '')).then(ok => { if (!ok) talk(`${x.m}: ${x.hint}`); }); };
+      $('#tpGame').onclick = () => { sfx.pop(); tripWords(lg); };
+      talk(`Vamos aprender palavras! A língua de lá é o ${lg.name}. Toca numa palavra para ouvires como soa.`);
+    } else if (tab === 'facts') {
+      const fs = p ? p.facts : await tripWiki(t.n); if (t0 !== tok) return;
+      box.innerHTML = fs.length ? `<div class="ag">${fs.map(f => `<div class="art-note ag-c"><p class="ag-p">⭐ ${esc(f)}</p><button class="ag-say" aria-label="Ler em voz alta">${ICON.speaker}</button></div>`).join('')}</div>` : "<p class=\"lead\">Ainda não há factos sobre este sítio. Pergunta aos adultos o que há de interessante!</p>";
+      box.onclick = e => { const b = e.target.closest('.ag-say'); if (b) { sfx.tick(); talk(b.closest('.ag-c').textContent.replace('⭐', '').trim()); } };
+      if (fs.length) talk(fs[0]);
+    } else {
+      if (!p) { box.innerHTML = "<p class=\"lead\">Não há eventos para este sítio na lista. Descubram juntos que festas lá há!</p>"; return; }
+      const ms = tripMonths(t), now = p.events.filter(e => e.m.some(m => ms.includes(m))), other = p.events.filter(e => !now.includes(e));
+      const ev = e => `<div class="art-note tp-ev"><b>${esc(e.e)} ${esc(e.t)}</b><p>${esc(e.d)}</p><small>${e.m.length >= 12 ? "todo o ano" : e.m.map(m => MONTHS_IN[m - 1]).join(', ')}</small></div>`;
+      box.innerHTML = `${now.length ? `<h2 class="art-h">📅 Quando lá estiverem</h2><div class="ag">${now.map(ev).join('')}</div>` : "<p class=\"lead\">Nos vossos dias não há grandes festas, por isso podem ver tudo com calma!</p>"}
+        ${other.length ? `<h2 class="art-h">🗓️ Noutras alturas do ano</h2><div class="ag">${other.map(ev).join('')}</div>` : ''}`;
+      talk(now.length ? `Quando lá estiverem: ${now.map(e => e.t).join(', ')}.` : "Isto é o que lá acontece em várias alturas do ano.");
+    }
+  }, () => { if (t0 === tok) $('#tpBox').innerHTML = "<p class=\"lead\">É preciso internet para abrir a viagem. Tenta outra vez quando houver.</p>"; });
+}
+// listen (or read) and choose what it means
+function tripWords(lg) {
+  const t0 = newScreen(), voice = !!tripVoice(lg.voice), qs = sample(lg.items, 6); let k = 0, ok = 0, busy = false;
+  shell("Palavras para a viagem", `<div class="tfq"><p class="tfq-s" id="twQ"></p><div class="og-btns"><button class="big ghost" id="twAgain">🔊 Outra vez</button></div>
+    <div class="al-opts" id="twO"></div><p class="al-w" id="twW" hidden></p><div class="og-btns"><button class="big" id="twNext" hidden>Seguinte</button></div></div>`, { back: () => screenTrip('words'), guide: false });
+  if (!voice) $('#twAgain').hidden = true;
+  const show = () => {
+    if (t0 !== tok) return;
+    const q = qs[k], opts = shuffle([q, ...sample(lg.items.filter(x => x !== q), 2)]); busy = false;
+    $('#twQ').textContent = voice ? `${k + 1} / ${qs.length}: o que é que eu disse${G("", '')}?` : `${k + 1} / ${qs.length}: ${q.w}`;
+    $('#twO').innerHTML = opts.map(o => `<button class="pick-b" data-m="${esc(o.id)}">${esc(o.m)}</button>`).join('');
+    $('#twW').hidden = true; $('#twNext').hidden = true;
+    if (voice) tripSay(lg.voice, q.w.replace('…', ''));
+  };
+  $('#twAgain').onclick = () => tripSay(lg.voice, qs[k].w.replace('…', ''));
+  $('#twO').onclick = e => {
+    const b = e.target.closest('[data-m]'); if (!b || busy) return; busy = true;
+    const q = qs[k], right = b.dataset.m === q.id;
+    if (right) { ok++; sfx.good(); } else tone(300, .2, 'sine', .13, 0, 210);
+    $$('#twO .pick-b').forEach(x => { x.disabled = true; if (x.dataset.m === q.id) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
+    $('#twW').textContent = `${q.w} — ${q.m} (${q.hint})`; $('#twW').hidden = false; $('#twNext').hidden = false;
+  };
+  $('#twNext').onclick = () => {
+    sfx.pop(); k++;
+    if (k >= qs.length) { finish({ key: 'trip-words', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: `Sabes ${ok} de ${qs.length} palavras para a viagem!`, again: () => tripWords(lg), menu: () => screenTrip('words') }); return; }
+    show();
+  };
+  show();
+}
+function tripQuiz() {
+  const t = tripOf(); if (!t) { goHome(); return; }
+  tripLoad().then(D => {
+    const p = D.places[t.p];
+    if (!p || !p.tf || !p.tf.length) { screenTrip('facts'); return; }
+    screenTF({ title: `${t.e || '✈️'} ${t.n}`, key: 'trip-quiz', items: p.tf.map(x => ({ ...x, head: t.n, e: t.e })), back: () => screenTrip('facts'), again: tripQuiz, n: p.tf.length });
+  }, () => screenTrip('facts'));
+}
+// «Для взрослых»: the trip of the family
+function tripSetHTML() {
+  const f = fam(), t = f && f.trip;
+  return `<section class="psec"><h2>✈️ Viagem</h2><p class="muted">Indique para onde e quando vão: as crianças veem a contagem decrescente e aprendem palavras locais, factos e o que lá acontece nesses dias.</p>
+    ${t ? `<p>${esc(t.e || '✈️')} <b>${esc(t.n)}</b> · ${esc(t.from)} — ${esc(t.to)}</p>` : ''}
+    <div class="prow-btns"><button class="big ghost" id="tripSetBtn">${t ? "Alterar a viagem" : "＋ Adicionar uma viagem"}</button></div></section>`;
+}
+function screenTripSet(back) {
+  const t0 = newScreen(), f = fam(), cur = (f && f.trip) || {};
+  back = back || (() => screenParents());
+  shell("Viagem", "<p class=\"lead\">A abrir a lista de sítios…</p>", { back, guide: false, raw: true });
+  tripLoad().then(D => {
+    if (t0 !== tok) return;
+    const pl = Object.entries(D.places).sort((a, b) => a[1].cc.localeCompare(b[1].cc) || a[1].name.localeCompare(b[1].name));
+    $('#stage').innerHTML = `<div class="trip-set parents">
+      <section class="psec"><p>Para onde e quando vão? As crianças recebem a contagem decrescente, palavras da língua local, factos e o que lá acontece nesses dias.</p>
+      <label class="prow" for="tpPlace">Para onde <select id="tpPlace">${pl.map(([id, p]) => `<option value="${id}" ${cur.p === id ? 'selected' : ''}>${FLAG(p.cc)} ${esc(p.name)}</option>`).join('')}<option value="" ${cur.n && !cur.p ? 'selected' : ''}>✏️ Outro sítio…</option></select></label>
+      <div id="tpOther" hidden><label class="prow" for="tpName">Nome do sítio <input id="tpName" maxlength="40" autocomplete="off" value="${esc(cur.p ? '' : cur.n || '')}"></label>
+        <label class="prow" for="tpLang">Língua de lá <select id="tpLang"><option value="">a nossa língua</option>${Object.entries(D.langs).map(([k, l]) => `<option value="${k}" ${cur.lang === k ? 'selected' : ''}>${esc(l.name)}</option>`).join('')}</select></label></div>
+      <label class="prow" for="tpFrom">Partida <input id="tpFrom" type="date" value="${esc(cur.from || '')}" min="${dayKey()}"></label>
+      <label class="prow" for="tpTo">Regresso <input id="tpTo" type="date" value="${esc(cur.to || '')}" min="${dayKey()}"></label>
+      <p class="fe-err" id="tpErr" role="alert"></p>
+      <div class="prow-btns"><button class="big" id="tpSave">✈️ Guardar</button>${f.trip ? "<button class=\"big ghost\" id=\"tpDel\">Apagar a viagem</button>" : ''}</div>
+      <p class="muted">A viagem fica guardada só neste telemóvel.</p></section></div>`;
+    const other = () => { $('#tpOther').hidden = $('#tpPlace').value !== ''; };
+    $('#tpPlace').onchange = other; other();
+    $('#tpSave').onclick = () => {
+      const id = $('#tpPlace').value, p = D.places[id], from = $('#tpFrom').value, to = $('#tpTo').value || from, n = p ? p.name : cleanS($('#tpName').value, 40);
+      const err = x => { $('#tpErr').textContent = x; };
+      if (!n) { err("Escreva para onde vão."); return; }
+      if (!/^\d{4}-\d\d-\d\d$/.test(from)) { err("Indique quando partem."); return; }
+      if (to < from) { err("O regresso não pode ser antes da partida."); return; }
+      if (to < dayKey()) { err("Esta viagem já passou."); return; }
+      f.trip = { p: p ? id : '', n, e: p ? p.e : '✈️', lang: p ? p.lang : $('#tpLang').value, from, to }; save(); sfx.good(); back();
+    };
+    if ($('#tpDel')) $('#tpDel').onclick = () => { delete f.trip; save(); sfx.pop(); back(); };
+  }, () => { if (t0 === tok) $('#stage').innerHTML = "<p class=\"lead\">A lista de sítios precisa de internet.</p>"; });
+}
+GAMES.push(
+  { id: 'cmp-tf', name: "Verdade ou invenção?", sub: "sobre compositores", ico: () => pic('🤔'), bg: 'var(--t-yellow)', go: () => screenCmpTF(), grp: 4, also: [13] },
+  { id: 'trip', name: "A preparar a viagem", sub: () => { const t = tripOf(); return t ? `${t.n}: ${tripWhen(t)}` : ''; }, ico: () => pic('✈️'), bg: 'var(--t-blue)', go: () => screenTrip(), grp: 10, hide: () => !tripOf() }
+);
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
    links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
