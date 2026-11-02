@@ -1698,6 +1698,13 @@ body.pv-on #app{padding-top:52px}
 .pv-test{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--plum)}
 .adm-k{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px dashed var(--line)}.adm-k small{color:var(--ink-soft);font:700 14px/1.3 var(--f-body)}
 .adm-f{gap:6px}.share-box{display:flex;flex-direction:column;gap:4px;margin:4px 0}.pv-adm{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
+.ml{display:flex;flex-direction:column;gap:14px;width:min(100%,720px);margin:0 auto}
+.ml-card{background:var(--paper);color:var(--ink);border-radius:22px;padding:14px 16px;box-shadow:0 5px 0 var(--line);display:flex;flex-direction:column;gap:8px}.ml-card h3{margin:0;font:800 19px/1.2 var(--f-body)}.ml-card p{margin:0;font:600 16px/1.4 var(--f-body)}
+.ml-words{display:flex;flex-wrap:wrap;gap:8px}.ml-hl{color:var(--berry)}.ml-wd{display:inline;white-space:nowrap}
+.ml-feel{background:var(--t-yellow);color:var(--ink);border-radius:22px;padding:14px 16px;font:600 16px/1.4 var(--f-body)}.ml-feel p{margin:6px 0 0}
+.ml-step{margin:0;text-align:center;font:800 15px var(--f-body);color:var(--ink-soft)}.ml-pic{display:grid;place-items:center;font-size:96px}.ml-pic .pic{width:120px;height:120px}
+.ml-say{display:flex;flex-direction:column;gap:10px}.ml-w{display:flex;align-items:center;gap:12px;border:0;border-radius:20px;padding:12px 16px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line);font:800 24px/1.1 var(--f-body);cursor:pointer;text-align:left}
+.ml-w b{flex:1}.ml-w.done{background:var(--t-green)}.ml-w .lang-f{font-size:28px}.ml-flags{justify-content:center}.ml-langs{display:flex;flex-direction:column;gap:6px}
 </style>
 </head>
 <body>
@@ -1892,6 +1899,7 @@ function lessonPlan(id) {
       const art = s === 0 ? ARTIC_L.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC_L.length);
       art.forEach(i => steps.push({ key: 'artic:' + ARTIC_L[i].id, kind: 'artic', name: ARTIC_L[i].name, run: () => screenArtic(i, true) }));
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
+      if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
     } else if (id === 'read') ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read')));
     else steps.push(gameStep('book', 'book'));
     return steps;
@@ -1906,6 +1914,7 @@ function lessonPlan(id) {
     const pri = ['r-end', 'sh-sort', 'beauty', 'sh-syll', 'sh-house'];
     steps.push(gameStep(pri[(n + s) % pri.length], 'game'));
     steps.push(gameStep(games[o % games.length].id, 'game'));
+    if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   } else if (id === 'read') {
     ['abc-find', 'abc-first', 'read-merge', (n + s) % 2 ? 'read-pick' : 'read-words'].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
@@ -7462,6 +7471,7 @@ function screenParents(focus) {
     </div>`, { guide: false, back: PAR_BACK });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   const exS = $('#expState'); if (exS) { exS.insertAdjacentHTML('afterend', shareHTML('shareIn')); bindShareBox('shareIn'); }
+  const nmL = $('#nameIn') && $('#nameIn').closest('label'); if (nmL) { nmL.insertAdjacentHTML('afterend', mlLangsHTML('mlLangsIn', P)); bindMlLangs('mlLangsIn', P); }
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
   vs(); later(vs, 1200);
   const fillDev = () => {
@@ -8122,6 +8132,7 @@ function speechPlanMine(n, s) {
   const ok = [...new Set(pool)].filter(id => GAMES.some(g => g.id === id) && !gameOff(id));
   const list = ok.length ? ok : ['my-words'];
   [...new Set([list[o % list.length], list[(o + 1) % list.length]])].forEach(id => steps.push(gameStep(id, 'game')));
+  if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   return steps;
 }
 
@@ -8205,6 +8216,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     }).join('');
   };
   drawSnd(); drawLikes(); drawMods();
+  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('afterend', `<section class="psec">${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
   const resuggest = () => { if (!modsTouched) { mods = suggestMods(track, snd, likes); drawMods(); } };
   $('#ksSnd').onclick = e => {
     const b = e.target.closest('[data-snd]'); if (!b) return; const k = b.dataset.snd; sfx.tick();
@@ -10401,7 +10413,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '59';
+const APP_VER = '60';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -10762,6 +10774,165 @@ function screenAdmin() {
   const run = () => adminPoll().then(n => { if (t !== tok) return; $('#adm').innerHTML = draw(); bind(); $('#admOut').textContent = n ? `Новых сводок: ${n}` : 'Новых сводок нет'; }, () => { if (t === tok) $('#admOut').textContent = 'Не получилось открыть сводки'; });
   bind(); run();
 }
+
+/* ---------- «Мои языки»: speech practice that uses every language a child speaks ---------- */
+// One sound lives differently in each language: the Russian Р trills with the tongue tip, the Portuguese rr and the
+// German R roll in the throat, the English r does not trill at all. A child who feels the difference controls the
+// tongue better in each of them. Words and their sounds stay as they are in every build of the app (RU keeps them).
+const ML_LANGS = [['ru', '🇷🇺', RU('Русский'), 'ru-RU'], ['pt', '🇵🇹', RU('Português'), 'pt-PT'], ['en', '🇬🇧', RU('English'), 'en-GB'], ['de', '🇩🇪', RU('Deutsch'), 'de-DE']];
+const mlInfo = c => ML_LANGS.find(x => x[0] === c) || ML_LANGS[0];
+// the same thing in four languages; c: the words sound alike (good for «guess the language»)
+const ML_WORDS = JSON.parse(RU(`[
+["🌹","роза","rosa","rose","Rose",1],["🐟","рыба","peixe","fish","Fisch",0],["🦒","жираф","girafa","giraffe","Giraffe",1],["🦓","зебра","zebra","zebra","Zebra",1],
+["🌞","солнце","sol","sun","Sonne",0],["🍫","шоколад","chocolate","chocolate","Schokolade",1],["🐯","тигр","tigre","tiger","Tiger",1],["🦁","лев","leão","lion","Löwe",0],
+["🍋","лимон","limão","lemon","Zitrone",0],["🚀","ракета","foguetão","rocket","Rakete",0],["⚽","мяч","bola","ball","Ball",0],["🐭","мышка","rato","mouse","Maus",0],
+["🦋","бабочка","borboleta","butterfly","Schmetterling",0],["🍉","арбуз","melancia","watermelon","Wassermelone",0],["🌙","луна","lua","moon","Mond",0],["🎵","музыка","música","music","Musik",1],
+["🐸","лягушка","rã","frog","Frosch",0],["🍓","клубника","morango","strawberry","Erdbeere",0],["🧀","сыр","queijo","cheese","Käse",0],["🦊","лиса","raposa","fox","Fuchs",0],
+["🐻","медведь","urso","bear","Bär",0],["🌧️","дождь","chuva","rain","Regen",0],["🏠","дом","casa","house","Haus",0],["🐶","собака","cão","dog","Hund",0],
+["🍎","яблоко","maçã","apple","Apfel",0],["🌳","дерево","árvore","tree","Baum",0],["🚂","поезд","comboio","train","Zug",0],["🐑","овечка","ovelha","sheep","Schaf",0],
+["🎂","торт","bolo","cake","Kuchen",0],["🍌","банан","banana","banana","Banane",1],["🏫","школа","escola","school","Schule",1],["⭐","звезда","estrela","star","Stern",0],
+["👟","ботинок","sapato","shoe","Schuh",0],["⏰","часы","relógio","clock","Uhr",0],["🐍","змея","cobra","snake","Schlange",0],["🌸","цветок","flor","flower","Blume",0],
+["💡","лампа","lâmpada","lamp","Lampe",1],["📻","радио","rádio","radio","Radio",1],["🐊","крокодил","crocodilo","crocodile","Krokodil",1]
+]`)).map(([e, ru, pt, en, de, c]) => ({ e, w: { ru, pt, en, de }, c: !!c }));
+// the letters of each sound in each language
+const ML_HL = {
+  r: { ru: /[рР]/g, pt: /rr|r/gi, en: /r/gi, de: /r/gi },
+  l: { ru: /[лЛ]/g, pt: /l(?!h)/gi, en: /l/gi, de: /l/gi },
+  sh: { ru: /[шжчщШЖЧЩ]/g, pt: /ch|x|j|g(?=[eéií])/gi, en: /sh|ch|j/gi, de: /t?sch|^s(?=[tp])/gi },
+  sz: { ru: /[сзСЗ]/g, pt: /ss|ç|s|z|c(?=[eéií])/gi, en: /s|z/gi, de: /ss|ß|s|z/gi }
+};
+const mlHas = (snd, c, w) => { const re = (ML_HL[snd] || {})[c]; if (!re) return false; re.lastIndex = 0; return re.test(w); };
+const mlHl = (snd, c, w) => { const re = (ML_HL[snd] || {})[c]; return `<span class="ml-wd">${re ? esc(w).replace(re, m => `<b class="ml-hl">${m}</b>`) : esc(w)}</span>`; };
+// how the sound is made in each language, and what to feel
+const ML_TIPS = {
+  r: { ru: 'Кончик языка дрожит за верхними зубами: р-р-р, как моторчик.', pt: 'Между гласными r — один быстрый удар кончиком языка: cara, para. А rr и r в начале слова рычат в горле: rato, carro.', en: 'Язык не дрожит и не касается нёба, губы чуть вперёд: red, rain. В конце слова r почти не слышно: car, star.', de: 'R рычит сзади, в горле, как полоскание: Rose, rot. В конце слова оно почти «а»: Mutter, Vater.',
+    feel: 'Положи ладошку на горло и скажи «рыба», потом «rato» и «Rose». Где дрожит? В русском — кончик языка спереди, в португальском rr и в немецком — горло сзади. В английском не дрожит ничего.' },
+  l: { ru: 'Твёрдое Л: кончик языка упирается в верхние зубы, спинка языка опущена: лапа, стол. Мягкое ЛЬ — спинка поднята: лис.', pt: 'В начале слова l светлое, мягкое: lua, leite. В конце слова тёмное, почти как «у»: sol, Portugal.', en: 'В начале слова l светлое: lion, leg. В конце — тёмное, глубже: ball, apple.', de: 'Немецкое l всегда светлое и лёгкое, даже в конце слова: Löwe, Ball.',
+    feel: 'Скажи «стол», «sol», «ball» и «Ball». Где Л в конце твёрдое и тёмное, а где лёгкое? Послушай, как меняется звук.' },
+  sh: { ru: 'Ш: губы бубликом, язык чашечкой, звук твёрдый и шумный: шапка, мышка. Ж — то же самое с голосом.', pt: 'Ch и x мягче русского Ш: chuva, peixe. J — как Ж: janela. А s в конце слова в Португалии тоже звучит как ш: dois, três.', en: 'Sh: губы вперёд, звук мягкий: ship, fish. Ch — коротко «тч»: cheese, chair.', de: 'Sch: губы сильно вперёд, трубочкой: Schuh, Fisch. А st и sp в начале слова звучат как «шт» и «шп»: Stern, Spiel.',
+    feel: 'Скажи «шапка», «chuva», «ship» и «Schuh». Где губы уходят дальше всего вперёд? Где звук твёрже, а где мягче?' },
+  sz: { ru: 'С: кончик языка за нижними зубами, улыбка, холодный ветерок: сок, сова. З — с голосом: зебра, зонт.', pt: 'S в начале слова — С: sol, sapo. S между гласными — З: casa, rosa. Z — тоже З: zebra.', en: 'S — как С: sun, snake. Z — как З: zoo, zebra. В конце слова s часто звучит как З: dogs.', de: 'S перед гласной звучит как З: Sonne, Saft. Ss и ß — как С: Wasser, Fuß. А немецкое Z — это Ц: Zebra, Zoo!',
+    feel: 'Скажи «зебра» по-русски, по-английски и по-немецки. В немецком вместо З получается Ц! Где ещё одна буква звучит по-разному?' }
+};
+const ML_SND = [['r', 'Р'], ['l', 'Л'], ['sh', 'Ш'], ['sz', 'С и З']];
+// the languages a child speaks: set by the parents; our first family's children speak several
+function myLangs(pr = P) {
+  const st = pr.settings;
+  if (Array.isArray(st.langs) && st.langs.length) return st.langs.filter(c => ML_LANGS.some(x => x[0] === c));
+  const id = Object.keys(ROOT.profiles).find(k => ROOT.profiles[k] === pr);
+  if (fam() && fam().id === 'main' && id === 'vera') return ['ru', 'pt', 'en', 'de'];
+  if (fam() && fam().id === 'main' && id === 'sava') return ['ru', 'pt', 'en'];
+  return [ML_LANGS.some(x => x[0] === LANG) ? LANG : 'ru'];
+}
+const mlOn = () => myLangs().length >= 2;
+const mlSounds = () => { const s = mySounds().filter(k => ML_TIPS[k]); return s.length ? s : ['r']; };
+// a voice for each language from the phone; without one, the word is only shown
+const mlVoice = c => { try { const L = mlInfo(c)[3], vs = speechSynthesis.getVoices(); return vs.find(v => v.lang === L) || vs.find(v => v.lang.replace('_', '-').toLowerCase().startsWith(c)) || null; } catch (e) { return null; } };
+function sayIn(c, text, rate = .8) {
+  return new Promise(res => {
+    const v = 'speechSynthesis' in window ? mlVoice(c) : null; if (!v) { res(false); return; }
+    let done = false; const fin = ok => { if (!done) { done = true; res(ok); } };
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = mlInfo(c)[3]; try { u.voice = v; } catch (e) {} u.rate = rate; u.onend = () => fin(true); u.onerror = () => fin(false); setTimeout(() => fin(true), 1800 + text.length * 160); speechSynthesis.speak(u); } catch (e) { fin(false); }
+  });
+}
+const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in window && !mlVoice(c)); return no.length ? `<p class="muted ml-nov">🔈 На этом телефоне нет голоса для: ${no.map(c => mlInfo(c)[2]).join(', ')}. Слова видны, а прослушать их можно, если добавить голос: на iPhone — Настройки → Универсальный доступ → Устный контент → Голоса.</p>` : ''; };
+// the parents' choice of the child's languages, in the settings and in the setup of a new child
+const mlLangsHTML = (id, pr) => { const on = myLangs(pr); return `<div class="ml-langs"><p class="prow">На каких языках говорит ${esc(pr.settings.name || '')}? Логопедия будет использовать все.</p><div class="lang-row" id="${id}">${ML_LANGS.map(([c, f, n]) => `<button class="pick-b lang-b ${on.includes(c) ? 'sel' : ''}" data-ml="${c}"><span class="lang-f">${f}</span>${n}</button>`).join('')}</div></div>`; };
+function bindMlLangs(id, pr) {
+  const row = document.getElementById(id); if (!row) return;
+  row.onclick = e => {
+    const b = e.target.closest('[data-ml]'); if (!b) return;
+    const cur = myLangs(pr), c = b.dataset.ml, next = cur.includes(c) ? cur.filter(x => x !== c) : [...cur, c];
+    if (!next.length) return;
+    pr.settings.langs = ML_LANGS.map(x => x[0]).filter(x => next.includes(x)); save(); sfx.tick();
+    row.querySelectorAll('[data-ml]').forEach(x => x.classList.toggle('sel', pr.settings.langs.includes(x.dataset.ml)));
+  };
+}
+// 1. one sound, different languages: how it is made in each of the child's languages, words to hear and say
+function screenMlSound(sndArg) {
+  newScreen();
+  const langs = myLangs(), sounds = mlSounds();
+  let snd = sounds.includes(sndArg) ? sndArg : sounds[0];
+  const draw = () => {
+    const T = ML_TIPS[snd], words = c => ML_WORDS.filter(x => mlHas(snd, c, x.w[c])).slice(0, 4);
+    return `${sounds.length > 1 ? `<div class="lang-row" id="mlSnd">${ML_SND.filter(x => sounds.includes(x[0])).map(([k, n]) => `<button class="pick-b ${k === snd ? 'sel' : ''}" data-snd="${k}">${n}</button>`).join('')}</div>` : ''}
+      ${langs.map(c => { const [, f, n] = mlInfo(c); return `<div class="ml-card"><h3>${f} ${n}</h3><p>${T[c]}</p><div class="ml-words">${words(c).map(x => `<button class="chip" data-say="${c}" data-w="${esc(x.w[c])}">${x.e} ${mlHl(snd, c, x.w[c])} 🔊</button>`).join('')}</div></div>`; }).join('')}
+      <div class="ml-feel"><b>✋ Почувствуй разницу</b><p>${T.feel}</p></div>
+      ${mlNoVoice(langs)}
+      <div class="prow-btns"><button class="big" id="mlDone">${G('Я попробовала!', 'Я попробовал!')}</button></div>`;
+  };
+  shell('Один звук — разные языки', `<div class="ml" id="ml">${draw()}</div>`, { guide: false });
+  const box = $('#ml');
+  box.onclick = e => {
+    const s = e.target.closest('[data-snd]'), w = e.target.closest('[data-say]');
+    if (s) { snd = s.dataset.snd; sfx.tick(); box.innerHTML = draw(); return; }
+    if (w) { sfx.pop(); sayIn(w.dataset.say, w.dataset.w); return; }
+    if (e.target.closest('#mlDone')) finish({ key: 'ml-sound', stars: 3, line: `Ты ${G('услышала', 'услышал')}, как один звук живёт в разных языках!`, again: () => screenMlSound(snd) });
+  };
+}
+// 2. say it in all your languages: a picture, its name in each language, the sound highlighted
+function screenMlSay() {
+  const t = newScreen(), langs = myLangs(), sounds = mlSounds();
+  const score = x => sounds.reduce((a, s) => a + langs.filter(c => mlHas(s, c, x.w[c])).length, 0);
+  const deck = shuffle(ML_WORDS.filter(x => score(x) >= 2)).slice(0, 6);
+  let k = 0, said = new Set();
+  const draw = () => {
+    const x = deck[k];
+    return `<p class="ml-step">${k + 1} / ${deck.length}</p><div class="ml-pic">${pic(x.e)}</div>
+      <div class="ml-say">${langs.map(c => { const [, f] = mlInfo(c), hs = sounds.find(s => mlHas(s, c, x.w[c])); return `<button class="ml-w ${said.has(c) ? 'done' : ''}" data-l="${c}"><span class="lang-f">${f}</span><b>${hs ? mlHl(hs, c, x.w[c]) : esc(x.w[c])}</b><span class="ml-act">${said.has(c) ? '✅' : '🔊'}</span></button>`; }).join('')}</div>
+      <p class="muted">Нажми на слово — послушай и скажи сам${G('а', '')}. Выделены звуки, которые ты тренируешь.</p>
+      ${mlNoVoice(langs)}`;
+  };
+  shell('Скажи на всех языках', `<div class="ml" id="ml">${draw()}</div>`, { guide: false });
+  talk(`Скажи это слово на всех своих языках!`);
+  const box = $('#ml');
+  box.onclick = async e => {
+    const b = e.target.closest('[data-l]'); if (!b) return;
+    const c = b.dataset.l; sfx.pop(); await sayIn(c, deck[k].w[c]); if (t !== tok) return;
+    said.add(c); b.classList.add('done'); b.querySelector('.ml-act').textContent = '✅';
+    if (said.size === langs.length) {
+      sfx.good();
+      later(() => { k++; said = new Set(); if (k >= deck.length) finish({ key: 'ml-say', stars: 3, line: `${deck.length} слов на ${langs.length} языках! Ты ${G('настоящая полиглотка', 'настоящий полиглот')}.`, again: () => screenMlSay() }); else box.innerHTML = draw(); }, 700);
+    }
+  };
+}
+// 3. guess the language: a word that sounds alike in several languages, said in one of them
+const ML_R_SHORT = { ru: 'русское Р дрожит кончиком языка', pt: 'португальское r: в начале слова рычит в горле, между гласными — один удар', en: 'английское r мягкое, язык не дрожит', de: 'немецкое R рычит в горле' };
+function screenMlGuess() {
+  const t = newScreen(), langs = myLangs().filter(c => !('speechSynthesis' in window) || mlVoice(c));
+  if (langs.length < 2) {
+    shell('Угадай язык', `<div class="ml"><p class="lead">Для этой игры нужны голоса хотя бы двух твоих языков.</p>${mlNoVoice(myLangs())}</div>`, { guide: false });
+    return;
+  }
+  const deck = shuffle(ML_WORDS.filter(x => x.c)).slice(0, 8).map(x => ({ x, c: pickOne(langs) }));
+  let k = 0, ok = 0, busy = false;
+  const draw = () => `<p class="ml-step">${k + 1} / ${deck.length}</p><div class="ml-pic">${pic(deck[k].x.e)}</div>
+    <div class="prow-btns"><button class="big ghost" id="mlAgain">🔊 Ещё раз</button></div>
+    <p class="lead">На каком языке это сказали?</p>
+    <div class="lang-row ml-flags">${langs.map(c => { const [, f, n] = mlInfo(c); return `<button class="pick-b lang-b" data-g="${c}"><span class="lang-f">${f}</span>${n}</button>`; }).join('')}</div>
+    <div id="mlOut"></div>`;
+  shell('Угадай язык', `<div class="ml" id="ml">${draw()}</div>`, { guide: false });
+  const box = $('#ml'), play = () => sayIn(deck[k].c, deck[k].x.w[deck[k].c]);
+  later(play, 500);
+  box.onclick = async e => {
+    if (e.target.closest('#mlAgain')) { sfx.pop(); play(); return; }
+    const b = e.target.closest('[data-g]'); if (!b || busy) return;
+    busy = true;
+    const d = deck[k], right = b.dataset.g === d.c; if (right) { ok++; sfx.good(); } else { sfx.tick(); b.classList.add('no'); }
+    box.querySelectorAll('[data-g]').forEach(x => { x.disabled = true; if (x.dataset.g === d.c) x.classList.add('sel'); });
+    const rr = langs.filter(c => mlHas('r', c, d.x.w[c]));
+    $('#mlOut').innerHTML = `<div class="ml-card"><p>${right ? '✅ Да!' : `Это был ${mlInfo(d.c)[1]} ${mlInfo(d.c)[2]}.`}</p><div class="ml-words">${langs.map(c => `<button class="chip" data-say="${c}" data-w="${esc(d.x.w[c])}">${mlInfo(c)[1]} ${mlHl('r', c, d.x.w[c])} 🔊</button>`).join('')}</div>${rr.length > 1 ? `<p class="muted">${rr.map(c => ML_R_SHORT[c]).join('; ')}.</p>` : ''}</div><div class="prow-btns"><button class="big" id="mlNext">Дальше</button></div>`;
+    box.querySelectorAll('[data-say]').forEach(x => x.onclick = ev => { ev.stopPropagation(); sayIn(x.dataset.say, x.dataset.w); });
+    $('#mlNext').onclick = ev => { ev.stopPropagation(); sfx.pop(); k++; busy = false; if (k >= deck.length) finish({ key: 'ml-guess', stars: ok >= 7 ? 3 : ok >= 4 ? 2 : 1, line: `Угадано ${ok} из ${deck.length}. У тебя чуткие уши!`, again: () => screenMlGuess() }); else { box.innerHTML = draw(); later(play, 400); } };
+  };
+}
+GAMES.push(
+  { id: 'ml-sound', hide: () => !mlOn(), name: 'Один звук — разные языки', sub: 'как звук живёт в каждом твоём языке', ico: () => pic('🌍'), bg: 'var(--t-mint)', go: () => screenMlSound(), grp: 14 },
+  { id: 'ml-say', hide: () => !mlOn(), name: 'Скажи на всех языках', sub: () => myLangs().map(c => ML_WORDS[0].w[c]).join(', '), ico: () => pic('🗣️'), bg: 'var(--t-yellow)', go: () => screenMlSay(), grp: 14 },
+  { id: 'ml-guess', hide: () => !mlOn(), name: 'Угадай язык', sub: 'послушай слово — чей это язык?', ico: () => pic('👂'), bg: 'var(--t-lilac)', go: () => screenMlGuess(), grp: 14 }
+);
+SECTIONS.splice(1, 0, { g: 14, h: 'Мои языки', p: 'один звук в разных языках: почувствуй разницу' });
+HOME_TABS.find(x => x.id === 'speak').g.splice(1, 0, 14);
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
    links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
