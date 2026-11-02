@@ -2650,7 +2650,6 @@ function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Teste do zero · <button id="demoAgain">de novo</button> · <a href="${SITE_ROOT}">sair</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
-  if (ADMIN_HASH) { const d = ADMIN_HASH; ADMIN_HASH = ''; adminActivate(d); return; }
   if (!PULT_BOOTED) { PULT_BOOTED = true; if (ROOT.parentPhone && !GUEST && !DEMO && !LIGA_HASH && fam() && KIDS.length) { screenPult(); return; } }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
@@ -10355,7 +10354,8 @@ function screenPult() {
   const draw = () => `${ROOT.parentPhone === undefined ? `<section class="psec pv-who"><h2>📱 Este telemóvel é seu?</h2>
       <p>Se for, a aplicação vai abrir no painel e aqui não vai pedir o código. Se as crianças jogam neste telemóvel, mantenha o código.</p>
       <div class="prow-btns"><button class="big" id="pvMine">Sim, é o meu telemóvel</button><button class="big ghost" id="pvKids">As crianças jogam aqui</button></div></section>` : ''}
-    ${ROOT.adminKey ? "<button class=\"lg-cta pv-adm\" id=\"pvAdm\"><span class=\"emo\">👑</span><span class=\"lg-t\"><b>Todas as famílias</b><small>todos os que jogam o Tagarelas e como estão a correr</small></span><span class=\"g-go\">▶</span></button>" : ''}
+    ${ROOT.adminKey && !authorLive() ? authorWaitHTML() : ''}
+    ${ROOT.adminKey && authorLive() ? "<button class=\"lg-cta pv-adm\" id=\"pvAdm\"><span class=\"emo\">👑</span><span class=\"lg-t\"><b>Todas as famílias</b><small>todos os que jogam o Tagarelas e como estão a correr</small></span><span class=\"g-go\">▶</span></button>" : ''}
     <button class="lg-cta pv-test" id="pvTest"><span class="emo">🧪</span><span class="lg-t"><b>Como os outros veem</b><small>abrir o jogo como uma família nova, uma criança de 5 ou 9 anos, uma família convidada ou a avó — num teste, os seus dados não mudam</small></span><span class="g-go">▶</span></button>
     <p class="muted">Todos das suas famílias neste telemóvel que jogam ou visitam. Toque numa criança para abrir o seu jogo. «👀 Ecrã» mostra o que um adulto vê no seu telemóvel.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">Ainda não há nenhuma família neste telemóvel.</p>"}
@@ -10374,8 +10374,8 @@ function screenPult() {
     on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
     on1('pvTest', () => screenPultTest());
     on1('pvAdm', () => screenAdmin());
-    on1('pvAuthor', () => { const bx = document.getElementById('pvAuthorBox'); if (bx) { bx.hidden = !bx.hidden; if (!bx.hidden) $('#pvKey').focus(); } });
-    on1('pvKeyGo', () => { const v = ($('#pvKey').value || '').trim().replace(/^.*admin=/, ''); if (!/^[A-Za-z0-9_-]{30,60}$/.test(v)) { $('#pvKeyOut').textContent = authorBad(); return; } adminPrivate(v).then(() => { ROOT.adminKey = v; save(); screenAdmin(); }, () => { $('#pvKeyOut').textContent = authorBad(); }); });
+    on1('pvAuthor', () => { authorKeys().then(() => screenPult(), () => {}); });
+    on1('pvKeyCopy', () => { const t = authorText(); if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => { $('#pvKeyOut').textContent = "Copiado"; }, () => {}); });
     on1('pvUpd', () => appUpdate($('#pvVer')));
 
     on1('pvInv', () => screenInvite(screenPult));
@@ -10406,10 +10406,11 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '58';
+const APP_VER = '59';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
-const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: introduzir a chave</button></div><div id="pvAuthorBox" hidden><label class="prow" for="pvKey">A chave da autora ou a ligação com ela <input id="pvKey" type="password" autocomplete="off"></label><div class="prow-btns"><button class="big" id="pvKeyGo">Abrir «Todas as famílias»</button></div><p class="fe-err" id="pvKeyOut"></p></div>`;
-const authorBad = () => "A chave não serve.";
+const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
+// until the app carries this phone's open key, the author sees what to send
+const authorWaitHTML = () => `<div class="psec pv-who"><h2>👑 A chave da autora está pronta</h2><p>A metade secreta fica só neste telemóvel. Envie este texto ao Claude — é a metade aberta e pode ser partilhada. Depois da atualização da app, os resumos de todas as famílias chegam aqui.</p><pre class="hg-msg" id="pvKeyTx">${esc(authorText())}</pre><div class="prow-btns"><button class="big" id="pvKeyCopy">📋 Copiar</button></div><p class="muted" id="pvKeyOut"></p></div>`;
 function appVer(el) { if (el) el.textContent = APP_VER ? `Versão da app: ${APP_VER}` : ''; }
 function appUpdate(el) {
   if (el) el.textContent = "A procurar atualização…";
@@ -10678,13 +10679,14 @@ function screenInviteFamily(back) {
 /* ---------- the author's view: every family that plays, and how it is going ---------- */
 // each phone sends a short summary every few hours, sealed with the author's public key: only her phone can open it.
 // Without the parents' tick there are no names in it — ages, language, country, stars, lessons, the games played most
-const ADMIN_PUB = { kty: 'EC', crv: 'P-256', x: 'vbENcZJaSfBgLM57M9sDYemRjIvuuH-Lj-XyJcz7FrQ', y: 'pqIyDghZp5t6XpQSeSJyeLU8s9SNdiaYYbPC9BeD0Wk' };
+// the author's open key (sent from her phone); until it is here, nothing is sent
+const ADMIN_PUB = /*__ADMIN_PUB__*/null;
 const ST_TOPIC = 'govorilki-st-q7m2x9';
 const stB64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 const stUnB64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0));
 const ST_EC = { name: 'ECDH', namedCurve: 'P-256' };
 async function sealForAdmin(obj) {
-  const S = crypto.subtle, pub = await S.importKey('jwk', ADMIN_PUB, ST_EC, false, []);
+  const S = crypto.subtle, pub = await S.importKey('jwk', { kty: 'EC', crv: 'P-256', x: ADMIN_PUB.x, y: ADMIN_PUB.y }, ST_EC, false, []);
   const eph = await S.generateKey(ST_EC, true, ['deriveKey']);
   const key = await S.deriveKey({ name: 'ECDH', public: pub }, eph.privateKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -10692,7 +10694,14 @@ async function sealForAdmin(obj) {
   const e = await S.exportKey('jwk', eph.publicKey);
   return { k: 'st', ex: e.x, ey: e.y, iv: stB64(iv), ct: stB64(ct) };
 }
-async function adminPrivate(d) { return crypto.subtle.importKey('jwk', { ...ADMIN_PUB, d }, ST_EC, false, ['deriveKey']); }
+async function adminPrivate(d) { const p = ROOT.adminPub; return crypto.subtle.importKey('jwk', { kty: 'EC', crv: 'P-256', x: p.x, y: p.y, d }, ST_EC, false, ['deriveKey']); }
+// the author's phone makes its key pair once: the secret half stays here, the open half goes into the app
+async function authorKeys() {
+  const k = await crypto.subtle.generateKey(ST_EC, true, ['deriveKey']), j = await crypto.subtle.exportKey('jwk', k.privateKey);
+  ROOT.adminKey = j.d; ROOT.adminPub = { x: j.x, y: j.y }; save();
+}
+const authorText = () => ROOT.adminPub ? `ADMINKEY:${ROOT.adminPub.x}.${ROOT.adminPub.y}` : '';
+const authorLive = () => !!(ROOT.adminPub && ADMIN_PUB && ROOT.adminPub.x === ADMIN_PUB.x && ROOT.adminPub.y === ADMIN_PUB.y);
 async function openForAdmin(m, prv) {
   const S = crypto.subtle, eph = await S.importKey('jwk', { kty: 'EC', crv: 'P-256', x: m.ex, y: m.ey }, ST_EC, false, []);
   const key = await S.deriveKey({ name: 'ECDH', public: eph }, prv, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
@@ -10707,7 +10716,7 @@ function statSnap() {
   return { v: 1, id: ROOT.sid, at: Date.now(), made: ROOT.made, ver: APP_VER, lang: LANG, ok: ok ? 1 : 0, fams };
 }
 async function statPing(force) {
-  if (DEMO || GUEST || PREVIEW || EMBEDDED || !window.crypto || !crypto.subtle || !fam() || !KIDS.length) return;
+  if (!ADMIN_PUB || DEMO || GUEST || PREVIEW || EMBEDDED || !window.crypto || !crypto.subtle || !fam() || !KIDS.length) return;
   if (!ROOT.sid) { ROOT.sid = rid(12); ROOT.made = ROOT.made || Date.now(); save(); }
   if (!force && Date.now() - (ROOT.stAt || 0) < 3 * 3600e3) return;
   try {
@@ -10719,12 +10728,6 @@ async function statPing(force) {
 // the parents' choice: names go to the author only with this tick
 const shareHTML = id => `<div class="share-box"><label class="sw" for="${id}"><input id="${id}" type="checkbox" ${ROOT.share ? 'checked' : ''}>Mostrar à autora do Tagarelas os nomes da família e das crianças</label><p class="muted">A autora da app vê quantas famílias jogam e como correm as lições — a idade das crianças, as estrelas, os jogos — para melhorar o Tagarelas. Sem a marca não há nomes. Está tudo cifrado: só a autora pode ler.</p></div>`;
 function bindShareBox(id) { const el = document.getElementById(id); if (el) el.onchange = () => { ROOT.share = el.checked; save(); statPing(true); }; }
-// the author's own link (#admin=…) opens the view once on her phone; the phone remembers it
-let ADMIN_HASH = '';
-try { const m = location.hash.match(/[#&]admin=([A-Za-z0-9_-]{30,60})/); if (m && !DEMO) { ADMIN_HASH = m[1]; history.replaceState(null, '', location.pathname + location.search); } } catch (e) {}
-async function adminActivate(d) {
-  try { await adminPrivate(d); ROOT.adminKey = d; save(); screenAdmin(); } catch (e) { goHome(); }
-}
 async function adminPoll() {
   const seen = ROOT.adminSeen = ROOT.adminSeen || {}; let n = 0;
   const prv = await adminPrivate(ROOT.adminKey);
