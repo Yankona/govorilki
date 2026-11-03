@@ -343,6 +343,20 @@ b.r{color:var(--berry)}
 .phr-star{border:0;background:none;font-size:22px;cursor:pointer}.phr-t{flex:1;display:flex;flex-direction:column;gap:2px;text-align:left}.phr-t b{font:800 16px var(--f-body)}.phr-t span{font:700 15px var(--f-body);color:var(--sea)}.phr-t small{color:#2E9D57;letter-spacing:2px}
 .phr textarea,.phr input{width:100%;box-sizing:border-box;border:2px solid var(--line-strong);border-radius:12px;padding:10px;font:700 17px var(--f-body);background:var(--paper);color:var(--ink)}
 .phr-gt{font:700 14px var(--f-body);color:var(--sea)}.phr-card{background:var(--paper);border-radius:22px;padding:18px;box-shadow:0 5px 0 var(--line-strong);display:flex;flex-direction:column;gap:8px;text-align:center;width:100%}
+.sw{display:flex;flex-direction:column;gap:12px;align-items:center;width:min(100%,720px)}.sw-safe p{margin:6px 0 0}.sw-daily{display:flex;gap:8px;align-items:center;font:700 15px/1.35 var(--f-body);color:var(--ink-soft)}
+.sw-care{margin:0;padding:8px 12px;border-radius:12px;background:#FFF1D6;color:#2A2346;font:700 15px/1.35 var(--f-body)}
+.face.sw-wig .sw-bud{animation:swWig .14s ease-in-out infinite alternate}.face.sw-pull .sw-bud{animation:swPull .9s ease-in-out infinite alternate}
+@keyframes swWig{from{transform:translateX(-3px)}to{transform:translateX(3px)}}@keyframes swPull{from{transform:translateX(0)}to{transform:translateX(6px)}}
+.nr{display:flex;flex-direction:column;gap:12px;align-items:center;width:min(100%,620px)}
+.nr-card{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--paper);border-radius:24px;padding:16px 30px;box-shadow:0 5px 0 var(--line-strong);min-width:60%}.nr-card b{font:900 26px var(--f-body)}
+.nr-e{display:flex;gap:10px}.nr-h{display:inline-block;font-size:86px;line-height:1}.nr-h.edge{transform:rotate(-90deg)}.nr-h.flat{transform:rotateX(55deg)}.nr-h.flip{transform:scaleX(-1)}
+.nr-row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.nr-mini{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;border-radius:14px;background:var(--paper);opacity:.6}.nr-mini .nr-h{font-size:30px}.nr-mini small{font:700 12px var(--f-body)}.nr-mini.on{opacity:1;box-shadow:0 0 0 3px var(--sun)}
+.nr-round{margin:0;min-height:1.2em;font:900 20px var(--f-body);color:var(--sea)}
+.lg-scene.dr .dr-d{position:absolute;left:8%;top:50%;transform:translateY(-50%)}.lg-scene.dr .dr-d .emo{font-size:70px}.lg-scene.dr .dr-f{position:absolute;left:36%;top:50%;margin-top:-30px;transform-origin:left center;transition:transform .15s}.lg-scene.dr .dr-f .emo{font-size:56px}
+.lg-scene.dr .dr-t{position:absolute;right:10px;top:14px;display:flex;flex-direction:column;gap:6px}.lg-scene.dr .dr-t .emo{font-size:30px}
+.tr{width:100%;max-width:600px;aspect-ratio:300/160;background:var(--paper);border-radius:20px;box-shadow:0 5px 0 var(--line-strong);touch-action:none}
+.tr-p{fill:none;stroke:#E6E1F5;stroke-width:22;stroke-linecap:round;stroke-linejoin:round}.tr-d{fill:none;stroke:var(--sea);stroke-width:2.5;stroke-dasharray:6 6;stroke-linecap:round}.tr-u{fill:none;stroke:#EF4F7E;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.tw-pen{display:none;font-size:46px;transform:rotate(90deg)}.tw-card.pen .tw-pen{display:block}
 .phr-card small{font:700 14px var(--f-body);color:var(--ink-soft)}.phr-card b{font:900 26px/1.3 var(--f-body)}.phr-ans{margin:0;min-height:1.3em;font:900 24px/1.3 var(--f-body);color:var(--sea)}
 .pr-l{font-size:22px}.pr-l small{font-size:.78em;margin-left:1px}.pr-l i.h{color:#D39A00}
 .pr-pair2{display:flex;align-items:baseline;gap:14px}.pr-big.sm{font-size:84px}.pr-q .pr-big.sm{font-size:28px;margin-left:4px}
@@ -2056,11 +2070,11 @@ function lessonPlan(id) {
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
-      const o = 2 * n + 2 * s, lg = ['l-rap', 'l-rec', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house'];
+      const o = 2 * n + 2 * s, lg = ['l-rap', 'l-rec', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house', ...(IS_RU ? ['twist-pen', 'neuro'] : [])];
       for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
       const art = s === 0 ? ARTIC_L.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC_L.length);
       art.forEach(i => steps.push({ key: 'artic:' + ARTIC_L[i].id, kind: 'artic', name: ARTIC_L[i].name, run: () => screenArtic(i, true) }));
-      const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
+      { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
       if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
     } else if (id === 'read') ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read')));
@@ -2074,7 +2088,7 @@ function lessonPlan(id) {
     const AR = AL(), shI = ARTIC_SH.map((_, i) => ARTIC.length + i);
     const art = s === 0 ? [...shI, ...[0, 1, 2].map(k => (3 * n + k) % ARTIC.length)] : [0, 1, 2, 3].map(k => (n + 4 * s + k) % AR.length);
     art.forEach(i => steps.push({ key: 'artic:' + AR[i].id, kind: 'artic', name: AR[i].name, run: () => screenArtic(i, true) }));
-    const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
+    { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
     const pri = ['r-end', 'sh-sort', 'beauty', 'sh-syll', 'sh-house', ...(IS_RU && modOnG(15) ? ['sz-sort', 'snd-hold', 'sz-syll', 'sz-house'] : [])];
     steps.push(gameStep(pri[(n + s) % pri.length], 'game'));
     steps.push(gameStep(games[o % games.length].id, 'game'));
@@ -8560,7 +8574,7 @@ function speechPlanMine(n, s) {
   for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
   const art = [...new Set((s === 0 ? [0, 1, 2, 3, 4, 5] : [0, 1, 2, 3]).map(k => (3 * n + 4 * s + k) % AR.length))];
   art.forEach(i => steps.push({ key: 'artic:' + AR[i].id, kind: 'artic', name: AR[i].name, run: () => screenArtic(i, true) }));
-  const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
+  { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
   const pool = [];
   if (snd.includes('r')) pool.push(...GAMES.filter(g => g.grp === 1 && !g.info).map(g => g.id));
   if (snd.includes('sh')) pool.push('sh-sort', 'sh-syll', 'sh-house', 'beauty');
@@ -10971,7 +10985,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '78';
+const APP_VER = '79';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13653,7 +13667,7 @@ const LOGO = (() => {
     if (changed) save();
   }
   // one of these in the daily speech lesson, in turn
-  const DAILY = ['hear-pairs', 'gram-many', 'syl-clap', 'gram-dim', 'story-seq', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
+  const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
   const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
   return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID };
 })();
@@ -14039,6 +14053,404 @@ const PHR = (() => {
   GAMES.push({ id: 'ml-phr', hide: () => !IS_RU || !langs().length, name: 'Нужные фразы', sub: 'как сказать в садике и в школе', ico: () => pic('💬'), bg: 'var(--t-peach)', go: () => home(), grp: 14,
     prog: () => { const c = langs()[0]; const n = c ? due(c).length : 0; return n ? `на сегодня ${n}` : ''; } });
   return { home };
+})();
+
+/* ---------- «Гимнастика с ватной палочкой»: a cotton bud held by a grown-up gives the tongue and lips something to feel
+   — where the tip of the tongue lives, a groove along the tongue, strong lips, a spot to reach, a stream of air to aim —
+   the way speech therapists use a probe or a spatula at home. The girl in the mirror shows each step with the bud drawn
+   where the grown-up holds it; the bud for «Р» is offered only to children training Р and is marked for after a speech
+   therapist has shown it. One exercise joins the daily speech lesson after the tongue exercises. Russian only. ---------- */
+const SWAB = (() => {
+  // where the bud is, in the face's coordinates (the mouth is at 100, 156): the cotton tip and the angle of the stick
+  const AT = { lips: [100, 156, 90, true], up: [100, 141, 35], lipUp: [100, 139, 20], cornerL: [74, 156, 70], cornerR: [126, 156, -70], lipDown: [100, 176, -20],
+    along: [100, 162, 0], across: [100, 170, 90, true], lowTeeth: [100, 166, 25], front: [100, 186, 0], under: [100, 160, 30] };
+  function bud(at) {
+    const [x, y, a, both] = AT[at] || AT.front, L = both ? 84 : 62;
+    const tip = (cx, cy) => `<ellipse cx="${cx}" cy="${cy}" rx="6.5" ry="9.5" fill="#FFFFFF" stroke="#C9D3DE" stroke-width="1.6"/><ellipse cx="${cx - 2}" cy="${cy - 3}" rx="2.4" ry="3.4" fill="#EEF3F8"/>`;
+    // the stick goes from the tip down and out of the face, turned by a degrees
+    return `<g transform="rotate(${a} ${x} ${y})"><g class="sw-bud">${both
+      ? `<rect x="${x - 2}" y="${y - L / 2}" width="4" height="${L}" rx="2" fill="#F6F1E7" stroke="#D9CCB4" stroke-width="1"/>${tip(x, y - L / 2)}${tip(x, y + L / 2)}`
+      : `<rect x="${x - 2}" y="${y}" width="4" height="${L}" rx="2" fill="#F6F1E7" stroke="#D9CCB4" stroke-width="1"/>${tip(x, y)}`}</g></g>`;
+  }
+  const faceBud = (pose, at, cls = '') => faceSVG(pose, cls).replace(/<\/svg>$/, `${bud(at)}</svg>`);
+  // [id, name, the face and the bud for the card, what to do, a hint, what the voice says first, steps [pose, line, ms, bud, fx], sounds it helps]
+  const EX = [
+    { id: 'lips', name: 'Палочка в губах', pose: 'horn', at: 'lips', for: ['sh', 'r', 'l', 'sz'],
+      text: 'Взрослый кладёт палочку поперёк губ. Ребёнок держит её только губами, не зубами, пока считаем до пяти. Потом взрослый чуть-чуть тянет палочку — губы не отпускают.',
+      tip: 'Зубы не кусают, губы сильные.', intro: 'Возьми палочку губками, не зубками. Держи крепко, пока я считаю до пяти.',
+      steps: [['horn', 'Раз', 1100, 'lips'], ['horn', 'Два', 1100, 'lips'], ['horn', 'Три', 1100, 'lips'], ['horn', 'Четыре', 1100, 'lips'], ['horn', 'Пять!', 1100, 'lips', 'pull'], ['frog', 'Отдыхаем', 1200, 'front']] },
+    { id: 'home', name: 'Домик для кончика языка', pose: 'swingUp', at: 'up', for: ['r', 'l', 'sh'],
+      text: 'Взрослый легко касается ваткой бугорков за верхними зубами. Ребёнок ставит кончик языка туда, где почувствовал ватку, и держит. Здесь живёт кончик языка для звуков Л, Р, Т, Д, Н.',
+      tip: 'Касаемся легко, не давим.', intro: 'Я коснусь ваткой домика за верхними зубками. Поставь туда кончик язычка.',
+      steps: rep(3, [['swingUp', 'Сюда!', 1500, 'up'], ['swingUp', 'Держим', 1500, ''], ['swingDown', 'Отдых', 1100, '']]) },
+    { id: 'chase', name: 'Догони ватку', pose: 'lickUp', at: 'lipUp', for: ['r', 'l', 'sh', 'sz'],
+      text: 'Взрослый касается ваткой то верхней губы, то уголков рта, то нижней губы. Ребёнок дотягивается кончиком языка до того места, где была ватка.',
+      tip: 'Нижняя челюсть не двигается, работает только язык.', intro: 'Где была ватка, туда и язычок! Догоняй.',
+      steps: rep(2, [['lickUp', 'Вверх', 1300, 'lipUp'], ['brushL', 'Влево', 1300, 'cornerL'], ['spatula', 'Вниз', 1300, 'lipDown'], ['brushR', 'Вправо', 1300, 'cornerR']]) },
+    { id: 'groove', name: 'Желобок', pose: 'cup', at: 'along', for: ['sz', 'sh'],
+      text: 'Взрослый кладёт палочку вдоль середины широкого языка. Ребёнок поднимает края языка, обнимая палочку, — получается желобок. Потом палочку убираем, а желобок остаётся, и по нему дуем.',
+      tip: 'Язык широкий, края поднимаются, губы не помогают.', intro: 'Положим палочку на серединку язычка. Обними её краешками.',
+      steps: rep(2, [['cup', 'Обними палочку', 1800, 'along'], ['cup', 'Убираю — держи желобок', 1800, ''], ['cup', 'Подуй!', 1800, '', 'tick']]) },
+    { id: 'spade', name: 'Лопаточка с палочкой', pose: 'spatula', at: 'across', for: ['sz', 'sh'],
+      text: 'Ребёнок кладёт широкий спокойный язык на нижнюю губу. Взрослый кладёт палочку поперёк языка. Язык держит её и не роняет, пока считаем до пяти.',
+      tip: 'Язык мягкий и широкий, не дрожит.', intro: 'Положи широкий язычок на нижнюю губку. Я положу на него палочку. Держи, не урони.',
+      steps: [['spatula', 'Раз', 1100, 'across'], ['spatula', 'Два', 1100, 'across'], ['spatula', 'Три', 1100, 'across'], ['spatula', 'Четыре', 1100, 'across'], ['spatula', 'Пять!', 1100, 'across'], ['frog', 'Отдыхаем', 1200, '']] },
+    { id: 'down', name: 'Кончик за нижние зубки', pose: 'donkey', at: 'lowTeeth', for: ['sz'],
+      text: 'Взрослый касается ваткой нижних зубов изнутри. Ребёнок упирает туда кончик языка и улыбается. Так кончик языка стоит для звуков С и З.',
+      tip: 'Кончик языка внизу, спинка выгнута горкой.', intro: 'Я коснусь ваткой нижних зубок изнутри. Упрись туда кончиком язычка и улыбнись.',
+      steps: rep(3, [['donkey', 'Сюда!', 1400, 'lowTeeth'], ['catHill', 'Горка', 1600, ''], ['frog', 'Отдых', 1000, '']]) },
+    { id: 'blow', name: 'Подуй на ватку', pose: 'frog', at: 'front', for: ['sz', 'sh', 'r', 'l'],
+      text: 'Взрослый держит палочку ваткой перед губами. Ребёнок улыбается и дует длинной холодной струйкой по середине языка — ватка шевелится. Щёки не надуваются.',
+      tip: 'Струя длинная и ровная, щёки спокойные.', intro: 'Улыбнись и подуй на ватку. Долго, ровно, щёчки не надуваем.',
+      steps: rep(3, [['frog', 'Вдох носом', 1100, 'front'], ['frog', 'Дуем…', 2200, 'front', 'blow'], ['frog', 'Отдых', 900, 'front']]) },
+    { id: 'motor', name: 'Моторчик для Р', pose: 'swingUp', at: 'under', for: ['r'], care: true,
+      text: 'Ребёнок поднимает кончик языка за верхние зубы и быстро говорит «д-д-д». Взрослый подводит палочку под язык и мягко покачивает её вправо-влево — язык начинает дрожать: «д-д-д» превращается в «ддррр».',
+      tip: 'Лучше, когда логопед уже показал это упражнение. Не давить на уздечку. Звук горловой или в нос — остановиться и спросить логопеда.',
+      intro: 'Подними кончик язычка за верхние зубки и говори быстро: д-д-д. А я помогу моторчику палочкой.',
+      steps: rep(3, [['swingUp', 'Быстро-быстро!', 1600, ''], ['swingUp', 'Моторчик!', 2200, 'under', 'wig'], ['swingDown', 'Отдых', 1100, '']]) }
+  ];
+  const list = () => EX.filter(e => !e.care || mySounds().includes('r'));
+  const ok = () => !!(P.settings.swabOk);
+  const daily = () => P.settings.swabDaily !== false;
+  function menu() {
+    newScreen();
+    const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
+    shell('Гимнастика с ватной палочкой', `<div class="sw">
+      <details class="pr-tip sw-safe" ${ok() ? '' : 'open'}><summary>🧑‍🍼 Для взрослого: как безопасно</summary>
+        <p>Палочку держит только взрослый. Руки чистые, палочка новая, с плотной ваткой. Касаемся губ, кончика и середины языка, бугорков за зубами — не глубже: дальше начинается рвотный рефлекс.</p>
+        <p>Не давим, движения мягкие. Ребёнок не кусает палочку. Неприятно или страшно — останавливаемся и делаем то же упражнение без палочки.</p>
+        <p>Палочка подсказывает языку, куда идти. Ставить звуки лучше вместе с логопедом.</p>
+        ${ok() ? '' : '<div class="og-btns"><button class="big" id="swOk">Понятно, я рядом</button></div>'}</details>
+      <p class="lead">Садимся перед зеркалом. Взрослый держит палочку, ребёнок повторяет за девочкой.</p>
+      <div class="cards" id="swCards">${list().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceBud(a.pose, a.at)}<span>${a.name}</span>${P.best['swab:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>
+      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Одно упражнение с палочкой — в занятии «Логопед» после зарядки</label></div>`);
+    const okb = $('#swOk'); if (okb) okb.onclick = () => { sfx.pop(); P.settings.swabOk = 1; save(); menu(); };
+    $('#swDaily').onchange = e => { P.settings.swabDaily = e.target.checked; save(); sfx.tick(); };
+    $('#swCards').onclick = e => { const c = e.target.closest('.card'); if (!c) return; sfx.pop(); if (!ok()) { wiggle($('.sw-safe')); $('.sw-safe').open = true; talk('Сначала взрослый читает, как делать безопасно.'); return; } ex(+c.dataset.i); };
+    talk(ok() ? 'Возьмите ватную палочку. Выбери упражнение.' : 'Позови взрослого. Ему нужно прочитать, как делать с палочкой безопасно.');
+  }
+  function ex(i, auto = false) {
+    const t = newScreen(), a = list()[i];
+    if (!a) { menu(); return; }
+    let started = false;
+    shell(a.name, `<div class="artic-stage" id="artStage">
+        <div class="mirror" id="mirror">${faceBud(a.pose, a.at)}<div class="say-b" id="sayB" hidden></div></div>
+        ${camHTML}
+        <div class="artic-side">
+          <p class="howto">${esc(a.text)}<em>${esc(a.tip)}</em></p>
+          ${a.care ? '<p class="sw-care">⚠️ Только со взрослым и лучше после того, как упражнение показал логопед.</p>' : ''}
+          <div class="steps" id="steps">${a.steps.map(() => '<i></i>').join('')}</div>
+          <div class="prow-btns"><button class="big" id="go">${ICON.play}Начать</button><button class="big ghost" id="camBtn"></button></div>
+          <p class="muted" id="camNote" hidden></p>
+        </div></div>`, { back: menu });
+    bindCam($('#artStage'));
+    const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
+    const setFace = (pose, at, fx) => { const old = mirror.querySelector('svg.face'); old.insertAdjacentHTML('afterend', at ? faceBud(pose, at, fx === 'wig' ? 'sw-wig' : fx === 'pull' ? 'sw-pull' : '') : faceSVG(pose)); old.remove(); };
+    const start = async () => {
+      if (started || t !== tok) return; started = true;
+      $('#go').hidden = true; sfx.pop();
+      await talk('Взрослый, возьмите палочку. Приготовились!'); if (t !== tok) return;
+      for (let k = 0; k < a.steps.length; k++) {
+        const [pose, line, ms, at, fx] = a.steps[k];
+        setFace(pose, at, fx); dots[k].classList.add('on');
+        if (line) { sayB.hidden = false; sayB.textContent = line; sayB.style.animation = 'none'; void sayB.offsetWidth; sayB.style.animation = ''; say(line); } else sayB.hidden = true;
+        if (fx === 'tick') sfx.tick();
+        await wait(ms * pace()); if (t !== tok) return;
+      }
+      sayB.hidden = true;
+      finish({ key: 'swab:' + a.id, stars: 1, line: 'Язычок знает, куда идти!', again: () => ex(i, auto), next: i < list().length - 1 ? () => ex(i + 1) : null, menu });
+    };
+    $('#go').onclick = start;
+    if (auto && ok()) talk(a.intro).then(() => later(start, 400));
+    else talk(a.intro + ' Нажми «Начать».');
+  }
+  // the daily lesson: one exercise that fits the child's sounds, a different one each day
+  const step = n => {
+    if (!IS_RU || !daily() || gameOff('swab')) return null;
+    const mine = list().filter(e => e.for.some(s => mySounds().includes(s)));
+    const xs = mine.length ? mine : list(), a = xs[n % xs.length], i = list().indexOf(a);
+    return { key: 'swab:' + a.id, kind: 'artic', name: a.name, run: () => (ok() ? ex(i, true) : menu()) };
+  };
+  GAMES.push({ id: 'swab', hide: () => !IS_RU, name: 'Гимнастика с ватной палочкой', sub: 'со взрослым: палочка подсказывает языку', ico: () => faceBud('swingUp', 'up'), bg: 'var(--t-mint)', go: menu, grp: 0, also: [15],
+    prog: () => `${ICON.star}${list().filter(e => P.best['swab:' + e.id]).length} из ${list().length}` });
+  return { step, menu, ex };
+})();
+
+/* ---------- More from the online speech therapists' videos (the kinds of exercise, our own words): Р without «д» and
+   without the throat (a drummer, a machine-gun, a painter, Р after a vowel), чистоговорки for every sound against a «каша
+   во рту», the dragon breath, tongue twisters with a pencil held in the teeth (a carrot stick will do), a brain warm-up
+   for hands and speech (fist — edge — palm, rings, ear — nose, lezginka, cross steps), and handwriting: finger exercises,
+   how to hold a pencil and sit, and tracing paths with a finger. Russian only; one declaration. ---------- */
+const IDEAS = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l' };
+  const firstMine = list => list.find(L => mySounds().includes(SND[L])) || list[0];
+
+  /* ===== a sequence to do with the body: cards in turn to a beat, faster each round ===== */
+  // items: [picture html, label, what the voice says ('' — nothing)]
+  function drill({ key, title, items, rounds = 3, beat = 1500, intro, tip, again, line }) {
+    const t = newScreen();
+    let started = false;
+    shell(title, `<div class="nr"><p class="lg-q">${esc(intro)}</p>${tip ? `<p class="muted">${esc(tip)}</p>` : ''}
+      <div class="nr-card" id="nrC"><span class="nr-e">${items[0][0]}</span><b>${esc(items[0][1])}</b></div>
+      <div class="nr-row">${items.map(([e, l], i) => `<span class="nr-mini" data-i="${i}">${e}<small>${esc(l)}</small></span>`).join('')}</div>
+      <p class="nr-round" id="nrR"></p><div class="og-btns"><button class="big" id="nrGo">${ICON.play}Начать</button></div></div>`);
+    const go = async () => {
+      if (started) return; started = true; $('#nrGo').hidden = true; sfx.pop();
+      await talk('Приготовились!'); if (t !== tok) return;
+      for (let r = 0; r < rounds; r++) {
+        const ms = beat * Math.pow(.8, r);
+        $('#nrR').textContent = r === 0 ? 'Медленно' : r === rounds - 1 ? 'Быстро!' : 'Быстрее';
+        for (let i = 0; i < items.length; i++) {
+          const [e, l, s] = items[i];
+          $('#nrC').innerHTML = `<span class="nr-e">${e}</span><b>${esc(l)}</b>`; hopEl($('#nrC'));
+          $$('.nr-mini').forEach((x, j) => x.classList.toggle('on', j === i));
+          sfx.tick(); if (s !== '') say(s || l);
+          await wait(ms); if (t !== tok) return;
+        }
+      }
+      $$('.nr-mini').forEach(x => x.classList.remove('on'));
+      await talk('Получилось? Молодец!'); if (t !== tok) return;
+      await askSaid('Получилось!'); if (t !== tok) return;
+      finish({ key, stars: 2, line: line || 'Голова и руки работают вместе!', again });
+    };
+    $('#nrGo').onclick = go;
+    talk(`${intro} Нажми «Начать».`);
+  }
+  const H = (e, cls = '') => `<span class="nr-h ${cls}">${e}</span>`;
+  const NEURO = [
+    { id: 'fist', name: 'Кулак — ребро — ладонь', intro: 'Рука на столе: сначала кулак, потом ребро, потом ладонь. Повторяй за мной.', tip: 'Сначала правой рукой, потом левой, потом двумя вместе.',
+      items: () => [[H('✊'), 'Кулак'], [H('🤚', 'edge'), 'Ребро'], [H('✋', 'flat'), 'Ладонь']] },
+    { id: 'rings', name: 'Колечки', intro: 'Большой пальчик здоровается с каждым пальчиком по очереди: получаются колечки.', tip: 'Сначала одной рукой, потом двумя вместе.',
+      items: () => [[H('👌'), 'Указательный'], [H('👌'), 'Средний'], [H('👌'), 'Безымянный'], [H('👌'), 'Мизинчик']] },
+    { id: 'earnose', name: 'Ухо — нос', intro: 'Левой рукой возьмись за кончик носа, правой — за левое ухо. Хлопок — и поменяй руки!', tip: 'Руки перекрещиваются. Сначала медленно, потом быстрее.',
+      items: () => [[`${H('👃')}${H('👂')}`, 'Нос и ухо'], [H('👏'), 'Хлопок!'], [`${H('👂')}${H('👃')}`, 'Поменяли!'], [H('👏'), 'Хлопок!']] },
+    { id: 'lezginka', name: 'Лезгинка', intro: 'Левая рука в кулаке, большой палец в сторону. Правая ладонь касается кулачка. Меняем руки!', tip: 'Как в танце: раз — поменяли, два — поменяли.',
+      items: () => [[`${H('👍')}${H('✋')}`, 'Раз'], [`${H('✋')}${H('👍')}`, 'Два']] },
+    // cross steps with the child's sound: a syllable on every step
+    { id: 'cross', name: 'Шагаем и говорим', intro: 'Правый локоть к левой коленке, потом левый локоть к правой. На каждый шаг — слог.', tip: 'Спина прямая, говорим чётко.',
+      items: () => { const L = firstMine(['Р', 'Ш', 'С', 'Л']), v = ['а', 'о', 'у', 'ы']; return v.map((x, i) => [i % 2 ? `${H('🦵')}${H('💪', 'flip')}` : `${H('💪')}${H('🦵', 'flip')}`, (L + x).toUpperCase(), L.toLowerCase() + x]); } }
+  ];
+  const neuro = i => { const n = NEURO[i % NEURO.length]; drill({ key: 'neuro', title: n.name, items: n.items(), intro: n.intro, tip: n.tip, rounds: 3, beat: n.id === 'cross' ? 1300 : 1500, again: () => neuroMenu() }); };
+  function neuroMenu() {
+    newScreen();
+    shell('Нейроразминка', `<div class="nr"><p class="lead">Руки и голова работают вместе — и речь становится лучше. Делаем стоя или за столом.</p>
+      <div class="lg-grid" id="nrM">${NEURO.map((n, i) => `<button class="lg-pic" data-i="${i}">${n.items()[0][0]}<b>${esc(n.name)}</b></button>`).join('')}</div></div>`);
+    $('#nrM').onclick = e => { const b = e.target.closest('[data-i]'); if (b) { sfx.pop(); neuro(+b.dataset.i); } };
+    talk('Нейроразминка! Выбери упражнение.');
+  }
+
+  /* ===== Р without «д» and without the throat ===== */
+  const R_EX = [
+    { id: 'drum', name: 'Барабанщик', text: 'Рот широко открыт. Кончик языка стучит по бугоркам за верхними зубами, как палочка по барабану: д-д-д. Нижняя челюсть не двигается.', pose: ['swingUp', 'catFlat'], line: 'Бам-бам-бам!' },
+    { id: 'gun', name: 'Пулемёт', text: 'Рот открыт, кончик языка за верхними зубами. Быстро-быстро: т-т-т, с сильным выдохом. Поднеси ладошку ко рту — чувствуешь ветерок?', pose: ['swingUp', 'catFlat'], line: 'Быстро-быстро!' },
+    { id: 'paint', name: 'Маляр', text: 'Рот открыт. Кончиком языка «красим» нёбо от зубов назад и обратно. Нижняя челюсть не двигается.', pose: ['swingUp', 'paintBack'], line: 'Красим!' }
+  ];
+  const THROAT = 'Положи ладошку на горлышко и скажи «а-а-а»: горлышко дрожит от голоса — это хорошо. А когда звучит Р, дрожит кончик языка впереди, за верхними зубами, а не горло. Если Р похоже на урчание в горле, не тренируем Р в словах: сначала барабанщик, пулемёт и маляр, и покажите ребёнка логопеду.';
+  const R_VOW = ['Ар!', 'Ор!', 'Ур!', 'Ыр!', 'Ара!', 'Оро!', 'Уру!', 'Ыры!'];
+  const R_WORDS = [['шар', '🎈'], ['сыр', '🧀'], ['комар', '🦟'], ['корова', '🐄'], ['гора', '⛰️'], ['барабан', '🥁'], ['морковка', '🥕'], ['пирамида', '🔺'], ['ведро', '🪣'], ['помидор', '🍅']];
+  function rMotor() {
+    const t = newScreen(), plan = [...R_EX, 'vow', 'words'];
+    shell('Р без «д»', `<div class="nr"><div class="pr-steps" id="rS">${plan.map((p, i) => `<span>${i + 1}</span>`).join('')}</div><div id="rBox" class="gr-box"></div>
+      <details class="pr-tip"><summary>💡 Взрослому</summary><p>Если ребёнок говорит «др» вместо Р (дрыба, дрома), язык ещё не умеет дрожать сам и помогает себе ударом «д». Тренируем кончик языка (барабанщик, пулемёт, маляр) и Р после гласной: ар, ара — там «д» не к чему прицепиться. Слова с Р в начале — позже.</p>
+      <p>Горловое Р (урчит в горле) дома словами не исправляется: делаем упражнения для кончика языка и идём к логопеду.</p></details></div>`);
+    const box = $('#rBox');
+    (async () => {
+      await talk('Тренируем Р без «д». Сначала зарядка для кончика языка.'); if (t !== tok) return;
+      for (let k = 0; k < plan.length; k++) {
+        if (t !== tok) return;
+        $$('#rS span').forEach((x, n) => { x.classList.toggle('now', n === k); x.classList.toggle('done', n < k); });
+        const p = plan[k];
+        if (p === 'vow') {
+          box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">Р после гласной — без «д»</p></div>`;
+          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', '') }); if (t !== tok) return; }
+        } else if (p === 'words') {
+          box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
+          for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
+        } else {
+          box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
+          await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;
+          for (let r = 0; r < 8; r++) {
+            const m = $('#rM'), old = m.querySelector('svg.face'); old.insertAdjacentHTML('afterend', faceSVG(p.pose[r % 2])); old.remove();
+            if (r % 2 === 0) { const b = $('#rB'); b.hidden = false; b.textContent = p.line; say(p.line); }
+            await wait(800 * pace()); if (t !== tok) return;
+          }
+        }
+      }
+      finish({ key: 'r-motor', line: 'Моторчик Р заводится!', again: rMotor });
+    })();
+  }
+  function rThroat() {
+    const t = newScreen();
+    shell('Р не в горле', `<div class="artic-stage"><div class="mirror">${faceSVG('frog')}</div><div class="artic-side"><p class="howto">${esc(THROAT)}</p><div class="og-btns"><button class="big" id="rOk">Понятно</button><button class="big ghost" id="rGo">Барабанщик и Р без «д»</button></div></div></div>`);
+    talk('Положи ладошку на горлышко и скажи: а-а-а.');
+    $('#rOk').onclick = () => { if (t === tok) finish({ key: 'r-throat', stars: 1, line: 'Теперь ты знаешь, где живёт Р!', again: rThroat }); };
+    $('#rGo').onclick = () => { sfx.pop(); rMotor(); };
+  }
+
+  /* ===== чистоговорки for every sound ===== */
+  const CHIST = {
+    'С': ['Са-са-са — в лесу бегает лиса.', 'Со-со-со — у Сони колесо.', 'Су-су-су — было холодно в лесу.', 'Сы-сы-сы — у кота усы.', 'Ас-ас-ас — у нас ананас.', 'Ос-ос-ос — в саду растёт кокос.'],
+    'З': ['За-за-за — вот идёт коза.', 'Зу-зу-зу — мы пасём козу.', 'Зы-зы-зы — колокольчик у козы.', 'Зо-зо-зо — у Зои новое пальто.', 'Зя-зя-зя — нам шалить нельзя.'],
+    'Ц': ['Ца-ца-ца — вот идёт овца.', 'Цы-цы-цы — у курицы птенцы.', 'Цо-цо-цо — у курицы яйцо.', 'Ец-ец-ец — песню пел скворец.'],
+    'Ш': ['Ша-ша-ша — мама моет малыша.', 'Шу-шу-шу — я письмо пишу.', 'Ши-ши-ши — в речке плавают ерши.', 'Шо-шо-шо — нам гулять хорошо.', 'Аш-аш-аш — вот новый карандаш.'],
+    'Ж': ['Жа-жа-жа — есть иголки у ежа.', 'Жу-жу-жу — молоко дадим ежу.', 'Жи-жи-жи — здесь живут ужи.', 'Жо-жо-жо — снега много, хорошо.'],
+    'Ч': ['Ча-ча-ча — горит в комнате свеча.', 'Чу-чу-чу — я на поезде качу.', 'Чи-чи-чи — прилетели к нам грачи.', 'Оч-оч-оч — наступила ночь.'],
+    'Щ': ['Ща-ща-ща — мы поймали леща.', 'Щу-щу-щу — я щенка ищу.', 'Щи-щи-щи — мама варит щи.', 'Ащ-ащ-ащ — у меня новый плащ.']
+  };
+  const chistOf = L => L === 'Р' ? CHIST_R : L === 'Л' ? CHIST_L : CHIST[L];
+  function chist(L0) {
+    const L = L0 || firstMine(['С', 'Ш', 'Р', 'Л', 'З', 'Ж', 'Ч', 'Щ', 'Ц']), t = newScreen(), deck = sample(chistOf(L), 4);
+    let k = 0;
+    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${['С', 'З', 'Ц', 'Ш', 'Ж', 'Ч', 'Щ', 'Р', 'Л'].map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
+    $('#chS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); chist(b.dataset.s); } };
+    const tw = $('#tw');
+    async function show() {
+      const s = deck[k];
+      tw.innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><p class="tw-text">${hiS(s, L.toLowerCase())}</p><p class="tw-step" id="tws">Медленно и чётко</p>`;
+      await talk(k === 0 ? `Чистоговорки — чтобы не было каши во рту. Слушай и повтори чётко. ${s}` : s); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      $('#tws').textContent = 'А теперь ещё раз, громко и быстрее!';
+      await talk('А теперь ещё раз, громко и быстрее!'); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      k++;
+      if (k >= deck.length) finish({ key: 'chist-all', line: 'Никакой каши во рту!', again: () => chist(L) }); else show();
+    }
+    show();
+  }
+
+  /* ===== tongue twisters with a pencil in the teeth ===== */
+  const TWIST = [['Шла Саша по шоссе и сосала сушку.', 'сш'], ['На дворе трава, на траве дрова.', 'р'], ['Карл у Клары украл кораллы, а Клара у Карла украла кларнет.', 'рл'],
+    ['Ехал Грека через реку, видит Грека — в реке рак.', 'р'], ['Сшила Саша Сашке шапку.', 'сш'], ['У ежа ежата, у ужа ужата.', 'ж'], ['Шесть мышат в шалаше шуршат.', 'ш'],
+    ['Щуку я тащу, тащу, щуку я не упущу.', 'щ'], ['Мила мыла мишку мылом.', 'л'], ['Слишком много ножек у сороконожек.', 'сж'], ['Бык тупогуб, тупогубенький бычок.', ''], ['Четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами чертёж.', 'ч']];
+  function twistPencil() {
+    const t = newScreen(), mine = TWIST.filter(([, s]) => s && mySounds().some(k => [...(SND_HI[k] || '')].some(c => s.includes(c))));
+    const deck = [...new Set([...shuffle(mine), ...shuffle(TWIST)])].slice(0, 3);
+    let k = 0;
+    shell('Скороговорки с карандашом', `<div class="nr"><details class="pr-tip"><summary>💡 Взрослому</summary><p>Карандаш (или палочку морковки) держим зубами поперёк, неглубоко: язык и губы работают сильнее, а без карандаша речь становится чётче. Карандаш чистый, острым концом не в рот; удобнее взять толстую морковную палочку.</p></details><div class="tw-card" id="tw"></div></div>`);
+    const tw = $('#tw');
+    async function show() {
+      const [s, hl] = deck[k];
+      tw.innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><p class="tw-text">${hl ? hiS(s, hl) : esc(s)}</p><p class="tw-step" id="tws">1. Медленно, без карандаша</p><div class="tw-pen">✏️</div>`;
+      await talk(k === 0 ? `Морковный челлендж! Сначала скажи медленно. ${s}` : `Сначала медленно: ${s}`); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      $('#tws').textContent = '2. С карандашом в зубах — три раза, стараясь чётко'; tw.classList.add('pen');
+      await talk('А теперь возьми карандаш зубами поперёк и скажи три раза. Старайся чётко!'); if (t !== tok) return;
+      await askSaid(G('Я сказала три раза!', 'Я сказал три раза!')); if (t !== tok) return;
+      $('#tws').textContent = '3. Убери карандаш — и быстро!'; tw.classList.remove('pen');
+      await talk('Убери карандаш и скажи быстро. Слышишь, как стало чётко?'); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      k++;
+      if (k >= deck.length) finish({ key: 'twist-pen', line: 'Дикция как у диктора!', again: twistPencil }); else show();
+    }
+    show();
+  }
+
+  /* ===== the dragon breath: in through the nose, a long warm breath out — the fire grows; three fires to light ===== */
+  function dragon() {
+    const t = newScreen(), need = Q() ? 3 : 2;
+    shell('Дракончик', `<div class="nr"><p class="lg-q">Вдохни носом. Выдохни ртом долго, тёплым воздухом, как дракончик огнём.</p>
+      <div class="lg-scene dr" id="drSc"><span class="dr-d">${pic('🐉')}</span><span class="dr-f" id="drF">${pic('🔥')}</span>
+        <span class="dr-t" id="drT">${[0, 1, 2].map(() => `<i>${pic('🪵')}</i>`).join('')}</span></div>
+      <div class="lg-bar"><i id="drBar"></i></div><p class="lg-note" id="drN">Тяни выдох ${need} секунды — зажжёшь костёр.</p>
+      <button class="big lg-hold" id="drH">🖐 Дую</button><p class="muted">Микрофон слышит выдох. Нет микрофона — держи кнопку, пока дуешь.</p></div>`);
+    let holding = false, mic = false, last = performance.now(), floor = .004, run = 0, lit = 0, over = false, rest = 0;
+    bindHold($('#drH'), () => { holding = true; }, () => { holding = false; });
+    const frame = now => {
+      if (t !== tok) { micRelease(); return; }
+      const dt = Math.min(.1, (now - last) / 1000); last = now;
+      let on = holding;
+      if (!on && mic && !micDeaf()) { const lv = micLevel(), thr = Math.max(.01, floor * 2.6); if (lv > thr) on = true; else floor = floorStep(floor, lv, thr); }
+      if (rest > 0) { rest -= dt; on = false; }
+      if (on) run += dt; else if (run > 0) run = Math.max(0, run - dt * 3);
+      $('#drF').style.transform = `scale(${(.3 + Math.min(1, run / need) * 1.4).toFixed(2)})`;
+      $('#drBar').style.width = (Math.min(1, run / need) * 100).toFixed(0) + '%';
+      if (run >= need && !over) {
+        lit++; run = 0; rest = 1.2; sfx.good(); $$('#drT i')[lit - 1].innerHTML = pic('🔥');
+        $('#drN').textContent = lit < 3 ? 'Костёр горит! Вдохни носом — и ещё раз.' : 'Все три костра горят!';
+        if (lit >= 3) { over = true; micRelease(); talk('Ты настоящий дракон!').then(() => { if (t === tok) finish({ key: 'breath:dragon', stars: 1, line: `Хорошо подул${G('а', '')}!`, again: dragon, menu: screenBreathMenu }); }); return; }
+      }
+      requestAnimationFrame(frame);
+    };
+    (async () => { await talk('Дракончик! Вдохни носом, а выдыхай ртом долго-долго, как будто дышишь огнём.'); if (t !== tok) return; mic = await micOn(); if (t !== tok) return; if (!mic) $('#drH').classList.add('only'); last = performance.now(); requestAnimationFrame(frame); })();
+  }
+
+  /* ===== handwriting: finger exercises, how to hold a pencil and sit, tracing paths ===== */
+  const FINGERS = [[H('🤝'), 'Замок', 'Пальчики в замок, покачали'], [H('👌'), 'Колечки', 'Колечки по очереди'], [H('🖐️'), 'Веер', 'Растопырили пальчики'], [H('✊'), 'Кулачок', 'Сжали кулачок'],
+    [H('🤏'), 'Щепотка', 'Пальчики щепоткой'], [H('🙌'), 'Пальчики здороваются', 'Пальчики здороваются']];
+  const fingers = () => drill({ key: 'hand-fingers', title: 'Пальчиковая гимнастика', items: FINGERS, rounds: 2, beat: 2200, intro: 'Разомнём пальчики перед письмом. Повторяй за мной.', tip: 'Каждое движение — пять раз.', again: fingers, line: 'Пальчики готовы писать!' });
+  function grip() {
+    const t = newScreen();
+    shell('Как держать карандаш', `<div class="nr"><div class="lg-card lg-adult">
+      <p class="lg-q">✏️ Карандаш</p><ul class="lg-list"><li>Карандаш лежит на среднем пальце, сверху его держат большой и указательный — «щепоткой».</li>
+      <li>Пальцы — примерно на 2 см выше кончика, не у самого грифеля.</li><li>Не сжимать изо всех сил: рука мягкая, пальцы не белеют.</li><li>Верхний конец карандаша смотрит в плечо.</li></ul>
+      <p class="lg-q">🪑 Посадка</p><ul class="lg-list"><li>Спина прямая, между грудью и столом — кулачок.</li><li>Ноги стоят на полу.</li><li>Тетрадь чуть наклонена, вторая рука придерживает лист.</li><li>Свет падает слева (у левшей — справа).</li></ul>
+      <p class="muted">Почерк складывается из сильных пальцев, удобного захвата и ровных движений: пальчиковая гимнастика и дорожки — каждый день по чуть-чуть.</p>
+      <div class="og-btns"><button class="big" id="gOk">Понятно</button></div></div></div>`);
+    talk('Как держать карандаш и как сидеть. Взрослый читает и показывает.');
+    $('#gOk').onclick = () => { if (t === tok) finish({ key: 'hand-grip', stars: 1, line: 'Готово!', again: grip }); };
+  }
+  // paths to trace with a finger, in a 300 × 160 box
+  const spiral = () => { let d = ''; for (let a = 0; a <= 6 * Math.PI; a += .2) { const r = 4 + a * 3.3, x = 150 + r * Math.cos(a), y = 80 + r * Math.sin(a) * .9; d += (d ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } return d; };
+  const loops = () => { let d = 'M10 110'; for (let x = 10; x < 270; x += 45) d += ` C${x + 30} 110 ${x + 42} 45 ${x + 26} 45 C${x + 10} 45 ${x + 14} 110 ${x + 45} 110`; return d; };
+  const PATHS = [['Волны', 'M10 80 Q45 30 80 80 T150 80 T220 80 T290 80'], ['Горки', 'M10 115 L45 45 L80 115 L115 45 L150 115 L185 45 L220 115 L255 45 L290 115'],
+    ['Заборчик', 'M25 125 L40 40 M70 125 L85 40 M115 125 L130 40 M160 125 L175 40 M205 125 L220 40 M250 125 L265 40'], ['Петельки', loops()],
+    ['Крючки', 'M30 40 L30 110 Q30 128 48 120 M90 40 L90 110 Q90 128 108 120 M150 40 L150 110 Q150 128 168 120 M210 40 L210 110 Q210 128 228 120'], ['Улитка', spiral()],
+    ['Мостики', 'M10 120 Q40 40 70 120 Q100 40 130 120 Q160 40 190 120 Q220 40 250 120 Q275 60 290 120']];
+  function trace(k = 0, done = 0) {
+    const t = newScreen(), [name, d] = PATHS[k % PATHS.length];
+    shell('Дорожки для почерка', `<div class="nr"><p class="lg-q">${esc(name)}: веди пальчиком по дорожке</p>
+      <svg class="tr" id="tr" viewBox="0 0 300 160"><path d="${d}" class="tr-p"/><path d="${d}" class="tr-d"/><polyline id="trU" class="tr-u" points=""/></svg>
+      <div class="lg-bar"><i id="trBar"></i></div><p class="lg-note" id="trN">Начни слева и веди, не отрывая пальчик.</p>
+      <div class="og-btns"><button class="big ghost" id="trR">↺ Заново</button></div></div>`);
+    talk(done === 0 ? 'Дорожки, как в прописях. Веди пальчиком по пунктиру — ровно и не торопясь.' : `${name}. Веди пальчиком.`);
+    const svg = $('#tr'), path = svg.querySelector('.tr-p'), L = path.getTotalLength(), N = Math.max(40, Math.round(L / 8));
+    const pts = Array.from({ length: N + 1 }, (_, i) => path.getPointAtLength(L * i / N)), hit = new Set();
+    let drawing = false, stray = 0, ink = [], over = false;
+    const toSvg = e => { const r = svg.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * 300, y: (e.clientY - r.top) / r.height * 160 }; };
+    const upd = () => { $('#trBar').style.width = (hit.size / pts.length * 100).toFixed(0) + '%'; $('#trU').setAttribute('points', ink.map(p => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ')); };
+    svg.addEventListener('pointerdown', e => { e.preventDefault(); drawing = true; try { svg.setPointerCapture(e.pointerId); } catch (x) {} ink.push(toSvg(e)); });
+    svg.addEventListener('pointermove', e => {
+      if (!drawing || over) return; const p = toSvg(e); ink.push(p);
+      let near = 1e9; pts.forEach((q, i) => { const dd = Math.hypot(q.x - p.x, q.y - p.y); if (dd < 14) hit.add(i); near = Math.min(near, dd); });
+      if (near > 26) { stray++; if (stray % 25 === 1) $('#trN').textContent = 'Ой, мимо дорожки! Держись пунктира.'; }
+      upd();
+    });
+    const end = async () => {
+      drawing = false; if (over || hit.size / pts.length < .88) return;
+      over = true; sfx.good(); const ok = stray < 30;
+      $('#trN').textContent = ok ? 'Ровно и аккуратно!' : 'Прошли! В следующий раз — поближе к пунктиру.';
+      await talk(ok ? 'Ровно и аккуратно!' : 'Получилось! Следующую — поаккуратнее.'); if (t !== tok) return;
+      if (done + 1 >= 4) finish({ key: 'hand-trace', stars: ok ? 3 : 2, line: 'Рука готова к красивому почерку!', again: () => trace(k + 1, 0) });
+      else later(() => trace(k + 1, done + 1), 400);
+    };
+    ['pointerup', 'pointercancel'].forEach(ev => svg.addEventListener(ev, end));
+    $('#trR').onclick = () => { sfx.tick(); hit.clear(); ink = []; stray = 0; upd(); $('#trN').textContent = 'Начни слева и веди, не отрывая пальчик.'; };
+  }
+  function handMenu() {
+    newScreen();
+    shell('Красивый почерк', `<div class="nr"><p class="lead">Почерк начинается с пальцев и правильного захвата. Каждый день по чуть-чуть.</p>
+      <div class="lg-grid" id="hM"><button class="lg-pic" data-h="f">${pic('🖐️')}<b>Пальчиковая гимнастика</b></button><button class="lg-pic" data-h="g">${pic('✏️')}<b>Как держать карандаш</b></button>
+      <button class="lg-pic" data-h="t">${pic('〰️')}<b>Дорожки</b></button><button class="lg-pic" data-h="w">${pic('✍️')}<b>Пишем буквы</b></button></div></div>`);
+    $('#hM').onclick = e => { const b = e.target.closest('[data-h]'); if (!b) return; sfx.pop(); ({ f: fingers, g: grip, t: () => trace(ri(0, PATHS.length - 1)), w: () => GAMES.find(g => g.id === 'write').go() })[b.dataset.h](); };
+    talk('Красивый почерк. Выбери, с чего начнём.');
+  }
+
+  /* ===== the games ===== */
+  const RU_ONLY = () => !IS_RU;
+  GAMES.push(
+    { id: 'neuro', hide: RU_ONLY, name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
+    { id: 'chist-all', hide: RU_ONLY, name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b>-<b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
+    { id: 'twist-pen', hide: RU_ONLY, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
+    { id: 'r-motor', hide: RU_ONLY, name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
+    { id: 'r-throat', hide: RU_ONLY, name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
+    { id: 'hand', hide: RU_ONLY, name: 'Красивый почерк', sub: 'пальчики, карандаш, дорожки', ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
+  );
+  if (IS_RU) {
+    BREATH.push({ id: 'dragon', name: 'Дракончик', icon: '🐉', bg: 'var(--t-peach)' });
+    BREATH_RUN.dragon = dragon;
+  }
+  return { neuroMenu, chist, twistPencil, rMotor, rThroat, dragon, handMenu, trace, fingers, grip };
 })();
 
 /* LOGO-END */
