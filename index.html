@@ -92,10 +92,11 @@ b.r{color:var(--berry)}
 .guide-ryz{width:66px;height:66px;flex:none;border:0;padding:0;background:none;cursor:pointer}
 .guide-ryz svg{width:100%;height:100%}
 .guide-ryz.talking svg{animation:bob .7s ease-in-out 2}
-.bubble{position:relative;flex:1;min-width:0;margin:0;background:var(--paper);border-radius:20px;padding:10px 16px;font:700 17px/1.3 var(--f-body);box-shadow:0 4px 0 var(--line);max-height:calc(3.9em + 20px);overflow:hidden}
-.bubble.more{cursor:pointer;-webkit-mask-image:linear-gradient(#000 62%,rgba(0,0,0,.25));mask-image:linear-gradient(#000 62%,rgba(0,0,0,.25))}
-.bubble.open{max-height:42vh;overflow-y:auto;-webkit-mask-image:none;mask-image:none}
-@media (max-height:780px){.guide{padding-block:4px 8px;gap:8px}.guide-ryz{width:52px;height:52px}.guide .ibtn{width:46px;height:46px}.bubble{font-size:16px;padding:8px 14px;max-height:calc(2.6em + 16px)}}
+.bubble{position:relative;flex:1;min-width:0;margin:0;background:var(--paper);border-radius:20px;padding:10px 16px 0;border-bottom:10px solid var(--paper);font:700 17px/1.3 var(--f-body);box-shadow:0 4px 0 var(--line);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
+.bubble.more{cursor:pointer;padding-right:34px}
+.bubble.more::after{content:'▾';position:absolute;right:10px;bottom:1px;width:20px;height:20px;border-radius:50%;background:var(--sun);color:var(--ink);font:900 13px/20px var(--f-body);text-align:center}
+.bubble.open{display:block;-webkit-line-clamp:unset;line-clamp:unset;max-height:42vh;overflow-y:auto}
+@media (max-height:780px){.guide{padding-block:4px 8px;gap:8px}.guide-ryz{width:52px;height:52px}.guide .ibtn{width:46px;height:46px}.bubble{font-size:16px;padding:8px 14px 0;border-bottom-width:8px;-webkit-line-clamp:2;line-clamp:2}}
 .guide .bubble::before{content:"";position:absolute;left:-10px;top:50%;margin-top:-10px;border:10px solid transparent;border-right-color:var(--paper);border-left:0}
 
 /* buttons */
@@ -2459,16 +2460,39 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
   if (!guide) guideWatch();
   if (guide) {
     $('#replay').onclick = () => talk(lastLine); $('#ryzBtn').onclick = () => talk(lastLine);
-    $('#bubble').onclick = e => { const b = e.currentTarget; if (b.classList.contains('more') || b.classList.contains('open')) { b.classList.toggle('open'); b.classList.toggle('more', !b.classList.contains('open')); } };
+    $('#bubble').onclick = e => { const b = e.currentTarget; if (b.classList.contains('more')) { b.style.webkitLineClamp = ''; b.style.lineClamp = ''; b.classList.remove('more'); b.classList.add('open'); } else if (b.classList.contains('open')) bubbleFit(b); };
     guideWatch();
     const st = $('#stage'), f1 = st.firstElementChild, lead = f1 && (f1.matches('p.lead') ? f1 : f1.firstElementChild && f1.firstElementChild.matches('p.lead') ? f1.firstElementChild : null);
     if (lead && !lead.id) lead.remove();
   }
   return $('#stage');
 }
+// a long line: the whole of it when the screen has free room above the friend, else whole lines with ▾ (a tap opens it)
+function bubbleFit(b) {
+  b.classList.remove('more', 'open'); b.style.webkitLineClamp = ''; b.style.lineClamp = '';
+  if (b.scrollHeight <= b.clientHeight + 3) return;
+  const cs = getComputedStyle(b), lh = parseFloat(cs.lineHeight) || 21, base = parseInt(cs.webkitLineClamp || cs.getPropertyValue('-webkit-line-clamp'), 10) || 2;
+  const total = Math.round((b.scrollHeight - (parseFloat(cs.paddingTop) || 0)) / lh), st = $('#stage');
+  let room = 0;
+  if (st) {
+    // the lowest thing actually drawn on the screen (wrappers stretch to the bottom, their contents do not)
+    const sr = st.getBoundingClientRect(), pad = parseFloat(getComputedStyle(st).paddingBottom) || 0;
+    let bottom = sr.top;
+    for (const el of st.querySelectorAll('*')) {
+      if (el.children.length && getComputedStyle(el).backgroundColor === 'rgba(0, 0, 0, 0)' && !el.matches('button,img,svg,canvas,input,textarea,select,video')) continue;
+      const r = el.getBoundingClientRect(); if (r.height && r.width) bottom = Math.max(bottom, r.bottom);
+    }
+    room = sr.bottom - pad - bottom;
+  }
+  // as many more lines as the free room takes; all of them — no ▾
+  const lines = Math.min(total, base + Math.max(0, Math.floor((room - 6) / lh)));
+  if (lines >= total) { b.classList.add('open'); return; }
+  if (lines > base) { b.style.webkitLineClamp = lines; b.style.lineClamp = lines; }
+  b.classList.add('more');
+}
 function talk(text, opts) {
   lastLine = text;
-  const b = $('#bubble'); if (b) { b.textContent = gx(text); b.classList.remove('open'); b.scrollTop = 0; b.classList.toggle('more', b.scrollHeight > b.clientHeight + 3); }
+  const b = $('#bubble'); if (b) { b.textContent = gx(text); b.classList.remove('open'); b.scrollTop = 0; bubbleFit(b); }
   const r = $('.guide-ryz'); if (r) { r.classList.remove('talking'); void r.offsetWidth; r.classList.add('talking'); }
   return say(text, opts);
 }
@@ -10850,7 +10874,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '72';
+const APP_VER = '73';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
