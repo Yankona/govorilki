@@ -274,6 +274,23 @@ b.r{color:var(--berry)}
 .ml-tr{display:block;font:700 12px var(--f-body);color:var(--ink-soft);margin-top:1px}
 .cmp-fxs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}.cmp-fxs:empty{display:none}.cmp-fx{text-decoration:none;white-space:normal;max-width:100%;text-align:left;line-height:1.25}
 .cmp-t.hint{box-shadow:0 0 0 3px var(--sun,#FFC94A)}
+.pr{display:flex;flex-direction:column;gap:12px;align-items:center;width:min(100%,620px)}.pr-note{margin:0;font:700 15px/1.35 var(--f-body);color:var(--ink-soft);text-align:center}
+.pr-path{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;width:100%}
+.pr-l{position:relative;border:0;border-radius:14px;height:52px;font:900 26px/1 var(--f-body);background:var(--paper);box-shadow:0 4px 0 var(--line-strong);cursor:pointer}
+.pr-l.v{color:#E53935}.pr-l.c{color:#1E63D6}.pr-l.s{color:var(--ink-soft)}.pr-l.later{opacity:.42}.pr-l.done{background:#E3F6E8}
+.pr-l i{position:absolute;right:3px;top:1px;font:900 11px var(--f-body);color:#2E9D57;font-style:normal}
+.pr-l.now{box-shadow:0 0 0 4px var(--sun),0 4px 0 var(--line-strong);animation:pulse 1.6s ease-in-out infinite}
+.pr-steps{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.pr-steps span{font:800 12px var(--f-body);padding:4px 9px;border-radius:999px;background:var(--paper);color:var(--ink-soft);opacity:.7}
+.pr-steps span.now{background:var(--sun);color:var(--ink);opacity:1}.pr-steps span.done{opacity:.45;text-decoration:line-through}
+#prBox{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px}
+.pr-card{background:var(--paper);border-radius:22px;padding:16px;box-shadow:0 5px 0 var(--line-strong);display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;text-align:center}
+.pr-big{font-size:110px;line-height:1;cursor:pointer}.pr-q .pr-big{font-size:34px;display:inline}.pr-hint{margin:0;font:800 19px/1.3 var(--f-body)}
+.pr-ws{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.pr-pic{font-size:84px;line-height:1}.pr-q{margin:0;font:800 20px/1.35 var(--f-body)}
+.pr-syl{border:0;background:#F4F1FF;border-radius:20px;padding:10px 26px;font:900 72px/1.1 var(--f-body);cursor:pointer;letter-spacing:2px}
+.pr-table{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;width:100%}
+.pr-ts{border:0;border-radius:14px;padding:8px 4px;background:#F4F1FF;font:900 30px/1.1 var(--f-body);cursor:pointer}.pr-ts.read{background:#E3F6E8}
+.pr-done b{font-size:54px}.pr-done p{margin:0;font:800 20px var(--f-body)}
+.pr-sent{margin:0;font:800 30px/1.5 var(--f-body)}.pr-w{border:0;background:none;font:inherit;color:inherit;padding:0 2px;border-radius:8px;cursor:pointer}.pr-w:active{background:#F4F1FF}
 .mg-loco{position:absolute;bottom:-16px;left:4px;font-size:40px;line-height:1;filter:drop-shadow(0 2px 0 rgba(42,35,70,.2))}
 .abc-trains{width:min(100%,560px)}.abc-tt{margin:2px 0 6px;font:800 16px var(--f-body);color:var(--ink-soft)}
 .trn-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px}.trn-row::-webkit-scrollbar{display:none}.trn{flex:none}
@@ -1989,7 +2006,8 @@ function lessonPlan(id) {
     steps.push(gameStep(games[o % games.length].id, 'game'));
     if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   } else if (id === 'read') {
-    ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
+    if (IS_RU && (P.settings.age || 6) <= 7 && prState().at < PRIMER.length) ['primer', ['read-words', 'abc-first', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
+    else ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
     ['math-count', 'math-digits', 'math-add', 'math-compare'].forEach(g => steps.push(gameStep(g, 'math')));
   }
@@ -2708,6 +2726,7 @@ const GAMES = [
   { id: 'syll', name: "Sílabas e palavras", sub: "trá-trá-trá… trator!", ico: () => `<span class="syl-ico"><i style="background:${BALLC[0]}">RA</i><i style="background:${BALLC[2]}">TO</i></span>`, bg: 'var(--t-mint)', go: () => screenSyll(), grp: 1 },
   { id: 'house', name: "Onde mora o som do R?", sub: "no início, no meio, no fim", ico: () => pic('🏠'), bg: 'var(--t-blue)', go: () => screenHouse(), grp: 1 },
   { id: 'boxes', name: "Contar caixas", sub: "«Na caixa há dois robôs»", ico: () => `<span class="mini-crate">${CRATE}<em>2</em></span>`, bg: 'var(--t-pink)', go: () => screenBoxes(), grp: 1 },
+  { id: 'primer', hide: () => !IS_RU, name: RU('Букварь шаг за шагом'), sub: () => RU('буква ') + PRIMER[Math.min(prState().at, PRIMER.length - 1)] + RU(': звук, слоги, слова'), ico: () => `<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b>-<b class="L c">М</b><b class="L v">А</b></span>`, bg: 'var(--t-mint)', go: () => screenPrimer(), grp: 2, prog: () => RU(`${prState().at} из ${PRIMER.length} букв`) },
   { id: 'abc', name: "Alfabeto", sub: "todas as letras com imagens", ico: () => "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b><b class=\"L c\">C</b></span>", bg: 'var(--t-yellow)', go: () => screenABC(), grp: 2, prog: () => '' },
   { id: 'abc-find', name: "Encontra a letra", sub: "ouve e toca", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b>?</span>", bg: 'var(--t-blue)', go: () => screenFindLetter(), grp: 2 },
   { id: 'abc-first', name: "Primeira letra", sub: "com que letra começa a palavra?", ico: () => pic('🍉'), bg: 'var(--t-pink)', go: () => screenFirstLetter(), grp: 2 },
@@ -10874,7 +10893,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '75';
+const APP_VER = '76';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -12440,6 +12459,205 @@ function sayOwnAdd(raw) {
   if (ROOT.sayOwnPh) delete ROOT.sayOwnPh[f];
   save();
   return f;
+}
+
+/* ---------- «Букварь шаг за шагом»: the tools of a speech therapist's primer (the method of N. S. Zhukova), not its
+   pages. Letters come one at a time, from easy sounds to hard ones; a letter is called by its sound («ммм», not «эм»);
+   vowels pair up first (АУ, УА), then the consonant «runs to the vowel» and the syllable is sung on one breath
+   («мммА»), back syllables (АМ) and a syllable table; words and sentences use only the letters already learned,
+   split into syllables (МА-МА). Russian only. ---------- */
+const PRIMER = 'АУОМСХРШЫЛНКТИПЗЙГВДБЖЕЬЯЮЁЧФЦЭЩЪ';
+// the sound of each letter: what it sounds like (for the grown-up and the child), and how the voice sings it
+const PR_SOUND = {
+  'А': ['Девочка плачет: «а-а-а!»', 'А-а-а!'], 'У': ['Поезд гудит: «у-у-у!»', 'У-у-у!'], 'О': ['Удивляемся: «о-о-о!»', 'О-о-о!'],
+  'М': ['Корова мычит: «м-м-м»', 'Мммуу!'], 'С': ['Насос качает воду: «с-с-с»', 'Сссок.'], 'Х': ['Греем ладошки: «х-х-х»', 'Хххлеб.'],
+  'Р': ['Тигр рычит: «р-р-р»', 'Ррракета.'], 'Ш': ['Змея шипит: «ш-ш-ш»', 'Шшшар.'], 'Ы': ['Медвежонок ворчит: «ы-ы-ы»', 'Ы-ы-ы!'],
+  'Л': ['Пароход гудит: «л-л-л»', 'Лллуна.'], 'Н': ['Самолёт гудит: «н-н-н»', 'Нннос.'], 'К': ['Стучим молоточком: «к-к-к»', 'Кот.'],
+  'Т': ['Часики тикают: «т-т-т»', 'Торт.'], 'И': ['Лошадка ржёт: «и-и-и!»', 'И-и-и!'], 'П': ['Пыхтит паровоз: «п-п-п»', 'Папа.'],
+  'З': ['Комар звенит: «з-з-з»', 'Зззонт.'], 'Й': ['Короткий звук «й», как в конце слова «май»', 'Май.'], 'Г': ['Гуси гогочут: «га-га-га!»', 'Гусь.'],
+  'В': ['Ветер воет: «в-в-в»', 'Вввода.'], 'Д': ['Дятел стучит: «д-д-д»', 'Дом.'], 'Б': ['Барабан бьёт: «б-б-б»', 'Банан.'],
+  'Ж': ['Жук жужжит: «ж-ж-ж»', 'Жжжук.'], 'Е': ['Буква Е поёт два звука: «й» и «э», как в слове «ель»', 'Ель.'],
+  'Ь': ['Мягкий знак не звучит: он делает звук перед собой мягким. Мел — мель', 'Мел. Мель.'],
+  'Я': ['Буква Я — это «й» и «а», как в слове «яблоко»', 'Яблоко.'], 'Ю': ['Буква Ю — это «й» и «у», как в слове «юла»', 'Юла.'],
+  'Ё': ['Буква Ё — это «й» и «о», как в слове «ёжик»', 'Ёжик.'], 'Ч': ['Поезд тормозит: «ч-ч-ч»', 'Чай.'], 'Ф': ['Ёжик фыркает: «ф-ф-ф»', 'Фффлаг.'],
+  'Ц': ['Тише, тише: «ц-ц-ц»', 'Цапля.'], 'Э': ['Эхо в горах: «э-э-э»', 'Э-э-э!'], 'Щ': ['Щётка шуршит: «щ-щ-щ»', 'Щщщука.'],
+  'Ъ': ['Твёрдый знак не звучит: он разделяет. Сел — съел', 'Сел. Съел.']
+};
+// words split into syllables, with a picture where there is one; each is offered once all its letters are learned
+const PR_WORDS = [['АУ', ''], ['У-А', '👶'], ['АХ', ''], ['ОХ', ''], ['УМ', ''], ['МУ', '🐄'], ['АМ', ''], ['САМ', ''], ['УС', ''], ['У-ХА', '🍲'], ['ХА-ХА', '😆'], ['СО-СУ', ''], ['АР-БУЗ', '🍉'], ['УТ-КА', '🦆'], ['У-ЛИТ-КА', '🐌'], ['О-БЛА-КО', '☁️'], ['ИН-ДЮК', '🦃'], ['ИГ-ЛА', '🪡'], ['Е-НОТ', '🦝'], ['МА-МА', '👩'], ['О-СА', '🐝'], ['У-ХО', '👂'], ['МУ-ХА', '🪰'], ['МОХ', '🌿'], ['СОМ', '🐟'], ['РА-МА', '🖼️'], ['РО-СА', '💧'], ['ХОР', '🎶'],
+  ['ШАР', '🎈'], ['ШУМ', ''], ['МА-ША', '👧'], ['СА-ША', '👦'], ['У-СЫ', ''], ['СЫР', '🧀'], ['О-СЫ', '🐝'], ['ША-РЫ', '🎈'], ['МЫ', ''],
+  ['МЫ-ЛО', '🧼'], ['ЛА-МА', '🦙'], ['МА-ЛЫШ', '👶'], ['ХОЛМ', '⛰️'], ['ЛОМ', ''], ['ЛУ-НА', '🌙'], ['НОС', '👃'], ['СОН', '😴'], ['СЛОН', '🐘'], ['НО-РА', ''],
+  ['ША-ЛУН', ''], ['РУ-КА', '✋'], ['РАК', '🦞'], ['МАК', '🌺'], ['СОК', '🧃'], ['ЛУК', '🧅'], ['КА-ША', '🥣'], ['КОШ-КА', '🐈'], ['СУМ-КА', '👜'], ['КРАН', '🏗️'],
+  ['КОТ', '🐈'], ['ТОРТ', '🎂'], ['МОСТ', '🌉'], ['РОТ', '👄'], ['КРОТ', ''], ['ТУ-КАН', ''], ['КИТ', '🐋'], ['МИШ-КА', '🧸'], ['ЛИ-СА', '🦊'], ['ЛИСТ', '🍂'],
+  ['ТИГР', '🐯'], ['ЛИ-МОН', '🍋'], ['МА-ЛИ-НА', ''], ['НИТ-КИ', '🧵'], ['И-РИС', ''], ['ПА-ПА', '👨'], ['ПАРК', '🏞️'], ['ПИ-ЛА', '🪚'], ['ЛА-ПА', '🐾'], ['СУП', '🍲'],
+  ['ПУШ-КА', ''], ['ПОП-КОРН', '🍿'], ['КО-ЗА', '🐐'], ['РО-ЗА', '🌹'], ['ЗОНТ', '☂️'], ['ЗИ-МА', '❄️'], ['ЗА-МОК', '🏰'], ['ЗАЙ-КА', '🐰'], ['МАЙ-КА', '👕'],
+  ['СОЙ-КА', ''], ['КРАЙ', ''], ['НО-ГА', '🦵'], ['ГО-РА', '⛰️'], ['ГУ-СИ', '🦢'], ['ИГ-РА', ''], ['ГРОМ', '⚡'], ['ПИ-РОГ', '🥧'], ['КНИ-ГА', '📖'], ['ГНОМ', ''],
+  ['ВА-ЗА', '🏺'], ['СО-ВА', '🦉'], ['ВОЛК', '🐺'], ['ТРА-ВА', '🌿'], ['ВИЛ-КА', '🍴'], ['КО-РО-ВА', '🐄'], ['ТРАМ-ВАЙ', '🚋'], ['ДОМ', '🏠'], ['ВО-ДА', '💧'],
+  ['ДЫМ', '💨'], ['ПАН-ДА', '🐼'], ['ДИ-ВАН', '🛋️'], ['ДРУГ', ''], ['ДО-РО-ГА', '🛣️'], ['БА-НАН', '🍌'], ['ДУБ', '🌳'], ['ЗУБ', '🦷'], ['РЫ-БА', '🐟'], ['БУ-СЫ', '📿'],
+  ['ГРИБ', '🍄'], ['БАН-КА', '🫙'], ['БА-БУШ-КА', '👵'], ['БЫК', '🐂'], ['ЖУК', '🪲'], ['ЖА-БА', '🐸'], ['ЛЫ-ЖИ', '🎿'], ['ЛУ-ЖА', ''], ['ЖИ-РАФ', '🦒'], ['ЛЕС', '🌲'],
+  ['СНЕГ', '❄️'], ['ХЛЕБ', '🍞'], ['РЕ-КА', '🏞️'], ['ЛЕ-ТО', '☀️'], ['КЕКС', '🧁'], ['ЛЕЙ-КА', ''], ['ВЕТ-КА', ''], ['МЕТ-ЛА', '🧹'], ['ПЕ-НАЛ', ''], ['ЕЛЬ', '🌲'],
+  ['КОНЬ', '🐴'], ['СОЛЬ', '🧂'], ['МЫШЬ', '🐭'], ['ПЕНЬ', '🪵'], ['ДЕНЬ', ''], ['ТЕНЬ', ''], ['ПАЛЬ-ТО', '🧥'], ['ДОЖДЬ', '🌧️'], ['ГУСЬ', '🪿'], ['Я-БЛО-КО', '🍎'],
+  ['ДЫ-НЯ', '🍈'], ['Я-ГО-ДА', '🫐'], ['Я-КОРЬ', '⚓'], ['ЗЕМ-ЛЯ', '🌍'], ['ДЯ-ДЯ', ''], ['Я-МА', ''], ['ЮБ-КА', '👗'], ['Ю-ЛА', ''], ['КЛЮВ', ''], ['ЛЮК', ''],
+  ['ЁЖ', '🦔'], ['ЁЛ-КА', '🎄'], ['МЁД', '🍯'], ['ЛЁД', '🧊'], ['СА-МО-ЛЁТ', '✈️'], ['КЛЁН', '🍁'], ['ЧАЙ', '🍵'], ['МЯЧ', '⚽'], ['ЧА-СЫ', '⏰'], ['ТУ-ЧА', '☁️'],
+  ['ЧАШ-КА', '☕'], ['ПЧЕ-ЛА', '🐝'], ['КЛЮЧ', '🔑'], ['ВРАЧ', ''], ['ФЛАГ', '🚩'], ['ШАРФ', '🧣'], ['ФЕ-Я', '🧚'], ['КО-ФЕ', '☕'], ['ФО-КУС', ''],
+  ['ЦВЕ-ТОК', '🌸'], ['ЦАП-ЛЯ', ''], ['ЗА-ЯЦ', '🐇'], ['ПТИ-ЦА', '🐦'], ['О-ГУ-РЕЦ', '🥒'], ['КУ-РИ-ЦА', '🐔'], ['ЦИРК', '🎪'], ['Э-ХО', ''], ['Э-КРАН', '📺'],
+  ['ЭС-КИ-МО', '🍦'], ['ЩУ-КА', '🐟'], ['ЩЕ-НОК', '🐶'], ['Я-ЩИК', '📦'], ['ПЛАЩ', '🧥'], ['О-ВО-ЩИ', '🥕'], ['ПОДЪ-ЕЗД', '🚪'], ['СЪЕЛ', ''], ['ПОДЪ-ЁМ', '']];
+// sentences made of learned letters only
+const PR_SENT = ['У мамы шары.', 'Усы у сома.', 'Саша сам.', 'Мама мыла раму.', 'Маша и Саша.', 'У Маши шар.', 'Сыр у мыши.', 'У слона нос.', 'На носу муха.', 'Мама и папа тут.', 'У кота усы.',
+  'Тут кит.', 'Малыш спит.', 'Нина пила сок.', 'У лисы нора.', 'Лиса спит.', 'Тома сама мыла миску.', 'Зина и Лиза.', 'Зайка ускакал.', 'Гуси на горе.',
+  'Вова пил воду.', 'У дома дуб.', 'Бабушка варит суп.', 'Жук ползает.', 'Жираф высокий.', 'Ель в лесу.', 'Летом тепло.', 'Конь и пень.',
+  'Яша ест яблоко.', 'Юля и юла.', 'Ёжик нёс грибы.', 'Чай в чашке.', 'Мяч у Вовы.', 'Фея и флаг.', 'Цапля стоит на одной ноге.', 'Это эхо.',
+  'Щенок ищет щётку.', 'Мы вошли в подъезд.', 'Ёж съел гриб.'];
+const prKnown = i => PRIMER.slice(0, i + 1);
+const prFits = (w, known) => [...w.toUpperCase().replace(/[^А-ЯЁ]/g, '')].every(c => known.includes(c));
+const prSing = s => { const c = s[0], v = s.slice(1); return 'МНЛРСЗШЖХФВЩ'.includes(c) && v ? c + c.toLowerCase().repeat(2) + v.toLowerCase() : s; };
+const PR_BAD = /^(ЖЫ|ШЫ|ЧЫ|ЩЫ|ЦЮ|ЧЯ|ЩЯ|ЧЮ|ЩЮ|ЖЯ|ШЯ|ЖЮ|ШЮ|КЫ|ГЫ|ХЫ|ЙЫ|ЙА|ЙО|ЙУ|ЙИ|ЦЯ)$/;
+const prBig = (L, cls = '') => `<b class="pr-big L ${lcls(L)} ${cls}">${L}</b>`;
+function prState() { if (!P.primer) P.primer = { at: 0, done: {} }; return P.primer; }
+// the path of letters: the next one glows; a letter further on opens for a grown-up
+function screenPrimer() {
+  newScreen();
+  const st = prState(), at = Math.min(st.at, PRIMER.length - 1);
+  shell(RU('Букварь шаг за шагом'), `<div class="pr">
+      <p class="pr-note">${RU('Буквы по одной, от простых звуков к сложным. Слоги поём, слова и предложения — только из изученных букв.')}</p>
+      <div class="pr-path" id="prPath">${[...PRIMER].map((L, i) => `<button class="pr-l ${lcls(L)} ${i < st.at ? 'done' : i === at ? 'now' : 'later'}" data-i="${i}">${L}${i < st.at ? '<i>✓</i>' : ''}</button>`).join('')}</div>
+      <div class="og-btns"><button class="big" id="prGo">${RU('Учим букву')} ${PRIMER[at]}</button></div>
+    </div>`);
+  $('#prGo').onclick = () => { sfx.pop(); screenPrimerLesson(at); };
+  $('#prPath').onclick = e => {
+    const b = e.target.closest('[data-i]'); if (!b) return; const i = +b.dataset.i;
+    sfx.pop();
+    if (i <= st.at) screenPrimerLesson(i);
+    else grownUp(() => screenPrimerLesson(i), RU('Буквы идут по порядку. Открыть эту букву раньше?'));
+  };
+  talk(st.at ? RU(`Продолжаем букварь. Сегодня буква ${PRIMER[at]}.`) : RU('Букварь! Учим буквы по одной. Первая буква — А.'));
+}
+function screenPrimerLesson(i) {
+  const t = newScreen(), L = PRIMER[i], known = prKnown(i), vow = [...known].filter(c => VOWELS.includes(c)), cons = [...known].filter(c => !VOWELS.includes(c) && !'ЬЪ'.includes(c));
+  const isV = VOWELS.includes(L), parts = [];
+  // 1. the sound and the letter
+  parts.push(['Звук и буква', box => {
+    const [hint, sing] = PR_SOUND[L], ws = PR_WORDS.filter(([w, e]) => e && w.replace(/-/g, '').startsWith(L)).slice(0, 3);
+    box.innerHTML = `<div class="pr-card">${prBig(L, 'pop')}<p class="pr-hint">${esc(hint)}</p>
+      <div class="pr-ws">${ws.map(([w, e]) => `<button class="chip" data-say="${esc(wordOf(w))}">${e} ${esc(cap(wordOf(w)))}</button>`).join('')}</div>
+      <p class="muted">${L === 'Ь' || L === 'Ъ' ? 'Этот знак — не звук. Он помогает читать.' : isV ? 'Гласный звук поётся, его можно тянуть долго. Гласные — красные.' : 'Согласный звук встречает преграду: губы, зубы или язык. Согласные — синие.'}</p></div>`;
+    box.onclick = e => { const b = e.target.closest('[data-say]'); if (b) { hopEl(b); say(cap(b.dataset.say) + '.'); } const g = e.target.closest('.pr-big'); if (g) { hopEl(g); say(sing); } };
+    return talk(`${hint.replace(/[«»]/g, '')}. ${sing}`);
+  }]);
+  // 2. hear the sound: does the word begin with it?
+  const pool = PR_WORDS.filter(([w, e]) => e), yes = pool.filter(([w]) => w.startsWith(L)), no = pool.filter(([w]) => !w.includes(L));
+  if (L !== 'Ь' && L !== 'Ъ' && yes.length >= 2) parts.push(['Слышу звук', box => new Promise(done => {
+    const deck = shuffle([...sample(yes, Math.min(3, yes.length)), ...sample(no, 3)]); let k = 0, busy = false;
+    const show = () => {
+      busy = false; const [w, e] = deck[k];
+      box.innerHTML = `<div class="pr-card"><div class="pr-pic">${pic(e)}</div><p class="pr-q">«${esc(cap(wordOf(w)))}» начинается со звука ${prBig(L)}?</p>
+        <div class="og-btns"><button class="big" data-a="1">👍 Да</button><button class="big ghost" data-a="0">👎 Нет</button></div></div>`;
+      talk(`${cap(wordOf(w))}. Это слово начинается со звука ${L}?`);
+    };
+    box.onclick = async e => {
+      const b = e.target.closest('[data-a]'); if (!b || busy) return; busy = true;
+      const right = (b.dataset.a === '1') === deck[k][0].startsWith(L);
+      if (!right) { sfx.oops(); wiggle(b); await talk(`Послушай ещё: ${wordOf(deck[k][0])}.`); busy = false; return; }
+      sfx.good(); b.classList.add('right'); await wait(500); if (t !== tok) return;
+      k++; if (k >= deck.length) done(); else show();
+    };
+    show();
+  })]);
+  // 3. syllables: vowel pairs, or the consonant running to each vowel, back syllables and the table
+  // a new vowel: the learned consonants run to it (МИ, СИ…); before any consonant, vowels pair up (АУ, УА); Й ends a syllable (АЙ)
+  let syl = [], run = false;
+  if (isV && cons.length) { syl = cons.slice(-6).map(c => c + L).filter(s => !PR_BAD.test(s)); run = true; }
+  else if (isV && vow.length >= 2) syl = shuffle(vow.filter(v => v !== L).flatMap(v => [L + v, v + L])).slice(0, 6);
+  else if (L === 'Й') syl = vow.slice(0, 5).map(v => v + 'Й');
+  else if (!isV && L !== 'Ь' && L !== 'Ъ') { syl = vow.map(v => L + v).filter(s => !PR_BAD.test(s)); run = true; }
+  if (syl.length) parts.push([run ? 'Буква бежит к букве' : 'Читаем слоги', box => new Promise(done => {
+    let k = 0, busy = false;
+    const show = () => {
+      busy = false; const s = syl[k];
+      box.innerHTML = run
+        ? `<div class="merge pr-merge" id="mg"><button class="mg-l mg-c" id="mc">${Lspan(s[0])}</button><span class="mg-path"></span><span class="mg-l mg-v" id="mv">${Lspan(s.slice(1))}</span></div><p class="merge-syl" id="ms"></p>`
+        : `<div class="pr-card"><button class="pr-syl" id="ps">${[...s].map(Lspan).join('')}</button></div>`;
+      if (run) { $('#mc', box).onclick = go; talk(k === 0 ? `Буква ${s[0]} бежит к букве ${s.slice(1)} и поёт: ${prSing(s)}! Нажми на синюю букву.` : 'Нажми на синюю букву.'); }
+      else { talk(k === 0 ? 'Прочитай слог. Не останавливайся между буквами: тяни их вместе. Нажми — я помогу.' : 'Прочитай слог.'); $('#ps', box).onclick = () => say(sylSay(s) + '.'); later(askNext, 300); }
+    };
+    async function askNext() {
+      await askSaid(G('Я прочитала!', 'Я прочитал!')); if (t !== tok) return;
+      await say(sylSay(syl[k]) + '!'); if (t !== tok) return;
+      k++; if (k >= syl.length) done(); else show();
+    }
+    async function go() {
+      if (busy) return; busy = true;
+      const s = syl[k], mc = $('#mc', box), cr = mc.getBoundingClientRect(), vr = $('#mv', box).getBoundingClientRect();
+      mc.classList.add('go'); mc.style.transform = `translate(${vr.left - cr.right + 4}px, ${vr.top - cr.top}px)`; sfx.whoosh(.5, .14);
+      say(prSing(s) + '!');
+      await wait(900); if (t !== tok) return;
+      $('#mg', box).classList.add('joined'); $('#ms', box).innerHTML = [...s].map(Lspan).join(''); sfx.pop();
+      await talk(`Повтори: ${prSing(s)}!`); if (t !== tok) return;
+      await askSaid(); if (t !== tok) return;
+      k++; if (k >= syl.length) done(); else show();
+    }
+    show();
+  })]);
+  // the table: every syllable of the letter, forward and back, to read on one's own
+  if (!isV && L !== 'Й' && L !== 'Ь' && L !== 'Ъ' && vow.length >= 2) parts.push(['Слоговая таблица', box => new Promise(done => {
+    const fw = vow.map(v => L + v).filter(s => !PR_BAD.test(s)), bw = vow.slice(0, 5).map(v => v + L);
+    box.innerHTML = `<div class="pr-card"><div class="pr-table">${[...fw, ...bw].map(s => `<button class="pr-ts" data-s="${s}">${[...s].map(Lspan).join('')}</button>`).join('')}</div>
+      <p class="muted">Читай по порядку: сначала слоги, где согласная впереди, потом где позади. Нажми на слог — я его спою.</p>
+      <div class="og-btns"><button class="big" id="prT">${G('Я прочитала все!', 'Я прочитал все!')}</button></div></div>`;
+    box.onclick = e => { const b = e.target.closest('[data-s]'); if (b) { hopEl(b); b.classList.add('read'); say(sylSay(b.dataset.s) + '.'); } if (e.target.closest('#prT')) { sfx.good(); done(); } };
+    return talk('Слоговая таблица. Прочитай все слоги по порядку.');
+  })]);
+  // 4. words of learned letters, by syllables
+  const fitting = PR_WORDS.filter(([w]) => prFits(w, known)), withL = fitting.filter(([w]) => w.includes(L));
+  const words = [...shuffle(withL), ...shuffle(fitting.filter(x => !withL.includes(x)))].slice(0, 5);
+  if (words.length >= 2) parts.push(['Читаем слова', box => new Promise(done => {
+    let k = 0;
+    const show = async () => {
+      const [w, e] = words[k];
+      box.innerHTML = `<div class="rw-word" id="rw">${wordChips(w)}</div><div class="rw-pic" id="rp"><span class="mystery">?</span></div>`;
+      chipHint($('#rw', box));
+      await talk(k === 0 ? 'Читаем слово по слогам. Слог трудный — нажми на него. Потом нажми жёлтую кнопку.' : 'Прочитай слово.'); if (t !== tok) return;
+      await askSaid(G('Я прочитала!', 'Я прочитал!')); if (t !== tok) return;
+      if (e) { $('#rp', box).innerHTML = pic(e); $('#rp', box).classList.add('open'); }
+      sfx.good(); await talk(`${cap(wordOf(w))}!`); if (t !== tok) return;
+      k++; if (k >= words.length) done(); else later(show, 400);
+    };
+    show();
+  })]);
+  // 5. a sentence or two, when the letters allow
+  const sents = shuffle(PR_SENT.filter(s => prFits(s, known))).sort((a, b) => b.toUpperCase().includes(L) - a.toUpperCase().includes(L)).slice(0, 2);
+  if (sents.length) parts.push(['Читаем предложение', box => new Promise(done => {
+    let k = 0;
+    const show = async () => {
+      const s = sents[k];
+      box.innerHTML = `<div class="pr-card"><p class="pr-sent">${s.split(' ').map(w => `<button class="pr-w" data-w="${esc(w.replace(/[.,!?]/g, ''))}">${esc(w)}</button>`).join(' ')}</p>
+        <p class="muted">Предложение начинается с большой буквы, а в конце стоит точка. Слово трудное — нажми на него.</p></div>`;
+      box.onclick = e => { const b = e.target.closest('[data-w]'); if (b) { hopEl(b); say(cap(b.dataset.w.toLowerCase()) + '.'); } };
+      await talk(k === 0 ? 'Прочитай предложение. Читай слово за словом.' : 'Ещё одно предложение.'); if (t !== tok) return;
+      await askSaid(G('Я прочитала!', 'Я прочитал!')); if (t !== tok) return;
+      sfx.good(); await talk(s); if (t !== tok) return;
+      k++; if (k >= sents.length) done(); else later(show, 400);
+    };
+    show();
+  })]);
+  shell(`Буква ${L}`, `<div class="pr pr-lesson"><div class="pr-steps" id="prS">${parts.map(([n], j) => `<span data-j="${j}">${esc(n)}</span>`).join('')}</div><div id="prBox"></div></div>`, { back: screenPrimer });
+  const box = $('#prBox');
+  (async () => {
+    for (let j = 0; j < parts.length; j++) {
+      if (t !== tok) return;
+      $$('#prS span').forEach((x, n) => { x.classList.toggle('now', n === j); x.classList.toggle('done', n < j); });
+      box.onclick = null;
+      await parts[j][1](box); if (t !== tok) return;
+      if (j < parts.length - 1) {
+        // a finished part leaves no buttons that do nothing: the sound card stays, the others say «готово»
+        if (j > 0) { box.onclick = null; box.innerHTML = `<div class="pr-card pr-done"><b>✅</b><p>${esc(parts[j][0])} — готово!</p></div>`; }
+        box.insertAdjacentHTML('beforeend', `<div class="og-btns"><button class="big" id="prNext">Дальше: ${esc(parts[j + 1][0])}</button></div>`);
+        await new Promise(r => { $('#prNext').onclick = () => { sfx.pop(); r(); }; }); if (t !== tok) return;
+      }
+    }
+    const st = prState(); st.done[L] = (st.done[L] || 0) + 1; st.at = Math.max(st.at, i + 1); save();
+    finish({ key: 'primer', stars: 3, line: i + 1 < PRIMER.length ? `Буква ${L} изучена! Следующая — ${PRIMER[i + 1]}.` : 'Весь букварь пройден! Ты читаешь сам' + G('а', '') + '!', again: () => screenPrimerLesson(i), next: () => screenPrimer() });
+  })();
 }
 
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
