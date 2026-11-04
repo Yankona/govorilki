@@ -1709,6 +1709,22 @@ body.quest .og-st.mine{color:#7BE0A0}
 .m-start{position:absolute;inset:auto 12px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:16px;border-radius:20px;background:rgba(20,18,36,.82);color:#fff}
 .m-start b{font:400 22px var(--f-display)}
 .m-start p{margin:0;font:700 15px/1.35 var(--f-body);color:#D9DAE6}
+.gar{display:flex;flex-direction:column;gap:10px;width:min(100%,680px)}
+.gar-top{display:flex;justify-content:space-between;align-items:center;gap:10px;background:linear-gradient(100deg,#2B2F45,#1E2235);color:#fff;border-radius:18px;padding:12px 16px}
+.gar-rank{display:flex;flex-direction:column;font:400 22px/1.1 var(--f-display);color:#FFB15C}.gar-rank small{font:700 13px var(--f-body);color:#C9CBDA}
+.gar-coins{font:800 24px var(--f-body);color:#9FFFB4}.gar-gift{background:linear-gradient(90deg,#FFD54A,#FF9D4D)}
+.gar-tune{display:flex;flex-direction:column;gap:8px}.gt-row{display:flex;align-items:center;gap:10px;background:var(--paper);border-radius:16px;padding:10px 12px;box-shadow:0 4px 0 var(--line-strong)}
+.gt-e{font-size:30px}.gt-t{flex:1;display:flex;flex-direction:column;gap:2px}.gt-t b{font:800 17px var(--f-body)}.gt-t small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.gt-lv{display:flex;gap:4px;margin-top:2px}.gt-lv i{width:22px;height:8px;border-radius:4px;background:#E6E1F5}.gt-lv i.on{background:#FF9D4D}.gt-max{font:900 15px var(--f-body);color:#2E9D57}
+.chip.dim{opacity:.55}.gar-paint{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.gp{border:0;border-radius:14px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong);padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--ink)}
+.gp i{width:34px;height:34px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 2px rgba(0,0,0,.12)}.gp small{font:700 11px var(--f-body)}.gp.sel{box-shadow:0 0 0 3px #FF9D4D,0 3px 0 var(--line-strong)}
+.gar-q{display:flex;flex-direction:column;gap:6px}.gq{display:flex;justify-content:space-between;gap:8px;background:var(--paper);border-radius:12px;padding:9px 12px;font:700 15px var(--f-body)}.gq small{color:var(--ink-soft);font-weight:800}.gq.done{background:#E3F6E8;color:#2A2346}
+.gar-modes{display:flex;flex-wrap:wrap;gap:8px}.gar-modes .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}.gar-modes small{font:700 11px var(--f-body);opacity:.7}
+.m-bot{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.45)}
+.m-coins{background:rgba(20,18,36,.6);border-radius:14px;padding:8px 12px;font:800 20px var(--f-body);color:#9FFFB4;font-variant-numeric:tabular-nums}.m-coins small{margin-left:6px;color:#FFE066;opacity:0;transition:opacity .25s}.m-coins small.on{opacity:1}
+.m-rank{background:rgba(20,18,36,.55);border-radius:14px;padding:8px 10px;font:800 14px/1 var(--f-body)}.m-spd small em{font-style:normal;color:#FFB15C}
+.m-sign.trick{background:#E8590C}
 @media (prefers-reduced-motion:reduce){.m-pop.on{animation:none;opacity:1}}
 .kp{position:relative;flex:1;width:100%;min-height:440px;border-radius:24px;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#5B3FA8 0%,#2A1B5C 55%,#140C33 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:12px 10px 14px}
 .kp-lights i{position:absolute;top:-20%;width:38%;height:120%;background:linear-gradient(180deg,rgba(255,240,180,.35),rgba(255,240,180,0) 70%);transform-origin:top center;filter:blur(2px);animation:kpsweep 5s ease-in-out infinite alternate}
@@ -6655,20 +6671,74 @@ function myBike() {
   const i = BIKES.findIndex(b => b.name === P.bikeName);
   return BIKES[i >= 0 && bikeOpen(i) ? i : bestBike()];
 }
+/* ---------- the L-track grows up: coins for every ride (distance, overtakes, words read aloud, tricks), tuning and
+   paint in the garage, ranks by kilometres, riding modes, ramps with tricks said aloud, roadside zones (coast, forest,
+   city), daily tasks and a daily gift. ---------- */
+const MOTO_TUNE = [{ id: 'engine', e: '⚙️', n: "Engine", d: "higher top speed" }, { id: 'accel', e: '⚡', n: "Acceleration", d: "speeds up faster" },
+  { id: 'nitro', e: '🔥', n: "Nitro", d: "nitro lasts longer" }, { id: 'grip', e: '🛞', n: "Tyres", d: "changes lanes faster" }];
+const TUNE_COST = [100, 250, 500, 900, 1500];
+const MOTO_PAINT = [['#FF8A2A', "Orange"], ['#E63946', "Red"], ['#2D6CDF', "Blue"], ['#2FA865', "Green"], ['#8C6CF2', "Purple"], ['#FFD54A', "Yellow"],
+  ['#16131F', "Black"], ['#F4F6FF', "White"], ['#FF6FA3', "Pink"], ['#39FF14', "Neon"]];
+const PAINT_COST = 300;
+const MOTO_RANKS = [[0, "Rookie"], [2, "Amateur"], [6, "Racer"], [15, "Pro"], [30, "Master"], [60, "Champion"], [100, "Legend"]];
+const MOTO_MODES = [{ id: 'eco', n: "Eco", sp: .85, cars: 1.4, k: 1 }, { id: 'city', n: "City", sp: 1, cars: 1, k: 1.2 }, { id: 'sport', n: "Sport", sp: 1.15, cars: .8, k: 1.5 }, { id: 'race', n: "Race", sp: 1.3, cars: .65, k: 2 }];
+const MOTO_Q = [{ id: 'words', n: "Read 8 words aloud", need: 8 }, { id: 'km', n: "Ride 2 km", need: 2 }, { id: 'tricks', n: "Do 3 tricks", need: 3 },
+  { id: 'over', n: "Overtake 20 cars", need: 20 }, { id: 'jumps', n: "Jump off 4 ramps", need: 4 }];
+// tricks in the air are said aloud: words with the sound the child trains
+const MOTO_TRICKS = { l: ["Swallow", "Slalom", "Flight", "Lightning", "Wild", "Wheelie"], r: ["Turbo", "Rocket", "Spin", "Dash", "Record"], sh: ["Splits", "Jump", "Style", "Heat"], sz: ["Candle", "Super", "Star", "Flip"] };
+function motoTricks() { const s = mySounds(), w = []; Object.keys(MOTO_TRICKS).forEach(k => { if (s.includes(k)) w.push(...MOTO_TRICKS[k]); }); return w.length ? w : MOTO_TRICKS.l; }
+function moto() { P.moto = P.moto || { coins: 0, tune: {}, paint: '', paints: [], mode: 'city' }; return P.moto; }
+const motoMode = () => MOTO_MODES.find(x => x.id === moto().mode) || MOTO_MODES[1];
+const motoRank = (km = P.motoKm || 0) => MOTO_RANKS.reduce((k, r, j) => km >= r[0] ? j : k, 0);
+function motoQuests() {
+  const m = moto(), d = dayKey();
+  if (!m.q || m.q.d !== d) { m.q = { d, list: sample(MOTO_Q, 3).map(q => ({ id: q.id, got: 0, done: false })) }; save(); }
+  return m.q.list.map(x => ({ ...MOTO_Q.find(q => q.id === x.id), ...x }));
+}
+// a ride adds to the day's tasks; a task done pays 150 coins
+function motoQuestAdd(id, n) {
+  const m = moto(); motoQuests(); let paid = 0;
+  m.q.list.forEach(x => { if (x.done || x.id !== id || !n) return; const q = MOTO_Q.find(y => y.id === id); x.got = +(x.got + n).toFixed(2); if (x.got >= q.need) { x.done = true; m.coins += 150; paid += 150; } });
+  return paid;
+}
+const fmtN = v => String(+(+v).toFixed(1)).replace('.', ',');
 function garageCard() {
   const i = BIKES.reduce((k, b, j) => bikeOpen(j) ? j : k, 0), nx = BIKES[i + 1], best = P.motoBest || 0;
   const day = P.motoDay && P.motoDay.d === dayKey() ? P.motoDay : { done: false };
   return `<button class="garage" id="garageBtn"><span class="g-bike">${myBike().e}</span><span class="g-t"><b>Garage: ${myBike().name}</b>
     <small>${best ? `record ${(best / 1000).toFixed(2).replace('.', ',')} km · ` : ''}${nx ? `“${nx.name}” in ${nx.at - P.stars} ⭐` : "you have all the bikes!"}</small>
-    <small class="g-day">${day.done ? "✅ Today's ride is done" : "🏁 Today's ride: read 5 signs out loud"}</small></span><span class="g-go">▶</span></button>`;
+    <small class="g-day">${day.done ? "✅ Today's ride is done" : "🏁 Today's ride: read 5 signs out loud"}</small><small class="g-coins">🪙 ${Math.floor(moto().coins)} · 🏁 ${MOTO_RANKS[motoRank()][1]} · tasks ${motoQuests().filter(q => q.done).length} of 3</small></span><span class="g-go">▶</span></button>`;
 }
-function screenGarage() {
+function screenGarage(quiet) {
   newScreen();
-  const st = shell("Garage", `<p class="lead">Stars from your lessons open new bikes. A faster bike has a harder track.</p>
+  const m = moto(), qs = motoQuests(), ri = motoRank(), km = P.motoKm || 0, nr = MOTO_RANKS[ri + 1], tl = id => m.tune[id] || 0;
+  const st = shell("Garage", `<div class="gar">
+    <div class="gar-top"><span class="gar-rank">🏁 ${MOTO_RANKS[ri][1]}<small>${nr ? `to «${nr[1]}»: ${fmtN(nr[0] - km)} km` : "top rank!"}</small></span><span class="gar-coins">🪙 <b>${Math.floor(m.coins)}</b></span></div>
+    ${m.gift !== dayKey() ? "<button class=\"big gar-gift\" id=\"gGift\">🎁 Daily gift: +100 🪙</button>" : ''}
+    <h3 class="fam-s">🏍️ Bikes</h3><p class="muted">Stars from lessons unlock new bikes. The faster the bike, the harder the track.</p>
     <div class="cards">${BIKES.map((b, i) => `<button class="card bike-c ${bikeOpen(i) ? '' : 'locked'} ${myBike() === b ? 'sel' : ''}" data-i="${i}" style="--bg:${b.body}33">${pic(b.e)}<span>${b.name}</span><small>${bikeOpen(i) ? `up to ${b.top} km/h` : `🔒 ${b.at} ⭐`}</small></button>`).join('')}</div>
-    <button class="big" id="rideBtn">🏍️ To the track!</button>`);
-  talk(`This is your garage. Right now you have: ${myBike().name}. Pick a bike and off we go!`);
+    <h3 class="fam-s">🔧 Tuning</h3>
+    <div class="gar-tune">${MOTO_TUNE.map(u => { const l = tl(u.id), c = TUNE_COST[l]; return `<div class="gt-row"><span class="gt-e">${u.e}</span><span class="gt-t"><b>${u.n}</b><small>${u.d}</small><span class="gt-lv">${[0, 1, 2, 3, 4].map(k => `<i class="${k < l ? 'on' : ''}"></i>`).join('')}</span></span>${l < 5 ? `<button class="chip ${m.coins >= c ? '' : 'dim'}" data-tune="${u.id}">🪙 ${c}</button>` : '<b class="gt-max">MAX</b>'}</div>`; }).join('')}</div>
+    <h3 class="fam-s">🎨 Paint</h3>
+    <div class="gar-paint"><button class="gp ${!m.paint ? 'sel' : ''}" data-paint=""><i style="--c:${myBike().body}"></i><small>own colour</small></button>${MOTO_PAINT.map(([c, n]) => { const own = (m.paints || []).includes(c); return `<button class="gp ${m.paint === c ? 'sel' : ''}" data-paint="${c}" aria-label="${n}"><i style="--c:${c}"></i><small>${own ? n : `🪙 ${PAINT_COST}`}</small></button>`; }).join('')}</div>
+    <h3 class="fam-s">📋 Daily tasks</h3>
+    <div class="gar-q">${qs.map(q => `<div class="gq ${q.done ? 'done' : ''}"><span>${q.done ? '✅' : '⬜'} ${q.n}</span><small>${q.done ? '+150 🪙' : `${fmtN(q.got)} of ${q.need}`}</small></div>`).join('')}</div>
+    <h3 class="fam-s">🚦 Mode</h3>
+    <div class="gar-modes">${MOTO_MODES.map(md => `<button class="chip ${motoMode().id === md.id ? 'sel' : ''}" data-mode="${md.id}">${md.n} <small>coins ×${String(md.k).replace('.', ',')}</small></button>`).join('')}</div>
+    <button class="big" id="rideBtn">🏍️ To the track!</button></div>`);
+  if (!quiet) talk(`This is your garage. You have the ${myBike().name}. Coins from rides buy tuning and paint. Let's go!`);
+  const again = () => screenGarage(true);
   st.onclick = e => {
+    if (e.target.closest('#gGift')) { m.coins += 100; m.gift = dayKey(); save(); sfx.magic(); talk("Daily gift: a hundred coins!"); again(); return; }
+    const tb = e.target.closest('[data-tune]');
+    if (tb) { const id = tb.dataset.tune, l = tl(id), c = TUNE_COST[l]; if (m.coins < c) { wiggle(tb); talk("Not enough coins yet. Read words and do tricks on the track!"); return; } m.coins -= c; m.tune[id] = l + 1; save(); sfx.magic(); talk(`${MOTO_TUNE.find(u => u.id === id).n}: level ${l + 1}!`); again(); return; }
+    const pb = e.target.closest('[data-paint]');
+    if (pb) {
+      const c = pb.dataset.paint; m.paints = m.paints || [];
+      if (c && !m.paints.includes(c)) { if (m.coins < PAINT_COST) { wiggle(pb); talk("Not enough coins for this paint yet."); return; } m.coins -= PAINT_COST; m.paints.push(c); sfx.magic(); }
+      m.paint = c; save(); sfx.pop(); again(); return;
+    }
+    const mb = e.target.closest('[data-mode]'); if (mb) { m.mode = mb.dataset.mode; save(); sfx.pop(); talk(`${motoMode().n} mode.`); again(); return; }
     const c = e.target.closest('.bike-c'); if (!c) return; const i = +c.dataset.i;
     if (!bikeOpen(i)) { wiggle(c); talk(`You get this bike when you have ${BIKES[i].at} stars.`); return; }
     P.bikeName = BIKES[i].name; save(); sfx.pop(); $$('.bike-c').forEach(x => x.classList.toggle('sel', x === c)); talk(`${BIKES[i].name}! Great choice.`);
@@ -6679,12 +6749,15 @@ function screenGarage() {
 function screenMoto() {
   const t = newScreen(); noGuard();
   const bike = { ...myBike(), ...(P.cos && P.cos.bike ? BIKE_SKINS[P.cos.bike] : {}) };
+  const m = moto(), md = motoMode(), TU = id => m.tune[id] || 0, TR = shuffle(motoTricks());
+  if (m.paint) bike.body = m.paint;
   const MW = motoWords(), HL = sndLetters() || "l";
   shell(motoName(), `<div class="moto" id="moto"><canvas id="mc"></canvas>
-      <div class="m-hud"><span class="m-spd"><b id="mSpd">0</b><small>km/h</small></span><span class="m-dist" id="mDist">0 m</span><span class="m-cnt"><span id="mOver">0</span> 🚗 · <span id="mWords">0</span> 🗣</span></div>
-      <div class="m-sign" id="mSign" hidden><small>Read it out loud to get nitro!</small><b id="mWord"></b><i class="m-lv"><i id="mLv"></i></i><small class="m-heard" id="mHeard"></small><button class="chip" id="mSaid" hidden>🔥 I read it!</button></div>
+      <div class="m-hud"><span class="m-rank">🏁 ${MOTO_RANKS[motoRank()][1]}</span><span class="m-dist" id="mDist">0 m</span><span class="m-cnt"><span id="mOver">0</span> 🚗 · <span id="mWords">0</span> 🗣 · <span id="mTr">0</span> 🤸</span></div>
+      <div class="m-bot"><span class="m-coins">🪙 <b id="mCoins">${Math.floor(m.coins)}</b><small id="mPlus"></small></span><span class="m-spd"><b id="mSpd">0</b><small>km/h<br><em>${md.n}</em></small></span></div>
+      <div class="m-sign" id="mSign" hidden><small>Read it aloud for nitro!</small><b id="mWord"></b><i class="m-lv"><i id="mLv"></i></i><small class="m-heard" id="mHeard"></small><button class="chip" id="mSaid" hidden>🔥 Read it!</button></div>
       <div class="m-pop" id="mPop"></div>
-      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Tap left or right to change lanes. Read the words on the blue signs out loud. Then nitro switches on!</p><button class="big" id="mGo">${ICON.play}Off we go!</button></div>
+      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Tap left or right to change lanes. Read the words on the blue signs aloud to fire the nitro! On a ramp, shout the trick for coins.</p><small class="m-mode">Mode: ${md.n} · coins ×${String(md.k).replace('.', ',')} · change it in the garage</small><button class="big" id="mGo">${ICON.play}Let's go!</button></div>
     </div>`, { back: screenGarage, guide: false });
   const box = $('#moto'), cv = $('#mc'), x = cv.getContext('2d');
   let W = 0, H = 0, dpr = 1, hor = 0;
@@ -6694,6 +6767,7 @@ function screenMoto() {
   const tOf = d => D0 / (D0 + Math.max(-2, d)), yOf = t => hor + t * (H - hor) * 1.02, hw = t => W * (.03 + .52 * t);
   const laneX = (l, t) => W / 2 + l * (2 * hw(t) / 3);
   let run = false, over = false, speed = 0, dist = 0, pl = 0, target = 0, cars = [], nextCar = 40, overtakes = 0, words = 0, score = 0;
+  let coins = 0, tricks = 0, jumps = 0, air = 0, air0 = 1, ramps = [], nextRamp = 420, zone = 0, tIdx = 0, plusT = 0;
   let sign = null, nextSign = 260, nitro = 0, heard = 0, floor = .004, shake = 0, continued = false, popT = 0, wordIdx = Math.floor(Math.random() * MW.length);
   const CAR_COLORS = ['#3D8BFD', '#2FA865', '#FFFFFF', '#2A2346', '#C0392B', '#F2C200', '#8E9AAF', '#16A085'];
   function pop(text) { const p = $('#mPop'); p.textContent = text; p.classList.remove('on'); void p.offsetWidth; p.classList.add('on'); }
@@ -6723,10 +6797,10 @@ function screenMoto() {
     if (sw > 34) { x.fillStyle = '#FFFFFF'; x.font = `800 ${Math.round(sh * .5)}px Nunito, sans-serif`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s.word.toUpperCase(), sx, y - sh * 2.6, sw * .9); }
   }
   // the ride from behind: a skateboard, a scooter, a bicycle, a motorbike, a race car, a police bike or a rocket bike
-  function drawBike(px) {
-    const by = H - Math.max(18, H * .04), s = Math.min(W * .16, H * .2), lean = (target - pl) * .35, ty = bike.type || 'moto';
+  function drawBike(px, lift = 0) {
+    const by = H - Math.max(18, H * .04) - lift, s = Math.min(W * .16, H * .2), lean = (target - pl) * .35, ty = bike.type || 'moto';
     const rr = (a, b, c, d, r, col) => { x.fillStyle = col; x.beginPath(); x.roundRect(a, b, c, d, r); x.fill(); };
-    x.save(); x.translate(px, by); x.rotate(ty === 'car' ? lean * .3 : lean);
+    x.save(); x.translate(px, by); x.rotate((ty === 'car' ? lean * .3 : lean) + (lift ? Math.sin(performance.now() / 140) * .18 : 0));
     const flame = (w, len) => { x.fillStyle = `rgba(255,${120 + Math.random() * 80 | 0},40,.9)`; x.beginPath(); x.moveTo(-w, -s * .12); x.lineTo(0, s * (len + Math.random() * .2)); x.lineTo(w, -s * .12); x.fill(); };
     const rider = (y0, h) => {
       rr(-s * .22, y0 - h, s * .44, h, s * .14, bike.suit);
@@ -6772,14 +6846,33 @@ function screenMoto() {
     }
     x.restore();
   }
+  function side(zn, b, tp, k) {
+    const ph = H * .07 * tp, y = yOf(tp);
+    if (zn === 0) { const ppx = W / 2 + b * hw(tp) * 1.2; x.fillStyle = '#FFFFFF'; x.fillRect(ppx - ph * .1, y - ph, ph * .2, ph); x.fillStyle = '#EF4F4F'; x.fillRect(ppx - ph * .1, y - ph, ph * .2, ph * .25); return; }
+    if (zn === 1) { const tx = W / 2 + b * hw(tp) * (1.45 + (k % 3) * .3), th = ph * (2.2 + (k % 2) * .6); x.fillStyle = '#7A4E2D'; x.fillRect(tx - th * .05, y - th * .55, th * .1, th * .55); x.fillStyle = ['#2E8B57', '#3FA34D', '#4CAF50'][k % 3]; x.beginPath(); x.arc(tx, y - th * .72, th * .3, 0, Math.PI * 2); x.fill(); x.beginPath(); x.arc(tx - th * .14, y - th * .58, th * .2, 0, Math.PI * 2); x.arc(tx + th * .14, y - th * .58, th * .2, 0, Math.PI * 2); x.fill(); return; }
+    const lx = W / 2 + b * hw(tp) * 1.16, lh = ph * 2.6; x.fillStyle = '#5A6070'; x.fillRect(lx - lh * .025, y - lh, lh * .05, lh); x.fillRect(b > 0 ? lx - lh * .22 : lx, y - lh, lh * .22, lh * .035); x.fillStyle = '#FFE680'; x.fillRect(b > 0 ? lx - lh * .25 : lx + lh * .17, y - lh + lh * .03, lh * .08, lh * .05);
+    if (k % 2) { const bx = W / 2 + b * hw(tp) * 2.15, bh = ph * (4 + k % 4), bw = ph * 2.4; x.fillStyle = ['#C9A27E', '#9AA7C7', '#E3B5A4', '#A8C3A0'][k % 4]; x.fillRect(bx - bw / 2, y - bh, bw, bh); x.fillStyle = 'rgba(255,255,255,.6)'; for (let r = 1; r < 4; r++) for (let cc = 0; cc < 2; cc++) x.fillRect(bx - bw * .35 + cc * bw * .45, y - bh + r * bh * .22, bw * .22, bh * .1); }
+  }
+  // a ramp on a lane: riding onto it means a jump, and a trick said aloud in the air
+  function drawRamp(r) {
+    const tt = tOf(r.d), y = yOf(tt), cx = laneX(r.lane, tt), w = 2 * hw(tt) / 3 * .8, h = w * .42;
+    if (y < hor - 2 || y > H + h) return;
+    x.fillStyle = '#E8A400'; x.beginPath(); x.moveTo(cx - w / 2, y); x.lineTo(cx + w / 2, y); x.lineTo(cx + w * .38, y - h); x.lineTo(cx - w * .38, y - h); x.closePath(); x.fill();
+    x.strokeStyle = '#1E1A2E'; x.lineWidth = Math.max(1, w * .05); for (let i = -2; i <= 2; i++) { x.beginPath(); x.moveTo(cx + i * w * .18 - w * .06, y - 1); x.lineTo(cx + i * w * .15 + w * .04, y - h + 1); x.stroke(); }
+    x.fillStyle = '#FFD54A'; x.fillRect(cx - w * .38, y - h, w * .76, Math.max(2, h * .14));
+  }
   function draw() {
     const sk = x.createLinearGradient(0, 0, 0, hor); sk.addColorStop(0, '#6EC6FF'); sk.addColorStop(1, '#FFE3B3');
     x.fillStyle = sk; x.fillRect(0, 0, W, hor);
     x.fillStyle = '#FFD36B'; x.beginPath(); x.arc(W * .78, hor * .45, Math.min(W, H) * .06, 0, Math.PI * 2); x.fill();
-    x.fillStyle = '#2B8AC8'; x.fillRect(0, hor - H * .02, W, H * .02);
-    x.fillStyle = '#E9C98E'; x.fillRect(0, hor, W, H - hor);
+    const zn = Math.floor(dist / 1000) % 3;
+    if (zn === 0) { x.fillStyle = '#2B8AC8'; x.fillRect(0, hor - H * .02, W, H * .02); }
+    else for (let i = 0; i < 12; i++) { const bw = W / 12, bh = (zn === 1 ? 10 + (i * 37) % 18 : 14 + (i * 53) % 34) * H / 420; x.fillStyle = zn === 1 ? '#4F8F4A' : '#8E95A6'; if (zn === 1) { x.beginPath(); x.ellipse(i * bw + bw / 2, hor, bw * .7, bh, 0, Math.PI, 0); x.fill(); } else x.fillRect(i * bw + 2, hor - bh, bw - 4, bh); }
+    x.fillStyle = ['#E9C98E', '#7CC56B', '#B9BDC8'][zn]; x.fillRect(0, hor, W, H - hor);
     const tF = tOf(ZMAX), tN = 1.12;
-    x.fillStyle = '#2F8FD0'; x.beginPath(); x.moveTo(0, hor); x.lineTo(W / 2 - hw(tF) * 2.2, hor); x.lineTo(0, yOf(.55)); x.fill();
+    if (zn === 0) { x.fillStyle = '#2F8FD0'; x.beginPath(); x.moveTo(0, hor); x.lineTo(W / 2 - hw(tF) * 2.2, hor); x.lineTo(0, yOf(.55)); x.fill(); }
+    const base = Math.floor(dist / 28);
+    for (let k = 17; k >= 0; k--) { const pd = k * 14 - (dist % 28) * .5; if (pd > 0) for (const b of [-1, 1]) side(zn, b, tOf(pd), k + base + (b > 0 ? 7 : 0)); }
     quad(W / 2, yOf(tF), hw(tF) * 1.12, W / 2, yOf(tN), hw(tN) * 1.12, '#F4F1EA');
     quad(W / 2, yOf(tF), hw(tF), W / 2, yOf(tN), hw(tN), '#4A4D5C');
     const off = dist % 14;
@@ -6787,21 +6880,31 @@ function screenMoto() {
       const d1 = k * 14 - off, d2 = d1 + 6; if (d2 < -1) continue;
       const t1 = tOf(d1), t2 = tOf(d2);
       for (const b of [-1, 1]) { const bx1 = W / 2 + b * hw(t1) / 3, bx2 = W / 2 + b * hw(t2) / 3; quad(bx1, yOf(t1), Math.max(.6, hw(t1) * .012), bx2, yOf(t2), Math.max(.4, hw(t2) * .012), '#F7F7F2'); }
-      const pd = k * 14 - (dist % 28) * .5; const tp = tOf(pd);
-      if (pd > 0) for (const b of [-1, 1]) { const ppx = W / 2 + b * hw(tp) * 1.2, ph = H * .07 * tp; x.fillStyle = '#FFFFFF'; x.fillRect(ppx - ph * .1, yOf(tp) - ph, ph * .2, ph); x.fillStyle = '#EF4F4F'; x.fillRect(ppx - ph * .1, yOf(tp) - ph, ph * .2, ph * .25); }
     }
-    const things = [...cars.map(c => ({ d: c.d, f: () => drawCar(c) })), ...(sign ? [{ d: sign.d, f: () => drawSign(sign) }] : [])].sort((a, b) => b.d - a.d);
+    const things = [...cars.map(c => ({ d: c.d, f: () => drawCar(c) })), ...ramps.map(r => ({ d: r.d, f: () => drawRamp(r) })), ...(sign && !sign.trick ? [{ d: sign.d, f: () => drawSign(sign) }] : [])].sort((a, b) => b.d - a.d);
     things.forEach(o => o.f());
     if (nitro > 0) { x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = 2; for (let i = 0; i < 10; i++) { const yy = rnd(hor, H), xx = Math.random() < .5 ? rnd(0, W * .15) : rnd(W * .85, W); x.beginPath(); x.moveTo(xx, yy); x.lineTo(xx, yy + 40); x.stroke(); } }
-    drawBike(laneX(pl, tOf(PD)));
+    const lift = air > 0 ? Math.sin(Math.PI * (1 - air / air0)) * H * .14 : 0;
+    if (lift) { const px = laneX(pl, tOf(PD)); x.fillStyle = 'rgba(0,0,0,.25)'; x.beginPath(); x.ellipse(px, H - Math.max(18, H * .04), W * .06, H * .015, 0, 0, Math.PI * 2); x.fill(); }
+    drawBike(laneX(pl, tOf(PD)), lift);
   }
   function hud() {
     $('#mSpd').textContent = Math.round(speed); $('#mDist').textContent = dist < 1000 ? `${Math.round(dist)} m` : `${(dist / 1000).toFixed(2).replace('.', ',')} km`;
-    $('#mOver').textContent = overtakes; $('#mWords').textContent = words;
+    $('#mOver').textContent = overtakes; $('#mWords').textContent = words; $('#mTr').textContent = tricks; $('#mCoins').textContent = Math.floor(m.coins + coins);
   }
   function fire() {
     if (!sign || sign.read) return;
-    sign.read = true; words++; nitro = 3.5; score += 100; sfx.magic(); pop("NITRO! 🔥"); hopEl($('#mSign')); later(() => { $('#mSign').hidden = true; }, 600);
+    sign.read = true; words++; hopEl($('#mSign')); later(() => { $('#mSign').hidden = true; }, 600);
+    if (sign.trick) { tricks++; sfx.magic(); gain(100, `${sign.word}! +${Math.round(100 * md.k)} 🪙`); return; }
+    nitro = 3.5 + TU('nitro') * .7; score += 100; sfx.magic(); gain(50); pop("NITRO! 🔥");
+  }
+  // coins: the ride's total, and a «+N» next to the counter
+  function gain(n, msg) { const v = Math.round(n * md.k); coins += v; const pl2 = $('#mPlus'); pl2.textContent = '+' + v; pl2.classList.add('on'); plusT = 1.2; if (msg) pop(msg); }
+  function jump() {
+    jumps++; air = air0 = 1.7; sfx.whoosh(.6, .2); gain(20);
+    // the trick takes the place of a sign not read yet: in the air it is the trick that is said
+    if (sign && !sign.read && !sign.trick) nextSign = Math.min(nextSign, 120);
+    sign = { d: 0, word: TR[tIdx++ % TR.length], read: false, trick: true }; heard = 0; $('#mSign').hidden = true; pop("Ramp! Say the trick!");
   }
   // reading the sign: one recognition session for the whole ride hears the word; else the loudness; else the button
   let mode = 'button', live = null, need3 = null;
@@ -6825,7 +6928,7 @@ function screenMoto() {
   function listen(dt) {
     if (!sign || sign.read || sign.d > 150 || need3) return;
     const sg = $('#mSign');
-    if (sg.hidden) { sg.hidden = false; $('#mWord').innerHTML = hiS(sign.word.toUpperCase(), HL); $('#mSaid').hidden = mode !== 'button'; $('#mHeard').textContent = mode === 'sr' ? (live && live.lost ? "🎤 Tap the sign so I can listen again" : "🎤 listening…") : ''; heard = 0; $('#mLv').style.width = '0%'; }
+    if (sg.hidden) { sg.querySelector('small').textContent = sign.trick ? "Trick in the air! Say it loud:" : "Read it out loud to get nitro!"; sg.classList.toggle('trick', !!sign.trick); sg.hidden = false; $('#mWord').innerHTML = hiS(sign.word.toUpperCase(), HL); $('#mSaid').hidden = mode !== 'button'; $('#mHeard').textContent = mode === 'sr' ? (live && live.lost ? "🎤 Tap the sign so I can listen again" : "🎤 listening…") : ''; heard = 0; $('#mLv').style.width = '0%'; }
     if (mode === 'sr') return;
     if (mode !== 'level' || micDeaf()) return;
     const lv = micLevel(), thr = Math.max(.012, floor * 3.2);
@@ -6861,31 +6964,40 @@ function screenMoto() {
     micRelease(true); liveStop();
     const km = dist / 1000, rec = dist > (P.motoBest || 0);
     if (rec) P.motoBest = Math.round(dist); P.motoKm = +((P.motoKm || 0) + km).toFixed(2);
+    const got = Math.round(coins); m.coins += got;
+    const qp = motoQuestAdd('words', words) + motoQuestAdd('km', +km.toFixed(2)) + motoQuestAdd('tricks', tricks) + motoQuestAdd('over', overtakes) + motoQuestAdd('jumps', jumps);
     let bonus = '';
     if (words >= 5 && !(P.motoDay && P.motoDay.d === dayKey() && P.motoDay.done)) { P.motoDay = { d: dayKey(), done: true }; P.stars += 2; bonus = " Today's ride is done: two extra stars!"; }
     save();
     finish({ key: 'l-moto', stars: words >= 4 ? 3 : words >= 2 ? 2 : 1, ev: { words, dist: Math.round(dist) }, again: screenMoto, menu: screenGarage,
-      line: `${km.toFixed(2).replace('.', ',')} km, cars passed: ${overtakes}, words out loud: ${words}.${rec ? " New record!" : ''}${bonus}` });
+      line: `${km.toFixed(2).replace('.', ',')} km, overtakes: ${overtakes}, words aloud: ${words}, tricks: ${tricks}. Coins: +${got}${qp ? `, daily tasks +${qp}` : ''} 🪙.${rec ? " New record!" : ''}${bonus}` });
   }
   function step(dt) {
     if (shake > 0) { shake -= dt; box.style.transform = `translate(${rnd(-6, 6)}px,${rnd(-4, 4)}px)`; } else box.style.transform = '';
     if (!run) { draw(); return; }
-    const top = bike.top + Math.min(40, dist / 150) + (nitro > 0 ? 45 : 0);
-    speed += ((nitro > 0 ? top : Math.min(top, 70 + dist / 25)) - speed) * Math.min(1, dt * .9);
+    const top = (bike.top + TU('engine') * 8 + Math.min(40, dist / 150)) * md.sp + (nitro > 0 ? 45 : 0);
+    speed += ((nitro > 0 ? top : Math.min(top, (70 + TU('accel') * 6 + dist / 25) * md.sp)) - speed) * Math.min(1, dt * (.9 + TU('accel') * .18));
     if (nitro > 0) nitro -= dt;
-    const ms = speed / 3.6; dist += ms * dt; score += ms * dt * .1;
-    pl += (target - pl) * Math.min(1, dt * 9);
+    const ms = speed / 3.6, d0 = dist; dist += ms * dt; score += ms * dt * .1;
+    if (Math.floor(dist / 10) > Math.floor(d0 / 10)) coins += md.k;
+    if (plusT > 0) { plusT -= dt; if (plusT <= 0) $('#mPlus').classList.remove('on'); }
+    const zn = Math.floor(dist / 1000) % 3; if (zn !== zone) { zone = zn; pop(["🌊 Coast", "🌲 Forest", "🏙️ City"][zn]); }
+    if (air > 0) { air -= dt; if (air <= 0) { sfx.pop(); if (sign && sign.trick) { if (!sign.read) $('#mSign').hidden = true; sign = null; } } }
+    pl += (target - pl) * Math.min(1, dt * (9 + TU('grip') * 2.5));
     for (const c of cars) {
       c.d -= (ms - c.v / 3.6) * dt;
       if (!c.passed && c.d < PD - 1.6) {
-        c.passed = true; overtakes++; score += 10;
-        const gap = Math.abs(c.lane - pl); if (gap < 1.1 && gap >= .62) { score += 50; pop("So close! +50"); sfx.whoosh(.25, .15); }
+        c.passed = true; overtakes++; score += 10; coins += 5 * md.k;
+        const gap = Math.abs(c.lane - pl); if (gap < 1.1 && gap >= .62) { score += 50; gain(25, `Close call! +${Math.round(25 * md.k)} 🪙`); sfx.whoosh(.25, .15); }
       }
-      if (c.d > PD - 1.6 && c.d < PD + 1.4 && Math.abs(c.lane - pl) < .62) { crash(); break; }
+      if (air <= 0 && c.d > PD - 1.6 && c.d < PD + 1.4 && Math.abs(c.lane - pl) < .62) { crash(); break; }
     }
     cars = cars.filter(c => c.d > -6);
-    nextCar -= ms * dt; if (nextCar <= 0) { spawnCar(); nextCar = Math.max(16, 46 - dist / 140) * rnd(.7, 1.3); }
-    if (sign) { sign.d -= ms * dt; if (sign.d < -4) { if (!sign.read) $('#mSign').hidden = true; sign = null; } }
+    nextCar -= ms * dt; if (nextCar <= 0) { spawnCar(); nextCar = Math.max(16, 46 - dist / 140) * rnd(.7, 1.3) * md.cars; }
+    for (const r of ramps) { r.d -= ms * dt; if (!r.hit && air <= 0 && r.d < PD + .6 && r.d > PD - 1.8 && Math.abs(r.lane - pl) < .5) { r.hit = true; jump(); } }
+    ramps = ramps.filter(r => r.d > -6);
+    nextRamp -= ms * dt; if (nextRamp <= 0) { const free = [-1, 0, 1].filter(l => !cars.some(c => c.lane === l && c.d > ZMAX - 40)); ramps.push({ lane: pickOne(free.length ? free : [0]), d: ZMAX, hit: false }); nextRamp = rnd(360, 520); }
+    if (sign && !sign.trick) { sign.d -= ms * dt; if (sign.d < -4) { if (!sign.read) $('#mSign').hidden = true; sign = null; } }
     nextSign -= ms * dt; if (nextSign <= 0 && !sign) { spawnSign(); nextSign = rnd(260, 360); }
     listen(dt);
     draw(); hud();
@@ -6911,7 +7023,9 @@ function screenMoto() {
     spawnSign(150); nextSign = rnd(240, 340);
   };
   draw(); loop(t, step);
-  talk(`${motoName()}! Your bike: ${bike.name}. Tap left or right to change lanes. The blue signs have words${mySounds().includes('l') ? " with the L sound" : ''}. Read a word out loud, and nitro switches on!`);
+  // a test page may look inside a ride (window.__T exists only there)
+  if (window.__T) window.__T.moto = { ramp: () => ramps.push({ lane: Math.round(target), d: 40, hit: false }), st: () => ({ coins, tricks, jumps, air, words, dist, zone, sign: sign && { word: sign.word, trick: !!sign.trick } }), go: v => { dist = v; } };
+  talk(`${motoName()}! Your ride: ${bike.name}. Tap left or right to change lanes. The blue signs carry words${mySounds().includes('l') ? " with the L sound" : ''}: read one aloud and the nitro fires! And on a ramp, shout the name of the trick.`);
 }
 
 /* ---------- «Жар-птицы»: Vera's own K-pop girl group of demon hunters. Each name trains one of her sounds:
@@ -11005,7 +11119,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '82';
+const APP_VER = '83';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
