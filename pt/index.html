@@ -11005,7 +11005,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '80';
+const APP_VER = '81';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13187,6 +13187,1335 @@ function screenPrimerLesson(i, stage) {
   })();
 }
 
+/* LOGO-BEGIN */
+/* ---------- Speech-therapy games, made after studying what online speech-therapy apps for children offer (kinds of
+   exercise, not their characters, words or pictures): whistling sounds С З Ц (sorting by ear, syllables, where the
+   sound lives), holding a sound long with the microphone, hearing words that differ by one sound, syllable structure
+   (clapping syllables, finding a lost one, putting a word together), grammar (one — many, a small thing said kindly,
+   whose tail), naming a group in one word, telling a story from pictures in order, feelings and the voice that shows
+   them, and a speech check with a grown-up that ends in a report and the games that fit it. Russian only; the whole
+   module is one declaration so the translation tool leaves it alone. ---------- */
+const LOGO = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const VW = /[аеёиоуыэюя]/gi;
+  const sylN = w => (w.match(VW) || []).length;
+  // the letters of a that differ from b: the part between their common start and their common end
+  function hiDiff(a, b) {
+    if (a === b) return esc(a);
+    let p = 0; while (p < a.length && p < b.length && a[p] === b[p]) p++;
+    let s = 0; while (s < a.length - p && s < b.length - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
+    return esc(a.slice(0, p)) + `<b class="hl">${esc(a.slice(p, a.length - s))}</b>` + esc(a.slice(a.length - s));
+  }
+  const tiles = (list, cls = 'lg-pic') => list.map(([w, e]) => `<button class="${cls}" data-w="${esc(w)}">${pic(e)}<b></b></button>`).join('');
+
+  /* ===== Тяни звук: the sound held long moves a picture to its goal; the microphone hears a voice, the button is for
+     a phone without one. The microphone can't tell С from Ш: the grown-up listens that the sound is right. ===== */
+  const HOLD = {
+    'С': { e: '🎈', goal: '', name: 'Насос качает шарик', how: 'Улыбнись, кончик языка за нижними зубками, дуй холодный ветерок: с-с-с.', grow: true },
+    'З': { e: '🦟', goal: '🌸', name: 'Комарик летит к цветку', how: 'Как «с», только горлышко звенит: з-з-з.' },
+    'Ш': { e: '🐍', goal: '🍎', name: 'Змейка ползёт к яблоку', how: 'Губы вперёд, язык чашечкой наверху, дуй тёплым воздухом: ш-ш-ш.' },
+    'Ж': { e: '🪲', goal: '🌼', name: 'Жук летит к ромашке', how: 'Как «ш», только горлышко звенит: ж-ж-ж.' },
+    'Р': { e: '🏍️', goal: '🏁', name: 'Мотоцикл едет к финишу', how: 'Кончик языка за верхними зубками дрожит, как моторчик: р-р-р.' },
+    'Л': { e: '✈️', goal: '☁️', name: 'Самолёт летит к облаку', how: 'Кончик языка упирается в верхние зубки, гудим: л-л-л.' }
+  };
+  const HOLD_OF = { sz: 'С', sh: 'Ш', r: 'Р', l: 'Л' };
+  function hold(L0) {
+    const L = L0 || HOLD_OF[mySounds().find(k => HOLD_OF[k])] || 'С', H = HOLD[L], T = Q() ? 8 : 5;
+    const t = newScreen();
+    shell('Тяни звук', `<div class="lg">
+      <div class="lg-chips" id="lgS">${Object.keys(HOLD).map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${HOLD[x].e} ${x}</button>`).join('')}</div>
+      <p class="lg-q">${esc(H.name)}: тяни звук <b class="L c">${L}</b> долго-долго</p>
+      <div class="lg-scene ${H.grow ? 'grow' : ''}" id="lgSc"><span class="lg-goal">${H.goal ? pic(H.goal) : ''}</span><span class="lg-actor" id="lgA">${pic(H.e)}</span></div>
+      <div class="lg-bar"><i id="lgBar"></i></div>
+      <p class="lg-note" id="lgN">${esc(H.how)}</p>
+      <button class="big lg-hold" id="lgH">🖐 Держу звук</button>
+      <p class="muted">Микрофон слышит голос, но не отличает «с» от «ш». Взрослый слушает, чтобы звук был правильным. Микрофона нет — держи кнопку, пока тянешь звук.</p></div>`);
+    $('#lgS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); hold(b.dataset.s); } };
+    let holding = false, mic = false, last = performance.now(), floor = .004, voiced = 0, run = 0, best = 0, over = false;
+    bindHold($('#lgH'), () => { holding = true; }, () => { holding = false; });
+    const actor = $('#lgA'), bar = $('#lgBar'), sc = $('#lgSc');
+    const draw = on => {
+      const p = Math.min(1, voiced / T);
+      bar.style.width = (p * 100).toFixed(1) + '%';
+      if (H.grow) actor.style.transform = `translate(-50%, -50%) scale(${(.45 + p * 1.25).toFixed(3)})`;
+      else actor.style.left = (6 + p * 70).toFixed(1) + '%';
+      sc.classList.toggle('on', on);
+      $('#lgN').textContent = run > .3 ? `Тянешь ${run.toFixed(1).replace('.', ',')} с…` : best ? `Без остановки: ${best.toFixed(1).replace('.', ',')} с. Вдохни и тяни ещё.` : H.how;
+    };
+    const frame = now => {
+      if (t !== tok) { micRelease(); return; }
+      const dt = Math.min(.1, (now - last) / 1000); last = now;
+      let on = holding;
+      if (!on && mic && !micDeaf()) { const lv = micLevel(), thr = Math.max(.012, floor * 3.2); if (lv > thr) on = true; else floor = floorStep(floor, lv, thr); }
+      if (on && !over) { voiced += dt; run += dt; best = Math.max(best, run); } else run = 0;
+      draw(on);
+      if (!over && voiced >= T) { over = true; win(); return; }
+      requestAnimationFrame(frame);
+    };
+    async function win() {
+      sc.classList.add('done'); sfx.good(); const r = sc.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2);
+      micRelease();
+      await talk(H.grow ? 'Шарик надут! Молодец!' : 'Доехали! Молодец!'); if (t !== tok) return;
+      const stars = best >= (Q() ? 5 : 3) ? 3 : best >= 1.5 ? 2 : 1;
+      finish({ key: 'snd-hold', stars, line: `Без остановки ${best.toFixed(1).replace('.', ',')} с`, again: () => hold(L) });
+    }
+    (async () => {
+      await talk(`${H.name}. Вдохни носом и тяни звук долго, без остановки, пока не получится.`); if (t !== tok) return;
+      mic = await micOn(); if (t !== tok) return;
+      if (!mic) $('#lgH').classList.add('only');
+      last = performance.now(); requestAnimationFrame(frame);
+    })();
+  }
+
+  /* ===== С З Ц: sorting by ear, syllables, where С lives ===== */
+  const SZ_ITEMS = [['С', 'сок', '🧃'], ['С', 'сыр', '🧀'], ['С', 'сумка', '👜'], ['С', 'самолёт', '✈️'], ['С', 'собака', '🐕'], ['С', 'сова', '🦉'], ['С', 'слон', '🐘'],
+    ['С', 'лиса', '🦊'], ['С', 'оса', '🐝'], ['С', 'колесо', '🛞'], ['С', 'автобус', '🚌'], ['С', 'ананас', '🍍'], ['С', 'нос', '👃'], ['С', 'кактус', '🌵'], ['С', 'сапоги', '👢'], ['С', 'маска', '🎭'],
+    ['З', 'зонт', '☂️'], ['З', 'зубы', '🦷'], ['З', 'зайка', '🐰'], ['З', 'коза', '🐐'], ['З', 'ваза', '🏺'], ['З', 'роза', '🌹'], ['З', 'глаза', '👀'], ['З', 'кукуруза', '🌽'], ['З', 'звезда', '⭐'],
+    ['Ц', 'цветок', '🌸'], ['Ц', 'цыплёнок', '🐥'], ['Ц', 'цирк', '🎪'], ['Ц', 'курица', '🐔'], ['Ц', 'огурец', '🥒'], ['Ц', 'птица', '🐦'], ['Ц', 'яйцо', '🥚'], ['Ц', 'кольцо', '💍'], ['Ц', 'овца', '🐑'], ['Ц', 'танец', '💃']];
+  const SZ_BINS = { 'С': ['💧', 'водичка: с-с-с', 'Свистит, как водичка!'], 'З': ['🦟', 'комарик: з-з-з', 'Звенит, как комарик!'], 'Ц': ['🤫', 'тише: ц-ц-ц', 'Тише-тише, цыц!'] };
+  function szSort() {
+    const t = newScreen(), pair = pickOne([['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
+    const deck = shuffle(pair.flatMap(L => sample(SZ_ITEMS.filter(x => x[0] === L), 3)));
+    let k = 0, busy = false;
+    shell('Водичка или комарик?', `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
+      <div class="bins" id="bins">${pair.map(L => `<button class="bin" data-l="${L}"><span class="emo">${SZ_BINS[L][0]}</span><b class="L c">${L}</b><small>${SZ_BINS[L][1]}</small></button>`).join('')}</div></div>`);
+    const cslot = $('#cslot'), bins = $('#bins');
+    function show() {
+      busy = false; const [, w, e] = deck[k];
+      cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
+      talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${pair.map(L => SZ_BINS[L][1].split(':')[0]).join(' или ')}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
+    }
+    bins.onclick = async e => {
+      const b = e.target.closest('.bin'); if (!b || busy) return;
+      const [L, w] = deck[k];
+      if (b.dataset.l !== L) { wiggle(b); sfx.oops(); talk(`Послушай ещё раз: ${w}`, { rate: .7 }); return; }
+      busy = true; sfx.good(); hopEl(b);
+      $('.pcard .w').innerHTML = hiS(w.toUpperCase(), L);
+      await talk(`${cap(w)}. ${SZ_BINS[L][2]}`); if (t !== tok) return;
+      k++;
+      if (k >= deck.length) finish({ key: 'sz-sort', line: 'Ты различаешь свистящие звуки!', again: szSort });
+      else later(show, 300);
+    };
+    show();
+  }
+  const SYL_S = [['са', 'СА', 'самолёт', '✈️'], ['со', 'СО', 'сова', '🦉'], ['су', 'СУ', 'сумка', '👜'], ['сы', 'СЫ', 'сыр', '🧀'], ['са', 'СА', 'сапоги', '👢'], ['су', 'СУ', 'суп', '🍲'],
+    ['зо', 'ЗО', 'зонт', '☂️'], ['зу', 'ЗУ', 'зубы', '🦷'], ['за', 'ЗА', 'зайка', '🐰'], ['цы', 'ЦЫ', 'цыплёнок', '🐥'], ['ци', 'ЦИ', 'цирк', '🎪']];
+  const HOUSE_S = [['сок', '🧃', 0], ['сыр', '🧀', 0], ['сумка', '👜', 0], ['сова', '🦉', 0], ['слон', '🐘', 0], ['самолёт', '✈️', 0], ['суп', '🍲', 0], ['сапоги', '👢', 0],
+    ['лиса', '🦊', 1], ['оса', '🐝', 1], ['миска', '🥣', 1], ['маска', '🎭', 1], ['весы', '⚖️', 1], ['колесо', '🛞', 1], ['капуста', '🥬', 1],
+    ['нос', '👃', 2], ['автобус', '🚌', 2], ['ананас', '🍍', 2], ['кактус', '🌵', 2], ['кокос', '🥥', 2], ['компас', '🧭', 2]];
+
+  /* ===== Похожие слова: words that differ by one sound; the voice says one, the child finds its picture ===== */
+  const PAIRS = [[['мышка', '🐭'], ['мишка', '🧸'], ['миска', '🥣']], [['кот', '🐈'], ['кит', '🐋']], [['дом', '🏠'], ['дым', '💨']], [['удочка', '🎣'], ['уточка', '🦆']],
+    [['рак', '🦞'], ['лак', '💅'], ['мак', '🌺']], [['рама', '🖼️'], ['лама', '🦙']], [['зуб', '🦷'], ['суп', '🍲']], [['роза', '🌹'], ['роса', '💧']], [['шар', '🎈'], ['жар', '🔥']],
+    [['уши', '👂'], ['ужи', '🐍']], [['лук', '🧅'], ['жук', '🪲']], [['кошка', '🐱'], ['ложка', '🥄']], [['мышка', '🐭'], ['мушка', '🪰']], [['сок', '🧃'], ['сом', '🐟']],
+    [['усы', '🥸'], ['уши', '👂']], [['белка', '🐿️'], ['булка', '🍞']], [['ёжик', '🦔'], ['ножик', '🔪']], [['бант', '🎀'], ['бинт', '🩹']], [['ракета', '🚀'], ['ракетка', '🏓']],
+    [['лапа', '🐾'], ['лампа', '💡']], [['рука', '✋'], ['река', '🏞️']]];
+  function hearPairs(nRounds = 6, onDone) {
+    const t = newScreen(), deck = sample(PAIRS, nRounds); let k = 0, busy = false, target = null, miss = 0;
+    shell('Похожие слова', `<div class="lg"><p class="lg-q">Слушай внимательно и нажми на картинку</p><div class="lg-pics" id="lgP"></div>
+      <button class="chip" id="lgAgain">🔊 Ещё раз</button></div>`);
+    $('#lgAgain').onclick = () => { if (target) say(cap(target[0]) + '.', { rate: .8 }); };
+    const show = () => {
+      busy = false; const set = shuffle([...deck[k]]); target = pickOne(set);
+      $('#lgP').innerHTML = tiles(set);
+      (k === 0 ? talk('Слова похожи, но звучат по-разному. Я скажу одно — найди его.') : wait(250)).then(() => { if (t === tok) say(cap(target[0]) + '.'); });
+    };
+    $('#lgP').onclick = async e => {
+      const b = e.target.closest('[data-w]'); if (!b || busy) return;
+      if (b.dataset.w !== target[0]) { sfx.oops(); wiggle(b); miss++; say(cap(target[0]) + '.', { rate: .7 }); return; }
+      busy = true; sfx.good(); b.classList.add('right');
+      $$('#lgP [data-w]').forEach(x => { x.querySelector('b').innerHTML = hiDiff(x.dataset.w, x.dataset.w === target[0] ? deck[k].find(([w]) => w !== target[0])[0] : target[0]); if (x !== b) x.classList.add('dim'); });
+      await talk(`${cap(target[0])}!`); if (t !== tok) return;
+      k++;
+      if (k < deck.length) later(show, 500);
+      else if (onDone) onDone(deck.length - Math.min(deck.length, miss));
+      else finish({ key: 'hear-pairs', stars: miss <= 1 ? 3 : miss <= 3 ? 2 : 1, line: 'У тебя внимательные ушки!', again: () => hearPairs() });
+    };
+    show();
+  }
+
+  /* ===== syllables: clap them, find the lost one, put a word together ===== */
+  const LONG = [['ЧЕ-РЕ-ПА-ХА', '🐢'], ['ВЕ-ЛО-СИ-ПЕД', '🚲'], ['КРО-КО-ДИЛ', '🐊'], ['ПО-МИ-ДОР', '🍅'], ['МА-ШИ-НА', '🚗'], ['ТЕ-ЛЕ-ВИ-ЗОР', '📺'], ['ГУ-СЕ-НИ-ЦА', '🐛'],
+    ['БА-БОЧ-КА', '🦋'], ['СНЕ-ГО-ВИК', '⛄'], ['ВЕР-ТО-ЛЁТ', '🚁'], ['КАР-ТОШ-КА', '🥔'], ['МО-РО-ЖЕ-НО', '🍦'], ['КЛУБ-НИ-КА', '🍓'], ['ПИНГ-ВИН', '🐧'], ['ЛЯ-ГУШ-КА', '🐸'],
+    ['Е-ДИ-НО-РОГ', '🦄'], ['ЧЕ-МО-ДАН', '🧳'], ['СВЕ-ТО-ФОР', '🚦'], ['КУ-КУ-РУ-ЗА', '🌽'], ['БА-РА-БАН', '🥁'], ['СО-БА-КА', '🐕'], ['ПА-У-ТИ-НА', '🕸️'], ['ЧЕ-РЕШ-НЯ', '🍒']];
+  const SYLW = () => [...LONG, ...PR_WORDS.filter(([w, e]) => e && /[А-ЯЁ]/.test(w))].filter(([w]) => !/Ъ/.test(w));
+  const SLOG = ['слог', 'слога', 'слогов'];
+  function sylClap() {
+    const t = newScreen(), all = SYLW(), by = n => shuffle(all.filter(([w]) => sylN(w) === n));
+    const deck = shuffle([...by(1).slice(0, 1), ...by(2).slice(0, 2), ...by(3).slice(0, 2), ...by(4).slice(0, Q() ? 2 : 1)]);
+    let k = 0, n = 0, busy = false, tries = 0, wrongs = 0;
+    shell('Хлопни слоги', `<div class="lg"><div class="lg-card"><div class="lg-big" id="lgW"></div><button class="chip" id="lgAgain">🔊 Послушать слово</button></div>
+      <button class="lg-drum" id="lgD" aria-label="Хлопок">🥁</button><div class="lg-dots" id="lgDots"></div><p class="lg-ans" id="lgAns"></p>
+      <div class="og-btns"><button class="big ghost" id="lgR">↺ Заново</button><button class="big" id="lgOk">Готово</button></div></div>`);
+    const word = () => wordOf(deck[k][0]);
+    $('#lgAgain').onclick = () => say(cap(word()) + '.');
+    const dots = () => { $('#lgDots').innerHTML = '<i></i>'.repeat(n); };
+    const show = () => {
+      busy = false; n = 0; tries = 0; dots(); $('#lgAns').textContent = '';
+      $('#lgW').innerHTML = pic(deck[k][1]);
+      (k === 0 ? talk('Я скажу слово. Хлопни по барабану на каждый слог: ма-ши-на — три хлопка. Потом нажми «Готово».') : wait(200)).then(() => { if (t === tok) say(cap(word()) + '.'); });
+    };
+    $('#lgD').onclick = () => { if (busy || n >= 6) return; sfx.note(n); n++; dots(); hopEl($('#lgD')); };
+    $('#lgR').onclick = () => { if (busy) return; n = 0; dots(); };
+    $('#lgOk').onclick = async () => {
+      if (busy || !n) return; busy = true;
+      const w = deck[k][0], c = sylN(w), syls = w.toLowerCase().split('-');
+      if (n !== c) {
+        sfx.oops(); wrongs++; tries++;
+        await talk(tries < 2 ? `Послушай по слогам: ${syls.join(', ')}. Хлопай вместе со мной.` : `${cap(word())}: ${c} ${plural(c, SLOG)} — ${syls.join(', ')}.`); if (t !== tok) return;
+        if (tries < 2) { n = 0; dots(); busy = false; return; }
+      } else sfx.good();
+      $('#lgAns').innerHTML = syls.map((s, i) => `<span class="lg-sy" style="--c:${BALLC[i % BALLC.length]}">${esc(s)}</span>`).join('<i>-</i>');
+      if (n === c) { await talk(`Да! ${cap(word())}: ${c} ${plural(c, SLOG)}.`); if (t !== tok) return; }
+      await wait(500); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'syl-clap', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты слышишь слоги!', again: sylClap }); else show();
+    };
+    show();
+  }
+  // a lost syllable is found among three; a word is put together from its syllables
+  function sylMiss() {
+    const t = newScreen(), all = SYLW().filter(([w]) => w.includes('-')), deck = sample(all.filter(([w]) => sylN(w) >= 2), 6);
+    const sylPool = [...new Set(all.flatMap(([w]) => w.toLowerCase().split('-')))];
+    let k = 0, busy = false, wrongs = 0;
+    shell('Слоги потерялись', `<div class="lg"><div class="lg-card"><div class="lg-big" id="lgW"></div><button class="chip" id="lgAgain">🔊 Послушать слово</button></div>
+      <div class="lg-slots" id="lgSl"></div><p class="lg-q" id="lgQ"></p><div class="lg-syls" id="lgO"></div></div>`);
+    $('#lgAgain').onclick = () => say(cap(wordOf(deck[k][0])) + '.');
+    let syls = [], miss = -1, at = 0, build = false;
+    const slots = () => { $('#lgSl').innerHTML = syls.map((s, i) => `<span class="lg-slot ${(build ? i < at : i !== miss) ? 'full' : ''}">${(build ? i < at : i !== miss) ? esc(prc(s)) : ''}</span>`).join('<i>-</i>'); };
+    const show = () => {
+      busy = false; const [w, e] = deck[k]; syls = w.toLowerCase().split('-'); build = k % 2 === 1; at = 0;
+      $('#lgW').innerHTML = pic(e);
+      let opts;
+      if (build) { opts = shuffle(syls.map((s, i) => [s, i])); $('#lgQ').textContent = 'Собери слово из слогов'; }
+      else { miss = ri(0, syls.length - 1); opts = shuffle([[syls[miss], miss], ...sample(sylPool.filter(s => !syls.includes(s)), 2).map(s => [s, -1])]); $('#lgQ').textContent = 'Какой слог потерялся?'; }
+      slots();
+      $('#lgO').innerHTML = opts.map(([s, i]) => `<button class="lg-syl" data-s="${esc(s)}" data-i="${i}">${esc(prc(s))}</button>`).join('');
+      (k === 0 ? talk('Послушай слово. Один слог потерялся — найди его.') : k === 1 ? talk('А теперь собери слово из слогов по порядку.') : wait(200)).then(() => { if (t === tok) say(cap(wordOf(w)) + '.'); });
+    };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-s]'); if (!b || busy || b.classList.contains('used')) return;
+      const good = build ? b.dataset.s === syls[at] : +b.dataset.i === miss;
+      if (!good) { sfx.oops(); wiggle(b); wrongs++; say(sylSay(b.dataset.s) + '.'); return; }
+      sfx.pop(); b.classList.add('used');
+      if (build) { at++; slots(); if (at < syls.length) return; } else { miss = -1; slots(); }
+      busy = true; sfx.good(); await talk(`${cap(wordOf(deck[k][0]))}!`); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'syl-miss', stars: wrongs <= 1 ? 3 : wrongs <= 4 ? 2 : 1, line: 'Все слоги нашлись!', again: sylMiss }); else later(show, 400);
+    };
+    show();
+  }
+
+  /* ===== grammar: a question, three answers the voice reads, the right one said aloud ===== */
+  function quiz({ key, title, deck, card, ask, phrase, line, again }) {
+    const t = newScreen(); let k = 0, busy = true, opts = [], wrongs = 0;
+    shell(title, `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
+    const show = async () => {
+      busy = true; const it = deck[k]; opts = shuffle([it.right, ...it.wrong]);
+      $('#lgC').innerHTML = card(it); $('#lgO').innerHTML = '';
+      await talk(`${ask(it, k)} ${opts.slice(0, -1).join(', ')} или ${opts[opts.length - 1]}?`); if (t !== tok) return;
+      $('#lgO').innerHTML = opts.map(o => `<button class="lg-opt" data-o="${esc(o)}">${esc(cap(o))}</button>`).join('');
+      busy = false;
+    };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
+      const it = deck[k];
+      if (b.dataset.o !== it.right) { sfx.oops(); wiggle(b); wrongs++; await talk(`Послушай, как звучит: ${b.dataset.o}. Так не говорят. Выбери ещё раз.`); busy = false; return; }
+      sfx.good(); b.classList.add('right'); hopEl(b);
+      const ph = phrase(it);
+      await talk(`${cap(ph)}! Скажи: ${ph}.`); if (t !== tok) return;
+      await askSaid(SAID(), { expect: ph }); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key, stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line, again }); else later(show, 300);
+    };
+    show();
+  }
+  // [one, many, picture, two wrong ways children say «many»]
+  const MANY = [['кот', 'котов', '🐈', 'коты', 'котей'], ['мяч', 'мячей', '⚽', 'мячов', 'мячи'], ['яблоко', 'яблок', '🍎', 'яблоков', 'яблоки'], ['ведро', 'вёдер', '🪣', 'ведров', 'вёдра'],
+    ['стул', 'стульев', '🪑', 'стулов', 'стулья'], ['дерево', 'деревьев', '🌳', 'деревов', 'деревья'], ['гриб', 'грибов', '🍄', 'грибей', 'грибы'], ['матрёшка', 'матрёшек', '🪆', 'матрёшков', 'матрёшки'],
+    ['ложка', 'ложек', '🥄', 'ложков', 'ложки'], ['книга', 'книг', '📖', 'книгов', 'книги'], ['носок', 'носков', '🧦', 'носоков', 'носки'], ['сапог', 'сапог', '👢', 'сапогов', 'сапоги'],
+    ['глаз', 'глаз', '👁️', 'глазов', 'глаза'], ['окно', 'окон', '🪟', 'окнов', 'окна'], ['конфета', 'конфет', '🍬', 'конфетов', 'конфеты'], ['звезда', 'звёзд', '⭐', 'звездов', 'звёзды'],
+    ['ёж', 'ежей', '🦔', 'ежов', 'ежи'], ['ключ', 'ключей', '🔑', 'ключов', 'ключи'], ['зуб', 'зубов', '🦷', 'зубей', 'зубы'], ['банан', 'бананов', '🍌', 'бананей', 'бананы'],
+    ['пчела', 'пчёл', '🐝', 'пчелов', 'пчёлы'], ['мышь', 'мышей', '🐭', 'мышов', 'мыши'], ['гусь', 'гусей', '🪿', 'гусов', 'гуси'], ['чашка', 'чашек', '☕', 'чашков', 'чашки'],
+    ['карандаш', 'карандашей', '✏️', 'карандашов', 'карандаши'], ['помидор', 'помидоров', '🍅', 'помидор', 'помидоры'], ['апельсин', 'апельсинов', '🍊', 'апельсин', 'апельсины'],
+    ['шар', 'шаров', '🎈', 'шарей', 'шары'], ['платье', 'платьев', '👗', 'платей', 'платья'], ['дом', 'домов', '🏠', 'домей', 'дома']];
+  const gramMany = () => quiz({
+    key: 'gram-many', title: 'Один — много', line: 'Ты знаешь, как сказать «много»!', again: gramMany,
+    deck: sample(MANY, 6).map(([one, many, e, w1, w2]) => ({ one, e, right: 'много ' + many, wrong: ['много ' + w1, 'много ' + w2] })),
+    card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.one))}</b></div><span class="lg-arrow">→</span><div class="lg-many">${pic(it.e).repeat(5)}</div>`,
+    ask: (it, k) => `${k === 0 ? 'Один и много. ' : ''}Один ${it.one}. А если их много? Как сказать:`,
+    phrase: it => it.right
+  });
+  // [big, small said kindly, picture, two wrong ways]
+  const DIM = [['мяч', 'мячик', '⚽', 'мячок', 'мячонок'], ['дом', 'домик', '🏠', 'домок', 'домчик'], ['шар', 'шарик', '🎈', 'шарок', 'шарчик'], ['нос', 'носик', '👃', 'носчик', 'носёнок'],
+    ['рыба', 'рыбка', '🐟', 'рыбик', 'рыбушка'], ['книга', 'книжка', '📖', 'книгочка', 'книжик'], ['ложка', 'ложечка', '🥄', 'ложкочка', 'ложик'], ['ёж', 'ёжик', '🦔', 'ёжок', 'ёжечка'],
+    ['сапог', 'сапожок', '👢', 'сапогик', 'сапожик'], ['ведро', 'ведёрко', '🪣', 'ведрочко', 'ведрик'], ['окно', 'окошко', '🪟', 'окночко', 'окник'], ['солнце', 'солнышко', '☀️', 'солнцико', 'солнчик'],
+    ['яблоко', 'яблочко', '🍎', 'яблочек', 'яблокик'], ['белка', 'белочка', '🐿️', 'белкочка', 'белик'], ['птица', 'птичка', '🐦', 'птицка', 'птичик'], ['звезда', 'звёздочка', '⭐', 'звездик', 'звездушка'],
+    ['рука', 'ручка', '✋', 'рукачка', 'рукик'], ['нога', 'ножка', '🦶', 'ногочка', 'ногик'], ['машина', 'машинка', '🚗', 'машинчик', 'машинушка'], ['заяц', 'зайчик', '🐰', 'заяцик', 'заячик'],
+    ['кукла', 'куколка', '🪆', 'куклочка', 'куклик'], ['цветок', 'цветочек', '🌸', 'цветокчик', 'цветушка']];
+  const gramDim = () => quiz({
+    key: 'gram-dim', title: 'Назови ласково', line: 'Ты умеешь говорить ласково!', again: gramDim,
+    deck: sample(DIM, 6).map(([big, small, e, w1, w2]) => ({ big, e, right: small, wrong: [w1, w2] })),
+    card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.big))}</b></div><span class="lg-arrow">→</span><div class="lg-one sm"><span class="lg-small">${pic(it.e)}</span><b>?</b></div>`,
+    ask: (it, k) => `${k === 0 ? 'Назовём ласково, когда предмет маленький. ' : ''}Это ${it.big}. А маленький, ласково — как сказать:`,
+    phrase: it => it.right
+  });
+  // [animal (whose), picture, the part, the right word with it, two wrong ways]
+  const WHOSE = [['лиса', '🦊', 'хвост', 'лисий хвост', 'лисиный хвост', 'лисовый хвост'], ['волк', '🐺', 'хвост', 'волчий хвост', 'волковый хвост', 'волкин хвост'],
+    ['заяц', '🐰', 'уши', 'заячьи уши', 'зайцевые уши', 'заячные уши'], ['медведь', '🐻', 'лапа', 'медвежья лапа', 'медведева лапа', 'медвежая лапа'],
+    ['кошка', '🐱', 'хвост', 'кошачий хвост', 'кошковый хвост', 'кошачный хвост'], ['собака', '🐶', 'лапа', 'собачья лапа', 'собаковая лапа', 'собачная лапа'],
+    ['корова', '🐄', 'молоко', 'коровье молоко', 'коровое молоко', 'коровиное молоко'], ['коза', '🐐', 'молоко', 'козье молоко', 'козовое молоко', 'козиное молоко'],
+    ['птица', '🐦', 'перо', 'птичье перо', 'птицыно перо', 'птичное перо'], ['лошадь', '🐴', 'грива', 'лошадиная грива', 'лошадья грива', 'лошадевая грива'],
+    ['утка', '🦆', 'яйцо', 'утиное яйцо', 'уточное яйцо', 'утковое яйцо'], ['курица', '🐔', 'яйцо', 'куриное яйцо', 'курицыно яйцо', 'куричье яйцо'],
+    ['рыба', '🐟', 'хвост', 'рыбий хвост', 'рыбовый хвост', 'рыбиный хвост'], ['лев', '🦁', 'грива', 'львиная грива', 'левиная грива', 'львовая грива']];
+  const OF = { 'лиса': 'лисы', 'волк': 'волка', 'заяц': 'зайца', 'медведь': 'медведя', 'кошка': 'кошки', 'собака': 'собаки', 'корова': 'коровы', 'коза': 'козы', 'птица': 'птицы', 'лошадь': 'лошади', 'утка': 'утки', 'курица': 'курицы', 'рыба': 'рыбы', 'лев': 'льва' };
+  const WHOSE_Q = { 'хвост': 'Чей это хвост', 'уши': 'Чьи это уши', 'лапа': 'Чья это лапа', 'молоко': 'Чьё это молоко', 'перо': 'Чьё это перо', 'грива': 'Чья это грива', 'яйцо': 'Чьё это яйцо' };
+  const gramWhose = () => quiz({
+    key: 'gram-whose', title: 'Чей хвост?', line: 'Ты знаешь, чей хвост и чья лапа!', again: gramWhose,
+    deck: sample(WHOSE, 6).map(([who, e, part, right, w1, w2]) => ({ who, e, part, right, wrong: [w1, w2] })),
+    card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.part))} ${esc(OF[it.who])}</b></div>`,
+    ask: it => `${cap(it.part)} ${OF[it.who]}. ${WHOSE_Q[it.part]}?`,
+    phrase: it => it.right
+  });
+
+  /* ===== Что лишнее: three of a group and one from another; then the group in one word ===== */
+  const CATS = [
+    { many: 'фрукты', one: 'фрукт', it: [['🍎', 'яблоко'], ['🍌', 'банан'], ['🍐', 'груша'], ['🍊', 'апельсин'], ['🍇', 'виноград'], ['🍑', 'персик']] },
+    { many: 'овощи', one: 'овощ', it: [['🥕', 'морковь'], ['🥒', 'огурец'], ['🍅', 'помидор'], ['🥔', 'картошка'], ['🧅', 'лук'], ['🌽', 'кукуруза']] },
+    { many: 'дикие звери', one: 'дикий зверь', it: [['🦊', 'лиса'], ['🐺', 'волк'], ['🐻', 'медведь'], ['🐰', 'заяц'], ['🦔', 'ёж'], ['🐿️', 'белка']] },
+    { many: 'домашние животные', one: 'домашнее животное', it: [['🐄', 'корова'], ['🐐', 'коза'], ['🐷', 'свинья'], ['🐑', 'овца'], ['🐴', 'лошадь'], ['🐱', 'кошка']] },
+    { many: 'птицы', one: 'птица', it: [['🐦', 'воробей'], ['🦉', 'сова'], ['🦆', 'утка'], ['🐧', 'пингвин'], ['🦜', 'попугай'], ['🦅', 'орёл']] },
+    { many: 'транспорт', one: 'транспорт', it: [['🚗', 'машина'], ['🚌', 'автобус'], ['✈️', 'самолёт'], ['🚂', 'поезд'], ['🚲', 'велосипед'], ['🚁', 'вертолёт']] },
+    { many: 'одежда', one: 'одежда', it: [['👕', 'футболка'], ['👗', 'платье'], ['🧥', 'куртка'], ['👖', 'джинсы'], ['🧦', 'носки'], ['🧣', 'шарф']] },
+    { many: 'посуда', one: 'посуда', it: [['☕', 'чашка'], ['🥄', 'ложка'], ['🍴', 'вилка'], ['🍽️', 'тарелка'], ['🫖', 'чайник'], ['🥣', 'миска']] },
+    { many: 'насекомые', one: 'насекомое', it: [['🐝', 'пчела'], ['🦋', 'бабочка'], ['🐞', 'божья коровка'], ['🐜', 'муравей'], ['🪲', 'жук'], ['🦗', 'кузнечик']] },
+    { many: 'инструменты', one: 'инструмент', it: [['🔨', 'молоток'], ['🪚', 'пила'], ['🪛', 'отвёртка'], ['🔧', 'гаечный ключ'], ['🪓', 'топор']] },
+    { many: 'музыкальные инструменты', one: 'музыкальный инструмент', it: [['🎸', 'гитара'], ['🎹', 'пианино'], ['🥁', 'барабан'], ['🎺', 'труба'], ['🎻', 'скрипка']] }];
+  const CLOSE = [['фрукты', 'овощи'], ['дикие звери', 'домашние животные'], ['птицы', 'насекомые'], ['инструменты', 'музыкальные инструменты']];
+  const isClose = (a, b) => CLOSE.some(([x, y]) => (x === a.many && y === b.many) || (y === a.many && x === b.many));
+  function gramOdd() {
+    const t = newScreen(), rounds = [];
+    for (const A of sample(CATS, 5)) {
+      const others = CATS.filter(B => B !== A), close = others.filter(B => isClose(A, B)), far = others.filter(B => !isClose(A, B));
+      const B = Q() && close.length && Math.random() < .6 ? pickOne(close) : pickOne(far);
+      rounds.push({ A, B, odd: pickOne(B.it), cards: shuffle([...sample(A.it, 3), pickOne(B.it)]) });
+    }
+    rounds.forEach(r => { if (!r.cards.includes(r.odd)) r.cards[ri(0, 3)] = r.odd; });
+    let k = 0, busy = false, wrongs = 0;
+    shell('Что лишнее?', `<div class="lg"><p class="lg-q">Какая картинка лишняя?</p><div class="lg-grid" id="lgP"></div><p class="lg-ans" id="lgAns"></p></div>`);
+    const show = () => {
+      busy = false; $('#lgAns').textContent = '';
+      $('#lgP').innerHTML = rounds[k].cards.map(([e, n]) => `<button class="lg-pic" data-n="${esc(n)}">${pic(e)}<b></b></button>`).join('');
+      talk(k === 0 ? 'Три картинки похожи, одна лишняя. Найди лишнюю.' : 'Какая лишняя?');
+    };
+    $('#lgP').onclick = async e => {
+      const b = e.target.closest('[data-n]'); if (!b || busy) return;
+      const { A, B, odd } = rounds[k];
+      if (b.dataset.n !== odd[1]) { sfx.oops(); wiggle(b); wrongs++; talk('Подумай: какая картинка не такая, как другие?'); return; }
+      busy = true; sfx.good(); b.classList.add('right');
+      $$('#lgP [data-n]').forEach(x => { x.querySelector('b').textContent = x.dataset.n; });
+      $('#lgAns').textContent = `Это ${A.many}`;
+      const ph = `это ${A.many}`;
+      await talk(`${cap(odd[1])} — это ${B.one}. А остальные — ${A.many}. Скажи одним словом: ${ph}.`); if (t !== tok) return;
+      await askSaid(SAID(), { expect: ph }); if (t !== tok) return;
+      k++; if (k >= rounds.length) finish({ key: 'gram-odd', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты умеешь называть одним словом!', again: gramOdd }); else later(show, 300);
+    };
+    show();
+  }
+
+  /* ===== Что сначала, что потом: pictures put in order, the story read, then told by the child ===== */
+  const STORIES = [
+    [['🥚', 'Сначала было яйцо.'], ['🐣', 'Из яйца вылупился цыплёнок.'], ['🐥', 'Цыплёнок подрос.'], ['🐔', 'И стал курицей.']],
+    [['🫘', 'Посадили семечко.'], ['🌱', 'Появился росток.'], ['🌿', 'Росток вырос.'], ['🌻', 'Расцвёл подсолнух.']],
+    [['☁️', 'На небо пришла туча.'], ['🌧️', 'Пошёл дождь.'], ['🌈', 'Выглянула радуга.']],
+    [['❄️', 'Выпал снег.'], ['⛄', 'Дети слепили снеговика.'], ['☀️', 'Пригрело солнце.'], ['💧', 'Снеговик растаял.']],
+    [['😴', 'Я сплю.'], ['⏰', 'Звенит будильник.'], ['🪥', 'Я чищу зубы.'], ['🥣', 'Я завтракаю.']],
+    [['🐛', 'Гусеница ест листья.'], ['💤', 'Гусеница уснула в коконе.'], ['🦋', 'Из кокона вылетела бабочка.']],
+    [['🥚', 'Взяли яйца и муку.'], ['🥣', 'Замесили тесто.'], ['🔥', 'Испекли в духовке.'], ['🥧', 'Пирог готов!']],
+    [['🌸', 'Яблоня цветёт.'], ['🍏', 'Выросло зелёное яблоко.'], ['🍎', 'Яблоко покраснело.'], ['🧺', 'Яблоки собрали в корзину.']],
+    [['✏️', 'Пишу письмо.'], ['✉️', 'Кладу его в конверт.'], ['📮', 'Опускаю в почтовый ящик.'], ['📬', 'Письмо пришло к бабушке.']],
+    [['🧱', 'Привезли кирпичи.'], ['🏗️', 'Строят дом.'], ['🏠', 'Дом готов.']]];
+  function storySeq() {
+    const t = newScreen(), deck = sample(Q() ? STORIES.filter(s => s.length === 4) : STORIES, 3);
+    let k = 0, at = 0, busy = false, order = [];
+    shell('Что сначала, что потом', `<div class="lg"><p class="lg-q" id="lgQ">Разложи картинки по порядку</p><div class="lg-grid" id="lgP"></div><p class="lg-story" id="lgSt"></p></div>`);
+    const show = () => {
+      busy = false; at = 0; const st = deck[k]; order = shuffle(st.map((_, i) => i));
+      if (order.every((x, i) => x === i)) order.reverse();
+      $('#lgSt').innerHTML = ''; $('#lgQ').textContent = 'Разложи картинки по порядку';
+      $('#lgP').innerHTML = order.map(i => `<button class="lg-pic" data-i="${i}">${pic(st[i][0])}<i class="lg-n"></i></button>`).join('');
+      talk(k === 0 ? 'Что было сначала, а что потом? Нажимай на картинки по порядку.' : 'Новая история. Что было сначала?');
+    };
+    $('#lgP').onclick = async e => {
+      const b = e.target.closest('[data-i]'); if (!b || busy || b.classList.contains('right')) return;
+      if (+b.dataset.i !== at) { sfx.oops(); wiggle(b); talk(at === 0 ? 'Подумай: с чего всё началось?' : 'А что было дальше?'); return; }
+      sfx.pop(); b.classList.add('right'); b.querySelector('.lg-n').textContent = ++at;
+      if (at < deck[k].length) return;
+      busy = true; sfx.good();
+      const st = deck[k];
+      $('#lgSt').innerHTML = st.map(([, s]) => esc(s)).join(' ');
+      await talk(st.map(([, s]) => s).join(' ')); if (t !== tok) return;
+      $('#lgQ').textContent = 'Сначала… Потом… В конце…';
+      await talk(`Теперь расскажи сам${G('а', '')}, по картинкам: сначала, потом, в конце.`); if (t !== tok) return;
+      await askSaid(G('Я рассказала!', 'Я рассказал!')); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'story-seq', line: 'Ты рассказываешь истории по порядку!', again: storySeq }); else later(show, 300);
+    };
+    show();
+  }
+
+  /* ===== Какое настроение: a face, a situation, and the voice that shows a feeling ===== */
+  const FEEL = [['😄', 'радость', 'весело'], ['😢', 'грусть', 'грустно'], ['😠', 'злость', 'сердито'], ['😨', 'страх', 'испуганно'], ['😲', 'удивление', 'удивлённо']];
+  const SITS = [['Мальчику подарили щенка.', 'радость'], ['У девочки улетел воздушный шарик.', 'грусть'], ['Младший брат сломал башню из кубиков.', 'злость'],
+    ['Ночью за окном загремел гром.', 'страх'], ['Из коробки выпрыгнул игрушечный зайчик!', 'удивление'], ['Друг не пришёл на день рождения.', 'грусть'],
+    ['Мама испекла любимый пирог.', 'радость'], ['Большая собака громко лает и бежит навстречу.', 'страх'], ['Зимой на окне вдруг расцвёл цветок!', 'удивление'],
+    ['Кто-то без спроса взял любимую игрушку.', 'злость'], ['В гости приехала бабушка.', 'радость'], ['Котёнок потерялся.', 'грусть']];
+  const PHR = ['Привет!', 'Пойдём гулять.', 'Это мой мяч.', 'У нас гости.', 'Смотри, снег!'];
+  function emo() {
+    const t = newScreen(), faces = sample(FEEL, 2), sits = sample(SITS, 3), it = pickOne(FEEL.filter(f => f[1] !== 'страх'));
+    const deck = [...faces.map(f => ({ kind: 'face', f })), ...sits.map(s => ({ kind: 'sit', s })), { kind: 'voice', f: it, p: pickOne(PHR) }];
+    let k = 0, busy = false, wrongs = 0;
+    shell('Какое настроение?', `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
+    const show = async () => {
+      busy = true; const d = deck[k]; $('#lgO').innerHTML = '';
+      if (d.kind === 'face') {
+        const opts = shuffle([d.f, ...sample(FEEL.filter(f => f !== d.f), 2)]);
+        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-q">Какое настроение?</p>`;
+        await talk(`${k === 0 ? 'Посмотри на лицо. ' : ''}Какое настроение: ${opts.map(f => f[1]).join(', ')}?`); if (t !== tok) return;
+        $('#lgO').innerHTML = opts.map(f => `<button class="lg-opt" data-o="${f[1]}">${esc(cap(f[1]))}</button>`).join('');
+      } else if (d.kind === 'sit') {
+        $('#lgC').innerHTML = `<p class="lg-sit">${esc(d.s[0])}</p><p class="lg-q">Какое у него настроение?</p>`;
+        await talk(`${d.s[0]} Какое настроение? Нажми на лицо.`); if (t !== tok) return;
+        $('#lgO').innerHTML = `<div class="lg-faces">${shuffle(FEEL).map(f => `<button class="lg-fb" data-o="${f[1]}" aria-label="${f[1]}">${f[0]}</button>`).join('')}</div>`;
+      } else {
+        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-sit">«${esc(d.p)}»</p><p class="lg-q">Скажи ${esc(d.f[2])}</p>`;
+        await talk(`А теперь голосом. Скажи ${d.f[2]}: ${d.p}`); if (t !== tok) return;
+        await askSaid(SAID()); if (t !== tok) return;
+        await talk('Голосом можно показать настроение!'); if (t !== tok) return;
+        k++; next(); return;
+      }
+      busy = false;
+    };
+    const next = () => { if (k >= deck.length) finish({ key: 'emo', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты понимаешь чувства!', again: emo }); else later(show, 300); };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
+      const d = deck[k], right = d.kind === 'face' ? d.f[1] : d.s[1];
+      if (b.dataset.o !== right) { sfx.oops(); wiggle(b); wrongs++; await talk('Подумай ещё: как бы ты себя почувствовал' + G('а', '') + '?'); busy = false; return; }
+      sfx.good(); b.classList.add('right');
+      if (d.kind === 'face') {
+        await talk(`Это ${right}. Покажи лицом ${right === 'удивление' ? 'удивление' : right}!`); if (t !== tok) return;
+        await askSaid(G('Показала!', 'Показал!')); if (t !== tok) return;
+      } else { await talk(`Да, ${right}.`); if (t !== tok) return; }
+      k++; next();
+    };
+    show();
+  }
+
+  /* ===== Проверка речи: a grown-up marks how the child names pictures, hearing is checked by the game, long words are
+     repeated; the report shows what to train and turns those games on ===== */
+  const CHECK = [['С', [['сок', '🧃'], ['оса', '🐝'], ['нос', '👃']]], ['З', [['зонт', '☂️'], ['коза', '🐐']]], ['Ц', [['цирк', '🎪'], ['курица', '🐔'], ['огурец', '🥒']]],
+    ['Ш', [['шапка', '🧢'], ['кошка', '🐱'], ['душ', '🚿']]], ['Ж', [['жук', '🪲'], ['ножницы', '✂️']]], ['Ч', [['чайник', '🫖'], ['очки', '👓'], ['мяч', '⚽']]],
+    ['Щ', [['щётка', '🪥'], ['ящик', '📦']]], ['Л', [['лампа', '💡'], ['волк', '🐺'], ['стул', '🪑']]], ['Ль', [['лимон', '🍋'], ['пальма', '🌴'], ['ель', '🌲']]],
+    ['Р', [['рыба', '🐟'], ['корова', '🐄'], ['шар', '🎈']]], ['Рь', [['рис', '🍚'], ['дверь', '🚪']]]];
+  const CHECK_KEY = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Л': 'l', 'Ль': 'l', 'Р': 'r', 'Рь': 'r' };
+  const LONGW = [['велосипед', '🚲'], ['черепаха', '🐢'], ['телевизор', '📺'], ['сковорода', '🍳'], ['милиционер', '👮']];
+  const hiSnd = (w, L) => { const c = L[0].toLowerCase(), i = w.indexOf(c); return i < 0 ? esc(w) : esc(w.slice(0, i)) + `<b class="hl">${esc(w.slice(i, i + 1))}</b>` + esc(w.slice(i + 1)); };
+  function check() {
+    let t = newScreen(); const name = P.settings.name || 'ребёнок';
+    shell('Проверка речи', `<div class="lg"><div class="lg-card lg-adult">
+      <p class="lg-q">Для взрослого: 7–10 минут вместе с ${esc(name === 'ребёнок' ? 'ребёнком' : name)}</p>
+      <ol class="lg-list"><li>Ребёнок называет картинки. Вы отмечаете, как прозвучал <b class="hl">выделенный</b> звук: чисто или с ошибкой (замена, пропуск, искажение).</li>
+      <li>Если ребёнок не знает слова, нажмите 🔊: пусть повторит за голосом, и отметьте.</li>
+      <li>Потом игра проверит слух на похожие слова и как ребёнок повторяет длинные слова.</li></ol>
+      <p class="muted">Это домашняя проверка, а не диагноз. Отчёт сохранится, его можно показать логопеду.</p>
+      <div class="og-btns"><button class="big" id="lgGo">Начать</button></div></div></div>`);
+    const res = { snd: {}, hear: 0, hearN: 5, syl: 0, sylN: LONGW.length };
+    const items = CHECK.flatMap(([L, ws]) => ws.map(([w, e]) => ({ L, w, e })));
+    $('#lgGo').onclick = () => { sfx.pop(); sounds(0); };
+    function sounds(i) {
+      if (t !== tok) return;
+      if (i >= items.length) { hearing(); return; }
+      const it = items[i];
+      shell('Проверка речи', `<div class="lg"><p class="lg-step">Звуки: ${i + 1} из ${items.length}</p><div class="lg-card"><span class="lg-big">${pic(it.e)}</span>
+        <p class="lg-adult-w">${hiSnd(it.w, it.L)} <small>звук ${esc(it.L)}</small></p><button class="chip" id="lgSay">🔊 Подсказать слово</button></div>
+        <div class="lg-mark"><button class="big" data-m="1">✓ Чисто</button><button class="big ghost" data-m="0">✗ С ошибкой</button></div></div>`);
+      $('#lgSay').onclick = () => talk(`Повтори: ${it.w}.`);
+      talk(i === 0 ? 'Что это? Скажи громко.' : 'А это?');
+      $('.lg-mark').onclick = e => {
+        const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick();
+        (res.snd[it.L] = res.snd[it.L] || []).push(+b.dataset.m);
+        sounds(i + 1);
+      };
+    }
+    function hearing() {
+      if (t !== tok) return;
+      talk('Теперь проверим слух.').then(() => { if (t === tok) hearPairs(res.hearN, n => { res.hear = n; t = tok; syllables(0); }); });
+    }
+    function syllables(i) {
+      if (t !== tok) return;
+      if (i >= LONGW.length) { report(); return; }
+      const [w, e] = LONGW[i];
+      t = newScreen();
+      shell('Проверка речи', `<div class="lg"><p class="lg-step">Длинные слова: ${i + 1} из ${LONGW.length}</p><div class="lg-card"><span class="lg-big">${pic(e)}</span>
+        <p class="lg-adult-w">${esc(w)}</p><button class="chip" id="lgSay">🔊 Ещё раз</button></div>
+        <p class="muted">Ребёнок повторяет слово. Ошибка — если пропущен, переставлен или добавлен слог.</p>
+        <div class="lg-mark"><button class="big" data-m="1">✓ Без ошибок</button><button class="big ghost" data-m="0">✗ Слоги не так</button></div></div>`);
+      $('#lgSay').onclick = () => talk(`${cap(w)}.`);
+      talk(`Повтори за мной: ${w}.`);
+      $('.lg-mark').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick(); res.syl += +b.dataset.m; syllables(i + 1); };
+    }
+    function report() {
+      const t2 = newScreen(), bad = CHECK.map(([L]) => L).filter(L => (res.snd[L] || []).some(x => !x));
+      const keys = [...new Set(bad.map(L => CHECK_KEY[L]))], hearBad = res.hear <= res.hearN - 2, sylBad = res.syl <= res.sylN - 2;
+      const prev = (P.checks || [])[0];
+      P.checks = [{ d: dayKey(), snd: res.snd, hear: res.hear, hearN: res.hearN, syl: res.syl, sylN: res.sylN }, ...(P.checks || [])].slice(0, 6); save();
+      const row = ([L]) => { const m = res.snd[L] || [], err = m.filter(x => !x).length; return `<li class="${err ? 'bad' : 'ok'}"><b>${esc(L)}</b><span>${err ? `⚠️ с ошибкой ${err} из ${m.length}` : '✅ чисто'}</span></li>`; };
+      const games = [...keys.flatMap(k => ({ sz: ['sz-sort', 'sz-syll', 'snd-hold'], sh: ['sh-sort', 'sh-syll'], l: ['l-chist', 'l-house'], r: ['syll', 'house'] }[k] || [])),
+        ...(hearBad ? ['hear-pairs'] : []), ...(sylBad ? ['syl-clap', 'syl-miss'] : [])].filter(id => GAMES.some(g => g.id === id));
+      const label = k => SOUND_SET.find(x => x[0] === k)[1];
+      shell('Отчёт о речи', `<div class="lg"><div class="lg-card lg-adult">
+        <p class="lg-q">${esc(P.settings.name || 'Ребёнок')}, ${esc(dayKey())}</p>
+        <ul class="lg-rep">${CHECK.map(row).join('')}</ul>
+        <p class="lg-line">👂 Похожие слова на слух: <b>${res.hear} из ${res.hearN}</b> ${hearBad ? '⚠️' : '✅'}</p>
+        <p class="lg-line">🥁 Длинные слова без ошибок в слогах: <b>${res.syl} из ${res.sylN}</b> ${sylBad ? '⚠️' : '✅'}</p>
+        ${prev ? `<p class="muted">Прошлая проверка ${esc(prev.d)}: с ошибкой ${CHECK.filter(([L]) => (prev.snd[L] || []).some(x => !x)).map(([L]) => L).join(', ') || 'ничего'}.</p>` : ''}
+        ${keys.length ? `<p class="lg-line">Потренировать: <b>${keys.map(label).join(', ')}</b></p><div class="og-btns"><button class="big" id="lgOn">Включить эти звуки в занятиях</button></div>` : '<p class="lg-line">Все звуки прозвучали чисто. 🎉</p>'}
+        ${games.length ? `<p class="lg-line">Игры для этого:</p><div class="lg-chips" id="lgG">${games.map(id => `<button class="chip" data-g="${id}">${esc(nm(GAMES.find(g => g.id === id).name))}</button>`).join('')}</div>` : ''}
+        <p class="muted">Это домашняя проверка, а не диагноз. Если ошибок много, звук заменяется другим или ребёнку уже 5 лет и больше, покажите отчёт логопеду.</p>
+        <div class="og-btns"><button class="big" id="lgFin">Готово ⭐</button></div></div></div>`);
+      const on = $('#lgOn');
+      if (on) on.onclick = () => {
+        sfx.magic(); P.settings.sounds = [...new Set([...soundsOf(P).filter(k => keys.includes(k)), ...keys])];
+        if (Array.isArray(P.settings.mods)) MODS.filter(m => m.snd && keys.includes(m.snd)).forEach(m => { if (!P.settings.mods.includes(m.id)) P.settings.mods.push(m.id); });
+        save(); on.textContent = '✓ Включено'; on.disabled = true;
+      };
+      const gl = $('#lgG'); if (gl) gl.onclick = e => { const b = e.target.closest('[data-g]'); if (b) { sfx.pop(); GAMES.find(g => g.id === b.dataset.g).go(); } };
+      $('#lgFin').onclick = () => { if (t2 === tok) finish({ key: 'speech-check', stars: 3, line: 'Проверка готова!', again: check }); };
+      talk('Проверка готова! Отчёт для взрослых.');
+    }
+  }
+
+  /* ===== the games, their sections and modules ===== */
+  const RU_ONLY = () => !IS_RU;
+  GAMES.push(
+    { id: 'snd-hold', hide: RU_ONLY, name: 'Тяни звук', sub: 'насос, комарик, змейка, мотор', ico: () => pic('🎈'), bg: 'var(--t-blue)', go: () => hold(), grp: 0, also: [15], prog: () => '' },
+    { id: 'sz-sort', hide: RU_ONLY, name: 'Водичка или комарик?', sub: 'С, З или Ц', ico: () => pic('🦟'), bg: 'var(--t-green)', go: szSort, grp: 15 },
+    { id: 'sz-syll', hide: RU_ONLY, name: 'Свистящие слоги', sub: 'са-са-са… самолёт!', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenSyll(SYL_S, 'sz-syll', 'Свистящие слоги', 'сзц'), grp: 15 },
+    { id: 'sz-house', hide: RU_ONLY, name: 'Где живёт звук С', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse('С'), grp: 15 },
+    { id: 'speech-check', hide: RU_ONLY, name: 'Проверка речи', sub: 'со взрослым · отчёт и нужные игры', ico: () => pic('🩺'), bg: 'var(--t-mint)', go: check, grp: 16, prog: () => P.checks && P.checks[0] ? 'была ' + P.checks[0].d : '' },
+    { id: 'hear-pairs', hide: RU_ONLY, name: 'Похожие слова', sub: 'мышка, мишка или миска?', ico: () => pic('👂'), bg: 'var(--t-blue)', go: () => hearPairs(), grp: 16 },
+    { id: 'syl-clap', hide: RU_ONLY, name: 'Хлопни слоги', sub: 'сколько слогов в слове?', ico: () => pic('🥁'), bg: 'var(--t-yellow)', go: sylClap, grp: 16 },
+    { id: 'syl-miss', hide: RU_ONLY, name: 'Слоги потерялись', sub: 'найди слог и собери слово', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b>-?</span>', bg: 'var(--t-lilac)', go: sylMiss, grp: 16 },
+    { id: 'gram-many', hide: RU_ONLY, name: 'Один — много', sub: 'один кот, много котов', ico: () => pic('🐈'), bg: 'var(--t-peach)', go: gramMany, grp: 16 },
+    { id: 'gram-dim', hide: RU_ONLY, name: 'Назови ласково', sub: 'мяч — мячик, дом — домик', ico: () => pic('⚽'), bg: 'var(--t-pink)', go: gramDim, grp: 16 },
+    { id: 'gram-whose', hide: RU_ONLY, name: 'Чей хвост?', sub: 'лисий, волчий, заячьи уши', ico: () => pic('🦊'), bg: 'var(--t-green)', go: gramWhose, grp: 16 },
+    { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 },
+    { id: 'story-seq', hide: RU_ONLY, name: 'Что сначала, что потом', sub: 'разложи картинки и расскажи', ico: () => pic('🐣'), bg: 'var(--t-mint)', go: storySeq, grp: 16 },
+    { id: 'emo', hide: RU_ONLY, name: 'Какое настроение?', sub: 'чувства на лице и в голосе', ico: () => pic('😊'), bg: 'var(--t-lilac)', go: emo, grp: 16 }
+  );
+  const snd0 = GAMES.find(g => g.id === 'sounds'); if (snd0) snd0.also = [...(snd0.also || []), 15];
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: 'Свистящие: С З Ц', p: 'водичка, комарик и тише-тише', only: 'r' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: 'Слушаю и говорю', p: 'похожие слова, слоги, грамматика, рассказ и чувства' });
+  const sp = HOME_TABS.find(x => x.id === 'speak');
+  if (sp) { sp.g.splice(sp.g.indexOf(9) + 1, 0, 15); sp.g.push(16); }
+  MODS.splice(MODS.findIndex(m => m.id === 'sh') + 1, 0, { id: 'sz', e: '💧', n: 'Свистящие: С З Ц', g: [15], snd: 'sz' }, { id: 'hear', e: '👂', n: 'Слух, слоги, грамматика и рассказ', g: [16] });
+  // children whose home screen was chosen before these sections existed get them once: С З Ц for those training it,
+  // the hearing and grammar games for the younger ones
+  if (IS_RU) {
+    let changed = false;
+    Object.values(ROOT.profiles || {}).forEach(pr => {
+      if (!pr || !pr.settings || pr.settings.v78) return;
+      pr.settings.v78 = 1; changed = true;
+      const m = pr.settings.mods; if (!Array.isArray(m)) return;
+      if (soundsOf(pr).includes('sz') && !m.includes('sz')) m.push('sz');
+      if ((pr.settings.track || 'r') === 'r' && !m.includes('hear')) m.push('hear');
+    });
+    if (changed) save();
+  }
+  // one of these in the daily speech lesson, in turn
+  const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
+  const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
+  return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID };
+})();
+
+/* ---------- «Грамматика: страница в день»: a grammar course for 4–6 year olds in the order of a speech therapist's
+   grammar workbook (the topics and kinds of task, not its pages, pictures or sentences): мой — моя — моё — мои, words
+   that agree with a thing (синий мяч, синяя чашка, синее ведро, синие носки), saying kindly and the opposite, cases with
+   and without prepositions (много чего, у кого, кому, по чему, кого-что, чем, с чем, где, на чём, о чём), a sentence with
+   a given word, «чтобы» and «потому что». One page a day, right after the tongue exercises in the speech lesson; a page
+   is a few short tasks, every answer said aloud. Russian only; one declaration for the translation tool. ---------- */
+const GRAM = (() => {
+  const SAID = LOGO.SAID;
+  // things by gender: m, f, n, and plural only (p)
+  const NN = {
+    m: [['мяч', '⚽'], ['стул', '🪑'], ['зонт', '☂️'], ['шарф', '🧣'], ['торт', '🎂'], ['дом', '🏠'], ['банан', '🍌'], ['ключ', '🔑'], ['чайник', '🫖'], ['телефон', '📱'],
+      ['карандаш', '✏️'], ['помидор', '🍅'], ['автобус', '🚌'], ['самолёт', '✈️'], ['сок', '🧃'], ['цветок', '🌸'], ['шарик', '🎈'], ['диван', '🛋️'], ['чай', '🍵'], ['гриб', '🍄']],
+    f: [['машина', '🚗'], ['чашка', '☕'], ['кепка', '🧢'], ['книга', '📖'], ['ложка', '🥄'], ['вилка', '🍴'], ['тарелка', '🍽️'], ['футболка', '👕'], ['груша', '🍐'], ['клубника', '🍓'],
+      ['лампа', '💡'], ['сумка', '👜'], ['пицца', '🍕'], ['конфета', '🍬'], ['звезда', '⭐'], ['ёлка', '🎄'], ['куртка', '🧥'], ['матрёшка', '🪆'], ['каша', '🥣'], ['рыба', '🐟']],
+    n: [['яблоко', '🍎'], ['платье', '👗'], ['ведро', '🪣'], ['окно', '🪟'], ['солнце', '☀️'], ['яйцо', '🥚'], ['мороженое', '🍦'], ['облако', '☁️'], ['колесо', '🛞'], ['сердце', '❤️'],
+      ['перо', '🪶'], ['зеркало', '🪞'], ['молоко', '🥛'], ['письмо', '✉️'], ['дерево', '🌳']],
+    p: [['носки', '🧦'], ['джинсы', '👖'], ['сапоги', '👢'], ['очки', '👓'], ['часы', '⌚'], ['ножницы', '✂️'], ['санки', '🛷'], ['ботинки', '👞'], ['перчатки', '🧤'], ['бусы', '📿'],
+      ['туфли', '👠'], ['шорты', '🩳'], ['блины', '🥞'], ['пельмени', '🥟'], ['вишни', '🍒'], ['орехи', '🥜']]
+  };
+  const G4 = ['m', 'f', 'n', 'p'];
+  const POSS = { m: 'мой', f: 'моя', n: 'моё', p: 'мои' };
+  // the four forms of a describing word, and which things it fits (null: any thing)
+  const ADJ = {
+    'синий': [['синий', 'синяя', 'синее', 'синие'], 'blue'], 'жёлтый': [['жёлтый', 'жёлтая', 'жёлтое', 'жёлтые'], 'yellow'],
+    'зелёный': [['зелёный', 'зелёная', 'зелёное', 'зелёные'], 'green'], 'красный': [['красный', 'красная', 'красное', 'красные'], 'red'],
+    'большой': [['большой', 'большая', 'большое', 'большие'], 'big'], 'маленький': [['маленький', 'маленькая', 'маленькое', 'маленькие'], 'small'],
+    'вкусный': [['вкусный', 'вкусная', 'вкусное', 'вкусные'], null, ['торт', 'банан', 'сок', 'помидор', 'чай', 'груша', 'клубника', 'пицца', 'конфета', 'каша', 'рыба', 'яблоко', 'мороженое', 'молоко', 'яйцо', 'блины', 'пельмени', 'вишни', 'орехи']],
+    'новый': [['новый', 'новая', 'новое', 'новые'], null, ['мяч', 'стул', 'зонт', 'телефон', 'автобус', 'диван', 'машина', 'книга', 'кепка', 'сумка', 'куртка', 'футболка', 'платье', 'ведро', 'окно', 'колесо', 'зеркало', 'джинсы', 'сапоги', 'туфли', 'очки', 'часы', 'ножницы', 'санки']],
+    'тёплый': [['тёплый', 'тёплая', 'тёплое', 'тёплые'], null, ['шарф', 'дом', 'чай', 'куртка', 'каша', 'солнце', 'молоко', 'носки', 'перчатки', 'сапоги', 'ботинки', 'блины']]
+  };
+  const COLORS = ['blue', 'yellow', 'green', 'red'];
+  const fits = (adj, w) => { const a = ADJ[adj]; return !a[2] || a[2].includes(w); };
+  const thing = (g, adj, n) => sample(NN[g].filter(([w]) => !adj || fits(adj, w)), n);
+  // a picture: tinted in a colour, or drawn big or small
+  const look = (e, how) => `<span class="gr-pic ${how ? 'gr-' + how : ''}">${pic(e)}</span>`;
+
+  /* ===== kinds of task ===== */
+  // say: tap each picture, hear how it is said, say it; then the pictures hide and are remembered
+  const say = (items, intro, memo) => (box, t) => new Promise(done => {
+    let left = items.length, busy = false;
+    box.innerHTML = `<div class="gr-grid">${items.map((it, i) => `<button class="gr-card" data-i="${i}">${look(it.e, it.how)}<b></b></button>`).join('')}</div>`;
+    box.onclick = async e => {
+      const b = e.target.closest('[data-i]'); if (!b || busy || b.classList.contains('right')) return; busy = true;
+      const it = items[+b.dataset.i]; sfx.pop(); hopEl(b);
+      b.querySelector('b').textContent = it.ph;
+      await talk(`${cap(it.ph)}.`); if (t !== tok) return;
+      await askSaid(SAID(), { expect: it.ph }); if (t !== tok) return;
+      b.classList.add('right'); busy = false;
+      if (--left) return;
+      box.onclick = null;
+      if (memo) {
+        $$('.gr-card', box).forEach(x => x.classList.add('shut'));
+        await talk('Картинки спрятались. Вспомни и назови, что было.'); if (t !== tok) return;
+        await askSaid(SAID()); if (t !== tok) return;
+        $$('.gr-card', box).forEach(x => x.classList.remove('shut'));
+        await wait(600);
+      }
+      done();
+    };
+    talk(intro);
+  });
+  // sort: one picture at a time goes to the word that fits it
+  const sort = (items, forms, intro) => (box, t) => new Promise(done => {
+    let k = 0, busy = false;
+    const show = () => {
+      busy = false; const it = items[k];
+      box.innerHTML = `<div class="gr-one">${look(it.e, it.how)}<b>${esc(it.w)}</b></div><div class="gr-bins">${forms.map(f => `<button class="gr-bin" data-f="${esc(f)}">${esc(f)}</button>`).join('')}</div>`;
+      if (k === 0) talk(intro); else talk(`${cap(it.w)}. Какое слово подходит?`);
+    };
+    box.onclick = async e => {
+      const b = e.target.closest('[data-f]'); if (!b || busy) return; busy = true;
+      const it = items[k];
+      if (b.dataset.f !== it.f) { sfx.oops(); wiggle(b); await talk(`Послушай: ${b.dataset.f} ${it.w}? Так не говорят.`); busy = false; return; }
+      sfx.good(); b.classList.add('right');
+      await talk(`${cap(it.ph)}!`); if (t !== tok) return;
+      k++; if (k >= items.length) done(); else later(show, 250);
+    };
+    show();
+  });
+  // pick: a question, three answers read aloud, the right one said whole
+  const pick = (items, intro) => (box, t) => new Promise(done => {
+    let k = 0, busy = true;
+    const show = async () => {
+      busy = true; const it = items[k], opts = shuffle([it.right, ...it.wrong]);
+      box.innerHTML = `<div class="gr-one">${it.card}</div><p class="lg-q">${esc(it.q)}</p><div class="lg-opts" id="grO"></div>`;
+      if (it.anim) it.anim(box);
+      await talk(`${k === 0 && intro ? intro + ' ' : ''}${it.q} ${opts.slice(0, -1).join(', ')} или ${opts[opts.length - 1]}?`); if (t !== tok) return;
+      $('#grO', box).innerHTML = opts.map(o => `<button class="lg-opt" data-o="${esc(o)}">${esc(cap(o))}</button>`).join('');
+      busy = false;
+    };
+    box.onclick = async e => {
+      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
+      const it = items[k];
+      if (b.dataset.o !== it.right) { sfx.oops(); wiggle(b); await talk(`${cap(b.dataset.o)}? Так не говорят. Послушай ещё раз и выбери.`); busy = false; return; }
+      sfx.good(); b.classList.add('right');
+      await talk(`${it.ph}! Скажи сам${G('а', '')}.`); if (t !== tok) return;
+      await askSaid(SAID(), { expect: it.ph.replace(/[.!?]$/, '') }); if (t !== tok) return;
+      k++; if (k >= items.length) done(); else later(show, 250);
+    };
+    show();
+  });
+  // compose: pictures about one word; the child makes a sentence, then hears one
+  const compose = (word, models) => (box, t) => new Promise(done => {
+    let k = 0;
+    const show = async () => {
+      const [e, s] = models[k];
+      box.innerHTML = `<div class="gr-one"><span class="gr-pic">${[...e.matchAll(/\p{Extended_Pictographic}(️|‍\p{Extended_Pictographic})*/gu)].map(m => pic(m[0])).join('')}</span><b>«${esc(word)}»</b></div><p class="lg-q">Придумай предложение со словом «${esc(word)}»</p><p class="gr-model" id="grM"></p>`;
+      await talk(k === 0 ? `Посмотри на картинку и придумай предложение со словом ${word}.` : 'А по этой картинке?'); if (t !== tok) return;
+      await askSaid(G('Я придумала!', 'Я придумал!')); if (t !== tok) return;
+      $('#grM', box).textContent = s; sfx.good();
+      await talk(`Можно и так: ${s}`); if (t !== tok) return;
+      k++; if (k >= models.length) done(); else later(show, 300);
+    };
+    show();
+  });
+
+  /* ===== the pages ===== */
+  const sayPoss = g => () => [say(thing(g, null, 4).map(([w, e]) => ({ e, ph: `${POSS[g]} ${w}` })), `Представь, что это всё твоё. Нажимай на картинки и говори: ${POSS[g]}.`, true)];
+  const sortPoss = () => [sort(shuffle(G4.flatMap(g => thing(g, null, 2).map(([w, e]) => ({ e, w, f: POSS[g], ph: `${POSS[g]} ${w}` })))), Object.values(POSS), 'Мой, моя, моё или мои? Нажми на нужное слово.')];
+  // a describing word: say it with a thing of each kind, then sort four more things to its forms
+  const adjPage = adj => () => {
+    const [forms, how] = ADJ[adj], c = COLORS.includes(how) ? how : how === 'big' || how === 'small' ? how : '';
+    const one = G4.map((g, i) => { const [w, e] = thing(g, adj, 1)[0]; return { e, w, how: c, f: forms[i], ph: `${forms[i]} ${w}` }; });
+    const more = shuffle(G4.map((g, i) => { const [w, e] = sample(NN[g].filter(([x]) => fits(adj, x) && !one.some(o => o.w === x)), 1)[0]; return { e, w, how: c, f: forms[i], ph: `${forms[i]} ${w}` }; }));
+    return [say(one, `Нажимай на картинки и говори: ${forms.join(', ')}.`), sort(more, forms, `${cap(forms[0])}, ${forms[1]}, ${forms[2]} или ${forms[3]}? Нажми на нужное слово.`)];
+  };
+  const dimPage = () => [pick(sample(LOGO.DIM, 5).map(([big, small, e, w1, w2]) => ({ card: `${look(e)}<b>${esc(cap(big))}</b>`, q: `${cap(big)}. А ласково?`, right: small, wrong: [w1, w2], ph: cap(small) })), 'Скажем ласково, когда предмет маленький.')];
+  const ANT = [['большой', 'маленький', 'высокий', 'толстый'], ['высокий', 'низкий', 'большой', 'длинный'], ['горячий', 'холодный', 'тёплый', 'мокрый'], ['широкий', 'узкий', 'длинный', 'большой'],
+    ['тёмный', 'светлый', 'чёрный', 'синий'], ['чистый', 'грязный', 'мокрый', 'старый'], ['новый', 'старый', 'грязный', 'маленький'], ['тяжёлый', 'лёгкий', 'мягкий', 'тонкий'],
+    ['быстрый', 'медленный', 'тихий', 'низкий'], ['весёлый', 'грустный', 'злой', 'тихий'], ['длинный', 'короткий', 'узкий', 'маленький'], ['мокрый', 'сухой', 'чистый', 'тёплый'], ['громкий', 'тихий', 'медленный', 'грустный']];
+  const antPage = () => [pick(sample(ANT, 5).map(([a, r, w1, w2]) => ({ card: `<b class="gr-word">${esc(a)}</b>`, q: `${cap(a)}. А наоборот?`, right: r, wrong: [w1, w2], ph: `${cap(a)} — ${r}` })), 'Скажи наоборот.')];
+  const CMP = [['🐱', 'Кошка большая, а собака ещё…', 'больше', 'большее', 'большая', 'Кошка большая, а собака ещё больше'], ['🐢', 'Черепаха ползёт медленно, а улитка ещё…', 'медленнее', 'медленная', 'медленнейше', 'Черепаха ползёт медленно, а улитка ещё медленнее'],
+    ['🌳', 'Куст высокий, а дерево ещё…', 'выше', 'высокее', 'высокое', 'Куст высокий, а дерево ещё выше'], ['🚗', 'Велосипед едет быстро, а машина ещё…', 'быстрее', 'быстрая', 'быстрей-быстрей', 'Велосипед едет быстро, а машина ещё быстрее'],
+    ['🐭', 'Кошка маленькая, а мышка ещё…', 'меньше', 'маленее', 'маленькая', 'Кошка маленькая, а мышка ещё меньше'], ['🔇', 'Мама говорит тихо, а малыш спит, и мы говорим ещё…', 'тише', 'тихее', 'тихая', 'Мама говорит тихо, а мы говорим ещё тише'],
+    ['☀️', 'Весной тепло, а летом ещё…', 'теплее', 'тёплее', 'тёплое', 'Весной тепло, а летом ещё теплее'], ['🐍', 'Червяк длинный, а змея ещё…', 'длиннее', 'длинная', 'длинее', 'Червяк длинный, а змея ещё длиннее']];
+  const cmpPage = () => [pick(sample(CMP, 5).map(([e, q, r, w1, w2, ph]) => ({ card: look(e), q, right: r, wrong: [w1, w2], ph })), 'Сравниваем: ещё больше, ещё выше.')];
+  const JAM = [['малина', 'малиновое', 'малинное', 'малинковое'], ['клубника', 'клубничное', 'клубниковое', 'клубникное'], ['вишня', 'вишнёвое', 'вишняное', 'вишневатое'],
+    ['яблоко', 'яблочное', 'яблоковое', 'яблоное'], ['груша', 'грушевое', 'грушное', 'грушиное'], ['абрикос', 'абрикосовое', 'абрикосное', 'абрикоское'], ['слива', 'сливовое', 'сливное', 'сливиное']];
+  const JAM_E = { 'малина': '🫐', 'клубника': '🍓', 'вишня': '🍒', 'яблоко': '🍎', 'груша': '🍐', 'абрикос': '🍑', 'слива': '🟣' };
+  const OF_JAM = { 'малина': 'малины', 'клубника': 'клубники', 'вишня': 'вишни', 'яблоко': 'яблок', 'груша': 'груш', 'абрикос': 'абрикосов', 'слива': 'слив' };
+  const jamPage = () => [pick(sample(JAM, 5).map(([f, r, w1, w2]) => ({ card: `${look(JAM_E[f])}${look('🍯')}`, q: `Варенье из ${OF_JAM[f]}. Какое?`, right: r, wrong: [w1, w2], ph: `${cap(r)} варенье` })), 'Бабушка варит варенье. Скажи, какое получилось.')];
+  const whosePage = () => [pick(sample(LOGO.WHOSE, 5).map(([who, e, part, r, w1, w2]) => ({ card: `${look(e)}<b>${esc(cap(part))} ${esc(LOGO.OF[who])}</b>`, q: `${cap(part)} ${LOGO.OF[who]}. Чей?`, right: r, wrong: [w1, w2], ph: cap(r) })), 'Чей хвост, чья лапа, чьё яйцо?')];
+  // cases
+  const manyPage = () => [pick(sample(LOGO.MANY, 5).map(([one, many, e, w1, w2]) => ({ card: `<span class="gr-many">${pic(e).repeat(5)}</span>`, q: `Один ${one}. А много?`, right: `много ${many}`, wrong: [`много ${w1}`, `много ${w2}`], ph: `Много ${many}` })), 'Один и много.')];
+  const NUMS = [[5, 'пять'], [6, 'шесть'], [7, 'семь'], [8, 'восемь'], [9, 'девять']];
+  const countPage = () => [pick(sample(LOGO.MANY.filter(x => x[0] !== 'глаз' && x[0] !== 'сапог'), 5).map(([one, many, e, w1, w2]) => { const [n, nw] = pickOne(NUMS); return { card: `<span class="gr-many">${pic(e).repeat(n)}</span>`, q: `Сколько? Посчитай.`, right: `${nw} ${many}`, wrong: [`${nw} ${w1}`, `${nw} ${w2}`], ph: `${cap(nw)} ${many}` }; }), 'Считаем и говорим, сколько.')];
+  // [who picture, у кого, the thing, the thing after «нет», two wrong ways after «у», two wrong ways after «нет»]
+  const HAS = [['🦔', 'у ежа', 'яблоко', '🍎', 'нет яблока', ['у ёж', 'у ежу'], ['нет яблоко', 'нет яблоку']], ['🐘', 'у слона', 'банан', '🍌', 'нет банана', ['у слон', 'у слону'], ['нет банан', 'нет банану']],
+    ['🐰', 'у зайца', 'морковка', '🥕', 'нет морковки', ['у заяц', 'у зайцу'], ['нет морковка', 'нет морковку']], ['🐿️', 'у белки', 'орех', '🥜', 'нет ореха', ['у белка', 'у белку'], ['нет орех', 'нет орехом']],
+    ['🐱', 'у кошки', 'клубок', '🧶', 'нет клубка', ['у кошка', 'у кошку'], ['нет клубок', 'нет клубку']], ['🐶', 'у собаки', 'косточка', '🦴', 'нет косточки', ['у собака', 'у собаку'], ['нет косточка', 'нет косточку']],
+    ['🐭', 'у мышки', 'сыр', '🧀', 'нет сыра', ['у мышка', 'у мышку'], ['нет сыр', 'нет сыру']], ['🐻', 'у медведя', 'мёд', '🍯', 'нет мёда', ['у медведь', 'у медведю'], ['нет мёд', 'нет мёдом']]];
+  const hasPage = () => [pick(sample(HAS, 5).map(([we, u, th, te, , w1]) => ({ card: `${look(we)}${look(te)}`, q: `У кого ${th}?`, right: u, wrong: w1, ph: `${cap(u)} ${th}` })), 'Скажи, у кого что.')];
+  const notPage = () => [pick(sample(HAS, 5).map(([we, u, th, te, nt, , w2]) => ({ card: `${look(we)}<span class="gr-gone">${pic(te)}</span>`, q: `Чего нет ${u}?`, right: nt, wrong: w2, ph: `${cap(u)} ${nt}` })), 'Всё спряталось. Скажи, чего нет.')];
+  // [who picture, кому, the thing, its picture, нужен/нужна/нужно/нужны, two wrong ways]
+  const WHOM = [['🧑‍⚕️', 'врачу', 'градусник', '🌡️', 'нужен', ['врача', 'врач']], ['🧑‍🎨', 'художнику', 'кисточка', '🖌️', 'нужна', ['художника', 'художник']], ['🧑‍🍳', 'повару', 'кастрюля', '🍲', 'нужна', ['повара', 'повар']],
+    ['🧑‍✈️', 'лётчику', 'самолёт', '✈️', 'нужен', ['лётчика', 'лётчик']], ['🧑‍🌾', 'фермеру', 'трактор', '🚜', 'нужен', ['фермера', 'фермер']], ['🧑‍🚒', 'пожарному', 'шланг', '🧯', 'нужен', ['пожарного', 'пожарный']],
+    ['💇', 'парикмахеру', 'ножницы', '✂️', 'нужны', ['парикмахера', 'парикмахер']], ['🧑‍🏫', 'учителю', 'книга', '📚', 'нужна', ['учителя', 'учитель']], ['📮', 'почтальону', 'письмо', '✉️', 'нужно', ['почтальона', 'почтальон']]];
+  const whomPage = () => [pick(sample(WHOM, 5).map(([we, r, th, te, need, w]) => ({ card: `${look(te)}<b>${esc(cap(th))}</b>`, q: `Кому ${need} ${th}?`, right: r, wrong: w, ph: `${cap(th)} ${need} ${r}` })), 'Кому что нужно для работы?')];
+  const BY = [['✈️', 'Самолёт летит', 'по небу', ['по небо', 'по неба']], ['🚗', 'Машина едет', 'по дороге', ['по дорогу', 'по дорога']], ['🚢', 'Корабль плывёт', 'по морю', ['по море', 'по моря']],
+    ['🚂', 'Поезд едет', 'по рельсам', ['по рельсы', 'по рельсах']], ['⛷️', 'Лыжник едет', 'по снегу', ['по снег', 'по снега']], ['🛶', 'Лодка плывёт', 'по реке', ['по река', 'по реку']], ['🐜', 'Муравей ползёт', 'по травинке', ['по травинка', 'по травинку']]];
+  const byPage = () => [pick(sample(BY, 5).map(([e, s, r, w]) => ({ card: look(e), q: `${s} — по чему?`, right: r, wrong: w, ph: `${s} ${r}` })), 'Кто где едет, летит и плывёт?')];
+  // [picture, the sentence start, the thing in the accusative, two wrong ways]
+  const ACC = [['👧🥣', 'Девочка ест', 'кашу', ['каша', 'каше']], ['🐈🐟', 'Кот любит', 'рыбу', ['рыба', 'рыбе']], ['🐶🦴', 'Щенок грызёт', 'косточку', ['косточка', 'косточке']],
+    ['👨📖', 'Папа читает', 'книгу', ['книга', 'книге']], ['👵🧶', 'Бабушка вяжет', 'шапку', ['шапка', 'шапке']], ['👦🐱', 'Мальчик кормит', 'кошку', ['кошка', 'кошке']],
+    ['👩🍲', 'Мама варит', 'суп', ['супа', 'супом']], ['👧🌷', 'Девочка поливает', 'цветок', ['цветка', 'цветком']], ['🐻🍓', 'Медведь собирает', 'клубнику', ['клубника', 'клубнике']]];
+  const accPage = () => [pick(sample(ACC, 5).map(([e, s, r, w]) => ({ card: [...e.matchAll(/\p{Extended_Pictographic}/gu)].map(m => look(m[0])).join(''), q: `${s} — что?`, right: r, wrong: w, ph: `${s} ${r}` })), 'Кто что делает?')];
+  // a ball and a box: where it is (где) and where it went (куда)
+  const PLACE = { 'на': 'top', 'в': 'in', 'под': 'under', 'около': 'near', 'над': 'over', 'за': 'behind', 'перед': 'front' };
+  const scene = (obj, pos, actor = '⚽') => `<div class="gr-scene"><span class="gr-obj">${pic(obj)}</span><span class="gr-act gr-${pos}">${pic(actor)}</span></div>`;
+  const WHERE = [['на', 'на коробке', ['на коробку', 'на коробка']], ['в', 'в коробке', ['в коробку', 'в коробка']], ['под', 'под коробкой', ['под коробку', 'под коробка']],
+    ['около', 'около коробки', ['около коробка', 'около коробкой']], ['над', 'над коробкой', ['над коробку', 'над коробка']]];
+  const wherePage = () => [pick(shuffle(WHERE).map(([p, r, w]) => ({ card: scene('📦', PLACE[p]), q: 'Где мяч?', right: r, wrong: w, ph: `Мяч ${r}` })), 'Где мяч? Посмотри внимательно.')];
+  const WHERETO = [['на', 'на коробку', ['на коробке', 'на коробка']], ['в', 'в коробку', ['в коробке', 'в коробка']], ['под', 'под коробку', ['под коробкой', 'под коробка']]];
+  const toPage = () => [pick(shuffle([...WHERETO, ...sample(WHERETO, 2)]).map(([p, r, w]) => ({ card: scene('📦', 'start'), anim: box => later(() => { const a = $('.gr-act', box); if (a) { a.classList.remove('gr-start'); a.classList.add('gr-' + PLACE[p]); } }, 300), q: 'Куда положили мяч?', right: r, wrong: w, ph: `Мяч положили ${r}` })), 'Смотри, куда я кладу мяч.')];
+  // hiding: a kitten behind or under a thing (instrumental)
+  const HIDE = [['🌳', 'за', 'за деревом', ['за дерево', 'за дерева']], ['🚗', 'за', 'за машиной', ['за машину', 'за машина']], ['🏠', 'за', 'за домом', ['за дом', 'за дома']],
+    ['☂️', 'под', 'под зонтом', ['под зонт', 'под зонта']], ['🎄', 'под', 'под ёлкой', ['под ёлку', 'под ёлка']], ['🛏️', 'под', 'под кроватью', ['под кровать', 'под кровати']], ['🪑', 'под', 'под стулом', ['под стул', 'под стула']]];
+  const hidePage = () => [pick(sample(HIDE, 5).map(([o, p, r, w]) => ({ card: scene(o, PLACE[p], '🐱'), q: 'Где спрятался котёнок?', right: r, wrong: w, ph: `Котёнок спрятался ${r}` })), 'Котёнок играет в прятки.')];
+  const WITH_WHAT = [['🖌️', 'Чем рисуют?', 'кисточкой', ['кисточка', 'кисточку']], ['✂️', 'Чем режут бумагу?', 'ножницами', ['ножницы', 'ножниц']], ['🥄', 'Чем едят суп?', 'ложкой', ['ложка', 'ложку']],
+    ['🔨', 'Чем забивают гвоздь?', 'молотком', ['молоток', 'молотка']], ['🪚', 'Чем пилят дрова?', 'пилой', ['пила', 'пилу']], ['🧹', 'Чем подметают пол?', 'метлой', ['метла', 'метлу']],
+    ['🪥', 'Чем чистят зубы?', 'щёткой', ['щётка', 'щётку']], ['✏️', 'Чем пишут в тетради?', 'карандашом', ['карандаш', 'карандаша']]];
+  const withPage = () => [pick(sample(WITH_WHAT, 5).map(([e, q, r, w]) => ({ card: look(e), q, right: r, wrong: w, ph: `${q.replace('Чем ', '').replace('?', '')} ${r}`.replace(/^./, c => c.toUpperCase()) })), 'Чем это делают?')];
+  const WITH = [['🍵🍋', 'Чай с чем?', 'с лимоном', ['с лимон', 'с лимона'], 'Чай с лимоном'], ['🥪🧀', 'Бутерброд с чем?', 'с сыром', ['с сыр', 'с сыра'], 'Бутерброд с сыром'],
+    ['🍕🍄', 'Пицца с чем?', 'с грибами', ['с грибы', 'с грибов'], 'Пицца с грибами'], ['🥞🍯', 'Блины с чем?', 'с мёдом', ['с мёд', 'с мёда'], 'Блины с мёдом'],
+    ['👧🐶', 'Девочка гуляет с кем?', 'с собакой', ['с собака', 'с собаку'], 'Девочка гуляет с собакой'], ['👦👨', 'Мальчик идёт с кем?', 'с папой', ['с папа', 'с папу'], 'Мальчик идёт с папой'],
+    ['🍦🍫', 'Мороженое с чем?', 'с шоколадом', ['с шоколад', 'с шоколада'], 'Мороженое с шоколадом']];
+  const withWhoPage = () => [pick(sample(WITH, 5).map(([e, q, r, w, ph]) => ({ card: [...e.matchAll(/\p{Extended_Pictographic}/gu)].map(m => look(m[0])).join(''), q, right: r, wrong: w, ph })), 'С кем? С чем?')];
+  const PLAY = [['🎸', 'на гитаре', ['на гитару', 'на гитара']], ['🥁', 'на барабане', ['на барабан', 'на барабаном']], ['🎹', 'на пианино', ['на пианинах', 'на пианину']],
+    ['🎻', 'на скрипке', ['на скрипку', 'на скрипка']], ['🎺', 'на трубе', ['на трубу', 'на труба']]];
+  const playPage = () => [pick(shuffle(PLAY).map(([e, r, w]) => ({ card: `${look('🧒')}${look(e)}`, q: 'На чём играет мальчик?', right: r, wrong: w, ph: `Мальчик играет ${r}` })), 'Мальчик играет на разных инструментах.')];
+  const DREAM = [['🐶🦴', 'Собака', 'о косточке', ['о косточку', 'о косточка']], ['🐱🐟', 'Кот', 'о рыбке', ['о рыбку', 'о рыбка']], ['👧🚲', 'Девочка', 'о велосипеде', ['о велосипед', 'о велосипеда']],
+    ['👦🐶', 'Мальчик', 'о собаке', ['о собаку', 'о собака']], ['🐭🧀', 'Мышка', 'о сыре', ['о сыр', 'о сыра']], ['🐻🍯', 'Медведь', 'о мёде', ['о мёд', 'о мёда']]];
+  const dreamPage = () => [pick(sample(DREAM, 5).map(([e, who, r, w]) => ({ card: [...e.matchAll(/\p{Extended_Pictographic}/gu)].map(m => look(m[0])).join(''), q: `О чём мечтает ${who.toLowerCase()}?`, right: r, wrong: w, ph: `${who} мечтает ${r}` })), 'Кто о чём мечтает?')];
+  const SENT = { 'мяч': [['👦⚽', 'Мальчик играет в мяч.'], ['🐶⚽', 'Щенок бежит за мячом.'], ['⚽🥅', 'Мяч влетел в ворота.']], 'снег': [['🌨️', 'На улице идёт снег.'], ['⛄', 'Дети лепят из снега снеговика.'], ['🛷', 'Санки катятся по снегу.']],
+    'дождь': [['🌧️', 'На улице идёт дождь.'], ['☂️', 'Мы спрятались от дождя под зонтом.'], ['🌈', 'После дождя появилась радуга.']], 'торт': [['🎂', 'Мама испекла торт.'], ['🕯️', 'На торте горят свечи.'], ['🍰', 'Я ем торт ложкой.']] };
+  const SO = [['Мальчик взял краски, чтобы…', 'нарисовать картину', 'испечь пирог', 'покататься на санках'], ['Мама включила чайник, чтобы…', 'вскипятить воду', 'постирать платье', 'полить цветы'],
+    ['Девочка надела куртку, чтобы…', 'не замёрзнуть', 'лучше слышать', 'быстрее читать'], ['Папа взял зонт, чтобы…', 'не промокнуть', 'не проголодаться', 'лучше видеть'],
+    ['Мы пошли в магазин, чтобы…', 'купить хлеб', 'покататься на коньках', 'посмотреть на звёзды'], ['Бабушка надела очки, чтобы…', 'читать книгу', 'не промокнуть', 'согреться'],
+    ['Птицы улетают на юг, чтобы…', 'не замёрзнуть зимой', 'поиграть в мяч', 'почистить зубы']];
+  const BEC = [['Мальчик плачет, потому что…', 'он упал', 'он рад', 'светит солнце'], ['Мы взяли зонты, потому что…', 'идёт дождь', 'жарко', 'мы голодные'],
+    ['Дети надели шапки, потому что…', 'на улице холодно', 'на улице жарко', 'они поели'], ['Листья пожелтели, потому что…', 'наступила осень', 'наступило лето', 'светит луна'],
+    ['Котёнок залез на дерево, потому что…', 'испугался собаки', 'любит морковку', 'хочет плавать'], ['На полу лужа, потому что…', 'кто-то пролил воду', 'светит луна', 'кот спит'],
+    ['Девочка улыбается, потому что…', 'ей подарили щенка', 'у неё болит зуб', 'на улице дождь']];
+  const endPage = (list, intro) => () => [pick(sample(list, 5).map(([s, r, w1, w2]) => ({ card: `<b class="gr-word">${esc(s)}</b>`, q: s, right: r, wrong: [w1, w2], ph: s.replace('…', ' ' + r) + '.' })), intro)];
+  const PAGES = [
+    ['Мой', sayPoss('m')], ['Моя', sayPoss('f')], ['Моё', sayPoss('n')], ['Мои', sayPoss('p')], ['Мой, моя, моё, мои', sortPoss],
+    ['Синий, синяя, синее, синие', adjPage('синий')], ['Жёлтый, жёлтая, жёлтое, жёлтые', adjPage('жёлтый')], ['Зелёный, зелёная, зелёное, зелёные', adjPage('зелёный')],
+    ['Красный, красная, красное, красные', adjPage('красный')], ['Скажи ласково', dimPage], ['Большой, большая, большое, большие', adjPage('большой')],
+    ['Маленький, маленькая, маленькое, маленькие', adjPage('маленький')], ['Скажи наоборот', antPage], ['Ещё больше, ещё выше', cmpPage],
+    ['Вкусный, вкусная, вкусное, вкусные', adjPage('вкусный')], ['Новый, новая, новое, новые', adjPage('новый')], ['Тёплый, тёплая, тёплое, тёплые', adjPage('тёплый')],
+    ['Чей хвост? Чьё яйцо?', whosePage], ['Какое варенье?', jamPage], ['Много чего?', manyPage], ['Сколько?', countPage], ['У кого что?', hasPage], ['Чего нет?', notPage],
+    ['Кому что нужно?', whomPage], ['Кто по чему?', byPage], ['Кто что делает?', accPage], ['Где мяч?', wherePage], ['Куда положили?', toPage], ['Чем это делают?', withPage],
+    ['С кем? С чем?', withWhoPage], ['Где спрятался котёнок?', hidePage], ['На чём играет?', playPage], ['Кто о чём мечтает?', dreamPage],
+    ['Предложение со словом «мяч» и «снег»', () => [compose('мяч', SENT['мяч']), compose('снег', SENT['снег'])]],
+    ['Предложение со словом «дождь» и «торт»', () => [compose('дождь', SENT['дождь']), compose('торт', SENT['торт'])]],
+    ['Чтобы…', endPage(SO, 'Закончи предложение: для чего?')], ['Потому что…', endPage(BEC, 'Закончи предложение: почему?')]];
+  function st() { if (!P.gram) P.gram = { at: 0, done: {} }; return P.gram; }
+  const doneToday = () => st().day === dayKey();
+  // the list of pages: the next one glows; one ahead opens for a grown-up
+  function path() {
+    newScreen();
+    const s = st(), at = Math.min(s.at, PAGES.length - 1);
+    shell('Грамматика: страница в день', `<div class="pr"><p class="pr-note">Одна страница в день, после гимнастики для языка. Каждый ответ говорим вслух.</p>
+      <div class="gr-path" id="grPath">${PAGES.map(([n], i) => `<button class="gr-pg ${i < s.at ? 'done' : i === at ? 'now' : 'later'}" data-i="${i}"><i>${i + 1}</i><span>${esc(n)}</span>${i < s.at ? '<b>✓</b>' : ''}</button>`).join('')}</div>
+      <div class="og-btns"><button class="big" id="grGo">${doneToday() ? 'Сегодняшняя страница готова ✓ Ещё одну?' : `Страница ${at + 1}: ${esc(PAGES[at][0])}`}</button></div></div>`);
+    $('#grGo').onclick = () => { sfx.pop(); page(at); };
+    $('#grPath').onclick = e => {
+      const b = e.target.closest('[data-i]'); if (!b) return; const i = +b.dataset.i; sfx.pop();
+      if (i <= s.at) page(i); else grownUp(() => page(i), 'Страницы идут по порядку. Открыть эту раньше?');
+    };
+    talk(s.at ? `Грамматика. Страница ${at + 1}.` : 'Грамматика! Каждый день одна страница.');
+  }
+  function page(i = Math.min(st().at, PAGES.length - 1)) {
+    const t = newScreen(), [name, make] = PAGES[i], tasks = make();
+    shell(`Страница ${i + 1}`, `<div class="lg gr"><p class="gr-title">${esc(name)}</p><div class="pr-steps" id="grS">${tasks.map((_, j) => `<span>${j + 1}</span>`).join('')}</div><div id="grBox" class="gr-box"></div></div>`, { back: path });
+    const box = $('#grBox');
+    (async () => {
+      for (let j = 0; j < tasks.length; j++) {
+        if (t !== tok) return;
+        $$('#grS span').forEach((x, n) => { x.classList.toggle('now', n === j); x.classList.toggle('done', n < j); });
+        box.onclick = null;
+        await tasks[j](box, t); if (t !== tok) return;
+      }
+      const s = st(), fresh = i >= s.at; s.done[i] = (s.done[i] || 0) + 1; if (fresh) s.at = i + 1;
+      // the lesson counts the page before the day is marked, so its step is still in the plan
+      finishing = true; try { finish({ key: 'gram-page', stars: 3, line: i + 1 < PAGES.length ? `Страница ${i + 1} готова! Завтра — «${PAGES[i + 1][0]}».` : 'Вся грамматика пройдена!', again: () => page(i), next: () => path() }); } finally { finishing = false; }
+      if (fresh) s.day = dayKey(); save();
+    })();
+  }
+  GAMES.push({ id: 'gram-page', hide: () => !IS_RU, name: 'Грамматика: страница в день', sub: () => `страница ${Math.min(st().at + 1, PAGES.length)}: ${PAGES[Math.min(st().at, PAGES.length - 1)][0]}`, ico: () => pic('📒'), bg: 'var(--t-yellow)', go: path, grp: 16, prog: () => `${st().at} из ${PAGES.length}` });
+  // the daily speech lesson: right after the tongue exercises, the page of the day (once a day, while pages are left)
+  let finishing = false;
+  const step = () => {
+    if (!IS_RU || !modOnG(16) || gameOff('gram-page')) return null;
+    const counted = ((todayState().done || {}).speech || []).includes('gram-page');
+    if (!finishing && !counted && (doneToday() || st().at >= PAGES.length)) return null;
+    return { key: 'gram-page', kind: 'game', name: `Грамматика: страница ${Math.min(st().at + 1, PAGES.length)}`, run: () => page() };
+  };
+  return { step, path, page, PAGES };
+})();
+
+/* ---------- «Нужные фразы»: the phrases a child needs in a day at kindergarten, school or the playground in a language
+   they are learning («мне надо пописать», «я не понимаю»), and the family's own: a phrase the child could not say today
+   is written down with its translation and trained until it comes by itself (a box system: a phrase known moves to a
+   longer wait, one forgotten comes back tomorrow). A translation is typed by a grown-up; a link opens Google Translate
+   with the phrase when the grown-up taps it. Russian only; one declaration for the translation tool. ---------- */
+const PHR = (() => {
+  // ru may be [for a girl, for a boy]; {n} is the child's name
+  const BASE = [
+    ['sch', 'Можно в туалет?', { pt: 'Posso ir à casa de banho?', en: 'May I go to the toilet?', de: 'Darf ich auf die Toilette gehen?', es: '¿Puedo ir al baño?', fr: 'Est-ce que je peux aller aux toilettes ?', it: 'Posso andare in bagno?', uk: 'Можна вийти до туалету?' }],
+    ['sch', 'Мне надо пописать.', { pt: 'Preciso de fazer xixi.', en: 'I need a wee.', de: 'Ich muss Pipi machen.', es: 'Tengo que hacer pis.', fr: "J'ai envie de faire pipi.", it: 'Devo fare la pipì.', uk: 'Мені треба пісяти.' }],
+    ['sch', 'Я не понимаю.', { pt: 'Não percebo.', en: "I don't understand.", de: 'Ich verstehe das nicht.', es: 'No entiendo.', fr: 'Je ne comprends pas.', it: 'Non capisco.', uk: 'Я не розумію.' }],
+    ['sch', 'Повторите, пожалуйста.', { pt: 'Pode repetir, por favor?', en: 'Can you say it again, please?', de: 'Können Sie das bitte wiederholen?', es: '¿Puede repetirlo, por favor?', fr: "Vous pouvez répéter, s'il vous plaît ?", it: 'Può ripetere, per favore?', uk: 'Повторіть, будь ласка.' }],
+    ['sch', 'Помогите мне, пожалуйста.', { pt: 'Pode ajudar-me, por favor?', en: 'Can you help me, please?', de: 'Können Sie mir bitte helfen?', es: '¿Me puede ayudar, por favor?', fr: "Vous pouvez m'aider, s'il vous plaît ?", it: 'Mi può aiutare, per favore?', uk: 'Допоможіть мені, будь ласка.' }],
+    ['sch', ['Я закончила.', 'Я закончил.'], { pt: 'Já acabei.', en: "I've finished.", de: 'Ich bin fertig.', es: 'Ya he terminado.', fr: "J'ai fini.", it: 'Ho finito.', uk: ['Я закінчила.', 'Я закінчив.'] }],
+    ['sch', 'Где мой рюкзак?', { pt: 'Onde está a minha mochila?', en: 'Where is my backpack?', de: 'Wo ist mein Rucksack?', es: '¿Dónde está mi mochila?', fr: 'Où est mon sac à dos ?', it: "Dov'è il mio zaino?", uk: 'Де мій рюкзак?' }],
+    ['body', 'Я хочу пить.', { pt: 'Tenho sede.', en: "I'm thirsty.", de: 'Ich habe Durst.', es: 'Tengo sed.', fr: "J'ai soif.", it: 'Ho sete.', uk: 'Я хочу пити.' }],
+    ['body', 'Можно попить воды?', { pt: 'Posso beber água?', en: 'Can I have some water, please?', de: 'Darf ich etwas Wasser trinken?', es: '¿Puedo beber agua?', fr: "Je peux boire de l'eau ?", it: "Posso bere un po' d'acqua?", uk: 'Можна попити води?' }],
+    ['body', 'Я хочу есть.', { pt: 'Tenho fome.', en: "I'm hungry.", de: 'Ich habe Hunger.', es: 'Tengo hambre.', fr: "J'ai faim.", it: 'Ho fame.', uk: 'Я хочу їсти.' }],
+    ['body', 'Мне холодно.', { pt: 'Tenho frio.', en: "I'm cold.", de: 'Mir ist kalt.', es: 'Tengo frío.', fr: "J'ai froid.", it: 'Ho freddo.', uk: 'Мені холодно.' }],
+    ['body', 'Мне жарко.', { pt: 'Tenho calor.', en: "I'm hot.", de: 'Mir ist heiß.', es: 'Tengo calor.', fr: "J'ai chaud.", it: 'Ho caldo.', uk: 'Мені жарко.' }],
+    ['body', 'У меня болит живот.', { pt: 'Dói-me a barriga.', en: 'My tummy hurts.', de: 'Mein Bauch tut weh.', es: 'Me duele la tripa.', fr: "J'ai mal au ventre.", it: 'Mi fa male la pancia.', uk: 'У мене болить живіт.' }],
+    ['body', ['Я упала, мне больно.', 'Я упал, мне больно.'], { pt: 'Caí e magoei-me.', en: 'I fell over and it hurts.', de: 'Ich bin hingefallen, es tut weh.', es: 'Me he caído y me duele.', fr: ["Je suis tombée, j'ai mal.", "Je suis tombé, j'ai mal."], it: ['Sono caduta, mi fa male.', 'Sono caduto, mi fa male.'], uk: ['Я впала, мені боляче.', 'Я впав, мені боляче.'] }],
+    ['body', 'Мне грустно, я хочу к маме.', { pt: 'Estou triste, quero a minha mãe.', en: 'I feel sad, I want my mum.', de: 'Ich bin traurig, ich will zu meiner Mama.', es: 'Estoy triste, quiero a mi mamá.', fr: 'Je suis triste, je veux ma maman.', it: 'Sono triste, voglio la mia mamma.', uk: 'Мені сумно, я хочу до мами.' }],
+    ['play', 'Можно мне поиграть с вами?', { pt: 'Posso brincar convosco?', en: 'Can I play with you?', de: 'Darf ich mitspielen?', es: '¿Puedo jugar con vosotros?', fr: 'Je peux jouer avec vous ?', it: 'Posso giocare con voi?', uk: 'Можна мені погратися з вами?' }],
+    ['play', 'Давай играть вместе!', { pt: 'Vamos brincar juntos?', en: "Let's play together!", de: 'Spielen wir zusammen?', es: '¿Jugamos juntos?', fr: 'On joue ensemble ?', it: 'Giochiamo insieme?', uk: 'Давай гратися разом!' }],
+    ['play', 'Как тебя зовут?', { pt: 'Como te chamas?', en: "What's your name?", de: 'Wie heißt du?', es: '¿Cómo te llamas?', fr: "Comment tu t'appelles ?", it: 'Come ti chiami?', uk: 'Як тебе звати?' }],
+    ['play', 'Меня зовут {n}.', { pt: 'Chamo-me {n}.', en: 'My name is {n}.', de: 'Ich heiße {n}.', es: 'Me llamo {n}.', fr: "Je m'appelle {n}.", it: 'Mi chiamo {n}.', uk: 'Мене звати {n}.' }],
+    ['play', 'Отдай, пожалуйста, это моё.', { pt: 'Devolve, por favor, é meu.', en: "Give it back, please, it's mine.", de: 'Gib das bitte zurück, das gehört mir.', es: 'Devuélvemelo, por favor, es mío.', fr: "Rends-le-moi, s'il te plaît, c'est à moi.", it: 'Ridammelo, per favore, è mio.', uk: 'Віддай, будь ласка, це моє.' }],
+    ['play', 'Можно я сяду рядом с тобой?', { pt: 'Posso sentar-me ao teu lado?', en: 'Can I sit next to you?', de: 'Darf ich mich neben dich setzen?', es: '¿Me puedo sentar a tu lado?', fr: 'Je peux m’asseoir à côté de toi ?', it: 'Posso sedermi vicino a te?', uk: 'Можна я сяду поруч із тобою?' }],
+    ['food', 'Можно ещё, пожалуйста?', { pt: 'Posso comer mais um pouco, por favor?', en: 'Can I have some more, please?', de: 'Kann ich bitte noch etwas haben?', es: '¿Me das un poco más, por favor?', fr: "Je peux en avoir encore, s'il vous plaît ?", it: "Posso averne ancora un po', per favore?", uk: 'Можна ще, будь ласка?' }],
+    ['food', 'Нет, спасибо.', { pt: ['Não, obrigada.', 'Não, obrigado.'], en: 'No, thank you.', de: 'Nein, danke.', es: 'No, gracias.', fr: 'Non, merci.', it: 'No, grazie.', uk: 'Ні, дякую.' }],
+    ['food', 'Я это не ем.', { pt: 'Eu não como isto.', en: "I don't eat this.", de: 'Das esse ich nicht.', es: 'Yo no como esto.', fr: 'Je ne mange pas ça.', it: 'Questo non lo mangio.', uk: 'Я це не їм.' }]
+  ].map(([cat, ru, t], i) => ({ id: 'b' + i, cat, ru, t }));
+  const CATS = [['mine', '✍️ Мои фразы'], ['sch', '🏫 В садике и школе'], ['body', '🤒 Самочувствие'], ['play', '🧸 Игра и друзья'], ['food', '🍽️ За столом']];
+  const WAIT = [0, 1, 2, 4, 7, 14, 30];
+  const gtx = v => { const s = Array.isArray(v) ? G(v[0], v[1]) : v || ''; return s.replace('{n}', P.settings.name || 'Вера'); };
+  function st() { if (!P.phr) P.phr = { mine: [], learn: { b0: 1, b1: 1, b2: 1, b7: 1, b8: 1 }, box: {} }; return P.phr; }
+  const langs = () => { const ls = myLangs().filter(c => c !== 'ru'); const learn = ls.filter(c => mlLearns(c)); return [...learn, ...ls.filter(c => !learn.includes(c))]; };
+  const all = () => [...st().mine.map(x => ({ ...x, cat: 'mine' })), ...BASE];
+  const tr = (x, c) => gtx(x.t[c]);
+  const due = c => { const today = dayKey(); return all().filter(x => (st().learn[x.id] || x.cat === 'mine') && tr(x, c)).filter(x => { const b = st().box[x.id + '|' + c]; return !b || b.due <= today; }); };
+  const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return dayKey(d); };
+  function home(c0) {
+    const t = newScreen(), ls = langs(), c = ls.includes(c0) ? c0 : ls[0];
+    if (!c) { shell('Нужные фразы', '<div class="ml"><p class="lead">Добавьте ребёнку язык, который он учит: «Для взрослых» → профиль → языки.</p></div>'); return; }
+    const n = due(c).length, s = st();
+    shell('Нужные фразы', `<div class="ml phr">
+      <div class="lang-row">${ls.map(x => { const [, f, nm] = mlInfo(x); return `<button class="chip ${x === c ? 'sel' : ''}" data-c="${x}">${f} ${nm}</button>`; }).join('')}</div>
+      <p class="muted">Фразы, которые нужны каждый день. Не получилось что-то сказать — запишите фразу, и она попадёт в тренировку.</p>
+      <div class="og-btns"><button class="big" id="phT">${n ? `🎯 Тренировка: ${n}` : '🎯 На сегодня всё выучено'}</button><button class="big ghost" id="phA">＋ Записать фразу</button></div>
+      ${mlNoVoice([c])}
+      ${CATS.map(([k, h]) => { const xs = all().filter(x => x.cat === k); return xs.length ? `<h3 class="fam-s">${h}</h3><div class="phr-list">${xs.map(x => {
+        const on = k === 'mine' || s.learn[x.id], b = s.box[x.id + '|' + c], tx = tr(x, c);
+        return `<div class="phr-row ${on ? 'on' : ''}"><button class="phr-star" data-star="${x.id}" ${k === 'mine' ? 'disabled' : ''} aria-label="Учить">${on ? '⭐' : '☆'}</button>
+          <div class="phr-t"><b>${esc(gtx(x.ru))}</b><span>${tx ? esc(mlText(tx)) : '<i>нет перевода</i>'}</span>${b && b.b ? `<small>${'●'.repeat(Math.min(b.b, 6))}</small>` : ''}</div>
+          ${tx ? `<button class="chip" data-say="${x.id}">🔊</button>` : ''}${k === 'mine' ? `<button class="chip" data-edit="${x.id}">✏️</button>` : ''}</div>`;
+      }).join('')}</div>` : ''; }).join('')}</div>`);
+    const box = $('.phr');
+    box.onclick = e => {
+      const lc = e.target.closest('[data-c]'); if (lc) { sfx.pop(); home(lc.dataset.c); return; }
+      const sr = e.target.closest('[data-star]'); if (sr) { sfx.tick(); const id = sr.dataset.star; if (s.learn[id]) delete s.learn[id]; else s.learn[id] = 1; save(); home(c); return; }
+      const sy = e.target.closest('[data-say]'); if (sy) { const x = all().find(y => y.id === sy.dataset.say); hopEl(sy); sayIn(c, tr(x, c), .75); return; }
+      const ed = e.target.closest('[data-edit]'); if (ed) { sfx.pop(); edit(c, ed.dataset.edit); return; }
+      if (e.target.closest('#phT')) { sfx.pop(); if (n) train(c); return; }
+      if (e.target.closest('#phA')) { sfx.pop(); edit(c); }
+    };
+    talk(n ? `Нужные фразы. На сегодня ${n} ${plural(n, ['фраза', 'фразы', 'фраз'])}.` : 'Нужные фразы.');
+  }
+  // a phrase of the family's own: the Russian, and its translation into each language the child learns
+  function edit(c, id) {
+    newScreen();
+    const s = st(), ls = langs(), x = id ? s.mine.find(y => y.id === id) : { ru: '', t: {} };
+    shell(id ? 'Изменить фразу' : 'Записать фразу', `<div class="ml phr"><div class="psec">
+      <p class="prow">Что ${esc(P.settings.name || 'ребёнок')} хотел${G('а', '')} сказать?</p>
+      <textarea id="phRu" rows="2" maxlength="140" placeholder="Например: можно мне ещё бумаги?">${esc(x.ru)}</textarea>
+      ${ls.map(l => { const [, f, nm] = mlInfo(l); return `<p class="prow">${f} ${nm}</p><input id="phT_${l}" maxlength="160" value="${esc(x.t[l] || '')}" placeholder="перевод">
+        <a class="phr-gt" data-gt="${l}" href="#" target="_blank" rel="noopener">Перевести в Google ↗</a>`; }).join('')}
+      <p class="muted">Ссылка открывает Google Переводчик с этой фразой: фраза уходит в Google. Проверьте перевод с тем, кто говорит на языке.</p>
+      <div class="og-btns"><button class="big" id="phS">Сохранить</button>${id ? '<button class="big ghost" id="phD">🗑 Удалить</button>' : ''}<button class="big ghost" id="phB">Назад</button></div></div></div>`);
+    $$('.phr-gt').forEach(a => a.addEventListener('click', () => { a.href = `https://translate.google.com/?sl=ru&tl=${a.dataset.gt}&text=${encodeURIComponent($('#phRu').value.trim())}&op=translate`; }));
+    $('#phB').onclick = () => { sfx.pop(); home(c); };
+    if (id) $('#phD').onclick = () => { sfx.tick(); s.mine = s.mine.filter(y => y.id !== id); Object.keys(s.box).forEach(k => { if (k.startsWith(id + '|')) delete s.box[k]; }); save(); home(c); };
+    $('#phS').onclick = () => {
+      const ru = $('#phRu').value.trim().slice(0, 140); if (!ru) { wiggle($('#phRu')); return; }
+      const t = {}; ls.forEach(l => { const v = $('#phT_' + l).value.trim().slice(0, 160); if (v) t[l] = v; });
+      if (id) Object.assign(x, { ru, t }); else s.mine.unshift({ id: 'm' + rid6(), ru, t });
+      save(); sfx.good(); home(c);
+    };
+  }
+  // the training: the phrase in Russian, the child tries to say it, then hears it and says it again
+  function train(c) {
+    const t = newScreen(), deck = shuffle(due(c)).sort((a, b) => !!st().box[a.id + '|' + c] - !!st().box[b.id + '|' + c]).slice(0, 8);
+    let k = 0, known = 0;
+    const [, flag, lname] = mlInfo(c);
+    const show = () => {
+      const x = deck[k];
+      shell('Нужные фразы', `<div class="ml phr"><p class="ml-step">${k + 1} / ${deck.length}</p>
+        <div class="phr-card"><small>Как сказать: ${flag} ${esc(lname)}?</small><b>${esc(gtx(x.ru))}</b><p class="phr-ans" id="phAns"></p></div>
+        <div class="og-btns" id="phBtns"><button class="big" id="phShow">Скажи вслух — потом проверь</button></div>${mlNoVoice([c])}</div>`, { back: () => home(c) });
+      talk(k === 0 ? `Как это сказать? Попробуй вслух, потом нажми кнопку.` : 'А это как сказать?');
+      $('#phShow').onclick = async () => {
+        sfx.pop(); const tx = tr(x, c);
+        $('#phAns').textContent = mlText(tx);
+        $('#phBtns').innerHTML = '<button class="big" data-r="1">✓ Сказал' + G('а', '') + ' так же</button><button class="big ghost" data-r="0">↺ Ещё поучу</button><button class="chip" id="phSay">🔊</button>';
+        $('#phSay').onclick = () => sayIn(c, tx, .75);
+        await sayIn(c, tx, .75); if (t !== tok) return;
+        $('#phBtns').onclick = e => {
+          const b = e.target.closest('[data-r]'); if (!b) return;
+          const key = x.id + '|' + c, s = st(), cur = s.box[key] || { b: 0 };
+          if (b.dataset.r === '1') { known++; sfx.good(); cur.b = Math.min(cur.b + 1, WAIT.length - 1); } else { sfx.tick(); cur.b = 0; }
+          cur.due = addDays(Math.max(1, WAIT[cur.b])); s.box[key] = cur; save();
+          k++; if (k >= deck.length) finish({ key: 'ml-phr', stars: known >= deck.length - 1 ? 3 : known >= deck.length / 2 ? 2 : 1, line: `Знаю ${known} из ${deck.length}. Остальные вернутся завтра.`, again: () => home(c) }); else show();
+        };
+      };
+    };
+    show();
+  }
+  GAMES.push({ id: 'ml-phr', hide: () => !IS_RU || !langs().length, name: 'Нужные фразы', sub: 'как сказать в садике и в школе', ico: () => pic('💬'), bg: 'var(--t-peach)', go: () => home(), grp: 14,
+    prog: () => { const c = langs()[0]; const n = c ? due(c).length : 0; return n ? `на сегодня ${n}` : ''; } });
+  return { home };
+})();
+
+/* ---------- «Гимнастика с ватной палочкой»: a cotton bud held by a grown-up gives the tongue and lips something to feel
+   — where the tip of the tongue lives, a groove along the tongue, strong lips, a spot to reach, a stream of air to aim —
+   the way speech therapists use a probe or a spatula at home. The girl in the mirror shows each step with the bud drawn
+   where the grown-up holds it; the bud for «Р» is offered only to children training Р and is marked for after a speech
+   therapist has shown it. One exercise joins the daily speech lesson after the tongue exercises. Russian only. ---------- */
+const SWAB = (() => {
+  // where the bud is, in the face's coordinates (the mouth is at 100, 156): the cotton tip and the angle of the stick
+  const AT = { lips: [100, 156, 90, true], up: [100, 141, 35], lipUp: [100, 139, 20], cornerL: [74, 156, 70], cornerR: [126, 156, -70], lipDown: [100, 176, -20],
+    along: [100, 162, 0], across: [100, 170, 90, true], lowTeeth: [100, 166, 25], front: [100, 186, 0], under: [100, 160, 30] };
+  function bud(at) {
+    const [x, y, a, both] = AT[at] || AT.front, L = both ? 84 : 62;
+    const tip = (cx, cy) => `<ellipse cx="${cx}" cy="${cy}" rx="6.5" ry="9.5" fill="#FFFFFF" stroke="#C9D3DE" stroke-width="1.6"/><ellipse cx="${cx - 2}" cy="${cy - 3}" rx="2.4" ry="3.4" fill="#EEF3F8"/>`;
+    // the stick goes from the tip down and out of the face, turned by a degrees
+    return `<g transform="rotate(${a} ${x} ${y})"><g class="sw-bud">${both
+      ? `<rect x="${x - 2}" y="${y - L / 2}" width="4" height="${L}" rx="2" fill="#F6F1E7" stroke="#D9CCB4" stroke-width="1"/>${tip(x, y - L / 2)}${tip(x, y + L / 2)}`
+      : `<rect x="${x - 2}" y="${y}" width="4" height="${L}" rx="2" fill="#F6F1E7" stroke="#D9CCB4" stroke-width="1"/>${tip(x, y)}`}</g></g>`;
+  }
+  const faceBud = (pose, at, cls = '') => faceSVG(pose, cls).replace(/<\/svg>$/, `${bud(at)}</svg>`);
+  // [id, name, the face and the bud for the card, what to do, a hint, what the voice says first, steps [pose, line, ms, bud, fx], sounds it helps]
+  const EX = [
+    { id: 'lips', name: 'Палочка в губах', pose: 'horn', at: 'lips', for: ['sh', 'r', 'l', 'sz'],
+      text: 'Взрослый кладёт палочку поперёк губ. Ребёнок держит её только губами, не зубами, пока считаем до пяти. Потом взрослый чуть-чуть тянет палочку — губы не отпускают.',
+      tip: 'Зубы не кусают, губы сильные.', intro: 'Возьми палочку губками, не зубками. Держи крепко, пока я считаю до пяти.',
+      steps: [['horn', 'Раз', 1100, 'lips'], ['horn', 'Два', 1100, 'lips'], ['horn', 'Три', 1100, 'lips'], ['horn', 'Четыре', 1100, 'lips'], ['horn', 'Пять!', 1100, 'lips', 'pull'], ['frog', 'Отдыхаем', 1200, 'front']] },
+    { id: 'home', name: 'Домик для кончика языка', pose: 'swingUp', at: 'up', for: ['r', 'l', 'sh'],
+      text: 'Взрослый легко касается ваткой бугорков за верхними зубами. Ребёнок ставит кончик языка туда, где почувствовал ватку, и держит. Здесь живёт кончик языка для звуков Л, Р, Т, Д, Н.',
+      tip: 'Касаемся легко, не давим.', intro: 'Я коснусь ваткой домика за верхними зубками. Поставь туда кончик язычка.',
+      steps: rep(3, [['swingUp', 'Сюда!', 1500, 'up'], ['swingUp', 'Держим', 1500, ''], ['swingDown', 'Отдых', 1100, '']]) },
+    { id: 'chase', name: 'Догони ватку', pose: 'lickUp', at: 'lipUp', for: ['r', 'l', 'sh', 'sz'],
+      text: 'Взрослый касается ваткой то верхней губы, то уголков рта, то нижней губы. Ребёнок дотягивается кончиком языка до того места, где была ватка.',
+      tip: 'Нижняя челюсть не двигается, работает только язык.', intro: 'Где была ватка, туда и язычок! Догоняй.',
+      steps: rep(2, [['lickUp', 'Вверх', 1300, 'lipUp'], ['brushL', 'Влево', 1300, 'cornerL'], ['spatula', 'Вниз', 1300, 'lipDown'], ['brushR', 'Вправо', 1300, 'cornerR']]) },
+    { id: 'groove', name: 'Желобок', pose: 'cup', at: 'along', for: ['sz', 'sh'],
+      text: 'Взрослый кладёт палочку вдоль середины широкого языка. Ребёнок поднимает края языка, обнимая палочку, — получается желобок. Потом палочку убираем, а желобок остаётся, и по нему дуем.',
+      tip: 'Язык широкий, края поднимаются, губы не помогают.', intro: 'Положим палочку на серединку язычка. Обними её краешками.',
+      steps: rep(2, [['cup', 'Обними палочку', 1800, 'along'], ['cup', 'Убираю — держи желобок', 1800, ''], ['cup', 'Подуй!', 1800, '', 'tick']]) },
+    { id: 'spade', name: 'Лопаточка с палочкой', pose: 'spatula', at: 'across', for: ['sz', 'sh'],
+      text: 'Ребёнок кладёт широкий спокойный язык на нижнюю губу. Взрослый кладёт палочку поперёк языка. Язык держит её и не роняет, пока считаем до пяти.',
+      tip: 'Язык мягкий и широкий, не дрожит.', intro: 'Положи широкий язычок на нижнюю губку. Я положу на него палочку. Держи, не урони.',
+      steps: [['spatula', 'Раз', 1100, 'across'], ['spatula', 'Два', 1100, 'across'], ['spatula', 'Три', 1100, 'across'], ['spatula', 'Четыре', 1100, 'across'], ['spatula', 'Пять!', 1100, 'across'], ['frog', 'Отдыхаем', 1200, '']] },
+    { id: 'down', name: 'Кончик за нижние зубки', pose: 'donkey', at: 'lowTeeth', for: ['sz'],
+      text: 'Взрослый касается ваткой нижних зубов изнутри. Ребёнок упирает туда кончик языка и улыбается. Так кончик языка стоит для звуков С и З.',
+      tip: 'Кончик языка внизу, спинка выгнута горкой.', intro: 'Я коснусь ваткой нижних зубок изнутри. Упрись туда кончиком язычка и улыбнись.',
+      steps: rep(3, [['donkey', 'Сюда!', 1400, 'lowTeeth'], ['catHill', 'Горка', 1600, ''], ['frog', 'Отдых', 1000, '']]) },
+    { id: 'blow', name: 'Подуй на ватку', pose: 'frog', at: 'front', for: ['sz', 'sh', 'r', 'l'],
+      text: 'Взрослый держит палочку ваткой перед губами. Ребёнок улыбается и дует длинной холодной струйкой по середине языка — ватка шевелится. Щёки не надуваются.',
+      tip: 'Струя длинная и ровная, щёки спокойные.', intro: 'Улыбнись и подуй на ватку. Долго, ровно, щёчки не надуваем.',
+      steps: rep(3, [['frog', 'Вдох носом', 1100, 'front'], ['frog', 'Дуем…', 2200, 'front', 'blow'], ['frog', 'Отдых', 900, 'front']]) },
+    { id: 'motor', name: 'Моторчик для Р', pose: 'swingUp', at: 'under', for: ['r'], care: true,
+      text: 'Ребёнок поднимает кончик языка за верхние зубы и быстро говорит «д-д-д». Взрослый подводит палочку под язык и мягко покачивает её вправо-влево — язык начинает дрожать: «д-д-д» превращается в «ддррр».',
+      tip: 'Лучше, когда логопед уже показал это упражнение. Не давить на уздечку. Звук горловой или в нос — остановиться и спросить логопеда.',
+      intro: 'Подними кончик язычка за верхние зубки и говори быстро: д-д-д. А я помогу моторчику палочкой.',
+      steps: rep(3, [['swingUp', 'Быстро-быстро!', 1600, ''], ['swingUp', 'Моторчик!', 2200, 'under', 'wig'], ['swingDown', 'Отдых', 1100, '']]) }
+  ];
+  const list = () => EX.filter(e => !e.care || mySounds().includes('r'));
+  const ok = () => !!(P.settings.swabOk);
+  const daily = () => P.settings.swabDaily !== false;
+  function menu() {
+    newScreen();
+    const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
+    shell('Гимнастика с ватной палочкой', `<div class="sw">
+      <details class="pr-tip sw-safe" ${ok() ? '' : 'open'}><summary>🧑‍🍼 Для взрослого: как безопасно</summary>
+        <p>Палочку держит только взрослый. Руки чистые, палочка новая, с плотной ваткой. Касаемся губ, кончика и середины языка, бугорков за зубами — не глубже: дальше начинается рвотный рефлекс.</p>
+        <p>Не давим, движения мягкие. Ребёнок не кусает палочку. Неприятно или страшно — останавливаемся и делаем то же упражнение без палочки.</p>
+        <p>Палочка подсказывает языку, куда идти. Ставить звуки лучше вместе с логопедом.</p>
+        ${ok() ? '' : '<div class="og-btns"><button class="big" id="swOk">Понятно, я рядом</button></div>'}</details>
+      <p class="lead">Садимся перед зеркалом. Взрослый держит палочку, ребёнок повторяет за девочкой.</p>
+      <div class="cards" id="swCards">${list().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceBud(a.pose, a.at)}<span>${a.name}</span>${P.best['swab:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>
+      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Одно упражнение с палочкой — в занятии «Логопед» после зарядки</label></div>`);
+    const okb = $('#swOk'); if (okb) okb.onclick = () => { sfx.pop(); P.settings.swabOk = 1; save(); menu(); };
+    $('#swDaily').onchange = e => { P.settings.swabDaily = e.target.checked; save(); sfx.tick(); };
+    $('#swCards').onclick = e => { const c = e.target.closest('.card'); if (!c) return; sfx.pop(); if (!ok()) { wiggle($('.sw-safe')); $('.sw-safe').open = true; talk('Сначала взрослый читает, как делать безопасно.'); return; } ex(+c.dataset.i); };
+    talk(ok() ? 'Возьмите ватную палочку. Выбери упражнение.' : 'Позови взрослого. Ему нужно прочитать, как делать с палочкой безопасно.');
+  }
+  function ex(i, auto = false) {
+    const t = newScreen(), a = list()[i];
+    if (!a) { menu(); return; }
+    let started = false;
+    shell(a.name, `<div class="artic-stage" id="artStage">
+        <div class="mirror" id="mirror">${faceBud(a.pose, a.at)}<div class="say-b" id="sayB" hidden></div></div>
+        ${camHTML}
+        <div class="artic-side">
+          <p class="howto">${esc(a.text)}<em>${esc(a.tip)}</em></p>
+          ${a.care ? '<p class="sw-care">⚠️ Только со взрослым и лучше после того, как упражнение показал логопед.</p>' : ''}
+          <div class="steps" id="steps">${a.steps.map(() => '<i></i>').join('')}</div>
+          <div class="prow-btns"><button class="big" id="go">${ICON.play}Начать</button><button class="big ghost" id="camBtn"></button></div>
+          <p class="muted" id="camNote" hidden></p>
+        </div></div>`, { back: menu });
+    bindCam($('#artStage'));
+    const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
+    const setFace = (pose, at, fx) => { const old = mirror.querySelector('svg.face'); old.insertAdjacentHTML('afterend', at ? faceBud(pose, at, fx === 'wig' ? 'sw-wig' : fx === 'pull' ? 'sw-pull' : '') : faceSVG(pose)); old.remove(); };
+    const start = async () => {
+      if (started || t !== tok) return; started = true;
+      $('#go').hidden = true; sfx.pop();
+      await talk('Взрослый, возьмите палочку. Приготовились!'); if (t !== tok) return;
+      for (let k = 0; k < a.steps.length; k++) {
+        const [pose, line, ms, at, fx] = a.steps[k];
+        setFace(pose, at, fx); dots[k].classList.add('on');
+        if (line) { sayB.hidden = false; sayB.textContent = line; sayB.style.animation = 'none'; void sayB.offsetWidth; sayB.style.animation = ''; say(line); } else sayB.hidden = true;
+        if (fx === 'tick') sfx.tick();
+        await wait(ms * pace()); if (t !== tok) return;
+      }
+      sayB.hidden = true;
+      finish({ key: 'swab:' + a.id, stars: 1, line: 'Язычок знает, куда идти!', again: () => ex(i, auto), next: i < list().length - 1 ? () => ex(i + 1) : null, menu });
+    };
+    $('#go').onclick = start;
+    if (auto && ok()) talk(a.intro).then(() => later(start, 400));
+    else talk(a.intro + ' Нажми «Начать».');
+  }
+  // the daily lesson: one exercise that fits the child's sounds, a different one each day
+  const step = n => {
+    if (!IS_RU || !daily() || gameOff('swab')) return null;
+    const mine = list().filter(e => e.for.some(s => mySounds().includes(s)));
+    const xs = mine.length ? mine : list(), a = xs[n % xs.length], i = list().indexOf(a);
+    return { key: 'swab:' + a.id, kind: 'artic', name: a.name, run: () => (ok() ? ex(i, true) : menu()) };
+  };
+  GAMES.push({ id: 'swab', hide: () => !IS_RU, name: 'Гимнастика с ватной палочкой', sub: 'со взрослым: палочка подсказывает языку', ico: () => faceBud('swingUp', 'up'), bg: 'var(--t-mint)', go: menu, grp: 0, also: [15],
+    prog: () => `${ICON.star}${list().filter(e => P.best['swab:' + e.id]).length} из ${list().length}` });
+  return { step, menu, ex };
+})();
+
+/* ---------- More from the online speech therapists' videos (the kinds of exercise, our own words): Р without «д» and
+   without the throat (a drummer, a machine-gun, a painter, Р after a vowel), чистоговорки for every sound against a «каша
+   во рту», the dragon breath, tongue twisters with a pencil held in the teeth (a carrot stick will do), a brain warm-up
+   for hands and speech (fist — edge — palm, rings, ear — nose, lezginka, cross steps), and handwriting: finger exercises,
+   how to hold a pencil and sit, and tracing paths with a finger. Russian only; one declaration. ---------- */
+const IDEAS = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l' };
+  const firstMine = list => list.find(L => mySounds().includes(SND[L])) || list[0];
+
+  /* ===== a sequence to do with the body: cards in turn to a beat, faster each round ===== */
+  // items: [picture html, label, what the voice says ('' — nothing)]
+  function drill({ key, title, items, rounds = 3, beat = 1500, intro, tip, again, line }) {
+    const t = newScreen();
+    let started = false;
+    shell(title, `<div class="nr"><p class="lg-q">${esc(intro)}</p>${tip ? `<p class="muted">${esc(tip)}</p>` : ''}
+      <div class="nr-card" id="nrC"><span class="nr-e">${items[0][0]}</span><b>${esc(items[0][1])}</b></div>
+      <div class="nr-row">${items.map(([e, l], i) => `<span class="nr-mini" data-i="${i}">${e}<small>${esc(l)}</small></span>`).join('')}</div>
+      <p class="nr-round" id="nrR"></p><div class="og-btns"><button class="big" id="nrGo">${ICON.play}Начать</button></div></div>`);
+    const go = async () => {
+      if (started) return; started = true; $('#nrGo').hidden = true; sfx.pop();
+      await talk('Приготовились!'); if (t !== tok) return;
+      for (let r = 0; r < rounds; r++) {
+        const ms = beat * Math.pow(.8, r);
+        $('#nrR').textContent = r === 0 ? 'Медленно' : r === rounds - 1 ? 'Быстро!' : 'Быстрее';
+        for (let i = 0; i < items.length; i++) {
+          const [e, l, s] = items[i];
+          $('#nrC').innerHTML = `<span class="nr-e">${e}</span><b>${esc(l)}</b>`; hopEl($('#nrC'));
+          $$('.nr-mini').forEach((x, j) => x.classList.toggle('on', j === i));
+          sfx.tick(); if (s !== '') say(s || l);
+          await wait(ms); if (t !== tok) return;
+        }
+      }
+      $$('.nr-mini').forEach(x => x.classList.remove('on'));
+      await talk('Получилось? Молодец!'); if (t !== tok) return;
+      await askSaid('Получилось!'); if (t !== tok) return;
+      finish({ key, stars: 2, line: line || 'Голова и руки работают вместе!', again });
+    };
+    $('#nrGo').onclick = go;
+    talk(`${intro} Нажми «Начать».`);
+  }
+  const H = (e, cls = '') => `<span class="nr-h ${cls}">${e}</span>`;
+  const NEURO = [
+    { id: 'fist', name: 'Кулак — ребро — ладонь', intro: 'Рука на столе: сначала кулак, потом ребро, потом ладонь. Повторяй за мной.', tip: 'Сначала правой рукой, потом левой, потом двумя вместе.',
+      items: () => [[H('✊'), 'Кулак'], [H('🤚', 'edge'), 'Ребро'], [H('✋', 'flat'), 'Ладонь']] },
+    { id: 'rings', name: 'Колечки', intro: 'Большой пальчик здоровается с каждым пальчиком по очереди: получаются колечки.', tip: 'Сначала одной рукой, потом двумя вместе.',
+      items: () => [[H('👌'), 'Указательный'], [H('👌'), 'Средний'], [H('👌'), 'Безымянный'], [H('👌'), 'Мизинчик']] },
+    { id: 'earnose', name: 'Ухо — нос', intro: 'Левой рукой возьмись за кончик носа, правой — за левое ухо. Хлопок — и поменяй руки!', tip: 'Руки перекрещиваются. Сначала медленно, потом быстрее.',
+      items: () => [[`${H('👃')}${H('👂')}`, 'Нос и ухо'], [H('👏'), 'Хлопок!'], [`${H('👂')}${H('👃')}`, 'Поменяли!'], [H('👏'), 'Хлопок!']] },
+    { id: 'lezginka', name: 'Лезгинка', intro: 'Левая рука в кулаке, большой палец в сторону. Правая ладонь касается кулачка. Меняем руки!', tip: 'Как в танце: раз — поменяли, два — поменяли.',
+      items: () => [[`${H('👍')}${H('✋')}`, 'Раз'], [`${H('✋')}${H('👍')}`, 'Два']] },
+    // cross steps with the child's sound: a syllable on every step
+    { id: 'cross', name: 'Шагаем и говорим', intro: 'Правый локоть к левой коленке, потом левый локоть к правой. На каждый шаг — слог.', tip: 'Спина прямая, говорим чётко.',
+      items: () => { const L = firstMine(['Р', 'Ш', 'С', 'Л']), v = ['а', 'о', 'у', 'ы']; return v.map((x, i) => [i % 2 ? `${H('🦵')}${H('💪', 'flip')}` : `${H('💪')}${H('🦵', 'flip')}`, (L + x).toUpperCase(), L.toLowerCase() + x]); } }
+  ];
+  const neuro = i => { const n = NEURO[i % NEURO.length]; drill({ key: 'neuro', title: n.name, items: n.items(), intro: n.intro, tip: n.tip, rounds: 3, beat: n.id === 'cross' ? 1300 : 1500, again: () => neuroMenu() }); };
+  function neuroMenu() {
+    newScreen();
+    shell('Нейроразминка', `<div class="nr"><p class="lead">Руки и голова работают вместе — и речь становится лучше. Делаем стоя или за столом.</p>
+      <div class="lg-grid" id="nrM">${NEURO.map((n, i) => `<button class="lg-pic" data-i="${i}">${n.items()[0][0]}<b>${esc(n.name)}</b></button>`).join('')}</div></div>`);
+    $('#nrM').onclick = e => { const b = e.target.closest('[data-i]'); if (b) { sfx.pop(); neuro(+b.dataset.i); } };
+    talk('Нейроразминка! Выбери упражнение.');
+  }
+
+  /* ===== Р without «д» and without the throat ===== */
+  const R_EX = [
+    { id: 'drum', name: 'Барабанщик', text: 'Рот широко открыт. Кончик языка стучит по бугоркам за верхними зубами, как палочка по барабану: д-д-д. Нижняя челюсть не двигается.', pose: ['swingUp', 'catFlat'], line: 'Бам-бам-бам!' },
+    { id: 'gun', name: 'Пулемёт', text: 'Рот открыт, кончик языка за верхними зубами. Быстро-быстро: т-т-т, с сильным выдохом. Поднеси ладошку ко рту — чувствуешь ветерок?', pose: ['swingUp', 'catFlat'], line: 'Быстро-быстро!' },
+    { id: 'paint', name: 'Маляр', text: 'Рот открыт. Кончиком языка «красим» нёбо от зубов назад и обратно. Нижняя челюсть не двигается.', pose: ['swingUp', 'paintBack'], line: 'Красим!' }
+  ];
+  const THROAT = 'Положи ладошку на горлышко и скажи «а-а-а»: горлышко дрожит от голоса — это хорошо. А когда звучит Р, дрожит кончик языка впереди, за верхними зубами, а не горло. Если Р похоже на урчание в горле, не тренируем Р в словах: сначала барабанщик, пулемёт и маляр, и покажите ребёнка логопеду.';
+  const R_VOW = ['Ар!', 'Ор!', 'Ур!', 'Ыр!', 'Ара!', 'Оро!', 'Уру!', 'Ыры!'];
+  const R_WORDS = [['шар', '🎈'], ['сыр', '🧀'], ['комар', '🦟'], ['корова', '🐄'], ['гора', '⛰️'], ['барабан', '🥁'], ['морковка', '🥕'], ['пирамида', '🔺'], ['ведро', '🪣'], ['помидор', '🍅']];
+  function rMotor() {
+    const t = newScreen(), plan = [...R_EX, 'vow', 'words'];
+    shell('Р без «д»', `<div class="nr"><div class="pr-steps" id="rS">${plan.map((p, i) => `<span>${i + 1}</span>`).join('')}</div><div id="rBox" class="gr-box"></div>
+      <details class="pr-tip"><summary>💡 Взрослому</summary><p>Если ребёнок говорит «др» вместо Р (дрыба, дрома), язык ещё не умеет дрожать сам и помогает себе ударом «д». Тренируем кончик языка (барабанщик, пулемёт, маляр) и Р после гласной: ар, ара — там «д» не к чему прицепиться. Слова с Р в начале — позже.</p>
+      <p>Горловое Р (урчит в горле) дома словами не исправляется: делаем упражнения для кончика языка и идём к логопеду.</p></details></div>`);
+    const box = $('#rBox');
+    (async () => {
+      await talk('Тренируем Р без «д». Сначала зарядка для кончика языка.'); if (t !== tok) return;
+      for (let k = 0; k < plan.length; k++) {
+        if (t !== tok) return;
+        $$('#rS span').forEach((x, n) => { x.classList.toggle('now', n === k); x.classList.toggle('done', n < k); });
+        const p = plan[k];
+        if (p === 'vow') {
+          box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">Р после гласной — без «д»</p></div>`;
+          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', '') }); if (t !== tok) return; }
+        } else if (p === 'words') {
+          box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
+          for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
+        } else {
+          box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
+          await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;
+          for (let r = 0; r < 8; r++) {
+            const m = $('#rM'), old = m.querySelector('svg.face'); old.insertAdjacentHTML('afterend', faceSVG(p.pose[r % 2])); old.remove();
+            if (r % 2 === 0) { const b = $('#rB'); b.hidden = false; b.textContent = p.line; say(p.line); }
+            await wait(800 * pace()); if (t !== tok) return;
+          }
+        }
+      }
+      finish({ key: 'r-motor', line: 'Моторчик Р заводится!', again: rMotor });
+    })();
+  }
+  function rThroat() {
+    const t = newScreen();
+    shell('Р не в горле', `<div class="artic-stage"><div class="mirror">${faceSVG('frog')}</div><div class="artic-side"><p class="howto">${esc(THROAT)}</p><div class="og-btns"><button class="big" id="rOk">Понятно</button><button class="big ghost" id="rGo">Барабанщик и Р без «д»</button></div></div></div>`);
+    talk('Положи ладошку на горлышко и скажи: а-а-а.');
+    $('#rOk').onclick = () => { if (t === tok) finish({ key: 'r-throat', stars: 1, line: 'Теперь ты знаешь, где живёт Р!', again: rThroat }); };
+    $('#rGo').onclick = () => { sfx.pop(); rMotor(); };
+  }
+
+  /* ===== чистоговорки for every sound ===== */
+  const CHIST = {
+    'С': ['Са-са-са — в лесу бегает лиса.', 'Со-со-со — у Сони колесо.', 'Су-су-су — было холодно в лесу.', 'Сы-сы-сы — у кота усы.', 'Ас-ас-ас — у нас ананас.', 'Ос-ос-ос — в саду растёт кокос.'],
+    'З': ['За-за-за — вот идёт коза.', 'Зу-зу-зу — мы пасём козу.', 'Зы-зы-зы — колокольчик у козы.', 'Зо-зо-зо — у Зои новое пальто.', 'Зя-зя-зя — нам шалить нельзя.'],
+    'Ц': ['Ца-ца-ца — вот идёт овца.', 'Цы-цы-цы — у курицы птенцы.', 'Цо-цо-цо — у курицы яйцо.', 'Ец-ец-ец — песню пел скворец.'],
+    'Ш': ['Ша-ша-ша — мама моет малыша.', 'Шу-шу-шу — я письмо пишу.', 'Ши-ши-ши — в речке плавают ерши.', 'Шо-шо-шо — нам гулять хорошо.', 'Аш-аш-аш — вот новый карандаш.'],
+    'Ж': ['Жа-жа-жа — есть иголки у ежа.', 'Жу-жу-жу — молоко дадим ежу.', 'Жи-жи-жи — здесь живут ужи.', 'Жо-жо-жо — снега много, хорошо.'],
+    'Ч': ['Ча-ча-ча — горит в комнате свеча.', 'Чу-чу-чу — я на поезде качу.', 'Чи-чи-чи — прилетели к нам грачи.', 'Оч-оч-оч — наступила ночь.'],
+    'Щ': ['Ща-ща-ща — мы поймали леща.', 'Щу-щу-щу — я щенка ищу.', 'Щи-щи-щи — мама варит щи.', 'Ащ-ащ-ащ — у меня новый плащ.']
+  };
+  const chistOf = L => L === 'Р' ? CHIST_R : L === 'Л' ? CHIST_L : CHIST[L];
+  function chist(L0) {
+    const L = L0 || firstMine(['С', 'Ш', 'Р', 'Л', 'З', 'Ж', 'Ч', 'Щ', 'Ц']), t = newScreen(), deck = sample(chistOf(L), 4);
+    let k = 0;
+    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${['С', 'З', 'Ц', 'Ш', 'Ж', 'Ч', 'Щ', 'Р', 'Л'].map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
+    $('#chS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); chist(b.dataset.s); } };
+    const tw = $('#tw');
+    async function show() {
+      const s = deck[k];
+      tw.innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><p class="tw-text">${hiS(s, L.toLowerCase())}</p><p class="tw-step" id="tws">Медленно и чётко</p>`;
+      await talk(k === 0 ? `Чистоговорки — чтобы не было каши во рту. Слушай и повтори чётко. ${s}` : s); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      $('#tws').textContent = 'А теперь ещё раз, громко и быстрее!';
+      await talk('А теперь ещё раз, громко и быстрее!'); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      k++;
+      if (k >= deck.length) finish({ key: 'chist-all', line: 'Никакой каши во рту!', again: () => chist(L) }); else show();
+    }
+    show();
+  }
+
+  /* ===== tongue twisters with a pencil in the teeth ===== */
+  const TWIST = [['Шла Саша по шоссе и сосала сушку.', 'сш'], ['На дворе трава, на траве дрова.', 'р'], ['Карл у Клары украл кораллы, а Клара у Карла украла кларнет.', 'рл'],
+    ['Ехал Грека через реку, видит Грека — в реке рак.', 'р'], ['Сшила Саша Сашке шапку.', 'сш'], ['У ежа ежата, у ужа ужата.', 'ж'], ['Шесть мышат в шалаше шуршат.', 'ш'],
+    ['Щуку я тащу, тащу, щуку я не упущу.', 'щ'], ['Мила мыла мишку мылом.', 'л'], ['Слишком много ножек у сороконожек.', 'сж'], ['Бык тупогуб, тупогубенький бычок.', ''], ['Четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами чертёж.', 'ч']];
+  function twistPencil() {
+    const t = newScreen(), mine = TWIST.filter(([, s]) => s && mySounds().some(k => [...(SND_HI[k] || '')].some(c => s.includes(c))));
+    const deck = [...new Set([...shuffle(mine), ...shuffle(TWIST)])].slice(0, 3);
+    let k = 0;
+    shell('Скороговорки с карандашом', `<div class="nr"><details class="pr-tip"><summary>💡 Взрослому</summary><p>Карандаш (или палочку морковки) держим зубами поперёк, неглубоко: язык и губы работают сильнее, а без карандаша речь становится чётче. Карандаш чистый, острым концом не в рот; удобнее взять толстую морковную палочку.</p></details><div class="tw-card" id="tw"></div></div>`);
+    const tw = $('#tw');
+    async function show() {
+      const [s, hl] = deck[k];
+      tw.innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><p class="tw-text">${hl ? hiS(s, hl) : esc(s)}</p><p class="tw-step" id="tws">1. Медленно, без карандаша</p><div class="tw-pen">✏️</div>`;
+      await talk(k === 0 ? `Морковный челлендж! Сначала скажи медленно. ${s}` : `Сначала медленно: ${s}`); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      $('#tws').textContent = '2. С карандашом в зубах — три раза, стараясь чётко'; tw.classList.add('pen');
+      await talk('А теперь возьми карандаш зубами поперёк и скажи три раза. Старайся чётко!'); if (t !== tok) return;
+      await askSaid(G('Я сказала три раза!', 'Я сказал три раза!')); if (t !== tok) return;
+      $('#tws').textContent = '3. Убери карандаш — и быстро!'; tw.classList.remove('pen');
+      await talk('Убери карандаш и скажи быстро. Слышишь, как стало чётко?'); if (t !== tok) return;
+      await askSaid(SAID()); if (t !== tok) return;
+      k++;
+      if (k >= deck.length) finish({ key: 'twist-pen', line: 'Дикция как у диктора!', again: twistPencil }); else show();
+    }
+    show();
+  }
+
+  /* ===== the dragon breath: in through the nose, a long warm breath out — the fire grows; three fires to light ===== */
+  function dragon() {
+    const t = newScreen(), need = Q() ? 3 : 2;
+    shell('Дракончик', `<div class="nr"><p class="lg-q">Вдохни носом. Выдохни ртом долго, тёплым воздухом, как дракончик огнём.</p>
+      <div class="lg-scene dr" id="drSc"><span class="dr-d">${pic('🐉')}</span><span class="dr-f" id="drF">${pic('🔥')}</span>
+        <span class="dr-t" id="drT">${[0, 1, 2].map(() => `<i>${pic('🪵')}</i>`).join('')}</span></div>
+      <div class="lg-bar"><i id="drBar"></i></div><p class="lg-note" id="drN">Тяни выдох ${need} секунды — зажжёшь костёр.</p>
+      <button class="big lg-hold" id="drH">🖐 Дую</button><p class="muted">Микрофон слышит выдох. Нет микрофона — держи кнопку, пока дуешь.</p></div>`);
+    let holding = false, mic = false, last = performance.now(), floor = .004, run = 0, lit = 0, over = false, rest = 0;
+    bindHold($('#drH'), () => { holding = true; }, () => { holding = false; });
+    const frame = now => {
+      if (t !== tok) { micRelease(); return; }
+      const dt = Math.min(.1, (now - last) / 1000); last = now;
+      let on = holding;
+      if (!on && mic && !micDeaf()) { const lv = micLevel(), thr = Math.max(.01, floor * 2.6); if (lv > thr) on = true; else floor = floorStep(floor, lv, thr); }
+      if (rest > 0) { rest -= dt; on = false; }
+      if (on) run += dt; else if (run > 0) run = Math.max(0, run - dt * 3);
+      $('#drF').style.transform = `scale(${(.3 + Math.min(1, run / need) * 1.4).toFixed(2)})`;
+      $('#drBar').style.width = (Math.min(1, run / need) * 100).toFixed(0) + '%';
+      if (run >= need && !over) {
+        lit++; run = 0; rest = 1.2; sfx.good(); $$('#drT i')[lit - 1].innerHTML = pic('🔥');
+        $('#drN').textContent = lit < 3 ? 'Костёр горит! Вдохни носом — и ещё раз.' : 'Все три костра горят!';
+        if (lit >= 3) { over = true; micRelease(); talk('Ты настоящий дракон!').then(() => { if (t === tok) finish({ key: 'breath:dragon', stars: 1, line: `Хорошо подул${G('а', '')}!`, again: dragon, menu: screenBreathMenu }); }); return; }
+      }
+      requestAnimationFrame(frame);
+    };
+    (async () => { await talk('Дракончик! Вдохни носом, а выдыхай ртом долго-долго, как будто дышишь огнём.'); if (t !== tok) return; mic = await micOn(); if (t !== tok) return; if (!mic) $('#drH').classList.add('only'); last = performance.now(); requestAnimationFrame(frame); })();
+  }
+
+  /* ===== handwriting: finger exercises, how to hold a pencil and sit, tracing paths ===== */
+  const FINGERS = [[H('🤝'), 'Замок', 'Пальчики в замок, покачали'], [H('👌'), 'Колечки', 'Колечки по очереди'], [H('🖐️'), 'Веер', 'Растопырили пальчики'], [H('✊'), 'Кулачок', 'Сжали кулачок'],
+    [H('🤏'), 'Щепотка', 'Пальчики щепоткой'], [H('🙌'), 'Пальчики здороваются', 'Пальчики здороваются']];
+  const fingers = () => drill({ key: 'hand-fingers', title: 'Пальчиковая гимнастика', items: FINGERS, rounds: 2, beat: 2200, intro: 'Разомнём пальчики перед письмом. Повторяй за мной.', tip: 'Каждое движение — пять раз.', again: fingers, line: 'Пальчики готовы писать!' });
+  function grip() {
+    const t = newScreen();
+    shell('Как держать карандаш', `<div class="nr"><div class="lg-card lg-adult">
+      <p class="lg-q">✏️ Карандаш</p><ul class="lg-list"><li>Карандаш лежит на среднем пальце, сверху его держат большой и указательный — «щепоткой».</li>
+      <li>Пальцы — примерно на 2 см выше кончика, не у самого грифеля.</li><li>Не сжимать изо всех сил: рука мягкая, пальцы не белеют.</li><li>Верхний конец карандаша смотрит в плечо.</li></ul>
+      <p class="lg-q">🪑 Посадка</p><ul class="lg-list"><li>Спина прямая, между грудью и столом — кулачок.</li><li>Ноги стоят на полу.</li><li>Тетрадь чуть наклонена, вторая рука придерживает лист.</li><li>Свет падает слева (у левшей — справа).</li></ul>
+      <p class="muted">Почерк складывается из сильных пальцев, удобного захвата и ровных движений: пальчиковая гимнастика и дорожки — каждый день по чуть-чуть.</p>
+      <div class="og-btns"><button class="big" id="gOk">Понятно</button></div></div></div>`);
+    talk('Как держать карандаш и как сидеть. Взрослый читает и показывает.');
+    $('#gOk').onclick = () => { if (t === tok) finish({ key: 'hand-grip', stars: 1, line: 'Готово!', again: grip }); };
+  }
+  // paths to trace with a finger, in a 300 × 160 box
+  const spiral = () => { let d = ''; for (let a = 0; a <= 6 * Math.PI; a += .2) { const r = 4 + a * 3.3, x = 150 + r * Math.cos(a), y = 80 + r * Math.sin(a) * .9; d += (d ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } return d; };
+  const loops = () => { let d = 'M10 110'; for (let x = 10; x < 270; x += 45) d += ` C${x + 30} 110 ${x + 42} 45 ${x + 26} 45 C${x + 10} 45 ${x + 14} 110 ${x + 45} 110`; return d; };
+  const PATHS = [['Волны', 'M10 80 Q45 30 80 80 T150 80 T220 80 T290 80'], ['Горки', 'M10 115 L45 45 L80 115 L115 45 L150 115 L185 45 L220 115 L255 45 L290 115'],
+    ['Заборчик', 'M25 125 L40 40 M70 125 L85 40 M115 125 L130 40 M160 125 L175 40 M205 125 L220 40 M250 125 L265 40'], ['Петельки', loops()],
+    ['Крючки', 'M30 40 L30 110 Q30 128 48 120 M90 40 L90 110 Q90 128 108 120 M150 40 L150 110 Q150 128 168 120 M210 40 L210 110 Q210 128 228 120'], ['Улитка', spiral()],
+    ['Мостики', 'M10 120 Q40 40 70 120 Q100 40 130 120 Q160 40 190 120 Q220 40 250 120 Q275 60 290 120']];
+  function trace(k = 0, done = 0) {
+    const t = newScreen(), [name, d] = PATHS[k % PATHS.length];
+    shell('Дорожки для почерка', `<div class="nr"><p class="lg-q">${esc(name)}: веди пальчиком по дорожке</p>
+      <svg class="tr" id="tr" viewBox="0 0 300 160"><path d="${d}" class="tr-p"/><path d="${d}" class="tr-d"/><polyline id="trU" class="tr-u" points=""/></svg>
+      <div class="lg-bar"><i id="trBar"></i></div><p class="lg-note" id="trN">Начни слева и веди, не отрывая пальчик.</p>
+      <div class="og-btns"><button class="big ghost" id="trR">↺ Заново</button></div></div>`);
+    talk(done === 0 ? 'Дорожки, как в прописях. Веди пальчиком по пунктиру — ровно и не торопясь.' : `${name}. Веди пальчиком.`);
+    const svg = $('#tr'), path = svg.querySelector('.tr-p'), L = path.getTotalLength(), N = Math.max(40, Math.round(L / 8));
+    const pts = Array.from({ length: N + 1 }, (_, i) => path.getPointAtLength(L * i / N)), hit = new Set();
+    let drawing = false, stray = 0, ink = [], over = false;
+    const toSvg = e => { const r = svg.getBoundingClientRect(); return { x: (e.clientX - r.left) / r.width * 300, y: (e.clientY - r.top) / r.height * 160 }; };
+    const upd = () => { $('#trBar').style.width = (hit.size / pts.length * 100).toFixed(0) + '%'; $('#trU').setAttribute('points', ink.map(p => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ')); };
+    svg.addEventListener('pointerdown', e => { e.preventDefault(); drawing = true; try { svg.setPointerCapture(e.pointerId); } catch (x) {} ink.push(toSvg(e)); });
+    svg.addEventListener('pointermove', e => {
+      if (!drawing || over) return; const p = toSvg(e); ink.push(p);
+      let near = 1e9; pts.forEach((q, i) => { const dd = Math.hypot(q.x - p.x, q.y - p.y); if (dd < 14) hit.add(i); near = Math.min(near, dd); });
+      if (near > 26) { stray++; if (stray % 25 === 1) $('#trN').textContent = 'Ой, мимо дорожки! Держись пунктира.'; }
+      upd();
+    });
+    const end = async () => {
+      drawing = false; if (over || hit.size / pts.length < .88) return;
+      over = true; sfx.good(); const ok = stray < 30;
+      $('#trN').textContent = ok ? 'Ровно и аккуратно!' : 'Прошли! В следующий раз — поближе к пунктиру.';
+      await talk(ok ? 'Ровно и аккуратно!' : 'Получилось! Следующую — поаккуратнее.'); if (t !== tok) return;
+      if (done + 1 >= 4) finish({ key: 'hand-trace', stars: ok ? 3 : 2, line: 'Рука готова к красивому почерку!', again: () => trace(k + 1, 0) });
+      else later(() => trace(k + 1, done + 1), 400);
+    };
+    ['pointerup', 'pointercancel'].forEach(ev => svg.addEventListener(ev, end));
+    $('#trR').onclick = () => { sfx.tick(); hit.clear(); ink = []; stray = 0; upd(); $('#trN').textContent = 'Начни слева и веди, не отрывая пальчик.'; };
+  }
+  function handMenu() {
+    newScreen();
+    shell('Красивый почерк', `<div class="nr"><p class="lead">Почерк начинается с пальцев и правильного захвата. Каждый день по чуть-чуть.</p>
+      <div class="lg-grid" id="hM"><button class="lg-pic" data-h="f">${pic('🖐️')}<b>Пальчиковая гимнастика</b></button><button class="lg-pic" data-h="g">${pic('✏️')}<b>Как держать карандаш</b></button>
+      <button class="lg-pic" data-h="t">${pic('〰️')}<b>Дорожки</b></button><button class="lg-pic" data-h="w">${pic('✍️')}<b>Пишем буквы</b></button></div></div>`);
+    $('#hM').onclick = e => { const b = e.target.closest('[data-h]'); if (!b) return; sfx.pop(); ({ f: fingers, g: grip, t: () => trace(ri(0, PATHS.length - 1)), w: () => GAMES.find(g => g.id === 'write').go() })[b.dataset.h](); };
+    talk('Красивый почерк. Выбери, с чего начнём.');
+  }
+
+  /* ===== the games ===== */
+  const RU_ONLY = () => !IS_RU;
+  GAMES.push(
+    { id: 'neuro', hide: RU_ONLY, name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
+    { id: 'chist-all', hide: RU_ONLY, name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b>-<b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
+    { id: 'twist-pen', hide: RU_ONLY, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
+    { id: 'r-motor', hide: RU_ONLY, name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
+    { id: 'r-throat', hide: RU_ONLY, name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
+    { id: 'hand', hide: RU_ONLY, name: 'Красивый почерк', sub: 'пальчики, карандаш, дорожки', ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
+  );
+  if (IS_RU) {
+    BREATH.push({ id: 'dragon', name: 'Дракончик', icon: '🐉', bg: 'var(--t-peach)' });
+    BREATH_RUN.dragon = dragon;
+  }
+  return { neuroMenu, chist, twistPencil, rMotor, rThroat, dragon, handMenu, trace, fingers, grip };
+})();
+
+/* LOGO-END */
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
    links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
    the phone: the welcome screen asks first, the parents' settings and the relatives' screen can change it. ---------- */
