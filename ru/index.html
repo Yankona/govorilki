@@ -1725,6 +1725,13 @@ body.quest .og-st.mine{color:#7BE0A0}
 .m-coins{background:rgba(20,18,36,.6);border-radius:14px;padding:8px 12px;font:800 20px var(--f-body);color:#9FFFB4;font-variant-numeric:tabular-nums}.m-coins small{margin-left:6px;color:#FFE066;opacity:0;transition:opacity .25s}.m-coins small.on{opacity:1}
 .m-rank{background:rgba(20,18,36,.55);border-radius:14px;padding:8px 10px;font:800 14px/1 var(--f-body)}.m-spd small em{font-style:normal;color:#FFB15C}
 .m-sign.trick{background:#E8590C}
+.m-combo{position:absolute;left:50%;top:56%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:14px;background:rgba(20,18,36,.78);color:#fff;pointer-events:none;white-space:nowrap}
+.m-combo b{font:400 30px/1 var(--f-display);font-variant-numeric:tabular-nums}.m-combo span{display:flex;flex-direction:column;align-items:center}.m-combo small{font:800 11px var(--f-body);letter-spacing:.06em;opacity:.85}.m-combo i{font:800 18px var(--f-body);font-style:normal;font-variant-numeric:tabular-nums}
+.m-combo em{font:800 22px var(--f-body);font-style:normal;color:#7BE0A0;font-variant-numeric:tabular-nums}.m-best{position:absolute;left:50%;top:calc(56% + 60px);transform:translateX(-50%);padding:3px 10px;border-radius:9px;background:#FFD54A;color:#2A2346;font:800 12px var(--f-body);pointer-events:none}
+.m-tricks{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px}
+.m-tb{display:flex;flex-direction:column;align-items:center;gap:1px;width:64px;padding:6px 4px;border:0;border-radius:14px;background:rgba(20,18,36,.6);color:#fff;font:400 24px/1 var(--f-body);touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.m-tb small{font:800 11px var(--f-body)}.m-tb em{font:700 10px var(--f-body);font-style:normal;opacity:.7}.m-tb.on{background:#FF9D4D;color:#1E1A2E}
+.m-keys{font:700 12px/1.35 var(--f-body);color:#C9CBDA}
 @media (prefers-reduced-motion:reduce){.m-pop.on{animation:none;opacity:1}}
 .kp{position:relative;flex:1;width:100%;min-height:440px;border-radius:24px;overflow:hidden;background:radial-gradient(120% 80% at 50% 0%,#5B3FA8 0%,#2A1B5C 55%,#140C33 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:12px 10px 14px}
 .kp-lights i{position:absolute;top:-20%;width:38%;height:120%;background:linear-gradient(180deg,rgba(255,240,180,.35),rgba(255,240,180,0) 70%);transform-origin:top center;filter:blur(2px);animation:kpsweep 5s ease-in-out infinite alternate}
@@ -6757,7 +6764,9 @@ function screenMoto() {
       <div class="m-bot"><span class="m-coins">🪙 <b id="mCoins">${Math.floor(m.coins)}</b><small id="mPlus"></small></span><span class="m-spd"><b id="mSpd">0</b><small>км/ч<br><em>${md.n}</em></small></span></div>
       <div class="m-sign" id="mSign" hidden><small>Прочитай вслух — будет нитро!</small><b id="mWord"></b><i class="m-lv"><i id="mLv"></i></i><small class="m-heard" id="mHeard"></small><button class="chip" id="mSaid" hidden>🔥 Прочитал!</button></div>
       <div class="m-pop" id="mPop"></div>
-      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Нажимай слева или справа, чтобы перестраиваться. Читай вслух слова на синих знаках — включится нитро! На трамплине громко скажи трюк — будут монеты.</p><small class="m-mode">Режим: ${md.n} · монеты ×${String(md.k).replace('.', ',')} · сменить в гараже</small><button class="big" id="mGo">${ICON.play}Поехали!</button></div>
+      <div class="m-combo" id="mCombo" hidden><b id="mcMul">×1,00</b><span><small id="mcName">КОЛЕСО</small><i id="mcT">0,0 с</i></span><em id="mcC">+0</em></div><div class="m-best" id="mBest" hidden></div>
+      <div class="m-tricks" id="mTricks" hidden><button class="m-tb" id="mWh">🛞<small>Колесо</small><em>Shift</em></button><button class="m-tb" id="mNh">🙌<small>Без рук</small><em>N</em></button></div>
+      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Нажимай слева или справа, чтобы перестраиваться. Читай вслух слова на синих знаках — включится нитро! На трамплине громко скажи трюк — будут монеты.</p><small class="m-mode">Режим: ${md.n} · монеты ×${String(md.k).replace('.', ',')} · сменить в гараже</small><small class="m-keys">Держи «Колесо» — растёт множитель; тяни голосом «л-л-л» — растёт быстрее. «Без рук» — монет больше, но руль не работает. На ноутбуке: ← → или A D — руль, Shift — колесо, N — без рук, пробел — «прочитал».</small><button class="big" id="mGo">${ICON.play}Поехали!</button></div>
     </div>`, { back: screenGarage, guide: false });
   const box = $('#moto'), cv = $('#mc'), x = cv.getContext('2d');
   let W = 0, H = 0, dpr = 1, hor = 0;
@@ -6765,7 +6774,9 @@ function screenMoto() {
   fit(); resizeFn = fit;
   const D0 = 30, ZMAX = 230, PD = 3;
   const tOf = d => D0 / (D0 + Math.max(-2, d)), yOf = t => hor + t * (H - hor) * 1.02, hw = t => W * (.03 + .52 * t);
-  const laneX = (l, t) => W / 2 + l * (2 * hw(t) / 3);
+  const cxo = t => W / 2 + curv * W * .9 * Math.pow(1 - Math.min(1, t), 2);
+  const laneX = (l, t) => cxo(t) + l * (2 * hw(t) / 3);
+  let curv = 0, wheelie = false, wTime = 0, wMul = 1, wCoins = 0, noHands = false, wHeld = false, wKey = false, nhHeld = false, nhKey = false, vOn = false;
   let run = false, over = false, speed = 0, dist = 0, pl = 0, target = 0, cars = [], nextCar = 40, overtakes = 0, words = 0, score = 0;
   let coins = 0, tricks = 0, jumps = 0, air = 0, air0 = 1, ramps = [], nextRamp = 420, zone = 0, tIdx = 0, plusT = 0;
   let sign = null, nextSign = 260, nitro = 0, heard = 0, floor = .004, shake = 0, continued = false, popT = 0, wordIdx = Math.floor(Math.random() * MW.length);
@@ -6789,7 +6800,7 @@ function screenMoto() {
     x.fillStyle = '#1E1A2E'; x.fillRect(cx - w * .44, y - h * .12, w * .18, h * .14); x.fillRect(cx + w * .26, y - h * .12, w * .18, h * .14);
   }
   function drawSign(s) {
-    const tt = tOf(s.d), y = yOf(tt), sx = W / 2 + hw(tt) * 1.18, sw = W * .5 * tt, sh = sw * .42;
+    const tt = tOf(s.d), y = yOf(tt), sx = cxo(tt) + hw(tt) * 1.18, sw = W * .5 * tt, sh = sw * .42;
     if (y < hor) return;
     x.fillStyle = '#9AA3B5'; x.fillRect(sx - sw * .03, y - sh * 2.2, sw * .06, sh * 2.2);
     x.fillStyle = s.read ? '#2FA865' : '#2D6CDF'; x.strokeStyle = '#FFFFFF'; x.lineWidth = Math.max(1, sw * .03);
@@ -6800,9 +6811,13 @@ function screenMoto() {
   function drawBike(px, lift = 0) {
     const by = H - Math.max(18, H * .04) - lift, s = Math.min(W * .16, H * .2), lean = (target - pl) * .35, ty = bike.type || 'moto';
     const rr = (a, b, c, d, r, col) => { x.fillStyle = col; x.beginPath(); x.roundRect(a, b, c, d, r); x.fill(); };
-    x.save(); x.translate(px, by); x.rotate((ty === 'car' ? lean * .3 : lean) + (lift ? Math.sin(performance.now() / 140) * .18 : 0));
+    x.save(); x.translate(px, by); x.rotate((ty === 'car' ? lean * .3 : lean) + (air > 0 ? Math.sin(performance.now() / 140) * .18 : 0));
+    if (wheelie) { x.fillStyle = `rgba(255,${180 + Math.random() * 60 | 0},60,.9)`; for (let i = 0; i < 4; i++) x.fillRect(rnd(-s * .15, s * .15), rnd(s * .02, s * .2) + H * .025, 3, 3); }
     const flame = (w, len) => { x.fillStyle = `rgba(255,${120 + Math.random() * 80 | 0},40,.9)`; x.beginPath(); x.moveTo(-w, -s * .12); x.lineTo(0, s * (len + Math.random() * .2)); x.lineTo(w, -s * .12); x.fill(); };
     const rider = (y0, h) => {
+      const ay = y0 - h * .82; x.strokeStyle = bike.suit; x.lineWidth = s * .09; x.lineCap = 'round'; x.beginPath();
+      if (noHands) { x.moveTo(-s * .18, ay); x.lineTo(-s * .62, ay - s * .1); x.moveTo(s * .18, ay); x.lineTo(s * .62, ay - s * .1); } else { x.moveTo(-s * .18, ay); x.lineTo(-s * .3, ay + s * .24); x.moveTo(s * .18, ay); x.lineTo(s * .3, ay + s * .24); }
+      x.stroke(); x.fillStyle = '#FFDDC2'; (noHands ? [[-s * .64, ay - s * .1], [s * .64, ay - s * .1]] : [[-s * .31, ay + s * .26], [s * .31, ay + s * .26]]).forEach(([hx, hy]) => { x.beginPath(); x.arc(hx, hy, s * .055, 0, Math.PI * 2); x.fill(); });
       rr(-s * .22, y0 - h, s * .44, h, s * .14, bike.suit);
       x.fillStyle = bike.body; x.beginPath(); x.arc(0, y0 - h - s * .1, s * .17, 0, Math.PI * 2); x.fill();
       x.fillStyle = 'rgba(255,255,255,.35)'; x.beginPath(); x.arc(-s * .05, y0 - h - s * .15, s * .06, 0, Math.PI * 2); x.fill();
@@ -6848,10 +6863,10 @@ function screenMoto() {
   }
   function side(zn, b, tp, k) {
     const ph = H * .07 * tp, y = yOf(tp);
-    if (zn === 0) { const ppx = W / 2 + b * hw(tp) * 1.2; x.fillStyle = '#FFFFFF'; x.fillRect(ppx - ph * .1, y - ph, ph * .2, ph); x.fillStyle = '#EF4F4F'; x.fillRect(ppx - ph * .1, y - ph, ph * .2, ph * .25); return; }
-    if (zn === 1) { const tx = W / 2 + b * hw(tp) * (1.45 + (k % 3) * .3), th = ph * (2.2 + (k % 2) * .6); x.fillStyle = '#7A4E2D'; x.fillRect(tx - th * .05, y - th * .55, th * .1, th * .55); x.fillStyle = ['#2E8B57', '#3FA34D', '#4CAF50'][k % 3]; x.beginPath(); x.arc(tx, y - th * .72, th * .3, 0, Math.PI * 2); x.fill(); x.beginPath(); x.arc(tx - th * .14, y - th * .58, th * .2, 0, Math.PI * 2); x.arc(tx + th * .14, y - th * .58, th * .2, 0, Math.PI * 2); x.fill(); return; }
-    const lx = W / 2 + b * hw(tp) * 1.16, lh = ph * 2.6; x.fillStyle = '#5A6070'; x.fillRect(lx - lh * .025, y - lh, lh * .05, lh); x.fillRect(b > 0 ? lx - lh * .22 : lx, y - lh, lh * .22, lh * .035); x.fillStyle = '#FFE680'; x.fillRect(b > 0 ? lx - lh * .25 : lx + lh * .17, y - lh + lh * .03, lh * .08, lh * .05);
-    if (k % 2) { const bx = W / 2 + b * hw(tp) * 2.15, bh = ph * (4 + k % 4), bw = ph * 2.4; x.fillStyle = ['#C9A27E', '#9AA7C7', '#E3B5A4', '#A8C3A0'][k % 4]; x.fillRect(bx - bw / 2, y - bh, bw, bh); x.fillStyle = 'rgba(255,255,255,.6)'; for (let r = 1; r < 4; r++) for (let cc = 0; cc < 2; cc++) x.fillRect(bx - bw * .35 + cc * bw * .45, y - bh + r * bh * .22, bw * .22, bh * .1); }
+    if (zn === 0) { const ppx = cxo(tp) + b * hw(tp) * 1.2; x.fillStyle = '#FFFFFF'; x.fillRect(ppx - ph * .1, y - ph, ph * .2, ph); x.fillStyle = '#EF4F4F'; x.fillRect(ppx - ph * .1, y - ph, ph * .2, ph * .25); return; }
+    if (zn === 1) { const tx = cxo(tp) + b * hw(tp) * (1.45 + (k % 3) * .3), th = ph * (2.2 + (k % 2) * .6); x.fillStyle = '#7A4E2D'; x.fillRect(tx - th * .05, y - th * .55, th * .1, th * .55); x.fillStyle = ['#2E8B57', '#3FA34D', '#4CAF50'][k % 3]; x.beginPath(); x.arc(tx, y - th * .72, th * .3, 0, Math.PI * 2); x.fill(); x.beginPath(); x.arc(tx - th * .14, y - th * .58, th * .2, 0, Math.PI * 2); x.arc(tx + th * .14, y - th * .58, th * .2, 0, Math.PI * 2); x.fill(); return; }
+    const lx = cxo(tp) + b * hw(tp) * 1.16, lh = ph * 2.6; x.fillStyle = '#5A6070'; x.fillRect(lx - lh * .025, y - lh, lh * .05, lh); x.fillRect(b > 0 ? lx - lh * .22 : lx, y - lh, lh * .22, lh * .035); x.fillStyle = '#FFE680'; x.fillRect(b > 0 ? lx - lh * .25 : lx + lh * .17, y - lh + lh * .03, lh * .08, lh * .05);
+    if (k % 2) { const bx = cxo(tp) + b * hw(tp) * 2.15, bh = ph * (4 + k % 4), bw = ph * 2.4; x.fillStyle = ['#C9A27E', '#9AA7C7', '#E3B5A4', '#A8C3A0'][k % 4]; x.fillRect(bx - bw / 2, y - bh, bw, bh); x.fillStyle = 'rgba(255,255,255,.6)'; for (let r = 1; r < 4; r++) for (let cc = 0; cc < 2; cc++) x.fillRect(bx - bw * .35 + cc * bw * .45, y - bh + r * bh * .22, bw * .22, bh * .1); }
   }
   // a ramp on a lane: riding onto it means a jump, and a trick said aloud in the air
   function drawRamp(r) {
@@ -6873,33 +6888,47 @@ function screenMoto() {
     if (zn === 0) { x.fillStyle = '#2F8FD0'; x.beginPath(); x.moveTo(0, hor); x.lineTo(W / 2 - hw(tF) * 2.2, hor); x.lineTo(0, yOf(.55)); x.fill(); }
     const base = Math.floor(dist / 28);
     for (let k = 17; k >= 0; k--) { const pd = k * 14 - (dist % 28) * .5; if (pd > 0) for (const b of [-1, 1]) side(zn, b, tOf(pd), k + base + (b > 0 ? 7 : 0)); }
-    quad(W / 2, yOf(tF), hw(tF) * 1.12, W / 2, yOf(tN), hw(tN) * 1.12, '#F4F1EA');
-    quad(W / 2, yOf(tF), hw(tF), W / 2, yOf(tN), hw(tN), '#4A4D5C');
+    for (let i = 0; i < 26; i++) { const d1 = ZMAX * Math.pow(1 - i / 26, 1.7) - 2, d2 = ZMAX * Math.pow(1 - (i + 1) / 26, 1.7) - 2, t1 = tOf(d1), t2 = i === 25 ? tN : tOf(d2); quad(cxo(t1), yOf(t1), hw(t1) * 1.12, cxo(t2), yOf(t2), hw(t2) * 1.12, '#F4F1EA'); quad(cxo(t1), yOf(t1), hw(t1), cxo(t2), yOf(t2), hw(t2), '#4A4D5C'); }
     const off = dist % 14;
     for (let k = 0; k < 18; k++) {
       const d1 = k * 14 - off, d2 = d1 + 6; if (d2 < -1) continue;
       const t1 = tOf(d1), t2 = tOf(d2);
-      for (const b of [-1, 1]) { const bx1 = W / 2 + b * hw(t1) / 3, bx2 = W / 2 + b * hw(t2) / 3; quad(bx1, yOf(t1), Math.max(.6, hw(t1) * .012), bx2, yOf(t2), Math.max(.4, hw(t2) * .012), '#F7F7F2'); }
+      for (const b of [-1, 1]) { const bx1 = cxo(t1) + b * hw(t1) / 3, bx2 = cxo(t2) + b * hw(t2) / 3; quad(bx1, yOf(t1), Math.max(.6, hw(t1) * .012), bx2, yOf(t2), Math.max(.4, hw(t2) * .012), '#F7F7F2'); }
     }
     const things = [...cars.map(c => ({ d: c.d, f: () => drawCar(c) })), ...ramps.map(r => ({ d: r.d, f: () => drawRamp(r) })), ...(sign && !sign.trick ? [{ d: sign.d, f: () => drawSign(sign) }] : [])].sort((a, b) => b.d - a.d);
     things.forEach(o => o.f());
     if (nitro > 0) { x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = 2; for (let i = 0; i < 10; i++) { const yy = rnd(hor, H), xx = Math.random() < .5 ? rnd(0, W * .15) : rnd(W * .85, W); x.beginPath(); x.moveTo(xx, yy); x.lineTo(xx, yy + 40); x.stroke(); } }
-    const lift = air > 0 ? Math.sin(Math.PI * (1 - air / air0)) * H * .14 : 0;
+    { const mx = W - 44, my = 102, R = 30; x.save(); x.beginPath(); x.arc(mx, my, R, 0, Math.PI * 2); x.fillStyle = 'rgba(20,18,36,.6)'; x.fill(); x.clip();
+      x.strokeStyle = '#C9CDE6'; x.lineWidth = 9; x.lineCap = 'round'; x.beginPath(); x.moveTo(mx, my + R); x.quadraticCurveTo(mx, my, mx + curv * 46, my - R); x.stroke();
+      x.fillStyle = '#FFD54A'; ramps.forEach(r => { if (r.d < 120) { const u = r.d / 120; x.fillRect(mx + curv * 46 * u * u + r.lane * 3 - 2, my + R * .55 - u * R * 1.5, 4, 4); } });
+      x.fillStyle = '#4DB8FF'; x.beginPath(); x.arc(mx + pl * 3, my + R * .55, 4.5, 0, Math.PI * 2); x.fill(); x.restore();
+      x.fillStyle = '#fff'; x.font = '800 10px Nunito, sans-serif'; x.textAlign = 'center'; x.fillText('N', mx, my - R + 11); }
+    const lift = (air > 0 ? Math.sin(Math.PI * (1 - air / air0)) * H * .14 : 0) + (wheelie ? H * .025 : 0);
     if (lift) { const px = laneX(pl, tOf(PD)); x.fillStyle = 'rgba(0,0,0,.25)'; x.beginPath(); x.ellipse(px, H - Math.max(18, H * .04), W * .06, H * .015, 0, 0, Math.PI * 2); x.fill(); }
     drawBike(laneX(pl, tOf(PD)), lift);
   }
   function hud() {
     $('#mSpd').textContent = Math.round(speed); $('#mDist').textContent = dist < 1000 ? `${Math.round(dist)} м` : `${(dist / 1000).toFixed(2).replace('.', ',')} км`;
+    const cb = $('#mCombo'); cb.hidden = !(wheelie || noHands);
+    if (!cb.hidden) { $('#mcMul').textContent = '×' + (wheelie ? wMul : 1.5).toFixed(2).replace('.', ','); $('#mcName').textContent = wheelie && noHands ? 'КОЛЕСО БЕЗ РУК' : wheelie ? 'КОЛЕСО' : 'БЕЗ РУК'; $('#mcT').textContent = fmtN(wTime) + ' с'; $('#mcC').textContent = '+' + fmtN(wCoins) + ' 🪙'; }
+    const bb = $('#mBest'); bb.hidden = !wheelie || !m.bestW; if (!bb.hidden) bb.textContent = `РЕКОРД ${fmtN(m.bestW)} с`;
     $('#mOver').textContent = overtakes; $('#mWords').textContent = words; $('#mTr').textContent = tricks; $('#mCoins').textContent = Math.floor(m.coins + coins);
   }
   function fire() {
     if (!sign || sign.read) return;
     sign.read = true; words++; hopEl($('#mSign')); later(() => { $('#mSign').hidden = true; }, 600);
     if (sign.trick) { tricks++; sfx.magic(); gain(100, `${sign.word}! +${Math.round(100 * md.k)} 🪙`); return; }
-    nitro = 3.5 + TU('nitro') * .7; score += 100; sfx.magic(); gain(50); pop('НИТРО! 🔥');
+    nitro = 3.5 + TU('nitro') * .7; score += 100; sfx.magic(); gain(50);
+    if (wheelie) { wMul = Math.min(4, wMul + .5); pop('КОМБО +0,5! 🔥'); } else pop('НИТРО! 🔥');
   }
   // coins: the ride's total, and a «+N» next to the counter
   function gain(n, msg) { const v = Math.round(n * md.k); coins += v; const pl2 = $('#mPlus'); pl2.textContent = '+' + v; pl2.classList.add('on'); plusT = 1.2; if (msg) pop(msg); }
+  function endTrick() {
+    wheelie = false; const best = m.bestW || 0;
+    if (wTime >= 1) { sfx.good(); pop(`Колесо ${fmtN(wTime)} с! +${Math.round(wCoins)} 🪙`); }
+    if (wTime > best && wTime >= 2) { m.bestW = +wTime.toFixed(1); later(() => pop('Рекорд колеса! 🏆'), 900); }
+    wTime = 0; wCoins = 0;
+  }
   function jump() {
     jumps++; air = air0 = 1.7; sfx.whoosh(.6, .2); gain(20);
     // the trick takes the place of a sign not read yet: in the air it is the trick that is said
@@ -6938,6 +6967,7 @@ function screenMoto() {
   }
   $('#mSaid').onclick = e => { e.stopPropagation(); if (need3) { const f = need3.done; need3 = null; f(); return; } fire(); };
   async function crash() {
+    if (wheelie) { wheelie = false; wTime = 0; wCoins = 0; }
     run = false; shake = .5; sfx.oops(); tone(90, .5, 'sawtooth', .12); try { navigator.vibrate && navigator.vibrate(200); } catch (e) {}
     pop('Бум! 💥');
     if (!continued) {
@@ -6984,6 +7014,16 @@ function screenMoto() {
     const zn = Math.floor(dist / 1000) % 3; if (zn !== zone) { zone = zn; pop(['🌊 Побережье', '🌲 Лес', '🏙️ Город'][zn]); }
     if (air > 0) { air -= dt; if (air <= 0) { sfx.pop(); if (sign && sign.trick) { if (!sign.read) $('#mSign').hidden = true; sign = null; } } }
     pl += (target - pl) * Math.min(1, dt * (9 + TU('grip') * 2.5));
+    curv += ((Math.sin(dist / 420) * .5 + Math.sin(dist / 170 + 1) * .18) * (zone === 2 ? .5 : 1) - curv) * Math.min(1, dt * 2);
+    vOn = false; if (mode === 'level' && !micDeaf()) { const lv = micLevel(); vOn = lv > Math.max(.012, floor * 3.2); }
+    noHands = nhHeld || nhKey; $('#mNh').classList.toggle('on', noHands);
+    const wOn = air <= 0 && (wHeld || wKey); $('#mWh').classList.toggle('on', wOn);
+    if (wOn || noHands) {
+      if (!wheelie && wOn) { wheelie = true; wTime = 0; wMul = 1; wCoins = 0; sfx.tick(); }
+      if (wheelie && !wOn) endTrick();
+      if (wheelie) { wTime += dt; wMul = Math.min(4, wMul + dt * (mode === 'level' ? (vOn ? .22 : .04) : .12)); }
+      const c = dt * md.k * (wheelie ? 2 * wMul : 0) * (noHands ? 1.5 : 1) + (noHands && !wheelie ? dt * md.k : 0); coins += c; wCoins += c;
+    } else if (wheelie) endTrick();
     for (const c of cars) {
       c.d -= (ms - c.v / 3.6) * dt;
       if (!c.passed && c.d < PD - 1.6) {
@@ -7002,10 +7042,20 @@ function screenMoto() {
     listen(dt);
     draw(); hud();
   }
-  const steer = dir => { if (!run) return; target = Math.max(-1, Math.min(1, Math.round(target) + dir)); sfx.tick(); };
+  const steer = dir => { if (!run) return; if (noHands) { pop('Без рук не повернёшь!'); return; } target = Math.max(-1, Math.min(1, Math.round(target) + dir)); sfx.tick(); };
   cv.addEventListener('pointerdown', e => { e.preventDefault(); const r = cv.getBoundingClientRect(); steer(e.clientX - r.left < r.width / 2 ? -1 : 1); });
-  const onKey = e => { if (t !== tok) { document.removeEventListener('keydown', onKey); return; } if (e.key === 'ArrowLeft') steer(-1); if (e.key === 'ArrowRight') steer(1); };
-  document.addEventListener('keydown', onKey);
+  const onKey = e => {
+    if (t !== tok) { document.removeEventListener('keydown', onKey); document.removeEventListener('keyup', onKey); return; }
+    const down = e.type === 'keydown', k = e.code;
+    if (down && !e.repeat && (k === 'ArrowLeft' || k === 'KeyA')) steer(-1);
+    if (down && !e.repeat && (k === 'ArrowRight' || k === 'KeyD')) steer(1);
+    if (k === 'ShiftLeft' || k === 'ShiftRight') wKey = down;
+    if (k === 'KeyN') nhKey = down;
+    if (down && k === 'Space') { e.preventDefault(); const sb = $('#mSaid'); if (sb && !sb.hidden) sb.click(); }
+  };
+  document.addEventListener('keydown', onKey); document.addEventListener('keyup', onKey);
+  bindHold($('#mWh'), () => { wHeld = true; }, () => { wHeld = false; });
+  bindHold($('#mNh'), () => { nhHeld = true; }, () => { nhHeld = false; });
   $('#mGo').onclick = async () => {
     const go = $('#mGo'); if (go.disabled) return; go.disabled = true;
     hush(); sfx.pop();
@@ -7017,7 +7067,7 @@ function screenMoto() {
       if (ok) mode = 'sr'; else liveStop();
     }
     if (mode !== 'sr') { const ok = await micOn(); if (t !== tok) return; if (ok) { MIC.keep = tok; mode = 'level'; } }
-    $('#mStart').hidden = true;
+    $('#mStart').hidden = true; $('#mTricks').hidden = false;
     run = true; speed = 40; tone(110, .4, 'sawtooth', .06); tone(165, .5, 'sawtooth', .05, .15);
     // the first word comes right away, the next ones every 15–20 seconds
     spawnSign(150); nextSign = rnd(240, 340);
@@ -11114,7 +11164,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '83';
+const APP_VER = '84';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
