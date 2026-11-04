@@ -1909,6 +1909,39 @@ body.pv-on #app{padding-top:52px}
 .ml-step{margin:0;text-align:center;font:800 15px var(--f-body);color:var(--ink-soft)}.ml-pic{display:grid;place-items:center;font-size:96px}.ml-pic .pic{width:120px;height:120px}
 .ml-say{display:flex;flex-direction:column;gap:10px}.ml-w{display:flex;align-items:center;gap:12px;border:0;border-radius:20px;padding:12px 16px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line);font:800 24px/1.1 var(--f-body);cursor:pointer;text-align:left}
 .ml-w b{flex:1}.ml-w.done{background:var(--t-green)}.ml-w .lang-f{font-size:28px}.ml-flags{justify-content:center}.ml-langs{display:flex;flex-direction:column;gap:6px}
+/* WHO-CSS */
+.who{max-width:640px;margin:0 auto;padding:12px 16px 40px;display:flex;flex-direction:column;gap:16px}
+.who-hero{display:flex;align-items:center;justify-content:center;gap:12px;padding-top:12px}
+.who-ryz{width:84px;flex:none}.who-ryz svg{width:100%;height:auto;display:block}
+.who-h{margin:0;font:400 40px/1.05 var(--f-display);color:var(--ink)}
+.who-sub{margin:0;text-align:center;font:800 19px var(--f-body);color:var(--ink-soft)}
+.who-fh{display:flex;align-items:center;justify-content:center;gap:10px;font:800 18px var(--f-body);color:var(--ink)}
+.who-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}.who-grid .who-kid{flex:0 1 150px;min-width:0}
+.who-kid{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px 14px;border:0;border-radius:24px;background:var(--paper);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 2px var(--line);cursor:pointer;color:var(--ink)}
+.who-kid:active,.who-famc:active,.who-opt:active{transform:translateY(3px)}
+.who-face{width:104px;height:104px;display:block}.who-face svg{width:100%;height:100%;display:block}
+.who-kid b{font:400 26px/1.1 var(--f-display);overflow-wrap:anywhere}
+.who-kid small{font:800 16px var(--f-body);color:var(--ink-soft)}
+.who-fams{display:flex;flex-direction:column;gap:12px}
+.who-famc{display:flex;align-items:center;gap:14px;padding:14px 16px;border:0;border-radius:22px;background:var(--paper);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 2px var(--line);cursor:pointer;color:var(--ink);text-align:left}
+.who-faces{display:flex;flex:none}
+.who-mini{width:56px;height:56px;margin-right:-14px;display:block}.who-mini svg{width:100%;height:100%;display:block}
+.who-ft{display:flex;flex-direction:column;gap:2px;margin-left:18px;min-width:0}
+.who-ft b{font:400 24px/1.1 var(--f-display)}.who-ft small{font:700 15px var(--f-body);color:var(--ink-soft)}
+.who-ad{display:flex;align-items:center;gap:12px;align-self:center;padding:10px 18px;border:0;border-radius:18px;background:var(--t-peach);color:var(--ink);cursor:pointer;text-align:left}
+.who-ad .emo{font-size:34px}.who-ad b{display:block;font:800 18px var(--f-body)}.who-ad small{font:700 14px var(--f-body);color:var(--ink-soft)}
+.who-foot{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+.who-note{text-align:center;margin:0}
+.who-away{display:flex;flex-direction:column;gap:12px;max-width:640px;margin:0 auto;padding:4px 16px 30px}
+.who-away textarea{width:100%;box-sizing:border-box;font:600 14px var(--f-body);border-radius:12px;border:3px solid var(--line-strong);padding:8px;background:var(--paper);color:var(--ink)}
+.who-lbl{font-weight:800}
+.who-pick{display:flex;flex-direction:column;gap:14px;max-width:560px;margin:0 auto;padding:4px 16px 30px}
+.who-opt{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:16px 18px;border:0;border-radius:20px;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 2px var(--line);color:var(--ink);cursor:pointer;text-align:left}
+.who-opt b{font:800 19px var(--f-body)}.who-opt small{font:700 16px var(--f-body);color:var(--ink-soft)}
+.who-opt i{position:absolute;right:14px;top:14px;padding:2px 10px;border-radius:999px;background:var(--leaf);color:#fff;font:800 13px var(--f-body);font-style:normal}
+.who-pick .who-face{width:72px;height:72px;flex:none}
+.pv-start{flex-wrap:wrap;gap:8px}
+@media (max-width:380px){.who-face{width:84px;height:84px}.who-h{font-size:34px}.who-grid .who-kid{flex-basis:118px}}
 </style>
 </head>
 <body>
@@ -2017,7 +2050,7 @@ function useFamily(fid) {
 useFamily(ROOT.curFam);
 // before any family exists (a new phone, until the family is created) the screens still need a profile to read
 let P = ROOT.profiles[ROOT.cur] || blankProfile('', 'f', 'r', '');
-const save = () => { try { localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} };
+const save = () => { try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P) P.upd = Date.now(); localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} };
 /* names in Russian: «Сава» → Савы, Саве, Саву, Савой; each word of «Бабушка Нина» too */
 function declWord(w, she) {
   const low = w.toLowerCase(), last = low.slice(-1), prev = low.slice(-2, -1), base = w.slice(0, -1);
@@ -2930,7 +2963,7 @@ function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Test from scratch · <button id="demoAgain">again</button> · <a href="${SITE_ROOT}">exit</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
-  if (!PULT_BOOTED) { PULT_BOOTED = true; if (ROOT.parentPhone && !GUEST && !DEMO && !LIGA_HASH && fam() && KIDS.length) { screenPult(); return; } }
+  if (!PULT_BOOTED) { PULT_BOOTED = true; if (whoBoot()) return; }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
@@ -3030,6 +3063,7 @@ function goHome() {
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
   on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; screenParents(); });
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
+  on('#whoChip', () => { sfx.pop(); homeLeave(); screenWho(); });
   if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); bindRelp(); bindReadFine(RF); }
   on('#gpBtn', () => { sfx.pop(); homeLeave(); screenGplayWho(); });
   on('#tripCard', () => { sfx.pop(); homeLeave(); screenTrip(); });
@@ -4570,7 +4604,7 @@ function teamCard() {
   </section>`;
 }
 const kidsBar = () => `<div class="kids"><div class="kids-top"><button class="ibtn kb-ic" id="homeSearch" aria-label="Find a game">🔍</button><div class="kids-in" role="tablist" aria-label="Who is playing">${KIDS.map(id => `<button class="kid ${id === ROOT.cur ? 'sel' : ''}" data-k="${id}" role="tab" aria-selected="${id === ROOT.cur}"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.label || ROOT.profiles[id].settings.name)}</button>`).join('')}</div>${GUEST ? '' : "<button class=\"ibtn kb-ic\" id=\"homePult\" aria-label=\"Family control panel\">👑</button>"}<button class="ibtn kb-ic" id="homeGear" aria-label="For grown-ups">⚙️</button></div>
-  <div class="kids-fam"><button class="fam-chip" id="famChip" aria-label="Families: switch or add"><span class="emo">🏠</span>${esc(fam().name)}</button>
+  <div class="kids-fam"><button class="fam-chip" id="whoChip"><span class="emo">👥</span>Who's playing?</button><button class="fam-chip" id="famChip" aria-label="Families: switch or add"><span class="emo">🏠</span>${esc(fam().name)}</button>
   <button class="fam-chip inv" id="invChip"><span class="emo">📨</span>Invite</button>
   <button class="fam-chip" id="worldChip" aria-label="Where our family lives"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button>
   </div></div>`;
@@ -5705,7 +5739,7 @@ try {
 } catch (e) {}
 // the family phone: the grandparents of the current family and the child who is playing now (or the first one who plays chess)
 function famPeople() {
-  if (GUEST) {
+  if (GUEST && !(GUEST_OFF && fam() && !fam().guest)) {
     GRAND = { [GUEST.who]: grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role) };
     KID = kidOf(GUEST.kid, GUEST.kidName, GUEST.kidShe);
     return;
@@ -8128,6 +8162,7 @@ function screenParents(focus) {
     else if (P.settings.voice) say("Hello! Now the phone’s voice is speaking.");
   };
   $('#devVoice').onchange = e => { ROOT.devVoice = e.target.value; save(); pickVoice(); vs(); if (P.settings.voice) say("Hello! I will speak with this voice."); };
+  { const ls = $('#langSec'); if (ls) ls.addEventListener('click', e => { const b = e.target.closest('[data-lang]'), f = fam(); if (b && f) { f.kids.forEach(id => { if (ROOT.profiles[id]) ROOT.profiles[id].settings.lang = b.dataset.lang; }); save(); } }, true); }
   bindLang($('#langSec'), () => screenParents());
   $('#nameIn').addEventListener('input', e => { P.settings.name = e.target.value.trim(); P.settings.nameTouched = true; save(); });
   $('#voiceIn').onchange = e => { P.settings.voice = e.target.checked; save(); if (!P.settings.voice) hush(); };
@@ -8799,12 +8834,14 @@ function screenWelcome({ liga = '' } = {}) {
     </ul>
     ${liga ? `<p class="ob-note">🏆 ${LIGA_FROM ? `The “${esc(LIGA_FROM)}” family invites you to Chatterbox and to their league.` : "You have been invited to a family league."} First we will create your family, then join.</p>` : ''}
     <button class="big" id="obStart">Create a family</button>
+    <button class="big ghost" id="obHave">🔗 We already play on another phone</button>
     <details class="psec fe-imp"><summary>We already play on another phone</summary>
       <textarea id="feImp" rows="3" placeholder="Paste the copied progress here"></textarea>
       <div class="prow-btns"><button class="big ghost" id="feImpGo">Load</button></div><p class="fe-err" id="feErr" role="alert"></p></details>
   </div></main></div>`;
   bindLang($('.lang-pick'), () => screenWelcome({ liga }));
   $('#obStart').onclick = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
+  $('#obHave').onclick = () => { sfx.pop(); screenWhoAway(() => screenWelcome({ liga })); };
   $('#feImpGo').onclick = () => {
     let ok = false; try { ok = importCode($('#feImp').value); } catch (e) {}
     if (!ok) { $('#feErr').textContent = "Could not read the progress. Copy it again, all of it."; return; }
@@ -9811,11 +9848,7 @@ Your link:`;
     $('#hgShare').onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: "Chatterbox on the phone screen", text: HOME_STEPS_TEXT }).catch(() => {}); else copy(); };
     $('#hgCopy').onclick = () => { sfx.pop(); copy(); };
   };
-  $('#ivKids').onclick = async () => {
-    sfx.pop(); const code = exportCode();
-    let ok = false; try { await navigator.clipboard.writeText(code); ok = true; } catch (e) {}
-    $('#ivKidsOut').innerHTML = `<ol class="hg-steps"><li>${ok ? "The family's progress has been copied." : "Copy this text:"}</li><li>On the other phone, open yankona.github.io/govorilki/en/.</li><li>“We already have progress” → paste it → “Load”.</li></ol>${ok ? '' : `<textarea rows="3" readonly>${esc(code)}</textarea>`}`;
-  };
+  $('#ivKids').onclick = () => { sfx.pop(); semShare(fam(), $('#ivKidsOut')); };
   talk("Tap the button next to the name and send the invitation.");
 }
 
@@ -11099,7 +11132,7 @@ function pultAdult(f, g) {
 const pultFam = f => `<section class="psec pf"><h2>${esc(f.name)}${f.id === ROOT.curFam ? " <i class=\"fam-now\">now</i>" : ''}</h2>
   <h3 class="pf-h">Children</h3>${f.kids.filter(id => ROOT.profiles[id]).map(id => pultKid(f, id)).join('') || "<p class=\"muted\">Nobody yet.</p>"}
   <h3 class="pf-h">Adults</h3>${f.grands.map(g => pultAdult(f, g)).join('') || "<p class=\"muted\">Nobody yet: add grandparents, mum or dad, and each will get their own link.</p>"}
-  <div class="prow-btns"><button class="big ghost" data-add="${f.id}">＋ Add an adult</button></div></section>`;
+  <div class="prow-btns"><button class="big ghost" data-add="${f.id}">＋ Add an adult</button><button class="big ghost" data-semlink="${f.id}">📲 Sign in from another phone</button></div><div class="pv-out" id="pvsem-${f.id}"></div></section>`;
 // who opened their link lately: the relatives' phones say «here» on the family channel (kept there for 12 hours)
 async function pultPoll() {
   let ch = false;
@@ -11115,7 +11148,7 @@ function screenPult() {
   if (!pultOpen()) { if (!ROOT.pultPin && ROOT.parentPhone === undefined) pultWho(); else pultGate(); return; }
   const t = newScreen(), fs = Object.values(ROOT.families).filter(f => !f.guest).sort((a, b) => (b.id === ROOT.curFam) - (a.id === ROOT.curFam));
   const draw = () => `${ROOT.parentPhone === undefined ? `<section class="psec pv-who"><h2>📱 Is this your phone?</h2>
-      <p>If it is, the app will open with the control panel and will not ask for the code here. If the children play on this phone, keep the code.</p>
+      <p>If it is, the control panel will open without a code. If the children play on this phone, keep the code.</p>
       <div class="prow-btns"><button class="big" id="pvMine">Yes, it is my phone</button><button class="big ghost" id="pvKids">The children play here</button></div></section>` : ''}
     ${ROOT.adminKey && !authorLive() ? authorWaitHTML() : ''}
     ${ROOT.adminKey && authorLive() ? "<button class=\"lg-cta pv-adm\" id=\"pvAdm\"><span class=\"emo\">👑</span><span class=\"lg-t\"><b>All families</b><small>everyone who plays Chatterbox, and how they are doing</small></span><span class=\"g-go\">▶</span></button>" : ''}
@@ -11123,8 +11156,8 @@ function screenPult() {
     <p class="muted">Everyone from your families on this phone who plays or visits. Tap a child to open their game. «👀 Screen» shows what an adult sees on their own phone.</p>
     ${fs.map(pultFam).join('') || "<p class=\"lead\">There is no family on this phone yet.</p>"}
     <section class="psec"><h2>For grown-ups</h2><div class="prow-btns pv-hub"><button class="big ghost" id="pvSet">⚙️ All settings</button><button class="big ghost" id="pvInv">📨 Invite family</button><button class="big ghost" id="pvInvF">👪 Invite another family</button><button class="big ghost" id="pvFams">🏠 Families</button><button class="big ghost" id="pvLg">🏆 Family league</button></div></section>
-    <section class="psec"><h2>This phone</h2>${ROOT.adminKey ? '' : authorHTML()}<p class="muted" id="pvVer">App version: …</p><div class="prow-btns"><button class="big ghost" id="pvUpd">🔄 Check for an update</button></div>${ROOT.parentPhone
-      ? `<p>📱 This is your phone: the app opens with the control panel, no code needed. The panel is always under the 👑 button at the top of the main screen.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 The children play here: lock the panel with a code</button></div>`
+    <section class="psec"><h2>This phone</h2>${ROOT.adminKey ? '' : authorHTML()}<h3 class="pf-h">Opens at start</h3><div class="prow-btns pv-start">${[['who', "👥 Who's playing?"], ['pult', "👑 Control panel"], ['kid', "🧒 The child's game"]].map(([v, n]) => `<button class="pick-b ${(ROOT.startAt || 'who') === v ? 'sel' : ''}" data-start="${v}" aria-pressed="${(ROOT.startAt || 'who') === v}">${n}</button>`).join('')}</div><p class="muted" id="pvVer">App version: …</p><div class="prow-btns"><button class="big ghost" id="pvUpd">🔄 Check for an update</button></div>${ROOT.parentPhone
+      ? `<p>📱 This is your phone: the control panel opens without a code. The panel is always under the 👑 button at the top of the main screen.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 The children play here: lock the panel with a code</button></div>`
       : `<p>The panel is locked with a code. Open it with the 👑 button at the top of the main screen${ROOT.parentPhone === false ? '' : " or from «For grown-ups»"}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 This is my phone: no code</button><button class="big ghost" id="pvPin">🔑 Change the code</button><button class="big ghost" id="pvLock">🔒 Lock the panel</button></div>`}</section>`;
   shell("Family control panel", `<div class="pult" id="pult">${draw()}</div>`, { back: () => goHome(), guide: false, raw: true });
   const box = $('#pult');
@@ -11149,7 +11182,9 @@ function screenPult() {
   bind();
   box.onclick = e => {
     const k = e.target.closest('[data-kid]'), v = e.target.closest('[data-view]'), l = e.target.closest('[data-link]'), a = e.target.closest('[data-add]');
-    const ks = e.target.closest('[data-kset]');
+    const ks = e.target.closest('[data-kset]'), sl = e.target.closest('[data-semlink]'), sa = e.target.closest('[data-start]');
+    if (sl) { sfx.pop(); semShare(ROOT.families[sl.dataset.semlink], document.getElementById('pvsem-' + sl.dataset.semlink)); return; }
+    if (sa) { sfx.tick(); ROOT.startAt = sa.dataset.start; save(); $$('[data-start]').forEach(x => { x.classList.toggle('sel', x === sa); x.setAttribute('aria-pressed', x === sa); }); return; }
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; screenParents(); return; }
     if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
@@ -11169,7 +11204,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '84';
+const APP_VER = '85';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -11496,7 +11531,7 @@ async function openForAdmin(m, prv) {
 }
 function statSnap() {
   const ok = !!ROOT.share;
-  const fams = Object.values(ROOT.families).filter(f => !f.guest).map(f => ({ n: ok ? cleanS(f.name, 30) : '', cc: f.cc || '', gr: f.grands.length, lg: f.league ? 1 : 0,
+  const fams = Object.values(ROOT.families).filter(f => !f.guest && !f.via).map(f => ({ n: ok ? cleanS(f.name, 30) : '', cc: f.cc || '', gr: f.grands.length, lg: f.league ? 1 : 0,
     kids: f.kids.filter(id => ROOT.profiles[id]).map(id => { const pr = ROOT.profiles[id], st = pr.settings, pl = pr.plays || {};
       return { n: ok ? cleanS(st.name, 20) : '', a: st.age || 0, tr: st.track === 'l' ? 'l' : 'r', st: pr.stars || 0, sk: streakOf(pr), wl: weekLessons(pr), td: dayTotalOf(pr, dayKey()),
         last: ((pr.recent || [])[0] || [])[2] || 0, top: Object.keys(pl).sort((a, b) => pl[b] - pl[a]).slice(0, 4) }; }) }));
@@ -14680,6 +14715,234 @@ const IDEAS = (() => {
 })();
 
 /* LOGO-END */
+/* WHO-BEGIN */
+/* ---------- «Кто играет?»: the first page. The phone may keep several families; a child picks the family, then
+   themself. A child of a family that plays on another phone comes in by the family's link (#sem=…): the link carries the
+   family (names, relatives, its channel code) and each child's profile as it was when the link was made, compressed.
+   Opening it, the child taps themself; if this phone already knows the child, the grown-up picks which progress stays.
+   The old addresses (the main page, /ru/, /pt/, #kids) all open this page now. Each child keeps a language: picking a
+   child of another language opens the app in that language (#kto=<child> picks them there). ---------- */
+let SEM_HASH = null, WHO_HASH = null;
+try {
+  const sm = HASH0.match(/[#&]sem=([A-Za-z0-9_-]{8,})/), wm = HASH0.match(/[#&]kto=([a-z0-9_]{2,16})/);
+  if (sm) SEM_HASH = sm[1];
+  if (wm) WHO_HASH = wm[1];
+  if (sm || wm) history.replaceState(null, '', location.pathname + location.search);
+} catch (e) {}
+// a family link opened in a tab where the app is already open changes only the hash
+window.addEventListener('hashchange', () => {
+  const m = location.hash.match(/[#&]sem=([A-Za-z0-9_-]{8,})/); if (!m) return;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  screenSem(m[1]);
+});
+const whoFams = () => Object.values(ROOT.families).filter(f => !f.guest && f.kids.some(id => ROOT.profiles[id])).sort((a, b) => (b.id === ROOT.curFam) - (a.id === ROOT.curFam));
+// the language each child plays in: the one this phone has used for them so far (stamped at the start, before a link
+// or a pick changes the phone's language)
+function whoLangs() {
+  let ch = false;
+  whoFams().forEach(f => f.kids.forEach(id => { const st = ROOT.profiles[id] && ROOT.profiles[id].settings; if (st && !st.lang) { st.lang = langWant() || LANG; ch = true; } }));
+  if (ch) save();
+}
+// what opens when the app starts: «who» (this page, the default), «pult» (the parents' panel), «kid» (the last child)
+function whoBoot() {
+  if (DEMO || PREVIEW) return false;
+  whoLangs();
+  if (LIGA_HASH || PULT_HASH) return false;
+  if (WHO_HASH) {
+    const id = WHO_HASH; WHO_HASH = null;
+    const f = whoFams().find(x => x.kids.includes(id));
+    if (f) { whoEnter(f.id, id, true); return true; }
+  }
+  if (SEM_HASH) { const s = SEM_HASH; SEM_HASH = null; screenSem(s); return true; }
+  if (!whoFams().length) return false;
+  const at = ROOT.startAt || 'who';
+  if (at === 'pult' && !GUEST) { screenPult(); return true; }
+  if (at === 'kid' && !GUEST) return false;
+  screenWho();
+  return true;
+}
+// into the child's game: their family, their profile, their language
+function whoEnter(fid, kid, here) {
+  if (!ROOT.profiles[kid] || !ROOT.families[fid]) { goHome(); return; }
+  useFamily(fid); ROOT.cur = kid; P = ROOT.profiles[kid]; GPLAY = null;
+  if (GUEST) GUEST_OFF = true;
+  famPeople(); save();
+  const kl = P.settings.lang;
+  if (!here && !EMBEDDED && kl && kl !== LANG && langGo(kl, '#kto=' + kid)) return;
+  try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {}
+  goHome();
+}
+const whoKid = (f, id) => { const st = ROOT.profiles[id].settings; return `<button class="who-kid" data-who="${id}" data-fam="${f.id}"><span class="who-face">${kidFace(id)}</span><b>${esc(st.label || st.name || '…')}</b><small>⭐ ${ROOT.profiles[id].stars || 0}</small></button>`; };
+function screenWho(fid) {
+  newScreen(); document.body.classList.remove('quest');
+  const fams = whoFams();
+  if (!fams.length) { goHome(); return; }
+  whoLangs();
+  const one = fid && ROOT.families[fid] ? ROOT.families[fid] : fams.length === 1 ? fams[0] : null;
+  const famCard = f => { const ks = f.kids.filter(id => ROOT.profiles[id]);
+    return `<button class="who-famc" data-wfam="${f.id}"><span class="who-faces">${ks.slice(0, 4).map(id => `<span class="who-mini">${kidFace(id)}</span>`).join('')}</span><span class="who-ft"><b>${esc(f.name)}</b><small>${esc(ks.map(id => ROOT.profiles[id].settings.name).join(', '))}</small></span></button>`; };
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="who">
+    <header class="who-hero"><span class="who-ryz">${friendSVG('', 'tiger')}</span><h1 class="who-h">Who's playing?</h1></header>
+    ${one ? `<div class="who-fh">${fams.length > 1 ? "<button class=\"chip\" id=\"whoBackF\">‹ Families</button>" : ''}<b>🏠 ${esc(one.name)}</b></div>
+      <p class="who-sub">Tap yourself</p>
+      <div class="who-grid">${one.kids.filter(id => ROOT.profiles[id]).map(id => whoKid(one, id)).join('')}</div>`
+    : `<p class="who-sub">Choose your family</p><div class="who-fams">${fams.map(famCard).join('')}</div>`}
+    ${GUEST ? `<button class="who-ad" id="whoGuest"><span class="emo">${esc(grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role).e)}</span><span><b>${esc(GUEST.name)}</b><small>my screen</small></span></button>` : ''}
+    <div class="who-foot"><button class="chip" id="whoAway">🧒 I'm not here</button>${GUEST ? '' : "<button class=\"chip\" id=\"whoPult\">👑 Grown-ups</button>"}</div>
+  </div></main></div>`;
+  $('.who').onclick = e => {
+    const k = e.target.closest('[data-who]'), f = e.target.closest('[data-wfam]');
+    if (k) { sfx.magic(); whoEnter(k.dataset.fam, k.dataset.who); return; }
+    if (f) { sfx.pop(); screenWho(f.dataset.wfam); }
+  };
+  const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
+  on1('whoBackF', () => screenWho());
+  on1('whoAway', () => screenWhoAway(() => screenWho(fid)));
+  on1('whoPult', () => screenPult());
+  on1('whoGuest', () => { GUEST_OFF = false; screenGuest(); });
+  later(() => say(one ? "Who's playing? Tap yourself." : "Who's playing? Choose your family."), 400);
+}
+// a child whose family is not on this phone: the family's link, or the old progress text
+function screenWhoAway(back) {
+  newScreen();
+  shell("Join your family", `<div class="who-away">
+    <div class="lg-hero">${pic('🔗')}<div><h2>Does your family play on another phone?</h2>
+      <p>Ask Mum or Dad to send you the family link: in their app it is 👑 Control panel → «📲 Sign in from another phone». Open it on this phone and tap yourself: your stars and progress come with the link.</p></div></div>
+    <label class="who-lbl" for="waTxt">Or paste the link here</label>
+    <textarea id="waTxt" rows="3" autocomplete="off" placeholder="https://yankona.github.io/govorilki/…#sem=…"></textarea>
+    <div class="prow-btns"><button class="big" id="waGo">Sign in</button></div><p class="fe-err" id="waErr" role="alert"></p>
+    <div class="prow-btns"><button class="big ghost" id="waNew">＋ New family</button></div>
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  $('#waGo').onclick = () => {
+    const v = String($('#waTxt').value || '').trim(), m = v.match(/sem=([A-Za-z0-9_-]{8,})/);
+    if (m) { sfx.pop(); screenSem(m[1], back); return; }
+    let ok = false; try { ok = v.startsWith('GOV2:') && importCode(v); } catch (e) {}
+    if (ok) { sfx.magic(); screenWho(ROOT.curFam); return; }
+    $('#waErr').textContent = "Couldn't read it. Copy the whole link again.";
+  };
+  $('#waNew').onclick = () => { sfx.pop(); screenFamilyEdit(null, { first: !whoFams().length }); };
+}
+
+/* the family's link: compressed when the browser can (deflate-raw), plain otherwise; base64url in the hash */
+const semB64 = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const semUnB64 = s => { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; const b = atob(s), u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; };
+const semPipe = async (u8, T) => new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(T)).arrayBuffer());
+async function semEncode(obj) {
+  const raw = new TextEncoder().encode(JSON.stringify(obj, (k, v) => typeof v === 'string' && v.length > 1500 && v.startsWith('data:') ? undefined : v));
+  if (window.CompressionStream) { try { return 'z' + semB64(await semPipe(raw, new CompressionStream('deflate-raw'))); } catch (e) {} }
+  return 'j' + semB64(raw);
+}
+async function semDecode(s) {
+  const kind = s[0], u = semUnB64(s.slice(1));
+  if (kind === 'j') return JSON.parse(new TextDecoder().decode(u));
+  if (kind !== 'z' || !window.DecompressionStream) throw new Error('format');
+  return JSON.parse(new TextDecoder().decode(await semPipe(u, new DecompressionStream('deflate-raw'))));
+}
+// the link for the children of family f, with their progress as it is now (drawings stay on this phone)
+async function semLink(f) {
+  const kids = f.kids.filter(id => ROOT.profiles[id]);
+  const data = { v: 1, l: LANG, at: Date.now(),
+    fam: { id: f.id, name: f.name, cc: f.cc || '', cc2: f.cc2 || '', code: famCodeOf(f), grands: f.grands.map(g => ({ id: g.id, name: g.name, she: g.she ? 1 : 0, role: g.role || '', e: g.e || '', cc: g.cc || '' })) },
+    kids, prof: Object.fromEntries(kids.map(id => [id, { ...ROOT.profiles[id], art: [] }])) };
+  const base = EMBEDDED ? 'https://yankona.github.io/govorilki/' + langPath(LANG) : SITE;
+  return base + '#sem=' + await semEncode(data);
+}
+// what a link may carry: a family with an id and children with settings; anything else makes it unreadable
+function semCheck(d) {
+  if (!d || d.v !== 1 || !d.fam || !Array.isArray(d.kids) || !d.prof || typeof d.prof !== 'object') return null;
+  const kids = d.kids.filter(id => ID_RE.test(id) && d.prof[id] && typeof d.prof[id] === 'object' && d.prof[id].settings && typeof d.prof[id].settings === 'object');
+  if (!kids.length) return null;
+  return { ...d, kids, l: LANGS.some(x => x[0] === d.l) ? d.l : LANG, at: +d.at || Date.now() };
+}
+// the same family on this phone: the same id with one of its children, or the same channel code
+function semFam(d) {
+  const F = d.fam, f = ROOT.families[F.id];
+  if (f && !f.guest && (d.kids.some(k => f.kids.includes(k)) || f.code && f.code === F.code)) return f;
+  return Object.values(ROOT.families).find(x => !x.guest && x.code && x.code === F.code) || null;
+}
+function semApply(d, kidId, take) {
+  const F = d.fam;
+  let f = semFam(d);
+  if (!f) {
+    const fid = !ID_RE.test(F.id) || ROOT.families[F.id] ? 'f' + rid6() : F.id;
+    f = ROOT.families[fid] = { id: fid, name: cleanS(F.name, 30) || "Family", cc: /^[A-Z]{2}$/.test(F.cc) ? F.cc : 'PT', ...(/^[A-Z]{2}$/.test(F.cc2) ? { cc2: F.cc2 } : {}), kids: [],
+      grands: (Array.isArray(F.grands) ? F.grands : []).filter(g => g && ID_RE.test(g.id)).slice(0, 12).map(g => ({ id: g.id, name: cleanS(g.name, 30) || "Grandma", she: !!g.she, ...(KIN_IDS.includes(g.role) ? { role: g.role } : {}), ...(/^[A-Z]{2}$/.test(g.cc) ? { cc: g.cc } : {}) })),
+      ...(/^[a-z0-9]{8,40}$/.test(F.code || '') ? { code: F.code } : {}), via: 1 };
+  }
+  let pick = null;
+  d.kids.forEach(id => {
+    const o = d.prof[id], owner = Object.values(ROOT.families).find(x => x !== f && x.kids.includes(id));
+    const lid = owner ? 'k' + rid6() : id;   // another family's child with the same id keeps it; this one gets a new one
+    const have = ROOT.profiles[lid] && f.kids.includes(lid);
+    if (!have || (take && id === kidId)) {
+      const st = o.settings, cur = ROOT.profiles[lid], b = blankProfile(cleanS(st.name, 30), st.gender === 'm' ? 'm' : 'f', st.track === 'l' ? 'l' : 'r', FRIENDS[st.friend] ? st.friend : '');
+      ROOT.profiles[lid] = { ...b, ...o, art: cur && cur.art || [], book: { ...b.book, ...(o.book || {}) }, settings: { ...b.settings, ...st, name: cleanS(st.name, 30), lang: LANGS.some(x => x[0] === st.lang) ? st.lang : d.l } };
+    }
+    if (!f.kids.includes(lid)) f.kids.push(lid);
+    if (id === kidId) pick = lid;
+  });
+  save();
+  return { fid: f.id, kid: pick };
+}
+const semDate = at => at ? new Date(at).toLocaleDateString(LOC, { day: 'numeric', month: 'long' }) : '';
+// the link opened: the family's children, as in the link
+async function screenSem(s, back) {
+  const t = newScreen();
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="who"><header class="who-hero"><span class="who-ryz">${friendSVG('', 'tiger')}</span><h1 class="who-h">Who's playing?</h1></header><p class="who-sub">Opening the family link…</p></div></main></div>`;
+  let d = null; try { d = semCheck(await semDecode(s)); } catch (e) {}
+  if (t !== tok) return;
+  if (!d) {
+    app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="who"><header class="who-hero"><span class="who-ryz">${friendSVG('', 'tiger')}</span><h1 class="who-h">The link did not open</h1></header>
+      <p class="who-sub">Maybe it was not copied in full. Ask for it to be sent again.</p><div class="prow-btns"><button class="big" id="semOk">Next</button></div></div></main></div>`;
+    $('#semOk').onclick = () => { sfx.pop(); (back || goHome)(); };
+    return;
+  }
+  SEM_LAST = s;
+  const loc = semFam(d);
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="who">
+    <header class="who-hero"><span class="who-ryz">${friendSVG('', 'tiger')}</span><h1 class="who-h">Who's playing?</h1></header>
+    <div class="who-fh"><b>🏠 ${esc(cleanS(d.fam.name, 30) || "Family")}</b></div>
+    <p class="who-sub">Tap yourself</p>
+    <div class="who-grid">${d.kids.map(id => { const o = d.prof[id], st = o.settings;
+      return `<button class="who-kid" data-sk="${id}"><span class="who-face">${friendSVG('', FRIENDS[st.friend] ? st.friend : 'tiger')}</span><b>${esc(cleanS(st.name, 30) || '…')}</b><small>⭐ ${+o.stars || 0}</small></button>`; }).join('')}</div>
+    <p class="muted who-note">Link from ${esc(semDate(d.at))}${loc ? " · this family is already on the phone" : ''}</p>
+    <div class="who-foot"><button class="chip" id="semNo">‹ Not my family</button></div>
+  </div></main></div>`;
+  $('#semNo').onclick = () => { sfx.pop(); whoFams().length ? screenWho() : goHome(); };
+  $('.who-grid').onclick = e => {
+    const b = e.target.closest('[data-sk]'); if (!b) return;
+    sfx.magic();
+    const id = b.dataset.sk, o = d.prof[id], f = semFam(d), mine = f && f.kids.includes(id) && ROOT.profiles[id];
+    if (mine && ((+o.stars || 0) !== (mine.stars || 0) || (+o.upd || 0) !== (mine.upd || 0))) { screenSemPick(d, id, mine); return; }
+    const r = semApply(d, id, false); whoEnter(r.fid, r.kid);
+  };
+  later(() => say("Who's playing? Tap yourself."), 400);
+}
+// the child is on this phone already and the link has other progress: which one stays
+function screenSemPick(d, id, mine) {
+  newScreen();
+  const o = d.prof[id], st = o.settings, she = st.gender !== 'm', name = cleanS(st.name, 30), oAt = +o.upd || d.at, mAt = mine.upd || 0, newL = oAt >= mAt;
+  shell("Which stars to keep?", `<div class="who-pick">
+    <div class="lg-hero"><span class="who-face">${friendSVG('', FRIENDS[st.friend] ? st.friend : 'tiger')}</span><p class="lead">${esc(name)} ${she ? "has played" : "has played"} on this phone before. Which stars and progress should stay? The other ones on this phone will be replaced.</p></div>
+    <button class="who-opt" data-take="0"><b>📱 As on this phone</b><small>⭐ ${mine.stars || 0}${mAt ? ' · ' + esc(semDate(mAt)) : ''}</small>${newL ? '' : "<i>newer</i>"}</button>
+    <button class="who-opt" data-take="1"><b>🔗 As in the link</b><small>⭐ ${+o.stars || 0} · ${esc(semDate(oAt))}</small>${newL ? "<i>newer</i>" : ''}</button>
+  </div>`, { back: () => screenSem(SEM_LAST || '', null), guide: false, raw: true });
+  $('.who-pick').onclick = e => { const b = e.target.closest('[data-take]'); if (!b) return; sfx.magic(); const r = semApply(d, id, b.dataset.take === '1'); whoEnter(r.fid, r.kid); };
+}
+let SEM_LAST = '';
+// for the grown-ups: the link for the children of family f, to send to another phone
+async function semShare(f, out) {
+  if (!out) return;
+  out.innerHTML = "<p class=\"muted\">Making the link…</p>";
+  let url = ''; try { url = await semLink(f); } catch (e) {}
+  if (!out.isConnected) return;
+  if (!url) { out.innerHTML = "<p class=\"muted\">Couldn't make the link on this phone.</p>"; return; }
+  const names = f.kids.filter(x => ROOT.profiles[x]).map(x => ROOT.profiles[x].settings.name).join(', '), id = 'sem' + rid(5);
+  const msg = `Sign in to Chatterbox for the children: ${names}. Open the link on another phone and tap yourself. Stars and progress as of ${semDate(Date.now())}.`;
+  out.innerHTML = `<div class="fam-steps">${shareRow(msg, url, id)}<p class="muted">Send it only to your own people: the link carries the children's names and progress. The link is a snapshot of today: what the child does on the other phone stays there (from there you can send the same kind of link back).</p></div>`;
+  bindShare(id, msg, url, s => out.insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`));
+}
+/* WHO-END */
 /* ---------- the three languages. Each language is its own page (/ English, /ru/, /pt/; /en/ is English too, for old
    links) built from this one; the progress is shared, because the pages live on one site. The choice is remembered on
    the phone: the welcome screen asks first, the parents' settings and the relatives' screen can change it. ---------- */
@@ -14702,6 +14965,7 @@ function langGo(l, hash = location.hash) {
 // before there were languages, stays Russian
 function langRedirect() {
   if (EMBEDDED) return false;
+  if (/[#&]sem=/.test(HASH0)) return false;
   let want = langWant();
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
   const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';
