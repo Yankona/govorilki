@@ -2223,6 +2223,34 @@ body.pv-on #app{padding-top:52px}
 .wn-row{justify-content:center;flex-wrap:wrap}
 .who-gtop{display:flex;align-items:center;justify-content:flex-start;gap:10px}.who-gtop b{font:800 18px var(--f-body);color:var(--ink)}
 /* FAM106-CSS-END */
+/* TRAVEL-CSS */
+.tv{max-width:680px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.tv-pass{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:22px;background:var(--paper);box-shadow:inset 0 0 0 3px var(--line),0 5px 0 var(--line-strong)}
+.tv-ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}.tv-ph b{font:800 19px var(--f-body);color:var(--ink)}.tv-ph span{font:800 15px var(--f-body);color:var(--ink-soft)}
+.tv-stamps{display:flex;flex-wrap:wrap;gap:6px}
+.tv-s{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;font:400 22px/1 var(--f-emoji);background:var(--line);filter:grayscale(1);opacity:.45}
+.tv-s.on{filter:none;opacity:1;background:var(--t-yellow);box-shadow:inset 0 0 0 2px var(--sun);transform:rotate(-8deg)}
+.tv-pass small{font:700 14px/1.35 var(--f-body);color:var(--ink-soft)}
+.tv-row{justify-content:center;flex-wrap:wrap}
+.tv-h{margin:6px 0 0;font:800 20px var(--f-body);color:var(--ink)}
+.tv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.tv-c{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 8px 12px;border:0;border-radius:20px;background:var(--bg,var(--paper));color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit}
+.tv-e{font:400 44px/1 var(--f-emoji)}.tv-f{position:absolute;top:8px;left:10px;font:400 20px/1 var(--f-emoji)}
+.tv-c b{font:800 16px/1.2 var(--f-body);text-align:center}.tv-c small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.tv-st{position:absolute;top:6px;right:8px;font:400 22px/1 var(--f-emoji);font-style:normal;transform:rotate(12deg)}
+.tv-q{display:flex;flex-direction:column;gap:10px}
+.tv-n{margin:0;text-align:center;font:800 15px var(--f-body);color:var(--ink-soft)}
+.tv-pic{position:relative;display:grid;place-items:center;min-height:120px;border-radius:22px;overflow:hidden;background:var(--paper);box-shadow:inset 0 0 0 3px var(--line)}
+.tv-pic img{display:block;width:100%;max-height:min(42vh,320px);object-fit:cover}.tv-pic img+.tv-big{display:none}
+.tv-big{font:400 84px/1 var(--f-emoji);padding:14px}
+.tv-t{margin:0;text-align:center;font:800 22px/1.25 var(--f-body);color:var(--ink)}
+.tv-ask{margin:0;text-align:center;font:800 18px var(--f-body);color:var(--ink-soft)}
+.tv-opts{display:grid;gap:8px}
+.tv-o{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);font:800 18px var(--f-body);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);text-align:left}
+.tv-o span{font:400 28px/1 var(--f-emoji)}.tv-o:disabled{cursor:default}
+.tv-o.yes{background:var(--t-mint);box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}.tv-o.no{opacity:.5}
+.tv-ans{padding:12px 14px;border-radius:18px;background:var(--t-yellow);color:var(--ink)}.tv-ans p{margin:0 0 8px;font:700 17px/1.45 var(--f-body)}
+/* TRAVEL-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -3237,7 +3265,7 @@ function homeSearch() {
   ov.innerHTML = `<div class="srch-box"><div class="srch-row"><input id="srchIn" type="search" placeholder="Find a game…" autocomplete="off" enterkeyhint="search"><button class="ibtn" id="srchX" aria-label="Close">✕</button></div><div class="srch-list" id="srchList"></div></div>`;
   document.body.append(ov);
   const norm = x => String(x).toLowerCase().replace(/ё/g, "е");
-  const draw = q => { const n = norm(q.trim()); const hit = all.filter(g => !n || norm(nm(g.name) + ' ' + (typeof g.sub === 'function' ? g.sub() : g.sub)).includes(n));
+  const draw = q => { const n = norm(q.trim()); const hit = all.filter(g => !n || norm(nm(g.name) + ' ' + (typeof g.sub === 'function' ? g.sub() : g.sub) + ' ' + (g.kw ? nm(g.kw) : '')).includes(n));
     $('#srchList').innerHTML = hit.map(g => `<button class="srch-i" data-id="${g.id}"><span class="tile-ico">${g.ico()}</span><span><b>${nm(g.name)}</b><small>${esc(typeof g.sub === 'function' ? g.sub() : g.sub)}</small></span></button>`).join('') || `<p class="lead">Nothing found</p>`; };
   draw('');
   const close = () => ov.remove();
@@ -6877,7 +6905,7 @@ function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
   const st = shell(T.name, `<p class="lead">${Q() ? "Read aloud, and then answer the question." : "Listen to the story and answer the question."}</p>
-    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
+    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`, { back: T.place ? () => TRAVEL.screen() : null });
   talk(Q() ? "Choose a story. Read it aloud and answer the question." : "Choose a story. I will tell it, and you will answer the question.");
   st.onclick = e => { const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
@@ -11488,7 +11516,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '107';
+const APP_VER = '108';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15823,6 +15851,84 @@ function screenFamOut(f, back) {
   };
 }
 /* OUT-END */
+/* TRAVEL-BEGIN */
+/* ---------- «Путешествие по миру»: the city and country stories in one game instead of a tile each. A passport gets a
+   stamp for a place after 3 of its stories; postcards of our places, then of the world; «Полетели наугад» (a place
+   without a stamp yet); «Угадай, где это»: a photo or a story's title, three places to choose from. The places are the
+   family's choice (placeOn). ---------- */
+const TRAVEL = (() => {
+  const STAMP = 3, QN = 5;
+  const places = () => PLACES().filter(placeOn);
+  const read = k => learnItems(k).filter(x => learnDone(x.id)).length;
+  const stamped = k => read(k) >= Math.min(STAMP, learnItems(k).length);
+  const flag = k => FLAG(LEARN[k].place);
+  const card = k => { const n = read(k), all = learnItems(k).length;
+    return `<button class="tv-c ${stamped(k) ? 'got' : ''}" data-k="${k}" style="--bg:${LEARN[k].bg}"><span class="tv-e">${LEARN[k].e}</span><span class="tv-f">${flag(k)}</span><b>${esc(LEARN[k].name)}</b><small>${n ? `${n} of ${all}` : `${all} ${plural(all, ["story", "stories", "stories"])}`}</small>${stamped(k) ? '<i class="tv-st">🛂</i>' : ''}</button>`; };
+
+  function screen() {
+    newScreen();
+    const ps = places(), own = ownPlaces().filter(k => ps.includes(k)), rest = ps.filter(k => !own.includes(k)), got = ps.filter(stamped);
+    shell("Journey round the world", `<div class="tv">
+      <div class="tv-pass"><div class="tv-ph"><b>🛂 My passport</b><span>stamps: ${got.length} of ${ps.length}</span></div>
+        <div class="tv-stamps">${ps.map(k => `<span class="tv-s ${stamped(k) ? 'on' : ''}" title="${esc(LEARN[k].name)}">${flag(k)}</span>`).join('')}</div>
+        <small>Read ${STAMP} stories about a place, and a stamp appears in your passport.</small></div>
+      <div class="prow-btns tv-row"><button class="big" id="tvQuiz">🧭 Guess where it is</button><button class="chip" id="tvRand">🎲 Fly somewhere at random</button></div>
+      ${own.length ? `<h2 class="tv-h">Our places</h2><div class="tv-grid">${own.map(card).join('')}</div>` : ''}
+      ${rest.length ? `<h2 class="tv-h">${own.length ? "The whole world" : "Where shall we fly?"}</h2><div class="tv-grid">${rest.map(card).join('')}</div>` : ''}
+    </div>`);
+    talk(got.length ? `Your passport already has ${got.length} ${plural(got.length, ["stamp", "stamps", "stamps"])}! Where shall we fly next?` : "Where shall we fly? Pick a city or a country. Or play “Guess where it is”.");
+    $('.tv').onclick = e => { const c = e.target.closest('[data-k]'); if (c) { sfx.pop(); screenLearn(c.dataset.k); } };
+    $('#tvRand').onclick = () => { sfx.magic(); const pool = ps.filter(k => !stamped(k)); screenLearn(pickOne(pool.length ? pool : ps)); };
+    $('#tvQuiz').onclick = () => { sfx.pop(); quiz(); };
+  }
+
+  // a story whose title names its own place would give the answer away
+  const stems = k => LEARN[k].name.toLowerCase().split(/[\s,]+/).filter(w => w.length >= 3).map(w => w.slice(0, 4));
+  function questions() {
+    const ps = places(), pool = [];
+    ps.forEach(k => learnItems(k).forEach((it, i) => { const t = it.t.toLowerCase(); if (!stems(k).some(s => t.includes(s))) pool.push({ k, i, it }); }));
+    const out = [], used = new Set();
+    for (const q of shuffle(pool)) { if (out.length >= QN) break; if (used.has(q.k) && used.size < ps.length) continue; used.add(q.k); out.push(q); }
+    return out.map(q => ({ ...q, opts: shuffle([q.k, ...shuffle(ps.filter(x => x !== q.k)).slice(0, 2)]) }));
+  }
+  function quiz() {
+    // one answer per question, then «Дальше»: no lock after a wrong one
+    newScreen(); noGuard();
+    if (places().length < 3) { screen(); return; }
+    const qs = questions(); let n = 0, right = 0;
+    shell("Guess where it is", `<div class="tv"><div class="tv-q" id="tvQ"></div></div>`, { back: screen });
+    const show = () => {
+      const q = qs[n], img = learnImg(q.it.id), src = img ? img[3] || `${SITE_ROOT}img/learn/${q.it.id}.webp` : '';
+      $('#tvQ').innerHTML = `<p class="tv-n">${n + 1} of ${qs.length}</p>
+        <div class="tv-pic">${src ? `<img src="${esc(src)}" alt="" onerror="this.remove()">` : ''}<span class="tv-big">${q.it.e}</span></div>
+        <h2 class="tv-t">${esc(q.it.t)}</h2><p class="tv-ask">Where is it?</p>
+        <div class="tv-opts">${q.opts.map(k => `<button class="tv-o" data-k="${k}"><span>${flag(k)}</span>${esc(LEARN[k].name)}</button>`).join('')}</div>
+        <div class="tv-ans" id="tvAns" hidden></div>`;
+      talk(`Where is it? ${q.it.t}`);
+      $('.tv-opts').onclick = e => {
+        const b = e.target.closest('[data-k]'); if (!b || $('#tvAns').hidden === false) return;
+        const ok = b.dataset.k === q.k; if (ok) right++;
+        $$('.tv-o').forEach(x => { x.disabled = true; x.classList.toggle('yes', x.dataset.k === q.k); x.classList.toggle('no', x === b && !ok); });
+        const first = sentences(q.it.s)[0].trim();
+        $('#tvAns').hidden = false;
+        $('#tvAns').innerHTML = `<p><b>${ok ? "Yes!" : "It’s"} ${esc(LEARN[q.k].name)} ${flag(q.k)}</b> ${esc(first)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < qs.length ? "Next →" : "Done"}</button></div>`;
+        if (ok) { sfx.good(); talk(`Yes! It’s ${LEARN[q.k].name}. ${first}`); } else { sfx.oops(); talk(`It’s ${LEARN[q.k].name}. ${first}`); }
+        $('#tvNext').onclick = () => { sfx.pop(); n++; if (n < qs.length) show(); else finish({ key: 'travel-quiz', stars: right >= 4 ? 3 : right >= 2 ? 2 : 1, line: `Guessed ${right} of ${qs.length}`, again: quiz, menu: screen }); };
+      };
+    };
+    show();
+  }
+
+  // one tile for all places; the old tiles of the places stay for links and «Недавно», but leave the lists
+  GAMES.forEach(g => { if (g.place) g.hide = () => true; });
+  const at = GAMES.findIndex(g => g.place);
+  GAMES.splice(at < 0 ? GAMES.length : at, 0, { id: 'travel', name: "Journey round the world", sub: () => { const ps = places(), got = ps.filter(stamped).length; return got ? `passport stamps: ${got} of ${ps.length}` : "cities and countries: stories, a passport, guess where"; },
+    kw: () => places().map(k => LEARN[k].name).join(' '), ico: () => pic('✈️'), bg: 'var(--t-blue)', go: () => screen(), grp: 10 });
+  // interests that pointed at a city tile point at the journey now
+  LIKES_BASE.forEach(x => { if (!Array.isArray(x.tiles)) return; const t = x.tiles.map(id => /^learn-/.test(id) && LEARN[id.slice(6)] && LEARN[id.slice(6)].place ? 'travel' : id); x.tiles.splice(0, x.tiles.length, ...new Set(t)); });
+  return { screen, quiz };
+})();
+/* TRAVEL-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
