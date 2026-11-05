@@ -2208,6 +2208,10 @@ body.pv-on #app{padding-top:52px}
 .ty-make span{font:400 44px/1 var(--f-emoji)}.ty-make b{font:800 19px var(--f-body)}.ty-make small{font:700 14px var(--f-body);color:var(--ink-soft)}
 .ty-acts{grid-column:auto;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start}
 /* TOY-CSS-END */
+/* OUT-CSS */
+.fo-p{margin:0;font:700 17px/1.45 var(--f-body);color:var(--ink)}.fo-row{justify-content:center;flex-wrap:wrap}
+.fo-msg{margin:0;font:700 16px/1.4 var(--f-body);color:var(--ink-soft);text-align:center}.fo-msg:empty{display:none}
+/* OUT-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -11465,7 +11469,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '104';
+const APP_VER = '105';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15749,9 +15753,57 @@ const TOY = (() => {
     if ($('#toyEdit')) $('#toyEdit').onclick = e => { e.stopPropagation(); sfx.pop(); screenToy(); };
     if ($('#toyDel')) $('#toyDel').onclick = e => { e.stopPropagation(); if (!confirm("Remove your hero? The photo will be deleted from this phone.")) return; sfx.pop(); remove(); screenFriends(); };
   }
-  return { screenToy, pickHTML, bindPick, register, mine };
+  // a family leaves this phone: its children's photos go too
+  function forget(ids) { let ch = false; ids.forEach(id => { if (TOYS[id]) { delete TOYS[id]; ch = true; } }); if (!ch) return; try { localStorage.setItem(KEY, JSON.stringify(TOYS)); } catch (e) {} register(); }
+  return { screenToy, pickHTML, bindPick, register, mine, forget };
 })();
 /* TOY-END */
+/* OUT-BEGIN */
+/* ---------- «Выйти»: a phone that is in a family by its login leaves it from «Кто играет?». The children's progress is
+   saved to the cloud first (and checked); then the family, its children and their photo heroes leave this phone.
+   The way back is the family's login and its 4 pictures. ---------- */
+const famSyncedNow = f => !!f.cloud && f.kids.every(id => { const p = ROOT.profiles[id]; return !p || (f.cloud.sent && f.cloud.sent[id] !== undefined && (p.upd || 0) <= f.cloud.sent[id]); });
+async function famSync(f) {
+  try {
+    if (!CL_READY || !CL_READY.has(f.id)) await cloudPull(f);
+    clearTimeout(CL_T);
+    for (let i = 0; i < 4 && !famSyncedNow(f); i++) { await cloudPushNow(); if (!famSyncedNow(f)) await wait(700); }
+  } catch (e) {}
+  return famSyncedNow(f);
+}
+function famDrop(f) {
+  const t = f.cloud && f.cloud.token;
+  if (t) cloudApi('POST', '/v1/logout', {}, t).catch(() => {});
+  // a child who is also in another family on this phone stays
+  const gone = f.kids.filter(id => !Object.values(ROOT.families).some(o => o !== f && o.kids.includes(id)));
+  try { TOY.forget(gone); } catch (e) {}
+  gone.forEach(id => delete ROOT.profiles[id]); delete ROOT.families[f.id];
+  if (typeof GPLAY !== 'undefined' && GPLAY && GPLAY.fam === f.id) GPLAY = null;
+  useFamily(Object.keys(ROOT.families).find(id => !ROOT.families[id].guest) || Object.keys(ROOT.families)[0]);
+  P = ROOT.profiles[ROOT.cur] || blankProfile('', 'f', 'r', ''); famPeople(); save();
+  if (whoFams().length) screenWho(); else goHome();
+}
+function screenFamOut(f, back) {
+  newScreen();
+  shell("Leave the family", `<div class="cl">
+    <p class="lead" id="foQ">Leave the family “${esc(f.name)}” on this phone?</p>
+    <p class="fo-p">The children’s stars and progress are kept in the cloud; on other phones everything stays. To come back here you need the family login <b>${esc(f.cloud.login)}</b> and the 4 pictures.</p>
+    <div class="prow-btns fo-row"><button class="big" id="foGo">🚪 Leave</button><button class="chip" id="foStay">Stay</button></div>
+    <p class="fo-msg" id="foMsg"></p></div>`, { back });
+  talk("Leave the family on this phone? Everything is saved in the cloud. You can come back with the login and the four pictures.");
+  let force = false;
+  $('#foStay').onclick = () => { sfx.pop(); back(); };
+  $('#foGo').onclick = async () => {
+    sfx.pop(); const b = $('#foGo'), m = $('#foMsg');
+    if (!force) {
+      b.disabled = true; m.textContent = "Saving the stars to the cloud…";
+      const ok = await famSync(f); b.disabled = false;
+      if (!ok) { force = true; m.textContent = "No connection to the cloud: the stars of the last games are not saved yet. If you leave now, they won’t be on the other phones either. Better connect to the internet and tap again."; b.textContent = "🚪 Leave anyway"; return; }
+    }
+    famDrop(f);
+  };
+}
+/* OUT-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
@@ -16304,7 +16356,13 @@ function screenWho(fid) {
   if (GUEST && one && one.grands.some(g => g.id === GUEST.who) && (one.code || (one.id === 'main' && ROOT.fam)) === GUEST.fam) { const wg = $('#whoGuest'); if (wg) wg.remove(); }
   // with the family's login the links are not needed: the login is the way in
   if (cloudOn()) { const wa = $('#whoAway'); if (wa) wa.remove(); const wp = $('#whoPult'); if (wp) wp.textContent = "👑 Control panel"; }
-  if (cloudOn()) { $('.who-foot').insertAdjacentHTML('afterbegin', "<button class=\"chip\" id=\"whoLogin\">🔑 Join your family</button>"); on1('whoLogin', () => screenCloudLogin({ back: () => screenWho(fid) })); }
+  if (cloudOn()) {
+    // a phone in this family by its login can leave it; a phone that is not can come in
+    const lf = one && one.cloud && !one.cloud.off && !one.guest ? one : null;
+    $('.who-foot').insertAdjacentHTML('afterbegin', lf ? "<button class=\"chip\" id=\"whoOut\">🚪 Leave</button>" : "<button class=\"chip\" id=\"whoLogin\">🔑 Join your family</button>");
+    on1('whoLogin', () => screenCloudLogin({ back: () => screenWho(fid) }));
+    on1('whoOut', () => screenFamOut(lf, () => screenWho(fid)));
+  }
   whoMovedNote($('.who'));
   on1('whoBackF', () => screenWho());
   on1('whoAway', () => screenWhoAway(() => screenWho(fid)));
