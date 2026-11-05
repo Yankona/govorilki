@@ -3253,13 +3253,15 @@ function navEnter(back) {
   try { if (!(history.state && history.state.gv)) history.pushState({ gv: 1 }, '', location.pathname + location.search + location.hash); } catch (e) {}
 }
 function navHome() {
+  // the game's own history entry stays: stepping back from it would light the browser's «forward» arrow
   NAV_BACK = null;
-  try { if (history.state && history.state.gv) { NAV_SILENT = true; history.back(); } } catch (e) {}
 }
 window.addEventListener('popstate', () => {
   if (NAV_SILENT) { NAV_SILENT = false; return; }
   const b = NAV_BACK; NAV_BACK = null;
   if (b) { try { sfx.pop(); } catch (e) {} b(); }
+  // back on the game's own entry: a fresh entry drops the one the browser would go «forward» to
+  try { if (!(history.state && history.state.gv)) history.pushState({ gv: 1 }, '', location.pathname + location.search + location.hash); } catch (e) {}
 });
 let LANG_CHECKED = false;
 function goHome() {
@@ -11481,7 +11483,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '106';
+const APP_VER = '107';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
