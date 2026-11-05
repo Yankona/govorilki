@@ -73,13 +73,19 @@ img{max-width:100%}
       Object.keys(keys).forEach(function (k) {
         if (!/^govorilki/.test(k) || /demo/.test(k)) return;
         if (k === 'govorilki-v2' && here && here.profiles) {
-          // this address has a family already: add the families and children it does not have
+          // this address has a family already: add the families and children it does not have; a child it has already
+          // is put aside, and the game merges the two copies at its start (kidMerge), so neither copy's stars are lost
           var t; try { t = JSON.parse(keys[k]); } catch (e) { return; }
           here.families = here.families || {};
+          var aside = {}, n = 0;
           Object.keys(t.families || {}).forEach(function (f) { if (!here.families[f]) here.families[f] = t.families[f]; });
-          Object.keys(t.profiles || {}).forEach(function (p) { if (!here.profiles[p]) here.profiles[p] = t.profiles[p]; });
+          Object.keys(t.profiles || {}).forEach(function (p) { if (!here.profiles[p]) here.profiles[p] = t.profiles[p]; else { aside[p] = t.profiles[p]; n++; } });
           if (!here.curFam && t.curFam) { here.curFam = t.curFam; here.cur = t.cur; }
           try { localStorage.setItem(k, JSON.stringify(here)); } catch (e) {}
+          if (n) {
+            try { localStorage.setItem('govorilki-merge-in', JSON.stringify({ at: Date.now(), profiles: aside })); }
+            catch (e) { try { Object.keys(aside).forEach(function (p) { aside[p] = Object.assign({}, aside[p], { art: [] }); }); localStorage.setItem('govorilki-merge-in', JSON.stringify({ at: Date.now(), profiles: aside })); } catch (x) {} }
+          }
           return;
         }
         if (localStorage.getItem(k) === null) { try { localStorage.setItem(k, keys[k]); } catch (e) {} }
@@ -2212,6 +2218,15 @@ for (const f of Object.values(ROOT.families)) for (const id of f.kids) {
   const b = blankProfile(o.settings.name, o.settings.gender, o.settings.track, o.settings.friend);
   ROOT.profiles[id] = { ...b, ...o, book: { ...b.book, ...(o.book || {}) }, settings: { ...b.settings, ...o.settings } };
 }
+// MERGE-IN: what the old address carried over for children this phone already has (the move script puts it aside):
+// the two copies merge (kidMerge in the family-login part), so the stars of neither copy are lost
+try {
+  const mi = JSON.parse(localStorage.getItem('govorilki-merge-in') || 'null');
+  if (mi && mi.profiles) {
+    Object.keys(mi.profiles).forEach(id => { const loc = ROOT.profiles[id], o = mi.profiles[id]; if (!loc || !o || !o.settings) return; const m = kidMerge(loc, o); if (m) ROOT.profiles[id] = m; });
+    localStorage.removeItem('govorilki-merge-in'); localStorage.setItem(KEY2, JSON.stringify(ROOT));
+  }
+} catch (e) {}
 const fam = () => ROOT.families[ROOT.curFam] || null;
 let KIDS = [];
 function useFamily(fid) {
@@ -2222,7 +2237,7 @@ function useFamily(fid) {
 useFamily(ROOT.curFam);
 // before any family exists (a new phone, until the family is created) the screens still need a profile to read
 let P = ROOT.profiles[ROOT.cur] || blankProfile('', 'f', 'r', '');
-const save = () => { try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P && !cloudFamOf(ROOT.cur)) P.upd = Date.now(); try { cloudStamp(); } catch (e) {} localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} try { cloudSoon(); } catch (e) {} };
+const save = () => { try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P && !Object.values(ROOT.families || {}).some(f => f.cloud && !f.cloud.off && !f.guest && f.kids.includes(ROOT.cur))) P.upd = Date.now(); try { cloudStamp(); } catch (e) {} localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} try { cloudSoon(); } catch (e) {} };
 /* names in Russian: «Сава» → Савы, Саве, Саву, Савой; each word of «Бабушка Нина» too */
 function declWord(w, she) {
   const low = w.toLowerCase(), last = low.slice(-1), prev = low.slice(-2, -1), base = w.slice(0, -1);
@@ -11350,7 +11365,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '93';
+const APP_VER = '94';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14998,6 +15013,11 @@ const WORLD = (() => {
    Hidden until the server's address is set, and in the artifact, the test sandbox and the panel's preview. ---------- */
 var CLOUD = /*__CLOUD__*/'https://govorilki-cloud.yankona.workers.dev';
 var CL_T = null, CL_BUSY = false, CL_PJ = null, CL_BOOTED = false, CL_READY = null;
+// what the app itself writes into a profile as it starts (a new version's fields, the language, defaults) is not a child's
+// change: until the server's copy has come (or the wait is over) a change does not make this phone's copy the newer one.
+// Before this, an old phone opening a new version stamped its stale copy as the newest and replaced the children's
+// progress on the server. The timer covers the starts that skip the wait (a league or panel link).
+var CL_SETTLED = false; setTimeout(() => { CL_SETTLED = true; }, 8000);
 const PICS = ['🍦', '🍎', '🐱', '🚀', '⭐', '🐶', '🌈', '⚽', '🦋', '🐟'];
 const PIC_N = ["gelado", "maçã", "gato", "foguetão", "estrela", "cão", "arco-íris", "bola", "borboleta", "peixe"];
 function cloudOn() { return !!CLOUD && !EMBEDDED && !DEMO; }
@@ -15012,7 +15032,7 @@ function cloudStamp() {
   Object.values(ROOT.families).forEach(f => { if (!f.cloud || f.cloud.off) return; f.kids.forEach(id => {
     const p = ROOT.profiles[id]; if (!p) return;
     const j = clPj(p);
-    if (CL_PJ[id] !== undefined && CL_PJ[id] !== j) p.upd = Date.now();
+    if (CL_PJ[id] !== undefined && CL_PJ[id] !== j && CL_SETTLED) p.upd = Date.now();
     CL_PJ[id] = j;
   }); });
 }
@@ -15028,6 +15048,42 @@ async function cloudApi(method, path, body, token) {
   } finally { if (tm) clearTimeout(tm); }
 }
 const clWrite = () => { try { localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} };
+/* Two copies of one child meet: this phone's and the server's, or this phone's and the one the old address carried over.
+   «The newer copy wins» lost a child's progress when each phone had played on its own copy: the copy saved last, maybe
+   with a few games, replaced the one with hundreds of stars. Now a copy that holds everything the other has played
+   simply wins; copies that each hold something the other lacks merge and nothing is lost: counters and stars take the
+   bigger value, days and lists join, the album keeps the newest drawings; the settings come from the newer copy.
+   Function declarations only: the start of the app calls kidMerge before this part runs. */
+function kidAhead(a, b) {   // a holds everything b has: b is just an older state of a
+  const pa = a.plays || {}, pb = b.plays || {};
+  for (const k in pb) if ((+pb[k] || 0) > (+pa[k] || 0)) return false;
+  const day = v => v === true ? { speech: 1 } : (v && typeof v === 'object' ? v : {});
+  const da = a.days || {}, db = b.days || {};
+  for (const k in db) { if (!da[k]) return false; const x = day(da[k]), y = day(db[k]); for (const f in y) if ((+y[f] || 0) > (+x[f] || 0)) return false; }
+  // stars that come without a game (bonuses, a battle's opponent): b has more than a's reading fines explain
+  const seen = new Set((b.readFines || []).map(x => x.d)), fines = (a.readFines || []).filter(x => !seen.has(x.d)).reduce((s, x) => s + (+x.s || 0), 0);
+  return (+b.stars || 0) <= (+a.stars || 0) + fines;
+}
+function kidMerge(a, b) {   // a: the newer copy, b: the other one; null when a already has it all
+  if (!a || !b || kidAhead(a, b)) return null;
+  const isO = v => !!v && typeof v === 'object' && !Array.isArray(v);
+  const mix = (x, y) => {
+    if (x === undefined) return y;
+    if (isO(x) && isO(y)) { const o = { ...y, ...x }; for (const k in y) if (k in x) o[k] = mix(x[k], y[k]); return o; }
+    if (typeof x === 'number' && typeof y === 'number') return Math.max(x, y);
+    if (Array.isArray(x) && Array.isArray(y)) { const s = new Set(x.map(v => JSON.stringify(v))); return [...x, ...y.filter(v => !s.has(JSON.stringify(v)))]; }
+    if (x === true && isO(y)) return y;
+    return x;
+  };
+  const m = mix(a, b);
+  m.settings = { ...(b.settings || {}), ...(a.settings || {}) };
+  if (a.today !== undefined) m.today = a.today;
+  const byD = new Map();
+  [...(a.art || []), ...(b.art || [])].forEach(x => { if (x && x.d && !byD.has(x.d)) byD.set(x.d, x); });
+  m.art = [...byD.values()].sort((x, y) => (y.at || 0) - (x.at || 0)).slice(0, 12);
+  m.upd = Date.now();
+  return m;
+}
 // the server's copy: newer children replace this phone's, the family's names and relatives follow the server
 function cloudMerge(f, d) {
   const c = f.cloud; let ch = false;
@@ -15045,10 +15101,12 @@ function cloudMerge(f, d) {
   (Array.isArray(d.kids) ? d.kids : []).forEach(k => {
     if (!k || !ID_RE.test(k.id) || (order && !order.includes(k.id))) return;
     if (Object.values(ROOT.families).some(x => x !== f && !x.guest && x.kids.includes(k.id))) return;
-    const loc = ROOT.profiles[k.id], su = +k.upd || 0;
-    if (k.profile && k.profile.settings && (!loc || su > (loc.upd || 0))) {
-      const o = k.profile, st = o.settings, b = blankProfile(cleanS(st.name, 30), st.gender === 'm' ? 'm' : 'f', st.track === 'l' ? 'l' : 'r', FRIENDS[st.friend] ? st.friend : '');
-      ROOT.profiles[k.id] = { ...b, ...o, art: loc && loc.art || [], book: { ...b.book, ...(o.book || {}) }, settings: { ...b.settings, ...st, name: cleanS(st.name, 30) }, upd: su };
+    const loc = ROOT.profiles[k.id], su = +k.upd || 0, newer = !loc || su > (loc.upd || 0);
+    // copies that each played something the other did not merge (kidMerge); the merged copy is new and goes to the server
+    const mixed = k.profile && k.profile.settings && loc ? (newer ? kidMerge(k.profile, loc) : kidMerge(loc, k.profile)) : null;
+    if (k.profile && k.profile.settings && (newer || mixed)) {
+      const o = mixed || k.profile, st = o.settings, b = blankProfile(cleanS(st.name, 30), st.gender === 'm' ? 'm' : 'f', st.track === 'l' ? 'l' : 'r', FRIENDS[st.friend] ? st.friend : '');
+      ROOT.profiles[k.id] = { ...b, ...o, art: mixed ? o.art : loc && loc.art || [], book: { ...b.book, ...(o.book || {}) }, settings: { ...b.settings, ...st, name: cleanS(st.name, 30) }, upd: mixed ? o.upd : su };
       CL_PJ[k.id] = clPj(ROOT.profiles[k.id]);
       if (ROOT.cur === k.id && P === loc) P = ROOT.profiles[k.id];
       ch = true;
@@ -15111,7 +15169,7 @@ function cloudBootWait() {
   CL_BOOTED = true;
   const t = newScreen();
   app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="who"><header class="who-hero"><span class="who-ryz">${friendSVG('', 'tiger')}</span><h1 class="who-h">Quem joga?</h1></header><p class="who-sub">☁️ A carregar as estrelas da família…</p></div></main></div>`;
-  cloudPullAll(3500).then(() => { if (t !== tok) return; PULT_BOOTED = false; goHome(); });
+  cloudPullAll(3500).then(() => { CL_SETTLED = true; if (t !== tok) return; PULT_BOOTED = false; goHome(); });
   return true;
 }
 
@@ -15178,14 +15236,14 @@ function cloudAdopt(d, token) {
     f = ROOT.families[fid] = { id: fid, name: cleanS(meta.name, 30) || d.login, cc: 'PT', kids: [], grands: [], via: 1 };
   }
   f.cloud = { login: d.login, token, sent: {}, metaSent: '' };
-  cloudMerge(f, d);
+  cloudMerge(f, d); CL_SETTLED = true;
   (CL_READY = CL_READY || new Set()).add(f.id);
   save();
   return f;
 }
 
 // the way in for everyone of the family: the address, the login; the pictures are told, not sent
-const cloudMsg = (f, name) => `${name ? name + ", esta é" : "Esta é"} a entrada na nossa família nas Tagarelas: ${EMBEDDED ? 'https://govorilki.com/play/' + langPath(LANG) : SITE}
+const cloudMsg = (f, name) => `${name ? name + ", esta é" : "Esta é"} a entrada na nossa família nas Tagarelas: ${EMBEDDED ? 'https://yankona.github.io/govorilki/' + langPath(LANG) : SITE}
 Abra e toque em «Já jogamos — entrar» (ou «🔑 Entrar na família»).
 Login da família: ${f.cloud.login}
 A palavra-passe são 4 imagens, dizemos nós. Depois toque em si.`;
@@ -15277,7 +15335,7 @@ function screenCloudMake(f) {
 }
 function screenCloudDone(f, pin) {
   newScreen();
-  const site = EMBEDDED ? 'https://govorilki.com/play/' + langPath(LANG) : SITE;
+  const site = EMBEDDED ? 'https://yankona.github.io/govorilki/' + langPath(LANG) : SITE;
   const msg = cloudMsg(f, '');
   shell("O login está pronto", `<div class="cl">
     <div class="cl-done"><p>Login da família</p><b class="cl-big">${esc(f.cloud.login)}</b><p>Palavra-passe</p><b class="cl-pics">${picsOf(pin)}</b><small>${[...pin].join(' ')}</small></div>
