@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="description" content="Speech, reading, maths, chess, art and music games for children aged 4–12. In English, Russian and Portuguese; grandparents can play along with their grandchildren.">
 <title>Chatterbox with Ginger — games for children aged 4–12</title>
-<link rel="canonical" href="https://yankona.github.io/govorilki/">
-<link rel="alternate" hreflang="en" href="https://yankona.github.io/govorilki/">
-<link rel="alternate" hreflang="ru" href="https://yankona.github.io/govorilki/ru/">
-<link rel="alternate" hreflang="pt" href="https://yankona.github.io/govorilki/pt/">
-<link rel="alternate" hreflang="x-default" href="https://yankona.github.io/govorilki/">
+<link rel="canonical" href="https://govorilki.com/play/">
+<link rel="alternate" hreflang="en" href="https://govorilki.com/play/">
+<link rel="alternate" hreflang="ru" href="https://govorilki.com/play/ru/">
+<link rel="alternate" hreflang="pt" href="https://govorilki.com/play/pt/">
+<link rel="alternate" hreflang="x-default" href="https://govorilki.com/play/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Chatterbox with Ginger">
 <meta property="og:title" content="Chatterbox with Ginger">
 <meta property="og:description" content="Speech, reading, maths, chess, art and music games for children aged 4–12. In English, Russian and Portuguese; grandparents can play along with their grandchildren.">
-<meta property="og:url" content="https://yankona.github.io/govorilki/">
-<meta property="og:image" content="https://yankona.github.io/govorilki/img/og-en.png">
+<meta property="og:url" content="https://govorilki.com/play/">
+<meta property="og:image" content="https://govorilki.com/play/img/og-en.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Chatterbox with Ginger">
@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Chatterbox with Ginger">
 <meta name="twitter:description" content="Speech, reading, maths, chess, art and music games for children aged 4–12. In English, Russian and Portuguese; grandparents can play along with their grandchildren.">
-<meta name="twitter:image" content="https://yankona.github.io/govorilki/img/og-en.png">
+<meta name="twitter:image" content="https://govorilki.com/play/img/og-en.png">
 <meta name="theme-color" content="#CDEEF6">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="../icons/icon-192.png">
@@ -48,11 +48,11 @@ img{max-width:100%}
    apart, so the old page packs this phone's progress (every govorilki-* key) and opens the new address with it:
    small progress rides in the link itself (#move=z…), bigger goes through the sign-in server encrypted with a key that
    stays in the link (#move=c<id>.<key>; the server keeps only the cipher, gives it out once, forgets it in a day).
-   The new page unpacks it, adds what it does not have yet and reloads. Someone new on an old address gets the website;
-   the old links (a grandparent's entry, the family link, #login, games, battles) open the game on the new address.
+   The new page unpacks it, adds what it does not have yet and reloads. the old links (a grandparent's entry, the family link, #login, games, battles) open the game on the new address,
+   and someone new gets the game's first page there.
    Not in the artifact (an iframe) and not in the ?demo sandbox. While a move runs, the game itself does not start. */
 (function () {
-  var FROM = 'yankona.github.io', TO = 'https://govorilki.com/play/', SITE_TO = 'https://govorilki.com/', CLOUD_TO = 'https://govorilki-cloud.yankona.workers.dev';
+  var FROM = 'yankona.github.io', TO = 'https://govorilki.com/play/', CLOUD_TO = 'https://govorilki-cloud.yankona.workers.dev';
   var INLINE_MAX = 48000, h = location.hash || '';
   try { if (window.self !== window.top) return; } catch (e) { return; }
   var b64u = function (u8) { var s = ''; for (var i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
@@ -119,8 +119,8 @@ img{max-width:100%}
   } catch (e) {}
   var go = function (u) { location.replace(u); };
   if (demo || !has) {
-    // nothing to carry: someone new gets the website, a link of ours opens the game there
-    go(demo || h.length > 1 ? TO + path + location.search + h : SITE_TO + (lang && lang !== 'en' ? lang : lang === 'en' ? 'en' : '') + (lang ? '/' : ''));
+    // nothing to carry: the game on the new address (someone new sees its first page; our links open their place)
+    go(TO + path + location.search + h);
     return;
   }
   var dest = function (code) { return TO + path + location.search + (h.length > 1 ? h + '&' : '#') + 'move=' + code; };
@@ -11330,7 +11330,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '91';
+const APP_VER = '92';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send

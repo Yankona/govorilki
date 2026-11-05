@@ -60,7 +60,7 @@ VERIFY_META = ''.join(f'<meta name="{n}" content="{html.escape(VERIFY[k], quote=
 
 def head(l, k, title, desc, canonical, alts, ld, og_type='website'):
     links = ''.join(f'<link rel="alternate" hreflang="{HL[a]}" href="{u}">' for a, u in alts.items())
-    links += f'<link rel="alternate" hreflang="x-default" href="{SITE}/">' if k in ('home', None) else f'<link rel="alternate" hreflang="x-default" href="{alts.get("en", canonical)}">'
+    links += f'<link rel="alternate" hreflang="x-default" href="{alts.get("en", canonical)}">'
     og_alt = ''.join(f'<meta property="og:locale:alternate" content="{OG_LOCALE[a]}">' for a in alts if a != l)
     return f'''<!doctype html>
 <html lang="{HL[l] if l else 'ru'}">
@@ -179,9 +179,10 @@ def extras():
         for l in LANGS:
             alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{HL[a]}" href="{url(a, k)}"/>' for a in LANGS)
             urls.append(f'<url><loc>{url(l, k)}</loc><lastmod>{TODAY}</lastmod>{alts}</url>')
-    urls.insert(0, f'<url><loc>{SITE}/</loc><lastmod>{TODAY}</lastmod></url>')
     open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(urls) + '\n</urlset>\n')
     open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /play/\n\nSitemap: {SITE}/sitemap.xml\n')
+    # govorilki.com opens the game straight away (it picks the phone's language itself); the articles stay for search
+    open(os.path.join(OUT, '_redirects'), 'w').write('/ /play/ 302\n/index.html /play/ 302\n')
     open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n')
     nf = head('ru', None, 'Говорилки · Chatterbox · Tagarelas', C['ru']['pages']['home']['description'], SITE + '/', {a: url(a, 'home') for a in LANGS}, {'@context': 'https://schema.org', '@type': 'WebPage'})
     nf = nf.replace('<head>', '<head>\n<meta name="robots" content="noindex">')
@@ -193,7 +194,7 @@ if __name__ == '__main__':
     shutil.copytree(os.path.join(HERE, 'assets'), os.path.join(OUT, 'assets'))
     for l in LANGS:
         for k in KEYS: page(l, k)
-    hub(); extras()
+    extras()
     if APP_DIR:
         for f in APP_FILES:
             src = os.path.join(APP_DIR, f); dst = os.path.join(OUT, 'play', f)
