@@ -1,8 +1,8 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
 // page kept under its own address. Icons and fonts come from the cache and refresh in the background.
-const CACHE = 'govorilki-v94';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+const CACHE = 'govorilki-v95';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './de/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
