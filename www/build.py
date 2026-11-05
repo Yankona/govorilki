@@ -13,7 +13,7 @@ import html, json, os, re, shutil, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'dist')
-SITE = os.environ.get('SITE_URL', 'https://govorilki.pages.dev').rstrip('/')
+SITE = os.environ.get('SITE_URL', 'https://govorilki.com').rstrip('/')
 LANGS = ['ru', 'en', 'pt']
 KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'grand', 'faq']
 APP = {'ru': 'https://yankona.github.io/govorilki/ru/', 'en': 'https://yankona.github.io/govorilki/', 'pt': 'https://yankona.github.io/govorilki/pt/'}
