@@ -2151,6 +2151,63 @@ body.pv-on #app{padding-top:52px}
 @keyframes lv-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,1.035)}}
 @keyframes lv-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-12%) scale(1.04)}}
 @keyframes lv-shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+/* CUBE-CSS */
+.cb{max-width:640px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.cb-scene{position:relative;width:100%;display:flex;align-items:center;justify-content:center;perspective:900px;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.cb-rot{position:relative;width:0;height:0;transform-style:preserve-3d}
+.cb-c{position:absolute;transform-style:preserve-3d}
+.cb-f{position:absolute;inset:0;background:#15151C;border-radius:14%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.cb-f i{position:absolute;inset:7%;border-radius:18%;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.cb-note{margin:0;font:700 17px/1.4 var(--f-body);color:var(--ink)}
+.cb-goal{margin:0;padding:12px 14px;border-radius:18px;background:var(--t-yellow);color:var(--ink);font:800 17px/1.35 var(--f-body)}
+.cb-menu{display:flex;flex-direction:column;gap:8px}
+.cb-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);text-align:left;cursor:pointer;box-shadow:0 4px 0 var(--line-strong);font:inherit}
+.cb-item b{flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:var(--t-blue);color:var(--ink);font:800 20px var(--f-body)}
+.cb-item span{display:flex;flex-direction:column;gap:2px;font:800 18px/1.2 var(--f-body)}
+.cb-item small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
+.cb-item.ok b{background:var(--t-mint)}
+.cb-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.cb-legend span{display:flex;align-items:center;gap:8px;font:700 16px/1.25 var(--f-body);color:var(--ink)}
+.cb-legend b{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--c);color:var(--k,#2A2346);font:900 18px var(--f-body);box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
+.cb-pad{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.cb-k{min-height:48px;border:0;border-radius:14px;background:var(--paper);color:var(--ink);font:900 19px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong),inset 0 -6px 0 var(--c)}
+.cb-k:active{transform:translateY(2px)}
+.cb-row{justify-content:center;flex-wrap:wrap}
+.cb-alg{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.cb-h{margin:0;font:800 22px/1.25 var(--f-body);color:var(--ink)}
+.cb-alg{scroll-margin-top:8px}
+.cb-m{min-width:34px;padding:5px 6px;border-radius:10px;background:var(--paper);color:var(--ink);text-align:center;font:900 16px var(--f-body);box-shadow:inset 0 0 0 2px var(--line);transition:transform .15s}
+.cb-m.past{opacity:.45}.cb-m.cur{background:var(--tiger);color:#fff;box-shadow:none;transform:scale(1.12)}
+.cb-tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.cb-tabs .chip.on{background:var(--t-yellow);color:var(--ink);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px var(--sun)}
+.cb-txt p{margin:0 0 10px;font:600 17px/1.45 var(--f-body);color:var(--ink)}
+.cb-tip{margin:0;padding:10px 14px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);font:700 16px/1.4 var(--f-body);color:var(--ink)}
+.cb-nav{display:flex;justify-content:space-between;gap:8px}
+.cb-scr{margin:0;padding:14px;border-radius:18px;background:var(--paper);text-align:center;font:900 22px/1.5 var(--f-body);letter-spacing:.04em;word-spacing:.25em;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.cb-timer{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 12px;border:0;border-radius:28px;background:var(--t-mint);color:var(--ink);cursor:pointer;box-shadow:0 7px 0 #3A9E7A}
+.cb-timer b{font:900 56px/1 var(--f-body);font-variant-numeric:tabular-nums}.cb-timer small{font:800 18px var(--f-body)}
+.cb-timer.run{background:var(--t-pink);box-shadow:0 7px 0 #C2456B}
+.cb-best{margin:0;text-align:center;font:700 16px/1.4 var(--f-body);color:var(--ink-soft)}
+/* CUBE-CSS-END */
+/* TOY-CSS */
+.ty{max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.ty-stage{position:relative;width:min(100%,360px);aspect-ratio:1;margin:0 auto;border-radius:28px;overflow:hidden;background:var(--paper);box-shadow:inset 0 0 0 3px var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
+.ty-stage.cut{background:repeating-conic-gradient(var(--line) 0 25%,var(--paper) 0 50%) 0 0/24px 24px}
+.ty-stage canvas,.ty-stage svg{position:absolute;inset:0;width:100%;height:100%}
+.ty-stage[data-step="frame"]{cursor:grab}.ty-stage[data-step="eyes"],.ty-stage[data-step="mouth"]{cursor:crosshair}
+.ty-empty{position:absolute;inset:0;display:grid;place-items:center;font:400 110px/1 var(--f-emoji);opacity:.35}
+.ty-step{display:flex;flex-direction:column;gap:10px}
+.ty-h{margin:0;font:800 19px/1.3 var(--f-body);color:var(--ink);text-align:center}
+.ty-p{margin:0;font:600 16px/1.4 var(--f-body);color:var(--ink);text-align:center}
+.ty-small{margin:0;font:700 14px/1.4 var(--f-body);color:var(--ink-soft);text-align:center}
+.ty-row{justify-content:center;flex-wrap:wrap}
+.ty-sl{display:flex;align-items:center;gap:10px;font:700 16px var(--f-body);color:var(--ink)}.ty-sl input{flex:1;min-width:0}
+.ty-sw{display:flex;align-items:center;gap:10px;font:700 16px var(--f-body);color:var(--ink);cursor:pointer}.ty-sw input{width:22px;height:22px;flex:none}
+.ty-name{width:100%;box-sizing:border-box;padding:12px 16px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:800 22px var(--f-body);text-align:center;box-shadow:inset 0 0 0 3px var(--line)}
+.ty-g{display:flex;gap:8px;justify-content:center}.ty-g .chip.on{background:var(--t-yellow);color:var(--ink);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px var(--sun)}
+.ty-make{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 18px;border:3px dashed var(--line-strong);border-radius:24px;background:var(--paper);color:var(--ink);cursor:pointer}
+.ty-make span{font:400 44px/1 var(--f-emoji)}.ty-make b{font:800 19px var(--f-body)}.ty-make small{font:700 14px var(--f-body);color:var(--ink-soft)}
+.ty-acts{grid-column:auto;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start}
+/* TOY-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -2161,6 +2218,7 @@ span.lg-n{position:static;font:inherit;color:inherit}i.lg-n{display:block;flex:n
 #cmp.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}@media (max-width:560px){#cmp.cmp{grid-template-columns:1fr}}
 div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;cursor:auto}button.chest{flex:none;min-width:0;display:inline-block}
 .cmp .pw-head{width:auto;aspect-ratio:auto;flex:none}.pinwheel .pw-head{display:block}
+.pick-b.sel,.wr-opt.yes,.wr-ans{color:var(--ink)}
 /* FIX-END */
 </style>
 </head>
@@ -8267,11 +8325,12 @@ const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражне
 function screenFriends() {
   newScreen();
   // Vera's heroines come first; Sava keeps his friends on top
-  const HER = ['rina', 'shani', 'zhasmi'], rest = Object.keys(FRIENDS).filter(id => !HER.includes(id));
+  const HER = ['rina', 'shani', 'zhasmi'], rest = Object.keys(FRIENDS).filter(id => !HER.includes(id) && !id.startsWith('toy:'));
   const likes = P.settings.likes, herFirst = likes ? likes.includes('kpop') : !Q();
   const groups = herFirst ? [['Жар-птицы — супер-девочки', HER], [Q() ? 'Друзья' : 'Зверята', rest]] : [[Q() ? 'Друзья' : 'Зверята', rest], ['Жар-птицы', HER]];
   const btn = id => `<button class="friend ${(P.settings.friend || 'tiger') === id ? 'sel' : ''}" data-id="${id}">${friendSVG('', id)}<b>${FRIENDS[id].name}</b><small>${FRIENDS[id].kind}</small></button>`;
   const st = shell('Выбери друга', `<p class="lead">Кто будет с тобой заниматься? Нажми на друга.</p>
+    ${TOY.pickHTML()}
     ${groups.map(([h, ids]) => `<h2 class="sec-h fr-h">${h}</h2><div class="friends ${ids === HER ? 'her' : ''}">${ids.map(btn).join('')}</div>`).join('')}
     <button class="big" id="friendOk">Готово</button>`);
   talk(Q() ? 'Кто будет с тобой заниматься? Нажми на друга.' : 'Кто будет с тобой заниматься? Выбери супер-девочку из Жар-птиц или зверёнка.');
@@ -8282,6 +8341,7 @@ function screenFriends() {
     $('#ryzBtn').innerHTML = friendSVG();
     talk(`Привет${nameBit()}! Я ${friend().who}. ${friend().hello} Будем заниматься вместе!`);
   };
+  TOY.bindPick();
   $('#friendOk').onclick = () => { sfx.pop(); if (!P.settings.friend) { P.settings.friend = 'tiger'; save(); } goHome(); };
 }
 
@@ -11400,7 +11460,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '103';
+const APP_VER = '104';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14924,7 +14984,9 @@ let LIVE_TXT = '', LIVE_SAY = false, LIVE_T0 = 0, LIVE_OPEN = 0, LIVE_W = .8, LI
 const LIVE_STILL = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
 function liveMouthHTML(f, mouth) {
   const y = (f.pm || 92) - 1;
-  return `<g class="lv-smile">${mouth}</g><g class="lv-mouth" transform="translate(60 ${y})"><ellipse class="lv-o" rx="6" ry="1" fill="#4A1C2C"/><ellipse class="lv-t" cy="2.5" rx="3.8" ry=".5" fill="#FF7A93"/></g>`;
+  // a hero from a photo: the mouth where the child tapped, or none
+  if (f.noMouth) return `<g class="lv-smile">${mouth}</g>`;
+  return `<g class="lv-smile">${mouth}</g><g class="lv-mouth" transform="translate(${f.pmx || 60} ${y})"><ellipse class="lv-o" rx="6" ry="1" fill="#4A1C2C"/><ellipse class="lv-t" cy="2.5" rx="3.8" ry=".5" fill="#FF7A93"/></g>`;
 }
 // what a letter does to the mouth: [how open, how wide]
 function liveVis(c) {
@@ -15203,6 +15265,488 @@ const WORLD = (() => {
   return { roles, screenRoles, screenSay, ready };
 })();
 /* WORLD-END */
+/* CUBE-BEGIN */
+/* ---------- «Кубик Рубика» for 9 and older: how the moves are written, the layer-by-layer method in seven steps shown on
+   a cube that turns on the screen (drag it to look around), «Разгадай кубик» (the cube was turned a few times: turn it
+   back) and a timer with records for the child's own cube. White is down and yellow up for the whole method, green
+   faces the child. Progress: P.cube = { done: [step indexes], lvl, best, times }. ---------- */
+const CUBE = (() => {
+  /* the model: 26 small cubes, each with a place p (x right, y up, z towards the viewer, −1…1) and a turn M (3×3, rows);
+     its stickers keep the colours of the faces it sat on when the cube was solved */
+  const FACES = { U: [1, 1], D: [1, -1], R: [0, 1], L: [0, -1], F: [2, 1], B: [2, -1] };
+  // a face turned clockwise as you look at it: the axis, the layer and the angle (right-hand rule)
+  const TURN = { U: [1, 1, -90], D: [1, -1, 90], R: [0, 1, -90], L: [0, -1, 90], F: [2, 1, -90], B: [2, -1, 90] };
+  function fresh() {
+    const cs = [];
+    for (let x = -1; x <= 1; x++) for (let y = -1; y <= 1; y++) for (let z = -1; z <= 1; z++) {
+      if (x || y || z) cs.push({ h: [x, y, z], p: [x, y, z], M: [1, 0, 0, 0, 1, 0, 0, 0, 1] });
+    }
+    return cs;
+  }
+  function rotM(ax, deg) {
+    const c = Math.round(Math.cos(deg * Math.PI / 180)), s = Math.round(Math.sin(deg * Math.PI / 180));
+    return ax === 0 ? [1, 0, 0, 0, c, -s, 0, s, c] : ax === 1 ? [c, 0, s, 0, 1, 0, -s, 0, c] : [c, -s, 0, s, c, 0, 0, 0, 1];
+  }
+  const mul = (A, B) => { const R = []; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) R.push(A[i * 3] * B[j] + A[i * 3 + 1] * B[3 + j] + A[i * 3 + 2] * B[6 + j]); return R; };
+  const app = (A, v) => [0, 1, 2].map(i => A[i * 3] * v[0] + A[i * 3 + 1] * v[1] + A[i * 3 + 2] * v[2]);
+  function move(m) {
+    const t = TURN[m[0]]; if (!t) return null;
+    const k = m.slice(1) === "'" ? -1 : m.slice(1) === '2' ? 2 : 1;
+    return { ax: t[0], layer: t[1], deg: t[2] * k };
+  }
+  function turnModel(cs, mv) {
+    const R = rotM(mv.ax, mv.deg);
+    cs.forEach(c => { if (c.p[mv.ax] === mv.layer) { c.p = app(R, c.p); c.M = mul(R, c.M); } });
+  }
+  const seq = s => String(s).trim().split(/\s+/).filter(Boolean);
+  const inv = s => seq(s).reverse().map(m => m.endsWith('2') ? m : m.endsWith("'") ? m[0] : m + "'").join(' ');
+  // turns of one face side by side add up («U U'» is nothing, «R R» is R2)
+  function simp(s) {
+    const out = [];
+    for (const m of seq(s)) {
+      const q = m.endsWith('2') ? 2 : m.endsWith("'") ? 3 : 1, top = out[out.length - 1];
+      if (top && top[0] === m[0]) { top[1] = (top[1] + q) % 4; if (!top[1]) out.pop(); } else out.push([m[0], q]);
+    }
+    return out.map(([f, q]) => f + ['', '', '2', "'"][q]).join(' ');
+  }
+  const apply = (cs, s) => { seq(s).forEach(m => { const mv = move(m); if (mv) turnModel(cs, mv); }); return cs; };
+  // solved: every piece with two or three stickers at home and unturned (the centres only spin in place)
+  const solved = cs => cs.every(c => c.h.filter(Boolean).length < 2 || (c.p.join() === c.h.join() && c.M.join() === '1,0,0,0,1,0,0,0,1'));
+  // a scramble: no face twice in a row and no «R L R»
+  function scramble(n) {
+    const F = 'UDRLFB', opp = { U: 'D', D: 'U', R: 'L', L: 'R', F: 'B', B: 'F' }, out = [];
+    while (out.length < n) {
+      const f = F[Math.floor(Math.random() * 6)], a = out[out.length - 1], b = out[out.length - 2];
+      if (a && (a[0] === f || (opp[f] === a[0] && b && b[0] === f))) continue;
+      out.push(f + (n > 8 ? ['', "'", '2'][Math.floor(Math.random() * 3)] : ['', "'"][Math.floor(Math.random() * 2)]));
+    }
+    return out.join(' ');
+  }
+
+  /* the cube on the screen: CSS 3D, a small cube per piece, a layer turns as one; drag to look around */
+  const COL = { U: '#FFD500', D: '#FFFFFF', F: '#00A35C', B: '#1F5BD6', R: '#D7263D', L: '#FF7A1A' };
+  const FCSS = { R: 'rotateY(90deg)', L: 'rotateY(-90deg)', U: 'rotateX(90deg)', D: 'rotateX(-90deg)', F: '', B: 'rotateY(180deg)' };
+  const rotCss = (ax, d) => ax === 0 ? `rotateX(${-d}deg)` : ax === 1 ? `rotateY(${d}deg)` : `rotateZ(${-d}deg)`;
+  function view(box, start = '', big = 60) {
+    const cs = apply(fresh(), start);
+    const S = Math.max(30, Math.min(big, Math.floor(Math.min(box.clientWidth || 320, 440) / 5.4)));
+    box.classList.add('cb-scene'); box.style.height = Math.round(S * 5.4) + 'px';
+    box.innerHTML = '<div class="cb-rot"></div>';
+    const rot = box.firstChild; let rx = -27, ry = -37, drag = null, tok = 0, chain = Promise.resolve();
+    const look = () => { rot.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`; };
+    // the CSS frame has y going down: the turn is mirrored on y, the place too
+    const mat = c => { const f = [1, -1, 1], a = (i, j) => f[i] * c.M[i * 3 + j] * f[j];
+      return `matrix3d(${a(0, 0)},${a(1, 0)},${a(2, 0)},0,${a(0, 1)},${a(1, 1)},${a(2, 1)},0,${a(0, 2)},${a(1, 2)},${a(2, 2)},0,${c.p[0] * S},${-c.p[1] * S},${c.p[2] * S},1)`; };
+    const els = cs.map(c => {
+      const el = document.createElement('div'); el.className = 'cb-c'; el.style.width = el.style.height = S + 'px'; el.style.left = el.style.top = -S / 2 + 'px';
+      el.innerHTML = Object.keys(FACES).map(F => { const [a, s] = FACES[F]; return `<div class="cb-f" style="transform:${FCSS[F]} translateZ(${S / 2}px)">${c.h[a] === s ? `<i style="background:${COL[F]}"></i>` : ''}</div>`; }).join('');
+      rot.append(el); return el;
+    });
+    const draw = () => cs.forEach((c, i) => { els[i].style.transition = 'none'; els[i].style.transform = mat(c); });
+    function turn(m, ms) {
+      return new Promise(res => {
+        const mv = move(m); if (!mv) return res();
+        if (!ms || !box.isConnected) { turnModel(cs, mv); draw(); return res(); }
+        const idx = cs.map((c, i) => c.p[mv.ax] === mv.layer ? i : -1).filter(i => i >= 0);
+        idx.forEach(i => { els[i].style.transition = 'none'; els[i].style.transform = rotCss(mv.ax, 0) + ' ' + mat(cs[i]); });
+        void rot.offsetWidth;
+        idx.forEach(i => { els[i].style.transition = `transform ${ms}ms ease-in-out`; els[i].style.transform = rotCss(mv.ax, mv.deg) + ' ' + mat(cs[i]); });
+        setTimeout(() => { turnModel(cs, mv); draw(); res(); }, ms + 40);
+      });
+    }
+    // taps on the move buttons wait for the turn before them
+    const queue = (m, ms = 280) => (chain = chain.then(() => turn(m, ms)));
+    async function play(s, ms, onStep) {
+      const my = ++tok, xs = seq(s);
+      for (let i = 0; i < xs.length; i++) {
+        if (my !== tok || !box.isConnected) return false;
+        if (onStep) onStep(i);
+        await turn(xs[i], ms); await wait(ms * .3);
+      }
+      if (onStep && my === tok) onStep(xs.length);
+      return my === tok;
+    }
+    function set(s) { tok++; const fr = apply(fresh(), s); cs.forEach((c, i) => { c.p = fr[i].p; c.M = fr[i].M; }); draw(); }
+    box.onpointerdown = e => { drag = { x: e.clientX, y: e.clientY, rx, ry }; try { box.setPointerCapture(e.pointerId); } catch (er) {} };
+    box.onpointermove = e => { if (!drag) return; ry = drag.ry + (e.clientX - drag.x) * .45; rx = Math.max(-85, Math.min(85, drag.rx - (e.clientY - drag.y) * .45)); look(); };
+    box.onpointerup = box.onpointercancel = () => { drag = null; };
+    look(); draw();
+    return { cs, turn, queue, play, set, stop: () => { tok++; }, solved: () => solved(cs) };
+  }
+
+  /* the method: seven steps; ex — examples to show: the formula played from the case it solves */
+  const STEPS = [
+    { t: 'Ромашка и белый крест', s: 'четыре белых ребра вниз',
+      g: 'Внизу белый крест: четыре белых ребра вокруг белого центра, и боковой цвет каждого ребра совпадает с центром своей стороны.',
+      p: ['Рёбра — это кубики с двумя цветами, они стоят между центрами. Найди четыре ребра с белым цветом.',
+        'Сначала собери «ромашку»: подними белые рёбра наверх, к жёлтому центру, как белые лепестки вокруг жёлтой серединки. Если место над ребром уже занято белым лепестком, сначала покрути верх (U), чтобы его освободить.',
+        'Потом бери лепестки по очереди. Крути верх, пока боковой цвет лепестка не встанет над центром того же цвета. Тогда поверни эту сторону два раза (F2, R2, B2 или L2) — лепесток уйдёт вниз.',
+        'Когда все четыре лепестка внизу — там белый крест!'],
+      tip: 'Смотри не на белый цвет лепестка, а на второй, боковой: он должен встать над центром своего цвета.',
+      say: 'Шаг первый. Собери ромашку: белые рёбра вокруг жёлтого центра. Потом выравнивай каждое ребро по цвету и поворачивай эту сторону два раза.',
+      ex: [{ n: 'Ромашка → крест', a: "U F2 U R2 U2 B2 U L2" }] },
+    { t: 'Белые уголки', s: 'весь белый низ',
+      g: 'Весь низ белый, и нижний ряд на каждой стороне одного цвета со своим центром.',
+      p: ['Уголки — это кубики с тремя цветами. Найди наверху уголок с белым цветом.',
+        'Покрути верх так, чтобы уголок встал прямо над своим местом: его два других цвета совпадают с центрами двух сторон, между которыми он стоит.',
+        'Поверни кубик так, чтобы этот уголок был справа, спереди, сверху. Повторяй R U R\' U\', пока уголок не встанет на место белым вниз: 1, 3 или 5 раз.',
+        'Если белый уголок застрял внизу не на своём месте, держи его справа спереди и сделай формулу один раз — он поднимется наверх.'],
+      tip: 'Говори в ритм: «право-верх-назад-назад». Пальцы быстро запомнят эту формулу, она понадобится ещё.',
+      say: 'Шаг второй. Ставь уголок над его местом, справа спереди, и повторяй формулу, пока он не встанет белым вниз.',
+      ex: [{ n: 'Белый справа — 1 раз', a: "R U R' U'" }, { n: 'Белый сверху — 3 раза', a: "R U R' U' R U R' U' R U R' U'" }] },
+    { t: 'Средний слой', s: 'два слоя готовы',
+      g: 'Готовы два слоя: белый низ и средний пояс.',
+      p: ['Держи кубик белым вниз. Найди в верхнем слое ребро без жёлтого цвета.',
+        'Покрути верх, чтобы передний цвет ребра совпал с центром спереди, — получится буква «Т» вверх ногами.',
+        'Посмотри на верхний цвет ребра. Совпадает с центром справа — ребро идёт направо: U R U\' R\' U\' F\' U F. Совпадает с центром слева — налево: U\' L\' U L U F U\' F\'.',
+        'Если ребро стоит в среднем слое, но не на своём месте или перевёрнуто, вставь на его место любое верхнее ребро той же формулой — и оно выйдет наверх.'],
+      tip: 'Направо — формула начинается с U, налево — с U\'. Обе похожи, как отражения в зеркале.',
+      say: 'Шаг третий. Найди сверху ребро без жёлтого, поставь его буквой Т и отправь направо или налево.',
+      ex: [{ n: 'Направо', a: "U R U' R' U' F' U F" }, { n: 'Налево', a: "U' L' U L U F U' F'" }] },
+    { t: 'Жёлтый крест', s: 'крест наверху',
+      g: 'Наверху жёлтый крест (уголки пока могут быть любыми).',
+      p: ['Посмотри сверху на жёлтые рёбра. Бывает точка, «галочка» из двух рёбер или палочка.',
+        'Формула этого шага: F R U R\' U\' F\'.',
+        'Палочку держи поперёк, слева направо, и сделай формулу один раз. Галочку держи так, чтобы она смотрела назад и влево, как стрелки часов на девяти часах, и сделай формулу два раза. Из точки формула сделает галочку или палочку.'],
+      tip: 'Внутри этой формулы спрятана знакомая R U R\' U\' — просто с F в начале и F\' в конце.',
+      say: 'Шаг четвёртый. Сделай наверху жёлтый крест. Палочку держи поперёк, галочку — назад и влево.',
+      ex: [{ n: 'Палочка', a: "F R U R' U' F'" }, { n: 'Галочка', a: "F R U R' U' F' F R U R' U' F'" }] },
+    { t: 'Рёбра креста на места', s: 'крест совпал с центрами',
+      g: 'Каждое ребро жёлтого креста совпадает с центром своей стороны.',
+      p: ['Крути верх, пока хотя бы два ребра не совпадут по бокам с центрами.',
+        'Если совпали два ребра рядом, держи их сзади и справа и сделай R U R\' U R U2 R\' U.',
+        'Если совпали два ребра напротив друг друга, сделай формулу один раз с любой стороны — и совпавшие окажутся рядом. Дальше как выше.'],
+      tip: 'Если все четыре уже совпали — этот шаг можно пропустить!',
+      say: 'Шаг пятый. Совпавшие рёбра держи сзади и справа и делай формулу.',
+      ex: [{ n: 'Два рядом', a: "R U R' U R U2 R' U" }] },
+    { t: 'Уголки на свои места', s: 'жёлтые уголки на местах',
+      g: 'Каждый жёлтый уголок стоит между центрами своих цветов (повёрнут он пока может быть как угодно).',
+      p: ['Найди уголок, который уже стоит на своём месте: три его цвета совпадают с тремя центрами вокруг. Повёрнут он может быть как угодно.',
+        'Держи его справа, спереди, сверху и делай U R U\' L\' U R\' U\' L, пока все уголки не встанут на места. Обычно хватает одного-двух раз.',
+        'Если ни один уголок не на месте, сделай формулу один раз с любой стороны — и такой уголок появится.'],
+      tip: 'Уголок на месте не трогается: формула гоняет по кругу три других.',
+      say: 'Шаг шестой. Уголок, который уже на месте, держи справа спереди, и делай формулу, пока все уголки не встанут на места.',
+      ex: [{ n: 'Три уголка по кругу', a: "U R U' L' U R' U' L" }] },
+    { t: 'Поверни уголки — и готово!', s: 'кубик собран',
+      g: 'Кубик собран!',
+      p: ['Держи кубик жёлтым вверх и поверни так, чтобы неправильный уголок был справа, спереди, сверху.',
+        'Повторяй R\' D\' R D, пока жёлтый цвет этого уголка не окажется сверху: 2 или 4 раза. Низ при этом перепутается — не бойся, так и надо!',
+        'Теперь, не поворачивая весь кубик, крути только верх (U), чтобы следующий неправильный уголок встал справа спереди. И снова R\' D\' R D, пока он не повернётся.',
+        'Когда все уголки смотрят жёлтым вверх, низ сам вернётся на место. Покрути верх — и кубик собран!'],
+      tip: 'Самое главное правило: в этом шаге кубик целиком не переворачивай, только крути верх.',
+      say: 'Последний шаг. Поворачивай уголки формулой, пока жёлтый не окажется сверху. Низ перепутается, но потом сам вернётся.',
+      ex: [{ n: 'Два уголка', a: "R' D' R D R' D' R D U R' D' R D R' D' R D R' D' R D R' D' R D U'" }] }];
+  const prog = () => { const c = P.cube = P.cube || {}; c.done = c.done || []; c.times = c.times || []; c.lvl = c.lvl || 1; return c; };
+  const fmt = ms => { const s = ms / 1000, m = Math.floor(s / 60); return `${m}:${(s - m * 60).toFixed(1).padStart(4, '0')}`; };
+  const PAD = ['R', "R'", 'L', "L'", 'U', "U'", 'D', "D'", 'F', "F'", 'B', "B'"].map(m => `<button class="cb-k" data-m="${m}" style="--c:${COL[m[0]]}">${m}</button>`).join('');
+  const chips = a => seq(a).map((m, i) => `<span class="cb-m" data-i="${i}">${m}</span>`).join('');
+
+  function screenCube() {
+    newScreen();
+    const c = prog(), best = c.best ? fmt(c.best) : '';
+    shell('Кубик Рубика', `<div class="cb">
+      <div id="cbView"></div>
+      <p class="cb-note">Кубик собирают слоями: белый низ, потом середина, потом жёлтый верх. Держи свой кубик белым центром вниз, жёлтым вверх, зелёным к себе — и повторяй за кубиком на экране. Его можно крутить пальцем.</p>
+      <div class="cb-menu">
+        <button class="cb-item" data-go="n"><b>🔤</b><span>Как читать формулы<small>R, U, F, штрих и двойка</small></span></button>
+        ${STEPS.map((s, i) => `<button class="cb-item ${c.done.includes(i) ? 'ok' : ''}" data-go="${i}"><b>${c.done.includes(i) ? '✅' : i + 1}</b><span>${s.t}<small>${s.s}</small></span></button>`).join('')}
+        <button class="cb-item" data-go="p"><b>🧩</b><span>Разгадай кубик<small>кубик повернули — поверни назад</small></span></button>
+        <button class="cb-item" data-go="t"><b>⏱️</b><span>Мой кубик на время<small>${best ? `рекорд ${best}` : 'перемешай и собери'}</small></span></button>
+      </div></div>`);
+    const v = view($('#cbView'), '', 40);
+    // the cube shows what it can: a few turns and back, again and again
+    (async () => { await wait(900); while ($('#cbView')) { const s = scramble(6); if (!await v.play(s, 330)) return; await wait(700); if (!await v.play(inv(s), 330)) return; await wait(1600); } })();
+    talk(c.done.length >= 7 ? 'Ты знаешь все семь шагов! Перемешай кубик и собери его на время.' : c.done.length ? `Продолжим? Дальше шаг ${c.done.length + 1}.` : 'Кубик Рубика собирают по шагам, слой за слоем. Семь шагов — и кубик собран! Начни с того, как читать формулы.');
+    $('.cb-menu').onclick = e => {
+      const b = e.target.closest('[data-go]'); if (!b) return; sfx.pop(); v.stop();
+      const g = b.dataset.go;
+      if (g === 'n') screenNotation(); else if (g === 'p') screenPuzzle(); else if (g === 't') screenTimer(); else screenStep(+g);
+    };
+  }
+
+  function screenNotation() {
+    newScreen();
+    const LEG = [['R', 'правая'], ['L', 'левая'], ['U', 'верхняя'], ['D', 'нижняя'], ['F', 'передняя, к тебе'], ['B', 'задняя']];
+    shell('Как читать формулы', `<div class="cb">
+      <p class="cb-note">Формула — это повороты по очереди. Буква говорит, какую сторону крутить:</p>
+      <div class="cb-legend">${LEG.map(([k, t]) => `<span><b style="--c:${COL[k]};--k:${'FBR'.includes(k) ? '#fff' : '#2A2346'}">${k}</b>${t}</span>`).join('')}</div>
+      <p class="cb-note">Просто буква (R) — поворот по часовой стрелке, если смотреть прямо на эту сторону. Со штрихом (R') — против часовой. С двойкой (R2) — два раза.</p>
+      <div id="cbView"></div>
+      <div class="cb-pad" id="cbPad">${PAD}</div>
+      <div class="prow-btns cb-row"><button class="chip" id="cbFix">⟲ Собрать</button></div>
+      <p class="cb-tip" id="cbMsg">Нажми на каждую кнопку и посмотри, какая сторона крутится. Повторяй на своём кубике!</p>
+    </div>`, { back: screenCube });
+    const v = view($('#cbView')), tried = new Set(); let done = false;
+    talk('Формула — это повороты по очереди. Буква говорит, какую сторону крутить. Со штрихом — против часовой стрелки. Нажми на каждую кнопку!');
+    $('#cbPad').onclick = e => {
+      const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick(); v.queue(b.dataset.m); tried.add(b.dataset.m);
+      $('#cbMsg').textContent = `${b.dataset.m}: ${LEG.find(x => x[0] === b.dataset.m[0])[1]} сторона ${b.dataset.m.includes("'") ? 'против часовой' : 'по часовой'}. Попробовано ${tried.size} из 12.`;
+      if (tried.size >= 12 && !done) { done = true; setTimeout(() => finish({ key: 'cube-n', stars: 2, line: 'Ты знаешь все повороты!', again: screenNotation, next: () => screenStep(0), menu: screenCube }), 900); }
+    };
+    $('#cbFix').onclick = () => { sfx.pop(); v.set(''); };
+  }
+
+  function screenStep(i) {
+    newScreen();
+    const s = STEPS[i]; let ex = 0, ms = 520;
+    shell(`Шаг ${i + 1} из 7`, `<div class="cb">
+      <h2 class="cb-h">${s.t}</h2>
+      <p class="cb-goal">🎯 ${s.g}</p>
+      ${s.ex.length > 1 ? `<div class="cb-tabs" id="cbTabs">${s.ex.map((x, k) => `<button class="chip ${k ? '' : 'on'}" data-ex="${k}">${x.n}</button>`).join('')}</div>` : ''}
+      <div class="cb-alg" id="cbAlg"></div>
+      <div id="cbView"></div>
+      <div class="prow-btns cb-row"><button class="big" id="cbPlay">▶ Покажи</button><button class="chip" id="cbAgain">⟲ Сначала</button><button class="chip" id="cbSlow">🐢 Медленно</button></div>
+      <div class="cb-txt">${s.p.map(x => `<p>${x}</p>`).join('')}</div>
+      <p class="cb-tip">💡 ${s.tip}</p>
+      <div class="prow-btns cb-row"><button class="big cb-ok" id="cbDone">✅ Получилось на моём кубике</button></div>
+      <div class="cb-nav">${i ? `<button class="chip" data-step="${i - 1}">← Шаг ${i}</button>` : '<span></span>'}${i < 6 ? `<button class="chip" data-step="${i + 1}">Шаг ${i + 2} →</button>` : ''}</div>
+    </div>`, { back: screenCube });
+    const v = view($('#cbView'));
+    const load = () => { v.set(inv(s.ex[ex].a)); $('#cbAlg').innerHTML = chips(s.ex[ex].a); };
+    load(); talk(s.say);
+    const mark = k => $$('#cbAlg .cb-m').forEach((x, j) => { x.classList.toggle('cur', j === k); x.classList.toggle('past', j < k); });
+    $('#cbPlay').onclick = async () => { sfx.pop(); v.set(inv(s.ex[ex].a)); const r = $('#cbAlg').getBoundingClientRect(); if (r.top < 60 || $('#cbView').getBoundingClientRect().bottom > innerHeight - 90) $('#cbAlg').scrollIntoView({ block: 'start', behavior: 'smooth' }); if (await v.play(s.ex[ex].a, ms, mark) && v.solved()) { sfx.good(); talk(i === 6 ? 'Готово! Кубик собран!' : 'Видишь? Шаг сделан.'); } };
+    $('#cbAgain').onclick = () => { sfx.pop(); load(); };
+    $('#cbSlow').onclick = e => { sfx.pop(); ms = ms > 600 ? 520 : 1000; e.currentTarget.textContent = ms > 600 ? '🐇 Быстрее' : '🐢 Медленно'; };
+    if ($('#cbTabs')) $('#cbTabs').onclick = e => { const b = e.target.closest('[data-ex]'); if (!b) return; sfx.pop(); ex = +b.dataset.ex; $$('#cbTabs .chip').forEach(x => x.classList.toggle('on', x === b)); load(); };
+    $('.cb-nav').onclick = e => { const b = e.target.closest('[data-step]'); if (!b) return; sfx.pop(); v.stop(); screenStep(+b.dataset.step); };
+    $('#cbDone').onclick = () => {
+      sfx.pop(); v.stop(); const c = prog(); if (!c.done.includes(i)) c.done.push(i); save();
+      finish({ key: 'cube-' + (i + 1), stars: i === 6 ? 5 : 2, line: i === 6 ? G('Ты собрала кубик Рубика!', 'Ты собрал кубик Рубика!') : `Шаг ${i + 1} из 7 готов!`, again: () => screenStep(i), next: i < 6 ? () => screenStep(i + 1) : () => screenTimer(), menu: screenCube });
+    };
+  }
+
+  function screenPuzzle() {
+    newScreen();
+    const c = prog(), n = Math.min(8, c.lvl), scr = scramble(n), mine = [];
+    shell('Разгадай кубик', `<div class="cb">
+      <p class="cb-note" id="cbLead">Кубик перемешан за ${n} ${plural(n, ['ход', 'хода', 'ходов'])}. Поверни его назад, чтобы он снова был собран!</p>
+      <div id="cbView"></div>
+      <div class="cb-pad" id="cbPad">${PAD}</div>
+      <div class="prow-btns cb-row"><button class="chip" id="cbUndo">↩ Отменить</button><button class="chip" id="cbHint">💡 Подсказка</button><button class="chip" id="cbShow">👀 Ещё раз показать</button><button class="chip" id="cbNew">🔁 Другой</button></div>
+      <p class="cb-tip" id="cbMsg">Уровень ${n}.</p>
+    </div>`, { back: screenCube });
+    const v = view($('#cbView')); let busy = true, won = false;
+    const show = async () => { busy = true; v.set(''); await wait(500); await v.play(scr, 420); busy = false; };
+    talk(`Смотри, я сделаю ${n} ${plural(n, ['ход', 'хода', 'ходов'])}. Потом поверни кубик назад!`); show();
+    const check = () => { if (won || !v.solved()) return; won = true; c.lvl = Math.min(8, n + 1); save(); sfx.good();
+      setTimeout(() => finish({ key: 'cube-p', stars: n >= 5 ? 3 : 2, line: `Уровень ${n} разгадан!`, again: screenPuzzle, menu: screenCube }), 700); };
+    $('#cbPad').onclick = async e => { const b = e.target.closest('[data-m]'); if (!b || busy || won) return; sfx.tick(); mine.push(b.dataset.m); await v.queue(b.dataset.m); check(); };
+    $('#cbUndo').onclick = async () => { if (busy || !mine.length) return; sfx.pop(); await v.queue(inv(mine.pop())); };
+    $('#cbHint').onclick = () => { if (busy) return; sfx.pop(); const need = seq(simp(inv(scr + ' ' + mine.join(' ')))); $('#cbMsg').textContent = need.length ? `Следующий поворот: ${need[0]}` : 'Уже собран!'; };
+    $('#cbShow').onclick = () => { if (busy) return; sfx.pop(); mine.length = 0; show(); };
+    $('#cbNew').onclick = () => { sfx.pop(); v.stop(); screenPuzzle(); };
+  }
+
+  function screenTimer() {
+    newScreen();
+    const c = prog(); let scr = scramble(20), t0 = 0, raf = 0;
+    shell('Мой кубик на время', `<div class="cb">
+      <p class="cb-note">Перемешай свой кубик по этой формуле: белый вниз, зелёный к себе. Потом нажми «Старт» и собирай!</p>
+      <p class="cb-scr" id="cbScr">${scr}</p>
+      <div class="prow-btns cb-row"><button class="chip" id="cbNewScr">🔁 Другая формула</button></div>
+      <button class="cb-timer" id="cbTimer"><b id="cbT">0:00.0</b><small id="cbTs">Старт</small></button>
+      <p class="cb-best" id="cbBest"></p>
+    </div>`, { back: screenCube });
+    const best = () => { $('#cbBest').innerHTML = c.best ? `🏆 Рекорд: <b>${fmt(c.best)}</b>${c.times.length ? ` · последние: ${c.times.slice(0, 5).map(fmt).join(', ')}` : ''}` : 'Здесь появится твой рекорд.'; };
+    best(); talk(G('Перемешай кубик по формуле. Потом нажми старт и собирай. Готова?', 'Перемешай кубик по формуле. Потом нажми старт и собирай. Готов?'));
+    $('#cbNewScr').onclick = () => { if (t0) return; sfx.pop(); scr = scramble(20); $('#cbScr').textContent = scr; };
+    const tick = () => { if (!t0 || !$('#cbT')) return; $('#cbT').textContent = fmt(performance.now() - t0); raf = requestAnimationFrame(tick); };
+    $('#cbTimer').onclick = () => {
+      if (!t0) { sfx.pop(); t0 = performance.now(); $('#cbTimer').classList.add('run'); $('#cbTs').textContent = 'Стоп — когда соберёшь'; tick(); return; }
+      const t = performance.now() - t0; t0 = 0; cancelAnimationFrame(raf); $('#cbTimer').classList.remove('run'); $('#cbT').textContent = fmt(t); $('#cbTs').textContent = 'Старт';
+      if (t < 5000) { talk('Так быстро не бывает! Нажми старт, когда начнёшь собирать.'); return; }
+      const rec = !c.best || t < c.best; c.times.unshift(Math.round(t)); c.times = c.times.slice(0, 10); if (rec) c.best = Math.round(t); save(); best();
+      finish({ key: 'cube-t', stars: rec ? 3 : 2, line: rec ? `Новый рекорд: ${fmt(t)}!` : `Время: ${fmt(t)}`, again: screenTimer, menu: screenCube });
+    };
+  }
+
+  // the tile's picture: a cube seen from the corner
+  const iso = (o, u, w, col) => { let out = ''; for (let a = 0; a < 3; a++) for (let b = 0; b < 3; b++) {
+    const P0 = (i, j) => [o[0] + u[0] * i / 3 + w[0] * j / 3, o[1] + u[1] * i / 3 + w[1] * j / 3], g = .1;
+    const q = [P0(a + g, b + g), P0(a + 1 - g, b + g), P0(a + 1 - g, b + 1 - g), P0(a + g, b + 1 - g)];
+    out += `<polygon points="${q.map(p => p.map(x => x.toFixed(1)).join(',')).join(' ')}" fill="${col}"/>`; } return out; };
+  SVGS.cube = `<svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,6 90,28 90,74 50,96 10,74 10,28" fill="#1E1E28"/>${iso([50, 8], [38, 21], [-38, 21], COL.U)}${iso([12, 30], [38, 21], [0, 43], COL.F)}${iso([50, 51], [38, -21], [0, 43], COL.R)}</svg>`;
+  GAMES.push({ id: 'cube', hide: () => (P.settings.age || 0) < 9, name: 'Кубик Рубика', sub: () => { const d = prog().done.length; return d >= 7 ? 'собран! теперь на время' : d ? `шаг ${d + 1} из 7` : 'соберём по шагам'; }, ico: () => pic('svg:cube'), bg: 'var(--t-blue)', go: () => screenCube(), grp: 8, also: [3] });
+  return { screenCube, view, apply, inv, solved, fresh, STEPS };
+})();
+/* CUBE-END */
+/* TOY-BEGIN */
+/* ---------- «Мой герой»: the child photographs a favourite toy and it becomes the friend: it breathes, blinks with
+   stuck-on googly eyes and talks with a mouth where the child tapped. The photo stays on this phone only (its own
+   storage key, not in the profile): the cloud, the league and other phones see the tiger instead. One hero per child:
+   FRIENDS['toy:<child id>']. ---------- */
+const TOY = (() => {
+  const KEY = 'govorilki-toys', EDIT = 400;
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } };
+  let TOYS = load();
+  const idOf = kid => 'toy:' + kid;
+  // the friend made from a saved toy; the picture sits at 4…116 of the friend's 120 box
+  function friendOf(t) {
+    const eyes = (t.eyes || []).length === 2 ? `<g class="lv-eyes">${t.eyes.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7.5" fill="#fff" stroke="#2A2346" stroke-width="1.6"/><circle cx="${x + .8}" cy="${y + 1.4}" r="3.7" fill="#2A2346"/><circle cx="${x - 1.6}" cy="${y - 2.4}" r="1.5" fill="#fff"/>`).join('')}</g>` : '';
+    const she = !!t.she, d = decl(t.name, she);
+    return { name: t.name, kind: she ? 'моя героиня' : 'мой герой', who: t.name, with: d[4], hello: 'Я твоя любимая игрушка, а теперь я ещё и говорю!', pitch: 1.12,
+      pm: t.mouth ? t.mouth[1] : 96, pmx: t.mouth ? t.mouth[0] : 60, noMouth: !t.mouth, toy: true,
+      puff: { c: '#FFFFFF', s: '#E2DCEC', x: [22, 98], y: 86 }, smile: '',
+      art: `<ellipse cx="60" cy="113" rx="36" ry="5" fill="#000" opacity=".12"/><image href="${t.img}" x="4" y="4" width="112" height="112"/>${eyes}` };
+  }
+  function register() { Object.keys(FRIENDS).filter(k => k.startsWith('toy:')).forEach(k => delete FRIENDS[k]); Object.entries(TOYS).forEach(([kid, t]) => { if (t && t.img) FRIENDS[idOf(kid)] = friendOf(t); }); }
+  register();
+  const mine = () => TOYS[ROOT.cur] && TOYS[ROOT.cur].img ? idOf(ROOT.cur) : null;
+
+  /* the picture: the photo moved and zoomed into a square; the plain background around the toy cut away
+     (filled from the edges while the colour stays close to the background and changes smoothly), else a circle */
+  function render(src, fr, cv) {
+    const ctx = cv.getContext('2d'), W = cv.width; ctx.clearRect(0, 0, W, W);
+    const base = W / Math.min(src.width, src.height), k = base * fr.z, w = src.width * k, h = src.height * k;
+    ctx.drawImage(src, (W - w) / 2 + fr.x * W, (W - h) / 2 + fr.y * W, w, h);
+    if (fr.cut) cutBg(cv, fr.tol);
+    else { ctx.globalCompositeOperation = 'destination-in'; ctx.beginPath(); ctx.arc(W / 2, W / 2, W / 2 - 1, 0, Math.PI * 2); ctx.fill(); ctx.globalCompositeOperation = 'source-over'; }
+  }
+  function cutBg(cv, tol) {
+    const ctx = cv.getContext('2d'), W = cv.width, H = cv.height, im = ctx.getImageData(0, 0, W, H), d = im.data, n = W * H;
+    const edge = []; for (let x = 0; x < W; x += 2) edge.push(x, (H - 1) * W + x); for (let y = 0; y < H; y += 2) edge.push(y * W, y * W + W - 1);
+    const med = c => { const v = edge.map(i => d[i * 4 + c]).sort((a, b) => a - b); return v[v.length >> 1]; }, bg = [med(0), med(1), med(2)];
+    const dist = (i, r, g, b) => { const a = d[i * 4] - r, e = d[i * 4 + 1] - g, f = d[i * 4 + 2] - b; return a * a + e * e + f * f; };
+    const T1 = (tol * 1.7) ** 2, T2 = (tol * .5) ** 2, seen = new Uint8Array(n), st = [];
+    for (const i of edge) if (!seen[i] && dist(i, bg[0], bg[1], bg[2]) < T1) { seen[i] = 1; st.push(i); }
+    while (st.length) {
+      const i = st.pop(), x = i % W, r = d[i * 4], g = d[i * 4 + 1], b = d[i * 4 + 2];
+      for (const j of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, i - W, i + W]) {
+        if (j < 0 || j >= n || seen[j]) continue;
+        if (dist(j, r, g, b) < T2 && dist(j, bg[0], bg[1], bg[2]) < T1) { seen[j] = 1; st.push(j); }
+      }
+    }
+    for (let i = 0; i < n; i++) {
+      if (seen[i]) { d[i * 4 + 3] = 0; continue; }
+      const x = i % W; if ((x && seen[i - 1]) || (x < W - 1 && seen[i + 1]) || (i >= W && seen[i - W]) || (i + W < n && seen[i + W])) d[i * 4 + 3] = 150;
+    }
+    ctx.putImageData(im, 0, 0);
+  }
+  // the saved picture: small, PNG or WebP with transparency
+  function exportImg(cv, size) {
+    const c = document.createElement('canvas'); c.width = c.height = size; c.getContext('2d').drawImage(cv, 0, 0, size, size);
+    const w = c.toDataURL('image/webp', .86); return w.startsWith('data:image/webp') ? w : c.toDataURL('image/png');
+  }
+
+  function screenToy(fresh = false) {
+    newScreen();
+    const old = fresh ? null : TOYS[ROOT.cur];
+    const s = { step: 'photo', src: null, fr: { x: 0, y: 0, z: 1, cut: false, tol: 40 }, eyes: old && old.eyes ? old.eyes.map(p => p.slice()) : [], mouth: old && old.mouth ? old.mouth.slice() : null, name: old ? old.name : '', she: old ? !!old.she : P.settings.gender === 'f' };
+    shell('Мой герой', `<div class="ty">
+      <div class="ty-stage" id="tyStage"><canvas id="tyCv" width="${EDIT}" height="${EDIT}"></canvas><svg id="tyOver" viewBox="0 0 120 120" aria-hidden="true"></svg><span class="ty-empty" id="tyEmpty">🧸</span></div>
+      <div class="ty-step" id="tyStep"></div>
+      <input type="file" id="tyCam" accept="image/*" capture="environment" hidden><input type="file" id="tyPick" accept="image/*" hidden>
+    </div>`, { back: screenFriends });
+    const cv = $('#tyCv'), over = $('#tyOver'), stage = $('#tyStage');
+    const redraw = () => { if (s.src) { render(s.src, s.fr, cv); $('#tyEmpty').hidden = true; stage.classList.toggle('cut', s.fr.cut); } marks(); };
+    // the googly eyes and the mouth on the picture, in the stage's 120 box
+    function marks() {
+      over.innerHTML = s.eyes.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="8" fill="#fff" stroke="#2A2346" stroke-width="1.6"/><circle cx="${x + .8}" cy="${y + 1.4}" r="3.9" fill="#2A2346"/>`).join('') +
+        (s.mouth ? `<ellipse cx="${s.mouth[0]}" cy="${s.mouth[1]}" rx="7" ry="4.5" fill="#4A1C2C" stroke="#fff" stroke-width="1.2"/>` : '');
+    }
+    const at = e => { const r = stage.getBoundingClientRect(); return [Math.round((e.clientX - r.left) / r.width * 1200) / 10, Math.round((e.clientY - r.top) / r.height * 1200) / 10]; };
+    let drag = null;
+    stage.onpointerdown = e => {
+      if (s.step === 'frame' && s.src) { drag = { x: e.clientX, y: e.clientY, fx: s.fr.x, fy: s.fr.y, w: stage.clientWidth }; try { stage.setPointerCapture(e.pointerId); } catch (er) {} return; }
+      if (s.step === 'eyes') { if (s.eyes.length >= 2) s.eyes = []; s.eyes.push(at(e)); sfx.pop(); marks(); step(); return; }
+      if (s.step === 'mouth') { s.mouth = at(e); sfx.pop(); marks(); step(); }
+    };
+    let rq = 0;
+    stage.onpointermove = e => { if (!drag) return; s.fr.x = drag.fx + (e.clientX - drag.x) / drag.w; s.fr.y = drag.fy + (e.clientY - drag.y) / drag.w; if (!rq) rq = requestAnimationFrame(() => { rq = 0; redraw(); }); };
+    stage.onpointerup = stage.onpointercancel = () => { drag = null; };
+    const got = file => {
+      if (!file) return; const url = URL.createObjectURL(file), im = new Image();
+      im.onload = () => { s.src = im; s.fr = { x: 0, y: 0, z: 1, cut: false, tol: 40 }; s.eyes = []; s.mouth = null; s.step = 'frame'; redraw(); step(); sfx.good(); };
+      im.onerror = () => talk('Не получилось открыть фото. Попробуй другое.');
+      im.src = url;
+    };
+    $('#tyCam').onchange = e => got(e.target.files[0]); $('#tyPick').onchange = e => got(e.target.files[0]);
+
+    function step() {
+      const box = $('#tyStep'), go = (k, line) => { s.step = k; step(); if (line) talk(line); };
+      stage.dataset.step = s.step;
+      if (s.step === 'photo') {
+        box.innerHTML = `<p class="ty-h">Сфотографируй свою любимую игрушку — и она станет твоим героем!</p>
+          <p class="ty-p">Поставь игрушку на однотонный фон: на стол, пол или лист бумаги. Снимай поближе, чтобы игрушка была большой.</p>
+          <div class="prow-btns ty-row"><button class="big" id="tyShoot">📷 Сфотографировать</button><button class="chip" id="tyFile">🖼️ Выбрать фото</button></div>
+          <p class="ty-small">🔒 Фото остаётся только на этом телефоне: никуда не отправляется.</p>`;
+        $('#tyShoot').onclick = () => { sfx.pop(); $('#tyCam').click(); }; $('#tyFile').onclick = () => { sfx.pop(); $('#tyPick').click(); };
+      } else if (s.step === 'frame') {
+        box.innerHTML = `<p class="ty-h">Подвинь фото пальцем, чтобы игрушка была в середине.</p>
+          <label class="ty-sl">🔍 Размер <input type="range" id="tyZ" min="1" max="3" step=".05" value="${s.fr.z}"></label>
+          <label class="ty-sw"><input type="checkbox" id="tyCut" ${s.fr.cut ? 'checked' : ''}> ✂️ Убрать фон вокруг игрушки</label>
+          <label class="ty-sl" id="tyTolL" ${s.fr.cut ? '' : 'hidden'}>Сколько фона убрать <input type="range" id="tyTol" min="12" max="90" step="2" value="${s.fr.tol}"></label>
+          <div class="prow-btns ty-row"><button class="chip" id="tyAgain">📷 Другое фото</button><button class="big" id="tyNext">Дальше →</button></div>`;
+        $('#tyZ').oninput = e => { s.fr.z = +e.target.value; redraw(); };
+        $('#tyCut').onchange = e => { s.fr.cut = e.target.checked; $('#tyTolL').hidden = !s.fr.cut; redraw(); };
+        $('#tyTol').oninput = e => { s.fr.tol = +e.target.value; redraw(); };
+        $('#tyAgain').onclick = () => { sfx.pop(); go('photo'); };
+        $('#tyNext').onclick = () => { sfx.pop(); go('eyes', 'Наклеим глазки! Нажми на фото там, где у героя глаза: сначала на один, потом на другой.'); };
+      } else if (s.step === 'eyes') {
+        box.innerHTML = `<p class="ty-h">${s.eyes.length < 2 ? `Нажми, где у героя глаза: ${s.eyes.length ? 'теперь второй' : 'сначала один'}.` : 'Глазки на месте! Они будут моргать.'}</p>
+          <p class="ty-p">Наклеим глазки-шевелилки: с ними герой моргает и смотрит на тебя.</p>
+          <div class="prow-btns ty-row"><button class="chip" id="tyNoEyes">Без глазок</button>${s.eyes.length ? '<button class="chip" id="tyEyesAgain">↩ Заново</button>' : ''}<button class="big" id="tyNext" ${s.eyes.length === 1 ? 'disabled' : ''}>Дальше →</button></div>`;
+        $('#tyNoEyes').onclick = () => { sfx.pop(); s.eyes = []; marks(); go('mouth', 'А где у героя ротик? Нажми туда — он будет говорить.'); };
+        if ($('#tyEyesAgain')) $('#tyEyesAgain').onclick = () => { sfx.pop(); s.eyes = []; marks(); step(); };
+        $('#tyNext').onclick = () => { sfx.pop(); go('mouth', 'А где у героя ротик? Нажми туда — он будет говорить.'); };
+      } else if (s.step === 'mouth') {
+        box.innerHTML = `<p class="ty-h">${s.mouth ? 'Ротик здесь! Когда герой говорит, он будет открываться.' : 'Нажми, где у героя ротик.'}</p>
+          <div class="prow-btns ty-row"><button class="chip" id="tyNoMouth">Без ротика</button><button class="big" id="tyNext" ${s.mouth ? '' : 'disabled'}>Дальше →</button></div>`;
+        $('#tyNoMouth').onclick = () => { sfx.pop(); s.mouth = null; marks(); go('name', 'Как зовут твоего героя?'); };
+        $('#tyNext').onclick = () => { sfx.pop(); go('name', 'Как зовут твоего героя?'); };
+      } else if (s.step === 'name') {
+        box.innerHTML = `<p class="ty-h">Как зовут твоего героя?</p>
+          <input class="ty-name" id="tyName" type="text" maxlength="18" autocomplete="off" placeholder="Например, Мишка" value="${esc(s.name)}">
+          <div class="ty-g"><button class="chip ${s.she ? '' : 'on'}" data-she="0">Он</button><button class="chip ${s.she ? 'on' : ''}" data-she="1">Она</button></div>
+          <div class="prow-btns ty-row"><button class="big" id="tySave">✅ Готово!</button></div>
+          <p class="ty-small" id="tyMsg"></p>`;
+        $('.ty-g').onclick = e => { const b = e.target.closest('[data-she]'); if (!b) return; sfx.pop(); s.she = b.dataset.she === '1'; $$('.ty-g .chip').forEach(x => x.classList.toggle('on', x === b)); };
+        $('#tySave').onclick = save1;
+      }
+    }
+    function save1() {
+      const name = cleanS($('#tyName').value, 18).trim();
+      if (!name) { $('#tyMsg').textContent = 'Напиши имя героя.'; $('#tyName').focus(); return; }
+      if (!s.src && !old) return;
+      // the stage box is 0…120, the friend's picture 4…116
+      const sc = ([x, y]) => [Math.round((4 + x * 112 / 120) * 10) / 10, Math.round((4 + y * 112 / 120) * 10) / 10];
+      const t = { name, she: s.she, eyes: s.eyes.length === 2 ? s.eyes.map(sc) : [], mouth: s.mouth ? sc(s.mouth) : null, t: Date.now() };
+      let ok = false;
+      for (const size of [240, 180, 128]) {
+        t.img = s.src ? exportImg(cv, size) : old.img;
+        TOYS[ROOT.cur] = t;
+        try { localStorage.setItem(KEY, JSON.stringify(TOYS)); ok = true; break; } catch (e) { if (!s.src) break; }
+      }
+      if (!ok) { TOYS = load(); $('#tyMsg').textContent = 'На телефоне не хватает места для фото. Попробуй ещё раз.'; return; }
+      register(); P.settings.friend = idOf(ROOT.cur); save(); sfx.good();
+      screenFriends();
+      talk(`Привет${nameBit()}! Я ${friend().who}. ${friend().hello} Будем заниматься вместе!`);
+    }
+    if (old) {
+      // editing: the saved picture is the photo (moving and cutting work on it as on a new one)
+      const im = new Image(); im.onload = () => { cv.getContext('2d').drawImage(im, 0, 0, EDIT, EDIT); $('#tyEmpty').hidden = true;
+        s.eyes = (old.eyes || []).map(([x, y]) => [(x - 4) * 120 / 112, (y - 4) * 120 / 112]); s.mouth = old.mouth ? [(old.mouth[0] - 4) * 120 / 112, (old.mouth[1] - 4) * 120 / 112] : null; s.step = 'eyes'; marks(); step(); };
+      im.src = old.img; talk('Можно переклеить глазки, переставить ротик или сфотографировать заново.');
+    } else talk('Сфотографируй свою любимую игрушку, и она станет твоим героем!');
+    step();
+  }
+  function remove() { delete TOYS[ROOT.cur]; try { localStorage.setItem(KEY, JSON.stringify(TOYS)); } catch (e) {} if (P.settings.friend === idOf(ROOT.cur)) { P.settings.friend = 'tiger'; save(); } register(); }
+  // the friend picker's own row: the child's hero or the button that makes one
+  function pickHTML() {
+    const id = mine(), f = id && FRIENDS[id];
+    return `<h2 class="sec-h fr-h">Мой герой</h2><div class="friends ty-pick">${f ? `<button class="friend ${P.settings.friend === id ? 'sel' : ''}" data-id="${id}">${friendSVG('', id)}<b>${esc(f.name)}</b><small>${f.kind}</small></button>
+      <div class="ty-acts"><button class="chip" id="toyEdit">✏️ Изменить</button><button class="chip" id="toyNew">📷 Новое фото</button><button class="chip" id="toyDel">🗑️ Убрать</button></div>`
+      : `<button class="ty-make" id="toyNew"><span>📷</span><b>Свой герой</b><small>сфотографируй любимую игрушку</small></button>`}</div>`;
+  }
+  function bindPick() {
+    if ($('#toyNew')) $('#toyNew').onclick = e => { e.stopPropagation(); sfx.pop(); screenToy(true); };
+    if ($('#toyEdit')) $('#toyEdit').onclick = e => { e.stopPropagation(); sfx.pop(); screenToy(); };
+    if ($('#toyDel')) $('#toyDel').onclick = e => { e.stopPropagation(); if (!confirm('Убрать своего героя? Фото удалится с этого телефона.')) return; sfx.pop(); remove(); screenFriends(); };
+  }
+  return { screenToy, pickHTML, bindPick, register, mine };
+})();
+/* TOY-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
