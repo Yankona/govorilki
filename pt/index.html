@@ -2120,6 +2120,20 @@ body.pv-on #app{padding-top:52px}
 #wrOut{display:flex;flex-direction:column;gap:12px}#wrOut:empty{display:none}
 .wr-ans{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:20px;text-align:center;background:var(--t-yellow);color:#2A2346}
 .wr-ans span{font:400 34px/1 var(--f-emoji)}.wr-ans b{font:800 22px/1.3 var(--f-body)}
+/* WARM-CSS */
+.warm{max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.warm-pair{display:flex;align-items:center;gap:12px;font:400 52px/1 var(--f-emoji)}.warm-pair i{font:800 30px var(--f-body);font-style:normal;color:var(--ink-soft)}
+.warm-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 18px;border-radius:24px;background:var(--paper);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 2px var(--line)}
+.warm-card svg{width:150px;height:auto}.warm-card b{font:400 24px var(--f-display);color:var(--ink)}
+.warm-tip{display:flex;align-items:center;gap:12px;text-align:left;padding:10px 12px;border-radius:18px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);color:var(--ink)}
+.warm-tip b{font:800 16px var(--f-body)}.warm-tip ol{margin:4px 0 0;padding-left:18px;font:600 14px/1.35 var(--f-body);color:var(--ink-soft)}
+.warm-prof{flex:none;width:96px}.warm-prof svg{width:100%;height:auto;display:block}
+.warm-end{justify-content:center}
+.m-snd{display:flex;gap:6px;justify-content:center}.m-snd .chip{min-width:46px;font-weight:800;background:#fff;color:#2A2346}.m-snd .chip.sel{background:#FFD54A;color:#2A2346;box-shadow:0 3px 0 #D39A00,inset 0 0 0 2px #fff}
+.m-start{max-height:calc(100% - 24px);overflow:auto}
+.m-start .warm-tip{background:#fff;color:#2A2346;padding:8px 10px;gap:8px;align-self:stretch}.m-start .warm-tip ol{font-size:12.5px;color:#4A4560}.m-start .warm-tip b{font:800 14px var(--f-body);color:#2A2346}.m-start .warm-prof{width:60px}
+.m-check{margin:0;font:700 13px/1.3 var(--f-body);color:#FFD27A}
+.sr-help{margin:4px 0 10px;color:#B5521B}
 </style>
 </head>
 <body>
@@ -3440,7 +3454,7 @@ function screenArticMenu() {
   talk("Senta-te em frente ao espelho. Escolhe um exercício.");
   st.onclick = e => { const c = e.target.closest('.card'); if (c) { sfx.pop(); screenArtic(+c.dataset.i); } };
 }
-function screenArtic(i, auto = false) {
+function screenArtic(i, auto = false, then = null) {
   const t = newScreen(), a = AL()[i];
   let started = false;
   shell(a.name, `<div class="artic-stage" id="artStage">
@@ -3452,7 +3466,7 @@ function screenArtic(i, auto = false) {
         <div class="steps" id="steps">${a.steps.map(() => '<i></i>').join('')}</div>
         <div class="prow-btns"><button class="big" id="go">${ICON.play}Começar</button><button class="big ghost" id="camBtn"></button></div>
         <p class="muted" id="camNote" hidden></p>
-      </div></div>`, { back: screenArticMenu });
+      </div></div>`, { back: then ? goHome : screenArticMenu });
   bindCam($('#artStage'));
   const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
   const setFace = (pose, fx) => { const old = mirror.querySelector('svg.face'); old.insertAdjacentHTML('afterend', faceSVG(pose, fx || '')); old.remove(); $('#scheme').innerHTML = profileSVG(profOf(pose)); };
@@ -3468,7 +3482,7 @@ function screenArtic(i, auto = false) {
       await wait(ms * pace()); if (t !== tok) return;
     }
     sayB.hidden = true;
-    finish({ key: 'artic:' + a.id, stars: 1, line: "A tua língua ficou mais forte!", again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
+    finish(then ? { key: 'artic:' + a.id, stars: 1, line: "A língua já aqueceu — agora vamos desenhar!", again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: "A tua língua ficou mais forte!", again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
   };
   $('#go').onclick = start;
   if (auto) talk(a.intro).then(() => later(start, 400));
@@ -6915,7 +6929,7 @@ const MOTO_Q = [{ id: 'words', n: "Lê 8 palavras em voz alta", need: 8 }, { id:
   { id: 'over', n: "Ultrapassa 20 carros", need: 20 }, { id: 'jumps', n: "Salta de 4 rampas", need: 4 }];
 // tricks in the air are said aloud: words with the sound the child trains
 const MOTO_TRICKS = { l: ["Andorinha", "Slalom", "Voo", "Relâmpago", "Radical", "Cavalinho"], r: ["Turbo", "Foguete", "Pirueta", "Arranque", "Recorde"], sh: ["Espargata", "Salto", "Estilo", "Calor"], sz: ["Vela", "Super", "Estrela", "Mortal"] };
-function motoTricks() { const s = mySounds(), w = []; Object.keys(MOTO_TRICKS).forEach(k => { if (s.includes(k)) w.push(...MOTO_TRICKS[k]); }); return w.length ? w : MOTO_TRICKS.l; }
+function motoTricks() { const w = MOTO_TRICKS[motoSnd()] || []; return w.length ? w : MOTO_TRICKS.l; }
 function moto() { P.moto = P.moto || { coins: 0, tune: {}, paint: '', paints: [], mode: 'city' }; return P.moto; }
 const motoMode = () => MOTO_MODES.find(x => x.id === moto().mode) || MOTO_MODES[1];
 const motoRank = (km = P.motoKm || 0) => MOTO_RANKS.reduce((k, r, j) => km >= r[0] ? j : k, 0);
@@ -6980,7 +6994,7 @@ function screenMoto() {
   const bike = { ...myBike(), ...(P.cos && P.cos.bike ? BIKE_SKINS[P.cos.bike] : {}) };
   const m = moto(), md = motoMode(), TU = id => m.tune[id] || 0, TR = shuffle(motoTricks());
   if (m.paint) bike.body = m.paint;
-  const MW = motoWords(), HL = sndLetters() || "l";
+  const MW = motoWords(), HL = SND_HI[motoSnd()] || sndLetters() || "l";
   shell(motoName(), `<div class="moto" id="moto"><canvas id="mc"></canvas>
       <div class="m-hud"><span class="m-rank">🏁 ${MOTO_RANKS[motoRank()][1]}</span><span class="m-dist" id="mDist">0 m</span><span class="m-cnt"><span id="mOver">0</span> 🚗 · <span id="mWords">0</span> 🗣 · <span id="mTr">0</span> 🤸</span></div>
       <div class="m-bot"><span class="m-coins">🪙 <b id="mCoins">${Math.floor(m.coins)}</b><small id="mPlus"></small></span><span class="m-spd"><b id="mSpd">0</b><small>km/h<br><em>${md.n}</em></small></span></div>
@@ -6988,7 +7002,7 @@ function screenMoto() {
       <div class="m-pop" id="mPop"></div>
       <div class="m-combo" id="mCombo" hidden><b id="mcMul">×1,00</b><span><small id="mcName">CAVALINHO</small><i id="mcT">0,0 s</i></span><em id="mcC">+0</em></div><div class="m-best" id="mBest" hidden></div>
       <div class="m-tricks" id="mTricks" hidden><button class="m-tb" id="mWh">🛞<small>Cavalinho</small><em>Shift</em></button><button class="m-tb" id="mNh">🙌<small>Sem mãos</small><em>N</em></button></div>
-      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b><p>Toca à esquerda ou à direita para mudar de faixa. Lê em voz alta as palavras das placas azuis e o nitro liga! Numa rampa, diz alto o truque e ganhas moedas.</p><small class="m-mode">Modo: ${md.n} · moedas ×${String(md.k).replace('.', ',')} · muda na garagem</small><small class="m-keys">Segura «Cavalinho» e o multiplicador sobe; mantém um som longo com a voz e sobe mais depressa. «Sem mãos» dá mais moedas, mas não dá para virar. No portátil: ← → ou A D — virar, Shift — cavalinho, N — sem mãos, espaço — «li».</small><button class="big" id="mGo">${ICON.play}Vamos!</button></div>
+      <div class="m-start" id="mStart"><b>${bike.e} ${bike.name}</b>${motoStartHTML()}<p>Toca à esquerda ou à direita para mudar de faixa. Lê em voz alta as palavras das placas azuis e o nitro liga! Numa rampa, diz alto o truque e ganhas moedas.</p><small class="m-mode">Modo: ${md.n} · moedas ×${String(md.k).replace('.', ',')} · muda na garagem</small><small class="m-keys">Segura «Cavalinho» e o multiplicador sobe; mantém um som longo com a voz e sobe mais depressa. «Sem mãos» dá mais moedas, mas não dá para virar. No portátil: ← → ou A D — virar, Shift — cavalinho, N — sem mãos, espaço — «li».</small><button class="big" id="mGo">${ICON.play}Vamos!</button></div>
     </div>`, { back: screenGarage, guide: false });
   const box = $('#moto'), cv = $('#mc'), x = cv.getContext('2d');
   let W = 0, H = 0, dpr = 1, hor = 0;
@@ -7286,9 +7300,9 @@ function screenMoto() {
       go.textContent = "🎤 A ligar o microfone…";
       const ok = await new Promise(res => { live = hearLive(onLive, { onStart: () => res(true), onFail: () => res(false), onLost: lost }); if (!live) res(false); later(() => res(!!(live && live.on)), 7000); });
       if (t !== tok) return;
-      if (ok) mode = 'sr'; else liveStop();
+      if (ok) { mode = 'sr'; if (ROOT.srFail) { ROOT.srFail = 0; save(); } } else { liveStop(); ROOT.srFail = Date.now(); save(); }
     }
-    if (mode !== 'sr') { const ok = await micOn(); if (t !== tok) return; if (ok) { MIC.keep = tok; mode = 'level'; } }
+    if (mode !== 'sr') { const ok = await micOn(); if (t !== tok) return; if (ok) { MIC.keep = tok; mode = 'level'; } } if (mode === 'level') pop("🔈 Não verifico palavras — só ouço a voz");
     $('#mStart').hidden = true; $('#mTricks').hidden = false;
     run = true; speed = 40; tone(110, .4, 'sawtooth', .06); tone(165, .5, 'sawtooth', .05, .15);
     // the first word comes right away, the next ones every 15–20 seconds
@@ -7297,7 +7311,7 @@ function screenMoto() {
   draw(); loop(t, step);
   // a test page may look inside a ride (window.__T exists only there)
   if (window.__T) window.__T.moto = { ramp: () => ramps.push({ lane: Math.round(target), d: 40, hit: false }), st: () => ({ coins, tricks, jumps, air, words, dist, zone, sign: sign && { word: sign.word, trick: !!sign.trick } }), go: v => { dist = v; } };
-  talk(`${motoName()}! A tua mota: ${bike.name}. Toca à esquerda ou à direita para mudar de faixa. As placas azuis têm palavras${mySounds().includes('l') ? " com o som do L" : ''}: lê uma em voz alta e o nitro liga! E numa rampa, diz alto o nome do truque.`);
+  motoRemind(t).then(() => t === tok && talk(`${motoName()}! A tua mota: ${bike.name}. Toca à esquerda ou à direita para mudar de faixa. As placas azuis têm palavras${" com o som " + sndLbl(motoSnd())}: lê uma em voz alta e o nitro liga! E numa rampa, diz alto o nome do truque.`));
 }
 
 /* ---------- «Жар-птицы»: Vera's own K-pop girl group of demon hunters. Each name trains one of her sounds:
@@ -8281,7 +8295,7 @@ function screenParents(focus) {
       <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>Um dia sem leitura custa 10 estrelas (uma lição de leitura, o livro ou um jogo de leitura contam para o dia)</label>
       ${readFinesHTML()}
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>O microfone verifica se a criança falou em voz alta e soprou</label>
-      <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Verificar que palavra foi dita (reconhecimento de voz do navegador: o som é processado pela Google no Chrome ou pela Apple no Safari)</label>
+      <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Verificar que palavra foi dita (reconhecimento de voz do navegador: o som é processado pela Google no Chrome ou pela Apple no Safari)</label>${srHelpHTML()}${warmSetHTML()}
       <p class="muted" id="voiceState"></p>
       <div class="prow-btns"><button class="big ghost" id="testVoice">Testar a voz</button></div>
     </section>
@@ -9099,14 +9113,11 @@ const MOTO_R = LX('MOTO_R', ['гонка', 'трасса', 'мотор', 'рул
 const MOTO_SH = LX('MOTO_SH', ['машина', 'шина', 'шоссе', 'шлем', 'жук', 'шофёр', 'ёжик', 'чайка', 'щётка', 'шарф', 'флажок', 'пешеход', 'шлагбаум', 'лужа', 'дождь', 'ключ', 'мяч', 'часы']);
 const MOTO_SZ = LX('MOTO_SZ', ['скорость', 'самокат', 'светофор', 'сирена', 'скейт', 'звезда', 'зебра', 'заправка', 'насос', 'колесо', 'автобус', 'мост', 'знак', 'зонт', 'сигнал', 'стоп']);
 function motoWords() {
-  const s = mySounds(), w = [];
-  if (s.includes('l')) w.push(...MOTO_WORDS);
-  if (s.includes('r')) w.push(...MOTO_R);
-  if (s.includes('sh')) w.push(...MOTO_SH);
-  if (s.includes('sz')) w.push(...MOTO_SZ);
-  return w.length ? [...new Set(w)] : MOTO_WORDS;
+  // the sound the child picked for the track (motoSnd: Л, Р, Ш or С)
+  const w = { l: MOTO_WORDS, r: MOTO_R, sh: MOTO_SH, sz: MOTO_SZ }[motoSnd()];
+  return w && w.length ? [...new Set(w)] : MOTO_WORDS;
 }
-const motoName = () => mySounds().includes('l') ? "Pista do L" : "Pista";
+const motoName = () => `Pista do ${sndLbl(motoSnd())}`;
 
 /* ---------- after every game: «Ещё раз» and «Поделиться» first, then a picture to save, 👍/👎 and a battle.
    A battle is a challenge to beat a score in the same game: to a brother or sister on this phone, to a child in the
@@ -11366,7 +11377,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '95';
+const APP_VER = '96';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14877,6 +14888,85 @@ const IDEAS = (() => {
 })();
 
 /* LOGO-END */
+/* WARM-BEGIN */
+/* ---------- A minute for the tongue before the fun. A child who loves drawing and skips the tongue exercises does one
+   exercise for her sounds before a drawing game opens (at most once in 10 minutes; grown-ups switch it off in the
+   settings). Before the track the friend reminds how the sound is said, with the side view of the tongue, and the track
+   trains the sound the child picks: Л, Р, Ш or С. When the phone cannot check words (an iPhone app opened from the home
+   screen, recognition switched off) the game says so instead of quietly taking any word. Function declarations: the
+   games' list and the settings screen call them. ---------- */
+const WARM_GAP = 10 * 60e3, SND_KEYS = ['l', 'r', 'sh', 'sz'];
+function sndLbl(k) { return IS_RU ? { l: RU('Л'), r: RU('Р'), sh: RU('Ш'), sz: RU('С') }[k] : { l: 'L', r: 'R', sh: LANG === 'de' ? 'SCH' : LANG === 'pt' ? 'CH' : 'SH', sz: 'S' }[k]; }
+function sndTip(k) { return SOUNDS[sndIdx({ l: RU('Л'), r: RU('Р'), sh: RU('Ш'), sz: RU('С') }[k])]; }
+function sndTipHTML(k, n = 3) {
+  const s = sndTip(k); if (!s) return '';
+  return `<div class="warm-tip"><div class="warm-prof">${profileSVG(s.prof)}</div><div><b>Como dizer o ${esc(sndLbl(k))}</b><ol>${s.steps.slice(0, n).map(x => `<li>${esc(x)}</li>`).join('')}</ol></div></div>`;
+}
+const warmSnd = () => mySounds().find(k => SND_KEYS.includes(k)) || '';
+
+/* before drawing */
+const WARM_DRAW = ['draw', 'color'];
+function warmPick() {
+  const all = AL(), s = mySounds();
+  const pre = s.includes('sh') ? all.filter(a => /^sh-/.test(a.id)) : s.includes('l') ? all.filter(a => /^l-/.test(a.id)) : [];
+  const list = pre.length ? pre : all;
+  return Math.max(0, all.indexOf(list[(P.warmN || 0) % list.length]));
+}
+function screenWarm(go) {
+  const i = warmPick(), a = AL()[i], k = warmSnd();
+  newScreen();
+  shell("Aquecimento da língua", `<div class="warm">
+      <div class="warm-pair" aria-hidden="true"><span>👅</span><i>➜</i><span>🎨</span></div>
+      <p class="lead">Primeiro um exercício para a língua — e depois desenhamos!</p>
+      <div class="warm-card">${faceSVG(a.thumb)}<b>${esc(a.name)}</b></div>
+      ${k ? sndTipHTML(k) : ''}
+      <div class="prow-btns warm-end"><button class="big" id="warmGo">👅 Fazer o exercício</button></div>
+    </div>`, { back: goHome });
+  talk(`Primeiro aquecemos a língua e depois desenhamos! O exercício: ${a.name}.`);
+  $('#warmGo').onclick = () => { sfx.pop(); screenArtic(i, true, () => { P.warmAt = Date.now(); P.warmN = (P.warmN || 0) + 1; save(); go(); }); };
+}
+function warmGate(go) {
+  if (GPLAY || P.settings.warmDraw === false || Date.now() - (P.warmAt || 0) < WARM_GAP) return go();
+  screenWarm(go);
+}
+WARM_DRAW.forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !g.warm) { const go0 = g.go; g.go = (...a) => warmGate(() => go0(...a)); g.warm = 1; } });
+
+/* the track: the sound it trains, the reminder, and a word about what the phone can check */
+function motoSnd() { const s = moto().snd, mine = mySounds().filter(k => SND_KEYS.includes(k)); return SND_KEYS.includes(s) ? s : mine[0] || 'l'; }
+function motoStartHTML() {
+  const k = motoSnd();
+  return `<div class="m-snd" role="group">${SND_KEYS.map(x => `<button class="chip ${x === k ? 'sel' : ''}" data-msnd="${x}" aria-pressed="${x === k}">${esc(sndLbl(x))}</button>`).join('')}</div>
+    ${sndTipHTML(k, 2)}${srOk() ? '' : `<p class="m-check">🔈 Neste telemóvel só ouço a tua voz — não consigo verificar as palavras.</p>`}`;
+}
+async function motoRemind(t) {
+  const k = motoSnd(), s = sndTip(k), m = moto();
+  // the start card's hint about holding the sound with the voice («л-л-л») follows the track's sound
+  const st = $('#mStart'), h = sndLbl(k).toLowerCase();
+  if (st && k !== 'l') { const w = document.createTreeWalker(st, NodeFilter.SHOW_TEXT); let nd; while ((nd = w.nextNode())) nd.nodeValue = nd.nodeValue.replace(/л-л-л|l-l-l/, [h, h, h].join('-')); }
+  if (!s || !s.line || Date.now() - ((m.tipAt || {})[k] || 0) < WARM_GAP) return;
+  m.tipAt = { ...(m.tipAt || {}), [k]: Date.now() }; save();
+  await talk(s.line);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-msnd]'); if (!b) return;
+  e.stopPropagation(); sfx.tick(); moto().snd = b.dataset.msnd; save(); screenMoto();
+});
+// the track's tile stands in the section of the sound it trains
+{ const g = GAMES.find(x => x.id === 'l-moto'); if (g) Object.defineProperty(g, 'also', { get: () => [{ l: 5, r: 1, sh: 9, sz: 15 }[motoSnd()]], configurable: true }); }
+
+/* the settings: the warm-up switch, and why words are not checked on this phone */
+function srHelpHTML() {
+  if (ROOT.srOff || ROOT.micOff) return '';
+  const fail = !SR ? 'none' : (HEAR.off || ROOT.srFail) ? 'fail' : '';
+  if (!fail) return '';
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  return `<p class="muted sr-help">⚠️ ${fail === 'none' ? "Este navegador não reconhece a fala: o jogo ouve a voz, mas não verifica as palavras." : "O reconhecimento de fala não arrancou neste aparelho: o jogo ouve a voz, mas não verifica as palavras."}${ios ? " No iPhone e no iPad, a verificação funciona se abrir o jogo no Safari (não pelo ícone no ecrã principal) e ativar o ditado: Definições → Geral → Teclado → Ativar ditado." : ''}</p>`;
+}
+function warmSetHTML() {
+  return `<label class="sw" for="warmIn"><input id="warmIn" type="checkbox" ${P.settings.warmDraw === false ? '' : 'checked'}>Antes de desenhar — um exercício para a língua</label>`;
+}
+document.addEventListener('change', e => { if (e.target && e.target.id === 'warmIn') { P.settings.warmDraw = !!e.target.checked; save(); } });
+/* WARM-END */
 /* WORLD-BEGIN */
 /* ---------- Children of the world: a child who speaks one language at home, another at school, a third in the street
    and a fourth with friends. «Где на каком языке» keeps the child's own map (settings.roles: home, gran, school,
