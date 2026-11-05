@@ -15,7 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'dist')
 SITE = os.environ.get('SITE_URL', 'https://govorilki.com').rstrip('/')
 LANGS = ['ru', 'en', 'pt']
-KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'grand', 'faq']
+KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq']
 APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/'}
 # the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
 APP_DIR = os.environ.get('APP_DIR', '')

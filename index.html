@@ -2093,6 +2093,26 @@ body.pv-on #app{padding-top:52px}
 .lp-list li{padding:12px 16px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
 .lp-login{max-width:520px;width:100%;margin:0 auto;padding:18px;border-radius:24px;background:var(--paper);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 2px var(--line);box-sizing:border-box;scroll-margin-top:12px}
 .lp-end{align-items:center;text-align:center}
+/* WORLD-CSS */
+.wr{max-width:640px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.wr-row{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:20px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
+.wr-h{display:flex;align-items:center;gap:10px;font:800 18px/1.25 var(--f-body);color:var(--ink)}.wr-h b{font:400 30px/1 var(--f-emoji)}
+.wr-langs{display:flex;flex-wrap:wrap;gap:6px}.wr-langs .pick-b{min-height:40px;padding:6px 12px;font-size:15px;border-radius:999px}
+.wr-more summary{cursor:pointer;padding:2px;font:700 14px var(--f-body);color:var(--ink-soft)}.wr-more .wr-langs{margin-top:6px}
+.wr-map{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.wr-pin{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:70px;padding:10px 8px;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong),inset 0 0 0 2px var(--line)}
+.wr-pin b{font:400 30px/1 var(--f-emoji)}.wr-pin i{font:400 24px/1 var(--f-emoji);font-style:normal}.wr-pin small{font:700 12px var(--f-body);color:var(--ink-soft)}
+.wr-end{justify-content:center}
+.wr-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border-radius:24px;text-align:center;background:var(--paper);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 2px var(--line)}
+.wr-who{font:400 72px/1 var(--f-emoji)}.wr-card b{font:400 24px var(--f-display);color:var(--ink)}.wr-card p{margin:0;font:800 20px/1.35 var(--f-body);color:var(--ink)}
+.wr-q{margin:0;text-align:center;font:800 17px/1.3 var(--f-body);color:var(--ink-soft)}
+.wr-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:10px}
+.wr-opt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border:0;border-radius:20px;cursor:pointer;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 2px var(--line)}
+.wr-opt span{font:400 44px/1 var(--f-emoji)}.wr-opt small{font:800 14px var(--f-body)}.wr-opt:disabled{cursor:default}
+.wr-opt.no{opacity:.35}.wr-opt.yes{background:var(--t-mint);color:#2A2346;box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}
+#wrOut{display:flex;flex-direction:column;gap:12px}#wrOut:empty{display:none}
+.wr-ans{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:20px;text-align:center;background:var(--t-yellow);color:#2A2346}
+.wr-ans span{font:400 34px/1 var(--f-emoji)}.wr-ans b{font:800 22px/1.3 var(--f-body)}
 </style>
 </head>
 <body>
@@ -11330,7 +11350,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '92';
+const APP_VER = '93';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14439,7 +14459,7 @@ const PHR = (() => {
   }
   GAMES.push({ id: 'ml-phr', hide: () => !IS_RU || !langs().length, name: 'Нужные фразы', sub: 'как сказать в садике и в школе', ico: () => pic('💬'), bg: 'var(--t-peach)', go: () => home(), grp: 14,
     prog: () => { const c = langs()[0]; const n = c ? due(c).length : 0; return n ? `на сегодня ${n}` : ''; } });
-  return { home };
+  return { home, BASE, gtx };
 })();
 
 /* ---------- «Гимнастика с ватной палочкой»: a cotton bud held by a grown-up gives the tongue and lips something to feel
@@ -14841,6 +14861,135 @@ const IDEAS = (() => {
 })();
 
 /* LOGO-END */
+/* WORLD-BEGIN */
+/* ---------- Children of the world: a child who speaks one language at home, another at school, a third in the street
+   and a fourth with friends. «Где на каком языке» keeps the child's own map (settings.roles: home, gran, school,
+   friends, street → a language code); «Кому как сказать?» trains the switch: a person and a situation («скажи
+   учительнице: можно в туалет?»), the child picks the language for this person, hears the phrase in it and says it
+   aloud. Mixing languages is normal; the game makes the choice conscious. Phrases come from «Нужные фразы» (PHR).
+   Russian only; one declaration for the translation tool. ---------- */
+const WORLD = (() => {
+  // [key, emoji, label on the map screen, short label on the map]
+  const ROLES = [
+    ['home', '🏠', 'Дома', 'дома'],
+    ['gran', '👵', 'С бабушкой и дедушкой', 'бабушка'],
+    ['school', '🏫', 'В школе или садике', 'школа'],
+    ['friends', '👫', 'С друзьями', 'друзья'],
+    ['street', '🛝', 'На улице, в магазине, в кафе', 'улица']];
+  // the people the child talks to: [emoji, who, to whom, with whom, role, phrase categories, phrases that make no sense to them]
+  const PEOPLE = [
+    ['👩', 'Мама', 'маме', 'с мамой', 'home', ['body'], /к маме/],
+    ['👵', 'Бабушка', 'бабушке', 'с бабушкой', 'gran', ['body', 'food']],
+    ['👩‍🏫', 'Учительница', 'учительнице', 'с учительницей', 'school', ['sch']],
+    ['🧒', 'Друг', 'другу', 'с другом', 'friends', ['play']],
+    ['🧑‍🍳', 'Продавец в кафе', 'продавцу в кафе', 'в кафе', 'street', ['food']]];
+  const LANG_IN = { ru: 'по-русски', uk: 'по-украински', pt: 'по-португальски', en: 'по-английски', de: 'по-немецки', es: 'по-испански', fr: 'по-французски', it: 'по-итальянски', he: 'на иврите', tr: 'по-турецки', zh: 'по-китайски' };
+  const HELLO = { ru: 'Привет!', uk: 'Привіт!', pt: 'Olá!', en: 'Hello!', de: 'Hallo!', es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!', he: 'שלום!', tr: 'Merhaba!', zh: '你好！' };
+  function roles(pr = P) {
+    const st = pr.settings; st.roles = st.roles || {};
+    const r = st.roles;
+    if (!r.home) r.home = myLangs(pr)[0] || 'ru';
+    if (!r.gran) r.gran = r.home;
+    return r;
+  }
+  const langsOn = () => { const r = roles(); return [...new Set(ROLES.map(x => r[x[0]]).filter(Boolean))]; };
+  const ready = () => langsOn().length >= 2;
+  const flag = c => mlInfo(c)[1];
+  const lname = c => mlInfo(c)[2];
+  // the phrase in a language: Russian is the phrase itself, the others are its translations
+  const phrase = (x, c) => c === 'ru' ? PHR.gtx(x.ru) : PHR.gtx(x.t[c]);
+  const mapHTML = () => { const r = roles(); return `<div class="wr-map">${ROLES.filter(x => r[x[0]]).map(([k, e, , short]) => `<span class="wr-pin"><b>${e}</b><i>${flag(r[k])}</i><small>${esc(short)}</small></span>`).join('')}</div>`; };
+  const goLabel = () => ready() ? '🙋 Играть: «Кому как сказать?»' : 'Готово';
+
+  /* «Где на каком языке»: the child's own map, made together with a grown-up */
+  function screenRoles(after) {
+    newScreen();
+    const r = roles(), mine = myLangs(), more = ML_LANGS.map(x => x[0]).filter(c => !mine.includes(c));
+    const btn = (k, c) => `<button class="pick-b ${r[k] === c ? 'sel' : ''}" data-l="${c}" aria-pressed="${r[k] === c}">${flag(c)} ${esc(lname(c))}</button>`;
+    const row = ([k, e, label]) => `<div class="wr-row" data-role="${k}"><div class="wr-h"><b>${e}</b><span>${esc(label)}</span></div>
+      <div class="wr-langs">${mine.map(c => btn(k, c)).join('')}</div>
+      <details class="wr-more"><summary>другой язык…</summary><div class="wr-langs">${more.map(c => btn(k, c)).join('')}</div></details></div>`;
+    const kid = kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f');
+    shell('Где на каком языке', `<div class="wr">
+      <p class="lead">Дома один язык, в школе другой, с друзьями третий — это нормально, так растут дети мира. Отметьте вместе с ${esc(kid.ins)}, где на каком языке ${G('она', 'он')} говорит.</p>
+      ${ROLES.map(row).join('')}
+      <h3 class="fam-s">Моя карта языков</h3><div id="wrMap">${mapHTML()}</div>
+      <div class="prow-btns wr-end"><button class="big" id="wrGo">${goLabel()}</button></div>
+    </div>`, { back: () => (after || goHome)() });
+    $('.wr').onclick = e => {
+      const b = e.target.closest('[data-l]'); if (!b) return;
+      const k = b.closest('[data-role]').dataset.role, c = b.dataset.l;
+      sfx.tick(); r[k] = c;
+      sayIn(c, HELLO[c] || '', .85);
+      // a language picked from «другой язык…» becomes one of the child's languages
+      if (!myLangs().includes(c)) { P.settings.langs = [...myLangs(), c]; save(); screenRoles(after); return; }
+      save();
+      b.closest('.wr-row').querySelectorAll('[data-l]').forEach(x => { const on = x.dataset.l === c; x.classList.toggle('sel', on); x.setAttribute('aria-pressed', on); });
+      $('#wrMap').innerHTML = mapHTML();
+      $('#wrGo').textContent = goLabel();
+    };
+    $('#wrGo').onclick = () => { sfx.pop(); ready() ? screenSay() : (after || goHome)(); };
+    talk('Где ты говоришь на каком языке? Нажми на флажки вместе со взрослым.');
+  }
+
+  /* «Кому как сказать?» */
+  function deck() {
+    const r = roles(), out = [];
+    PEOPLE.forEach(p => {
+      const c = r[p[4]]; if (!c) return;
+      const xs = PHR.BASE.filter(x => p[5].includes(x.cat) && phrase(x, c) && !(p[6] && p[6].test(PHR.gtx(x.ru))));
+      shuffle(xs).slice(0, 2).forEach(x => out.push({ p, x, c }));
+    });
+    return shuffle(out).slice(0, 8);
+  }
+  function screenSay() {
+    if (!ready()) { screenRoles(); return; }
+    const t = newScreen(), cards = deck(), opts = langsOn();
+    if (!cards.length) { screenRoles(); return; }
+    let k = 0, right = 0;
+    const done = () => finish({ key: 'world-say', stars: right >= cards.length - 1 ? 3 : right >= cards.length / 2 ? 2 : 1,
+      line: `Верный язык с первого раза: ${right} из ${cards.length}.`, again: () => screenSay(), menu: () => screenRoles() });
+    const show = () => {
+      const { p, x, c } = cards[k], [e, who, to, withWho] = p, ru = PHR.gtx(x.ru), my = k;
+      let firstTry = true;
+      const still = () => t === tok && k === my;
+      shell('Кому как сказать?', `<div class="wr wr-say"><p class="ml-step">${k + 1} / ${cards.length}</p>
+        <div class="wr-card"><span class="wr-who">${e}</span><b>${esc(who)}</b><p>Скажи ${esc(to)}: «${esc(ru)}»</p></div>
+        <p class="wr-q">На каком языке ты говоришь ${esc(withWho)}?</p>
+        <div class="wr-opts" id="wrOpts">${opts.map(o => `<button class="wr-opt" data-c="${o}"><span>${flag(o)}</span><small>${esc(lname(o))}</small></button>`).join('')}</div>
+        <div id="wrOut"></div>${mlNoVoice(opts.filter(o => o !== 'ru'))}</div>`, { back: () => screenRoles() });
+      talk(`Скажи ${to}: ${ru} На каком языке?`);
+      $('#wrOpts').onclick = async ev => {
+        const b = ev.target.closest('[data-c]'); if (!b || b.disabled) return;
+        if (b.dataset.c !== c) {
+          sfx.oops(); firstTry = false; b.disabled = true; b.classList.add('no');
+          const w = withWho[0].toUpperCase() + withWho.slice(1);
+          talk(`${w} ты говоришь ${LANG_IN[c] || lname(c)}. Попробуй ещё.`);
+          return;
+        }
+        sfx.good(); if (firstTry) right++;
+        $$('#wrOpts [data-c]').forEach(x => { x.disabled = true; x.classList.toggle('yes', x === b); });
+        const said = phrase(x, c), now = `Теперь скажи сам${G('а', '')}.`;
+        $('#wrOut').innerHTML = `<div class="wr-ans"><span>${flag(c)}</span><b>${esc(mlText(said))}</b></div>
+          <div class="prow-btns wr-end"><button class="chip" id="wrHear">🔊 Ещё раз</button><button class="big" id="wrSaid">🗣️ ${G('Сказала', 'Сказал')}!</button></div>`;
+        $('#wrHear').onclick = () => { sfx.pop(); c === 'ru' ? say(said) : sayIn(c, said, .75); };
+        $('#wrSaid').onclick = () => { sfx.pop(); k++; if (k >= cards.length) done(); else show(); };
+        if (c === 'ru') { if (still()) say(`${said} ${now}`); }
+        else { await sayIn(c, said, .75); if (still()) talk(now); }
+      };
+    };
+    show();
+  }
+
+  // the section «Мои языки» (on the tab «Говорим») now opens with the map and the game
+  const sec = SECTIONS.find(x => x.g === 14); if (sec && IS_RU) sec.p = 'где на каком языке, кому как сказать и как звучит каждый твой язык';
+  const at = GAMES.findIndex(g => g.id === 'ml-sound');
+  GAMES.splice(at < 0 ? GAMES.length : at, 0,
+    { id: 'world-say', hide: () => !IS_RU || !mlOn(), name: 'Кому как сказать?', sub: 'маме, учительнице, другу — на своём языке', ico: () => pic('🙋'), bg: 'var(--t-yellow)', go: () => screenSay(), grp: 14 },
+    { id: 'world-roles', hide: () => !IS_RU || !mlOn(), name: 'Где на каком языке', sub: () => { const r = roles(); return ROLES.filter(x => r[x[0]]).map(x => x[1] + flag(r[x[0]])).join(' '); }, ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenRoles(), grp: 14 });
+  return { roles, screenRoles, screenSay, ready };
+})();
+/* WORLD-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
