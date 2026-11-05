@@ -2151,6 +2151,14 @@ body.pv-on #app{padding-top:52px}
 @keyframes lv-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,1.035)}}
 @keyframes lv-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-12%) scale(1.04)}}
 @keyframes lv-shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+/* FIX-CSS */
+.kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0}
+label.sw{flex-direction:row;width:auto}div.sw{font-weight:inherit;cursor:auto}
+span.lg-n{position:static;font:inherit;color:inherit}i.lg-n{display:block;flex:none;min-width:0}
+#cmp.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}@media (max-width:560px){#cmp.cmp{grid-template-columns:1fr}}
+div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;cursor:auto}button.chest{flex:none;min-width:0;display:inline-block}
+.cmp .pw-head{width:auto;aspect-ratio:auto;flex:none}.pinwheel .pw-head{display:block}
+/* FIX-END */
 </style>
 </head>
 <body>
@@ -11389,7 +11397,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '100';
+const APP_VER = '101';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
