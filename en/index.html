@@ -11516,7 +11516,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '108';
+const APP_VER = '109';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15648,6 +15648,16 @@ const TOY = (() => {
   }
   function register() { Object.keys(FRIENDS).filter(k => k.startsWith('toy:')).forEach(k => delete FRIENDS[k]); Object.entries(TOYS).forEach(([kid, t]) => { if (t && t.img) FRIENDS[idOf(kid)] = friendOf(t); }); }
   register();
+  // heroes saved before drawings: drawn once, the photo kept under the drawing
+  setTimeout(() => Object.values(TOYS).forEach(t => {
+    if (!t || !t.img || t.drawn !== undefined) return;
+    const im = new Image();
+    im.onload = () => { const c = document.createElement('canvas'); c.width = c.height = EDIT; c.getContext('2d').drawImage(im, 0, 0, EDIT, EDIT);
+      t.photo = t.img; t.img = exportImg(cartoon(c), 240); t.drawn = 1;
+      try { localStorage.setItem(KEY, JSON.stringify(TOYS)); } catch (e) { t.img = t.photo; delete t.photo; t.drawn = 0; }
+      register(); };
+    im.src = t.img;
+  }), 1500);
   const mine = () => TOYS[ROOT.cur] && TOYS[ROOT.cur].img ? idOf(ROOT.cur) : null;
 
   /* the picture: the photo moved and zoomed into a square; the plain background around the toy cut away
@@ -15679,6 +15689,89 @@ const TOY = (() => {
     }
     ctx.putImageData(im, 0, 0);
   }
+  /* the photo becomes a drawing, like the other friends: an edge-keeping blur (Kuwahara, quick with summed tables)
+     paints flat patches, the colours are cut to a few bright ones (k-means), stray specks are cleaned, dark lines go
+     where a colour meets a much darker or lighter one, and a thicker line goes round the hero */
+  function cartoon(src) {
+    const W = src.width, H = src.height, out = document.createElement('canvas'); out.width = W; out.height = H;
+    const o = out.getContext('2d'); o.drawImage(src, 0, 0);
+    const im = o.getImageData(0, 0, W, H), d = im.data, n = W * H, R = Math.max(2, Math.round(W / 70)), on = i => d[i * 4 + 3] > 20;
+    // crumbs of the background left by the cut would each get a line: only the big parts stay
+    { const comp = new Int32Array(n).fill(-1), sizes = []; let id = 0;
+      for (let s0 = 0; s0 < n; s0++) { if (!on(s0) || comp[s0] >= 0) continue; const st = [s0]; comp[s0] = id; let sz = 0;
+        while (st.length) { const i = st.pop(), x = i % W; sz++; for (const j of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, i - W, i + W]) if (j >= 0 && j < n && comp[j] < 0 && on(j)) { comp[j] = id; st.push(j); } }
+        sizes.push(sz); id++; }
+      const big = Math.max(...sizes, 0), keep = sizes.map(z => z >= Math.max(60, big * .03));
+      for (let i = 0; i < n; i++) if (comp[i] >= 0 && !keep[comp[i]]) d[i * 4 + 3] = 0; }
+    const W1 = W + 1, S = [0, 1, 2, 3, 4, 5].map(() => new Float64Array(W1 * (H + 1)));
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x, a = on(i) ? 1 : 0, r = d[i * 4] * a, g = d[i * 4 + 1] * a, b = d[i * 4 + 2] * a, L = .299 * r + .587 * g + .114 * b;
+      const v = [r, g, b, L, L * L, a], j = (y + 1) * W1 + x + 1;
+      for (let k = 0; k < 6; k++) S[k][j] = v[k] + S[k][j - 1] + S[k][j - W1] - S[k][j - W1 - 1];
+    }
+    const box = (k, x0, y0, x1, y1) => S[k][y1 * W1 + x1] - S[k][y0 * W1 + x1] - S[k][y1 * W1 + x0] + S[k][y0 * W1 + x0];
+    const pc = new Float32Array(n * 3), lab = new Int16Array(n).fill(-1);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x; if (!on(i)) continue;
+      let best = Infinity, bc = null;
+      for (const [qx, qy] of [[1, 1], [0, 1], [1, 0], [0, 0]]) {
+        const x0 = Math.max(0, x - qx * R), y0 = Math.max(0, y - qy * R), x1 = Math.min(W, x0 + R + 1), y1 = Math.min(H, y0 + R + 1), c = box(5, x0, y0, x1, y1);
+        if (!c) continue;
+        const m = box(3, x0, y0, x1, y1) / c, v = box(4, x0, y0, x1, y1) / c - m * m;
+        if (v < best) { best = v; bc = [box(0, x0, y0, x1, y1) / c, box(1, x0, y0, x1, y1) / c, box(2, x0, y0, x1, y1) / c]; }
+      }
+      pc[i * 3] = bc[0]; pc[i * 3 + 1] = bc[1]; pc[i * 3 + 2] = bc[2];
+    }
+    // a few colours: k-means on a sample, centres spread out first
+    const ids = []; for (let i = 0; i < n; i++) if (on(i)) ids.push(i);
+    if (!ids.length) return out;
+    const smp = ids.filter((_, k) => k % Math.max(1, Math.floor(ids.length / 3000)) === 0), K = Math.min(7, smp.length);
+    const dist = (i, c) => { const a = pc[i * 3] - c[0], b = pc[i * 3 + 1] - c[1], e = pc[i * 3 + 2] - c[2]; return a * a + b * b + e * e; };
+    const C = [[pc[smp[0] * 3], pc[smp[0] * 3 + 1], pc[smp[0] * 3 + 2]]];
+    while (C.length < K) { let far = smp[0], fd = -1; for (const i of smp) { const m = Math.min(...C.map(c => dist(i, c))); if (m > fd) { fd = m; far = i; } } C.push([pc[far * 3], pc[far * 3 + 1], pc[far * 3 + 2]]); }
+    const near = i => { let b = 0, bd = Infinity; for (let k = 0; k < C.length; k++) { const v = dist(i, C[k]); if (v < bd) { bd = v; b = k; } } return b; };
+    for (let it = 0; it < 8; it++) {
+      const acc = C.map(() => [0, 0, 0, 0]);
+      for (const i of smp) { const k = near(i), a = acc[k]; a[0] += pc[i * 3]; a[1] += pc[i * 3 + 1]; a[2] += pc[i * 3 + 2]; a[3]++; }
+      acc.forEach((a, k) => { if (a[3]) C[k] = [a[0] / a[3], a[1] / a[3], a[2] / a[3]]; });
+    }
+    // brighter and a bit more colourful, like paints
+    const P = C.map(([r, g, b]) => {
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, k = 1.3;
+      const f = v => Math.max(0, Math.min(255, l + (v - l) * k + 10));
+      return [f(r), f(g), f(b)];
+    });
+    for (const i of ids) lab[i] = near(i);
+    // stray specks and ragged patches: twice, each pixel takes the most common colour around it
+    let lab2 = lab;
+    for (let pass = 0; pass < 2; pass++) {
+      const src = lab2, nx = src.slice();
+      for (const i of ids) {
+        const x = i % W, y = (i / W) | 0, cnt = new Int16Array(C.length); let b = src[i], bn = 0;
+        for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue; const l = src[yy * W + xx]; if (l >= 0 && ++cnt[l] > bn) { bn = cnt[l]; b = l; } }
+        nx[i] = b;
+      }
+      lab2 = nx;
+    }
+    const lum = k => .299 * P[k][0] + .587 * P[k][1] + .114 * P[k][2], INK = [42, 35, 70];
+    const ink = new Uint8Array(n);
+    for (const i of ids) {
+      const x = i % W, y = (i / W) | 0;
+      // round the hero: two pixels of line
+      let edge = false;
+      for (let dy = -2; dy <= 2 && !edge; dy++) for (let dx = -2; dx <= 2; dx++) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= W || yy >= H || !on(yy * W + xx)) { if (Math.abs(dx) + Math.abs(dy) <= 2) { edge = true; break; } } }
+      if (edge) { ink[i] = 2; continue; }
+      // inside: a line where the colour changes a lot
+      const r = x < W - 1 ? i + 1 : -1, dn = y < H - 1 ? i + W : -1;
+      for (const j of [r, dn]) if (j >= 0 && lab2[j] >= 0 && lab2[j] !== lab2[i] && Math.abs(lum(lab2[j]) - lum(lab2[i])) > 34) { ink[i] = 1; break; }
+    }
+    for (const i of ids) {
+      const c = ink[i] ? INK : P[lab2[i]], q = i * 4, m = ink[i] === 1 ? .8 : 1;
+      d[q] = ink[i] === 1 ? c[0] * m + P[lab2[i]][0] * (1 - m) : c[0]; d[q + 1] = ink[i] === 1 ? c[1] * m + P[lab2[i]][1] * (1 - m) : c[1]; d[q + 2] = ink[i] === 1 ? c[2] * m + P[lab2[i]][2] * (1 - m) : c[2]; d[q + 3] = 255;
+    }
+    o.putImageData(im, 0, 0);
+    return out;
+  }
   // the saved picture: small, PNG or WebP with transparency
   function exportImg(cv, size) {
     const c = document.createElement('canvas'); c.width = c.height = size; c.getContext('2d').drawImage(cv, 0, 0, size, size);
@@ -15688,13 +15781,17 @@ const TOY = (() => {
   function screenToy(fresh = false) {
     newScreen();
     const old = fresh ? null : TOYS[ROOT.cur];
-    const s = { step: 'photo', src: null, fr: { x: 0, y: 0, z: 1, cut: false, tol: 40 }, eyes: old && old.eyes ? old.eyes.map(p => p.slice()) : [], mouth: old && old.mouth ? old.mouth.slice() : null, name: old ? old.name : '', she: old ? !!old.she : P.settings.gender === 'f' };
+    const s = { step: 'photo', src: null, fr: { x: 0, y: 0, z: 1, cut: false, tol: 40 }, eyes: old && old.eyes ? old.eyes.map(p => p.slice()) : [], mouth: old && old.mouth ? old.mouth.slice() : null, name: old ? old.name : '', she: old ? !!old.she : P.settings.gender === 'f', drawn: old ? old.drawn !== 0 : true };
+    // the photo as it was framed and its drawing; the stage shows one of them from the eyes on
+    const photoC = document.createElement('canvas'), drawC = document.createElement('canvas'); photoC.width = photoC.height = drawC.width = drawC.height = EDIT;
     shell("My hero", `<div class="ty">
       <div class="ty-stage" id="tyStage"><canvas id="tyCv" width="${EDIT}" height="${EDIT}"></canvas><svg id="tyOver" viewBox="0 0 120 120" aria-hidden="true"></svg><span class="ty-empty" id="tyEmpty">🧸</span></div>
       <div class="ty-step" id="tyStep"></div>
       <input type="file" id="tyCam" accept="image/*" capture="environment" hidden><input type="file" id="tyPick" accept="image/*" hidden>
     </div>`, { back: screenFriends });
     const cv = $('#tyCv'), over = $('#tyOver'), stage = $('#tyStage');
+    const look = () => { const c = cv.getContext('2d'); c.clearRect(0, 0, EDIT, EDIT); c.drawImage(s.drawn ? drawC : photoC, 0, 0); };
+    const makeLook = () => { const p = photoC.getContext('2d'); p.clearRect(0, 0, EDIT, EDIT); p.drawImage(cv, 0, 0); const d = cartoon(photoC); const q = drawC.getContext('2d'); q.clearRect(0, 0, EDIT, EDIT); q.drawImage(d, 0, 0); look(); };
     const redraw = () => { if (s.src) { render(s.src, s.fr, cv); $('#tyEmpty').hidden = true; stage.classList.toggle('cut', s.fr.cut); } marks(); };
     // the googly eyes and the mouth on the picture, in the stage's 120 box
     function marks() {
@@ -15733,16 +15830,19 @@ const TOY = (() => {
           <label class="ty-sl">🔍 Size <input type="range" id="tyZ" min="1" max="3" step=".05" value="${s.fr.z}"></label>
           <label class="ty-sw"><input type="checkbox" id="tyCut" ${s.fr.cut ? 'checked' : ''}> ✂️ Remove the background around the toy</label>
           <label class="ty-sl" id="tyTolL" ${s.fr.cut ? '' : 'hidden'}>How much to remove <input type="range" id="tyTol" min="12" max="90" step="2" value="${s.fr.tol}"></label>
-          <div class="prow-btns ty-row"><button class="chip" id="tyAgain">📷 Another photo</button><button class="big" id="tyNext">Next →</button></div>`;
+          <div class="prow-btns ty-row"><button class="chip" id="tyAgain">📷 Another photo</button><button class="big" id="tyNext">Next →</button></div>
+          <p class="ty-small">🎨 Next we’ll draw your hero: it becomes a cartoon, like the other friends.</p>`;
         $('#tyZ').oninput = e => { s.fr.z = +e.target.value; redraw(); };
         $('#tyCut').onchange = e => { s.fr.cut = e.target.checked; $('#tyTolL').hidden = !s.fr.cut; redraw(); };
         $('#tyTol').oninput = e => { s.fr.tol = +e.target.value; redraw(); };
         $('#tyAgain').onclick = () => { sfx.pop(); go('photo'); };
-        $('#tyNext').onclick = () => { sfx.pop(); go('eyes', "Let’s stick on eyes! Tap the photo where your hero’s eyes are: first one, then the other."); };
+        $('#tyNext').onclick = () => { sfx.magic(); makeLook(); go('eyes', "Here’s your hero, drawn! Now let’s stick on eyes: tap where its eyes are, first one, then the other."); };
       } else if (s.step === 'eyes') {
         box.innerHTML = `<p class="ty-h">${s.eyes.length < 2 ? `Tap where your hero’s eyes are: ${s.eyes.length ? "now the second one" : "first one"}.` : "The eyes are on! They will blink."}</p>
+          <div class="ty-g" id="tyLook"><button class="chip ${s.drawn ? 'on' : ''}" data-look="1">🎨 Drawn</button><button class="chip ${s.drawn ? '' : 'on'}" data-look="0">📷 Like the photo</button></div>
           <p class="ty-p">We’ll stick on googly eyes: with them your hero blinks and looks at you.</p>
           <div class="prow-btns ty-row"><button class="chip" id="tyNoEyes">No eyes</button>${s.eyes.length ? "<button class=\"chip\" id=\"tyEyesAgain\">↩ Again</button>" : ''}<button class="big" id="tyNext" ${s.eyes.length === 1 ? 'disabled' : ''}>Next →</button></div>`;
+        $('#tyLook').onclick = e => { const b = e.target.closest('[data-look]'); if (!b) return; sfx.pop(); s.drawn = b.dataset.look === '1'; look(); $$('#tyLook .chip').forEach(x => x.classList.toggle('on', x === b)); };
         $('#tyNoEyes').onclick = () => { sfx.pop(); s.eyes = []; marks(); go('mouth', "And where is your hero’s mouth? Tap there, and it will talk."); };
         if ($('#tyEyesAgain')) $('#tyEyesAgain').onclick = () => { sfx.pop(); s.eyes = []; marks(); step(); };
         $('#tyNext').onclick = () => { sfx.pop(); go('mouth', "And where is your hero’s mouth? Tap there, and it will talk."); };
@@ -15767,12 +15867,13 @@ const TOY = (() => {
       if (!s.src && !old) return;
       // the stage box is 0…120, the friend's picture 4…116
       const sc = ([x, y]) => [Math.round((4 + x * 112 / 120) * 10) / 10, Math.round((4 + y * 112 / 120) * 10) / 10];
-      const t = { name, she: s.she, eyes: s.eyes.length === 2 ? s.eyes.map(sc) : [], mouth: s.mouth ? sc(s.mouth) : null, t: Date.now() };
+      const t = { name, she: s.she, eyes: s.eyes.length === 2 ? s.eyes.map(sc) : [], mouth: s.mouth ? sc(s.mouth) : null, drawn: s.drawn ? 1 : 0, t: Date.now() };
       let ok = false;
       for (const size of [240, 180, 128]) {
-        t.img = s.src ? exportImg(cv, size) : old.img;
+        // the picture as shown, and the photo under a drawing (to go back to it later)
+        t.img = exportImg(cv, size); if (s.drawn) t.photo = exportImg(photoC, size); else delete t.photo;
         TOYS[ROOT.cur] = t;
-        try { localStorage.setItem(KEY, JSON.stringify(TOYS)); ok = true; break; } catch (e) { if (!s.src) break; }
+        try { localStorage.setItem(KEY, JSON.stringify(TOYS)); ok = true; break; } catch (e) {}
       }
       if (!ok) { TOYS = load(); $('#tyMsg').textContent = "There isn’t enough room on the phone for the photo. Try again."; return; }
       register(); P.settings.friend = idOf(ROOT.cur); save(); sfx.good();
@@ -15780,10 +15881,10 @@ const TOY = (() => {
       talk(`Hello${nameBit()}! I'm ${friend().who}. ${friend().hello} Let's practise together!`);
     }
     if (old) {
-      // editing: the saved picture is the photo (moving and cutting work on it as on a new one)
-      const im = new Image(); im.onload = () => { cv.getContext('2d').drawImage(im, 0, 0, EDIT, EDIT); $('#tyEmpty').hidden = true;
+      // editing: the photo under the drawing (or the saved picture of a hero from before drawings) is drawn again
+      const im = new Image(); im.onload = () => { const c = cv.getContext('2d'); c.clearRect(0, 0, EDIT, EDIT); c.drawImage(im, 0, 0, EDIT, EDIT); makeLook(); $('#tyEmpty').hidden = true; stage.classList.add('cut');
         s.eyes = (old.eyes || []).map(([x, y]) => [(x - 4) * 120 / 112, (y - 4) * 120 / 112]); s.mouth = old.mouth ? [(old.mouth[0] - 4) * 120 / 112, (old.mouth[1] - 4) * 120 / 112] : null; s.step = 'eyes'; marks(); step(); };
-      im.src = old.img; talk("You can move the eyes, move the mouth or take a new photo.");
+      im.src = old.photo || old.img; talk("You can move the eyes, move the mouth or take a new photo.");
     } else talk("Take a photo of your favourite toy, and it becomes your hero!");
     step();
   }
