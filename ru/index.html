@@ -1961,6 +1961,7 @@ body.pv-on #app{padding-top:52px}
 .cl-done{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border-radius:22px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
 .cl-done p{margin:6px 0 0;font:800 15px var(--f-body);color:var(--ink-soft)}
 .cl-big{font:400 34px var(--f-display);color:var(--ink)}.cl-pics{font-size:40px;font-family:var(--f-emoji);letter-spacing:2px;white-space:nowrap}
+.who-ads{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.who-adult{display:flex;align-items:center;gap:8px;padding:10px 16px;border:0;border-radius:18px;background:var(--t-peach);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}.who-adult .emo{font-size:30px}.who-adult b{font:800 17px var(--f-body)}.who-gtop{display:flex;justify-content:flex-end}
 .cl-p{display:flex;flex-direction:column;gap:6px;margin-top:8px}.cl-p p{margin:0}.cl-off{color:var(--berry)}
 </style>
 </head>
@@ -5975,7 +5976,7 @@ function screenGuest() {
   </div></main></div>`;
   bindGames($('.fam'));
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = b.dataset.s; $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
-  bindLang($('#gLang'), () => screenGuest());
+  bindLang($('#gLang'), () => screenGuest()); whoGuestTop();
   if ($('#hgDone')) $('#hgDone').onclick = () => { sfx.pop(); gStore(HG_KEY, Date.now()); screenGuest(); };
   $('#gKids').onclick = () => { sfx.pop(); guestGames(GUEST.kid); };
   // the grandchildren's games: a whole set, or the very game a grandchild played
@@ -9856,6 +9857,7 @@ function screenInvite(back) {
     $('#hgCopy').onclick = () => { sfx.pop(); copy(); };
   };
   $('#ivKids').onclick = () => { sfx.pop(); semShare(fam(), $('#ivKidsOut')); };
+  cloudInviteHook(f);
   talk('Нажми на кнопку рядом с именем — и отправь приглашение.');
 }
 
@@ -11211,7 +11213,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '88';
+const APP_VER = '89';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14880,7 +14882,7 @@ function screenCloudLogin({ back = null, login = '' } = {}) {
     ${padHTML('clPad')}
     <p class="fe-err" id="clErr" role="alert"></p>
     <div class="prow-btns"><button class="big" id="clGo">Войти</button></div>
-    <p class="muted cl-alt">Нет логина? <button class="link-btn" id="clLink">Войти по ссылке</button> · <button class="link-btn" id="clNew">Начать с нуля</button></p>
+    <p class="muted cl-alt">Логин и пароль один на всю семью, его создают в пульте. Нет логина? <button class="link-btn" id="clNew">Начать с нуля</button></p>
   </div>`, { back: back || goHome, guide: false, raw: true });
   let busy = false;
   const pad = padBind('clPad', () => go());
@@ -14898,7 +14900,6 @@ function screenCloudLogin({ back = null, login = '' } = {}) {
     screenWho(f.id);
   }
   $('#clGo').onclick = () => go();
-  $('#clLink').onclick = () => { sfx.pop(); screenWhoAway(() => screenCloudLogin({ back, login })); };
   $('#clNew').onclick = () => { sfx.pop(); screenWhoNew(fam(), () => screenCloudLogin({ back, login })); };
 }
 // the server's family on this phone: the one that signed in with this login before, the same family, or a new one
@@ -14917,13 +14918,30 @@ function cloudAdopt(d, token) {
   return f;
 }
 
+// the way in for everyone of the family: the address, the login; the pictures are told, not sent
+const cloudMsg = (f, name) => `${name ? name + ', это' : 'Это'} вход в нашу семью в «Говорилках»: ${EMBEDDED ? 'https://yankona.github.io/govorilki/' + langPath(LANG) : SITE}\nОткройте и нажмите «Мы уже играем — войти» (или «🔑 Войти в семью»).\nЛогин семьи: ${f.cloud.login}\nПароль — 4 картинки, скажем сами. Потом нажмите на себя.`;
+function clShareBtn(id, msg) { const b = document.getElementById(id); if (b) b.onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: 'Говорилки', text: msg }).catch(() => {}); else { const c = $(`[data-copy="${id}"]`); if (c) c.click(); } }; }
+// «Пригласить родных» of a family with its login: the login instead of each one's link
+function cloudInviteHook(f) {
+  if (!cloudOn() || !f || !f.cloud) return;
+  const box = $('.ivs'); if (!box) return;
+  const show = (out, who, msg, id) => { out.innerHTML = `<div class="fam-steps">${who ? `<p>${who}</p>` : ''}${shareRow(msg, '', id)}<p class="muted">Пароль в сообщение не попадает — скажите его сами.</p></div>`; bindShare(id, msg, '', s => out.insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`)); clShareBtn(id, msg); };
+  box.addEventListener('click', e => {
+    const b = e.target.closest('[data-inv]'); if (!b) return;
+    e.stopImmediatePropagation(); sfx.pop();
+    const g = f.grands.find(x => x.id === b.dataset.inv); if (!g) return;
+    show($('#ivOut'), `${kinE(g)} ${esc(g.name)}`, cloudMsg(f, g.name), 'ivShare');
+  }, true);
+  const k = $('#ivKids'); if (k) k.onclick = () => { sfx.pop(); show($('#ivKidsOut'), '', cloudMsg(f, ''), 'ivKShare'); };
+}
 /* in the panel: make the family's login, its state, change the code, sign out, delete */
 function cloudPultHTML(f) {
   if (!cloudOn() || f.guest) return '';
   const c = f.cloud;
   if (!c) return `<div class="cl-p"><button class="big" data-cl="make" data-fam="${f.id}">🔑 Логин и пароль для семьи</button><p class="muted">Дети заходят под собой на любом телефоне, планшете или ноутбуке, звёздочки везде одни и те же.</p></div>`;
   return `<div class="cl-p"><p>🔑 Логин семьи: <b>${esc(c.login)}</b> · ${c.off ? '<b class="cl-off">нужно войти снова</b>' : c.at ? 'сохранено ' + esc(pultAgo(c.at)) : 'сохраняется'}</p>
-    <div class="prow-btns">${c.off ? `<button class="chip" data-cl="relogin" data-fam="${f.id}">🔑 Войти снова</button>` : ''}<button class="chip" data-cl="pin" data-fam="${f.id}">🔁 Сменить пароль</button><button class="chip" data-cl="out" data-fam="${f.id}">🚪 Выйти на этом телефоне</button><button class="chip" data-cl="del" data-fam="${f.id}">🗑 Удалить из облака</button></div></div>`;
+    <div class="prow-btns">${c.off ? `<button class="chip" data-cl="relogin" data-fam="${f.id}">🔑 Войти снова</button>` : ''}<button class="chip" data-cl="pin" data-fam="${f.id}">🔁 Сменить пароль</button><button class="chip" data-cl="out" data-fam="${f.id}">🚪 Выйти на этом телефоне</button><button class="chip" data-cl="del" data-fam="${f.id}">🗑 Удалить из облака</button></div>
+    <p class="muted">Все входят по этому логину и паролю, потом каждый нажимает на себя: дети, бабушки, дедушки, мама, папа.</p></div>`;
 }
 function cloudPultFill() {
   if (!cloudOn()) return;
@@ -14931,6 +14949,8 @@ function cloudPultFill() {
     const a = document.getElementById('pvsem-' + f.id); if (!a || a.nextElementSibling && a.nextElementSibling.classList.contains('cl-p')) return;
     a.insertAdjacentHTML('afterend', cloudPultHTML(f));
   });
+  // a family with its login needs no links: the login is the way in for everyone
+  Object.values(ROOT.families).forEach(f => { if (f.cloud) $$(`[data-semlink="${f.id}"], [data-link][data-fam="${f.id}"]`).forEach(b => { b.hidden = true; }); });
   $$('[data-cl]').forEach(b => b.onclick = e => {
     e.stopPropagation(); sfx.pop();
     const f = ROOT.families[b.dataset.fam]; if (!f) return;
@@ -14989,7 +15009,7 @@ function screenCloudMake(f) {
 function screenCloudDone(f, pin) {
   newScreen();
   const site = EMBEDDED ? 'https://yankona.github.io/govorilki/' + langPath(LANG) : SITE;
-  const msg = `«Говорилки»: ${site}\nНа новом телефоне: «Мы уже играем — войти» или «🔑 Войти в семью».\nЛогин семьи: ${f.cloud.login}\nПароль — 4 картинки, скажем сами.`;
+  const msg = cloudMsg(f, '');
   shell('Вход готов', `<div class="cl">
     <div class="cl-done"><p>Логин семьи</p><b class="cl-big">${esc(f.cloud.login)}</b><p>Пароль</p><b class="cl-pics">${picsOf(pin)}</b><small>${[...pin].join(' ')}</small></div>
     <p class="lead">Запомните картинки или запишите их: здесь пароль больше не покажется. Детям его можно сказать словами: «${esc([...pin].map(d => PIC_N[+d]).join(', '))}».</p>
@@ -14998,7 +15018,7 @@ function screenCloudDone(f, pin) {
     <div class="prow-btns"><button class="big ghost" id="clBack">Готово</button></div>
   </div>`, { back: screenPult, guide: false, raw: true });
   bindShare('clShare', msg, '', s => $('.fam-steps').insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`));
-  $('#clShare').onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: 'Говорилки', text: msg }).catch(() => {}); else $('[data-copy="clShare"]').click(); };
+  clShareBtn('clShare', msg);
   $('#clBack').onclick = () => { sfx.pop(); screenPult(); };
 }
 function screenCloudPin(f) {
@@ -15115,11 +15135,17 @@ function screenWho(fid) {
     <div class="who-foot"><button class="chip" id="whoAway">🔗 Я играю в другом месте</button><button class="chip" id="whoNew">＋ Новенький</button>${GUEST ? '' : '<button class="chip" id="whoPult">👑 Взрослым</button>'}</div>
   </div></main></div>`;
   $('.who').onclick = e => {
-    const k = e.target.closest('[data-who]'), f = e.target.closest('[data-wfam]');
+    const k = e.target.closest('[data-who]'), f = e.target.closest('[data-wfam]'), ad = e.target.closest('[data-wad]');
     if (k) { sfx.magic(); whoEnter(k.dataset.fam, k.dataset.who); return; }
+    if (ad) { sfx.magic(); whoAdult(ad.dataset.fam, ad.dataset.wad); return; }
     if (f) { sfx.pop(); screenWho(f.dataset.wfam); }
   };
   const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
+  // the family's grown-ups under the children: each taps themself and gets their own screen
+  if (one && one.grands.length) $('.who-grid').insertAdjacentHTML('afterend', whoAdultsHTML(one));
+  if (GUEST && one && one.grands.some(g => g.id === GUEST.who) && (one.code || (one.id === 'main' && ROOT.fam)) === GUEST.fam) { const wg = $('#whoGuest'); if (wg) wg.remove(); }
+  // with the family's login the links are not needed: the login is the way in
+  if (cloudOn()) { const wa = $('#whoAway'); if (wa) wa.remove(); const wp = $('#whoPult'); if (wp) wp.textContent = '👑 Пульт'; }
   if (cloudOn()) { $('.who-foot').insertAdjacentHTML('afterbegin', '<button class="chip" id="whoLogin">🔑 Войти в семью</button>'); on1('whoLogin', () => screenCloudLogin({ back: () => screenWho(fid) })); }
   on1('whoBackF', () => screenWho());
   on1('whoAway', () => screenWhoAway(() => screenWho(fid)));
@@ -15127,6 +15153,22 @@ function screenWho(fid) {
   on1('whoPult', () => screenPult());
   on1('whoGuest', () => { GUEST_OFF = false; screenGuest(); });
   later(() => say(one ? 'Кто играет? Нажми на себя.' : 'Кто играет? Выбери свою семью.'), 400);
+}
+const whoAdultsHTML = f => `<p class="who-sub">Взрослые</p><div class="who-ads">${f.grands.map(g => `<button class="who-adult" data-wad="${esc(g.id)}" data-fam="${f.id}"><span class="emo">${esc(kinE(g))}</span><b>${esc(g.name)}</b></button>`).join('')}</div>`;
+// a grown-up of the family on this phone: their own screen (the grandchildren's news, praise, chess, their games), as their link gave it
+function whoAdult(fid, gid) {
+  const f = ROOT.families[fid], g = f && f.grands.find(x => x.id === gid); if (!g) return;
+  const kid = f.kids.find(id => ROOT.profiles[id]), st = kid ? ROOT.profiles[kid].settings : { name: '', gender: 'm' };
+  GUEST = { who: g.id, fam: f.code || (f.id === 'main' && ROOT.fam) || famCodeOf(f), role: g.role || '', name: g.name, she: !!g.she, kid: kid || 'kid', kidName: st.name || '', kidShe: st.gender === 'f' };
+  try { localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST)); } catch (e) {}
+  GUEST_OFF = false; GPLAY = null; famPeople(); screenGuest();
+}
+// on a grown-up's screen: back to «Кто играет?» when the phone has the family
+function whoGuestTop() {
+  if (!whoFams().length) return;
+  const fm = $('.fam'); if (!fm) return;
+  fm.insertAdjacentHTML('afterbegin', '<div class="who-gtop"><button class="chip" id="gWhoBtn">👥 Кто играет?</button></div>');
+  $('#gWhoBtn').onclick = () => { sfx.pop(); GUEST_OFF = true; famPeople(); screenWho(); };
 }
 // a child whose family is not on this phone: the family's link, or the old progress text
 function screenWhoAway(back) {
