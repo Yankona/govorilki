@@ -1963,6 +1963,24 @@ body.pv-on #app{padding-top:52px}
 .cl-big{font:400 34px var(--f-display);color:var(--ink)}.cl-pics{font-size:40px;font-family:var(--f-emoji);letter-spacing:2px;white-space:nowrap}
 .who-ads{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}.who-adult{display:flex;align-items:center;gap:8px;padding:10px 16px;border:0;border-radius:18px;background:var(--t-peach);color:var(--ink);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}.who-adult .emo{font-size:30px}.who-adult b{font:800 17px var(--f-body)}.who-gtop{display:flex;justify-content:flex-end}
 .cl-p{display:flex;flex-direction:column;gap:6px;margin-top:8px}.cl-p p{margin:0}.cl-off{color:var(--berry)}
+/* LAND-CSS */
+.lp{max-width:980px;margin:0 auto;padding:10px 16px 50px;display:flex;flex-direction:column;gap:28px}
+.lp-hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-top:6px}
+.lp-lang{align-self:stretch}.lp-lang .lang-row{justify-content:center;gap:6px;flex-wrap:wrap}.lp-lang .pick-b{min-height:0;padding:5px 12px;font-size:15px;border-radius:999px}.lp-lang .lang-f{font-size:17px}
+.lp-hero .logo{font-size:clamp(46px,9vw,84px);margin:0}
+.lp-tag{margin:0;max-width:660px;font:800 clamp(18px,2.6vw,24px)/1.35 var(--f-body);color:var(--ink)}
+.lp-friends{display:flex;justify-content:center;gap:4px}.lp-f{width:clamp(54px,12vw,96px);display:block}.lp-f svg{width:100%;height:auto;display:block}
+.lp-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.lp-free{margin:0;font:700 14px var(--f-body);color:var(--ink-soft)}
+.lp-sec{display:flex;flex-direction:column;gap:12px}.lp-sec>h2{margin:0;text-align:center;font:400 clamp(26px,4vw,36px) var(--f-display);color:var(--ink)}
+.lp-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.lp-card{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:22px;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 2px var(--line)}
+.lp-card .emo{font-size:36px;font-family:var(--f-emoji)}.lp-card b{font:400 22px var(--f-display);color:var(--ink)}.lp-card p{margin:0;font:600 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.lp-steps{margin:0 auto;max-width:720px;padding-left:24px;display:flex;flex-direction:column;gap:10px;font:600 17px/1.45 var(--f-body);color:var(--ink)}
+.lp-list{margin:0 auto;max-width:720px;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font:600 17px/1.45 var(--f-body);color:var(--ink)}
+.lp-list li{padding:12px 16px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
+.lp-login{max-width:520px;width:100%;margin:0 auto;padding:18px;border-radius:24px;background:var(--paper);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 2px var(--line);box-sizing:border-box;scroll-margin-top:12px}
+.lp-end{align-items:center;text-align:center}
 </style>
 </head>
 <body>
@@ -8841,26 +8859,7 @@ function speechPlanMine(n, s) {
 })();
 
 /* ---------- onboarding: welcome → family → each child (sounds, interests, games, own words) → ready ---------- */
-function screenWelcome({ liga = '' } = {}) {
-  newScreen(); document.body.classList.remove('quest');
-  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe ob">
-    <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1 class="logo">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}</h1>
-      </div></header>
-    <section class="lang-pick"><h2>🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</section>
-    <ul class="ob-list">
-      <li><span>🗣️</span><b>Звуки Р, Л, С, З, шипящие</b></li>
-      <li><span>💛</span><b>Под интересы ребёнка</b></li>
-      <li><span>👵</span><b>Бабушки и дедушки</b></li>
-      <li><span>🏆</span><b>Лига семей и баттлы</b></li>
-    </ul>
-    ${liga ? `<p class="ob-note">🏆 ${LIGA_FROM ? `Семья «${esc(LIGA_FROM)}» зовёт вас в «Говорилки» и в свою лигу.` : 'Вас позвали в лигу семей.'} Сначала создадим вашу семью, потом вступим.</p>` : ''}
-    <button class="big" id="obStart">Создать семью</button>
-    <button class="big ghost" id="obHave">🔗 Мы уже играем — войти под собой</button>
-  </div></main></div>`;
-  bindLang($('.lang-pick'), () => screenWelcome({ liga }));
-  $('#obStart').onclick = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
-  $('#obHave').onclick = () => { sfx.pop(); cloudOn() ? screenCloudLogin({ back: () => screenWelcome({ liga }) }) : screenWhoAway(() => screenWelcome({ liga })); };
-}
+function screenWelcome({ liga = '' } = {}) { screenLanding({ liga }); }
 const kidChip = (on, val, label, attr) => `<button class="pick-b ${on ? 'sel' : ''}" ${attr}="${val}" aria-pressed="${on}">${label}</button>`;
 function screenKidSetup(id, { queue = [], first = false, liga = '', back = null, idx = 1, total = 1 } = {}) {
   newScreen();
@@ -11213,7 +11212,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '89';
+const APP_VER = '90';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15058,6 +15057,88 @@ function screenCloudDel(f) {
   };
 }
 /* CLOUD-END */
+/* LAND-BEGIN */
+/* ---------- the page for new people: what the game is, for whom, how to start, the family's sign-in right on it.
+   A phone with no family opens here from any address; #login (or #voiti) scrolls to the sign-in. ---------- */
+const LAND_LOGIN = /[#&](login|voiti)\b/.test(HASH0);
+const LAND_CARDS = [
+  ['🗣️', 'Логопед', 'Звуки Р, Л, С, З и шипящие: гимнастика для языка (и с ватной палочкой), дыхание, чистоговорки, «Тяни звук», «Слушаю и говорю», грамматика по странице в день.'],
+  ['📖', 'Чтение', 'Букварь шаг за шагом, слоги-паровозики, «Прочитай и найди», раскраски, которые учат читать, дневник чтения своей книги.'],
+  ['🔢', 'Математика', 'Счёты для малышей, «Ступеньки» от точек до уравнений, олимпиадные задачи для старших.'],
+  ['🏍️', 'Игры голосом', 'Л-трасса: прочитай слово вслух — и включится нитро; трюки, гараж, монеты. Микрофон слышит, когда ребёнок говорит.'],
+  ['♟️', 'Шахматы', 'Десять уровней с компьютером и тренером, партии с бабушкой и дедушкой прямо в игре.'],
+  ['🎨', 'Творчество', 'Раскраски, рисовалка, песенки, ксилофон, весёлые композиторы с их музыкой.'],
+  ['🌍', 'Узнаём', 'Музей мира — 1000 картин, истории о городах, опыты на площадке, праздники, подготовка к поездке, слова на 11 языках.'],
+  ['🏆', 'Вместе', 'Звёзды, серии дней и медали, командная серия братьев и сестёр, лига семей и баттлы.']];
+function screenLanding({ liga = '' } = {}) {
+  newScreen(); document.body.classList.remove('quest');
+  const cl = cloudOn(), friends = ['tiger', 'kitty', 'panda', 'unicorn', 'ghost'].filter(k => FRIENDS[k]);
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="lp">
+    <header class="lp-hero">
+      <div class="lp-lang lang-pick">${langChips()}</div>
+      <h1 class="logo">${[...'Говорилки'].map(c => `<span class="lt">${c}</span>`).join('')}</h1>
+      <p class="lp-tag">Логопед, чтение и математика в играх для детей 4–12 лет. По несколько минут в день — с другом, который говорит и слушает.</p>
+      <div class="lp-friends">${friends.map(k => `<span class="lp-f">${friendSVG('', k)}</span>`).join('')}</div>
+      ${liga ? `<p class="ob-note">🏆 ${LIGA_FROM ? `Семья «${esc(LIGA_FROM)}» зовёт вас в игру и в свою лигу.` : 'Вас позвали в лигу семей.'} Сначала создадим вашу семью, потом вступим.</p>` : ''}
+      <div class="lp-cta"><button class="big" id="obStart">🚀 Начать: создать семью</button><button class="big ghost" id="obHave">🔑 Мы уже играем — войти</button></div>
+      <p class="lp-free">Бесплатно · без рекламы · работает и без интернета · русский, English, português</p>
+    </header>
+    <section class="lp-sec"><h2>Что внутри</h2><div class="lp-cards">${LAND_CARDS.map(([e, h, p]) => `<div class="lp-card"><span class="emo">${e}</span><b>${h}</b><p>${p}</p></div>`).join('')}</div></section>
+    <section class="lp-sec"><h2>Как начать</h2><ol class="lp-steps">
+      <li><b>Создайте семью.</b> Дети, а ещё бабушки, дедушки, мама и папа — у каждого своё место в игре.</li>
+      <li><b>Ребёнок выбирает себя и свои интересы.</b> Игра подстраивается под возраст, звуки, которые нужно тренировать, и то, что ребёнок любит: гонки, шахматы, к-поп, футбол…</li>
+      <li><b>Занятие на сегодня.</b> «Логопед», «Чтение», «Математика» — по несколько минут. Друг подсказывает голосом, за занятия — звёзды и медали.</li></ol></section>
+    <section class="lp-sec lp-fam"><h2>Вся семья в одной игре</h2><ul class="lp-list">
+      <li>🔑 Один логин семьи и 4 картинки вместо пароля — малыши запоминают картинки, старшие — цифры.</li>
+      <li>👥 На любом телефоне, планшете или ноутбуке: «Кто играет?» — и каждый нажимает на себя. Звёздочки везде одни и те же.</li>
+      <li>👵 Бабушки и дедушки видят, чем занимаются внуки, хвалят их, играют с ними в шахматы и в их игры.</li></ul></section>
+    ${cl ? `<section class="lp-sec lp-login" id="lpLogin"><h2>🔑 Войти в семью</h2>
+      <label class="cl-l" for="clLogin">Логин семьи</label>
+      <input id="clLogin" class="cl-in" type="text" maxlength="30" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="например, верасава">
+      <p class="cl-l">Пароль — 4 картинки</p>
+      ${padHTML('clPad')}
+      <p class="fe-err" id="clErr" role="alert"></p>
+      <div class="prow-btns"><button class="big" id="clGo">Войти</button></div>
+      <p class="muted cl-alt">Логин и пароль один на всю семью: его создают в пульте того телефона, где семья уже играет.</p></section>` : ''}
+    <section class="lp-sec"><h2>Для взрослых</h2><ul class="lp-list">
+      <li>👑 Пульт семьи: все дети и взрослые, их занятия за неделю и настройки. На телефоне детей пульт закрыт кодом.</li>
+      <li>📱 Ставится на экран телефона как приложение и потом работает без интернета.</li>
+      <li>🔒 Прогресс хранится на устройстве; на сервере — только если семья включила вход по логину (удалить можно в пульте).</li>
+      <li>🩺 Это домашние занятия, а не замена логопеду: если речь беспокоит, покажите ребёнка специалисту.</li></ul></section>
+    <section class="lp-sec lp-end"><div class="lp-cta"><button class="big" id="obStart2">🚀 Создать семью</button></div>
+      <p class="muted">На iPhone: «Поделиться» → «На экран „Домой“». На Android: меню ⋮ → «Добавить на главный экран».</p></section>
+  </div></main></div>`;
+  bindLang($('.lp-lang'), () => screenLanding({ liga }));
+  const start = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
+  $('#obStart').onclick = start; $('#obStart2').onclick = start;
+  $('#obHave').onclick = () => {
+    sfx.pop();
+    const box = $('#lpLogin');
+    if (box) { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(() => { const i = $('#clLogin'); if (i) i.focus({ preventScroll: true }); }, 500); }
+    else screenWhoAway(() => screenLanding({ liga }));
+  };
+  if (cl) {
+    let busy = false;
+    const pad = padBind('clPad', () => go());
+    async function go() {
+      if (busy) return;
+      const lg = clNorm($('#clLogin').value), pin = pad.get();
+      if (!CL_LOGIN_RE.test(lg)) { $('#clErr').textContent = 'Напишите логин семьи: буквы или цифры, от 3 до 24.'; return; }
+      if (pin.length !== 4) { $('#clErr').textContent = 'Выберите 4 картинки.'; return; }
+      busy = true; $('#clErr').textContent = ''; $('#clGo').disabled = true;
+      let r = {}; try { r = await cloudApi('POST', '/v1/login', { login: lg, pin }); } catch (e) { r = { error: 'net' }; }
+      busy = false; if (!$('#clGo')) return; $('#clGo').disabled = false;
+      if (!r.ok) { pad.clear(); $('#clErr').textContent = clErr(r); sfx.oops && sfx.oops(); return; }
+      sfx.magic();
+      try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {}
+      const f = cloudAdopt(r, r.token);
+      screenWho(f.id);
+    }
+    $('#clGo').onclick = () => go();
+    if (LAND_LOGIN) later(() => { const b = $('#lpLogin'); if (b) b.scrollIntoView({ block: 'start' }); }, 300);
+  }
+}
+/* LAND-END */
 /* WHO-BEGIN */
 /* ---------- «Кто играет?»: the first page. The phone may keep several families; a child picks the family, then
    themself. A child of a family that plays on another phone comes in by the family's link (#sem=…): the link carries the
@@ -15092,6 +15173,8 @@ function whoBoot() {
   whoLangs();
   if (LIGA_HASH || PULT_HASH) return false;
   if (cloudBootWait()) return true;
+  // …/#login on a phone that has a family but not its login yet: straight to the sign-in
+  if (LAND_LOGIN && cloudOn() && !cloudFams().length) { screenCloudLogin({ back: () => screenWho() }); return true; }
   if (WHO_HASH) {
     const id = WHO_HASH; WHO_HASH = null;
     const f = whoFams().find(x => x.kids.includes(id));
@@ -15360,7 +15443,7 @@ function langGo(l, hash = location.hash) {
 // before there were languages, stays Russian
 function langRedirect() {
   if (EMBEDDED) return false;
-  if (/[#&]sem=/.test(HASH0)) return false;
+  if (/[#&](sem=|login\b|voiti\b)/.test(HASH0)) return false;
   let want = langWant();
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
   const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';
