@@ -2119,7 +2119,8 @@ body.pv-on #app{padding-top:52px}
 .wr-opt.no{opacity:.35}.wr-opt.yes{background:var(--t-mint);color:#2A2346;box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}
 #wrOut{display:flex;flex-direction:column;gap:12px}#wrOut:empty{display:none}
 .wr-ans{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-radius:20px;text-align:center;background:var(--t-yellow);color:#2A2346}
-.wr-ans span{font:400 34px/1 var(--f-emoji)}.wr-ans b{font:800 22px/1.3 var(--f-body)}
+.wr-ans span{font:400 34px/1 var(--f-emoji)}.wr-ans b{flex:1;font:800 22px/1.3 var(--f-body)}.wr-ans .chip{flex:none}
+.wr-ans+.wr-ans{background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}.wr-ans+.wr-ans b{font-size:18px;color:var(--ink)}.wr-pin i{display:flex;gap:2px}
 /* WARM-CSS */
 .warm{max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
 .warm-pair{display:flex;align-items:center;gap:12px;font:400 52px/1 var(--f-emoji)}.warm-pair i{font:800 30px var(--f-body);font-style:normal;color:var(--ink-soft)}
@@ -11388,7 +11389,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '97';
+const APP_VER = '98';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15068,33 +15069,37 @@ const WORLD = (() => {
     ['🧑‍🍳', 'Продавец в кафе', 'продавцу в кафе', 'в кафе', 'street', ['food']]];
   const LANG_IN = { ru: 'по-русски', uk: 'по-украински', pt: 'по-португальски', en: 'по-английски', de: 'по-немецки', es: 'по-испански', fr: 'по-французски', it: 'по-итальянски', he: 'на иврите', tr: 'по-турецки', zh: 'по-китайски' };
   const HELLO = { ru: 'Привет!', uk: 'Привіт!', pt: 'Olá!', en: 'Hello!', de: 'Hallo!', es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!', he: 'שלום!', tr: 'Merhaba!', zh: '你好！' };
+  // each place has its languages: with grandparents or at school there are often two (settings.roles: place → [codes];
+  // a single code from the first version becomes a list)
   function roles(pr = P) {
     const st = pr.settings; st.roles = st.roles || {};
     const r = st.roles;
-    if (!r.home) r.home = myLangs(pr)[0] || 'ru';
-    if (!r.gran) r.gran = r.home;
+    ROLES.forEach(([k]) => { const v = r[k]; r[k] = Array.isArray(v) ? v.filter(Boolean) : v ? [v] : []; });
+    if (!r.home.length) r.home = [myLangs(pr)[0] || 'ru'];
+    if (!r.gran.length) r.gran = [...r.home];
     return r;
   }
-  const langsOn = () => { const r = roles(); return [...new Set(ROLES.map(x => r[x[0]]).filter(Boolean))]; };
+  const langsOn = () => { const r = roles(); return [...new Set(ROLES.flatMap(x => r[x[0]]))]; };
+  const inList = cs => { const w = cs.map(c => LANG_IN[c] || lname(c)); return w.length > 1 ? w.slice(0, -1).join(', ') + ' и ' + w[w.length - 1] : w[0] || ''; };
   const ready = () => langsOn().length >= 2;
   const flag = c => mlInfo(c)[1];
   const lname = c => mlInfo(c)[2];
   // the phrase in a language: Russian is the phrase itself, the others are its translations
   const phrase = (x, c) => c === 'ru' ? PHR.gtx(x.ru) : PHR.gtx(x.t[c]);
-  const mapHTML = () => { const r = roles(); return `<div class="wr-map">${ROLES.filter(x => r[x[0]]).map(([k, e, , short]) => `<span class="wr-pin"><b>${e}</b><i>${flag(r[k])}</i><small>${esc(short)}</small></span>`).join('')}</div>`; };
+  const mapHTML = () => { const r = roles(); return `<div class="wr-map">${ROLES.filter(x => r[x[0]].length).map(([k, e, , short]) => `<span class="wr-pin"><b>${e}</b><i>${r[k].map(flag).join('')}</i><small>${esc(short)}</small></span>`).join('')}</div>`; };
   const goLabel = () => ready() ? '🙋 Играть: «Кому как сказать?»' : 'Готово';
 
   /* «Где на каком языке»: the child's own map, made together with a grown-up */
   function screenRoles(after) {
     newScreen();
     const r = roles(), mine = myLangs(), more = ML_LANGS.map(x => x[0]).filter(c => !mine.includes(c));
-    const btn = (k, c) => `<button class="pick-b ${r[k] === c ? 'sel' : ''}" data-l="${c}" aria-pressed="${r[k] === c}">${flag(c)} ${esc(lname(c))}</button>`;
+    const btn = (k, c) => `<button class="pick-b ${r[k].includes(c) ? 'sel' : ''}" data-l="${c}" aria-pressed="${r[k].includes(c)}">${flag(c)} ${esc(lname(c))}</button>`;
     const row = ([k, e, label]) => `<div class="wr-row" data-role="${k}"><div class="wr-h"><b>${e}</b><span>${esc(label)}</span></div>
       <div class="wr-langs">${mine.map(c => btn(k, c)).join('')}</div>
       <details class="wr-more"><summary>другой язык…</summary><div class="wr-langs">${more.map(c => btn(k, c)).join('')}</div></details></div>`;
     const kid = kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f');
     shell('Где на каком языке', `<div class="wr">
-      <p class="lead">Дома один язык, в школе другой, с друзьями третий — это нормально, так растут дети мира. Отметьте вместе с ${esc(kid.ins)}, где на каком языке ${G('она', 'он')} говорит.</p>
+      <p class="lead">Дома один язык, в школе другой, с друзьями третий — это нормально, так растут дети мира. Отметьте вместе с ${esc(kid.ins)}, где на каком языке ${G('она', 'он')} говорит. Если с бабушкой или в школе говорят на двух языках, отметьте оба.</p>
       ${ROLES.map(row).join('')}
       <h3 class="fam-s">Моя карта языков</h3><div id="wrMap">${mapHTML()}</div>
       <div class="prow-btns wr-end"><button class="big" id="wrGo">${goLabel()}</button></div>
@@ -15102,12 +15107,15 @@ const WORLD = (() => {
     $('.wr').onclick = e => {
       const b = e.target.closest('[data-l]'); if (!b) return;
       const k = b.closest('[data-role]').dataset.role, c = b.dataset.l;
-      sfx.tick(); r[k] = c;
-      sayIn(c, HELLO[c] || '', .85);
+      // a tap adds the language to this place or takes it away; home keeps at least one
+      const had = r[k].includes(c);
+      if (had && k === 'home' && r[k].length === 1) { talk('Дома должен остаться хотя бы один язык.'); return; }
+      sfx.tick(); r[k] = had ? r[k].filter(x => x !== c) : [...r[k], c];
+      if (!had) sayIn(c, HELLO[c] || '', .85);
       // a language picked from «другой язык…» becomes one of the child's languages
       if (!myLangs().includes(c)) { P.settings.langs = [...myLangs(), c]; save(); screenRoles(after); return; }
       save();
-      b.closest('.wr-row').querySelectorAll('[data-l]').forEach(x => { const on = x.dataset.l === c; x.classList.toggle('sel', on); x.setAttribute('aria-pressed', on); });
+      b.closest('.wr-row').querySelectorAll('[data-l]').forEach(x => { const on = r[k].includes(x.dataset.l); x.classList.toggle('sel', on); x.setAttribute('aria-pressed', on); });
       $('#wrMap').innerHTML = mapHTML();
       $('#wrGo').textContent = goLabel();
     };
@@ -15119,9 +15127,10 @@ const WORLD = (() => {
   function deck() {
     const r = roles(), out = [];
     PEOPLE.forEach(p => {
-      const c = r[p[4]]; if (!c) return;
-      const xs = PHR.BASE.filter(x => p[5].includes(x.cat) && phrase(x, c) && !(p[6] && p[6].test(PHR.gtx(x.ru))));
-      shuffle(xs).slice(0, 2).forEach(x => out.push({ p, x, c }));
+      const all = r[p[4]]; if (!all.length) return;
+      const xs = PHR.BASE.filter(x => p[5].includes(x.cat) && all.some(c => phrase(x, c)) && !(p[6] && p[6].test(PHR.gtx(x.ru))));
+      // all: every language spoken with this person (any one is right); cs: those the phrase exists in
+      shuffle(xs).slice(0, 2).forEach(x => out.push({ p, x, all, cs: all.filter(c => phrase(x, c)) }));
     });
     return shuffle(out).slice(0, 8);
   }
@@ -15133,7 +15142,7 @@ const WORLD = (() => {
     const done = () => finish({ key: 'world-say', stars: right >= cards.length - 1 ? 3 : right >= cards.length / 2 ? 2 : 1,
       line: `Верный язык с первого раза: ${right} из ${cards.length}.`, again: () => screenSay(), menu: () => screenRoles() });
     const show = () => {
-      const { p, x, c } = cards[k], [e, who, to, withWho] = p, ru = PHR.gtx(x.ru), my = k;
+      const { p, x, all, cs } = cards[k], [e, who, to, withWho] = p, ru = PHR.gtx(x.ru), my = k;
       let firstTry = true;
       const still = () => t === tok && k === my;
       shell('Кому как сказать?', `<div class="wr wr-say"><p class="ml-step">${k + 1} / ${cards.length}</p>
@@ -15144,18 +15153,20 @@ const WORLD = (() => {
       talk(`Скажи ${to}: ${ru} На каком языке?`);
       $('#wrOpts').onclick = async ev => {
         const b = ev.target.closest('[data-c]'); if (!b || b.disabled) return;
-        if (b.dataset.c !== c) {
+        if (!all.includes(b.dataset.c)) {
           sfx.oops(); firstTry = false; b.disabled = true; b.classList.add('no');
           const w = withWho[0].toUpperCase() + withWho.slice(1);
-          talk(`${w} ты говоришь ${LANG_IN[c] || lname(c)}. Попробуй ещё.`);
+          talk(`${w} ты говоришь ${inList(all)}. Попробуй ещё.`);
           return;
         }
         sfx.good(); if (firstTry) right++;
-        $$('#wrOpts [data-c]').forEach(x => { x.disabled = true; x.classList.toggle('yes', x === b); });
-        const said = phrase(x, c), now = `Теперь скажи сам${G('а', '')}.`;
-        $('#wrOut').innerHTML = `<div class="wr-ans"><span>${flag(c)}</span><b>${esc(mlText(said))}</b></div>
-          <div class="prow-btns wr-end"><button class="chip" id="wrHear">🔊 Ещё раз</button><button class="big" id="wrSaid">🗣️ ${G('Сказала', 'Сказал')}!</button></div>`;
-        $('#wrHear').onclick = () => { sfx.pop(); c === 'ru' ? say(said) : sayIn(c, said, .75); };
+        // every language of this person counts: the one tapped comes first, then the others
+        const c = cs.includes(b.dataset.c) ? b.dataset.c : cs[0], order = [c, ...cs.filter(o => o !== c)];
+        $$('#wrOpts [data-c]').forEach(o => { o.disabled = true; o.classList.toggle('yes', all.includes(o.dataset.c)); });
+        const said = phrase(x, c), now = `Теперь скажи сам${G('а', '')}.`, hearIn = (l, w) => l === 'ru' ? say(w) : sayIn(l, w, .75);
+        $('#wrOut').innerHTML = `${order.map(o => `<div class="wr-ans"><span>${flag(o)}</span><b>${esc(mlText(phrase(x, o)))}</b><button class="chip" data-hear="${o}" aria-label="🔊">🔊</button></div>`).join('')}
+          <div class="prow-btns wr-end"><button class="big" id="wrSaid">🗣️ ${G('Сказала', 'Сказал')}!</button></div>`;
+        $('#wrOut').onclick = ev2 => { const h = ev2.target.closest('[data-hear]'); if (!h) return; sfx.pop(); hearIn(h.dataset.hear, phrase(x, h.dataset.hear)); };
         $('#wrSaid').onclick = () => { sfx.pop(); k++; if (k >= cards.length) done(); else show(); };
         if (c === 'ru') { if (still()) say(`${said} ${now}`); }
         else { await sayIn(c, said, .75); if (still()) talk(now); }
@@ -15169,7 +15180,7 @@ const WORLD = (() => {
   const at = GAMES.findIndex(g => g.id === 'ml-sound');
   GAMES.splice(at < 0 ? GAMES.length : at, 0,
     { id: 'world-say', hide: () => !IS_RU || !mlOn(), name: 'Кому как сказать?', sub: 'маме, учительнице, другу — на своём языке', ico: () => pic('🙋'), bg: 'var(--t-yellow)', go: () => screenSay(), grp: 14 },
-    { id: 'world-roles', hide: () => !IS_RU || !mlOn(), name: 'Где на каком языке', sub: () => { const r = roles(); return ROLES.filter(x => r[x[0]]).map(x => x[1] + flag(r[x[0]])).join(' '); }, ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenRoles(), grp: 14 });
+    { id: 'world-roles', hide: () => !IS_RU || !mlOn(), name: 'Где на каком языке', sub: () => { const r = roles(); return ROLES.filter(x => r[x[0]].length).map(x => x[1] + r[x[0]].map(flag).join('')).join(' '); }, ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenRoles(), grp: 14 });
   return { roles, screenRoles, screenSay, ready };
 })();
 /* WORLD-END */
