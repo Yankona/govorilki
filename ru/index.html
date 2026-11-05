@@ -2212,6 +2212,17 @@ body.pv-on #app{padding-top:52px}
 .fo-p{margin:0;font:700 17px/1.45 var(--f-body);color:var(--ink)}.fo-row{justify-content:center;flex-wrap:wrap}
 .fo-msg{margin:0;font:700 16px/1.4 var(--f-body);color:var(--ink-soft);text-align:center}.fo-msg:empty{display:none}
 /* OUT-CSS-END */
+/* FAM106-CSS */
+.wn{max-width:640px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.wn-lead{margin:0;font:800 20px/1.3 var(--f-body);color:var(--ink);text-align:center}
+.wn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.wn-b{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border:0;border-radius:20px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit}
+.wn-b span{font:400 38px/1 var(--f-emoji)}.wn-b b{font:800 15px/1.2 var(--f-body);text-align:center}.wn-b small{font:700 12px/1.25 var(--f-body);color:var(--ink-soft);text-align:center}
+.wn-b.kid{grid-column:1/-1;flex-direction:row;justify-content:center;gap:12px;background:var(--t-yellow)}.wn-b.kid span{font-size:42px}.wn-b.kid b{font-size:19px}
+.wn-note{margin:0;font:700 15px/1.45 var(--f-body);color:var(--ink-soft);text-align:center}
+.wn-row{justify-content:center;flex-wrap:wrap}
+.who-gtop{display:flex;align-items:center;justify-content:flex-start;gap:10px}.who-gtop b{font:800 18px var(--f-body);color:var(--ink)}
+/* FAM106-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -3347,7 +3358,7 @@ function goHome() {
   $$('.l-go').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); startLesson(b.dataset.l); });
   $$('.kid').forEach(b => b.onclick = () => { if (b.dataset.k !== ROOT.cur) { sfx.pop(); HOME_POS = null; switchKid(b.dataset.k); } });
   on('#duoBtn', () => { sfx.pop(); screenDuo(); });
-  on('#famChip', () => { sfx.pop(); screenFamilies(); });
+  on('#famChip', () => { sfx.pop(); screenFamilies(goHome); });
   on('#worldChip', () => { sfx.pop(); screenWorld(); });
   on('#invChip', () => { sfx.pop(); screenInviteWho(); });
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
@@ -8469,11 +8480,11 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam); };
+  $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
   $('#kidSetup').onclick = () => { sfx.pop(); screenKidSetup(ROOT.cur, { back: screenParents }); };
-  $('#famAll').onclick = () => { sfx.pop(); screenFamilies(); };
+  $('#famAll').onclick = () => { sfx.pop(); screenFamilies(() => screenParents()); };
   $('#pultBtn').onclick = () => { sfx.pop(); screenPult(); };
   $('#famLg').onclick = () => { sfx.pop(); screenLeague(); };
   $('#expBtn').onclick = async () => {
@@ -8592,11 +8603,14 @@ const yearsWord = a => a + ' ' + plural(a, ['год', 'года', 'лет']);
 /* ---------- creating and editing a family ---------- */
 const TRACKS = [['r', 'Малыши 4–7: Р, шипящие, буквы, слоги'], ['l', 'Школьники 7–12: Л, миссии, чтение, математика']];
 const ageTrack = a => a && a < 7 ? 'r' : 'l';
-function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
+function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = null, add = '' } = {}) {
   const t = newScreen(), f = fid ? ROOT.families[fid] : null;
   const kids = f ? f.kids.map(id => { const st = ROOT.profiles[id].settings; return { id, name: st.name || '', she: st.gender === 'f', age: st.age || 0, track: st.track, tt: true }; })
     : [{ id: '', name: '', she: true, age: 0, track: 'r', tt: false }];
   const grands = f ? f.grands.map(g => ({ ...g, cc: g.cc || f.cc2 || f.cc })) : [];
+  // «Новенький»: an empty row ready for the one who joins
+  if (add === 'kid') kids.push({ id: '', name: '', she: true, age: 0, track: 'r', tt: false });
+  else if (add) { const r = ROLES.find(x => x[0] === add) || ROLES[ROLES.length - 1]; grands.push({ id: '', name: '', she: !!r[3], role: r[0], cc: f ? f.cc2 || f.cc : 'RU' }); }
   let ask = '';
   const kidRow = (k, i) => `<div class="fe-row" data-k="${i}">
       <input class="fe-name" type="text" maxlength="20" autocomplete="off" placeholder="Имя" aria-label="Имя ребёнка" value="${esc(k.name)}">
@@ -8627,13 +8641,14 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
     app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe">
       ${form}
     </div></main></div>`;
-  } else shell(f ? 'Семья' : 'Новая семья', `<div class="fe">${form}</div>`, { back: screenFamilies, guide: false, raw: true });
+  } else shell(f ? 'Семья' : 'Новая семья', `<div class="fe">${form}</div>`, { back: back || (() => screenFamilies()), guide: false, raw: true });
   const read = () => {
     $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); });
     $$('#feGrands .fe-row').forEach((r, i) => { grands[i].name = cleanS(r.querySelector('.fe-name').value, 30); grands[i].cc = r.querySelector('.fe-gcc').value; });
   };
   const draw = () => { $('#feKids').innerHTML = kids.map(kidRow).join(''); $('#feGrands').innerHTML = grands.map(grandRow).join(''); };
   draw();
+  if (add) { const rs = $$(add === 'kid' ? '#feKids .fe-name' : '#feGrands .fe-name'), el = rs[rs.length - 1]; if (el) { el.closest('.fe-row').scrollIntoView({ block: 'center' }); setTimeout(() => el.focus(), 300); } }
   $('#feKids').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.k;
     const g = e.target.closest('[data-g]'); if (g) { read(); kids[i].she = g.dataset.g === 'f'; sfx.tick(); draw(); return; }
@@ -8651,7 +8666,7 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
   $('#fePl').onclick = e => { const b = e.target.closest('[data-pl]'); if (!b) return; sfx.tick(); b.classList.toggle('sel'); };
   $('#feAddKid').onclick = () => { read(); kids.push({ id: '', name: '', she: false, age: 0, track: 'l', tt: false }); sfx.pop(); draw(); const l = $$('#feKids .fe-name'); l[l.length - 1].focus(); };
   $('#feAddGrand').onclick = () => { read(); grands.push({ id: '', name: '', she: !grands.some(g => g.she), cc: grands.length ? grands[grands.length - 1].cc : 'RU' }); sfx.pop(); draw(); const l = $$('#feGrands .fe-name'); l[l.length - 1].focus(); };
-  if (!first) $('#feCancel').onclick = () => { sfx.pop(); screenFamilies(); };
+  if (!first) $('#feCancel').onclick = () => { sfx.pop(); back ? back() : screenFamilies(); };
   if ($('#feDel')) {
     let sure = false;
     $('#feDel').onclick = () => {
@@ -8677,14 +8692,16 @@ function screenFamilyEdit(fid, { first = false, liga = '' } = {}) {
     ROOT.families[id] = { ...(f || {}), id, name: cleanS($('#feName').value, 30) || 'Наша семья', cc: $('#feCc').value, cc2: gs.length ? '' : (f && f.cc2) || '', places: $$('#fePl [data-pl].sel').map(b => b.dataset.pl), kids: ids, grands: gs };
     holYear.c = {};
     useFamily(id); P = ROOT.profiles[ROOT.cur]; famPeople(); save(); sfx.magic();
-    if (fresh.length) screenKidSetup(fresh[0], { queue: fresh.slice(1), first, liga, back: first ? null : fid ? screenFamilies : goHome, total: fresh.length });
-    else if (liga) screenLeague(liga); else if (first || !fid) goHome(); else screenFamilies();
+    if (fresh.length) screenKidSetup(fresh[0], { queue: fresh.slice(1), first, liga, back: first ? null : done || back || (fid ? screenFamilies : goHome), total: fresh.length });
+    else if (liga) screenLeague(liga); else if (first || !fid) goHome(); else if (done || back) (done || back)(); else screenFamilies();
   };
 }
 
 const ccOptions = sel => Object.entries(COUNTRY_NAMES).sort((a, b) => a[1].localeCompare(b[1], LANG)).map(([cc, n]) => `<option value="${cc}" ${cc === sel ? 'selected' : ''}>${FLAG(cc)} ${n}</option>`).join('');
 /* ---------- the families of this phone: switch, edit, add ---------- */
-function screenFamilies() {
+let FAM_BACK = null;
+function screenFamilies(back) {
+  if (back) FAM_BACK = back;
   newScreen();
   const fs = Object.values(ROOT.families);
   shell('Семьи', `<div class="fams">
@@ -8697,7 +8714,7 @@ function screenFamilies() {
     <button class="big ghost" id="famNew">＋ Новая семья</button>
     <p class="muted">У каждой семьи свои дети, звёздочки, бабушки и дедушки. Всё хранится только на этом телефоне. Обычно у каждой семьи свой телефон: откройте там приложение, и оно предложит создать семью.</p>
     <button class="lg-cta" id="famLeague"><span class="emo">🏆</span><span class="lg-t"><b>Лига семей</b><small>дети разных семей соревнуются, кто больше занимался</small></span></button>
-  </div>`, { guide: false, raw: true });
+  </div>`, { back: FAM_BACK || goHome, guide: false, raw: true });
   $('.fams').onclick = e => {
     const u = e.target.closest('[data-use]'); if (u) { sfx.pop(); useFamily(u.dataset.use); P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     const ed = e.target.closest('[data-edit]'); if (ed) { sfx.pop(); screenFamilyEdit(ed.dataset.edit); }
@@ -11436,7 +11453,7 @@ function screenPult() {
 
     on1('pvInv', () => screenInvite(screenPult));
     on1('pvInvF', () => screenInviteFamily(screenPult));
-    on1('pvFams', () => screenFamilies());
+    on1('pvFams', () => screenFamilies(screenPult));
     on1('pvLg', () => screenLeague());
   };
   bind(); cloudPultFill();
@@ -11464,7 +11481,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '105';
+const APP_VER = '106';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -16334,7 +16351,7 @@ function screenWho(fid) {
       <div class="who-grid">${one.kids.filter(id => ROOT.profiles[id]).map(id => whoKid(one, id)).join('')}</div>`
     : `<p class="who-sub">Выбери свою семью</p><div class="who-fams">${fams.map(famCard).join('')}</div>`}
     ${GUEST ? `<button class="who-ad" id="whoGuest"><span class="emo">${esc(grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role).e)}</span><span><b>${esc(GUEST.name)}</b><small>мой экран</small></span></button>` : ''}
-    <div class="who-foot"><button class="chip" id="whoAway">🔗 Я играю в другом месте</button><button class="chip" id="whoNew">＋ Новенький</button>${GUEST ? '' : '<button class="chip" id="whoPult">👑 Взрослым</button>'}</div>
+    <div class="who-foot"><button class="chip" id="whoAway">🔗 Я играю в другом месте</button><button class="chip" id="whoNew">＋ Новенький</button></div>
   </div></main></div>`;
   $('.who').onclick = e => {
     const k = e.target.closest('[data-who]'), f = e.target.closest('[data-wfam]'), ad = e.target.closest('[data-wad]');
@@ -16386,8 +16403,10 @@ function whoAdult(fid, gid) {
 function whoGuestTop() {
   if (!whoFams().length) return;
   const fm = $('.fam'); if (!fm) return;
-  fm.insertAdjacentHTML('afterbegin', '<div class="who-gtop"><button class="chip" id="gWhoBtn">👥 Кто играет?</button></div>');
-  $('#gWhoBtn').onclick = () => { sfx.pop(); GUEST_OFF = true; famPeople(); screenWho(); };
+  fm.insertAdjacentHTML('afterbegin', `<div class="who-gtop"><button class="ibtn" id="gWhoBtn" aria-label="Назад">${ICON.back}</button><b>👥 Кто играет?</b></div>`);
+  const out = () => { GUEST_OFF = true; famPeople(); screenWho(); };
+  $('#gWhoBtn').onclick = () => { sfx.pop(); out(); };
+  navEnter(out);
 }
 // a grown-up's screen without the family on the phone shows the note about the move too
 function whoGuestMoved() { whoMovedNote($('.fam')); }
@@ -16424,19 +16443,31 @@ function screenWhoAway(back) {
     $('#waErr').textContent = 'Телефон не дал вставить сам: нажмите на поле, «Вставить», потом «Войти».';
   };
 }
-// a child new here: their own profile from zero, in this family or a new one
+// «Новенький»: anyone who joins the family (a child or a grown-up); a phone without a family starts one or comes in
 function screenWhoNew(f, back) {
   newScreen();
+  const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
+  const here = () => screenWhoNew(f, back);
+  if (f) {
+    shell('Кто новенький?', `<div class="wn">
+      <p class="wn-lead">Кто ещё есть в семье «${esc(f.name)}»?</p>
+      <div class="wn-grid" id="wnGrid"><button class="wn-b kid" data-wn="kid"><span>🧒</span><b>Ребёнок</b><small>свои игры и звёздочки</small></button>
+        ${ROLES.map(r => `<button class="wn-b" data-wn="${r[0]}"><span>${r[1]}</span><b>${r[2]}</b></button>`).join('')}</div>
+      <p class="wn-note">Взрослый получает свой экран: как дела у детей, их игры, шахматы с ними. Чтобы родные играли со своего телефона, пригласите их.</p>
+      <div class="prow-btns wn-row"><button class="big" id="wnInv">📨 Пригласить родных</button><button class="big ghost" id="wnEdit">✏️ Изменить семью</button></div>
+    </div>`, { back, guide: false, raw: true });
+    $('#wnGrid').onclick = e => { const b = e.target.closest('[data-wn]'); if (!b) return; sfx.pop(); screenFamilyEdit(f.id, { back: here, done: back, add: b.dataset.wn }); };
+    on1('wnInv', () => screenInvite(here));
+    on1('wnEdit', () => screenFamilyEdit(f.id, { back: here, done: back }));
+    return;
+  }
   shell('Начать с нуля', `<div class="who-away">
-    <div class="lg-hero">${pic('🌱')}<div><h2>Новенький?</h2><p>Здесь заводится новый ребёнок, звёздочки начнутся с нуля. Если ты уже играл в другом месте, лучше войти по ссылке — тогда всё твоё останется.</p></div></div>
-    ${f ? `<button class="big" id="wnKid">🧒 Новый ребёнок в семье «${esc(f.name)}»</button>` : ''}
-    <button class="big ghost" id="wnFam">🏠 Новая семья</button>
+    <div class="lg-hero">${pic('🌱')}<div><h2>Новенький?</h2><p>Здесь заводится новая семья, звёздочки начнутся с нуля. Если вы уже играете в другом месте, лучше войти: тогда всё сохранится.</p></div></div>
+    <button class="big" id="wnFam">🏠 Новая семья</button>
     <button class="big ghost" id="wnAway">🔗 Я уже играю в другом месте</button>
   </div>`, { back: back || goHome, guide: false, raw: true });
-  const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
-  on1('wnKid', () => screenFamilyEdit(f.id));
   on1('wnFam', () => screenFamilyEdit(null, { first: !whoFams().length }));
-  on1('wnAway', () => cloudOn() ? screenCloudLogin({ back: () => screenWhoNew(f, back) }) : screenWhoAway(() => screenWhoNew(f, back)));
+  on1('wnAway', () => cloudOn() ? screenCloudLogin({ back: here }) : screenWhoAway(here));
 }
 
 /* the family's link: compressed when the browser can (deflate-raw), plain otherwise; base64url in the hash */
