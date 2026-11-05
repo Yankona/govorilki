@@ -1942,6 +1942,26 @@ body.pv-on #app{padding-top:52px}
 .who-pick .who-face{width:72px;height:72px;flex:none}
 .pv-start{flex-wrap:wrap;gap:8px}
 @media (max-width:380px){.who-face{width:84px;height:84px}.who-h{font-size:34px}.who-grid .who-kid{flex-basis:118px}}
+/* CLOUD-CSS */
+.cl{display:flex;flex-direction:column;gap:12px;max-width:520px;margin:0 auto;padding:4px 16px 30px}
+.cl-l{margin:4px 0 0;font:800 17px var(--f-body);color:var(--ink)}
+.cl-in{font:400 26px var(--f-display);padding:10px 16px;border-radius:16px;border:3px solid var(--line-strong);background:var(--paper);color:var(--ink);width:100%;box-sizing:border-box;text-align:center}
+.cl-hint{margin:-4px 0 0;font:700 14px var(--f-body);color:var(--ink-soft);text-align:center}
+.cl-alt{text-align:center}
+.cl-ok{display:flex;gap:10px;align-items:flex-start;font:700 14px/1.4 var(--f-body);color:var(--ink-soft)}.cl-ok input{width:22px;height:22px;flex:none;margin-top:2px}
+.pad{display:flex;flex-direction:column;align-items:center;gap:12px}
+.pad-slots{display:flex;gap:10px}
+.pad-s{width:58px;height:58px;border-radius:16px;border:3px dashed var(--line-strong);display:flex;align-items:center;justify-content:center;font-size:36px;font-family:var(--f-emoji);background:var(--paper)}
+.pad-s.on{border-style:solid;border-color:var(--tiger)}
+.pad-keys{display:grid;grid-template-columns:repeat(3,78px);gap:10px}
+.pad-k{height:72px;border:0;border-radius:20px;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 2px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;cursor:pointer;color:var(--ink)}
+.pad-k .emo{font-size:34px;line-height:1.05;font-family:var(--f-emoji)}.pad-k small{font:800 13px var(--f-body);color:var(--ink-soft)}
+.pad-k:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line-strong)}
+.pad-x{font:800 26px var(--f-body)}
+.cl-done{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px;border-radius:22px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
+.cl-done p{margin:6px 0 0;font:800 15px var(--f-body);color:var(--ink-soft)}
+.cl-big{font:400 34px var(--f-display);color:var(--ink)}.cl-pics{font-size:40px;font-family:var(--f-emoji);letter-spacing:2px;white-space:nowrap}
+.cl-p{display:flex;flex-direction:column;gap:6px;margin-top:8px}.cl-p p{margin:0}.cl-off{color:var(--berry)}
 </style>
 </head>
 <body>
@@ -2050,7 +2070,7 @@ function useFamily(fid) {
 useFamily(ROOT.curFam);
 // before any family exists (a new phone, until the family is created) the screens still need a profile to read
 let P = ROOT.profiles[ROOT.cur] || blankProfile('', 'f', 'r', '');
-const save = () => { try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P) P.upd = Date.now(); localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} };
+const save = () => { try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P && !cloudFamOf(ROOT.cur)) P.upd = Date.now(); try { cloudStamp(); } catch (e) {} localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} try { cloudSoon(); } catch (e) {} };
 /* names in Russian: «Сава» → Савы, Саве, Саву, Савой; each word of «Бабушка Нина» too */
 function declWord(w, she) {
   const low = w.toLowerCase(), last = low.slice(-1), prev = low.slice(-2, -1), base = w.slice(0, -1);
@@ -8838,7 +8858,7 @@ function screenWelcome({ liga = '' } = {}) {
   </div></main></div>`;
   bindLang($('.lang-pick'), () => screenWelcome({ liga }));
   $('#obStart').onclick = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
-  $('#obHave').onclick = () => { sfx.pop(); screenWhoAway(() => screenWelcome({ liga })); };
+  $('#obHave').onclick = () => { sfx.pop(); cloudOn() ? screenCloudLogin({ back: () => screenWelcome({ liga }) }) : screenWhoAway(() => screenWelcome({ liga })); };
 }
 const kidChip = (on, val, label, attr) => `<button class="pick-b ${on ? 'sel' : ''}" ${attr}="${val}" aria-pressed="${on}">${label}</button>`;
 function screenKidSetup(id, { queue = [], first = false, liga = '', back = null, idx = 1, total = 1 } = {}) {
@@ -11171,7 +11191,7 @@ function screenPult() {
     on1('pvFams', () => screenFamilies());
     on1('pvLg', () => screenLeague());
   };
-  bind();
+  bind(); cloudPultFill();
   box.onclick = e => {
     const k = e.target.closest('[data-kid]'), v = e.target.closest('[data-view]'), l = e.target.closest('[data-link]'), a = e.target.closest('[data-add]');
     const ks = e.target.closest('[data-kset]'), sl = e.target.closest('[data-semlink]'), sa = e.target.closest('[data-start]');
@@ -11191,12 +11211,12 @@ function screenPult() {
       bindShare(id, msg, url, s => out.insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`));
     }
   };
-  pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); appVer($('#pvVer')); } });
+  pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); cloudPultFill(); appVer($('#pvVer')); } });
   setTimeout(() => statPing(), 4000);
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '86';
+const APP_VER = '87';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14707,6 +14727,325 @@ const IDEAS = (() => {
 })();
 
 /* LOGO-END */
+/* CLOUD-BEGIN */
+/* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
+   The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
+   pulls at the start and sends what changed, the newest copy of a child wins. A profile counts as changed only when its
+   content changes (not when a screen just saves), so an idle phone never overwrites a child's newer progress.
+   Hidden until the server's address is set, and in the artifact, the test sandbox and the panel's preview. ---------- */
+var CLOUD = /*__CLOUD__*/'';
+var CL_T = null, CL_BUSY = false, CL_PJ = null, CL_BOOTED = false, CL_READY = null;
+const PICS = ['🍦', '🍎', '🐱', '🚀', '⭐', '🐶', '🌈', '⚽', '🦋', '🐟'];
+const PIC_N = ["ice cream", "apple", "cat", "rocket", "star", "dog", "rainbow", "ball", "butterfly", "fish"];
+function cloudOn() { return !!CLOUD && !EMBEDDED && !DEMO; }
+const clNorm = s => String(s || '').toLowerCase().replace(/ё/g, RU('е')).replace(/[\s\-_.·,]+/g, '').normalize('NFC');
+const CL_LOGIN_RE = /^[a-zа-я0-9]{3,24}$/;
+function cloudFamOf(id) { if (!cloudOn()) return null; return Object.values(ROOT.families).find(f => f.cloud && !f.cloud.off && !f.guest && f.kids.includes(id)) || null; }
+const clPj = p => { try { return JSON.stringify(p, (k, v) => k === 'upd' ? undefined : v); } catch (e) { return ''; } };
+// called by save(): a child of a signed-in family whose profile really changed gets a new time
+function cloudStamp() {
+  if (!cloudOn()) return;
+  CL_PJ = CL_PJ || {};
+  Object.values(ROOT.families).forEach(f => { if (!f.cloud || f.cloud.off) return; f.kids.forEach(id => {
+    const p = ROOT.profiles[id]; if (!p) return;
+    const j = clPj(p);
+    if (CL_PJ[id] !== undefined && CL_PJ[id] !== j) p.upd = Date.now();
+    CL_PJ[id] = j;
+  }); });
+}
+const clProf = p => JSON.parse(JSON.stringify({ ...p, art: [] }, (k, v) => typeof v === 'string' && v.length > 1500 && v.startsWith('data:') ? undefined : v));
+const clMeta = f => ({ id: f.id, name: f.name, cc: f.cc || '', cc2: f.cc2 || '', code: famCodeOf(f), kids: f.kids.filter(id => ROOT.profiles[id]),
+  grands: f.grands.map(g => ({ id: g.id, name: g.name, she: g.she ? 1 : 0, role: g.role || '', e: g.e || '', cc: g.cc || '' })) });
+async function cloudApi(method, path, body, token) {
+  const ac = window.AbortController ? new AbortController() : null, tm = ac && setTimeout(() => ac.abort(), 9000);
+  try {
+    const r = await fetch(CLOUD + path, { method, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) }, body: body ? JSON.stringify(body) : undefined, ...(ac ? { signal: ac.signal } : {}), keepalive: method !== 'GET' && JSON.stringify(body || {}).length < 60000 });
+    let j = {}; try { j = await r.json(); } catch (e) {}
+    return { ...j, status: r.status, ok: r.ok && j.ok !== false };
+  } finally { if (tm) clearTimeout(tm); }
+}
+const clWrite = () => { try { localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} };
+// the server's copy: newer children replace this phone's, the family's names and relatives follow the server
+function cloudMerge(f, d) {
+  const c = f.cloud; let ch = false;
+  c.sent = c.sent || {}; CL_PJ = CL_PJ || {};
+  const meta = d.meta && typeof d.meta === 'object' ? d.meta : {}, mj = JSON.stringify(meta), order = Array.isArray(meta.kids) ? meta.kids.filter(x => ID_RE.test(x)) : null;
+  if (meta.name && mj !== c.metaSent) {
+    f.name = cleanS(meta.name, 30) || f.name;
+    if (/^[A-Z]{2}$/.test(meta.cc)) f.cc = meta.cc;
+    if (/^[A-Z]{2}$/.test(meta.cc2)) f.cc2 = meta.cc2;
+    if (/^[a-z0-9]{8,40}$/.test(meta.code || '')) f.code = meta.code;
+    if (Array.isArray(meta.grands)) f.grands = meta.grands.filter(g => g && ID_RE.test(g.id)).slice(0, 12).map(g => ({ id: g.id, name: cleanS(g.name, 30) || "Grandma", she: !!g.she, ...(KIN_IDS.includes(g.role) ? { role: g.role } : {}), ...(g.e ? { e: cleanS(g.e, 8) } : {}), ...(/^[A-Z]{2}$/.test(g.cc) ? { cc: g.cc } : {}) }));
+    if (order) f.kids = [...order.filter(id => f.kids.includes(id) || (d.kids || []).some(k => k.id === id)), ...f.kids.filter(id => !order.includes(id) && c.sent[id] === undefined)];
+    c.metaSent = mj; ch = true;
+  }
+  (Array.isArray(d.kids) ? d.kids : []).forEach(k => {
+    if (!k || !ID_RE.test(k.id) || (order && !order.includes(k.id))) return;
+    if (Object.values(ROOT.families).some(x => x !== f && !x.guest && x.kids.includes(k.id))) return;
+    const loc = ROOT.profiles[k.id], su = +k.upd || 0;
+    if (k.profile && k.profile.settings && (!loc || su > (loc.upd || 0))) {
+      const o = k.profile, st = o.settings, b = blankProfile(cleanS(st.name, 30), st.gender === 'm' ? 'm' : 'f', st.track === 'l' ? 'l' : 'r', FRIENDS[st.friend] ? st.friend : '');
+      ROOT.profiles[k.id] = { ...b, ...o, art: loc && loc.art || [], book: { ...b.book, ...(o.book || {}) }, settings: { ...b.settings, ...st, name: cleanS(st.name, 30) }, upd: su };
+      CL_PJ[k.id] = clPj(ROOT.profiles[k.id]);
+      if (ROOT.cur === k.id && P === loc) P = ROOT.profiles[k.id];
+      ch = true;
+    }
+    c.sent[k.id] = Math.max(c.sent[k.id] || 0, su);
+    if (!f.kids.includes(k.id)) { f.kids.push(k.id); ch = true; }
+  });
+  if (ROOT.curFam === f.id) { useFamily(f.id); P = ROOT.profiles[ROOT.cur] || P; }
+  c.at = Date.now();
+  return ch;
+}
+async function cloudPull(f) {
+  const c = f.cloud; if (!cloudOn() || !c || c.off) return false;
+  let d; try { d = await cloudApi('GET', '/v1/family', null, c.token); } catch (e) { return false; }
+  if (d.status === 401) { c.off = 1; clWrite(); return false; }
+  if (!d.ok) return false;
+  const ch = cloudMerge(f, d);
+  (CL_READY = CL_READY || new Set()).add(f.id);
+  clWrite(); cloudSoon();
+  return ch;
+}
+const cloudFams = () => cloudOn() ? Object.values(ROOT.families).filter(f => f.cloud && !f.cloud.off && !f.guest) : [];
+// at most `ms`: offline, the phone plays with what it has
+function cloudPullAll(ms) {
+  const all = Promise.all(cloudFams().map(f => cloudPull(f))).then(r => r.some(Boolean), () => false);
+  return ms ? Promise.race([all, new Promise(r => setTimeout(() => r(false), ms))]) : all;
+}
+function cloudSoon() { if (!cloudOn() || !cloudFams().length) return; clearTimeout(CL_T); CL_T = setTimeout(cloudPushNow, 3000); }
+async function cloudPushNow() {
+  if (!cloudOn() || CL_BUSY) return;
+  CL_BUSY = true;
+  try {
+    for (const f of cloudFams()) {
+      const c = f.cloud; if (!CL_READY || !CL_READY.has(f.id)) continue;   // never send before this session has the server's copy
+      c.sent = c.sent || {};
+      const mj = JSON.stringify(clMeta(f));
+      if (mj !== c.metaSent) { const r = await cloudApi('PUT', '/v1/meta', { meta: JSON.parse(mj) }, c.token); if (r.status === 401) { c.off = 1; continue; } if (r.ok) c.metaSent = mj; }
+      for (const id of f.kids) {
+        const p = ROOT.profiles[id]; if (!p) continue;
+        if (!p.upd) p.upd = Date.now();
+        if (c.sent[id] !== undefined && p.upd <= c.sent[id]) continue;
+        const r = await cloudApi('PUT', '/v1/kid/' + id, { upd: p.upd, profile: clProf(p) }, c.token);
+        if (r.ok) { c.sent[id] = r.upd || p.upd; c.at = Date.now(); }
+        else if (r.status === 409) { await cloudPull(f); }
+        else if (r.status === 401) { c.off = 1; break; }
+      }
+    }
+  } catch (e) {}
+  finally { CL_BUSY = false; clWrite(); }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!cloudOn() || !cloudFams().length) return;
+  if (document.hidden) { clearTimeout(CL_T); cloudPushNow(); return; }
+  // back on the screen: another phone may have played meanwhile
+  cloudPullAll().then(ch => { if (!ch) return; if ($('.who-grid') && !$('.who-pick')) screenWho(ROOT.curFam); else if ($('#tabBar')) goHome(); });
+});
+// at the start: the children's newest progress before anyone taps themself (a short wait, then whatever is here)
+function cloudBootWait() {
+  if (CL_BOOTED || !cloudFams().length) return false;
+  CL_BOOTED = true;
+  const t = newScreen();
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="who"><header class="who-hero"><span class="who-ryz">${friendSVG('', 'tiger')}</span><h1 class="who-h">Who's playing?</h1></header><p class="who-sub">☁️ Loading the family's stars…</p></div></main></div>`;
+  cloudPullAll(3500).then(() => { if (t !== tok) return; PULT_BOOTED = false; goHome(); });
+  return true;
+}
+
+/* the keypad: ten pictures, each with its digit */
+const padHTML = id => `<div class="pad" id="${id}"><div class="pad-slots" aria-live="polite">${[0, 1, 2, 3].map(i => `<span class="pad-s" data-s="${i}"></span>`).join('')}</div>
+  <div class="pad-keys">${[1, 2, 3, 4, 5, 6, 7, 8, 9, -1, 0, 'x'].map(d => d === -1 ? '<span></span>' : d === 'x' ? `<button class="pad-k pad-x" data-d="x" aria-label="${esc(RU('⌫'))}">⌫</button>` : `<button class="pad-k" data-d="${d}" aria-label="${esc(PIC_N[d])}"><span class="emo">${PICS[d]}</span><small>${d}</small></button>`).join('')}</div></div>`;
+function padBind(id, onFull) {
+  let v = '';
+  noGuard();   // a wrong code must not lock the keypad the way a wrong answer in a game does
+  const root = document.getElementById(id);
+  const draw = () => root.querySelectorAll('.pad-s').forEach((s, i) => { s.textContent = i < v.length ? PICS[+v[i]] : ''; s.classList.toggle('on', i < v.length); });
+  root.querySelector('.pad-keys').onclick = e => {
+    const b = e.target.closest('[data-d]'); if (!b) return;
+    sfx.tick();
+    if (b.dataset.d === 'x') v = v.slice(0, -1); else if (v.length < 4) v += b.dataset.d;
+    draw(); if (v.length === 4 && onFull) onFull(v);
+  };
+  return { get: () => v, set: x => { v = x; draw(); }, clear: () => { v = ''; draw(); } };
+}
+const picsOf = pin => [...pin].map(d => PICS[+d]).join(' ');
+// a login children remember: their names one after another
+function clSuggest(f) { const s = clNorm(f.kids.filter(id => ROOT.profiles[id]).map(id => ROOT.profiles[id].settings.name).join('')); return CL_LOGIN_RE.test(s) ? s : ''; }
+const clErr = (r, wrong) => r.error === 'locked' ? `Too many tries. Try again in ${r.wait || 15} min.` : r.error === 'slow' ? "Too many tries from this phone. Try again in an hour."
+  : r.error === 'nologin' ? "There is no such family. Check the login." : r.error === 'pin' ? (wrong || "Wrong pictures.") + (r.left ? ` Tries left: ${r.left}.` : '') : r.error === 'taken' ? "This login is taken." : "It didn't work. Check the internet and try again.";
+
+/* «Войти в семью»: the login and 4 pictures */
+function screenCloudLogin({ back = null, login = '' } = {}) {
+  newScreen();
+  const last = login || (Object.values(ROOT.families).find(f => f.cloud) || {}).cloud?.login || '';
+  shell("Join your family", `<div class="cl">
+    <label class="cl-l" for="clLogin">Family login</label>
+    <input id="clLogin" class="cl-in" type="text" maxlength="30" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="for example, emmaandleo" value="${esc(last)}">
+    <p class="cl-l">Password — 4 pictures</p>
+    ${padHTML('clPad')}
+    <p class="fe-err" id="clErr" role="alert"></p>
+    <div class="prow-btns"><button class="big" id="clGo">Sign in</button></div>
+    <p class="muted cl-alt">No login? <button class="link-btn" id="clLink">Sign in with a link</button> · <button class="link-btn" id="clNew">Start from zero</button></p>
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  let busy = false;
+  const pad = padBind('clPad', () => go());
+  async function go() {
+    if (busy) return;
+    const lg = clNorm($('#clLogin').value), pin = pad.get();
+    if (!CL_LOGIN_RE.test(lg)) { $('#clErr').textContent = "Type the family's login: letters or digits, 3 to 24."; return; }
+    if (pin.length !== 4) { $('#clErr').textContent = "Choose 4 pictures."; return; }
+    busy = true; $('#clErr').textContent = ''; $('#clGo').disabled = true;
+    let r = {}; try { r = await cloudApi('POST', '/v1/login', { login: lg, pin }); } catch (e) { r = { error: 'net' }; }
+    busy = false; if (!$('#clGo')) return; $('#clGo').disabled = false;
+    if (!r.ok) { pad.clear(); $('#clErr').textContent = clErr(r); sfx.oops && sfx.oops(); return; }
+    sfx.magic();
+    const f = cloudAdopt(r, r.token);
+    screenWho(f.id);
+  }
+  $('#clGo').onclick = () => go();
+  $('#clLink').onclick = () => { sfx.pop(); screenWhoAway(() => screenCloudLogin({ back, login })); };
+  $('#clNew').onclick = () => { sfx.pop(); screenWhoNew(fam(), () => screenCloudLogin({ back, login })); };
+}
+// the server's family on this phone: the one that signed in with this login before, the same family, or a new one
+function cloudAdopt(d, token) {
+  const meta = d.meta || {};
+  let f = Object.values(ROOT.families).find(x => !x.guest && x.cloud && x.cloud.login === d.login)
+    || (ID_RE.test(meta.id || '') && ROOT.families[meta.id] && !ROOT.families[meta.id].guest ? ROOT.families[meta.id] : null);
+  if (!f) {
+    const fid = ID_RE.test(meta.id || '') && !ROOT.families[meta.id] ? meta.id : 'f' + rid6();
+    f = ROOT.families[fid] = { id: fid, name: cleanS(meta.name, 30) || d.login, cc: 'PT', kids: [], grands: [], via: 1 };
+  }
+  f.cloud = { login: d.login, token, sent: {}, metaSent: '' };
+  cloudMerge(f, d);
+  (CL_READY = CL_READY || new Set()).add(f.id);
+  save();
+  return f;
+}
+
+/* in the panel: make the family's login, its state, change the code, sign out, delete */
+function cloudPultHTML(f) {
+  if (!cloudOn() || f.guest) return '';
+  const c = f.cloud;
+  if (!c) return `<div class="cl-p"><button class="big" data-cl="make" data-fam="${f.id}">🔑 Login and password for the family</button><p class="muted">The children sign in as themselves on any phone, tablet or laptop, with the same stars everywhere.</p></div>`;
+  return `<div class="cl-p"><p>🔑 Family login: <b>${esc(c.login)}</b> · ${c.off ? "<b class=\"cl-off\">needs signing in again</b>" : c.at ? "saved " + esc(pultAgo(c.at)) : "saving"}</p>
+    <div class="prow-btns">${c.off ? `<button class="chip" data-cl="relogin" data-fam="${f.id}">🔑 Sign in again</button>` : ''}<button class="chip" data-cl="pin" data-fam="${f.id}">🔁 Change the password</button><button class="chip" data-cl="out" data-fam="${f.id}">🚪 Sign out on this phone</button><button class="chip" data-cl="del" data-fam="${f.id}">🗑 Delete from the cloud</button></div></div>`;
+}
+function cloudPultFill() {
+  if (!cloudOn()) return;
+  Object.values(ROOT.families).forEach(f => {
+    const a = document.getElementById('pvsem-' + f.id); if (!a || a.nextElementSibling && a.nextElementSibling.classList.contains('cl-p')) return;
+    a.insertAdjacentHTML('afterend', cloudPultHTML(f));
+  });
+  $$('[data-cl]').forEach(b => b.onclick = e => {
+    e.stopPropagation(); sfx.pop();
+    const f = ROOT.families[b.dataset.fam]; if (!f) return;
+    const act = b.dataset.cl;
+    if (act === 'make') screenCloudMake(f);
+    else if (act === 'relogin') screenCloudLogin({ back: screenPult, login: f.cloud.login });
+    else if (act === 'pin') screenCloudPin(f);
+    else if (act === 'del') screenCloudDel(f);
+    else if (act === 'out') {
+      if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = "Sign out? Everything stays here, but without syncing"; return; }
+      const t = f.cloud.token; delete f.cloud; save();
+      cloudApi('POST', '/v1/logout', {}, t).catch(() => {});
+      screenPult();
+    }
+  });
+}
+function screenCloudMake(f) {
+  newScreen();
+  shell("Login and password", `<div class="cl">
+    <p class="lead">A family login and 4 pictures — and the children sign in as themselves on any phone, tablet or laptop. Stars and progress are the same everywhere.</p>
+    <label class="cl-l" for="clLogin">Family login</label>
+    <input id="clLogin" class="cl-in" type="text" maxlength="30" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="for example, emmaandleo" value="${esc(clSuggest(f))}">
+    <p class="cl-hint" id="clHint">Easiest for children: their names one after another. Capitals, spaces and hyphens don't matter.</p>
+    <p class="cl-l">Password — 4 pictures (each picture is a digit)</p>
+    ${padHTML('clPad')}
+    <div class="prow-btns"><button class="chip" id="clRnd">🎲 Make one up</button></div>
+    <label class="cl-ok"><input type="checkbox" id="clAgree"> <span>The children's names, settings and progress will be kept on the app's server (Cloudflare), so you can sign in from any phone. Drawings stay on the phone. You can delete everything here, in the control panel.</span></label>
+    <p class="fe-err" id="clErr" role="alert"></p>
+    <div class="prow-btns"><button class="big" id="clGo">Create the login</button></div>
+  </div>`, { back: screenPult, guide: false, raw: true });
+  const pad = padBind('clPad');
+  let ct = null;
+  const check = () => { clearTimeout(ct); ct = setTimeout(async () => {
+    const lg = clNorm($('#clLogin') && $('#clLogin').value), h = $('#clHint'); if (!h) return;
+    if (!CL_LOGIN_RE.test(lg)) { h.textContent = "Only letters and digits, 3 to 24."; return; }
+    try { const r = await cloudApi('GET', '/v1/check?login=' + encodeURIComponent(lg)); if (!$('#clHint')) return;
+      h.textContent = r.free ? `✅ «${lg}» is free` : `Taken. Free: ${(r.suggest || []).join(', ')}`; } catch (e) {}
+  }, 400); };
+  $('#clLogin').addEventListener('input', check); check();
+  $('#clRnd').onclick = () => { sfx.pop(); const a = new Uint8Array(4); crypto.getRandomValues(a); pad.set([...a].map(x => x % 10).join('')); };
+  $('#clGo').onclick = async () => {
+    const lg = clNorm($('#clLogin').value), pin = pad.get(), err = $('#clErr');
+    if (!CL_LOGIN_RE.test(lg)) { err.textContent = "Type a login: letters or digits, 3 to 24."; return; }
+    if (pin.length !== 4) { err.textContent = "Choose 4 pictures or tap «🎲 Make one up»."; return; }
+    if (!$('#clAgree').checked) { err.textContent = "Tick the box about keeping it on the server."; return; }
+    $('#clGo').disabled = true; err.textContent = '';
+    const kids = Object.fromEntries(f.kids.filter(id => ROOT.profiles[id]).map(id => { const p = ROOT.profiles[id]; if (!p.upd) p.upd = Date.now(); return [id, clProf(p)]; }));
+    let r = {}; try { r = await cloudApi('POST', '/v1/family', { login: lg, pin, meta: clMeta(f), kids }); } catch (e) { r = { error: 'net' }; }
+    if (!$('#clGo')) return; $('#clGo').disabled = false;
+    if (!r.ok) { err.textContent = clErr(r) + (r.suggest && r.suggest.length ? ` Free: ${r.suggest.join(', ')}` : ''); return; }
+    f.cloud = { login: r.login, token: r.token, sent: Object.fromEntries(Object.entries(kids).map(([id, p]) => [id, p.upd])), metaSent: JSON.stringify(clMeta(f)), at: Date.now() };
+    (CL_READY = CL_READY || new Set()).add(f.id); save(); sfx.magic();
+    screenCloudDone(f, pin);
+  };
+}
+function screenCloudDone(f, pin) {
+  newScreen();
+  const site = EMBEDDED ? 'https://yankona.github.io/govorilki/' + langPath(LANG) : SITE;
+  const msg = `Chatterbox: ${site}
+On a new phone: «We already play — sign in» or «🔑 Join your family».
+Family login: ${f.cloud.login}
+The password is 4 pictures, we'll tell you ourselves.`;
+  shell("The login is ready", `<div class="cl">
+    <div class="cl-done"><p>Family login</p><b class="cl-big">${esc(f.cloud.login)}</b><p>Password</p><b class="cl-pics">${picsOf(pin)}</b><small>${[...pin].join(' ')}</small></div>
+    <p class="lead">Remember the pictures or write them down: the password will not be shown here again. Tell the children in words: «${esc([...pin].map(d => PIC_N[+d]).join(', '))}».</p>
+    <p>On another phone: open Chatterbox → «🔑 Join your family» (or «We already play — sign in»), the login and 4 pictures — and each child taps themself.</p>
+    <div class="fam-steps">${shareRow(msg, '', 'clShare')}<p class="muted">The message has only the address and the login, no password.</p></div>
+    <div class="prow-btns"><button class="big ghost" id="clBack">Done</button></div>
+  </div>`, { back: screenPult, guide: false, raw: true });
+  bindShare('clShare', msg, '', s => $('.fam-steps').insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`));
+  $('#clShare').onclick = () => { sfx.pop(); if (navigator.share) navigator.share({ title: "Chatterbox", text: msg }).catch(() => {}); else $('[data-copy="clShare"]').click(); };
+  $('#clBack').onclick = () => { sfx.pop(); screenPult(); };
+}
+function screenCloudPin(f) {
+  newScreen();
+  shell("Change the password", `<div class="cl">
+    <p class="cl-l">Old password</p>${padHTML('clOld')}
+    <p class="cl-l">New password</p>${padHTML('clNew')}
+    <div class="prow-btns"><button class="chip" id="clRnd">🎲 Make one up</button></div>
+    <p class="fe-err" id="clErr" role="alert"></p>
+    <div class="prow-btns"><button class="big" id="clGo">Change</button></div>
+  </div>`, { back: screenPult, guide: false, raw: true });
+  const a = padBind('clOld'), b = padBind('clNew');
+  $('#clRnd').onclick = () => { sfx.pop(); const x = new Uint8Array(4); crypto.getRandomValues(x); b.set([...x].map(v => v % 10).join('')); };
+  $('#clGo').onclick = async () => {
+    if (a.get().length !== 4 || b.get().length !== 4) { $('#clErr').textContent = "Choose 4 pictures in each."; return; }
+    let r = {}; try { r = await cloudApi('POST', '/v1/pin', { pin: a.get(), newPin: b.get() }, f.cloud.token); } catch (e) { r = { error: 'net' }; }
+    if (!$('#clGo')) return;
+    if (!r.ok) { a.clear(); $('#clErr').textContent = clErr(r, "The old password is wrong."); return; }
+    sfx.magic(); screenCloudDone(f, b.get());
+  };
+}
+function screenCloudDel(f) {
+  newScreen();
+  shell("Delete from the cloud", `<div class="cl">
+    <p class="lead">The family's login and the children's stars will be deleted from the server. Everything stays on this phone. On other phones the children stay as they were, but without syncing.</p>
+    <p class="cl-l">Family password</p>${padHTML('clPad')}
+    <p class="fe-err" id="clErr" role="alert"></p>
+    <div class="prow-btns"><button class="big" id="clGo">🗑 Delete</button></div>
+  </div>`, { back: screenPult, guide: false, raw: true });
+  const pad = padBind('clPad');
+  $('#clGo').onclick = async () => {
+    if (pad.get().length !== 4) { $('#clErr').textContent = "Choose 4 pictures."; return; }
+    let r = {}; try { r = await cloudApi('DELETE', '/v1/family', { pin: pad.get() }, f.cloud.token); } catch (e) { r = { error: 'net' }; }
+    if (!$('#clGo')) return;
+    if (!r.ok) { pad.clear(); $('#clErr').textContent = clErr(r); return; }
+    delete f.cloud; save(); sfx.pop(); screenPult();
+  };
+}
+/* CLOUD-END */
 /* WHO-BEGIN */
 /* ---------- «Кто играет?»: the first page. The phone may keep several families; a child picks the family, then
    themself. A child of a family that plays on another phone comes in by the family's link (#sem=…): the link carries the
@@ -14740,6 +15079,7 @@ function whoBoot() {
   if (DEMO || PREVIEW) return false;
   whoLangs();
   if (LIGA_HASH || PULT_HASH) return false;
+  if (cloudBootWait()) return true;
   if (WHO_HASH) {
     const id = WHO_HASH; WHO_HASH = null;
     const f = whoFams().find(x => x.kids.includes(id));
@@ -14788,6 +15128,7 @@ function screenWho(fid) {
     if (f) { sfx.pop(); screenWho(f.dataset.wfam); }
   };
   const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
+  if (cloudOn()) { $('.who-foot').insertAdjacentHTML('afterbegin', "<button class=\"chip\" id=\"whoLogin\">🔑 Join your family</button>"); on1('whoLogin', () => screenCloudLogin({ back: () => screenWho(fid) })); }
   on1('whoBackF', () => screenWho());
   on1('whoAway', () => screenWhoAway(() => screenWho(fid)));
   on1('whoNew', () => screenWhoNew(one, () => screenWho(fid)));
@@ -14810,6 +15151,7 @@ function screenWhoAway(back) {
       <ol class="who-steps"><li>Open Chatterbox where you play (for example, with the icon on the Home screen).</li><li>👑 Control panel → «📲 Sign in from another phone» → «📋 Copy».</li><li>Come back here and tap «📋 Paste the link».</li></ol></section>
     <p class="muted">Going back works the same way: a link from the 👑 Control panel here, opened where you played before, then «As in the link».</p>
   </div>`, { back: back || goHome, guide: false, raw: true });
+  if (cloudOn()) { $('.who-away').insertAdjacentHTML('afterbegin', "<div class=\"prow-btns\"><button class=\"big\" id=\"waLogin\">🔑 Sign in with the family's login</button></div>"); $('#waLogin').onclick = () => { sfx.pop(); screenCloudLogin({ back: () => screenWhoAway(back) }); }; }
   const go = () => {
     const v = String($('#waTxt').value || '').trim(), m = v.match(/sem=([A-Za-z0-9_-]{8,})/);
     if (m) { sfx.pop(); screenSem(m[1], back); return; }
@@ -14839,7 +15181,7 @@ function screenWhoNew(f, back) {
   const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
   on1('wnKid', () => screenFamilyEdit(f.id));
   on1('wnFam', () => screenFamilyEdit(null, { first: !whoFams().length }));
-  on1('wnAway', () => screenWhoAway(() => screenWhoNew(f, back)));
+  on1('wnAway', () => cloudOn() ? screenCloudLogin({ back: () => screenWhoNew(f, back) }) : screenWhoAway(() => screenWhoNew(f, back)));
 }
 
 /* the family's link: compressed when the browser can (deflate-raw), plain otherwise; base64url in the hash */
