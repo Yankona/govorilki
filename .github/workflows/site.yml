@@ -1,0 +1,37 @@
+# Builds the website (www/: static pages in Russian, English and Portuguese) and puts it on Cloudflare Pages,
+# project «govorilki» → https://govorilki.pages.dev. Uses the same CLOUDFLARE_API_TOKEN as the sign-in server;
+# the token needs Account · Cloudflare Pages · Edit as well.
+name: Site
+on:
+  push:
+    branches: [main]
+    paths: ['www/**', '.github/workflows/site.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: site
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: 15cd28371f0f83f230dfa84c5f324556
+      SITE_URL: https://govorilki.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build
+        run: python3 www/build.py
+      - name: Deploy
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: |
+          npm i -g wrangler@4 > /dev/null
+          wrangler pages project create govorilki --production-branch main 2>&1 | tail -3 || true
+          wrangler pages deploy www/dist --project-name govorilki --branch main --commit-dirty=true || { echo "::error::Не получилось выложить сайт. Если в ошибке Authentication error — добавьте токену право Account · Cloudflare Pages · Edit (Cloudflare → Account API tokens → токен → Edit)."; exit 1; }
+      - name: Check
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: |
+          for i in 1 2 3 4 5 6; do curl -sf "$SITE_URL/ru/" -o /dev/null && echo "up: $SITE_URL" && break; sleep 10; done
+          echo "### Сайт: $SITE_URL" >> "$GITHUB_STEP_SUMMARY"
