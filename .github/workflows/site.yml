@@ -1,11 +1,12 @@
-# Builds the website (www/: static pages in Russian, English and Portuguese) and puts it on Cloudflare Pages,
+# Builds the website (www/: static pages in Russian, English and Portuguese) with the game in /play/ (the repository's
+# root: index.html, ru/, pt/, en/, …) and puts it on Cloudflare Pages,
 # project «govorilki» → https://govorilki.com (also govorilki.pages.dev). Uses the same CLOUDFLARE_API_TOKEN as the sign-in server;
 # the token needs Account · Cloudflare Pages · Edit as well.
 name: Site
 on:
   push:
     branches: [main]
-    paths: ['www/**', '.github/workflows/site.yml']
+    paths: ['www/**', '.github/workflows/site.yml', 'index.html', 'ru/**', 'en/**', 'pt/**', 'art/**', 'img/**', 'trips/**', 'engine/**', 'icons/**', 'sw.js', 'manifest.webmanifest']
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,8 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Build
-        run: python3 www/build.py
+      - name: Build (the website, and the game in /play/)
+        run: APP_DIR=. python3 www/build.py
       - name: Deploy
         if: env.CLOUDFLARE_API_TOKEN != ''
         run: |

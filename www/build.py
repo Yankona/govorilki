@@ -6,7 +6,7 @@ content/{ru,en,pt}.json hold the texts (see the shape in content/README.md); thi
   /{lang}/               the home page of each language
   /{lang}/{slug}/        the articles
   /sitemap.xml, /robots.txt, /404.html, /assets/…
-SITE_URL (env) is the address the pages are served from; the game itself stays at yankona.github.io/govorilki.
+SITE_URL (env) is the address the pages are served from; the game is copied to /play/ from APP_DIR (yankona.github.io/govorilki moves there).
 Run: python3 www/build.py  (writes www/dist)
 """
 import html, json, os, re, shutil, datetime
@@ -16,7 +16,10 @@ OUT = os.path.join(HERE, 'dist')
 SITE = os.environ.get('SITE_URL', 'https://govorilki.com').rstrip('/')
 LANGS = ['ru', 'en', 'pt']
 KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'grand', 'faq']
-APP = {'ru': 'https://yankona.github.io/govorilki/ru/', 'en': 'https://yankona.github.io/govorilki/', 'pt': 'https://yankona.github.io/govorilki/pt/'}
+APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/'}
+# the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
+APP_DIR = os.environ.get('APP_DIR', '')
+APP_FILES = ['index.html', 'ru', 'en', 'pt', 'art', 'img', 'trips', 'engine', 'icons', 'sw.js', 'manifest.webmanifest']
 HL = {'ru': 'ru', 'en': 'en', 'pt': 'pt-PT'}
 OG_LOCALE = {'ru': 'ru_RU', 'en': 'en_GB', 'pt': 'pt_PT'}
 SHORT = {'ru': 'RU', 'en': 'EN', 'pt': 'PT'}
@@ -178,8 +181,8 @@ def extras():
             urls.append(f'<url><loc>{url(l, k)}</loc><lastmod>{TODAY}</lastmod>{alts}</url>')
     urls.insert(0, f'<url><loc>{SITE}/</loc><lastmod>{TODAY}</lastmod></url>')
     open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(urls) + '\n</urlset>\n')
-    open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n')
-    open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n')
+    open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /play/\n\nSitemap: {SITE}/sitemap.xml\n')
+    open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n')
     nf = head('ru', None, 'Говорилки · Chatterbox · Tagarelas', C['ru']['pages']['home']['description'], SITE + '/', {a: url(a, 'home') for a in LANGS}, {'@context': 'https://schema.org', '@type': 'WebPage'})
     nf = nf.replace('<head>', '<head>\n<meta name="robots" content="noindex">')
     nf += f'<main class="wrap hub"><div class="hero-f"><img src="/assets/ghost.svg" alt="" width="96" height="96"></div><h1>404</h1><div class="lang-cards">' + ''.join(f'<a class="lang-card" href="{path(a, "home")}"><b>{esc(C[a]["brand"])}</b><span>{esc(C[a]["ui"]["lang_name"])}</span></a>' for a in LANGS) + '</div></main></body></html>'
@@ -191,5 +194,10 @@ if __name__ == '__main__':
     for l in LANGS:
         for k in KEYS: page(l, k)
     hub(); extras()
+    if APP_DIR:
+        for f in APP_FILES:
+            src = os.path.join(APP_DIR, f); dst = os.path.join(OUT, 'play', f)
+            if os.path.isdir(src): shutil.copytree(src, dst)
+            elif os.path.exists(src): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy2(src, dst)
     n = sum(len(fs) for _, _, fs in os.walk(OUT))
     print(f'built {len(LANGS) * len(KEYS) + 1} pages, {n} files → {OUT} for {SITE}')

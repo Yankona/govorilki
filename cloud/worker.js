@@ -2,9 +2,9 @@
 // (the app shows it as 4 pictures). The server keeps each child's profile, the newest copy wins, so a child plays as
 // themself on any phone. 4 digits are weak on their own: the server locks a login for 15 minutes after 5 wrong codes and
 // slows down an address that keeps guessing; each new lock lasts twice as long (up to a day) until the right code. Codes are stored as HMAC with a key that lives only in this database.
-const ORIGINS = ['https://yankona.github.io', 'http://localhost:8765'];
+const ORIGINS = ['https://govorilki.com', 'https://www.govorilki.com', 'https://yankona.github.io', 'http://localhost:8765'];
 const LOCK_AFTER = 5, LOCK_MS = 15 * 60e3, LOCK_MAX = 24 * 3600e3, IP_MAX = 40, IP_WINDOW = 60 * 60e3, TOKEN_DAYS = 400;
-const MAX_PROFILE = 600e3, MAX_META = 40e3, MAX_KIDS = 12;
+const MAX_PROFILE = 600e3, MAX_META = 40e3, MAX_KIDS = 12, MAX_MOVE = 1.9e6, MOVE_TTL = 24 * 3600e3, MOVE_IP_MAX = 30;
 
 const now = () => Date.now();
 const enc = new TextEncoder();
@@ -77,6 +77,28 @@ async function route(req, env) {
   const url = new URL(req.url), path = url.pathname.replace(/\/+$/, ''), M = req.method;
   const ip = req.headers.get('CF-Connecting-IP') || 'local';
   if (path === '/v1/ping') return json({ ok: true, at: now() });
+
+  // the move from yankona.github.io to govorilki.com: the old page leaves the family's progress here, encrypted with a
+  // key that stays in the link (the server never sees it); the new page takes it once, then it is gone
+  if (path === '/v1/move' && M === 'POST') {
+    const r = await env.DB.prepare('SELECT n, since FROM ipfails WHERE ip = ?').bind('move:' + ip).first();
+    if (r && now() - r.since < IP_WINDOW && r.n >= MOVE_IP_MAX) return json({ ok: false, error: 'slow' }, 429);
+    const b = await body(req, MAX_MOVE + 1000), data = String(b.data || '');
+    if (!/^[A-Za-z0-9_-]{16,}$/.test(data) || data.length > MAX_MOVE) return json({ ok: false, error: 'data' }, 400);
+    const id = b64u(rand(12));
+    await env.DB.batch([
+      env.DB.prepare('DELETE FROM moves WHERE created < ?').bind(now() - MOVE_TTL),
+      env.DB.prepare('INSERT INTO moves (id, data, created) VALUES (?, ?, ?)').bind(id, data, now()),
+      !r || now() - r.since >= IP_WINDOW ? env.DB.prepare('INSERT OR REPLACE INTO ipfails (ip, n, since) VALUES (?, 1, ?)').bind('move:' + ip, now()) : env.DB.prepare('UPDATE ipfails SET n = n + 1 WHERE ip = ?').bind('move:' + ip)]);
+    return json({ ok: true, id });
+  }
+  const mv = path.match(/^\/v1\/move\/([A-Za-z0-9_-]{16})$/);
+  if (mv && M === 'GET') {
+    const r = await env.DB.prepare('SELECT data, created FROM moves WHERE id = ?').bind(mv[1]).first();
+    if (!r || now() - r.created > MOVE_TTL) return json({ ok: false, error: 'gone' }, 404);
+    await env.DB.prepare('DELETE FROM moves WHERE id = ?').bind(mv[1]).run();
+    return json({ ok: true, data: r.data });
+  }
 
   if (path === '/v1/check' && M === 'GET') {
     const login = normLogin(url.searchParams.get('login'));
