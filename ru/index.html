@@ -2134,6 +2134,22 @@ body.pv-on #app{padding-top:52px}
 .m-start .warm-tip{background:#fff;color:#2A2346;padding:8px 10px;gap:8px;align-self:stretch}.m-start .warm-tip ol{font-size:12.5px;color:#4A4560}.m-start .warm-tip b{font:800 14px var(--f-body);color:#2A2346}.m-start .warm-prof{width:60px}
 .m-check{margin:0;font:700 13px/1.3 var(--f-body);color:#FFD27A}
 .sr-help{margin:4px 0 10px;color:#B5521B}
+/* LIVE-CSS */
+.ryz .lv-body{transform-box:fill-box;transform-origin:50% 100%}
+.ryz .lv-eyes{transform-box:fill-box;transform-origin:50% 50%;transition:transform .12s}
+.ryz .lv-mouth{opacity:0}.ryz.lv-talk .lv-mouth{opacity:1}.ryz.lv-talk .lv-smile{opacity:0}
+.ryz.lv-blink .lv-eyes{transform:scaleY(.12)}
+@media (prefers-reduced-motion:no-preference){
+.guide-ryz .ryz .lv-body,.who-ryz .ryz .lv-body,.win .ryz .lv-body{animation:lv-breathe 3.4s ease-in-out infinite}
+.ryz.lv-listen .lv-body{animation:none;transform:rotate(-7deg) scale(1.05);transition:transform .25s}
+.ryz.lv-listen .lv-eyes{transform:scale(1.15)}
+.ryz.lv-happy .lv-body{animation:lv-hop .5s ease-out 2}
+.ryz.lv-happy .lv-eyes{transform:scaleY(.55)}
+.ryz.lv-oops .lv-body{animation:lv-shake .5s ease-in-out}
+}
+@keyframes lv-breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.02,1.035)}}
+@keyframes lv-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-12%) scale(1.04)}}
+@keyframes lv-shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
 </style>
 </head>
 <body>
@@ -2581,7 +2597,7 @@ const CRATE = '<svg viewBox="0 0 120 110" aria-hidden="true"><rect x="8" y="26" 
 const TRAIN = '<svg viewBox="0 0 150 84" aria-hidden="true"><rect x="0" y="36" width="40" height="28" rx="5" fill="#3D8BFD"/><rect x="5" y="41" width="12" height="10" rx="2" fill="#CDEEF6"/><rect x="22" y="41" width="12" height="10" rx="2" fill="#CDEEF6"/><rect x="38" y="54" width="12" height="4" fill="#2A2346"/><rect x="48" y="20" width="34" height="44" rx="5" fill="#EF4F7E"/><rect x="55" y="27" width="20" height="14" rx="3" fill="#CDEEF6"/><rect x="44" y="13" width="42" height="9" rx="3" fill="#2A2346"/><rect x="82" y="34" width="52" height="30" rx="9" fill="#FF8A2A"/><rect x="112" y="14" width="13" height="22" rx="3" fill="#2A2346"/><rect x="132" y="56" width="12" height="7" rx="2" fill="#2A2346"/><g class="wheel"><circle cx="12" cy="68" r="8" fill="#2A2346"/><path d="M6 68h12M12 62v12" stroke="#FFC83A" stroke-width="2"/></g><g class="wheel"><circle cx="30" cy="68" r="8" fill="#2A2346"/><path d="M24 68h12M30 62v12" stroke="#FFC83A" stroke-width="2"/></g><g class="wheel"><circle cx="62" cy="68" r="10" fill="#2A2346"/><path d="M54 68h16M62 60v16" stroke="#FFC83A" stroke-width="2.5"/></g><g class="wheel"><circle cx="98" cy="68" r="10" fill="#2A2346"/><path d="M90 68h16M98 60v16" stroke="#FFC83A" stroke-width="2.5"/></g><g class="wheel"><circle cx="122" cy="68" r="10" fill="#2A2346"/><path d="M114 68h16M122 60v16" stroke="#FFC83A" stroke-width="2.5"/></g></svg>';
 const PINWHEEL = '<svg viewBox="-50 -50 100 100" aria-hidden="true"><path d="M0 0V-46L24-22z" fill="#EF4F7E"/><path d="M0 0H46L22 24z" fill="#FFC83A"/><path d="M0 0V46L-24 22z" fill="#3D8BFD"/><path d="M0 0H-46L-22-24z" fill="#2FA865"/><circle r="6" fill="#2A2346"/></svg>';
 
-const EYES = (a, b, y) => `<ellipse cx="${a}" cy="${y}" rx="6" ry="7.5" fill="#2A2346"/><ellipse cx="${b}" cy="${y}" rx="6" ry="7.5" fill="#2A2346"/><circle cx="${a + 2}" cy="${y - 3}" r="2.2" fill="#fff"/><circle cx="${b + 2}" cy="${y - 3}" r="2.2" fill="#fff"/>`;
+const EYES = (a, b, y) => `<g class="lv-eyes"><ellipse cx="${a}" cy="${y}" rx="6" ry="7.5" fill="#2A2346"/><ellipse cx="${b}" cy="${y}" rx="6" ry="7.5" fill="#2A2346"/><circle cx="${a + 2}" cy="${y - 3}" r="2.2" fill="#fff"/><circle cx="${b + 2}" cy="${y - 3}" r="2.2" fill="#fff"/></g>`;
 const BLUSH = (y, dx = 29, cx = 60) => `<circle cx="${cx - dx}" cy="${y}" r="7" fill="#FF5E7E" opacity=".35"/><circle cx="${cx + dx}" cy="${y}" r="7" fill="#FF5E7E" opacity=".35"/>`;
 const LASH = (a, b, y) => `<path d="M${a - 6} ${y - 5}l-4-3M${b + 6} ${y - 5}l4-3" stroke="#2A2346" stroke-width="2" stroke-linecap="round"/>`;
 const SMILE = (y, c = '#2A2346') => `<path d="M60 ${y - 6}v4M51 ${y}q4.5 5 9 0 4.5 5 9 0" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
@@ -2631,7 +2647,7 @@ const FRIENDS = {
     art: `<circle cx="26" cy="30" r="16" fill="#2E2B3A"/><circle cx="94" cy="30" r="16" fill="#2E2B3A"/>
       <ellipse cx="60" cy="66" rx="46" ry="42" fill="#FFFFFF" stroke="#DDDAE8" stroke-width="2.5"/>
       <ellipse cx="42" cy="62" rx="11" ry="14" transform="rotate(-28 42 62)" fill="#2E2B3A"/><ellipse cx="78" cy="62" rx="11" ry="14" transform="rotate(28 78 62)" fill="#2E2B3A"/>
-      <circle cx="43" cy="61" r="5" fill="#fff"/><circle cx="77" cy="61" r="5" fill="#fff"/><circle cx="44" cy="61" r="2.6" fill="#2E2B3A"/><circle cx="78" cy="61" r="2.6" fill="#2E2B3A"/>
+      <g class="lv-eyes"><circle cx="43" cy="61" r="5" fill="#fff"/><circle cx="77" cy="61" r="5" fill="#fff"/><circle cx="44" cy="61" r="2.6" fill="#2E2B3A"/><circle cx="78" cy="61" r="2.6" fill="#2E2B3A"/></g>
       ${BLUSH(84, 31)}<path d="M53 75q7-4 14 0-7 8-14 0z" fill="#2E2B3A"/>` }
 };
 const friend = () => FRIENDS[P.settings.friend] || FRIENDS.tiger;
@@ -2639,7 +2655,7 @@ function friendSVG(v = '', id = P.settings.friend) {
   const f = FRIENDS[id] || FRIENDS.tiger, pf = f.puff, puffy = v === 'puffy';
   const puffs = puffy ? pf.x.map(x => `<ellipse class="puff" cx="${x}" cy="${pf.y}" rx="21" ry="19" fill="${pf.c}"${pf.s ? ` stroke="${pf.s}" stroke-width="2.5"` : ''}/>`).join('') : '';
   const mouth = puffy ? `<path class="m-flat" d="M51 ${f.pm + 1}q9-3 18 0" stroke="#2A2346" stroke-width="3.5" fill="none" stroke-linecap="round"/><ellipse class="m-o" cx="60" cy="${f.pm}" rx="5" ry="4.5" fill="#2A2346"/>` : f.smile;
-  return `<svg class="ryz ${v}" viewBox="0 0 120 120" aria-hidden="true">${puffs}${f.art}${mouth}</svg>`;
+  return `<svg class="ryz ${v}" viewBox="0 0 120 120" aria-hidden="true"><g class="lv-body">${puffs}${f.art}${puffy ? mouth : liveMouthHTML(f, mouth)}</g></svg>`;
 }
 const stickerHTML = s => s.startsWith('svg:') ? `<span class="pic">${friendSVG('', s.slice(4))}</span>` : s;
 
@@ -11372,7 +11388,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '96';
+const APP_VER = '97';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14883,6 +14899,72 @@ const IDEAS = (() => {
 })();
 
 /* LOGO-END */
+/* LIVE-BEGIN */
+/* ---------- The friends come alive. Each friend is a drawing (friendSVG): its eyes, mouth and body are separate parts, so
+   the phone animates them itself, like a puppet: free, offline, nothing leaves the phone. The friend breathes and blinks;
+   while a voice speaks (SAYING, any engine) the mouth opens to the vowels of the line it says (а — wide, о — round,
+   у — small, и — narrow, м/п/б — closed); while the child speaks into the microphone the friend leans in and listens;
+   a right answer makes it hop, a miss makes it shake its head. Respects «reduce motion» except for the talking mouth.
+   Function declarations and one loop; friendSVG calls liveMouthHTML. ---------- */
+let LIVE_TXT = '', LIVE_SAY = false, LIVE_T0 = 0, LIVE_OPEN = 0, LIVE_W = .8, LIVE_MOOD = '', LIVE_MOOD_T = 0, LIVE_BLINK = 0, LIVE_RAF = 0;
+const LIVE_STILL = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } })();
+function liveMouthHTML(f, mouth) {
+  const y = (f.pm || 92) - 1;
+  return `<g class="lv-smile">${mouth}</g><g class="lv-mouth" transform="translate(60 ${y})"><ellipse class="lv-o" rx="6" ry="1" fill="#4A1C2C"/><ellipse class="lv-t" cy="2.5" rx="3.8" ry=".5" fill="#FF7A93"/></g>`;
+}
+// what a letter does to the mouth: [how open, how wide]
+function liveVis(c) {
+  if (/[аяáàâãa]/i.test(c)) return [1, .9];
+  if (/[оёóôõo]/i.test(c)) return [.75, .55];
+  if (/[уюúuü]/i.test(c)) return [.45, .4];
+  if (/[иыеэéêieyäö]/i.test(c)) return [.5, 1];
+  if (/[мпбmpb]/i.test(c)) return [0, .8];
+  if (/[\s.,!?…—:;«»"()-]/.test(c)) return [.05, .8];
+  return [.28, .8];
+}
+// the friend that speaks: the one next to the speech bubble, else the first one on the screen
+function liveWho() { return document.querySelector('.guide-ryz svg.ryz') || document.querySelector('.screen svg.ryz') || null; }
+function liveMood(m) { LIVE_MOOD = m; LIVE_MOOD_T = performance.now() + (m === 'happy' ? 1000 : 600); }
+function liveTick(now) {
+  LIVE_RAF = 0;
+  const svg = liveWho();
+  const speaking = SAYING > 0 || (('speechSynthesis' in window) && speechSynthesis.speaking);
+  if (speaking && !LIVE_SAY) { LIVE_SAY = true; LIVE_T0 = now; }
+  if (!speaking) LIVE_SAY = false;
+  let open = 0, wide = .8;
+  if (LIVE_SAY) {
+    const rate = (typeof P !== 'undefined' && P && P.settings && +P.settings.rate) || 1, dt = 68 / rate, txt = LIVE_TXT || '';
+    const i = Math.floor((now - LIVE_T0) / dt);
+    if (txt && i < txt.length) { [open, wide] = liveVis(txt[i]); if (/[.!?…]/.test(txt[i])) open = 0; }
+    else open = .25 + .25 * Math.abs(Math.sin(now / 95));
+  }
+  LIVE_OPEN += (open - LIVE_OPEN) * .45; LIVE_W += (wide - LIVE_W) * .35;
+  if (svg) {
+    const o = svg.querySelector('.lv-o'), tg = svg.querySelector('.lv-t'), on = LIVE_OPEN > .07;
+    if (o) { o.setAttribute('ry', (1 + LIVE_OPEN * 6.5).toFixed(2)); o.setAttribute('rx', (4.5 + LIVE_W * 3.5).toFixed(2)); }
+    if (tg) { tg.setAttribute('ry', (LIVE_OPEN * 2.4 + .3).toFixed(2)); tg.setAttribute('cy', (1.5 + LIVE_OPEN * 3).toFixed(2)); }
+    svg.classList.toggle('lv-talk', on);
+    // listening: the child's voice in the microphone, while the friend itself is quiet
+    let listen = false;
+    try { listen = !LIVE_SAY && MIC.stream && !micDeaf() && micLevel() > .03; } catch (e) {}
+    svg.classList.toggle('lv-listen', listen);
+    if (!LIVE_STILL && now > LIVE_BLINK) { svg.classList.add('lv-blink'); setTimeout(() => svg.classList.remove('lv-blink'), 150); LIVE_BLINK = now + 2200 + Math.random() * 3200; }
+    const mood = now < LIVE_MOOD_T ? LIVE_MOOD : '';
+    svg.classList.toggle('lv-happy', mood === 'happy'); svg.classList.toggle('lv-oops', mood === 'oops');
+  }
+  if (!document.hidden) LIVE_RAF = requestAnimationFrame(liveTick);
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && !LIVE_RAF) LIVE_RAF = requestAnimationFrame(liveTick); });
+// the lines the voice says, and the moments of joy and of a miss
+{
+  const s0 = say; say = function (text, opts) { LIVE_TXT = String(text || '').toLowerCase(); return s0(text, opts); };
+  const s1 = sayIn; sayIn = function (c, text, rate) { LIVE_TXT = String(text || '').toLowerCase(); return s1(c, text, rate); };
+  const g0 = sfx.good, b0 = sfx.oops;
+  sfx.good = (...a) => { liveMood('happy'); return g0(...a); };
+  sfx.oops = (...a) => { liveMood('oops'); return b0(...a); };
+  LIVE_RAF = requestAnimationFrame(liveTick);
+}
+/* LIVE-END */
 /* WARM-BEGIN */
 /* ---------- A minute for the tongue before the fun. A child who loves drawing and skips the tongue exercises does one
    exercise for her sounds before a drawing game opens (at most once in 10 minutes; grown-ups switch it off in the
