@@ -1,6 +1,6 @@
-# Deploys the family sign-in server (cloud/) to Cloudflare Workers + D1. Needs two repository secrets:
-# CLOUDFLARE_API_TOKEN (template «Edit Cloudflare Workers» + Account · D1 · Edit) and CLOUDFLARE_ACCOUNT_ID.
-# Without them the run only says what to add. The server's address is in the run's summary.
+# Deploys the family sign-in server (cloud/) to Cloudflare Workers + D1 (account yankona, subdomain yankona.workers.dev).
+# Needs one repository secret: CLOUDFLARE_API_TOKEN (template «Edit Cloudflare Workers» + Account · D1 · Edit).
+# The account id is not a secret (it is in every dashboard address). Without the token the run only says what to add.
 name: Cloud
 on:
   push:
@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_ACCOUNT_ID: 15cd28371f0f83f230dfa84c5f324556
     steps:
       - name: Secrets in place?
         id: s
         run: |
-          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then echo "ok=1" >> "$GITHUB_OUTPUT"
-          else echo "::notice::Сервер ещё не настроен: добавьте секреты CLOUDFLARE_API_TOKEN и CLOUDFLARE_ACCOUNT_ID (Settings → Secrets and variables → Actions) и запустите этот workflow снова."; fi
+          if [ -n "$CLOUDFLARE_API_TOKEN" ]; then echo "ok=1" >> "$GITHUB_OUTPUT"
+          else echo "::notice::Сервер ещё не настроен: добавьте секрет CLOUDFLARE_API_TOKEN (Settings → Secrets and variables → Actions) и запустите этот workflow снова."; fi
       - uses: actions/checkout@v4
         if: steps.s.outputs.ok == '1'
       - uses: actions/setup-node@v4
