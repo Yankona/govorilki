@@ -8834,19 +8834,11 @@ function screenWelcome({ liga = '' } = {}) {
     </ul>
     ${liga ? `<p class="ob-note">🏆 ${LIGA_FROM ? `A família «${esc(LIGA_FROM)}» convida-vos para o Tagarelas e para a sua liga.` : "Foram convidados para uma liga de famílias."} Primeiro criamos a vossa família e depois entramos.</p>` : ''}
     <button class="big" id="obStart">Criar família</button>
-    <button class="big ghost" id="obHave">🔗 Já jogamos noutro telemóvel</button>
-    <details class="psec fe-imp"><summary>Já temos progresso de outro telemóvel</summary>
-      <textarea id="feImp" rows="3" placeholder="Cole aqui o progresso copiado"></textarea>
-      <div class="prow-btns"><button class="big ghost" id="feImpGo">Carregar</button></div><p class="fe-err" id="feErr" role="alert"></p></details>
+    <button class="big ghost" id="obHave">🔗 Já jogamos — entrar como eu</button>
   </div></main></div>`;
   bindLang($('.lang-pick'), () => screenWelcome({ liga }));
   $('#obStart').onclick = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
   $('#obHave').onclick = () => { sfx.pop(); screenWhoAway(() => screenWelcome({ liga })); };
-  $('#feImpGo').onclick = () => {
-    let ok = false; try { ok = importCode($('#feImp').value); } catch (e) {}
-    if (!ok) { $('#feErr').textContent = "Não foi possível ler o progresso. Copie-o outra vez, por inteiro."; return; }
-    sfx.magic(); liga ? screenLeague(liga) : goHome();
-  };
 }
 const kidChip = (on, val, label, attr) => `<button class="pick-b ${on ? 'sel' : ''}" ${attr}="${val}" aria-pressed="${on}">${label}</button>`;
 function screenKidSetup(id, { queue = [], first = false, liga = '', back = null, idx = 1, total = 1 } = {}) {
@@ -11204,7 +11196,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '85';
+const APP_VER = '86';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -14788,7 +14780,7 @@ function screenWho(fid) {
       <div class="who-grid">${one.kids.filter(id => ROOT.profiles[id]).map(id => whoKid(one, id)).join('')}</div>`
     : `<p class="who-sub">Escolhe a tua família</p><div class="who-fams">${fams.map(famCard).join('')}</div>`}
     ${GUEST ? `<button class="who-ad" id="whoGuest"><span class="emo">${esc(grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role).e)}</span><span><b>${esc(GUEST.name)}</b><small>o meu ecrã</small></span></button>` : ''}
-    <div class="who-foot"><button class="chip" id="whoAway">🧒 Não estou aqui</button>${GUEST ? '' : "<button class=\"chip\" id=\"whoPult\">👑 Adultos</button>"}</div>
+    <div class="who-foot"><button class="chip" id="whoAway">🔗 Jogo noutro sítio</button><button class="chip" id="whoNew">＋ Sou novo</button>${GUEST ? '' : "<button class=\"chip\" id=\"whoPult\">👑 Adultos</button>"}</div>
   </div></main></div>`;
   $('.who').onclick = e => {
     const k = e.target.closest('[data-who]'), f = e.target.closest('[data-wfam]');
@@ -14798,6 +14790,7 @@ function screenWho(fid) {
   const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
   on1('whoBackF', () => screenWho());
   on1('whoAway', () => screenWhoAway(() => screenWho(fid)));
+  on1('whoNew', () => screenWhoNew(one, () => screenWho(fid)));
   on1('whoPult', () => screenPult());
   on1('whoGuest', () => { GUEST_OFF = false; screenGuest(); });
   later(() => say(one ? "Quem joga? Toca em ti." : "Quem joga? Escolhe a tua família."), 400);
@@ -14805,22 +14798,48 @@ function screenWho(fid) {
 // a child whose family is not on this phone: the family's link, or the old progress text
 function screenWhoAway(back) {
   newScreen();
-  shell("Entrar na tua família", `<div class="who-away">
-    <div class="lg-hero">${pic('🔗')}<div><h2>A tua família joga noutro telemóvel?</h2>
-      <p>Pede à mãe ou ao pai para te enviar a ligação da família: na aplicação deles é 👑 Painel → «📲 Entrar noutro telemóvel». Abre-a neste telemóvel e toca em ti: as tuas estrelas e progressos vêm com a ligação.</p></div></div>
-    <label class="who-lbl" for="waTxt">Ou cola a ligação aqui</label>
-    <textarea id="waTxt" rows="3" autocomplete="off" placeholder="https://yankona.github.io/govorilki/…#sem=…"></textarea>
-    <div class="prow-btns"><button class="big" id="waGo">Entrar</button></div><p class="fe-err" id="waErr" role="alert"></p>
-    <div class="prow-btns"><button class="big ghost" id="waNew">＋ Nova família</button></div>
+  shell("Entrar como tu", `<div class="who-away">
+    <p class="lead">As tuas estrelas vivem onde jogaste. Para jogares aqui como tu, uma ligação trá-las.</p>
+    <div class="prow-btns"><button class="big" id="waPaste">📋 Colar a ligação</button></div>
+    <textarea id="waTxt" rows="2" autocomplete="off" aria-label="Ligação" placeholder="ou cola a ligação aqui"></textarea>
+    <div class="prow-btns"><button class="big ghost" id="waGo">Entrar</button></div><p class="fe-err" id="waErr" role="alert"></p>
+    <section class="psec who-case"><h2>📱 ➜ 📱 De outro telemóvel ou portátil</h2>
+      <ol class="who-steps"><li>Onde jogas: 👑 Painel → «📲 Entrar noutro telemóvel» → «📤 Enviar» para aqui (WhatsApp, Telegram, AirDrop).</li><li>Aqui, abre essa ligação e toca em ti.</li></ol></section>
+    <section class="psec who-case"><h2>🔁 Neste mesmo telemóvel</h2>
+      <p>O ícone no ecrã principal, o Safari, o Chrome e o navegador dentro do WhatsApp ou do Telegram guardam o jogo cada um à parte. Por isso aqui pode estar vazio, mesmo que esteja tudo ao lado.</p>
+      <ol class="who-steps"><li>Abre as Tagarelas onde jogas (por exemplo, com o ícone no ecrã principal).</li><li>👑 Painel → «📲 Entrar noutro telemóvel» → «📋 Copiar».</li><li>Volta aqui e toca em «📋 Colar a ligação».</li></ol></section>
+    <p class="muted">Para voltar é igual: uma ligação do 👑 Painel daqui, aberta onde jogavas antes, e depois «Como na ligação».</p>
   </div>`, { back: back || goHome, guide: false, raw: true });
-  $('#waGo').onclick = () => {
+  const go = () => {
     const v = String($('#waTxt').value || '').trim(), m = v.match(/sem=([A-Za-z0-9_-]{8,})/);
     if (m) { sfx.pop(); screenSem(m[1], back); return; }
     let ok = false; try { ok = v.startsWith('GOV2:') && importCode(v); } catch (e) {}
     if (ok) { sfx.magic(); screenWho(ROOT.curFam); return; }
-    $('#waErr').textContent = "Não foi possível ler. Copie a ligação inteira outra vez.";
+    $('#waErr').textContent = v ? "Não foi possível ler. Copie a ligação inteira outra vez." : "Primeiro copie a ligação no painel — veja os passos acima.";
   };
-  $('#waNew').onclick = () => { sfx.pop(); screenFamilyEdit(null, { first: !whoFams().length }); };
+  $('#waGo').onclick = go;
+  $('#waPaste').onclick = async () => {
+    sfx.pop(); let t = '';
+    try { t = await navigator.clipboard.readText(); } catch (e) {}
+    if (!$('#waTxt')) return;
+    if (t) { $('#waTxt').value = t; go(); return; }
+    $('#waTxt').focus();
+    $('#waErr').textContent = "O telemóvel não deixou colar: toque no campo, «Colar», depois «Entrar».";
+  };
+}
+// a child new here: their own profile from zero, in this family or a new one
+function screenWhoNew(f, back) {
+  newScreen();
+  shell("Começar do zero", `<div class="who-away">
+    <div class="lg-hero">${pic('🌱')}<div><h2>És novo aqui?</h2><p>Aqui cria-se uma criança nova, e as estrelas começam do zero. Se já jogaste noutro sítio, é melhor entrar com uma ligação — assim fica tudo o que é teu.</p></div></div>
+    ${f ? `<button class="big" id="wnKid">🧒 Nova criança em «${esc(f.name)}»</button>` : ''}
+    <button class="big ghost" id="wnFam">🏠 Nova família</button>
+    <button class="big ghost" id="wnAway">🔗 Já jogo noutro sítio</button>
+  </div>`, { back: back || goHome, guide: false, raw: true });
+  const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
+  on1('wnKid', () => screenFamilyEdit(f.id));
+  on1('wnFam', () => screenFamilyEdit(null, { first: !whoFams().length }));
+  on1('wnAway', () => screenWhoAway(() => screenWhoNew(f, back)));
 }
 
 /* the family's link: compressed when the browser can (deflate-raw), plain otherwise; base64url in the hash */
@@ -14939,7 +14958,7 @@ async function semShare(f, out) {
   if (!url) { out.innerHTML = "<p class=\"muted\">Não foi possível criar a ligação neste telemóvel.</p>"; return; }
   const names = f.kids.filter(x => ROOT.profiles[x]).map(x => ROOT.profiles[x].settings.name).join(', '), id = 'sem' + rid(5);
   const msg = `Entrada nas Tagarelas para as crianças: ${names}. Abram a ligação noutro telemóvel e toquem em si. Estrelas e progressos de ${semDate(Date.now())}.`;
-  out.innerHTML = `<div class="fam-steps">${shareRow(msg, url, id)}<p class="muted">Envie só aos seus: a ligação tem os nomes das crianças e os progressos. A ligação é uma fotografia de hoje: o que a criança fizer no outro telemóvel fica lá (de lá pode enviar uma ligação igual de volta).</p></div>`;
+  out.innerHTML = `<div class="fam-steps">${shareRow(msg, url, id)}<p class="muted">Para outro telemóvel — «📤 Enviar». Neste mesmo telemóvel, mas noutro navegador ou pelo ícone: «📋 Copiar», e lá «Jogo noutro sítio» (ou «Já jogamos — entrar») → «📋 Colar a ligação».</p><p class="muted">Envie só aos seus: a ligação tem os nomes das crianças e os progressos. A ligação é uma fotografia de hoje: o que a criança fizer noutro sítio fica lá (de lá pode enviar uma ligação igual de volta).</p></div>`;
   bindShare(id, msg, url, s => out.insertAdjacentHTML('beforeend', `<p class="muted">${esc(s)}</p>`));
 }
 /* WHO-END */
