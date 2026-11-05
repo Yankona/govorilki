@@ -51,6 +51,9 @@ def plain(s):
     return re.sub(r'<[^>]+>', '', s)
 
 CSS = open(os.path.join(HERE, 'site.css'), encoding='utf-8').read()
+# search engines' ownership checks (Google Search Console, Yandex Webmaster, Bing): www/verify.json {"google": "…", "yandex": "…", "bing": "…"}
+VERIFY = json.load(open(os.path.join(HERE, 'verify.json'))) if os.path.exists(os.path.join(HERE, 'verify.json')) else {}
+VERIFY_META = ''.join(f'<meta name="{n}" content="{html.escape(VERIFY[k], quote=True)}">' for k, n in (('google', 'google-site-verification'), ('yandex', 'yandex-verification'), ('bing', 'msvalidate.01')) if VERIFY.get(k))
 
 def head(l, k, title, desc, canonical, alts, ld, og_type='website'):
     links = ''.join(f'<link rel="alternate" hreflang="{HL[a]}" href="{u}">' for a, u in alts.items())
@@ -62,7 +65,7 @@ def head(l, k, title, desc, canonical, alts, ld, og_type='website'):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
-<meta name="description" content="{esc(desc)}">
+<meta name="description" content="{esc(desc)}">{VERIFY_META}
 <link rel="canonical" href="{canonical}">
 {links}
 <meta property="og:type" content="{og_type}">
