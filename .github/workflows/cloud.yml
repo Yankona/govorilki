@@ -1,0 +1,54 @@
+# Deploys the family sign-in server (cloud/) to Cloudflare Workers + D1. Needs two repository secrets:
+# CLOUDFLARE_API_TOKEN (template «Edit Cloudflare Workers» + Account · D1 · Edit) and CLOUDFLARE_ACCOUNT_ID.
+# Without them the run only says what to add. The server's address is in the run's summary.
+name: Cloud
+on:
+  push:
+    branches: [main]
+    paths: ['cloud/**', '.github/workflows/cloud.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: cloud
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Secrets in place?
+        id: s
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then echo "ok=1" >> "$GITHUB_OUTPUT"
+          else echo "::notice::Сервер ещё не настроен: добавьте секреты CLOUDFLARE_API_TOKEN и CLOUDFLARE_ACCOUNT_ID (Settings → Secrets and variables → Actions) и запустите этот workflow снова."; fi
+      - uses: actions/checkout@v4
+        if: steps.s.outputs.ok == '1'
+      - uses: actions/setup-node@v4
+        if: steps.s.outputs.ok == '1'
+        with:
+          node-version: 22
+      - name: Database
+        if: steps.s.outputs.ok == '1'
+        working-directory: cloud
+        run: |
+          npm i -g wrangler@4 > /dev/null
+          dbid() { wrangler d1 list --json | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{let a=[];try{a=JSON.parse(s)}catch(e){};const d=a.find(x=>x.name==='govorilki');process.stdout.write(d?(d.uuid||d.id||''):'')})"; }
+          ID=$(dbid)
+          if [ -z "$ID" ]; then wrangler d1 create govorilki; ID=$(dbid); fi
+          [ -n "$ID" ] || { echo "::error::Не получилось создать базу D1: проверьте, что у токена есть право Account · D1 · Edit"; exit 1; }
+          sed -i "s/__DB_ID__/$ID/" wrangler.toml
+          wrangler d1 migrations apply govorilki --remote
+      - name: Deploy
+        if: steps.s.outputs.ok == '1'
+        working-directory: cloud
+        run: |
+          wrangler deploy || { echo "::error::Не получилось выложить сервер. Если в ошибке есть workers.dev subdomain — откройте в Cloudflare «Workers & Pages» и выберите поддомен, потом запустите снова."; exit 1; }
+      - name: Address
+        if: steps.s.outputs.ok == '1'
+        run: |
+          SUB=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{process.stdout.write(JSON.parse(s).result.subdomain||'')}catch(e){}})")
+          URL="https://govorilki-cloud.$SUB.workers.dev"
+          echo "CLOUD_URL=$URL"
+          for i in 1 2 3 4 5 6; do curl -sf "$URL/v1/ping" && echo && break; sleep 10; done
+          echo "### Сервер: $URL" >> "$GITHUB_STEP_SUMMARY"

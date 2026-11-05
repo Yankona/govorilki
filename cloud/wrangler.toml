@@ -1,0 +1,12 @@
+# The family sign-in server of «Говорилки» (Cloudflare Workers + D1, free plan).
+# The deploy workflow (.github/workflows/cloud.yml) puts the database id in place of __DB_ID__.
+name = "govorilki-cloud"
+main = "worker.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "govorilki"
+database_id = "__DB_ID__"
+migrations_dir = "migrations"
