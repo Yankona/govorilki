@@ -2269,6 +2269,33 @@ body.pv-on #app{padding-top:52px}
 .wk-d:active{transform:translateY(2px)}
 .wk-sum{margin:-4px 0 0;font:700 14px var(--f-body);color:var(--ink-soft);text-align:center}
 /* WEEK-CSS-END */
+/* HIKE-CSS */
+.hk{max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.hk-map{position:relative;height:118px;margin:6px 34px 0}
+.hk-line{position:absolute;left:0;right:0;top:46px;height:10px;border-radius:6px;background:var(--line)}
+.hk-line i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--leaf),var(--sun))}
+.hk-stop{position:absolute;top:0;bottom:0;width:68px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;justify-content:space-between;opacity:.5}
+.hk-stop.on{opacity:1}
+.hk-stop b{font:400 28px/1 var(--f-emoji)}
+.hk-stop small{font:800 12px var(--f-body);color:var(--ink-soft);white-space:nowrap}
+.hk-me{position:absolute;top:25px;width:54px;height:54px;transform:translateX(-50%);border-radius:50%;background:var(--paper);box-shadow:0 4px 0 var(--line-strong),0 0 0 3px var(--sun);overflow:hidden;transition:left .8s ease}
+.hk-me svg{width:100%;height:100%}
+.hk-sum{margin:0;text-align:center;font:800 20px var(--f-body);color:var(--ink)}
+.hk-sum b{font-size:32px}
+.hk-days{margin:-10px 0 0;text-align:center;font:700 14px var(--f-body);color:var(--ink-soft)}
+.hk-chest{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:20px;background:var(--paper);box-shadow:0 5px 0 var(--line);font:700 16px/1.35 var(--f-body);color:var(--ink)}
+.hk-chest .emo{font-size:34px;flex:none}
+.hk-chest.open{box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px var(--sun)}
+.hk .fam-s{margin:4px 0 0}
+#hikeBox{width:100%;margin-top:12px}
+.hk-mini{display:flex;align-items:center;gap:12px;width:100%;max-width:560px;margin:0 auto;padding:12px 16px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);text-align:left;cursor:pointer}
+.hk-mini .emo{font-size:32px;flex:none}
+.hk-t{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.hk-t b{font:800 17px var(--f-body)}
+.hk-t small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.hk-bar{display:block;height:8px;border-radius:5px;background:var(--line);overflow:hidden}
+.hk-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--leaf),var(--sun))}
+/* HIKE-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -8660,6 +8687,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
+  HIKE.settings();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -9033,7 +9061,7 @@ function leagueCard() {
   return `<button class="lg-card" id="leagueBtn"><span class="emo">🏆</span><span class="lg-t"><b>${rows.length > 1 && me >= 0 ? `League: place ${me + 1} of ${rows.length}` : "Family League"}</b>
     <small class="lg-top">${top.map((r, i) => `<span>${['🥇', '🥈', '🥉'][i]} ${esc(r.n)} · ${r.v}⭐</span>`).join('')}${rows.length < 2 ? "invite friends: so far it is only your family in the league" : ''}</small></span><span class="g-go">▶</span></button>`;
 }
-function bindLeagueCard() { const b = $('#leagueBtn'); if (b) b.onclick = () => { sfx.pop(); screenLeague(); }; }
+function bindLeagueCard() { const b = $('#leagueBtn'); if (b) b.onclick = () => { sfx.pop(); screenLeague(); }; HIKE.home(); }
 
 const LTABS = [['ws', "⭐ Week", ["star", "stars", "stars"]], ['wl', "📚 Lessons", ["lesson", "lessons", "lessons"]], ['sk', "🔥 In a row", ["day", "days", "days"]], ['lv', "🏅 Level", null], ['rec', "🏁 Records", null]];
 const RECS = [['mo', "🏍️ L track", "m"], ['ma', "⚡ Maths sprint", "per minute"], ['cs', "♟️ Chess puzzles", "solved"]];
@@ -9042,7 +9070,7 @@ function screenLeague(join) {
   if (!f) { goHome(); return; }
   if (!f.league || join && join !== f.league.code) { screenLeagueJoin(join); return; }
   const L = f.league; let tab = ROOT.ltab || 'ws';
-  shell("Family League", `<div class="lg">
+  shell("Friends", `<div class="lg">
       <div class="lg-tabs" id="lgTabs" role="tablist">${LTABS.map(([k, n]) => `<button class="chip ${k === tab ? 'sel' : ''}" data-t="${k}" role="tab">${n}</button>`).join('')}</div>
       <p class="lg-sub" id="lgSub"></p>
       <div id="lgBody"></div>
@@ -9052,6 +9080,7 @@ function screenLeague(join) {
       <div class="prow-btns"><button class="big ghost" id="lgSet">Nicknames and league settings</button></div>
     </div>`, { guide: false, raw: true });
   $('#lgInv').onclick = () => { sfx.pop(); screenInviteFamily(() => screenLeague()); };
+  { const lgx = $('.lg'); if (lgx && HIKE.on()) { lgx.insertAdjacentHTML('afterbegin', HIKE.miniHTML('lgHike')); $('#lgHike').onclick = () => { sfx.pop(); HIKE.screen(() => screenLeague()); }; } }
   const mine = () => new Set(mySnaps(L.code).map(s => s.u));
   const row = (s, i, unit, my) => `<div class="lg-row ${my.has(s.u) ? 'me' : ''}"><span class="lg-pl">${['🥇', '🥈', '🥉'][i] || `<i>${i + 1}</i>`}</span>
       <span class="chip-face">${friendSVG('', s.e)}</span>
@@ -11666,7 +11695,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '113';
+const APP_VER = '114';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -16180,6 +16209,108 @@ const TRAVEL = (() => {
   return { screen, quiz };
 })();
 /* TRAVEL-END */
+/* HIKE-BEGIN */
+/* ---------- «Друзья» and «Общий поход». The grown-ups' settings get two clear parts: «Моя семья» (members, relatives,
+   the control panel) and «Друзья» (the friend families of the league, invitations, the board and challenges).
+   «Общий поход»: the friend families' children walk one path each week; every star of the week is a step. When all of
+   them together reach the top, the chest opens for everyone who walked: +5 ⭐ each. Nobody loses: the more children walk,
+   the longer the path. Without friend families, the children of this family walk it together. ---------- */
+const HIKE = (() => {
+  const PER = 40, MIN = 80, PRIZE = 5;
+  const STOPS = [['🏁', "Start"], ['🏕️', "Camp"], ['🌲', "Forest"], ['🌊', "River"], ['🏔️', "Top"]];
+  const on = () => !!fam() && (!!league() || KIDS.length > 1);
+  // who walks this week: the friend families' children heard from this week (and ours), or this family's children
+  function state() {
+    const f = fam(), L = league(), w = weekId();
+    let rows, mine;
+    if (L) {
+      mine = new Set(mySnaps(L.code).map(s => s.u));
+      rows = lrank(L.code, 'ws').filter(s => s.v > 0 || mine.has(s.u)).map(s => ({ u: s.u, n: s.n, tm: s.tm, e: s.e, v: s.v }));
+    } else {
+      mine = new Set(KIDS);
+      rows = KIDS.map(id => { const pr = ROOT.profiles[id]; return { u: id, n: pr.settings.name || '?', tm: f ? f.name : '', e: pr.settings.friend || 'tiger', v: weekStars(pr) }; });
+    }
+    rows.sort((a, b) => b.v - a.v);
+    const sum = rows.reduce((a, s) => a + s.v, 0), goal = Math.max(MIN, PER * rows.length);
+    return { L, rows, mine, sum, goal, done: sum >= goal, w };
+  }
+  // the chest: each child of this family who walked this week gets the prize once
+  function reward(st) {
+    if (!st.done || GPLAY || GUEST || !fam()) return 0;
+    let n = 0;
+    for (const id of fam().kids) {
+      const pr = ROOT.profiles[id];
+      if (!pr || pr.hikeWk === st.w || !weekStars(pr)) continue;
+      pr.hikeWk = st.w; pr.stars += PRIZE; n++;
+    }
+    if (n) save();
+    return n;
+  }
+  const pct = st => Math.min(100, Math.round(st.sum / st.goal * 100));
+  function mapHTML(st) {
+    const k = pct(st);
+    return `<div class="hk-map" aria-hidden="true"><div class="hk-line"><i style="width:${k}%"></i></div>
+      ${STOPS.map(([e, n], i) => `<span class="hk-stop ${k >= i * 25 ? 'on' : ''}" style="left:${i * 25}%"><b>${e}</b><small>${n}</small></span>`).join('')}
+      <span class="hk-me" style="left:${k}%">${friendSVG('', P.settings.friend || 'tiger')}</span></div>`;
+  }
+  function miniHTML(id = 'hikeBtn') {
+    const st = state();
+    return `<button class="hk-mini" id="${id}"><span class="emo">🎒</span><span class="hk-t"><b>Hike together</b><small>${st.done ? "The top! The chest is open" : `${st.sum} of ${st.goal} ⭐ so far`}</small><span class="hk-bar"><i style="width:${pct(st)}%"></i></span></span><span class="g-go">▶</span></button>`;
+  }
+  // the home screen: the walk under the league card
+  function home() {
+    const box = $('#leagueBox'); if (!box) return;
+    let m = $('#hikeBox');
+    if (!on()) { if (m) m.remove(); return; }
+    if (!m) { box.insertAdjacentHTML('afterend', '<div id="hikeBox"></div>'); m = $('#hikeBox'); }
+    m.innerHTML = miniHTML();
+    $('#hikeBtn').onclick = () => { sfx.pop(); screen(goHome); };
+  }
+  function screen(back) {
+    newScreen();
+    const st = state(), got = reward(st), left = Math.max(0, st.goal - st.sum), dl = 7 - (new Date().getDay() + 6) % 7;
+    shell("Hike together", `<div class="hk">
+      ${mapHTML(st)}
+      <p class="hk-sum"><b>${st.sum}</b> of ${st.goal} ⭐${st.done ? '' : ` · ${left} to go`}</p>
+      <p class="hk-days">${dl > 1 ? `${dl} ${plural(dl, ["day", "days", "days"])} until Monday` : "Today is the last day of the hike"}</p>
+      <div class="hk-chest ${st.done ? 'open' : ''}"><span class="emo">${st.done ? '🎉' : '🎁'}</span><span>${st.done ? `The top! The chest is open: +${PRIZE} ⭐ for everyone who walked.` : `A chest waits at the top: +${PRIZE} ⭐ for everyone who walked.`}</span></div>
+      <h3 class="fam-s">Who brought how much</h3>
+      <div class="lg-list">${st.rows.map(s => `<div class="lg-row ${st.mine.has(s.u) ? 'me' : ''}"><span class="chip-face">${friendSVG('', s.e)}</span><span class="lg-n"><b>${esc(s.n)}</b><small>${esc(s.tm || '')}</small></span><span class="lg-v"><b>${s.v}</b><small>⭐</small></span></div>`).join('')}</div>
+      ${st.L ? '' : `<div class="fam-card"><p>A hike is more fun with friends: invite a friend family, and their children will walk with you.</p><div class="prow-btns"><button class="big" id="hkInv">👪 Invite a friend family</button></div></div>`}
+      <p class="muted">Every star this week is a step. The more children walk, the longer the path. A new hike starts on Monday.</p>
+    </div>`, { back: back || goHome });
+    const iv = $('#hkInv'); if (iv) iv.onclick = () => { sfx.pop(); screenInviteFamily(() => screen(back)); };
+    if (got) { const sn = $('#starN'); if (sn) sn.textContent = P.stars; sfx.magic(); }
+    talk(got ? `You reached the top! The chest is open: plus ${PRIZE} stars.` : st.done ? "You are already at the top! A great hike." : `Hike together! Every star is a step. Together you have walked ${st.sum} of ${st.goal}.`);
+  }
+
+  // the grown-ups' settings: «Моя семья» and «Друзья» instead of one row of seven buttons
+  function friendFams(L, f) {
+    const me = L.team || f.name;
+    return [...new Set(lrank(L.code, 'xp').map(s => s.tm).filter(t => t && t !== me))];
+  }
+  function settings() {
+    const pult = $('#pultBtn'), f = fam(); if (!pult || !f) return;
+    const sec = pult.closest('.psec'), row = pult.closest('.prow-btns');
+    sec.querySelector('h2').textContent = "👪 My family";
+    // the child's interests belong to the child's own settings
+    const ks = $('#kidSetup'), nm = $('#nameIn');
+    if (ks && nm) { const r = document.createElement('div'); r.className = 'prow-btns'; ks.className = 'big ghost'; r.append(ks); nm.closest('label').after(r); }
+    const lab = { famEdit: "👥 Family members", famInvP: "📨 Invite relatives", pultBtn: "👑 Family control panel: all accounts", famAll: "🏠 Other families on this phone" };
+    Object.entries(lab).forEach(([id, t], i) => { const b = $('#' + id); if (b) { b.textContent = t; b.className = i ? 'big ghost' : 'big'; row.append(b); } });
+    const L = league(), fams = L ? friendFams(L, f) : [];
+    sec.insertAdjacentHTML('afterend', `<section class="psec" id="frSec"><h2>🤝 Friends</h2>
+      <p class="muted">Families of friends, classmates, neighbours. Each child practises at home, and here they see each other, send challenges and go on a hike together.</p>
+      <p>${fams.length ? `Friends: <b>${esc(fams.join(', '))}</b>` : "No friends yet: send an invitation to your friends’ parents."}</p>
+      <div class="prow-btns" id="frBtns"></div></section>`);
+    const fb = $('#frBtns'), inv = $('#famInvF'), lg = $('#famLg');
+    if (inv) { inv.textContent = "👪 Invite a friend family"; inv.className = 'big'; fb.append(inv); }
+    if (lg) { lg.textContent = L ? "🏆 Board and challenges" : "🏆 League: a code from friends"; lg.className = 'big ghost'; fb.append(lg); }
+    if (on()) { fb.insertAdjacentHTML('beforeend', "<button class=\"big ghost\" id=\"frHike\">🎒 Hike together</button>"); $('#frHike').onclick = () => { sfx.pop(); screen(() => screenParents()); }; }
+  }
+  return { home, screen, settings, miniHTML, on, state };
+})();
+/* HIKE-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
