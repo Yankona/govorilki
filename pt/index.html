@@ -2253,6 +2253,9 @@ body.pv-on #app{padding-top:52px}
 .tv-o.yes{background:var(--t-mint);box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}.tv-o.no{opacity:.5}
 .tv-ans{padding:12px 14px;border-radius:18px;background:var(--t-yellow);color:var(--ink)}.tv-ans p{margin:0 0 8px;font:700 17px/1.45 var(--f-body)}
 /* TRAVEL-CSS-END */
+/* SAID-CSS */
+.said-dup{display:none!important}
+/* SAID-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -2991,9 +2994,77 @@ function bubbleFit(b) {
   if (lines > base) { b.style.webkitLineClamp = lines; b.style.lineClamp = lines; }
   b.classList.add('more');
 }
+/* SAID-BEGIN */
+// words of a line: lower case, ё as е, no emoji or punctuation
+const saidN = s => (s || '').toLowerCase().replace(/ё/g, String.fromCharCode(1077)).replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+// the cards that are the game itself: they stay, the bubble gives way
+const SAID_KEEP = '.tw-text,.st-name,.vera-line,.sb-q,.move-big,.tv-t,.art-t,.og-st,.no-said';
+// the bubble's line covers a block: the block is inside the line word for word, or (a longer block) nearly all its words are said
+function saidCovers(line, el) {
+  const n = saidN(el.textContent); if (!n || !line) return false;
+  // short lines are left alone (a word to read, «Да!»), except a game's own question line («Where is more?»)
+  const E = n.split(' '), isQ = el.matches('[class$="-q"],[class*="-q "],.tv-ask');
+  if (isQ ? E.length < 2 || n.length < 6 : E.length < 3 || n.length < 12) return false;
+  // word for word inside the line: a whole instruction, not a title the friend only mentions
+  const T = line.split(' ');
+  if ((' ' + line + ' ').includes(' ' + n + ' ') && (!el.matches('h2,h3,h4') || E.length >= 5 || E.length >= T.length * .5)) return true;
+  const bag = new Map(); for (const w of T) bag.set(w, (bag.get(w) || 0) + 1);
+  let c = 0; for (const w of E) { const k = bag.get(w); if (k) { c++; bag.set(w, k - 1); } }
+  if (E.length >= 5 && c >= E.length * .85) return true;
+  // a game's question or step line («Какой слог потерялся?», «Сначала медленно и чётко») retold by the friend in other words: most word stems said, and the letters too
+  if (!el.matches('.lg-q,.tw-step')) return false;
+  const st5 = w => w.slice(0, 5), L = T, LS = new Set(L.map(st5));
+  if (E.some(w => w.length === 1 && !L.includes(w))) return false;
+  return E.filter(w => LS.has(st5(w))).length >= E.length * .6;
+}
+let SAID_ST = null, SAID_MO = null, SAID_RQ = 0, SAID_FULL = '', SAID_SHOWN = '', SAID_T = 0;
+const saidSeen = el => el.getClientRects().length > 0;
+function saidSync() {
+  SAID_RQ = 0;
+  const b = $('#bubble'), st = $('#stage'); if (!b || !st) return;
+  // the screen's own changes (a step drawn after the line, a card filled in, a hint rewritten) are checked too
+  if (st !== SAID_ST) {
+    if (SAID_MO) SAID_MO.disconnect(); SAID_ST = st;
+    if (window.MutationObserver) { SAID_MO = new MutationObserver(() => { if (!SAID_RQ) SAID_RQ = requestAnimationFrame(saidSync); }); SAID_MO.observe(st, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] }); }
+  }
+  // the bubble without the sentences a game card already shows
+  let shown = SAID_FULL;
+  const keep = [...st.querySelectorAll(SAID_KEEP)].filter(saidSeen).map(e => ' ' + saidN(e.textContent) + ' ');
+  if (keep.length && shown) {
+    // sentences and the bits after a colon («Скажи: ал, ол, ул, ыл.» → «Скажи.»)
+    const parts = shown.match(/[^.!?…:]+[.!?…:»"]*\s*/g) || [shown], out = [];
+    for (const s of parts) {
+      const n = saidN(s);
+      if (n.split(' ').length >= 2 && keep.some(k => k.includes(' ' + n + ' '))) { if (out.length) out[out.length - 1] = out[out.length - 1].replace(/:\s*$/, '. '); continue; }
+      out.push(s);
+    }
+    const rest = out.join('').trim().replace(/:$/, '.');
+    if (rest) shown = rest;
+  }
+  // a line the game put into the bubble itself («Слушай историю!») is left as it is
+  let ch = 0;
+  if (shown && (b.textContent === SAID_FULL || b.textContent === SAID_SHOWN) && b.textContent !== shown) { b.textContent = shown; ch++; }
+  if (b.textContent === shown) SAID_SHOWN = shown;
+  // what the friend says is the whole line, even when the bubble leaves out a card's sentences
+  const line = saidN(b.textContent === SAID_SHOWN ? SAID_FULL : b.textContent), now = Date.now();
+  // a hidden instruction the bubble no longer says comes back after a moment (a quick «Верно!» before the next question does not make it jump)
+  for (const el of st.querySelectorAll('.said-dup')) {
+    if (saidCovers(line, el)) { delete el.dataset.saidOff; continue; }
+    const off = +el.dataset.saidOff || 0;
+    if (!off) { el.dataset.saidOff = now; clearTimeout(SAID_T); SAID_T = setTimeout(saidSync, 1600); }
+    else if (now - off >= 1500) { el.classList.remove('said-dup'); delete el.dataset.saidOff; ch++; }
+    else { clearTimeout(SAID_T); SAID_T = setTimeout(saidSync, 1600 - (now - off)); }
+  }
+  if (line.split(' ').length >= 3) for (const el of st.querySelectorAll('p,h2,h3,h4')) {
+    if (el.classList.contains('said-dup') || !saidSeen(el) || el.matches(SAID_KEEP) || el.closest('button,label,a,' + SAID_KEEP) || el.querySelector('button,input,select,textarea,a,label,img,svg,canvas,video,' + SAID_KEEP)) continue;
+    if (saidCovers(line, el)) { el.classList.add('said-dup'); ch++; }
+  }
+  if (ch && !b.classList.contains('open')) bubbleFit(b);
+}
+/* SAID-END */
 function talk(text, opts) {
   lastLine = text;
-  const b = $('#bubble'); if (b) { b.textContent = gx(text); b.classList.remove('open'); b.scrollTop = 0; bubbleFit(b); }
+  const b = $('#bubble'); if (b) { SAID_FULL = gx(text); b.textContent = SAID_FULL; b.classList.remove('open'); b.scrollTop = 0; bubbleFit(b); saidSync(); }
   const r = $('.guide-ryz'); if (r) { r.classList.remove('talking'); void r.offsetWidth; r.classList.add('talking'); }
   return say(text, opts);
 }
@@ -4754,7 +4825,7 @@ function hiRe(ch) {
   const parts = [...new Set([...keys.filter(k => got.has(k)).map(k => HI_RE[k]), ...extra])];
   return new RegExp(parts.join('|') || '(?!)', 'giu');
 }
-const hiS = (s, ch) => esc(s).replace(hiRe(ch), '<b class="r">$&</b>');
+const hiS = (s, ch) => esc(gx(s)).replace(hiRe(ch), '<b class="r">$&</b>');
 const fmtDate = k => k.split('-').reverse().join('.');
 const fmtSec = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
@@ -5321,7 +5392,7 @@ function screenPiano() {
     <div class="xy-songs" id="tunes">${TUNES.map((x, i) => `<button class="chip" data-i="${i}"><span class="emo">🎼</span>${x.title}</button>`).join('')}</div>
     <div class="prow-btns"><button class="big ghost" id="demo" hidden>${ICON.speaker}Ouvir</button></div>`);
   talk("Carrega nas teclas. Ou escolhe uma melodia: a tecla certa vai brilhar e tu cantas «la» em cada nota.");
-  const pl = $('#pl'), keyOf = n => $(`.pk[data-n="${n}"]`);
+  const pl = $('#pl'), keyOf = n => $(`.pk[data-n="${n}"]`); if ($('#bubble')) pl.hidden = true;
   const glow = () => { $$('.pk').forEach(k => k.classList.remove('glow')); if (follow && follow[fi]) keyOf(follow[fi].note).classList.add('glow'); };
   const lineHTML = () => `<b>${tune.title}</b> · nota ${Math.min(fi + 1, follow.length)} de ${follow.length} · canta: <span class="la">la</span>`;
   function press(k) {
@@ -5339,7 +5410,7 @@ function screenPiano() {
   $('#tunes').onclick = e => {
     const c = e.target.closest('.chip'); if (!c) return;
     sfx.pop(); tune = TUNES[+c.dataset.i]; follow = tuneNotes(tune); fi = 0;
-    pl.innerHTML = lineHTML(); glow(); $('#demo').hidden = false;
+    pl.innerHTML = lineHTML(); pl.hidden = false; glow(); $('#demo').hidden = false;
     talk(`«${tune.title}». Primeiro podes ouvir. Depois carrega na tecla que brilha e canta «la».`);
   };
   $('#demo').onclick = () => {
@@ -11518,7 +11589,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '110';
+const APP_VER = '111';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
