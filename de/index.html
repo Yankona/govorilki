@@ -3714,9 +3714,14 @@ function goHome() {
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   if (GUEST) on('#guestTop', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   $('#tabBar').onclick = e => {
-    const b = e.target.closest('[data-tab]'); if (!b || b.dataset.tab === tab) { if (b) { const st = $('#stage'); if (st) st.scrollTo({ top: 0, behavior: 'smooth' }); } return; }
-    sfx.tick(); P.homeTab = b.dataset.tab; save(); HOME_POS = null; goHome();
-    const T = HOME_TABS.find(x => x.id === b.dataset.tab); if (T && T.id !== 'today') say(nm(T.n));
+    const b = e.target.closest('[data-tab]'); if (!b) return;
+    const T = HOME_TABS.find(x => x.id === b.dataset.tab);
+    // a tab says its name; «Сегодня» says what is left in today's plan
+    const speak = () => { if (!T) return; if (T.id !== 'today') { say(nm(T.n)); return; }
+      const left = LIDS().filter(id => nextStepOf(id)).map(id => LS()[id].name);
+      say(left.length ? `Heute: ${left.length > 1 ? left.slice(0, -1).join(', ') + " und " + left[left.length - 1] : left[0]}.` : "Heute ist alles geschafft! Super!"); };
+    if (b.dataset.tab === tab) { const st = $('#stage'); if (st) st.scrollTo({ top: 0, behavior: 'smooth' }); hush(); speak(); return; }
+    sfx.tick(); P.homeTab = b.dataset.tab; save(); HOME_POS = null; goHome(); speak();
   };
   if ($('#secNav')) $('#secNav').onclick = e => { const b = e.target.closest('[data-sec]'); if (!b) return; sfx.tick(); const el = $('#sec' + b.dataset.sec); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   // back from a game: the same tab, the same place
@@ -11912,7 +11917,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '132';
+const APP_VER = '133';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17652,7 +17657,7 @@ const MUSIC = (() => {
     danube: ['US Marine Band', 'PD'], spring: ['Modena Chamber Orchestra / Musopen', 'PD'], turca: ['Romuald Greiss', 'PD'],
     joy: ['US Navy Band', 'PD'], elise: ['V. Gao', 'CC0'], nacht: ['European Archive / Musopen', 'PD'], promenade: ['Musopen', 'PD'] };
   // only the pieces whose recording is already on the site (build/music_avail.py fills this in)
-  const AVAIL = ["lullaby", "morning", "spring", "toccata"];
+  const AVAIL = ["lullaby", "morning", "nacht", "promenade", "spring", "swan", "toccata"];
   Object.keys(REC).forEach(k => { if (!AVAIL.includes(k)) delete REC[k]; });
   let au = null;
   const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
