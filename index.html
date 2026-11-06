@@ -2256,6 +2256,19 @@ body.pv-on #app{padding-top:52px}
 /* SAID-CSS */
 .said-dup{display:none!important}
 /* SAID-CSS-END */
+/* WEEK-CSS */
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wk-d{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:8px 0 6px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);box-shadow:0 4px 0 var(--line-strong),inset 0 0 0 2px var(--line);font:800 12px var(--f-body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.wk-d small{font:800 12px var(--f-body);color:var(--ink-soft);white-space:nowrap}
+.wk-d b{font:900 21px/1 var(--f-body)}
+.wk-d i{min-height:15px;font:800 12px/1.2 var(--f-body);font-style:normal;color:var(--ink);white-space:nowrap}
+.wk-d.on{background:var(--t-yellow)}
+.wk-d.now small{color:var(--berry);font-weight:900}
+.wk-d.now b{color:var(--berry)}
+.wk-d.sel{box-shadow:0 0 0 3px var(--ink),0 4px 0 var(--line-strong)}
+.wk-d:active{transform:translateY(2px)}
+.wk-sum{margin:-4px 0 0;font:700 14px var(--f-body);color:var(--ink-soft);text-align:center}
+/* WEEK-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -4978,7 +4991,41 @@ function screenBook() {
       <button class="link-btn" id="bkBackBtn">👪 For grown-ups: fill in a past day</button>
       <section class="psec bk-back" id="bkBack" hidden></section>
     </div>`);
-  talk(e ? `You already ${G("read", "read")} ${e.pages ? `${e.pages} ${pgW(e.pages)}` : "a little"} today. Great!` : `Read your book and have fun. Then pick how many pages you ${G("read", "read")}.`);
+  /* WEEK-BEGIN */
+  // the week above the form: a tap on a day writes the reading in for that day
+  const yd = new Date(); yd.setDate(yd.getDate() - 1); const yk = dayKey(yd);
+  const wk = Array.from({ length: 7 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return dayKey(d); });
+  let sel = tk;
+  const sec = $('.book-log'), h2 = sec.querySelector('h2'), strip = $('.days14');
+  if (strip) strip.remove();
+  sec.insertAdjacentHTML('afterbegin', '<div class="wk" id="bkWk"></div><p class="wk-sum" id="bkSum"></p>');
+  const WEEK_ON = ["On Monday", "On Tuesday", "On Wednesday", "On Thursday", "On Friday", "On Saturday", "On Sunday"];
+  const wd = k => (new Date(k + 'T12:00:00').getDay() + 6) % 7;
+  const head = k => k === tk ? G("Today I read", "Today I read") : k === yk ? G("Yesterday I read", "Yesterday I read") : `${WEEK_ON[wd(k)]} ${G("I read", "I read")}`;
+  const when = k => k === tk ? "Today" : k === yk ? "Yesterday" : WEEK_ON[wd(k)];
+  const drawWk = () => {
+    $('#bkWk').innerHTML = wk.map(k => { const x = P.book.log[k]; return `<button class="wk-d ${x ? 'on' : ''} ${k === sel ? 'sel' : ''} ${k === tk ? 'now' : ''}" data-k="${k}" aria-pressed="${k === sel}"><small>${WEEK[wd(k)]}</small><b>${new Date(k + 'T12:00:00').getDate()}</b><i>${x ? `⭐${x.pages || ''}` : ''}</i></button>`; }).join('');
+    const ds = wk.filter(k => P.book.log[k]), pg = ds.reduce((a, k) => a + (P.book.log[k].pages || 0), 0);
+    $('#bkSum').textContent = ds.length ? `This week: ${ds.length} ${plural(ds.length, ["day", "days", "days"])} with a book, ${pg} ${plural(pg, ["page", "pages", "pages"])}` : "Nothing written down this week yet";
+  };
+  const pick = k => {
+    sel = k; const x = P.book.log[k]; pages = x && x.pages ? x.pages : 0; like = x && x.like != null ? x.like : -1;
+    h2.textContent = head(k);
+    $$('#pgs .mn').forEach(b => b.classList.toggle('sel', +b.dataset.p === pages));
+    $('#pageIn').value = pages && !CH.includes(pages) ? pages : '';
+    $$('#likes .lk').forEach(b => b.classList.toggle('sel', +b.dataset.l === like));
+    $('#logBtn').textContent = x ? "Change it" : "Write it down";
+    drawWk();
+  };
+  drawWk();
+  $('#bkWk').onclick = ev => {
+    const b = ev.target.closest('[data-k]'); if (!b) return;
+    sfx.tick(); pick(b.dataset.k); const x = P.book.log[sel];
+    talk(x ? `${when(sel)}: ${x.pages} ${pgW(x.pages)}. You can change it.` : `${when(sel)}. How many pages ${G("did you read", "did you read")}?`);
+  };
+  const gap = wk.slice(0, 6).some(k => !P.book.log[k]);
+  talk((e ? `You already ${G("read", "read")} ${e.pages ? `${e.pages} ${pgW(e.pages)}` : "a little"} today. Great!` : `Read your book and have fun. Then pick how many pages you ${G("read", "read")}.`) + (gap ? ' ' + G("Forgot to mark another day? Tap it.", "Forgot to mark another day? Tap it.") : ''));
+  /* WEEK-END */
   $('#pgs').onclick = ev => { const b = ev.target.closest('.mn'); if (!b) return; pages = +b.dataset.p; $('#pageIn').value = ''; $$('#pgs .mn').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#pageIn').addEventListener('input', ev => { pages = Math.max(0, Math.round(+ev.target.value || 0)); $$('#pgs .mn').forEach(x => x.classList.remove('sel')); });
   $('#likes').onclick = ev => { const b = ev.target.closest('.lk'); if (!b) return; like = +b.dataset.l; $$('#likes .lk').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
@@ -4986,9 +5033,20 @@ function screenBook() {
   $('#bkBackBtn').onclick = () => grownUp(() => { const b = $('#bkBack'); b.hidden = false; $('#bkBackBtn').hidden = true; bookBackfill(b); b.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, "Only a grown-up can fill in reading for a past day.");
   $('#logBtn').onclick = () => {
     if (!pages) { talk("Pick how many pages."); wiggle($('#pgs')); return; }
-    P.book.log[tk] = { pages, like: like >= 0 ? like : null }; save(); sfx.pop();
-    if (e) { talk("Done. I changed it."); later(goHome, 900); return; }
-    finish({ key: 'book', line: "Another day with a book! Read and have fun." });
+    const was = P.book.log[sel];
+    if (sel === tk) {
+      P.book.log[tk] = { pages, like: like >= 0 ? like : null }; save(); sfx.pop();
+      if (was) { talk("Done. I changed it."); later(goHome, 900); return; }
+      finish({ key: 'book', line: "Another day with a book! Read and have fun." }); return;
+    }
+    // a day earlier in the week: no stars for it, but the day counts (the goal, the streak) and its fine comes back
+    const o = { pages, like: like >= 0 ? like : null }; if (!was || was.late) o.late = 1;
+    P.book.log[sel] = o;
+    if (!was) { const c = { ...dayCounts(sel) }; c.book = (c.book || 0) + 1; P.days[sel] = c; }
+    const back = readFineBack(sel); save(); sfx.good();
+    const sn = $('#starN'); if (sn) sn.textContent = P.stars;
+    talk(`Saved! ${when(sel)}: ${pages} ${pgW(pages)}.${back ? ` And ${back} ${plural(back, ["star came back", "stars came back", "stars came back"])}!` : ''}`);
+    pick(sel); $('#bkWk').scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 }
 
@@ -11589,7 +11647,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '111';
+const APP_VER = '112';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -12605,7 +12663,7 @@ function readFineBack(k) {
 const dayLabel = k => { const d = new Date(k + 'T12:00:00'); return `${WEEK[(d.getDay() + 6) % 7]}, ${d.getDate()} ${MONTHS_GEN[d.getMonth()]}`; };
 const MONTHS_GEN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 function bookBackfill(box) {
-  const tk = dayKey(), days = Array.from({ length: 14 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 14 + i); return dayKey(d); }).filter(k => k !== tk);
+  const tk = dayKey(), days = Array.from({ length: 14 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 14 + i); return dayKey(d); }).slice(0, 7);
   let sel = days.filter(k => !P.book.log[k]).pop() || null, pages = 0;
   const pgW = n => plural(n, ["page", "pages", "pages"]);
   const draw = () => {
