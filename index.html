@@ -2434,6 +2434,8 @@ body.pv-on #app{padding-top:52px}
 .cbx-card p{margin:6px 0 0;font:700 15px/1.45 var(--f-body)}
 .cbx-st{display:flex;flex-direction:column;align-items:flex-start}
 .cbx-st .link-btn,.ast-story{align-self:flex-start;text-align:left}
+.cbx-story{border-radius:18px;padding:12px 14px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong)}
+.cbx-story b{font:900 16px var(--f-body);color:var(--plum,#6B3FA0)}.cbx-story p{margin:6px 0 0;font:700 16px/1.5 var(--f-body)}
 /* the painters in the museum */
 .ast-row{display:flex;gap:8px;overflow-x:auto;contain:inline-size;width:100%;max-width:calc(100vw - 32px);padding:2px 2px 8px;scroll-snap-type:x mandatory}
 .ast-c{flex:0 0 132px;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-radius:16px;padding:10px 6px;background:var(--t-peach,#FFE3D3);box-shadow:0 3px 0 var(--line-strong);scroll-snap-align:start;cursor:pointer}
@@ -11893,7 +11895,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '128';
+const APP_VER = '129';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13437,6 +13439,7 @@ function sayParts(text) {
 function sayPatches(marked) {
   const D = (SAYRU && SAYRU.p) || {}, own = (ROOT && ROOT.sayOwnPh) || {}, pairs = [], need = [];
   for (const m of marked.matchAll(/[А-Яа-яЁё́]+/g)) {
+    { const jo = PIPER_JO[m[0].toLowerCase().replace(/\u0301/g, '')]; if (jo) pairs.push(jo.split('|')); }
     if (!m[0].includes(ACC)) continue;
     const f = m[0].toLowerCase(), p = f in D ? D[f] : own[f];
     if (p === undefined) { if (!need.includes(f)) need.push(f); continue; }
@@ -17218,6 +17221,26 @@ const CBOX = (() => {
     ['nacht', '🌙', "Night serenade", "At night, musicians play under a window."],
     ['promenade', '🖼️', "Promenade", "We stroll through a picture exhibition."]
   ].filter(x => CTUNES[x[0]] && compOf(x[0]));
+  // the story of each piece, told after the guess: where it comes from, why it sounds the way it does, what it means
+  const TSTORY = {
+    bee: "“Flight of the Bumblebee” comes from Rimsky-Korsakov’s opera “The Tale of Tsar Saltan”, after Pushkin’s fairy tale. Prince Gvidon turns into a bumblebee and flies across the sea to his father. The violins play very fast notes — that is the buzzing and the flight.",
+    king: "Edvard Grieg wrote this music for the fairy-tale play “Peer Gynt”. Peer ends up in the cave of the trolls, and they chase him. The music creeps quietly at first, then gets louder and faster — the trolls are running!",
+    surprise: "Joseph Haydn noticed that some people fell asleep at concerts. So he wrote a symphony where the quiet music is suddenly broken by a loud bang from the whole orchestra. Ever since, it has been called the “Surprise”.",
+    swan: "Pyotr Tchaikovsky wrote the ballet “Swan Lake” about Princess Odette, whom an evil wizard turned into a swan: by day she is a bird, by night a girl again. The sad oboe tune is the swans’ song on the lake.",
+    tell: "The “William Tell” Overture opens Gioachino Rossini’s opera about a brave archer from Switzerland. At the end comes a fast gallop: the trumpets call, and it sounds like a whole troop on horseback. Cartoons often use this music for chases.",
+    twinkle: "The tune of “Twinkle, Twinkle” was sung in France before Mozart. Mozart wrote twelve variations on it: the same tune sounds new every time — cheerful, gentle, or very, very fast.",
+    lullaby: "Johannes Brahms wrote the “Lullaby” as a gift for a friend who had just had a baby boy. The tune rocks like a cradle. Little ones in many countries still fall asleep to it.",
+    morning: "“Morning” is also from Grieg’s music for “Peer Gynt”. The flute and the oboe call to each other like birds at dawn, and then the whole orchestra grows louder — the sun is rising higher and higher.",
+    fifth: "Beethoven’s Fifth Symphony begins with four notes: da-da-da-DUM. People say Beethoven called it fate knocking at the door. The whole first part of the symphony grows out of those four notes.",
+    toccata: "Johann Sebastian Bach wrote the Toccata in D minor for the organ — a huge instrument with pipes that stands in a church. “Toccata” means “to touch”: the organist’s fingers run fast over the keys, and the sound thunders right up to the ceiling.",
+    danube: "Johann Strauss wrote the waltz “The Blue Danube” about the river that flows through Vienna. A waltz is danced one-two-three, twirling in pairs. In Vienna it is played every New Year.",
+    spring: "Antonio Vivaldi wrote four violin concertos called “The Four Seasons”. In “Spring” the violins chirp like birds, babble like brooks, and then a spring thunderstorm rumbles.",
+    turca: "Mozart wrote the “Turkish March” for the piano. In those days Europe loved Turkish military bands with drums and cymbals, and Mozart painted them on the keys. Can you hear a drum beating?",
+    joy: "“Ode to Joy” is the end of Beethoven’s Ninth Symphony. When he wrote it he could no longer hear at all, but the music played in his head. At the end a choir sings that all people are brothers and sisters. Today this tune is the anthem of Europe.",
+    elise: "Beethoven wrote “Für Elise” for the piano. People still argue about who Elise was — a pupil, maybe, or a friend. The piece was found only after the composer died, and now everyone who learns the piano knows it.",
+    nacht: "Mozart’s “Eine kleine Nachtmusik” is music for violins, viola and cello. Serenades were played in the evening, at parties and under windows. It starts bright and lively, as if the musicians were saying hello.",
+    promenade: "“Promenade” is from Modest Mussorgsky’s “Pictures at an Exhibition”. He wrote this music after an exhibition of paintings by his artist friend. “Promenade” is Mussorgsky himself, walking from one picture to the next."
+  };
   // the stories about a composer (ids of LEARN.music; the stories of each language that exist)
   const STORY = { mozart: ['mu-mozart'], beethoven: ['mu-beethoven'], vivaldi: ['mu-vivaldi'], bach: ['mu-bach'], rimsky: ['mu-bee'], mussorgsky: ['mu-pictures'], tchaikovsky: ['mu-nutcracker', 'mu-album'] };
   const mine = () => (P.cmpCards = P.cmpCards || []);
@@ -17261,7 +17284,7 @@ const CBOX = (() => {
         <h2 class="cbx-name">${esc(row[2])}</h2><p class="cbx-img">${esc(row[3])}</p>
         <div id="cbxAsk"><h2 class="art-h">Who wrote this music?</h2>
           <div class="cmp-grid three" id="cbxOpts">${opts.map(x => `<button class="cmp-c" data-c="${x.id}"><img src="${portrait(x)}" alt=""><b>${esc(x.n)}</b></button>`).join('')}</div>
-          <div class="og-btns"><button class="big ghost" id="cbxAgain">▶ Listen again</button></div></div>
+          <div class="og-btns"><button class="big ghost" id="cbxAgain">▶ Listen again</button><button class="big ghost" id="cbxIdk">🤷 I don’t know — tell me!</button></div></div>
         <div id="cbxWin"></div>
       </div>`, { back: screen });
     const big = $('#cbxBig'), st = $('#cbxSt');
@@ -17285,17 +17308,25 @@ const CBOX = (() => {
         return;
       }
       done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good();
-      const fresh = !has(c); if (fresh) { mine().push(c.id); P.stars += 1; weekAdd(P, 1); save(); }
-      const f = cfNext(c), all = fresh && COMPOSERS.every(has);
+      win(true);
+    };
+    // «Не знаю»: the answer and the story; the card comes too (learning is the point), without the star
+    $('#cbxIdk').onclick = () => { if (done) return; done = true; sfx.pop(); compStop(); st.classList.remove('on'); win(false); };
+    // the answer: the story of the piece (where it comes from, why it sounds so, what it means), then the composer
+    function win(guessed) {
+      const fresh = !has(c); if (fresh) { mine().push(c.id); if (guessed) { P.stars += 1; weekAdd(P, 1); } save(); }
+      const story = TSTORY[tid] || cfNext(c), all = fresh && COMPOSERS.every(has);
       $('#cbxAsk').hidden = true;
-      $('#cbxWin').innerHTML = `<div class="cbx-card ${fresh ? 'new' : ''}"><img src="${portrait(c, 300)}" alt="${esc(c.full)}"><div><b>${fresh ? "🃏 New card!" : "✅ Right!"}</b><h3>${esc(c.full)}</h3><small>${FLAG(c.cc)} ${c.y}</small><p>${esc(f)}</p></div></div>
+      $('#cbxWin').innerHTML = `<div class="cbx-card ${fresh ? 'new' : ''}"><img src="${portrait(c, 300)}" alt="${esc(c.full)}"><div><b>${fresh ? "🃏 New card!" : guessed ? "✅ Right!" : "🎼 Here is who it is"}</b><h3>${esc(c.full)}</h3><small>${FLAG(c.cc)} ${c.y}</small></div></div>
+        <div class="cbx-story"><b>📖 ${esc(CTUNES[tid].n)}</b><p>${esc(story)}</p></div>
         <div class="og-btns"><button class="big" id="cbxNext">🎵 More music</button><button class="big ghost" id="cbxAbout">😄 About this music maker</button><button class="big ghost" id="cbxAll">🃏 My cards</button></div>`;
       $('#cbxNext').onclick = () => { sfx.pop(); play(nextTune(tid)); };
-      $('#cbxAbout').onclick = () => { sfx.pop(); screenComposer(c.id, f); };
+      $('#cbxAbout').onclick = () => { sfx.pop(); screenComposer(c.id); };
       $('#cbxAll').onclick = () => { sfx.pop(); screen(); };
       if (all) confetti && confetti();
-      talk(`${fresh ? "Hooray! A new card!" : "Right!"} It’s ${c.n}. ${f}${all ? ` You${G("", '')} collected all the music makers!` : ''}`);
-    };
+      talk(`${guessed ? (fresh ? "Hooray! A new card!" : "Right!") : "Listen!"} It’s ${c.n}. ${story}${all ? ` You${G("", '')} collected all the music makers!` : ''}`);
+      if (MUSIC.full) MUSIC.full(tid, $('#cbxWin'));
+    }
     (async () => { if (row[3]) await talk(`${row[3]} Listen!`); if (t !== tok) return; go(); })();
   }
   // the stories about this composer, under their music
@@ -17540,6 +17571,64 @@ const POLISH = (() => {
   return { home, today, calm };
 })();
 /* POLISH-END */
+/* THEMES-BEGIN */
+/* ---------- «Учимся» and «Творим» by themes (the family asked): for the older track chess, maths, the piano and the
+   Rubik's cube each have their own section; «Творим» splits into drawing, music, and paintings with the museum.
+   A «true or made up?» about paintings joins the one about composers. The cube shows when a child's age was never
+   written down but the child is on the older track. ---------- */
+const THEMES = (() => {
+  const sec = g => SECTIONS.find(x => x.g === g), at = g => SECTIONS.findIndex(x => x.g === g);
+  const move = (id, from, to) => { const g = GAMES.find(x => x.id === id); if (!g) return; if (g.grp === from) g.grp = to; if (g.also) g.also = g.also.map(a => a === from ? to : a); };
+  // «Учимся», the older track
+  const s8 = sec(8); if (s8) { s8.h = "Chess"; s8.p = "with the computer, puzzles and games online"; }
+  SECTIONS.splice(at(8) + 1, 0, { g: 17, h: "Maths", p: "mental maths, flash counting, olympiad, abacus", only: 'l' },
+    { g: 18, h: "Piano", p: "play tunes", only: 'l' }, { g: 19, h: "Rubik's cube", p: "solve it step by step", only: 'l' });
+  ['m-sprint', 'olymp', 'flash', 'math-path', 'soroban', 'steps'].forEach(id => move(id, 8, 17));
+  move('piano', 8, 18); move('cube', 8, 19);
+  // «Творим»: the younger track
+  const s4 = sec(4); if (s4) { s4.h = "Drawing and colouring"; s4.p = "draw, colour, join the dots"; }
+  SECTIONS.splice(at(4) + 1, 0, { g: 20, h: "Music", p: "songs, xylophone, music makers", only: 'r' }, { g: 21, h: "Paintings and the museum", p: "world museum, quiz, true or made up", only: 'r' });
+  ['songs', 'xylo', 'composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 4, 20));
+  ['museum', 'art-quiz', 'art-memory'].forEach(id => move(id, 4, 21));
+  // «Творим»: the older track
+  const s13 = sec(13); if (s13) { s13.h = "Paintings and the museum"; s13.p = "world museum, quiz, true or made up"; }
+  SECTIONS.splice(at(13) + 1, 0, { g: 22, h: "Music", p: "music makers, conductor, guess the tune", only: 'l' }, { g: 23, h: "Drawing", p: "draw and colour", only: 'l' });
+  ['composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 13, 22));
+  ['draw', 'code-math'].forEach(id => move(id, 13, 23));
+  const mb = MODS.find(m => m.id === 'brain'); if (mb) mb.g.push(17, 18, 19);
+  const ma = MODS.find(m => m.id === 'art'); if (ma) ma.g.push(20, 21);
+  const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 18, 19);
+  const tc = HOME_TABS.find(t => t.id === 'create'); if (tc) tc.g.push(20, 21, 22, 23);
+  // the cube: 9 and older, or the older track when the age was never written down
+  const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => (P.settings.age || (P.settings.track === 'l' ? 9 : 0)) < 9;
+  // «Правда или выдумка?» about paintings: who painted it, where it lives, when it was painted
+  function artTF() {
+    artLoad().then(D => {
+      const pool = D.p.slice(0, Q() ? 400 : 200).filter(x => x.a && x.f), mus = [...new Set(pool.map(x => artMus(x)).filter(Boolean))], pts = [...new Set(pool.map(x => x.a))];
+      const items = sample(pool, 14).map((x, i) => {
+        const kind = i % 3, yes = Math.random() < .5, head = x.t, img = artImg(x.f, 300);
+        if (kind === 1 && artMus(x)) {
+          const m = yes ? artMus(x) : pickOne(mus.filter(v => v !== artMus(x)));
+          return { s: `This painting lives in ${m}.`, t: yes, w: `Its home is ${artMus(x)}.`, head, img };
+        }
+        if (kind === 2 && x.y > 0) {
+          const y = yes ? x.y : x.y + pickOne([-150, -100, -60, 60, 100, 150]);
+          return { s: `This painting was made in ${y}.`, t: yes, w: `It was made in ${x.y}.`, head, img };
+        }
+        const a = yes ? x.a : pickOne(pts.filter(v => v !== x.a));
+        return { s: `This painting is by ${a}.`, t: yes, w: `It is by ${x.a}.`, head, img };
+      });
+      screenTF({ title: "True or made up: paintings", key: 'art-tf', items, back: () => screenMuseum(), again: artTF });
+    }, () => { newScreen(); shell("True or made up: paintings", "<p class=\"lead\">The paintings need the internet to open.</p>", { back: () => screenMuseum() }); });
+  }
+  GAMES.push({ id: 'art-tf', name: "True or made up: paintings", sub: "who made it, where it lives, when", ico: () => pic('🤔'), bg: 'var(--t-peach)', go: () => artTF(), grp: 21, also: [13] });
+  return { artTF };
+})();
+// the app's own voices lose the «й» in ё after a vowel («узнаём» came out as «узнам»): these words get it back
+const PIPER_JO = {"узнаём":"uznaˈɵm|uznajˈɵm","узнаёшь":"uznaˈɵʃ|uznajˈɵʃ","узнаёт":"uznaˈɵt|uznajˈɵt","узнаёте":"uznaˈɵtʲi|uznajˈɵtʲi","даём":"daˈɵm|dajˈɵm","даёшь":"daˈɵʃ|dajˈɵʃ","даёт":"daˈɵt|dajˈɵt","даёте":"daˈɵtʲi|dajˈɵtʲi","сдаём":"zdaˈɵm|zdajˈɵm","продаём":"prʌdaˈɵm|prʌdajˈɵm","отдаём":"ʌddaˈɵm|ʌddajˈɵm","задаём":"zʌdaˈɵm|zʌdajˈɵm","подаём":"pʌdaˈɵm|pʌdajˈɵm","создаём":"sʌzdaˈɵm|sʌzdajˈɵm","поём":"pʌˈɵm|pʌjˈɵm","поёшь":"pʌˈɵʃ|pʌjˈɵʃ","поёт":"pʌˈɵt|pʌjˈɵt","поёте":"pʌˈɵtʲi|pʌjˈɵtʲi","споём":"spʌˈɵm|spʌjˈɵm","споёт":"spʌˈɵt|spʌjˈɵt","встаём":"fstaˈɵm|fstajˈɵm","встаёшь":"fstaˈɵʃ|fstajˈɵʃ","встаёт":"fstaˈɵt|fstajˈɵt","встаёте":"fstaˈɵtʲi|fstajˈɵtʲi","моё":"mʌˈɵ|mʌjˈɵ","твоё":"tvʌˈɵ|tvʌjˈɵ","своё":"svʌˈɵ|svʌjˈɵ","заём":"zaˈɵm|zajˈɵm","наём":"naˈɵm|najˈɵm","боёк":"bʌˈɵk|bʌjˈɵk","раёк":"raˈɵk|rajˈɵk","устаём":"ustaˈɵm|ustajˈɵm","остаёмся":"ʌstaˈɵmsʲʌ|ʌstajˈɵmsʲʌ","остаётся":"ʌstaˈɵtsʌ|ʌstajˈɵtsʌ","узнаётся":"uznaˈɵtsʌ|uznajˈɵtsʌ","достаём":"dʌstaˈɵm|dʌstajˈɵm","достаёт":"dʌstaˈɵt|dʌstajˈɵt","стаёт":"staˈɵt|stajˈɵt"};
+// full recordings of the music box's pieces (filled in by the player below when it is there)
+const MUSIC = { full: null };
+/* THEMES-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in

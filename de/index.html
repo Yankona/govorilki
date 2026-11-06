@@ -2434,6 +2434,8 @@ body.pv-on #app{padding-top:52px}
 .cbx-card p{margin:6px 0 0;font:700 15px/1.45 var(--f-body)}
 .cbx-st{display:flex;flex-direction:column;align-items:flex-start}
 .cbx-st .link-btn,.ast-story{align-self:flex-start;text-align:left}
+.cbx-story{border-radius:18px;padding:12px 14px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong)}
+.cbx-story b{font:900 16px var(--f-body);color:var(--plum,#6B3FA0)}.cbx-story p{margin:6px 0 0;font:700 16px/1.5 var(--f-body)}
 /* the painters in the museum */
 .ast-row{display:flex;gap:8px;overflow-x:auto;contain:inline-size;width:100%;max-width:calc(100vw - 32px);padding:2px 2px 8px;scroll-snap-type:x mandatory}
 .ast-c{flex:0 0 132px;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-radius:16px;padding:10px 6px;background:var(--t-peach,#FFE3D3);box-shadow:0 3px 0 var(--line-strong);scroll-snap-align:start;cursor:pointer}
@@ -11893,7 +11895,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '128';
+const APP_VER = '129';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13437,6 +13439,7 @@ function sayParts(text) {
 function sayPatches(marked) {
   const D = (SAYRU && SAYRU.p) || {}, own = (ROOT && ROOT.sayOwnPh) || {}, pairs = [], need = [];
   for (const m of marked.matchAll(/[А-Яа-яЁё́]+/g)) {
+    { const jo = PIPER_JO[m[0].toLowerCase().replace(/\u0301/g, '')]; if (jo) pairs.push(jo.split('|')); }
     if (!m[0].includes(ACC)) continue;
     const f = m[0].toLowerCase(), p = f in D ? D[f] : own[f];
     if (p === undefined) { if (!need.includes(f)) need.push(f); continue; }
@@ -17218,6 +17221,26 @@ const CBOX = (() => {
     ['nacht', '🌙', "Nachtmusik", "Nachts spielen Musiker unter einem Fenster."],
     ['promenade', '🖼️', "Promenade", "Wir spazieren durch eine Bilderausstellung."]
   ].filter(x => CTUNES[x[0]] && compOf(x[0]));
+  // the story of each piece, told after the guess: where it comes from, why it sounds the way it does, what it means
+  const TSTORY = {
+    bee: "Der „Hummelflug“ stammt aus Rimski-Korsakows Oper „Das Märchen vom Zaren Saltan“ nach einem Märchen von Puschkin. Prinz Gwidon verwandelt sich in eine Hummel und fliegt übers Meer zu seinem Vater. Die Geigen spielen ganz schnelle Töne — so klingen das Summen und der Flug.",
+    king: "Diese Musik schrieb Edvard Grieg für das Märchenstück „Peer Gynt“. Peer landet in der Höhle der Trolle, und sie jagen ihn. Die Musik schleicht erst ganz leise und wird dann immer lauter und schneller — die Trolle rennen!",
+    surprise: "Joseph Haydn merkte, dass manche Zuhörer im Konzert einschliefen. Da schrieb er eine Sinfonie, in der die leise Musik plötzlich von einem lauten Schlag des ganzen Orchesters unterbrochen wird. Seitdem heißt sie „Mit dem Paukenschlag“.",
+    swan: "Pjotr Tschaikowski schrieb das Ballett „Schwanensee“ über Prinzessin Odette, die ein böser Zauberer in einen Schwan verwandelt hat: tagsüber ist sie ein Vogel, nachts wieder ein Mädchen. Die traurige Oboenmelodie ist das Lied der Schwäne auf dem See.",
+    tell: "Die Ouvertüre zu „Wilhelm Tell“ eröffnet Gioachino Rossinis Oper über einen mutigen Schützen aus der Schweiz. Am Ende kommt ein schneller Galopp: Die Trompeten rufen, und es klingt, als ob eine ganze Reiterschar vorbeijagt. In Zeichentrickfilmen hört man diese Musik oft bei Verfolgungsjagden.",
+    twinkle: "Die Melodie von „Morgen kommt der Weihnachtsmann“ sang man in Frankreich schon vor Mozart. Mozart schrieb zwölf Variationen darüber: Dieselbe Melodie klingt jedes Mal neu — fröhlich, sanft oder ganz, ganz schnell.",
+    lullaby: "Johannes Brahms schrieb das „Wiegenlied“ als Geschenk für eine Freundin, die gerade einen kleinen Sohn bekommen hatte. Die Melodie schaukelt wie eine Wiege. Bis heute singt man es Babys in vielen Ländern.",
+    morning: "„Morgenstimmung“ stammt auch aus Griegs Musik zu „Peer Gynt“. Flöte und Oboe rufen einander zu wie Vögel im Morgengrauen, dann wird das ganze Orchester lauter — die Sonne steigt immer höher.",
+    fifth: "Beethovens Fünfte Sinfonie beginnt mit vier Tönen: ta-ta-ta-TAM. Man sagt, Beethoven habe gemeint, so klopfe das Schicksal an die Tür. Aus diesen vier Tönen wächst der ganze erste Satz.",
+    toccata: "Johann Sebastian Bach schrieb die Toccata in d-Moll für die Orgel — ein riesiges Instrument mit Pfeifen, das in der Kirche steht. „Toccata“ heißt „berühren“: Die Finger des Organisten laufen schnell über die Tasten, und der Klang donnert bis unter die Decke.",
+    danube: "Johann Strauss schrieb den Walzer „An der schönen blauen Donau“ über den Fluss, der durch Wien fließt. Walzer tanzt man im Eins-zwei-drei und dreht sich paarweise. In Wien spielt man ihn jedes Jahr zu Neujahr.",
+    spring: "Antonio Vivaldi schrieb vier Violinkonzerte, „Die vier Jahreszeiten“. Im „Frühling“ zwitschern die Geigen wie Vögel, plätschern wie Bäche, und dann donnert ein Frühlingsgewitter.",
+    turca: "Den „Türkischen Marsch“ schrieb Mozart für Klavier. Damals liebte man in Europa türkische Militärkapellen mit Trommeln und Becken, und Mozart malte sie auf den Tasten nach. Hörst du, wie die Trommel schlägt?",
+    joy: "Die „Ode an die Freude“ ist das Ende von Beethovens Neunter Sinfonie. Als er sie schrieb, konnte er gar nichts mehr hören, aber die Musik klang in seinem Kopf. Am Ende singt ein Chor, dass alle Menschen Brüder werden. Heute ist diese Melodie die Hymne Europas.",
+    elise: "„Für Elise“ schrieb Beethoven für Klavier. Bis heute rätselt man, wer Elise war: vielleicht eine Schülerin, vielleicht eine Freundin. Gefunden wurde das Stück erst nach dem Tod des Komponisten, und heute kennt es jeder, der Klavier lernt.",
+    nacht: "Mozarts „Eine kleine Nachtmusik“ ist Musik für Geigen, Bratsche und Cello. Serenaden spielte man abends, auf Festen und unter Fenstern. Sie beginnt munter, als ob die Musiker Hallo sagen.",
+    promenade: "Die „Promenade“ stammt aus Modest Mussorgskis „Bilder einer Ausstellung“. Er schrieb die Musik nach einer Ausstellung mit Bildern seines Malerfreundes. Die „Promenade“ ist Mussorgski selbst, der von Bild zu Bild geht."
+  };
   // the stories about a composer (ids of LEARN.music; the stories of each language that exist)
   const STORY = { mozart: ['mu-mozart'], beethoven: ['mu-beethoven'], vivaldi: ['mu-vivaldi'], bach: ['mu-bach'], rimsky: ['mu-bee'], mussorgsky: ['mu-pictures'], tchaikovsky: ['mu-nutcracker', 'mu-album'] };
   const mine = () => (P.cmpCards = P.cmpCards || []);
@@ -17261,7 +17284,7 @@ const CBOX = (() => {
         <h2 class="cbx-name">${esc(row[2])}</h2><p class="cbx-img">${esc(row[3])}</p>
         <div id="cbxAsk"><h2 class="art-h">Wer hat diese Musik geschrieben?</h2>
           <div class="cmp-grid three" id="cbxOpts">${opts.map(x => `<button class="cmp-c" data-c="${x.id}"><img src="${portrait(x)}" alt=""><b>${esc(x.n)}</b></button>`).join('')}</div>
-          <div class="og-btns"><button class="big ghost" id="cbxAgain">▶ Noch einmal hören</button></div></div>
+          <div class="og-btns"><button class="big ghost" id="cbxAgain">▶ Noch einmal hören</button><button class="big ghost" id="cbxIdk">🤷 Weiß ich nicht — erzähl!</button></div></div>
         <div id="cbxWin"></div>
       </div>`, { back: screen });
     const big = $('#cbxBig'), st = $('#cbxSt');
@@ -17285,17 +17308,25 @@ const CBOX = (() => {
         return;
       }
       done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good();
-      const fresh = !has(c); if (fresh) { mine().push(c.id); P.stars += 1; weekAdd(P, 1); save(); }
-      const f = cfNext(c), all = fresh && COMPOSERS.every(has);
+      win(true);
+    };
+    // «Не знаю»: the answer and the story; the card comes too (learning is the point), without the star
+    $('#cbxIdk').onclick = () => { if (done) return; done = true; sfx.pop(); compStop(); st.classList.remove('on'); win(false); };
+    // the answer: the story of the piece (where it comes from, why it sounds so, what it means), then the composer
+    function win(guessed) {
+      const fresh = !has(c); if (fresh) { mine().push(c.id); if (guessed) { P.stars += 1; weekAdd(P, 1); } save(); }
+      const story = TSTORY[tid] || cfNext(c), all = fresh && COMPOSERS.every(has);
       $('#cbxAsk').hidden = true;
-      $('#cbxWin').innerHTML = `<div class="cbx-card ${fresh ? 'new' : ''}"><img src="${portrait(c, 300)}" alt="${esc(c.full)}"><div><b>${fresh ? "🃏 Neue Karte!" : "✅ Richtig!"}</b><h3>${esc(c.full)}</h3><small>${FLAG(c.cc)} ${c.y}</small><p>${esc(f)}</p></div></div>
+      $('#cbxWin').innerHTML = `<div class="cbx-card ${fresh ? 'new' : ''}"><img src="${portrait(c, 300)}" alt="${esc(c.full)}"><div><b>${fresh ? "🃏 Neue Karte!" : guessed ? "✅ Richtig!" : "🎼 Das ist es"}</b><h3>${esc(c.full)}</h3><small>${FLAG(c.cc)} ${c.y}</small></div></div>
+        <div class="cbx-story"><b>📖 ${esc(CTUNES[tid].n)}</b><p>${esc(story)}</p></div>
         <div class="og-btns"><button class="big" id="cbxNext">🎵 Mehr Musik</button><button class="big ghost" id="cbxAbout">😄 Über den Komponisten</button><button class="big ghost" id="cbxAll">🃏 Meine Karten</button></div>`;
       $('#cbxNext').onclick = () => { sfx.pop(); play(nextTune(tid)); };
-      $('#cbxAbout').onclick = () => { sfx.pop(); screenComposer(c.id, f); };
+      $('#cbxAbout').onclick = () => { sfx.pop(); screenComposer(c.id); };
       $('#cbxAll').onclick = () => { sfx.pop(); screen(); };
       if (all) confetti && confetti();
-      talk(`${fresh ? "Hurra! Eine neue Karte!" : "Richtig!"} Es ist ${c.n}. ${f}${all ? ` Du hast${G("", '')} alle Komponisten gesammelt!` : ''}`);
-    };
+      talk(`${guessed ? (fresh ? "Hurra! Eine neue Karte!" : "Richtig!") : "Hör zu!"} Es ist ${c.n}. ${story}${all ? ` Du hast${G("", '')} alle Komponisten gesammelt!` : ''}`);
+      if (MUSIC.full) MUSIC.full(tid, $('#cbxWin'));
+    }
     (async () => { if (row[3]) await talk(`${row[3]} Hör zu!`); if (t !== tok) return; go(); })();
   }
   // the stories about this composer, under their music
@@ -17540,6 +17571,64 @@ const POLISH = (() => {
   return { home, today, calm };
 })();
 /* POLISH-END */
+/* THEMES-BEGIN */
+/* ---------- «Учимся» and «Творим» by themes (the family asked): for the older track chess, maths, the piano and the
+   Rubik's cube each have their own section; «Творим» splits into drawing, music, and paintings with the museum.
+   A «true or made up?» about paintings joins the one about composers. The cube shows when a child's age was never
+   written down but the child is on the older track. ---------- */
+const THEMES = (() => {
+  const sec = g => SECTIONS.find(x => x.g === g), at = g => SECTIONS.findIndex(x => x.g === g);
+  const move = (id, from, to) => { const g = GAMES.find(x => x.id === id); if (!g) return; if (g.grp === from) g.grp = to; if (g.also) g.also = g.also.map(a => a === from ? to : a); };
+  // «Учимся», the older track
+  const s8 = sec(8); if (s8) { s8.h = "Schach"; s8.p = "mit dem Computer, Aufgaben und Partien online"; }
+  SECTIONS.splice(at(8) + 1, 0, { g: 17, h: "Mathe", p: "Kopfrechnen, Blitzrechnen, Olympiade, Abakus", only: 'l' },
+    { g: 18, h: "Klavier", p: "spiel Melodien", only: 'l' }, { g: 19, h: "Zauberwürfel", p: "Schritt für Schritt lösen", only: 'l' });
+  ['m-sprint', 'olymp', 'flash', 'math-path', 'soroban', 'steps'].forEach(id => move(id, 8, 17));
+  move('piano', 8, 18); move('cube', 8, 19);
+  // «Творим»: the younger track
+  const s4 = sec(4); if (s4) { s4.h = "Malen und Ausmalen"; s4.p = "malen, ausmalen, Punkte verbinden"; }
+  SECTIONS.splice(at(4) + 1, 0, { g: 20, h: "Musik", p: "Lieder, Xylofon, Komponisten", only: 'r' }, { g: 21, h: "Bilder und Museum", p: "Museum der Welt, Quiz, wahr oder erfunden", only: 'r' });
+  ['songs', 'xylo', 'composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 4, 20));
+  ['museum', 'art-quiz', 'art-memory'].forEach(id => move(id, 4, 21));
+  // «Творим»: the older track
+  const s13 = sec(13); if (s13) { s13.h = "Bilder und Museum"; s13.p = "Museum der Welt, Quiz, wahr oder erfunden"; }
+  SECTIONS.splice(at(13) + 1, 0, { g: 22, h: "Musik", p: "Komponisten, Dirigent, errate die Melodie", only: 'l' }, { g: 23, h: "Malen", p: "malen und ausmalen", only: 'l' });
+  ['composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 13, 22));
+  ['draw', 'code-math'].forEach(id => move(id, 13, 23));
+  const mb = MODS.find(m => m.id === 'brain'); if (mb) mb.g.push(17, 18, 19);
+  const ma = MODS.find(m => m.id === 'art'); if (ma) ma.g.push(20, 21);
+  const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 18, 19);
+  const tc = HOME_TABS.find(t => t.id === 'create'); if (tc) tc.g.push(20, 21, 22, 23);
+  // the cube: 9 and older, or the older track when the age was never written down
+  const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => (P.settings.age || (P.settings.track === 'l' ? 9 : 0)) < 9;
+  // «Правда или выдумка?» about paintings: who painted it, where it lives, when it was painted
+  function artTF() {
+    artLoad().then(D => {
+      const pool = D.p.slice(0, Q() ? 400 : 200).filter(x => x.a && x.f), mus = [...new Set(pool.map(x => artMus(x)).filter(Boolean))], pts = [...new Set(pool.map(x => x.a))];
+      const items = sample(pool, 14).map((x, i) => {
+        const kind = i % 3, yes = Math.random() < .5, head = x.t, img = artImg(x.f, 300);
+        if (kind === 1 && artMus(x)) {
+          const m = yes ? artMus(x) : pickOne(mus.filter(v => v !== artMus(x)));
+          return { s: `Dieses Bild wohnt in: ${m}.`, t: yes, w: `Sein Zuhause: ${artMus(x)}.`, head, img };
+        }
+        if (kind === 2 && x.y > 0) {
+          const y = yes ? x.y : x.y + pickOne([-150, -100, -60, 60, 100, 150]);
+          return { s: `Dieses Bild wurde ${y} gemalt.`, t: yes, w: `Es wurde ${x.y} gemalt.`, head, img };
+        }
+        const a = yes ? x.a : pickOne(pts.filter(v => v !== x.a));
+        return { s: `Dieses Bild ist von ${a}.`, t: yes, w: `Es ist von ${x.a}.`, head, img };
+      });
+      screenTF({ title: "Wahr oder erfunden: Bilder", key: 'art-tf', items, back: () => screenMuseum(), again: artTF });
+    }, () => { newScreen(); shell("Wahr oder erfunden: Bilder", "<p class=\"lead\">Für die Bilder braucht es Internet.</p>", { back: () => screenMuseum() }); });
+  }
+  GAMES.push({ id: 'art-tf', name: "Wahr oder erfunden: Bilder", sub: "wer, wo, wann", ico: () => pic('🤔'), bg: 'var(--t-peach)', go: () => artTF(), grp: 21, also: [13] });
+  return { artTF };
+})();
+// the app's own voices lose the «й» in ё after a vowel («узнаём» came out as «узнам»): these words get it back
+const PIPER_JO = {"узнаём":"uznaˈɵm|uznajˈɵm","узнаёшь":"uznaˈɵʃ|uznajˈɵʃ","узнаёт":"uznaˈɵt|uznajˈɵt","узнаёте":"uznaˈɵtʲi|uznajˈɵtʲi","даём":"daˈɵm|dajˈɵm","даёшь":"daˈɵʃ|dajˈɵʃ","даёт":"daˈɵt|dajˈɵt","даёте":"daˈɵtʲi|dajˈɵtʲi","сдаём":"zdaˈɵm|zdajˈɵm","продаём":"prʌdaˈɵm|prʌdajˈɵm","отдаём":"ʌddaˈɵm|ʌddajˈɵm","задаём":"zʌdaˈɵm|zʌdajˈɵm","подаём":"pʌdaˈɵm|pʌdajˈɵm","создаём":"sʌzdaˈɵm|sʌzdajˈɵm","поём":"pʌˈɵm|pʌjˈɵm","поёшь":"pʌˈɵʃ|pʌjˈɵʃ","поёт":"pʌˈɵt|pʌjˈɵt","поёте":"pʌˈɵtʲi|pʌjˈɵtʲi","споём":"spʌˈɵm|spʌjˈɵm","споёт":"spʌˈɵt|spʌjˈɵt","встаём":"fstaˈɵm|fstajˈɵm","встаёшь":"fstaˈɵʃ|fstajˈɵʃ","встаёт":"fstaˈɵt|fstajˈɵt","встаёте":"fstaˈɵtʲi|fstajˈɵtʲi","моё":"mʌˈɵ|mʌjˈɵ","твоё":"tvʌˈɵ|tvʌjˈɵ","своё":"svʌˈɵ|svʌjˈɵ","заём":"zaˈɵm|zajˈɵm","наём":"naˈɵm|najˈɵm","боёк":"bʌˈɵk|bʌjˈɵk","раёк":"raˈɵk|rajˈɵk","устаём":"ustaˈɵm|ustajˈɵm","остаёмся":"ʌstaˈɵmsʲʌ|ʌstajˈɵmsʲʌ","остаётся":"ʌstaˈɵtsʌ|ʌstajˈɵtsʌ","узнаётся":"uznaˈɵtsʌ|uznajˈɵtsʌ","достаём":"dʌstaˈɵm|dʌstajˈɵm","достаёт":"dʌstaˈɵt|dʌstajˈɵt","стаёт":"staˈɵt|stajˈɵt"};
+// full recordings of the music box's pieces (filled in by the player below when it is there)
+const MUSIC = { full: null };
+/* THEMES-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
