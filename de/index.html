@@ -2346,6 +2346,12 @@ body.pv-on #app{padding-top:52px}
 .parents .sw input[type=checkbox]:checked{background:var(--leaf)}
 .parents .sw input[type=checkbox]:checked::after{left:23px}
 /* SETUI-CSS-END */
+/* HOMEUX-CSS */
+.tile-more{display:none!important}
+.more-btn{display:block;margin:12px auto 0;padding:10px 22px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);font:800 16px var(--f-body);box-shadow:0 4px 0 var(--line-strong);cursor:pointer}
+.more-btn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--line-strong)}
+#homeWho{font-size:22px}
+/* HOMEUX-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -2997,6 +3003,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
+  document.querySelectorAll('.srch').forEach(x => x.remove());
   tok++; hush(); windStop(); motorStop(); compStop(); stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
@@ -3543,6 +3550,7 @@ function goHome() {
    </main>
    <nav class="tabbar" id="tabBar" role="tablist">${HOME_TABS.map(x => `<button class="tb ${x.id === tab ? 'sel' : ''}" data-tab="${x.id}" role="tab" aria-selected="${x.id === tab}"><span class="emo">${x.e}</span><small>${nm(x.n)}</small>${x.id === 'today' && inboxN && tab !== 'today' ? `<i class="tb-dot">${inboxN}</i>` : ''}</button>`).join('')}</nav>
   </div>`;
+  HOMEUX.apply(tab);
   const on = (sel, fn) => { const el = $(sel); if (el) el.onclick = fn; };
   lastLine = greet();
   on('#heroRyz', () => { hopEl($('#heroRyz')); say(greet()); });
@@ -8908,6 +8916,14 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
   };
   const draw = () => { $('#feKids').innerHTML = kids.map(kidRow).join(''); $('#feGrands').innerHTML = grands.map(grandRow).join(''); };
   draw();
+  { const pl = $('#fePl'), ps = pl && pl.closest('section'), ks = $('#feKids') && $('#feKids').closest('section'), gs = $('#feGrands') && $('#feGrands').closest('section');
+    if (ps && ks && gs) {
+      ps.before(ks); gs.after(ps);
+      const cnt = () => `${pl.querySelectorAll('.pick-b.sel').length} / ${pl.querySelectorAll('.pick-b').length}`;
+      const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = `<summary>🌍 Geschichten über Städte und Länder · <span id="fePlN">${cnt()}</span></summary>`;
+      ps.querySelector('h2').remove(); pl.before(d); d.append(pl);
+      pl.addEventListener('click', () => setTimeout(() => { const n = $('#fePlN'); if (n) n.textContent = cnt(); }, 0));
+    } }
   if (add) { const rs = $$(add === 'kid' ? '#feKids .fe-name' : '#feGrands .fe-name'), el = rs[rs.length - 1]; if (el) { el.closest('.fe-row').scrollIntoView({ block: 'center' }); setTimeout(() => el.focus(), 300); } }
   $('#feKids').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.k;
@@ -11747,7 +11763,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '116';
+const APP_VER = '117';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -16766,6 +16782,61 @@ const SETUI = (() => {
   return { build, reset };
 })();
 /* SETUI-END */
+/* HOMEUX-BEGIN */
+/* ---------- the home screen, tidied for a child: one header row, today's plan first, nothing twice, long lists folded.
+   - header: search, the children, «кто играет», settings; the family's grown-up chips (family name, invite, flags,
+     the control panel) live in «Для взрослых»;
+   - «Сегодня»: the plan right under the friend; no «Все игры» grid (the tab bar is that list); «Вместе» once;
+   - the other tabs: a game shows once per tab, a long section shows four games and «Ещё N»;
+   - a game never played shows no row of empty stars. ---------- */
+const HOMEUX = (() => {
+  const OPEN = {};   // sections opened with «Ещё» stay open while the child is around
+  function apply(tab) {
+    const st = $('#stage'); if (!st) return;
+    // the header: one row
+    const fr = st.querySelector('.kids-fam'); if (fr) fr.remove();
+    const pult = $('#homePult');
+    if (pult) {
+      pult.id = 'homeWho'; pult.textContent = '👥'; pult.setAttribute('aria-label', "Wer spielt?");
+      pult.onclick = () => { sfx.pop(); homeLeave(); screenWho(); };
+    }
+    // the voice switch is a grown-ups' setting (⚙️ → «Голос и звук»)
+    const vb = $('#voiceBtn'); if (vb) vb.remove();
+    // no empty stars under games never played
+    st.querySelectorAll('.tile .prog, .mini .prog').forEach(p => { const s = p.querySelectorAll('span'); if (s.length && !p.textContent.trim() && [...s].every(x => x.classList.contains('off'))) p.remove(); });
+    if (tab === 'today') {
+      const hero = st.querySelector('.hero'), plan = st.querySelector('section.today');
+      if (hero && plan) hero.after(plan);
+      const all = st.querySelector('.alltabs'); if (all) all.remove();
+      if (st.querySelector('section.team')) { const s7 = st.querySelector('#sec7'); if (s7) s7.remove(); }
+      const tr = st.querySelector('.tryit .tiles'); if (tr) [...tr.children].slice(4).forEach(x => x.remove());
+      const pb = $('#parentsBtn'); if (pb) pb.textContent = "⚙️ Für Erwachsene";
+      return;
+    }
+    // the other tabs: each game once, long sections folded
+    const seen = new Set();
+    st.querySelectorAll('section.group').forEach(sec => {
+      const box = sec.querySelector('.tiles'); if (!box) return;
+      [...box.querySelectorAll(':scope > .tile')].forEach(t => { if (seen.has(t.dataset.id)) t.remove(); else seen.add(t.dataset.id); });
+      const left = [...box.querySelectorAll(':scope > .tile')];
+      if (!left.length) { const nb = st.querySelector(`#secNav [data-sec="${sec.id.replace('sec', '')}"]`); if (nb) nb.remove(); sec.remove(); return; }
+      const key = tab + ':' + sec.id;
+      if (left.length > 6 && !OPEN[key]) {
+        left.slice(4).forEach(t => t.classList.add('tile-more'));
+        box.insertAdjacentHTML('afterend', `<button class="more-btn" data-more="${key}">${left.length - 4} weitere ▾</button>`);
+      }
+    });
+    st.querySelectorAll('[data-more]').forEach(b => b.onclick = () => {
+      sfx.pop(); OPEN[b.dataset.more] = 1;
+      const box = b.previousElementSibling; box.querySelectorAll('.tile-more').forEach(t => t.classList.remove('tile-more')); b.remove();
+    });
+    // a jump from the section chips opens that section too
+    const nav = $('#secNav');
+    if (nav) nav.addEventListener('click', e => { const c = e.target.closest('[data-sec]'); if (!c) return; const b = st.querySelector(`#sec${c.dataset.sec} [data-more]`); if (b) b.click(); }, true);
+  }
+  return { apply };
+})();
+/* HOMEUX-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
