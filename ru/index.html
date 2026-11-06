@@ -2452,6 +2452,28 @@ body.pv-on #app{padding-top:52px}
 .lt-in.fresh{box-shadow:0 0 0 3px var(--sun,#FFC94A)}
 .lt-t{white-space:pre-wrap;font:600 17px/1.45 var(--f-body)}
 /* LETTERS-CSS-END */
+/* POLISH-CSS */
+/* the orange of the main buttons: deep enough for white text (3.4:1 by day, 3.2:1 at night; the text is 24px bold) */
+:root{--tiger:#E2660F;--tiger-deep:#A84A06}
+body.quest{--tiger:#E27012;--tiger-deep:#A3500A}
+/* touch targets for small fingers */
+.chip,.lang-row .lang-b{min-height:44px}
+/* a tile named by the first tap: ringed, with ▶ — the second tap plays */
+.tile.tl-armed{box-shadow:0 0 0 4px var(--sun),0 6px 0 var(--line-strong)}
+.tile.tl-armed::after{content:'▶';position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--tiger);color:#fff;font:900 16px/1 var(--f-body);box-shadow:0 3px 0 var(--tiger-deep)}
+/* the older child's folded meters */
+.hm-more{width:100%;border-radius:22px;background:var(--paper);box-shadow:0 5px 0 var(--line);padding:4px 14px}
+.hm-more>summary{min-height:48px;display:flex;align-items:center;font:800 17px var(--f-body);color:var(--ink);cursor:pointer}
+.hm-more[open]>summary{margin-bottom:8px}
+.hm-more-in{display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+/* the end card: toasts go to the bottom so they do not cover the result; little ones see no share/save */
+body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+.young .win-main .share,.young .res-x [data-r="save"]{display:none}
+/* grown-ups' text folded inside games */
+.m-rules>summary,.ml-nov>summary{min-height:40px;display:flex;align-items:center;font:800 15px var(--f-body);cursor:pointer}
+.img-off-note{margin:4px 0 0;text-align:center}
+.m-rules>small{display:block;margin-top:6px}
+/* POLISH-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -8038,8 +8060,8 @@ const ACH = [
   { id: 'first', e: '🎯', t: 'Первый шаг', d: 'Заверши первую игру', test: () => Object.keys(P.plays || {}).length >= 1 },
   { id: 'lvl5', e: '⬆️', t: 'Пятый уровень', d: 'Дойди до 5 уровня', test: () => lvlOf(P.stars) >= 5 },
   { id: 'lvl10', e: '🚀', t: 'Десятый уровень', d: 'Дойди до 10 уровня', test: () => lvlOf(P.stars) >= 10 },
-  { id: 'belt-blue', get e() { return RANK_THEMES[rankTheme()][0]; }, get t() { return ranks()[3].name; }, d: '80 XP', test: () => P.stars >= 80 },
-  { id: 'belt-black', get e() { return RANK_THEMES[rankTheme()][0]; }, get t() { return ranks()[5].name; }, d: '220 XP', test: () => P.stars >= 220 },
+  { id: 'belt-blue', get e() { return RANK_THEMES[rankTheme()][0]; }, get t() { return ranks()[3].name; }, d: '80 ⭐', test: () => P.stars >= 80 },
+  { id: 'belt-black', get e() { return RANK_THEMES[rankTheme()][0]; }, get t() { return ranks()[5].name; }, d: '220 ⭐', test: () => P.stars >= 220 },
   { id: 'fire3', e: '🔥', t: 'Огонь', d: '3 дня подряд', test: () => streak() >= 3 },
   { id: 'fire7', e: '☄️', t: 'Неделя огня', d: '7 дней подряд', test: () => streak() >= 7 },
   { id: 'fire30', e: '🌋', t: 'Вулкан', d: '30 дней подряд', test: () => streak() >= 30 },
@@ -8082,14 +8104,14 @@ function gameHook(ev) {
     const c = CHALL.find(x => x.id === id), r = c.test(ev);
     if (!r) continue;
     ch.prog[id] = (ch.prog[id] || 0) + (c.n ? +r : 1);
-    if (ch.prog[id] >= (c.n || 1)) { ch.done.push(id); s.xp += 6; out.push({ e: c.e, t: 'Челлендж выполнен!', d: c.t + ' · +6 XP сезона' }); }
+    if (ch.prog[id] >= (c.n || 1)) { ch.done.push(id); s.xp += 6; out.push({ e: c.e, t: 'Челлендж выполнен!', d: c.t + ' · +6 очков сезона' }); }
   }
   if (ch.done.length === 3 && !ch.chest) out.push({ e: '📦', t: 'Сундук дня готов!', d: 'Открой его на главной' });
   const tier1 = tierOf(s);
   if (tier1 > tier0) out.push({ e: '🎟️', t: `Уровень пропуска ${tier1}!`, d: `Награда: ${passName(PASS[tier1 - 1])}` });
   if (lv1 > lv0) { const R = ranks(); out.push({ e: '⬆️', t: `Уровень ${lv1}!`, d: R.find(r => ev.xp0 < r.at && P.stars >= r.at) ? `${RANK_THEMES[rankTheme()][2]}: ${R.filter(r => P.stars >= r.at).pop().name}` : 'Так держать!' }); }
   P.ach = P.ach || [];
-  for (const a of ACH) if (!P.ach.includes(a.id) && a.test()) { P.ach.push(a.id); out.push({ e: a.e, t: `Ачивка: ${a.t}`, d: a.d }); }
+  for (const a of ACH) if (!P.ach.includes(a.id) && a.test()) { P.ach.push(a.id); out.push({ e: a.e, t: `Новая награда: ${a.t}`, d: a.d }); }
   save(); return out;
 }
 function showToasts(list) {
@@ -8108,7 +8130,7 @@ function rankCard() {
   const lp = (P.stars - lvlStart(lv)) / (lvlStart(lv + 1) - lvlStart(lv)) * 100, c = cos(), s = streak();
   return `<button class="rank" id="rankBtn"><span class="rank-ico">${RANK_THEMES[rankTheme()][0]}<em>${lv}</em></span><div><b>${r.name}</b>
     <span class="rank-bar"><i style="width:${lp}%"></i></span>
-    <small>Уровень ${lv} · ${P.stars} XP${nx ? ` · до «${nx.name}» ${nx.at - P.stars}` : ''}</small>
+    <small>Уровень ${lv} · ${P.stars} ⭐${nx ? ` · до «${nx.name}» ${nx.at - P.stars}` : ''}</small>
     <small class="rank-t">${c.title ? `«${esc(c.title)}» · ` : ''}${P.mc ? esc(P.mc) + ' · ' : ''}<span class="fire">🔥 ${s}</span>${P.freeze ? ` · 🧊 ${P.freeze}` : ''}</small></div><span class="rank-go">›</span></button>`;
 }
 function seasonCard() {
@@ -8117,7 +8139,7 @@ function seasonCard() {
   return `<section class="season">
     <button class="ss-head" id="passBtn"><span class="ss-tag">Сезон</span><b>${seasonName()}</b><span class="ss-tier">${t}/${PASS.length}</span></button>
     <div class="ss-bar"><i style="width:${t >= PASS.length ? 100 : into / TIER_XP * 100}%"></i></div>
-    <p class="ss-next">${t >= PASS.length ? 'Сезон пройден! Новый начнётся 1-го числа.' : `Следующая награда: ${next.e} ${esc(passName(next))} · ещё ${TIER_XP - into} XP`}${unclaimed.length ? ` · <b class="ss-claim">забрать: ${unclaimed.length}</b>` : ''}</p>
+    <p class="ss-next">${t >= PASS.length ? 'Сезон пройден! Новый начнётся 1-го числа.' : `Следующая награда: ${next.e} ${esc(passName(next))} · осталось ${TIER_XP - into}`}${unclaimed.length ? ` · <b class="ss-claim">забрать: ${unclaimed.length}</b>` : ''}</p>
     <div class="chal">${ch.ids.map(id => { const c = CHALL.find(x => x.id === id), dn = ch.done.includes(id), p = ch.prog[id] || 0; return `<div class="ch ${dn ? 'done' : ''}"><span class="ch-e">${dn ? '✅' : c.e}</span><span class="ch-t">${esc(c.t)}${c.n && !dn ? ` <i>${p}/${c.n}</i>` : ''}</span><span class="ch-x">+6</span></div>`; }).join('')}</div>
     <button class="chest ${ch.done.length === 3 && !ch.chest ? 'ready' : ''}" id="chestBtn" ${ch.done.length === 3 && !ch.chest ? '' : 'disabled'}>${ch.chest ? '📭 Сундук открыт' : ch.done.length === 3 ? '📦 Открыть сундук дня!' : `📦 Сундук дня: ${ch.done.length}/3`}</button>
   </section>`;
@@ -8130,7 +8152,7 @@ function bindSeasonCard() {
     const xp0 = P.stars; ch.chest = true; P.chests = (P.chests || 0) + 1; P.stars += 2; weekAdd(P, 2); season().xp += 10; save();
     sfx.magic(); confetti(50); const r = cb.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 14);
     say('Сундук открыт! Две звезды и десять очков сезона!');
-    const t = gameHook({ key: 'chest', stars: 0, xp0 }); later(goHome, 1600); showToasts([{ e: '📦', t: 'Сундук дня!', d: '+2 ⭐ и +10 XP сезона' }, ...t]);
+    const t = gameHook({ key: 'chest', stars: 0, xp0 }); later(goHome, 1600); showToasts([{ e: '📦', t: 'Сундук дня!', d: '+2 ⭐ и +10 очков сезона' }, ...t]);
   };
 }
 
@@ -8138,7 +8160,7 @@ function screenPass() {
   newScreen();
   const s = season(), t = tierOf(s);
   const st = shell(`Сезон «${seasonName()}»`, `<p class="lead">Очки сезона дают звёзды за игры, челленджи дня и сундук. Каждые ${TIER_XP} очков — новый уровень и награда. В начале месяца — новый сезон, а награды остаются навсегда.</p>
-    <div class="pass">${PASS.map((r, i) => { const got = s.claimed.includes(i), open = i < t; return `<div class="tier ${got ? 'got' : open ? 'open' : ''}"><span class="tier-n">${i + 1}</span><span class="tier-e">${r.e}</span><span class="tier-t">${esc(passName(r))}</span>${got ? '<span class="tier-s">✓</span>' : open ? `<button class="chip tier-c" data-i="${i}">Забрать</button>` : `<span class="tier-s">🔒 ${(i + 1) * TIER_XP - s.xp} XP</span>`}</div>`; }).join('')}</div>`);
+    <div class="pass">${PASS.map((r, i) => { const got = s.claimed.includes(i), open = i < t; return `<div class="tier ${got ? 'got' : open ? 'open' : ''}"><span class="tier-n">${i + 1}</span><span class="tier-e">${r.e}</span><span class="tier-t">${esc(passName(r))}</span>${got ? '<span class="tier-s">✓</span>' : open ? `<button class="chip tier-c" data-i="${i}">Забрать</button>` : `<span class="tier-s">🔒 ещё ${(i + 1) * TIER_XP - s.xp}</span>`}</div>`; }).join('')}</div>`);
   talk(`Сезон ${seasonName()}! Твой уровень пропуска: ${t}. Забирай награды!`);
   st.onclick = e => {
     const b = e.target.closest('.tier-c'); if (!b) return;
@@ -8992,15 +9014,15 @@ const ageTrack = a => a && a < 7 ? 'r' : 'l';
 function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = null, add = '' } = {}) {
   const t = newScreen(), f = fid ? ROOT.families[fid] : null;
   const kids = f ? f.kids.map(id => { const st = ROOT.profiles[id].settings; return { id, name: st.name || '', she: st.gender === 'f', age: st.age || 0, track: st.track, tt: true }; })
-    : [{ id: '', name: '', she: true, age: 0, track: 'r', tt: false }];
+    : [{ id: '', name: '', she: null, age: 0, track: 'r', tt: false }];
   const grands = f ? f.grands.map(g => ({ ...g, cc: g.cc || f.cc2 || f.cc })) : [];
   // «Новенький»: an empty row ready for the one who joins
-  if (add === 'kid') kids.push({ id: '', name: '', she: true, age: 0, track: 'r', tt: false });
+  if (add === 'kid') kids.push({ id: '', name: '', she: null, age: 0, track: 'r', tt: false });
   else if (add) { const r = ROLES.find(x => x[0] === add) || ROLES[ROLES.length - 1]; grands.push({ id: '', name: '', she: !!r[3], role: r[0], cc: f ? f.cc2 || f.cc : 'RU' }); }
   let ask = '';
   const kidRow = (k, i) => `<div class="fe-row" data-k="${i}">
       <input class="fe-name" type="text" maxlength="20" autocomplete="off" placeholder="Имя" aria-label="Имя ребёнка" value="${esc(k.name)}">
-      <div class="picks-g two"><button class="pick-b ${k.she ? 'sel' : ''}" data-g="f">👧 Девочка</button><button class="pick-b ${k.she ? '' : 'sel'}" data-g="m">🧒 Мальчик</button></div>
+      <div class="picks-g two"><button class="pick-b ${k.she === true ? 'sel' : ''}" data-g="f">👧 Девочка</button><button class="pick-b ${k.she === false ? 'sel' : ''}" data-g="m">🧒 Мальчик</button></div>
       <div class="fe-age"><b>Возраст</b><div class="picks-g nums">${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(a => `<button class="pick-b ${k.age === a ? 'sel' : ''}" data-age="${a}">${a}</button>`).join('')}</div></div>
       ${kids.length > 1 ? `<button class="fe-x" data-x="k${i}">${ask === 'k' + i ? 'Точно удалить? Звёздочки пропадут' : '✕ Убрать'}</button>` : ''}
     </div>`;
@@ -9073,6 +9095,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
     read();
     const ks = kids.filter(k => k.name), err = $('#feErr');
     if (!ks.length) { err.textContent = 'Впишите имя хотя бы одного ребёнка.'; wiggle(err); return; }
+    const noG = ks.find(k => k.she !== true && k.she !== false); if (noG) { err.textContent = `${noG.name}: девочка или мальчик?`; wiggle(err); return; }
     const noAge = ks.find(k => !k.age); if (noAge) { err.textContent = `Сколько лет: ${noAge.name}?`; wiggle(err); return; }
     const id = fid || 'f' + rid6(), old = f ? f.kids : [], fresh = [];
     const ids = ks.map(k => {
@@ -9537,7 +9560,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', st.friend || (she ? 'unicorn' : 'tiger'))}</span><div><h1 class="ks-name">${esc(name)}</h1>
       ${first && total > 1 ? `<p>Ребёнок ${idx} из ${total}</p>` : ''}</div></header>
     <section class="psec"><h2>Какие звуки тренируем?</h2>
-      <div class="picks-g two" id="ksSnd"></div></section>
+      <div class="picks-g two" id="ksSnd"></div>${st.sounds && st.sounds.length ? '' : '<p class="muted ks-hint">Отмечено по возрасту — нажмите, чтобы поменять.</p>'}</section>
     <section class="psec"><h2>Что ${she ? 'она' : 'он'} любит?</h2>
       <button class="big ks-kid" id="ksKid">${she ? '👧' : '🧒'} Пусть ${esc(name)} выберет ${she ? 'сама' : 'сам'}</button>
       <p class="ks-cnt" id="ksCnt"></p>
@@ -11865,7 +11888,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '125';
+const APP_VER = '126';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15770,6 +15793,7 @@ const WORLD = (() => {
           }
           if (tries >= 3) { mic.remove(); nextBig(); talk('Хорошо! Потренируем эту фразу в другой раз.'); }
         };
+        const bb = $('#bubble'); if (bb) bb.textContent = now;
         if (c === 'ru') { if (still()) say(`${said} ${now}`); }
         else { await sayIn(c, said, .75); if (still()) talk(now); }
       };
@@ -17011,6 +17035,7 @@ const HOMEUX = (() => {
   const OPEN = {};   // sections opened with «Ещё» stay open while the child is around
   function apply(tab) {
     const st = $('#stage'); if (!st) return;
+    POLISH.home(st);
     // the header: one row
     const fr = st.querySelector('.kids-fam'); if (fr) fr.remove();
     const pult = $('#homePult');
@@ -17034,6 +17059,7 @@ const HOMEUX = (() => {
       if (st.querySelector('section.team')) { const s7 = st.querySelector('#sec7'); if (s7) s7.remove(); }
       const tr = st.querySelector('.tryit .tiles'); if (tr) [...tr.children].slice(4).forEach(x => x.remove());
       const pb = $('#parentsBtn'); if (pb) pb.textContent = '⚙️ Для взрослых';
+      POLISH.today(st);
       return;
     }
     // the other tabs: each game once, long sections folded
@@ -17396,6 +17422,104 @@ const LETTERS = (() => {
   return { screen, row, flush, inbox, pultBtn, poll };
 })();
 /* LETTERS-END */
+/* POLISH-BEGIN */
+/* ---------- polish after the design review (critique + technical audit, v126):
+   - home tiles talk to children who do not read: the first tap names the game, the second opens it;
+   - the older child's «Сегодня» keeps the plan and the season in view; level, garage, league and hike fold away;
+   - the end of a round leads on to today's plan, and the little ones' card has no «Поделиться/Сохранить»;
+   - a picture that cannot load (no internet) becomes a drawn placeholder, a composer's portrait — the first letter;
+   - grown-ups' text inside games folds away: the race rules, the phone's voice settings. ---------- */
+const POLISH = (() => {
+  /* home tiles for children who do not read */
+  let ARM = null, ARMN = 0;
+  function home(st) {
+    if (!st || st._pol) return; st._pol = 1;
+    st.addEventListener('click', e => {
+      if (!document.body.classList.contains('young') || !$('#tabBar')) return;
+      const t = e.target.closest('.tile'); if (!t || !st.contains(t) || !t.closest('.tiles')) return;
+      if (ARM && ARM.el === t && Date.now() - ARM.at < 10000) { ARM = null; t.classList.remove('tl-armed'); return; }
+      e.preventDefault(); e.stopImmediatePropagation();
+      st.querySelectorAll('.tl-armed').forEach(x => x.classList.remove('tl-armed'));
+      ARM = { el: t, at: Date.now() }; t.classList.add('tl-armed'); wiggle(t);
+      const n = ((t.querySelector('b') || t).textContent || '').trim();
+      const nn = /[.!?…]$/.test(n) ? n : n + '.';
+      hush(); say(ARMN++ < 3 ? `${nn} Нажми ещё раз, чтобы играть.` : nn);
+    }, true);
+  }
+  /* the older child's «Сегодня»: the plan and the season stay; the other meters fold under one line */
+  let MORE_OPEN = false;
+  function today(st) {
+    if (!Q() || st.querySelector('.hm-more')) return;
+    const items = [st.querySelector('.rank'), st.querySelector('.garage'), $('#leagueBox'), $('#hikeBox')].filter(Boolean);
+    if (items.length < 2) return;
+    const d = document.createElement('details'); d.className = 'hm-more'; d.open = MORE_OPEN;
+    d.innerHTML = '<summary>🏆 Уровень, гараж и соревнования</summary><div class="hm-more-in"></div>';
+    const at = $('#parentsBtn'); if (at && at.parentElement === st) at.before(d); else st.append(d);
+    items.forEach(x => d.lastElementChild.append(x));
+    const qc = st.querySelector('.qcard'); if (qc && !qc.children.length) qc.remove();
+    d.ontoggle = () => { MORE_OPEN = d.open; };
+  }
+  /* the end of a round: today's plan comes next */
+  function nextPlan() { for (const id of LIDS()) { const s = nextStepOf(id); if (s) return id; } return null; }
+  function winbox(ov) {
+    if (ov._pol || ACTIVE || ov.querySelector('[data-a="next"]')) return; ov._pol = 1;
+    const id = nextPlan(), main = ov.querySelector('.win-main'); if (!id || !main) return;
+    const b = document.createElement('button'); b.className = 'big'; b.id = 'winPlan';
+    b.textContent = `▶ Дальше: ${LS()[id].name}`;
+    main.prepend(b);
+    const again = main.querySelector('[data-a="again"]'); if (again) again.classList.add('ghost');
+    b.onclick = e => { e.stopPropagation(); sfx.pop(); startLesson(id); };
+  }
+  /* pictures that cannot load */
+  const PH = (txt, w = 120, h = 120, bg = '#E9E1FF') => 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="${bg}"/><text x="50%" y="52%" font-family="system-ui,sans-serif" font-weight="800" font-size="${Math.round(Math.min(w, h) * .42)}" fill="#6B3FA0" text-anchor="middle" dominant-baseline="middle">${txt}</text></svg>`);
+  document.addEventListener('error', e => {
+    const img = e.target; if (!img || img.tagName !== 'IMG' || img.dataset.ph || img.closest('.story-img')) return;
+    const cmp = img.closest('.cmp-c, .cmp-head, .cmp-day, .cbx-card') || (img.classList.contains('cbx-who') ? img : null);
+    const art = img.closest('.art-day, .art-th, .ag-pic, .art-row, .art-fs-in');
+    if (!cmp && !art) return;
+    img.dataset.ph = 1; img.removeAttribute('srcset');
+    if (cmp) {
+      const nEl = cmp.querySelector && (cmp.querySelector('h3') || cmp.querySelector('h2') || cmp.querySelector('b')), n = (nEl && nEl.textContent) || img.alt || '';
+      const ch = (n.replace(/[^\p{L}]/gu, '')[0] || '♪').toUpperCase();
+      img.src = PH(ch, 120, 140, '#FFF1C2');
+    } else {
+      img.src = PH('🖼️', 160, 120, '#EAF6FB');
+      const day = img.closest('.art-day');
+      if (day && !day.nextElementSibling?.classList.contains('img-off-note')) day.insertAdjacentHTML('afterend', '<p class="muted img-off-note">Картинка появится, когда будет интернет.</p>');
+    }
+  }, true);
+  /* grown-ups' text inside games: folded */
+  function fold(root) {
+    const ms = root.querySelector('#mStart:not([data-pol])');
+    if (ms) {
+      ms.dataset.pol = 1;
+      const parts = [...ms.querySelectorAll(':scope > p:not(.m-check), :scope > .m-mode, :scope > .m-keys')];
+      if (parts.length) {
+        const d = document.createElement('details'); d.className = 'm-rules'; d.open = !(P.plays || {})['l-moto'];
+        d.innerHTML = '<summary>📜 Как играть</summary>'; parts[0].before(d); parts.forEach(x => d.append(x));
+      }
+    }
+    root.querySelectorAll('p.ml-nov').forEach(p => {
+      const t = p.textContent, i = t.indexOf('. '); if (i < 0) return;
+      const d = document.createElement('details'); d.className = 'muted ml-nov';
+      d.innerHTML = `<summary>${esc(t.slice(0, i + 1))}</summary><p>${esc(t.slice(i + 2))}</p>`; p.replaceWith(d);
+    });
+  }
+  // the end card and the folds appear on screens built elsewhere: watch the app for them
+  let due = false;
+  const mo = new MutationObserver(() => {
+    if (due) return; due = true;
+    requestAnimationFrame(() => {
+      due = false;
+      const ov = document.querySelector('.overlay .winbox'); if (ov) winbox(ov.closest('.overlay'));
+      const st = $('#stage'); if (st) fold(st);
+    });
+  });
+  const go = () => { const app = $('#app') || document.body; mo.observe(app, { childList: true, subtree: true }); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
+  return { home, today };
+})();
+/* POLISH-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
