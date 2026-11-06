@@ -3660,7 +3660,7 @@ function goHome() {
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
     body = `<div class="tab-head"><span class="emo">${T.e}</span><h1>${nm(T.n)}</h1><div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div></div>
-      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Где живут наши</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div>` : ''}
+      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Где живёт наша семья?</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div>` : ''}
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || '<p class="lead">Здесь пока пусто. Игры включаются в «Для взрослых» → «Интересы и игры».</p>'}`;
   }
@@ -5297,7 +5297,7 @@ function teamCard() {
 const kidsBar = () => `<div class="kids"><div class="kids-top"><button class="ibtn kb-ic" id="homeSearch" aria-label="Найти игру">🔍</button><div class="kids-in" role="tablist" aria-label="Кто играет">${KIDS.map(id => `<button class="kid ${id === ROOT.cur ? 'sel' : ''}" data-k="${id}" role="tab" aria-selected="${id === ROOT.cur}"><span class="chip-face">${kidFace(id)}</span>${esc(ROOT.profiles[id].settings.label || ROOT.profiles[id].settings.name)}</button>`).join('')}</div>${GUEST ? '' : '<button class="ibtn kb-ic" id="homePult" aria-label="Пульт семьи">👑</button>'}<button class="ibtn kb-ic" id="homeGear" aria-label="Для взрослых">⚙️</button></div>
   <div class="kids-fam"><button class="fam-chip" id="whoChip"><span class="emo">👥</span>Кто играет?</button><button class="fam-chip" id="famChip" aria-label="Семьи: сменить или добавить"><span class="emo">🏠</span>${esc(fam().name)}</button>
   <button class="fam-chip inv" id="invChip"><span class="emo">📨</span>Пригласить</button>
-  <button class="fam-chip" id="worldChip" aria-label="Где живут наши"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button>
+  <button class="fam-chip" id="worldChip" aria-label="Где живёт наша семья?"><span class="emo">🌍</span>${[...new Set([fam().cc || 'PT', ...fam().grands.map(g => g.cc).filter(Boolean)])].map(FLAG).join('')}</button>
   </div></div>`;
 function switchKid(id) { if (!ROOT.profiles[id]) return; GPLAY = null; ROOT.cur = id; P = ROOT.profiles[id]; save(); goHome(); }
 function screenDuo() {
@@ -10057,7 +10057,7 @@ function screenWorld() {
   newScreen(); famCountries().forEach(holList);
   const f = fam(), ccs = [...new Set([f.cc || 'PT', ...f.grands.map(g => g.cc).filter(Boolean)])];
   const nextHol = cc => { const d = new Date(); for (let i = 0; i < 366; i++) { const k = dayKey(d), x = holOn(k).find(z => z.h.cc === cc && z.day === 0); if (x) return { ...x, k, in: i }; d.setDate(d.getDate() + 1); } return null; };
-  shell('Где живут наши', `<div class="wl">${ccs.map(cc => {
+  shell('Где живёт наша семья?', `<div class="wl">${ccs.map(cc => {
     const I = COUNTRY_INFO[cc] || [], hr = ccHour(cc), nh = nextHol(cc), who = whoIn(cc);
     return `<section class="wl-c">
       <header class="wl-h"><span class="wl-f">${FLAG(cc)}</span><b>${esc(COUNTRY_NAMES[cc] || cc)}</b><button class="wl-t" data-say="${esc(`Сейчас ${whoSay(cc) || 'там'} ${ccTime(cc)}. ${hr >= 7 && hr < 21 ? 'Там день.' : 'Там ночь, все спят.'}`)}">${hr >= 7 && hr < 21 ? '☀️' : '🌙'} ${ccTime(cc)}</button></header>
@@ -10068,7 +10068,7 @@ function screenWorld() {
     </section>`;
   }).join('')}<button class="big" id="wlInv">📨 Пригласить родных</button></div>`);
   $('#wlInv').onclick = () => { sfx.pop(); screenInvite(screenWorld); };
-  talk(ccs.length > 1 ? 'Где живут наши! Нажми на часы — узнаешь, день там сейчас или ночь. Скажи «привет» на их языке!' : 'Добавь бабушек и дедушек и где они живут — и узнаешь, что у них сейчас.');
+  talk(ccs.length > 1 ? 'Где живёт наша семья! Нажми на часы — узнаешь, день там сейчас или ночь. Скажи «привет» на их языке!' : 'Добавь бабушек и дедушек и где они живут — и узнаешь, что у них сейчас.');
   $('.wl').onclick = e => {
     const h = e.target.closest('[data-hol]'); if (h) { sfx.pop(); screenHoliday(h.dataset.hol, h.dataset.k); return; }
     const b = e.target.closest('[data-say]'); if (b && b.dataset.say) { sfx.pop(); hopEl(b); talk(b.dataset.say); }
@@ -11888,7 +11888,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '127';
+const APP_VER = '128';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send

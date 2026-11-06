@@ -10058,7 +10058,7 @@ function screenWorld() {
   newScreen(); famCountries().forEach(holList);
   const f = fam(), ccs = [...new Set([f.cc || 'PT', ...f.grands.map(g => g.cc).filter(Boolean)])];
   const nextHol = cc => { const d = new Date(); for (let i = 0; i < 366; i++) { const k = dayKey(d), x = holOn(k).find(z => z.h.cc === cc && z.day === 0); if (x) return { ...x, k, in: i }; d.setDate(d.getDate() + 1); } return null; };
-  shell("Where our family lives", `<div class="wl">${ccs.map(cc => {
+  shell("Where does our family live?", `<div class="wl">${ccs.map(cc => {
     const I = COUNTRY_INFO[cc] || [], hr = ccHour(cc), nh = nextHol(cc), who = whoIn(cc);
     return `<section class="wl-c">
       <header class="wl-h"><span class="wl-f">${FLAG(cc)}</span><b>${esc(COUNTRY_NAMES[cc] || cc)}</b><button class="wl-t" data-say="${esc(`It is ${ccTime(cc)} ${whoSay(cc) || "there"}. ${hr >= 7 && hr < 21 ? "It is daytime there." : "It is night there and everyone is asleep."}`)}">${hr >= 7 && hr < 21 ? '☀️' : '🌙'} ${ccTime(cc)}</button></header>
@@ -10069,7 +10069,7 @@ function screenWorld() {
     </section>`;
   }).join('')}<button class="big" id="wlInv">📨 Invite family</button></div>`);
   $('#wlInv').onclick = () => { sfx.pop(); screenInvite(screenWorld); };
-  talk(ccs.length > 1 ? "Where our family lives! Tap the clock to find out whether it is day or night there now. Say “hello” in their language!" : "Add your grannies and grandpas and where they live, and you will find out what it is like for them right now.");
+  talk(ccs.length > 1 ? "Here is where our family lives! Tap a clock to see if it is day or night there. Say “hello” in their language!" : "Add your grannies and grandpas and where they live, and you will find out what it is like for them right now.");
   $('.wl').onclick = e => {
     const h = e.target.closest('[data-hol]'); if (h) { sfx.pop(); screenHoliday(h.dataset.hol, h.dataset.k); return; }
     const b = e.target.closest('[data-say]'); if (b && b.dataset.say) { sfx.pop(); hopEl(b); talk(b.dataset.say); }
@@ -11893,7 +11893,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '127';
+const APP_VER = '128';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
