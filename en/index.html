@@ -192,6 +192,8 @@ h1,h2{text-wrap:balance}
 .emo,.pic.emo{font-family:var(--f-emoji);font-weight:400}
 .pic{display:inline-grid;place-items:center;width:1.2em;height:1.2em;line-height:1;flex:none}
 .pic svg{width:100%;height:100%;display:block}
+.fe-bd{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.fe-bday{font:700 18px var(--f-body);padding:10px 12px;border-radius:14px;border:3px solid var(--line-strong);background:#fff;color:#2A2346;min-height:48px}.fe-agen{font:800 18px var(--f-body);color:var(--ink)}
+.fe-agealt{margin-top:8px}.fe-agealt>summary{font:700 15px var(--f-body);color:var(--ink-soft);cursor:pointer;min-height:36px;display:flex;align-items:center}
 .emo.drawn{display:inline-grid;place-items:center}.emo.drawn svg{width:1.15em;height:1.15em;display:block}
 b.r{color:var(--berry)}
 
@@ -2437,6 +2439,11 @@ body.pv-on #app{padding-top:52px}
 .cbx-st .link-btn,.ast-story{align-self:flex-start;text-align:left}
 .cbx-story{border-radius:18px;padding:12px 14px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong)}
 .cbx-story b{font:900 16px var(--f-body);color:var(--plum,#6B3FA0)}.cbx-story p{margin:6px 0 0;font:700 16px/1.5 var(--f-body)}
+.mu-full{display:flex;flex-direction:column;gap:6px;align-items:stretch;margin-top:4px}
+.mu-full .mu-play{align-self:center}
+.mu-bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}.mu-bar i{display:block;height:100%;width:0;background:var(--plum,#8C6CF2);transition:width .3s linear}
+.mu-by{font:700 12px var(--f-body);color:var(--ink-soft);text-align:center}
+.mu-list{display:flex;flex-direction:column;gap:10px}
 /* the painters in the museum */
 .ast-row{display:flex;gap:8px;overflow-x:auto;contain:inline-size;width:100%;max-width:calc(100vw - 32px);padding:2px 2px 8px;scroll-snap-type:x mandatory}
 .ast-c{flex:0 0 132px;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-radius:16px;padding:10px 6px;background:var(--t-peach,#FFE3D3);box-shadow:0 3px 0 var(--line-strong);scroll-snap-align:start;cursor:pointer}
@@ -3130,7 +3137,7 @@ const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
   document.querySelectorAll('.srch').forEach(x => x.remove());
-  tok++; hush(); windStop(); motorStop(); compStop(); stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); soundOut(true);
+  tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
@@ -8617,14 +8624,15 @@ function piperWarm() {
   return PIPER.ready;
 }
 async function piperAudio(text) {
-  const key = piperVoice() + '|' + text;
+  const fx = IS_RU ? sayPatches(text) : null, sig = fx && fx.pairs.length ? '?fix=' + encodeURIComponent(fx.pairs.map(x => x.join('>')).join(',')) : '';
+  const key = piperVoice() + '|' + text + sig;
   if (PIPER.mem.has(key)) return PIPER.mem.get(key);
-  const url = 'https://govorilki.local/piper/' + piperVoice() + '/' + encodeURIComponent(text);
+  const url = 'https://govorilki.local/piper/' + piperVoice() + '/' + encodeURIComponent(text) + sig;
   const job = (async () => {
     let cache = null; try { cache = await caches.open('govorilki-voice'); } catch (e) {}
     const hit = cache && await cache.match(url);
     // a phrase the voice does not answer within 40 s is said by the phone's voice instead
-    const buf = hit ? await hit.arrayBuffer() : await Promise.race([piperCall(text, IS_RU ? sayPatches(text) : null), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 40000))]);
+    const buf = hit ? await hit.arrayBuffer() : await Promise.race([piperCall(text, fx), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 40000))]);
     if (!hit && cache) { try { await cache.put(url, new Response(buf.slice(0), { headers: { 'Content-Type': 'audio/wav' } })); } catch (e) {} }
     return ac().decodeAudioData(buf);
   })();
@@ -9015,9 +9023,13 @@ const yearsWord = a => a + ' ' + plural(a, ["year", "years", "years"]);
 /* ---------- creating and editing a family ---------- */
 const TRACKS = [['r', "Little ones 4–7: R, SH CH J, letters, syllables"], ['l', "School age 7–12: L, missions, reading, maths"]];
 const ageTrack = a => a && a < 7 ? 'r' : 'l';
+// a child's age from the date of birth (YYYY-MM-DD); 0 when there is none
+const ageFrom = b => { const m = /^(\d{4})-(\d\d)-(\d\d)$/.exec(b || ''); if (!m) return 0; const n = new Date(); let a = n.getFullYear() - +m[1]; if (n.getMonth() + 1 < +m[2] || (n.getMonth() + 1 === +m[2] && n.getDate() < +m[3])) a--; return a > 0 && a < 20 ? a : 0; };
+// every start: the ages of children with a date of birth follow it (a birthday makes them a year older)
+try { Object.values(ROOT.profiles || {}).forEach(pr => { const s = pr && pr.settings, a = s && ageFrom(s.bday); if (a && s.age !== a) s.age = a; }); } catch (e) {}
 function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = null, add = '' } = {}) {
   const t = newScreen(), f = fid ? ROOT.families[fid] : null;
-  const kids = f ? f.kids.map(id => { const st = ROOT.profiles[id].settings; return { id, name: st.name || '', she: st.gender === 'f', age: st.age || 0, track: st.track, tt: true }; })
+  const kids = f ? f.kids.map(id => { const st = ROOT.profiles[id].settings; return { id, name: st.name || '', she: st.gender === 'f', age: ageFrom(st.bday) || st.age || 0, bday: st.bday || '', track: st.track, tt: true }; })
     : [{ id: '', name: '', she: null, age: 0, track: 'r', tt: false }];
   const grands = f ? f.grands.map(g => ({ ...g, cc: g.cc || f.cc2 || f.cc })) : [];
   // «Новенький»: an empty row ready for the one who joins
@@ -9027,7 +9039,8 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
   const kidRow = (k, i) => `<div class="fe-row" data-k="${i}">
       <input class="fe-name" type="text" maxlength="20" autocomplete="off" placeholder="Name" aria-label="Child’s name" value="${esc(k.name)}">
       <div class="picks-g two"><button class="pick-b ${k.she === true ? 'sel' : ''}" data-g="f">👧 Girl</button><button class="pick-b ${k.she === false ? 'sel' : ''}" data-g="m">🧒 Boy</button></div>
-      <div class="fe-age"><b>Age</b><div class="picks-g nums">${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(a => `<button class="pick-b ${k.age === a ? 'sel' : ''}" data-age="${a}">${a}</button>`).join('')}</div></div>
+      <div class="fe-age"><b>Date of birth</b><div class="fe-bd"><input class="fe-bday" type="date" aria-label="Date of birth" min="${new Date().getFullYear() - 16}-01-01" max="${dayKey()}" value="${esc(k.bday || '')}"><span class="fe-agen">${k.age ? `${k.age} ${plural(k.age, ["year", "years", "years"])}` : ''}</span></div>
+        <details class="fe-agealt" ${k.age && !k.bday ? 'open' : ''}><summary>or just the age</summary><div class="picks-g nums">${[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(a => `<button class="pick-b ${k.age === a ? 'sel' : ''}" data-age="${a}">${a}</button>`).join('')}</div></details></div>
       ${kids.length > 1 ? `<button class="fe-x" data-x="k${i}">${ask === 'k' + i ? "Really remove? The stars will disappear" : "✕ Remove"}</button>` : ''}
     </div>`;
   const grandRow = (g, i) => `<div class="fe-row" data-gi="${i}">
@@ -9055,7 +9068,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
     </div></main></div>`;
   } else shell(f ? "Family" : "New family", `<div class="fe">${form}</div>`, { back: back || (() => screenFamilies()), guide: false, raw: true });
   const read = () => {
-    $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); });
+    $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); const bd = r.querySelector('.fe-bday'), v = bd ? bd.value : ''; if (ageFrom(v)) { kids[i].bday = v; kids[i].age = ageFrom(v); kids[i].track = ageTrack(kids[i].age); } });
     $$('#feGrands .fe-row').forEach((r, i) => { grands[i].name = cleanS(r.querySelector('.fe-name').value, 30); grands[i].cc = r.querySelector('.fe-gcc').value; });
   };
   const draw = () => { $('#feKids').innerHTML = kids.map(kidRow).join(''); $('#feGrands').innerHTML = grands.map(grandRow).join(''); };
@@ -9069,6 +9082,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
       pl.addEventListener('click', () => setTimeout(() => { const n = $('#fePlN'); if (n) n.textContent = cnt(); }, 0));
     } }
   if (add) { const rs = $$(add === 'kid' ? '#feKids .fe-name' : '#feGrands .fe-name'), el = rs[rs.length - 1]; if (el) { el.closest('.fe-row').scrollIntoView({ block: 'center' }); setTimeout(() => el.focus(), 300); } }
+  $('#feKids').addEventListener('change', e => { if (e.target.classList.contains('fe-bday')) { read(); draw(); } });
   $('#feKids').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.k;
     const g = e.target.closest('[data-g]'); if (g) { read(); kids[i].she = g.dataset.g === 'f'; sfx.tick(); draw(); return; }
@@ -9105,7 +9119,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
     const ids = ks.map(k => {
       let kid = k.id && ROOT.profiles[k.id] ? k.id : null;
       if (!kid) { do kid = 'k' + rid6(); while (ROOT.profiles[kid]); fresh.push(kid); ROOT.profiles[kid] = blankProfile(k.name, k.she ? 'f' : 'm', k.track, ''); ROOT.profiles[kid].book.title = k.track === 'l' ? "My book" : ''; }
-      Object.assign(ROOT.profiles[kid].settings, { name: k.name, gender: k.she ? 'f' : 'm', track: k.age ? ageTrack(k.age) : k.track, age: k.age || 0, nameTouched: true });
+      Object.assign(ROOT.profiles[kid].settings, { name: k.name, gender: k.she ? 'f' : 'm', track: k.age ? ageTrack(k.age) : k.track, age: k.age || 0, ...(k.bday ? { bday: k.bday } : {}), nameTouched: true });
       return kid;
     });
     old.filter(x => !ids.includes(x)).forEach(x => delete ROOT.profiles[x]);
@@ -9612,7 +9626,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
   $('#ksGames').onclick = e => { const b = e.target.closest('[data-game]'); if (!b) return; const k = b.dataset.game; sfx.tick(); off = off.includes(k) ? off.filter(x => x !== k) : [...off, k]; b.classList.toggle('sel', !off.includes(k)); };
   const list = (v, n, len) => [...new Set(String(v || '').split(/[,;\n]+/).map(x => cleanS(x, len)).filter(Boolean))].slice(0, n);
   $('#ksNext').onclick = () => {
-    const bd = $('#ksBday').value; if (/^\d{4}-\d\d-\d\d$/.test(bd)) st.bday = bd; else delete st.bday;
+    const bd = $('#ksBday').value; if (/^\d{4}-\d\d-\d\d$/.test(bd)) { st.bday = bd; st.age = ageFrom(bd) || st.age; } else delete st.bday;
     Object.assign(st, { sounds: snd.length ? snd : defSounds(track), likes, ownLikes: list($('#ksOwn').value, 10, 30), mods, off, track, words: list($('#ksWords').value, 40, 30) });
     // the defaults of a programme are not stored, so Vera and Sava keep following their programmes
     if (!modsTouched && mods.join() === defMods(track).join()) delete st.mods;
@@ -11691,6 +11705,7 @@ function screenComposer(id, first) {
   };
   fx(f0);
   CBOX.stories(c);
+  MUSIC.composer(c);
   $('#cmpPlay').onclick = () => { sfx.pop(); screenPlayWith(c.tunes[0]); };
   $('#cmpCond1').onclick = () => { sfx.pop(); screenConductor(c.tunes[0]); };
   talk(`${c.full}. ${f0} Tap a tune to hear it.`);
@@ -11897,7 +11912,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '131';
+const APP_VER = '132';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17327,7 +17342,7 @@ const CBOX = (() => {
       $('#cbxAll').onclick = () => { sfx.pop(); screen(); };
       if (all) confetti && confetti();
       talk(`${guessed ? (fresh ? "Hooray! A new card!" : "Right!") : "Listen!"} It’s ${c.n}. ${story}${all ? ` You${G("", '')} collected all the music makers!` : ''}`);
-      if (MUSIC.full) MUSIC.full(tid, $('#cbxWin'));
+      MUSIC.full(tid, $('#cbxWin .cbx-story'));
     }
     (async () => { if (row[3]) await talk(`${row[3]} Listen!`); if (t !== tok) return; go(); })();
   }
@@ -17628,8 +17643,50 @@ const THEMES = (() => {
 })();
 // the app's own voices lose the «й» in ё after a vowel («узнаём» came out as «узнам»): these words get it back
 const PIPER_JO = {"узнаём":"uznaˈɵm|uznajˈɵm","узнаёшь":"uznaˈɵʃ|uznajˈɵʃ","узнаёт":"uznaˈɵt|uznajˈɵt","узнаёте":"uznaˈɵtʲi|uznajˈɵtʲi","даём":"daˈɵm|dajˈɵm","даёшь":"daˈɵʃ|dajˈɵʃ","даёт":"daˈɵt|dajˈɵt","даёте":"daˈɵtʲi|dajˈɵtʲi","сдаём":"zdaˈɵm|zdajˈɵm","продаём":"prʌdaˈɵm|prʌdajˈɵm","отдаём":"ʌddaˈɵm|ʌddajˈɵm","задаём":"zʌdaˈɵm|zʌdajˈɵm","подаём":"pʌdaˈɵm|pʌdajˈɵm","создаём":"sʌzdaˈɵm|sʌzdajˈɵm","поём":"pʌˈɵm|pʌjˈɵm","поёшь":"pʌˈɵʃ|pʌjˈɵʃ","поёт":"pʌˈɵt|pʌjˈɵt","поёте":"pʌˈɵtʲi|pʌjˈɵtʲi","споём":"spʌˈɵm|spʌjˈɵm","споёт":"spʌˈɵt|spʌjˈɵt","встаём":"fstaˈɵm|fstajˈɵm","встаёшь":"fstaˈɵʃ|fstajˈɵʃ","встаёт":"fstaˈɵt|fstajˈɵt","встаёте":"fstaˈɵtʲi|fstajˈɵtʲi","моё":"mʌˈɵ|mʌjˈɵ","твоё":"tvʌˈɵ|tvʌjˈɵ","своё":"svʌˈɵ|svʌjˈɵ","заём":"zaˈɵm|zajˈɵm","наём":"naˈɵm|najˈɵm","боёк":"bʌˈɵk|bʌjˈɵk","раёк":"raˈɵk|rajˈɵk","устаём":"ustaˈɵm|ustajˈɵm","остаёмся":"ʌstaˈɵmsʲʌ|ʌstajˈɵmsʲʌ","остаётся":"ʌstaˈɵtsʌ|ʌstajˈɵtsʌ","узнаётся":"uznaˈɵtsʌ|uznajˈɵtsʌ","достаём":"dʌstaˈɵm|dʌstajˈɵm","достаёт":"dʌstaˈɵt|dʌstajˈɵt","стаёт":"staˈɵt|stajˈɵt"};
-// full recordings of the music box's pieces (filled in by the player below when it is there)
-const MUSIC = { full: null };
+// the music box's pieces in full: real performances from Wikimedia Commons (public domain or free licences), kept on our
+// own site; after the guess and on a composer's page «🎻 Послушать целиком» plays the whole piece
+const MUSIC = (() => {
+  const REC = { bee: ['US Air Force Band', 'PD'], king: ['Musopen Symphony Orchestra', 'PD'], swan: ['European Archive / Musopen', 'PD'],
+    tell: ['US Marine Band', 'PD'], twinkle: ['Stefano Ligoratti', 'CC BY 3.0'], lullaby: ['Psychogerd (Höxter)', 'CC BY-SA 4.0'],
+    morning: ['Musopen Symphony Orchestra', 'PD'], fifth: ['Skidmore College Orchestra / Musopen', 'PD'], toccata: ['Ashtar Moïra', 'PD'],
+    danube: ['US Marine Band', 'PD'], spring: ['Modena Chamber Orchestra / Musopen', 'PD'], turca: ['Romuald Greiss', 'PD'],
+    joy: ['US Navy Band', 'PD'], elise: ['V. Gao', 'CC0'], nacht: ['European Archive / Musopen', 'PD'], promenade: ['Musopen', 'PD'] };
+  // only the pieces whose recording is already on the site (build/music_avail.py fills this in)
+  const AVAIL = ["lullaby", "morning", "spring", "toccata"];
+  Object.keys(REC).forEach(k => { if (!AVAIL.includes(k)) delete REC[k]; });
+  let au = null;
+  const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  function stop() { if (au) { try { au.pause(); au.src = ''; } catch (e) {} au = null; } }
+  function player(tid, box, label) {
+    const r = REC[tid]; if (!r || !box) return;
+    const id = 'mu' + tid;
+    box.insertAdjacentHTML('beforeend', `<div class="mu-full" id="${id}"><button class="big ghost mu-play">🎻 ${esc(label || "Listen to the whole piece")}</button><div class="mu-bar"><i></i></div><small class="mu-by">Recording: ${esc(r[0])} · ${esc(r[1])} · Wikimedia Commons</small></div>`);
+    const el = document.getElementById(id), btn = el.querySelector('.mu-play'), bar = el.querySelector('.mu-bar i'), t0 = btn.textContent;
+    btn.onclick = () => {
+      sfx.pop();
+      if (au && au._tid === tid && !au.paused) { au.pause(); btn.textContent = t0; return; }
+      if (!au || au._tid !== tid) {
+        stop(); hush(); compStop();
+        au = new Audio(SITE_ROOT + 'music/' + tid + '.mp3'); au._tid = tid; au.preload = 'auto';
+        au.ontimeupdate = () => { if (!au || au._tid !== tid) return; bar.style.width = (au.duration ? au.currentTime / au.duration * 100 : 0) + '%'; btn.textContent = `⏸ ${mmss(au.currentTime)} / ${au.duration ? mmss(au.duration) : '…'}`; };
+        au.onended = () => { btn.textContent = t0; bar.style.width = '100%'; };
+        au.onerror = () => { btn.textContent = "Listening needs the internet"; };
+      }
+      hush(); compStop();
+      au.play().catch(() => { btn.textContent = "Listening needs the internet"; });
+    };
+  }
+  // after the guess in the music box
+  function full(tid, box) { player(tid, box); }
+  // on a composer's page: every piece of theirs that has a recording
+  function composer(c) {
+    const at = document.querySelector('.cmp-tunes'); if (!at) return;
+    const ts = c.tunes.filter(t => REC[t]); if (!ts.length) return;
+    at.insertAdjacentHTML('afterend', '<div class="mu-list" id="muList"></div>');
+    ts.forEach(t => player(t, document.getElementById('muList'), `${CTUNES[t].n} — the whole piece`));
+  }
+  return { full, composer, stop, has: t => !!REC[t] };
+})();
 /* THEMES-END */
 /* ICONS-BEGIN */
 /* ---------- the game tiles' pictures, drawn like the friends (flat soft shapes, the friends' colours, dark eyes with a
