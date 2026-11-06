@@ -11870,11 +11870,11 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '123';
+const APP_VER = '124';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
-const authorWaitHTML = () => `<div class="psec pv-who"><h2>👑 The author’s key is ready</h2><p>The secret half stays only on this phone. Send this text to Claude — it is the open half and can be shared. After the app updates, the summaries of all families will come here.</p><pre class="hg-msg" id="pvKeyTx">${esc(authorText())}</pre><div class="prow-btns"><button class="big" id="pvKeyCopy">📋 Copy</button></div><p class="muted" id="pvKeyOut"></p></div>`;
+const authorWaitHTML = () => `<div class="psec pv-who"><h2>👑 The author’s key is ready</h2><p>The secret half stays only on this phone. Send this text to Claude — it is the open half and can be shared. After the app updates, the summaries of all families and the letters with ideas and feedback will come here.</p><pre class="hg-msg" id="pvKeyTx">${esc(authorText())}</pre><div class="prow-btns"><button class="big" id="pvKeyCopy">📋 Copy</button></div><p class="muted" id="pvKeyOut"></p></div>`;
 function appVer(el) { if (el) el.textContent = APP_VER ? `App version: ${APP_VER}` : ''; }
 function appUpdate(el) {
   if (el) el.textContent = "Checking for an update…";
@@ -11904,7 +11904,7 @@ function screenPultTest() {
 // the first visit: the parent's own phone opens with the panel and needs no code; a phone the children play on gets a code
 function pultWho() {
   newScreen();
-  shell("Family control panel", `<div class="pult-gate">
+  shell("How everyone is doing", `<div class="pult-gate">
     <p class="lead">Whose phone is this?</p>
     <button class="big" id="pwMine">📱 Mine: open with the panel, no code</button>
     <button class="big ghost" id="pwKids">🧒 The children play here: lock the panel with a code</button>
@@ -11926,7 +11926,7 @@ function pultDemo(as, lang) {
 function pultGate(change) {
   newScreen();
   let step = change || !ROOT.pultPin ? 1 : 0, first = '', code = '', ask = null;
-  shell("Family control panel", `<div class="pult-gate">
+  shell("How everyone is doing", `<div class="pult-gate">
     <p class="lead pg-t" id="pgT"></p>
     <div class="pg-dots" id="pgD"></div>
     <p class="pg-out" id="pgOut" aria-live="polite"></p>
