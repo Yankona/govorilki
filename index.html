@@ -2394,6 +2394,14 @@ body.pv-on #app{padding-top:52px}
 .ow-t b{font:800 16px var(--f-body);color:var(--ink)}
 .ow-t small{font:700 13px/1.3 var(--f-body);color:var(--ink-soft);overflow-wrap:anywhere}
 /* WORLD2-CSS-END */
+/* READBTN-CSS */
+.rb-btn{position:relative;font-size:22px;line-height:1}
+.rb-btn i{position:absolute;right:-3px;bottom:-3px;font-size:13px;font-style:normal}
+.rb-btn.rb-new{animation:rbPulse 1.1s ease-in-out 4}
+@keyframes rbPulse{50%{transform:scale(1.18)}}
+.rb-on{outline:4px solid var(--sun)!important;outline-offset:3px;transform:scale(1.05);transition:transform .15s}
+.lab-story{margin:6px auto 0}
+/* READBTN-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -3110,6 +3118,7 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
     guideWatch();
     const st = $('#stage'), f1 = st.firstElementChild, lead = f1 && (f1.matches('p.lead') ? f1 : f1.firstElementChild && f1.firstElementChild.matches('p.lead') ? f1.firstElementChild : null);
     if (lead && !lead.id) lead.remove();
+    READBTN.add();
   }
   return $('#stage');
 }
@@ -7183,7 +7192,7 @@ function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
   const st = shell(T.name, `<p class="lead">${Q() ? "Read aloud, and then answer the question." : "Listen to the story and answer the question."}</p>
-    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`, { back: T.place ? () => TRAVEL.screen() : null });
+    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : null });
   talk(Q() ? "Choose a story. Read it aloud and answer the question." : "Choose a story. I will tell it, and you will answer the question.");
   st.onclick = e => { const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
@@ -10007,6 +10016,11 @@ function screenLab(which = 'swing') {
     <p class="lab-note" id="labNote"></p>
   </div>`);
   $('#labTabs').onclick = e => { const b = e.target.closest('[data-k]'); if (b && b.dataset.k !== which) { sfx.pop(); screenLab(b.dataset.k); } };
+  // the stories about the playground: all of them, and the one about this experiment
+  { const items = learnItems('phys'), i = items.findIndex(x => x.id === { swing: 'ph-swing', slide: 'ph-slide', seesaw: 'ph-seesaw' }[which]);
+    $('#labTabs').insertAdjacentHTML('beforeend', "<button class=\"chip\" id=\"labStories\">📖 Stories</button>");
+    $('#labStories').onclick = () => { sfx.pop(); screenLearn('phys'); };
+    if (i >= 0) { $('#labNote').insertAdjacentHTML('afterend', `<button class="link-btn lab-story" id="labStory">📖 Read: ${esc(items[i].t)}</button>`); $('#labStory').onclick = () => { sfx.pop(); screenStory('phys', i, { back: () => screenLab(which) }); }; } }
   const box = $('#labBox'), cv = $('#labC'), x = cv.getContext('2d');
   let W = 0, H = 0;
   const fit = () => { const r = box.getBoundingClientRect(), d = Math.min(2, window.devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; x.setTransform(d, 0, 0, d, 0, 0); };
@@ -10150,7 +10164,10 @@ function screenLab(which = 'swing') {
   }
 }
 
-GAMES.push({ id: 'phys-lab', name: "Science on the playground", sub: "swing the swing, slide down the slide, balance the seesaw", ico: () => pic('🎠'), bg: 'var(--t-blue)', go: () => screenLab(), grp: 10 });
+GAMES.push({ id: 'phys-lab', name: "Science on the playground", sub: "experiments and stories: swing, slide, seesaw", ico: () => pic('🎠'), bg: 'var(--t-blue)', go: () => screenLab(), grp: 10, kw: "physics" });
+// «Физика на площадке» (the stories) lives inside the experiments now: one game, not two
+{ const g = GAMES.find(x => x.id === 'learn-phys'); if (g) g.hide = () => true;
+  INTEREST_CAT.forEach(c => (c.items || []).forEach(it => { if (it.tiles) it.tiles = [...new Set(it.tiles.map(t => t === 'learn-phys' ? 'phys-lab' : t))]; })); }
 /* ---------- «Что значит слово?»: a dictionary for the book. The child types or says the word; the meaning comes from
    Wiktionary (the free Russian dictionary, even for a word in another form: «колыбели» finds «колыбель»), a person or a
    place from Wikipedia; links open Ozhegov, Ushakov, Efremova and Dahl on dictionary sites. Words looked up go into the
@@ -11821,7 +11838,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '120';
+const APP_VER = '121';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17037,6 +17054,36 @@ const LANDUX = (() => {
   return { apply };
 })();
 /* HOMEUX-END */
+/* READBTN-BEGIN */
+/* ---------- for children who do not read yet (6 and younger): a button in the friend's bar reads every button on the
+   screen aloud, one by one, each lit up while it is read. It never gets in the way of a game (holding buttons, quick
+   taps): the child asks for it. The first few times it pulses, so it is noticed. ---------- */
+const READBTN = (() => {
+  let run = 0;
+  const label = b => { const t = (b.innerText || b.getAttribute('aria-label') || '').replace(/[\p{Extended_Pictographic}️‍]/gu, ' ').replace(/\s+/g, ' ').trim(); return /\p{L}{2}/u.test(t) ? t : ''; };
+  function add() {
+    if (Q() || (P.settings.age || 0) > 6 || !$('.guide') || $('#readBtns')) return;
+    const rp = $('#replay'); if (!rp) return;
+    rp.insertAdjacentHTML('beforebegin', "<button class=\"ibtn rb-btn\" id=\"readBtns\" aria-label=\"Read the buttons\"><span>👆</span><i>🔊</i></button>");
+    P.rbSeen = (P.rbSeen || 0) + 1; if (P.rbSeen <= 4) $('#readBtns').classList.add('rb-new');
+    $('#readBtns').onclick = read;
+  }
+  async function read() {
+    const my = ++run, t = tok, vh = innerHeight, seen = new Set();
+    const bs = [...document.querySelectorAll('#stage button, #stage [role="button"]')].filter(b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < vh - 60 && !b.disabled; })
+      .map(b => [b, label(b)]).filter(([, l]) => l && !seen.has(l) && seen.add(l)).slice(0, 10);
+    hush(); sfx.pop();
+    if (!bs.length) { talk("There are no buttons with words here."); return; }
+    for (const [b, l] of bs) {
+      if (my !== run || t !== tok) return;
+      b.classList.add('rb-on'); await say(l); b.classList.remove('rb-on');
+      if (my !== run || t !== tok) return;
+      await wait(180);
+    }
+  }
+  return { add };
+})();
+/* READBTN-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
