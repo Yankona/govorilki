@@ -2539,8 +2539,9 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 @media (max-width:360px){.pd{--pd-c:72px}.pd-lb b{font-size:16px}.pd-say{font-size:16px}.pd-hero .pd-fr.guide-ryz{width:68px;height:68px}}
 /* the reading reminder in the older child's dark theme: dark card, light words */
 .quest .rf-card{background:#3A3352;border-color:#FFC83A;color:var(--ink)}.quest .rf-card.soft{background:#2B2F52}
-/* a wide screen: the tabs in a column on the left, the path in the middle, the week and the family on the right */
-@media (min-width:1024px){
+/* a wide screen: the tabs in a column on the left from 900 px; from 1100 px the path in the middle and the week,
+   the stars and the family on the right */
+@media (min-width:900px){
   #app:has(>.home-t){max-width:none;margin:0;padding-left:236px}
   .home-t .tabbar{top:0;bottom:0;left:0;right:auto;width:236px;display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:22px 14px;border-radius:0;box-shadow:2px 0 0 var(--line)}
   .rail-logo{display:flex;align-items:center;gap:10px;margin:0 6px 18px;font:900 24px/1 var(--f-display);color:var(--ink)}
@@ -2553,6 +2554,8 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
   .home-t .tb-dot{right:auto;left:40px}
   .home-t .stage{padding:8px 32px 28px}
   .home-t .stage>*{width:100%;max-width:1060px;margin-inline:auto}
+}
+@media (min-width:1100px){
   .home-t .stage:has(>.pd-side){display:grid;grid-template-columns:minmax(0,1fr) 300px;column-gap:32px;align-items:start;align-content:start}
   .home-t .stage:has(>.pd-side)>*{max-width:none;margin:0}
   .pd{--pd-c:92px}
@@ -3708,6 +3711,7 @@ function goHome() {
   navHome();
   setTimeout(() => statPing(), 4000);
   document.body.classList.toggle('quest', Q());
+  if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
   const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b));
@@ -12010,7 +12014,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '136';
+const APP_VER = '137';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17877,10 +17881,14 @@ const tabIco = e => typeof DRAWN === 'object' && DRAWN && DRAWN[e] ? `<span clas
      the rest — quiet; any step can be pressed;
    - a chest at the end opens when every lesson of the day is done and gives 5 stars once a day;
    - stickers, «Я люблю» and the friend's page are chips under the path;
-   - on a wide screen (a laptop, a tablet held sideways) the tab bar is a column on the left, and a panel on the right
-     shows the week, the stars and how each child of the family is doing today. ---------- */
+   - on a wide screen (from 900 px: a laptop, a tablet held sideways) the tab bar is a column on the left; from 1100 px
+     a panel on the right shows the week, the stars and how each child of the family is doing today;
+   - when the game opens, each child starts on «Сегодня». ---------- */
 const PATH = (() => {
   const CHEST = 5;
+  // each child's first home screen after the game opens is «Сегодня»; later the tab they were on stays
+  const SEEN = new Set();
+  const fresh = id => { if (SEEN.has(id)) return false; SEEN.add(id); return true; };
   const ICO = { speech: '👂', read: '📖', math: '🧮', book: '📚' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
@@ -18005,7 +18013,7 @@ const PATH = (() => {
     const tb = $('#tabBar'); if (!tb || tb.querySelector('.rail-logo')) return;
     tb.insertAdjacentHTML('afterbegin', `<div class="rail-logo" aria-hidden="true">${pic('🗣️')}<b>Plaudertaschen</b></div>`);
   }
-  return { today, side, rail, lay };
+  return { today, side, rail, lay, fresh };
 })();
 /* PATH-END */
 /* CLOUD-BEGIN */
