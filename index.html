@@ -11895,7 +11895,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '129';
+const APP_VER = '130';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17599,8 +17599,8 @@ const THEMES = (() => {
   const ma = MODS.find(m => m.id === 'art'); if (ma) ma.g.push(20, 21);
   const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 18, 19);
   const tc = HOME_TABS.find(t => t.id === 'create'); if (tc) tc.g.push(20, 21, 22, 23);
-  // the cube: 9 and older, or the older track when the age was never written down
-  const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => (P.settings.age || (P.settings.track === 'l' ? 9 : 0)) < 9;
+  // the cube: every child on the older track, and anyone 9 or older
+  const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => !(P.settings.track === 'l' || (P.settings.age || 0) >= 9);
   // «Правда или выдумка?» about paintings: who painted it, where it lives, when it was painted
   function artTF() {
     artLoad().then(D => {
