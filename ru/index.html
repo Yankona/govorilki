@@ -2365,6 +2365,16 @@ body.pv-on #app{padding-top:52px}
 .lp-more>summary{cursor:pointer;text-align:center;font:800 16px var(--f-body);color:var(--ink-soft);padding:10px 0}
 .lp-more[open]>summary{margin-bottom:8px}
 /* HOMEUX-CSS-END */
+/* ARTIC-CSS */
+.mirror .face.f-new{position:absolute;inset:0;opacity:0}
+.face .mth{transform-box:fill-box;transform-origin:50% 50%}
+.face.f-in .mth{animation:mIn .42s ease-out}
+.face.hold .mth{animation:mHold 1.1s ease-in-out}
+@keyframes mIn{from{transform:scale(.92)}}
+@keyframes mHold{50%{transform:scale(1.05)}}
+#scheme{transition:opacity .18s ease}
+@media (prefers-reduced-motion:reduce){.face.f-in .mth,.face.hold .mth{animation:none}}
+/* ARTIC-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -2950,7 +2960,7 @@ function faceSVG(pose, cls = '') {
   <circle cx="74.5" cy="99.5" r="2.6" fill="#fff"/><circle cx="130.5" cy="99.5" r="2.6" fill="#fff"/>
   <circle cx="54" cy="138" r="12" fill="#FF8FA3" opacity=".45"/><circle cx="146" cy="138" r="12" fill="#FF8FA3" opacity=".45"/>
   <path d="M95 125q5 5 10 0" stroke="#D99A7A" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <g transform="translate(100 156)">${mouth(pose)}</g></svg>`;
+  <g transform="translate(100 156)"><g class="mth">${mouth(pose)}</g></g></svg>`;
 }
 
 /* ---------- content (from the speech therapist's sheets) ---------- */
@@ -3787,7 +3797,19 @@ function screenArtic(i, auto = false, then = null) {
       </div></div>`, { back: then ? goHome : screenArticMenu });
   bindCam($('#artStage'));
   const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
-  const setFace = (pose, fx) => { const old = mirror.querySelector('svg.face'); old.insertAdjacentHTML('afterend', faceSVG(pose, fx || '')); old.remove(); $('#scheme').innerHTML = profileSVG(profOf(pose)); };
+  // a pose melts into the next one, so the tongue and the lips seem to move; the same pose again: held, it breathes
+  let cur = a.thumb, swap = 0;
+  const setFace = (pose, fx) => {
+    const faces = mirror.querySelectorAll('svg.face'), old = faces[faces.length - 1];
+    if (pose === cur && !fx) { old.classList.remove('hold', 'f-in'); void old.getBoundingClientRect(); old.classList.add('hold'); return; }
+    cur = pose; const my = ++swap, dur = 360;
+    old.insertAdjacentHTML('afterend', faceSVG(pose, `${fx || ''} f-new f-in`));
+    const nw = old.nextElementSibling;
+    nw.style.transition = old.style.transition = `opacity ${dur}ms ease`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { nw.style.opacity = 1; old.style.opacity = 0; }));
+    setTimeout(() => { if (my !== swap) return; mirror.querySelectorAll('svg.face').forEach(f => { if (f !== nw) f.remove(); }); nw.classList.remove('f-new'); nw.removeAttribute('style'); }, dur + 60);
+    const sc = $('#scheme'); sc.style.opacity = 0; setTimeout(() => { if (my !== swap) return; sc.innerHTML = profileSVG(profOf(pose)); sc.style.opacity = 1; }, dur / 2);
+  };
   const start = async () => {
     if (started || t !== tok) return; started = true;
     $('#go').hidden = true; sfx.pop();
@@ -3803,6 +3825,10 @@ function screenArtic(i, auto = false, then = null) {
     finish(then ? { key: 'artic:' + a.id, stars: 1, line: 'Язычок размялся — теперь рисуем!', again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: 'Язычок стал сильнее!', again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
   };
   $('#go').onclick = start;
+  // before «Начать»: the movement again and again, so the child sees what the tongue does
+  { const demo = a.steps.map(s => s[0]).filter((p, j, all) => j === 0 || p !== all[j - 1]).slice(0, 8);
+    let k = 0; const loop = () => { if (t !== tok || started) return; k = (k + 1) % demo.length; setFace(demo[k], ''); later(loop, demo.length > 1 ? 1100 : 1400); };
+    later(loop, 1000); }
   if (auto) talk(a.intro).then(() => later(start, 400));
   else talk(a.intro + ' Нажми «Начать».');
 }
@@ -11771,7 +11797,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '118';
+const APP_VER = '119';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
