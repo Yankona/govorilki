@@ -2314,6 +2314,38 @@ body.pv-on #app{padding-top:52px}
 .mm .fam-card p{margin:0}
 .mm-note{text-align:center;margin:4px 0 0}
 /* MM-CSS-END */
+/* SETUI-CSS */
+.set-menu{display:flex;flex-direction:column;gap:16px}
+.set-faces{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 10px;width:100%;padding:16px 10px;border:0;border-radius:24px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line);font:inherit;cursor:pointer}
+.set-faces:disabled{cursor:default}
+.psec .set-faces{box-shadow:none;padding:4px 0 8px;background:transparent}
+.set-face{display:flex;flex-direction:column;align-items:center;gap:5px;width:70px}
+.set-face .chip-face,.set-e{width:50px;height:50px}
+.set-e{display:grid;place-items:center;border-radius:50%;background:var(--line);font:400 30px/1 var(--f-emoji)}
+.set-face small{font:700 12px/1.2 var(--f-body);color:var(--ink);text-align:center;overflow-wrap:anywhere}
+.set-list{display:flex;flex-direction:column;width:100%;border-radius:22px;background:var(--paper);box-shadow:0 5px 0 var(--line);overflow:hidden}
+.psec .set-list{background:transparent;box-shadow:none;border-radius:0;width:auto;margin:0 -20px}
+.set-row{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;margin:0;padding:10px 18px;border:0;border-radius:0;background:transparent;color:var(--ink);text-align:left;font:inherit;box-shadow:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.set-list>*+*{border-top:2px solid var(--line)}
+.set-row:active{background:var(--line)}
+.set-i{flex:none;width:30px;text-align:center;font:400 25px/1 var(--f-emoji)}
+.set-t{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+.set-t b{font:800 17px/1.25 var(--f-body);color:var(--ink)}
+.set-t small{font:700 13px/1.3 var(--f-body);color:var(--ink-soft)}
+.set-go{flex:none;font:800 26px/1 var(--f-body);color:var(--ink-soft)}
+.set-row.danger .set-t b{color:var(--berry)}
+.set-sw{display:flex!important;align-items:center;gap:12px;min-height:60px;padding:10px 18px;cursor:pointer}
+.set-off{display:none!important}
+.set-more{width:100%}
+.set-more summary{cursor:pointer;font:800 16px var(--f-body);color:var(--ink-soft);padding:6px 0}
+.set-more[open] summary{margin-bottom:10px}
+.psec.set-sub{padding-top:10px;padding-bottom:10px}
+.parents .sw{display:flex;align-items:center;gap:12px;font:700 16px/1.35 var(--f-body);color:var(--ink)}
+.parents .sw input[type=checkbox]{order:3;margin-left:auto;flex:none;-webkit-appearance:none;appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line-strong);position:relative;cursor:pointer;transition:background .2s;accent-color:auto}
+.parents .sw input[type=checkbox]::after{content:'';position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
+.parents .sw input[type=checkbox]:checked{background:var(--leaf)}
+.parents .sw input[type=checkbox]:checked::after{left:23px}
+/* SETUI-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -3528,13 +3560,13 @@ function goHome() {
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
-  on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; screenParents(); });
+  on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
   on('#whoChip', () => { sfx.pop(); homeLeave(); screenWho(); });
   if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); bindRelp(); bindReadFine(RF); }
   on('#gpBtn', () => { sfx.pop(); homeLeave(); screenGplayWho(); });
   on('#tripCard', () => { sfx.pop(); homeLeave(); screenTrip(); });
-  on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; screenParents(); });
+  on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
   $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
@@ -8799,6 +8831,7 @@ function screenParents(focus) {
     };
     $('#elOff').onclick = () => { ROOT.eleven = { key: '', voice: '', voiceName: '' }; save(); screenParents(); };
   }
+  SETUI.build(focus);
 }
 
 /* ---------- families: each family has its children and grandparents; one phone can keep several families.
@@ -11664,7 +11697,7 @@ function screenPult() {
     <section class="psec"><h2>Этот телефон</h2>${ROOT.adminKey ? '' : authorHTML()}<h3 class="pf-h">При запуске открывается</h3><div class="prow-btns pv-start">${[['who', '👥 Кто играет?'], ['pult', '👑 Пульт'], ['kid', '🧒 Игра ребёнка']].map(([v, n]) => `<button class="pick-b ${(ROOT.startAt || 'who') === v ? 'sel' : ''}" data-start="${v}" aria-pressed="${(ROOT.startAt || 'who') === v}">${n}</button>`).join('')}</div><p class="muted" id="pvVer">Версия приложения: …</p><div class="prow-btns"><button class="big ghost" id="pvUpd">🔄 Проверить обновление</button></div>${ROOT.parentPhone
       ? `<p>📱 Это ваш телефон: пульт открывается без кода. Пульт всегда под кнопкой 👑 вверху главного экрана.</p><div class="prow-btns"><button class="big ghost" id="pvKids">🧒 Здесь играют дети: закрыть пульт кодом</button></div>`
       : `<p>Пульт закрыт кодом. Открыть его можно кнопкой 👑 вверху главного экрана${ROOT.parentPhone === false ? '' : ' или из «Для взрослых»'}.</p><div class="prow-btns"><button class="big ghost" id="pvMine">📱 Это мой телефон: без кода</button><button class="big ghost" id="pvPin">🔑 Сменить код</button><button class="big ghost" id="pvLock">🔒 Закрыть пульт</button></div>`}</section>`;
-  shell('Пульт семьи', `<div class="pult" id="pult">${draw()}</div>`, { back: () => goHome(), guide: false, raw: true });
+  shell('Как дела у всех', `<div class="pult" id="pult">${draw()}</div>`, { back: () => goHome(), guide: false, raw: true });
   const box = $('#pult');
   const on1 = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); fn(); }; };
   const bind = () => {
@@ -11672,7 +11705,7 @@ function screenPult() {
     on1('pvLock', () => { try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} goHome(); });
     on1('pvMine', () => { ROOT.parentPhone = true; save(); screenPult(); });
     on1('pvKids', () => { ROOT.parentPhone = false; save(); if (ROOT.pultPin) { pultLetIn(); screenPult(); } else pultGate(true); });
-    on1('pvSet', () => { PAR_BACK = screenPult; screenParents(); });
+    on1('pvSet', () => { PAR_BACK = screenPult; SETUI.reset(); screenParents(); });
     on1('pvTest', () => screenPultTest());
     on1('pvAdm', () => screenAdmin());
     on1('pvAuthor', () => { authorKeys().then(() => screenPult(), () => {}); });
@@ -11690,7 +11723,7 @@ function screenPult() {
     const ks = e.target.closest('[data-kset]'), sl = e.target.closest('[data-semlink]'), sa = e.target.closest('[data-start]');
     if (sl) { sfx.pop(); semShare(ROOT.families[sl.dataset.semlink], document.getElementById('pvsem-' + sl.dataset.semlink)); return; }
     if (sa) { sfx.tick(); ROOT.startAt = sa.dataset.start; save(); $$('[data-start]').forEach(x => { x.classList.toggle('sel', x === sa); x.setAttribute('aria-pressed', x === sa); }); return; }
-    if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; screenParents(); return; }
+    if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents(); return; }
     if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
     if (a) { sfx.pop(); useFamily(a.dataset.add); P = ROOT.profiles[ROOT.cur] || P; famPeople(); save(); screenFamilyEdit(a.dataset.add); return; }
@@ -11709,7 +11742,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '115';
+const APP_VER = '116';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -16606,6 +16639,128 @@ const CHESSMM = (() => {
 })();
 GAMES.push({ id: 'chess-mm', name: 'Соперник онлайн', sub: 'шахматы с ребёнком, который сейчас в игре', ico: () => pic('🌍'), bg: 'var(--t-blue)', go: () => CHESSMM.screen(), grp: 8, hide: () => !CHESSMM.on() });
 /* MM-END */
+/* SETUI-BEGIN */
+/* ---------- «Для взрослых» as a short menu, like the phone's own settings: the family's faces on top, then one row per
+   part (Семья, Друзья, the child, Голос и звук, Язык, Поездка, Прогресс, Как заниматься). A row opens its part alone;
+   «назад» comes back to the menu. The parts are the page's own sections, so every button keeps working; inside them,
+   rows of buttons become one even list with «›». ---------- */
+const SETUI = (() => {
+  let open = null;
+  const reset = () => { open = null; };
+  const row = (b, i, t, s, danger) => {
+    if (!b) return null;
+    b.className = 'set-row' + (danger ? ' danger' : '');
+    b.innerHTML = `<span class="set-i">${i}</span><span class="set-t"><b>${t}</b>${s ? `<small>${s}</small>` : ''}</span><span class="set-go">›</span>`;
+    return b;
+  };
+  // buttons that stood in a row of big buttons: one list, in this order
+  function list(btns, where) {
+    const ok = btns.filter(Boolean); if (!ok.length) return null;
+    const box = document.createElement('div'); box.className = 'set-list';
+    const old = new Set(ok.map(b => b.parentElement));
+    (where || ok[0].parentElement).before(box); ok.forEach(b => box.append(b));
+    old.forEach(p => { if (p && p.classList.contains('prow-btns') && !p.children.length) p.remove(); });
+    return box;
+  }
+  function faces(page) {
+    const f = fam(); if (!f) return '';
+    const kids = f.kids.filter(id => ROOT.profiles[id]).map(id => `<span class="set-face"><span class="chip-face">${kidFace(id)}</span><small>${esc(ROOT.profiles[id].settings.name || '')}</small></span>`);
+    const gr = (f.grands || []).map(g => { const x = grandOf(g.id, g.name, g.she, g.e, g.role); return `<span class="set-face"><span class="set-e">${x.e}</span><small>${esc(x.name)}</small></span>`; });
+    return `<button class="set-faces" ${page ? 'data-page="fam"' : 'disabled'} aria-label="Семья">${[...kids, ...gr].join('')}</button>`;
+  }
+  function build(focus) {
+    const root = $('.parents'); if (!root || !fam()) return;
+    const secs = [...root.children].filter(x => x.matches('section.psec'));
+    const find = sel => secs.find(s => s.matches(sel) || s.querySelector(sel)) || null;
+    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
+
+    // «Семья»: the faces, then even rows; «другая семья» only when this phone has more than one
+    if (S.fam) {
+      const p = S.fam.querySelectorAll(':scope > p');
+      if (p[0]) p[0].remove();
+      if (S.kid) [...p].slice(1).forEach(x => S.kid.querySelector('h2').after(x));   // what the child likes: the child's part
+      S.fam.querySelector('h2').insertAdjacentHTML('afterend', faces(false));
+      const many = Object.values(ROOT.families).filter(f => !f.guest).length > 1;
+      const fa = $('#famAll'); if (fa && !many) fa.remove();
+      list([row($('#famEdit'), '👥', 'Кто в семье', 'дети и взрослые'), row($('#famInvP'), '📨', 'Позвать родных'),
+        row($('#pultBtn'), '📊', 'Как дела у всех', 'успехи детей, кто из родных заходил'), many ? row($('#famAll'), '🔁', 'Другая семья на этом телефоне') : null]);
+    }
+    // «Друзья»: who is in, then rows; the chess switch as a row
+    if (S.friends) {
+      const ps = S.friends.querySelectorAll(':scope > p');
+      if (ps[0]) ps[0].remove();
+      const L = league();
+      if (ps[1] && !(L && ps[1].querySelector('b'))) ps[1].remove();
+      const lst = list([row($('#famInvF'), '📨', 'Позвать друзей'), row($('#famLg'), L ? '🏆' : '🔑', L ? 'Рейтинг и вызовы' : 'Код от друзей'), row($('#frHike'), '🎒', 'Общий поход')]);
+      const sw = $('#mmIn') && $('#mmIn').closest('label');
+      if (sw && lst) {
+        const inp = $('#mmIn'); sw.textContent = ''; sw.append(inp);
+        sw.insertAdjacentHTML('beforeend', '<span class="set-i">♟️</span><span class="set-t"><b>Шахматы с незнакомыми детьми</b><small>только ходы, без чата</small></span>');
+        sw.classList.add('set-sw'); lst.append(sw);
+      }
+    }
+    // short labels instead of the long ones (the controls stay where they are)
+    const relabel = (id, t, sm) => {
+      const el = $('#' + id), l = el && el.closest('label'); if (!l) return;
+      [...l.childNodes].forEach(n => { if (n.nodeType === 3 && n.textContent.trim()) n.remove(); });
+      const h = sm ? `<span class="set-t"><b>${t}</b><small>${sm}</small></span>` : `<span>${t}</span>`;
+      if (l.classList.contains('sw')) l.insertAdjacentHTML('beforeend', h); else l.insertAdjacentHTML('afterbegin', h);
+    };
+    relabel('nameIn', 'Имя'); relabel('rfIn', 'День без чтения: −10 ⭐', 'чтение, книга или игра на чтение — и день засчитан');
+    relabel('voiceIn', 'Друг говорит вслух'); relabel('slowIn', 'Говорить медленнее'); relabel('piperSel', 'Голос друга'); relabel('devVoice', 'Голос телефона');
+    relabel('sfxIn', 'Звуки игры'); relabel('micIn', 'Микрофон слушает ребёнка'); relabel('srIn', 'Узнавать слова', 'речь распознаёт Apple или Google');
+    // the long list of languages folds away
+    const ml = $('#mlLangsIn'); const mlb = ml && (ml.closest('.ml-langs') || ml);
+    if (mlb && S.kid && S.kid.contains(mlb)) { const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>🗣️ Языки ребёнка</summary>'; mlb.before(d); d.append(mlb); }
+    // the child: name, languages, interests, reading; the voice moves to its own part
+    const voice = document.createElement('section'); voice.className = 'psec'; voice.innerHTML = '<h2>🔊 Голос и звук</h2>';
+    if (S.kid) {
+      const take = id => { const el = $('#' + id); return el ? el.closest('label') || el : null; };
+      ['voiceIn', 'slowIn', 'piperSel', 'piperState', 'devVoice', 'sfxIn', 'micIn', 'srIn', 'voiceState'].map(take).filter(Boolean).forEach(el => voice.append(el));
+      const tv = $('#testVoice'); if (tv) voice.append(tv.closest('.prow-btns'));
+      const own = $('#sayOwn'); if (own) { const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>Голос ошибается в слове?</summary>'; d.append(own); voice.append(d); }
+      S.kid.after(voice);
+      list([row($('#kidSetup'), '💛', 'Интересы и игры')]);
+    }
+    if (S.el) {
+      const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>Ещё голоса: ElevenLabs</summary>';
+      [...S.el.children].filter(x => x.tagName !== 'H2').forEach(x => d.append(x));
+      S.el.querySelector('h2').remove(); S.el.append(d); S.el.classList.add('set-sub');
+    }
+    if (S.prog) list([row($('#expBtn'), '📤', 'Скопировать прогресс'), row($('#impBtn'), '📥', 'Вставить прогресс')]);
+    if ($('#resetBtn')) list([row($('#resetBtn'), '🗑️', 'Начать заново', '', true)]);
+
+    const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
+    const PAGES = [
+      ['fam', '👪', 'Семья', '', [S.fam]],
+      ['friends', '🤝', 'Друзья', '', [S.friends]],
+      ['kid', '🧒', name, 'имя, языки, интересы, чтение', [S.kid, S.book]],
+      ['voice', '🔊', 'Голос и звук', '', [voice, S.el]],
+      ['lang', '🌐', 'Язык игры', ln || '', [S.lang]],
+      ['trip', '✈️', 'Поездка', '', [S.trip]],
+      ['prog', '💾', 'Прогресс', 'перенос на другой телефон', [S.prog]],
+      ['how', '📖', 'Как заниматься', '', [S.how]],
+    ].map(([k, i, t, s, ss]) => ({ k, i, t, s, ss: ss.filter(Boolean) })).filter(p => p.ss.length);
+    const menu = document.createElement('div'); menu.className = 'set-menu';
+    menu.innerHTML = faces(true) + `<div class="set-list">${PAGES.map(p => `<button class="set-row" data-page="${p.k}"><span class="set-i">${p.i}</span><span class="set-t"><b>${esc(p.t)}</b>${p.s ? `<small>${esc(p.s)}</small>` : ''}</span><span class="set-go">›</span></button>`).join('')}</div>`;
+    root.prepend(menu);
+    const h1 = $('.bar h1'), title = h1 ? h1.textContent : '', st = $('#stage'), back0 = $('#backBtn').onclick, out = PAR_BACK || goHome;
+    function show(k, quiet) {
+      const pg = PAGES.find(p => p.k === k) || null; open = pg ? pg.k : null;
+      menu.classList.toggle('set-off', !!pg);
+      [...root.children].filter(x => x.matches('section.psec')).forEach(s => s.classList.toggle('set-off', !pg || !pg.ss.includes(s)));
+      if (pg) pg.ss.forEach((s, j) => { const h = s.querySelector(':scope > h2'); if (h) h.classList.toggle('set-off', j === 0); });
+      if (h1) h1.textContent = pg ? pg.t : title;
+      navEnter(pg ? () => show(null) : out);
+      if (!quiet && st) st.scrollTop = 0;
+    }
+    menu.onclick = e => { const b = e.target.closest('[data-page]'); if (b) { sfx.pop(); show(b.dataset.page); } };
+    $('#backBtn').onclick = e => { if (open) { sfx.pop(); show(null); } else { open = null; back0(e); } };
+    show(focus === 'voice' ? 'voice' : open, true);
+  }
+  return { build, reset };
+})();
+/* SETUI-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
