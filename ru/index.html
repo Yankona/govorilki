@@ -2351,6 +2351,19 @@ body.pv-on #app{padding-top:52px}
 .more-btn{display:block;margin:12px auto 0;padding:10px 22px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);font:800 16px var(--f-body);box-shadow:0 4px 0 var(--line-strong);cursor:pointer}
 .more-btn:active{transform:translateY(2px);box-shadow:0 2px 0 var(--line-strong)}
 #homeWho{font-size:22px}
+.young .home-t .tile small{display:none}
+.young .home-t .tile b{font-size:17px}
+.qcard{display:flex;flex-direction:column;width:100%;border-radius:24px;overflow:hidden;background:var(--paper);box-shadow:0 5px 0 var(--line-strong)}
+.qcard>*{margin:0!important;width:100%!important;border-radius:0!important;box-shadow:none!important}
+.qcard>.rank,.qcard>.garage{background:transparent!important}
+.qcard>*+*{border-top:2px solid var(--line)}
+.lp-cards.lp-cards-s{grid-template-columns:repeat(4,1fr);gap:8px}
+.lp-cards-s .lp-card{align-items:center;text-align:center;gap:4px;padding:10px 4px;border-radius:18px}
+.lp-cards-s .lp-card .emo{font-size:30px}
+.lp-cards-s .lp-card b{font:800 13px/1.2 var(--f-body)}
+.lp-more{width:100%;margin:6px 0}
+.lp-more>summary{cursor:pointer;text-align:center;font:800 16px var(--f-body);color:var(--ink-soft);padding:10px 0}
+.lp-more[open]>summary{margin-bottom:8px}
 /* HOMEUX-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
@@ -11758,7 +11771,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '117';
+const APP_VER = '118';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -16795,6 +16808,8 @@ const HOMEUX = (() => {
       pult.id = 'homeWho'; pult.textContent = '👥'; pult.setAttribute('aria-label', 'Кто играет?');
       pult.onclick = () => { sfx.pop(); homeLeave(); screenWho(); };
     }
+    // children who do not read yet: a picture and a name on each game, no small print
+    document.body.classList.toggle('young', !Q() && (P.settings.age || 0) <= 6);
     // the voice switch is a grown-ups' setting (⚙️ → «Голос и звук»)
     const vb = $('#voiceBtn'); if (vb) vb.remove();
     // no empty stars under games never played
@@ -16803,6 +16818,9 @@ const HOMEUX = (() => {
       const hero = st.querySelector('.hero'), plan = st.querySelector('section.today');
       if (hero && plan) hero.after(plan);
       const all = st.querySelector('.alltabs'); if (all) all.remove();
+      // the older child's rank, season and garage: one card instead of three
+      const qs = [st.querySelector('.rank'), st.querySelector('.season'), st.querySelector('.garage')].filter(Boolean);
+      if (qs.length > 1) { const box = document.createElement('div'); box.className = 'qcard'; qs[0].before(box); qs.forEach(x => box.append(x)); }
       if (st.querySelector('section.team')) { const s7 = st.querySelector('#sec7'); if (s7) s7.remove(); }
       const tr = st.querySelector('.tryit .tiles'); if (tr) [...tr.children].slice(4).forEach(x => x.remove());
       const pb = $('#parentsBtn'); if (pb) pb.textContent = '⚙️ Для взрослых';
@@ -16828,6 +16846,26 @@ const HOMEUX = (() => {
     // a jump from the section chips opens that section too
     const nav = $('#secNav');
     if (nav) nav.addEventListener('click', e => { const c = e.target.closest('[data-sec]'); if (!c) return; const b = st.querySelector(`#sec${c.dataset.sec} [data-more]`); if (b) b.click(); }, true);
+  }
+  return { apply };
+})();
+
+/* the first screen for a new family: the friends, «Начать», «Мы уже играем — войти»; what is inside as eight small
+   tiles (emoji and a name); how to start, the family and the grown-ups' notes fold under «Подробнее»; the sign-in form
+   shows only after «Мы уже играем — войти» */
+const LANDUX = (() => {
+  function apply() {
+    const lp = $('.lp'); if (!lp) return;
+    lp.querySelectorAll('.lp-card p').forEach(p => p.remove());
+    const cards = lp.querySelector('.lp-cards'); if (cards) cards.classList.add('lp-cards-s');
+    const more = [...lp.querySelectorAll(':scope > section.lp-sec')].filter(x => !x.querySelector('.lp-cards') && x.id !== 'lpLogin' && !x.classList.contains('lp-end'));
+    if (more.length) {
+      const d = document.createElement('details'); d.className = 'lp-more';
+      d.innerHTML = '<summary>Подробнее: как начать, вся семья, для взрослых</summary>';
+      more[0].before(d); more.forEach(x => d.append(x));
+    }
+    const lg = $('#lpLogin');
+    if (lg && !LAND_LOGIN) { lg.classList.add('set-off'); const h = $('#obHave'); if (h) h.addEventListener('click', () => lg.classList.remove('set-off'), true); }
   }
   return { apply };
 })();
@@ -17260,6 +17298,7 @@ function screenLanding({ liga = '' } = {}) {
     <section class="lp-sec lp-end"><div class="lp-cta"><button class="big" id="obStart2">🚀 Создать семью</button></div>
       <p class="muted">На iPhone: «Поделиться» → «На экран „Домой“». На Android: меню ⋮ → «Добавить на главный экран».</p></section>
   </div></main></div>`;
+  LANDUX.apply();
   bindLang($('.lp-lang'), () => screenLanding({ liga }));
   const start = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
   $('#obStart').onclick = start; $('#obStart2').onclick = start;
