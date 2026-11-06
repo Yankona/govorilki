@@ -2364,6 +2364,9 @@ body.pv-on #app{padding-top:52px}
 .lp-more{width:100%;margin:6px 0}
 .lp-more>summary{cursor:pointer;text-align:center;font:800 16px var(--f-body);color:var(--ink-soft);padding:10px 0}
 .lp-more[open]>summary{margin-bottom:8px}
+.home-t .tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.home-t .tiles>.tile{flex:0 0 calc((100% - 14px)/2);max-width:calc((100% - 14px)/2);grid-column:auto!important}
+@media (min-width:760px){.home-t .tiles>.tile{flex-basis:calc((100% - 42px)/4);max-width:calc((100% - 42px)/4)}.home-t .tiles.warm>.tile{flex-basis:calc((100% - 14px)/2);max-width:calc((100% - 14px)/2)}}
 /* HOMEUX-CSS-END */
 /* ARTIC-CSS */
 .mirror .face.f-new{position:absolute;inset:0;opacity:0}
@@ -2375,6 +2378,22 @@ body.pv-on #app{padding-top:52px}
 #scheme{transition:opacity .18s ease}
 @media (prefers-reduced-motion:reduce){.face.f-in .mth,.face.hold .mth{animation:none}}
 /* ARTIC-CSS-END */
+/* WORLD2-CSS */
+.wr-heard{padding:12px 14px;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 var(--line);text-align:center}
+.wr-heard.good{box-shadow:0 4px 0 var(--line),inset 0 0 0 3px var(--leaf)}
+.wr-heard p{margin:0}
+.wr-hw{font:800 20px/1.5 var(--f-body);color:var(--ink)}
+.wr-hw .ok{color:#1E8A4F}
+.wr-hw .no{color:#D6336C;text-decoration:underline wavy}
+.wr-heard small{display:block;margin-top:4px;font:700 13px var(--f-body);color:var(--ink-soft)}
+.wr-own .fam-card{gap:12px}
+.ow-list{display:flex;flex-direction:column;gap:8px}
+.ow-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 var(--line)}
+.ow-who{font:400 26px/1 var(--f-emoji)}
+.ow-t{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.ow-t b{font:800 16px var(--f-body);color:var(--ink)}
+.ow-t small{font:700 13px/1.3 var(--f-body);color:var(--ink-soft);overflow-wrap:anywhere}
+/* WORLD2-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -11802,7 +11821,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '119';
+const APP_VER = '120';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13313,9 +13332,10 @@ const sayKey = w => w.toLowerCase().replace(/ё/g, 'е');
 function sayHash(t) { let h = 0x811c9dc5; for (const ch of t) h = Math.imul(h ^ ch.codePointAt(0), 0x01000193) >>> 0; return h.toString(36); }
 // f: a lower-case word with its ё and stress mark; the capitals of t stay
 function sayForm(t, f) {
-  let out = '', j = 0;
-  for (const c of f) {
-    if (c === ACC) { out += ACC; continue; }
+  let out = '', j = 0; const cs = [...f];
+  for (let i = 0; i < cs.length; i++) {
+    const c = cs[i];
+    if (c === ACC) { if (!'еёюя'.includes(cs[i + 1] || '')) out += ACC; continue; }
     const o = t[j++];
     if (o === undefined || sayKey(o) !== sayKey(c)) return t;
     out += o === o.toLowerCase() ? c : c.toUpperCase();
@@ -14416,7 +14436,7 @@ const LOGO = (() => {
   function check() {
     let t = newScreen(); const name = P.settings.name || 'ребёнок';
     shell('Проверка речи', `<div class="lg"><div class="lg-card lg-adult">
-      <p class="lg-q">Для взрослого: 7–10 минут вместе с ${esc(name === 'ребёнок' ? 'ребёнком' : name)}</p>
+      <p class="lg-q">Для взрослого: 7–10 минут вместе с ${esc(name === 'ребёнок' ? 'ребёнком' : decl(name, P.settings.gender === 'f')[4])}</p>
       <ol class="lg-list"><li>Ребёнок называет картинки. Вы отмечаете, как прозвучал <b class="hl">выделенный</b> звук: чисто или с ошибкой (замена, пропуск, искажение).</li>
       <li>Если ребёнок не знает слова, нажмите 🔊: пусть повторит за голосом, и отметьте.</li>
       <li>Потом игра проверит слух на похожие слова и как ребёнок повторяет длинные слова.</li></ol>
@@ -15525,8 +15545,9 @@ const WORLD = (() => {
       <p class="lead">Дома один язык, в школе другой, с друзьями третий — это нормально, так растут дети мира. Отметьте вместе с ${esc(kid.ins)}, где на каком языке ${G('она', 'он')} говорит. Если с бабушкой или в школе говорят на двух языках, отметьте оба.</p>
       ${ROLES.map(row).join('')}
       <h3 class="fam-s">Моя карта языков</h3><div id="wrMap">${mapHTML()}</div>
-      <div class="prow-btns wr-end"><button class="big" id="wrGo">${goLabel()}</button></div>
+      <div class="prow-btns wr-end"><button class="big" id="wrGo">${goLabel()}</button><button class="big ghost" id="wrOwnB">✍️ Свои фразы</button></div>
     </div>`, { back: () => (after || goHome)() });
+    $('#wrOwnB').onclick = () => { sfx.pop(); screenOwn(() => screenRoles(after)); };
     $('.wr').onclick = e => {
       const b = e.target.closest('[data-l]'); if (!b) return;
       const k = b.closest('[data-role]').dataset.role, c = b.dataset.l;
@@ -15546,24 +15567,105 @@ const WORLD = (() => {
     talk('Где ты говоришь на каком языке? Нажми на флажки вместе со взрослым.');
   }
 
+  /* the family's own phrases: the same list as «Мои фразы» in «Нужные фразы» (P.phr.mine: { id, ru, t: { code: text }, who:
+     a place of the map, none for everyone }) */
+  const own = () => { if (!P.phr) P.phr = { mine: [], learn: { b0: 1, b1: 1, b2: 1, b7: 1, b8: 1 }, box: {} }; return P.phr.mine; };
+  const ownFor = (o, role) => !o.who || o.who === '*' || o.who === role;
+  /* listening in the phrase's language and telling which words came through */
+  const CJK = /[㐀-鿿]/;
+  const normX = s => String(s).toLowerCase().replace(/ß/g, 'ss').replace(/ё/g, 'е').normalize('NFD').replace(/\p{M}/gu, '').replace(/[’'`]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+  const toks = s => CJK.test(s) ? [...normX(s).replace(/ /g, '')] : normX(s).split(' ').filter(Boolean);
+  const near = (h, w) => h === w || (w.length >= 4 && lev(h, w) <= (w.length >= 7 ? 2 : 1));
+  const heardIn = (heard, w) => { const hw = toks(heard || ''), tt = toks(w); return !tt.length || tt.every(x => hw.some(h => near(h, x))); };
+  const check = (heard, expect) => { const tw = toks(expect), hw = toks(heard || ''); return tw.length > 0 && tw.filter(w => hw.some(h => near(h, w))).length / tw.length >= .75; };
+  // one recognition in that language: the best of what was heard, '' for silence, null when the phone cannot listen in it
+  function listenIn(c, expect, maxMs = 8000) {
+    return new Promise(res => {
+      let r = null, best = '', done = false, can = true;
+      const end = () => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res(can ? best : null); };
+      try { r = new SR(); } catch (e) { res(null); return; }
+      audioSession('play-and-record'); SR_ON++;
+      r.lang = mlInfo(c)[3]; r.interimResults = true; r.maxAlternatives = 3; r.continuous = true;
+      r.onresult = e => {
+        let all = ''; const alts = [];
+        for (let i = 0; i < e.results.length; i++) { all += ' ' + e.results[i][0].transcript; for (let j = 0; j < e.results[i].length; j++) alts.push(e.results[i][j].transcript); }
+        const good = [all.trim(), ...alts].find(a => check(a, expect));
+        best = good || all.trim();
+        if (good) end();
+      };
+      r.onerror = e => { if (['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture'].includes(e.error) && !best) can = false; end(); };
+      r.onend = end;
+      setTimeout(end, maxMs);
+      try { r.start(); } catch (e) { can = false; end(); }
+    });
+  }
+  // «Свои фразы»: what the child needs to say to the coach, the neighbour, the doctor; a grown-up writes the translation
+  function screenOwn(back) {
+    newScreen();
+    const r = roles();
+    let who = '*';
+    const whoList = [['*', '🌟', 'Всем'], ...PEOPLE.filter(p => r[p[4]].length).map(p => [p[4], p[0], p[1]])];
+    const langsFor = w => w === '*' ? langsOn() : r[w];
+    shell('Свои фразы', `<div class="wr wr-own">
+      <p class="lead">Фразы, которые нужны именно вам: что сказать тренеру, соседке, врачу. Перевод пишет взрослый.</p>
+      <div class="fam-card">
+        <p class="wr-q">Кому сказать?</p>
+        <div class="wr-langs" id="owWho">${whoList.map(([k, e, n]) => `<button class="pick-b ${k === who ? 'sel' : ''}" data-who="${k}">${e} ${esc(n)}</button>`).join('')}</div>
+        <label class="prow" for="owRu">Что сказать (по-русски) <input id="owRu" type="text" maxlength="80" autocomplete="off" placeholder="например, Можно мне ещё?"></label>
+        <div id="owLangs"></div>
+        <p class="fe-err" id="owErr" role="alert"></p>
+        <div class="prow-btns"><button class="big" id="owAdd">＋ Добавить фразу</button></div>
+      </div>
+      <h3 class="fam-s">Мои фразы</h3><div class="ow-list" id="owList"></div>
+    </div>`, { back: back || (() => screenSay()) });
+    const drawLangs = () => {
+      const cs = langsFor(who).filter(c => c !== 'ru');
+      $('#owLangs').innerHTML = cs.map(c => `<label class="prow" for="ow-${c}">${flag(c)} ${esc(lname(c))} <input id="ow-${c}" data-l="${c}" type="text" maxlength="120" autocomplete="off" lang="${c}" dir="${c === 'he' ? 'rtl' : 'auto'}"></label><a class="phr-gt" data-gt="${c}" href="#" target="_blank" rel="noopener">Перевести в Google ↗</a>`).join('')
+        || '<p class="muted">С этим человеком ты говоришь по-русски: перевод не нужен.</p>';
+    };
+    const drawList = () => {
+      const L = own();
+      $('#owList').innerHTML = L.length ? L.map(o => { const w = whoList.find(x => x[0] === (o.who || '*')) || ['', '🌟', 'Всем'];
+        return `<div class="ow-row"><span class="ow-who">${w[1]}</span><span class="ow-t"><b>«${esc(o.ru)}»</b><small>${Object.entries(o.t).map(([c, tx]) => `${flag(c)} ${esc(tx)}`).join(' · ') || 'по-русски'}</small></span><button class="fe-x" data-del="${o.id}" aria-label="Убрать">✕</button></div>`; }).join('')
+        : '<p class="muted">Пока своих фраз нет.</p>';
+    };
+    drawLangs(); drawList();
+    $('#owLangs').addEventListener('click', e => { const a = e.target.closest('.phr-gt'); if (a) a.href = `https://translate.google.com/?sl=ru&tl=${a.dataset.gt}&text=${encodeURIComponent($('#owRu').value.trim())}&op=translate`; });
+    $('#owWho').onclick = e => { const b = e.target.closest('[data-who]'); if (!b) return; sfx.tick(); who = b.dataset.who; $$('#owWho [data-who]').forEach(x => x.classList.toggle('sel', x === b)); drawLangs(); };
+    $('#owList').onclick = e => { const b = e.target.closest('[data-del]'); if (!b) return; sfx.pop(); const id = b.dataset.del; P.phr.mine = own().filter(o => o.id !== id); Object.keys(P.phr.box || {}).forEach(k => { if (k.startsWith(id + '|')) delete P.phr.box[k]; }); save(); drawList(); };
+    $('#owAdd').onclick = () => {
+      const ru = cleanS($('#owRu').value, 80), t = {};
+      $$('#owLangs [data-l]').forEach(i => { const v = cleanS(i.value, 120); if (v) t[i.dataset.l] = v; });
+      const cs = langsFor(who);
+      if (!ru) { $('#owErr').textContent = 'Напишите, что сказать.'; return; }
+      if (!cs.includes('ru') && !Object.keys(t).length) { $('#owErr').textContent = 'Напишите, как это сказать хотя бы на одном языке.'; return; }
+      own().unshift({ id: 'm' + rid(6), ru, t, ...(who === '*' ? {} : { who }) }); save(); sfx.good();
+      $('#owErr').textContent = ''; $('#owRu').value = ''; $$('#owLangs [data-l]').forEach(i => { i.value = ''; });
+      drawList(); talk('Фраза добавлена. Она будет в «Кому как сказать?» и в «Нужных фразах».');
+    };
+    talk('Здесь можно добавить свои фразы. Выберите, кому их говорить, и напишите перевод.');
+  }
+
   /* «Кому как сказать?» */
   function deck() {
-    const r = roles(), out = [];
+    const r = roles(), out = [], mine = [];
     PEOPLE.forEach(p => {
       const all = r[p[4]]; if (!all.length) return;
       const xs = PHR.BASE.filter(x => p[5].includes(x.cat) && all.some(c => phrase(x, c)) && !(p[6] && p[6].test(PHR.gtx(x.ru))));
       // all: every language spoken with this person (any one is right); cs: those the phrase exists in
       shuffle(xs).slice(0, 2).forEach(x => out.push({ p, x, all, cs: all.filter(c => phrase(x, c)) }));
+      own().filter(o => ownFor(o, p[4]) && all.some(c => phrase(o, c))).forEach(o => mine.push({ p, x: o, all, cs: all.filter(c => phrase(o, c)) }));
     });
-    return shuffle(out).slice(0, 8);
+    const seen = new Set(), ownCards = shuffle(mine).filter(m => !seen.has(m.x.id) && seen.add(m.x.id)).slice(0, 6);
+    return shuffle([...ownCards, ...shuffle(out)].slice(0, 8));
   }
   function screenSay() {
     if (!ready()) { screenRoles(); return; }
     const t = newScreen(), cards = deck(), opts = langsOn();
     if (!cards.length) { screenRoles(); return; }
-    let k = 0, right = 0;
+    let k = 0, right = 0, clear = 0;
     const done = () => finish({ key: 'world-say', stars: right >= cards.length - 1 ? 3 : right >= cards.length / 2 ? 2 : 1,
-      line: `Верный язык с первого раза: ${right} из ${cards.length}.`, again: () => screenSay(), menu: () => screenRoles() });
+      line: `Верный язык с первого раза: ${right} из ${cards.length}.${clear ? ` Сказано понятно: ${clear}.` : ''}`, again: () => screenSay(), menu: () => screenRoles() });
     const show = () => {
       const { p, x, all, cs } = cards[k], [e, who, to, withWho] = p, ru = PHR.gtx(x.ru), my = k;
       let firstTry = true;
@@ -15572,7 +15674,8 @@ const WORLD = (() => {
         <div class="wr-card"><span class="wr-who">${e}</span><b>${esc(who)}</b><p>Скажи ${esc(to)}: «${esc(ru)}»</p></div>
         <p class="wr-q">На каком языке ты говоришь ${esc(withWho)}?</p>
         <div class="wr-opts" id="wrOpts">${opts.map(o => `<button class="wr-opt" data-c="${o}"><span>${flag(o)}</span><small>${esc(lname(o))}</small></button>`).join('')}</div>
-        <div id="wrOut"></div>${mlNoVoice(opts.filter(o => o !== 'ru'))}</div>`, { back: () => screenRoles() });
+        <div id="wrOut"></div>${mlNoVoice(opts.filter(o => o !== 'ru'))}<button class="link-btn" id="wrOwn">✍️ Свои фразы</button></div>`, { back: () => screenRoles() });
+      $('#wrOwn').onclick = () => { sfx.pop(); screenOwn(() => screenSay()); };
       talk(`Скажи ${to}: ${ru} На каком языке?`);
       $('#wrOpts').onclick = async ev => {
         const b = ev.target.closest('[data-c]'); if (!b || b.disabled) return;
@@ -15587,10 +15690,42 @@ const WORLD = (() => {
         const c = cs.includes(b.dataset.c) ? b.dataset.c : cs[0], order = [c, ...cs.filter(o => o !== c)];
         $$('#wrOpts [data-c]').forEach(o => { o.disabled = true; o.classList.toggle('yes', all.includes(o.dataset.c)); });
         const said = phrase(x, c), now = `Теперь скажи сам${G('а', '')}.`, hearIn = (l, w) => l === 'ru' ? say(w) : sayIn(l, w, .75);
+        const canHear = srOk();
         $('#wrOut').innerHTML = `${order.map(o => `<div class="wr-ans"><span>${flag(o)}</span><b>${esc(mlText(phrase(x, o)))}</b><button class="chip" data-hear="${o}" aria-label="🔊">🔊</button></div>`).join('')}
-          <div class="prow-btns wr-end"><button class="big" id="wrSaid">🗣️ ${G('Сказала', 'Сказал')}!</button></div>`;
+          <div class="wr-heard" id="wrHeard" hidden></div>
+          <div class="prow-btns wr-end">${canHear ? '<button class="big" id="wrMic">🎤 Сказать</button>' : ''}<button class="big ${canHear ? 'ghost' : ''}" id="wrSaid">${canHear ? 'Дальше →' : `🗣️ ${G('Сказала', 'Сказал')}!`}</button></div>`;
         $('#wrOut').onclick = ev2 => { const h = ev2.target.closest('[data-hear]'); if (!h) return; sfx.pop(); hearIn(h.dataset.hear, phrase(x, h.dataset.hear)); };
         $('#wrSaid').onclick = () => { sfx.pop(); k++; if (k >= cards.length) done(); else show(); };
+        // the phone listens in that language: the words it understood turn green, the others are said again slowly
+        let tries = 0, gotIt = false;
+        const mic = $('#wrMic'), nextBig = () => { const n = $('#wrSaid'); n.className = 'big'; n.textContent = 'Дальше →'; };
+        if (mic) mic.onclick = async () => {
+          if (mic.disabled) return; mic.disabled = true; sfx.pop(); hush();
+          mic.textContent = '👂 Слушаю…';
+          const heard = await listenIn(c, said); if (!still()) return;
+          mic.disabled = false; mic.textContent = '🎤 Ещё раз';
+          const box = $('#wrHeard'); box.hidden = false;
+          if (heard === null) { box.innerHTML = '<p>На этом языке телефон пока не слушает. Скажи вслух и нажми «Дальше».</p>'; mic.remove(); nextBig(); return; }
+          tries++;
+          const parts = CJK.test(said) ? [...said.replace(/\s+/g, '')] : said.split(/\s+/), marks = parts.map(w => ({ w, ok: heardIn(heard, w) })), ok = check(heard, said);
+          box.className = 'wr-heard ' + (ok ? 'good' : 'try');
+          box.innerHTML = `<p class="wr-hw">${marks.map(m => `<span class="${m.ok ? 'ok' : 'no'}">${esc(m.w)}</span>`).join(CJK.test(said) ? '' : ' ')}</p>${heard ? `<small>Слышу: «${esc(heard)}»</small>` : ''}`;
+          if (ok) {
+            sfx.good(); if (!gotIt) { gotIt = true; clear++; } mic.remove(); nextBig();
+            talk(pickOne(['Отлично, всё понятно!', 'Здорово, так и говорят!', 'Молодец, очень понятно!']));
+            return;
+          }
+          sfx.oops();
+          const miss = marks.filter(m => !m.ok).map(m => m.w);
+          if (!heard) { talk('Ничего не слышно. Нажми «Ещё раз» и скажи погромче.'); }
+          else {
+            const few = miss.length && miss.length < marks.length && miss.length <= 3;
+            await talk(few ? `Почти! Послушай ${miss.length > 1 ? 'эти слова' : 'это слово'}.` : 'Послушай ещё раз, медленно.'); if (!still()) return;
+            await (c === 'ru' ? say(few ? miss.join(' ') : said) : sayIn(c, few ? miss.join(' ') : said, .6)); if (!still()) return;
+            if (tries < 3) talk('Теперь ещё раз!');
+          }
+          if (tries >= 3) { mic.remove(); nextBig(); talk('Хорошо! Потренируем эту фразу в другой раз.'); }
+        };
         if (c === 'ru') { if (still()) say(`${said} ${now}`); }
         else { await sayIn(c, said, .75); if (still()) talk(now); }
       };
@@ -16865,7 +17000,8 @@ const HOMEUX = (() => {
       const left = [...box.querySelectorAll(':scope > .tile')];
       if (!left.length) { const nb = st.querySelector(`#secNav [data-sec="${sec.id.replace('sec', '')}"]`); if (nb) nb.remove(); sec.remove(); return; }
       const key = tab + ':' + sec.id;
-      if (left.length > 6 && !OPEN[key]) {
+      // «Слушаю и говорю» shows all its games (the family asked); long sections elsewhere fold
+      if (left.length > 6 && !OPEN[key] && sec.id !== 'sec16') {
         left.slice(4).forEach(t => t.classList.add('tile-more'));
         box.insertAdjacentHTML('afterend', `<button class="more-btn" data-more="${key}">${left.length - 4} more ▾</button>`);
       }
