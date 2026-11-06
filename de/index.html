@@ -2402,6 +2402,46 @@ body.pv-on #app{padding-top:52px}
 .rb-on{outline:4px solid var(--sun)!important;outline-offset:3px;transform:scale(1.05);transition:transform .15s}
 .lab-story{margin:6px auto 0}
 /* READBTN-CSS-END */
+/* CBOX-CSS */
+.cbx-lead{margin:0;font:700 16px/1.4 var(--f-body);color:var(--ink-soft);text-align:center}
+.young .cbx-lead{display:none}
+.cbx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (min-width:640px){.cbx-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cbx-t{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-radius:18px;padding:12px 4px 10px;background:var(--t-lilac,#E9E1FF);box-shadow:0 4px 0 var(--line-strong);cursor:pointer}
+.cbx-t:nth-child(3n+2){background:var(--t-blue,#DDEEFF)}.cbx-t:nth-child(3n){background:var(--t-yellow,#FFF1C2)}
+.cbx-t:active{transform:translateY(2px);box-shadow:0 2px 0 var(--line-strong)}
+.cbx-e{font-size:44px;line-height:1}
+.cbx-t b{font:800 14px/1.2 var(--f-body);color:var(--ink);text-align:center}
+.cbx-who{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;object-fit:cover;object-position:top;border:2px solid #fff;background:#ddd}
+.cmp-grid.three{grid-template-columns:repeat(3,1fr)}
+.cbx-unk img{filter:brightness(0);opacity:.55}
+.cbx-unk b{font-size:18px}
+.cmp-c.hint{box-shadow:0 0 0 4px #FFC83A,0 3px 0 var(--line-strong);animation:pulse .9s ease-in-out infinite}
+.cmp-c:disabled{opacity:.55}
+.cbx-stage{position:relative;display:flex;justify-content:center;align-items:center;height:150px;border-radius:24px;background:radial-gradient(circle at 50% 60%,var(--t-yellow,#FFF1C2),var(--t-lilac,#E9E1FF));overflow:hidden}
+.cbx-big{font-size:96px;line-height:1;display:inline-block}
+.cbx-n{position:absolute;bottom:8px;font:900 28px var(--f-body);font-style:normal;color:var(--plum,#6B3FA0);animation:cbxUp 1.5s ease-out forwards;pointer-events:none}
+@keyframes cbxUp{from{transform:translateY(0);opacity:1}to{transform:translateY(-120px);opacity:0}}
+.cbx-name{margin:0;text-align:center;font:800 24px var(--f-display,var(--f-body))}
+.cbx-img{margin:0;text-align:center;font:700 16px/1.4 var(--f-body);color:var(--ink-soft)}
+.cbx-card{display:flex;gap:12px;align-items:flex-start;border-radius:20px;padding:12px;background:var(--t-yellow,#FFF1C2);box-shadow:0 4px 0 var(--line-strong)}
+.cbx-card.new{animation:cbxFlip .7s ease-out}
+@keyframes cbxFlip{from{transform:rotateY(90deg) scale(.8)}to{transform:none}}
+.cbx-card img{width:96px;height:120px;border-radius:14px;object-fit:cover;object-position:top;flex:none;background:#ddd}
+.cbx-card b{font:900 17px var(--f-body);color:var(--plum,#6B3FA0)}
+.cbx-card h3{margin:4px 0 0;font:800 19px/1.25 var(--f-body)}
+.cbx-card small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.cbx-card p{margin:6px 0 0;font:700 15px/1.45 var(--f-body)}
+.cbx-st{display:flex;flex-direction:column;align-items:flex-start}
+.cbx-st .link-btn,.ast-story{align-self:flex-start;text-align:left}
+/* the painters in the museum */
+.ast-row{display:flex;gap:8px;overflow-x:auto;contain:inline-size;width:100%;max-width:calc(100vw - 32px);padding:2px 2px 8px;scroll-snap-type:x mandatory}
+.ast-c{flex:0 0 132px;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-radius:16px;padding:10px 6px;background:var(--t-peach,#FFE3D3);box-shadow:0 3px 0 var(--line-strong);scroll-snap-align:start;cursor:pointer}
+.ast-c span{font-size:34px;line-height:1}.ast-c b{font:800 13px/1.25 var(--f-body);color:var(--ink);text-align:center}
+.ast-c.seen{outline:3px solid var(--leaf,#2FA865)}
+.ast-who{position:relative;padding-right:44px}
+.ast-who .ag-say{position:absolute;top:8px;right:8px}
+/* CBOX-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -7192,7 +7232,7 @@ function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
   const st = shell(T.name, `<p class="lead">${Q() ? "Lies laut vor und beantworte dann die Frage." : "Hör dir die Geschichte an und beantworte die Frage."}</p>
-    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : null });
+    <div class="cards">${items.map((x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.remove()" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : null });
   talk(Q() ? "Such dir eine Geschichte aus. Lies sie laut vor und beantworte die Frage." : "Such dir eine Geschichte aus. Ich erzähle sie, und du beantwortest die Frage.");
   st.onclick = e => { const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
@@ -10936,7 +10976,7 @@ function artLoad() {
   // a short tour of every painting: what to find, the feeling, a question, the secret
   fetch(SITE_ROOT + 'art/tours-' + LANG + '.json').then(r => r.ok ? r.json() : {}).then(n => { ART.tours = n || {}; }).catch(() => {});
   ART.load = fetch(SITE_ROOT + 'art/art-' + LANG + '.json').then(r => r.ok ? r.json() : Promise.reject(r.status)).then(d => {
-    ART.data = { m: d.m, p: d.p.map(([q, t, a, y, m, f, w, l], i) => ({ q, t, a, y, m, f, w, l, i })) };
+    ART.data = { m: d.m, aw: d.aw || {}, p: d.p.map(([q, t, a, y, m, f, w, l], i) => ({ q, t, a, y, m, f, w, l, i })) };
     return ART.data;
   }).catch(e => { ART.load = null; throw e; });
   return ART.load;
@@ -10998,15 +11038,9 @@ function screenMuseum(tab = 'day', arg = null) {
       box.querySelector('[data-tab-back]').onclick = () => screenMuseum('mus');
       talk(`${D.m[arg] || "Museum"}. Hier gibt es ${list.length} ${plural(list.length, ["Bild", "Bilder", "Bilder"])}.`);
     } else if (tab === 'who' && !arg) {
-      const cnt = {}; P2.forEach(x => { if (x.a) cnt[x.a] = (cnt[x.a] || 0) + 1; });
-      const as = Object.keys(cnt).filter(a => cnt[a] >= 3).sort((a, b) => cnt[b] - cnt[a]);
-      box.innerHTML = `<div class="art-list">${as.map(a => { const top = P2.find(x => x.a === a); return `<button class="art-row" data-who="${esc(a)}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(a)}</b><small>${cnt[a]} ${plural(cnt[a], ["Bild", "Bilder", "Bilder"])}</small></span></button>`; }).join('')}</div>`;
-      talk("Wähle einen Künstler.");
+      ARTISTS.list(box, P2);
     } else if (tab === 'who') {
-      const list = P2.filter(x => x.a === arg); box._list = list;
-      box.innerHTML = `<button class="link-btn" data-tab-back>← Alle Künstler</button><h2 class="art-h">🎨 ${esc(arg)}</h2>${artThumbs(list)}`;
-      box.querySelector('[data-tab-back]').onclick = () => screenMuseum('who');
-      talk(`${arg}. ${list.length} ${plural(list.length, ["Bild", "Bilder", "Bilder"])}.`);
+      ARTISTS.one(box, P2, arg);
     } else if (tab === 'my') {
       const list = my.likes.map(q => P2.find(x => x.q === q)).filter(Boolean); box._list = list;
       box.innerHTML = list.length ? `<h2 class="art-h">❤️ Mein Museum: ${list.length}</h2>${artThumbs(list)}` : "<p class=\"lead\">Hier erscheinen die Bilder, die dir gefallen. Tippe auf ❤️ unter einem Bild.</p>";
@@ -11217,7 +11251,7 @@ function screenArtQuiz() {
   }, () => { if (t === tok) $('#aqBox').innerHTML = "<p class=\"lead\">Um das Museum zu öffnen, brauchst du Internet.</p>"; });
 }
 GAMES.push(
-  { id: 'museum', name: "Museum der Welt", sub: "1.000 berühmte Gemälde", ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenMuseum(), grp: 4, also: [13], prog: () => { const n = (P.museum && P.museum.seen || []).length; return n ? `angeschaut: ${n}` : ''; } },
+  { id: 'museum', name: "Museum der Welt", sub: "1000 Bilder und 200 Maler", ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenMuseum(), grp: 4, also: [13], prog: () => { const n = (P.museum && P.museum.seen || []).length; return n ? `angeschaut: ${n}` : ''; } },
   { id: 'art-quiz', name: "Quiz: Gemälde", sub: "Wer hat es gemalt? Wo hängt es?", ico: () => pic('🎯'), bg: 'var(--t-yellow)', go: () => screenArtQuiz(), grp: 4, also: [13] },
   { id: 'art-memory', name: "Memory: Gemälde", sub: "finde Paare von Meisterwerken", ico: () => pic('🃏'), bg: 'var(--t-lilac)', go: () => screenArtMemory(), grp: 4, also: [13] }
 );
@@ -11595,22 +11629,7 @@ function cfWorkHTML(c, f) {
   return w.t ? `<button class="chip cmp-fx" data-t="${w.t}">▶ Abspielen: ${esc(CTUNES[w.t].n)}</button>`
     : `<a class="chip cmp-fx" href="https://www.youtube.com/results?search_query=${encodeURIComponent(w.q)}" target="_blank" rel="noopener">🎧 ${esc(w.n)} – Aufnahme, zusammen mit Erwachsenen</a>`;
 }
-function screenComposers() {
-  if (!CF.data) { cfLoad().then(() => screenComposers()); return; }
-  newScreen();
-  const fc = pickOne(COMPOSERS), ff = cfNext(fc);
-  shell("Lustige Komponisten", `<div class="cmp">
-      <div class="og-btns"><button class="big" id="cmpGuess">🎧 Rate den Komponisten</button><button class="big ghost" id="cmpTF">🤔 Wahr oder erfunden?</button><button class="big ghost" id="cmpCond">🪄 Dirigent</button></div>
-      <button class="cmp-day" id="cmpDay"><img src="${portrait(fc, 200)}" alt=""><span><b>😄 ${esc(fc.n)}</b><small>${esc(ff)}</small></span></button>
-      <div class="cmp-grid">${COMPOSERS.map(c => `<button class="cmp-c" data-c="${c.id}"><img loading="lazy" src="${portrait(c)}" alt=""><b>${esc(c.n)}</b><small>${FLAG(c.cc)} ${c.y}</small></button>`).join('')}</div>
-    </div>`);
-  $('.cmp-grid').onclick = e => { const b = e.target.closest('[data-c]'); if (b) { sfx.pop(); screenComposer(b.dataset.c); } };
-  $('#cmpGuess').onclick = () => { sfx.pop(); screenGuessComposer(); };
-  $('#cmpCond').onclick = () => { sfx.pop(); screenConductor(); };
-  $('#cmpTF').onclick = () => { sfx.pop(); screenCmpTF(); };
-  $('#cmpDay').onclick = () => { sfx.pop(); screenComposer(fc.id, ff); };
-  talk("Lustige Komponisten! Such dir einen aus – hör seine Musik und erfahre lustige Geschichten über ihn.");
-}
+function screenComposers() { CBOX.screen(); }
 function screenComposer(id, first) {
   if (!CF.data) { cfLoad().then(() => screenComposer(id, first)); return; }
   const t = newScreen(), c = COMPOSERS.find(x => x.id === id), f0 = first || cfNext(c);
@@ -11633,6 +11652,7 @@ function screenComposer(id, first) {
     if (CTUNES[b.dataset.t].surprise) talk("Erschrocken? Das ist Haydns Überraschung!");
   };
   fx(f0);
+  CBOX.stories(c);
   $('#cmpPlay').onclick = () => { sfx.pop(); screenPlayWith(c.tunes[0]); };
   $('#cmpCond1').onclick = () => { sfx.pop(); screenConductor(c.tunes[0]); };
   talk(`${c.full}. ${f0} Tippe auf eine Melodie, um sie zu hören.`);
@@ -11723,7 +11743,7 @@ function screenPlayWith(tid) {
   talk(`Wir spielen zusammen mit dem Komponisten ${c.n}! Tippe auf die leuchtende Taste – und es entsteht die Melodie „${T.n}“.`);
 }
 GAMES.push(
-  { id: 'composers', name: "Lustige Komponisten", sub: "Mozart, Tschaikowsky, Beethoven…", ico: () => pic('🎼'), bg: 'var(--t-lilac)', go: () => screenComposers(), grp: 4, also: [13] },
+  { id: 'composers', name: "Lustige Komponisten", sub: "spiel Musik ab und sammle Komponisten-Karten", ico: () => pic('🎼'), bg: 'var(--t-lilac)', go: () => screenComposers(), grp: 4, also: [13] },
   { id: 'guess-composer', name: "Rate den Komponisten", sub: "hör zu – wer hat das geschrieben?", ico: () => pic('🎧'), bg: 'var(--t-blue)', go: () => screenGuessComposer(), grp: 4, also: [13] },
   { id: 'conductor', name: "Dirigent", sub: "das Orchester spielt, wie du den Stab schwingst", ico: () => pic('🪄'), bg: 'var(--t-yellow)', go: () => screenConductor(), grp: 4, also: [13] }
 );
@@ -11838,7 +11858,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '121';
+const APP_VER = '122';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17084,6 +17104,184 @@ const READBTN = (() => {
   return { add };
 })();
 /* READBTN-END */
+/* CBOX-BEGIN */
+/* ---------- «Художники» inside «Музей мира»: every painter of the museum (not only those with three paintings), the
+   stories about painters (they were a separate tile «Художники и картины» with 8 stories, which looked like the whole
+   painters' section), and on a painter's page who that was (the first sentences of Wikipedia in the page's language),
+   their story if there is one, and all their paintings. ---------- */
+const ARTISTS = (() => {
+  // a story's painter, found through one of that painter's paintings in the museum (names differ between languages)
+  const STORY_Q = { 'ar-aiv': 'Q1070896', 'ar-shishkin': 'Q4396378', 'ar-vasn': 'Q4089077', 'ar-bryull': 'Q2521909', 'ar-leo': 'Q12418',
+    'ar-vangogh': 'Q45585', 'ar-monet': 'Q328523', 'ar-kand': 'Q2990634', 'ar-malevich': 'Q1170315' };
+  const WIKI = {};
+  const LIST_N = 24;   // the best-known painters first; the others under «Ещё»
+  let open = false;
+  const stories = () => (LEARN.art ? learnItems('art') : []);
+  const storyOf = (P2, a) => stories().map((x, i) => ({ x, i })).filter(({ x }) => { const p = P2.find(y => y.q === STORY_Q[x.id]); return p && p.a === a; });
+  // the painter's article (its exact title comes with the museum's list)
+  function about(a) {
+    const w = ART.data && ART.data.aw && ART.data.aw[a]; if (!w) return Promise.resolve('');
+    if (WIKI[a] === undefined) WIKI[a] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(w.replace(/ /g, '_'))}`)
+      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+    return WIKI[a].then(s => s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, Q() ? 3 : 2).join(' ') : '');
+  }
+  function list(box, P2) {
+    const cnt = {}; P2.forEach(x => { if (x.a) cnt[x.a] = (cnt[x.a] || 0) + 1; });
+    const as = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a] || a.localeCompare(b));
+    const st = stories(), withStory = new Set(st.map(x => { const p = P2.find(y => y.q === STORY_Q[x.id]); return p && p.a; }).filter(Boolean));
+    const row = a => { const top = P2.find(x => x.a === a); return `<button class="art-row ${as.indexOf(a) >= LIST_N && !open ? 'tile-more' : ''}" data-who="${esc(a)}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(a)}${withStory.has(a) ? ' 📖' : ''}</b><small>${cnt[a]} ${plural(cnt[a], ["Gemälde", "Gemälde", "Gemälde"])}</small></span></button>`; };
+    box.innerHTML = `<p class="art-cnt">🎨 ${as.length} ${plural(as.length, ["Maler", "Maler", "Maler"])} · 🖼️ ${P2.length} ${plural(P2.length, ["Gemälde", "Gemälde", "Gemälde"])}</p>
+      ${st.length ? `<h2 class="art-h">📖 Geschichten über Maler</h2><div class="ast-row" id="astRow">${st.map((x, i) => `<button class="ast-c ${learnDone(x.id) ? 'seen' : ''}" data-st="${i}"><span>${x.e}</span><b>${esc(x.t)}</b></button>`).join('')}</div>` : ''}
+      <div class="og-btns"><button class="big ghost" id="astQuiz">🎯 Errate den Maler</button></div>
+      <h2 class="art-h">🎨 Alle Maler</h2>
+      <div class="art-list">${as.map(row).join('')}</div>
+      ${as.length > LIST_N && !open ? `<button class="more-btn" id="astMore">Noch ${as.length - LIST_N} ▾</button>` : ''}`;
+    const sr = $('#astRow'); if (sr) sr.onclick = e => { const b = e.target.closest('[data-st]'); if (b) { sfx.pop(); screenStory('art', +b.dataset.st, { back: () => screenMuseum('who') }); } };
+    $('#astQuiz').onclick = () => { sfx.pop(); screenArtQuiz(); };
+    const m = $('#astMore'); if (m) m.onclick = () => { sfx.pop(); open = true; box.querySelectorAll('.art-row.tile-more').forEach(x => x.classList.remove('tile-more')); m.remove(); };
+    talk(`Im Museum gibt es ${as.length} ${plural(as.length, ["Maler", "Maler", "Maler"])}. Wähle einen Maler oder hör dir eine Geschichte an.`);
+  }
+  function one(box, P2, a) {
+    const ps = P2.filter(x => x.a === a), st = storyOf(P2, a); box._list = ps;
+    box.innerHTML = `<button class="link-btn" data-tab-back>← Alle Maler</button><h2 class="art-h">🎨 ${esc(a)}</h2>
+      <div class="art-note ast-who" id="astWho" hidden><b>👤 Wer war das</b><p id="astWhoT"></p><button class="ag-say" id="astWhoSay" aria-label="Anhören">🔊</button></div>
+      ${st.map(({ x, i }) => `<button class="link-btn ast-story" data-st="${i}">📖 Geschichte: ${esc(x.t)}</button>`).join('')}
+      <p class="art-cnt">${ps.length} ${plural(ps.length, ["Gemälde", "Gemälde", "Gemälde"])} im Museum</p>${artThumbs(ps)}`;
+    box.querySelector('[data-tab-back]').onclick = () => screenMuseum('who');
+    box.querySelectorAll('.ast-story').forEach(b => b.onclick = () => { sfx.pop(); screenStory('art', +b.dataset.st, { back: () => screenMuseum('who', a) }); });
+    const me = tok;
+    about(a).then(s => {
+      if (me !== tok || !s) { if (me === tok) talk(`${a}. ${ps.length} ${plural(ps.length, ["Gemälde", "Gemälde", "Gemälde"])}. Tippe auf ein Bild.`); return; }
+      $('#astWho').hidden = false; $('#astWhoT').textContent = s;
+      $('#astWhoSay').onclick = () => { sfx.pop(); talk(s); };
+      talk(`${a}. ${s}`);
+    });
+  }
+  return { list, one, STORY_Q };
+})();
+/* ---------- «Весёлые композиторы» start with the music, not with twelve names a child does not know: «Музыкальная
+   шкатулка» is a picture for every theme (a bumblebee, the Mountain King, swans…); a tap plays it, the picture dances,
+   and the child guesses who wrote it out of three portraits. The right guess gives that composer's card (a star the
+   first time); the cards not found yet are black silhouettes, and a tap on one plays that composer's music. The
+   stories about composers (they were a separate tile «Композиторы») open from here and from a composer's page. ---------- */
+const CBOX = (() => {
+  // the themes as a child sees them: what is in the music, and what to imagine while it plays
+  const T = [
+    ['bee', '🐝', "Hummelflug", "Hörst du? Die Hummel summt und flitzt hin und her!"],
+    ['king', '👹', "Bergkönig", "Trolle schleichen durch die Höhle… immer schneller!"],
+    ['surprise', '💥', "Überraschung!", "Leise, leise… und dann — Überraschung!"],
+    ['swan', '🦢', "Schwäne", "Weiße Schwäne gleiten über einen stillen See."],
+    ['tell', '🐎', "Galopp", "Die Pferde galoppieren davon!"],
+    ['twinkle', '⭐', "Sternchen", "Die Sternchen funkeln am Himmel."],
+    ['lullaby', '😴', "Wiegenlied", "Psst, psst, die Kleinen schlafen ein."],
+    ['morning', '🌅', "Morgen", "Die Sonne wacht auf und die Vögel fangen an zu singen."],
+    ['fifth', '🚪', "Klopf-klopf-klopf-KLOPF!", "Jemand klopft laut an die Tür!"],
+    ['toccata', '🦇', "Gruselige Orgel", "Eine riesige Orgel dröhnt in einem alten Schloss."],
+    ['danube', '💃', "Walzer", "Eins-zwei-drei, eins-zwei-drei — alle drehen sich im Walzer."],
+    ['spring', '🐦', "Frühling", "Der Frühling ist da und die Vögel zwitschern."],
+    ['turca', '🥁', "Marsch", "Spielzeugsoldaten marschieren zur Trommel."],
+    ['joy', '🎉', "Freude", "Alle singen zusammen und freuen sich."],
+    ['elise', '🎹', "Für Elise", "Ein zartes Liedchen für ein Mädchen namens Elise."],
+    ['nacht', '🌙', "Nachtmusik", "Nachts spielen Musiker unter einem Fenster."],
+    ['promenade', '🖼️', "Promenade", "Wir spazieren durch eine Bilderausstellung."]
+  ].filter(x => CTUNES[x[0]] && compOf(x[0]));
+  // the stories about a composer (ids of LEARN.music; the stories of each language that exist)
+  const STORY = { mozart: ['mu-mozart'], beethoven: ['mu-beethoven'], vivaldi: ['mu-vivaldi'], bach: ['mu-bach'], rimsky: ['mu-bee'], mussorgsky: ['mu-pictures'], tchaikovsky: ['mu-nutcracker', 'mu-album'] };
+  const mine = () => (P.cmpCards = P.cmpCards || []);
+  const has = c => mine().includes(c.id);
+  const names = l => l.length > 1 ? `${l.slice(0, -1).map(x => x.n).join(', ')} oder ${l[l.length - 1].n}` : (l[0] ? l[0].n : '');
+  // the next music: one whose composer has no card yet, while there is one
+  const nextTune = not => { const left = T.filter(x => !has(compOf(x[0])) && x[0] !== not); return (left.length ? pickOne(left) : pickOne(T.filter(x => x[0] !== not)))[0]; };
+  function screen() {
+    if (!CF.data) { cfLoad().then(() => screen()); return; }
+    newScreen();
+    const n = COMPOSERS.filter(has).length, all = n >= COMPOSERS.length;
+    shell("Lustige Komponisten", `<div class="cmp cbx">
+        <p class="cbx-lead">🎵 Tippe auf ein Bild, dann spielt die Musik. Errate, wer sie geschrieben hat, und die Karte des Komponisten gehört dir!</p>
+        <div class="cbx-grid" id="cbxGrid">${T.map(([tid, e, nm]) => { const c = compOf(tid); return `<button class="cbx-t" data-t="${tid}"><span class="cbx-e">${e}</span><b>${esc(nm)}</b>${has(c) ? `<img class="cbx-who" src="${portrait(c, 90)}" alt="">` : ''}</button>`; }).join('')}</div>
+        <h2 class="art-h">🃏 Meine Komponisten: ${n} von ${COMPOSERS.length}${all ? ' 🏆' : ''}</h2>
+        <div class="cmp-grid" id="cbxCards">${COMPOSERS.map(c => has(c)
+          ? `<button class="cmp-c" data-c="${c.id}"><img loading="lazy" src="${portrait(c)}" alt=""><b>${esc(c.n)}</b><small>${FLAG(c.cc)} ${c.y}</small></button>`
+          : `<button class="cmp-c cbx-unk" data-u="${c.id}" aria-label="Wer ist das?"><img loading="lazy" src="${portrait(c)}" alt=""><b>❓</b><small>${FLAG(c.cc)} ${c.y}</small></button>`).join('')}</div>
+        <div class="og-btns"><button class="big ghost" id="cmpGuess">🎧 Errate den Komponisten</button><button class="big ghost" id="cmpTF">🤔 Wahr oder erfunden?</button><button class="big ghost" id="cmpCond">🪄 Dirigent</button>${LEARN.music ? "<button class=\"big ghost\" id=\"cbxStories\">📖 Geschichten über Komponisten</button>" : ''}</div>
+      </div>`);
+    $('#cbxGrid').onclick = e => { const b = e.target.closest('[data-t]'); if (b) { sfx.pop(); play(b.dataset.t); } };
+    $('#cbxCards').onclick = e => {
+      const b = e.target.closest('[data-c], [data-u]'); if (!b) return; sfx.pop();
+      if (b.dataset.c) screenComposer(b.dataset.c); else play(pickOne(COMPOSERS.find(c => c.id === b.dataset.u).tunes.filter(x => T.some(y => y[0] === x))));
+    };
+    $('#cmpGuess').onclick = () => { sfx.pop(); screenGuessComposer(); };
+    $('#cmpCond').onclick = () => { sfx.pop(); screenConductor(); };
+    $('#cmpTF').onclick = () => { sfx.pop(); screenCmpTF(); };
+    const sb = $('#cbxStories'); if (sb) sb.onclick = () => { sfx.pop(); screenLearn('music'); };
+    talk(all ? `Du hast${G("", '')} alle Komponisten gesammelt! Tippe auf ein Bild und hör die Musik noch einmal.`
+      : n ? `Du hast ${n} ${plural(n, ["Karte", "Karten", "Karten"])} von ${COMPOSERS.length}. Tippe auf ein Bild, dann spielt die Musik. Errate, wer sie geschrieben hat!`
+      : "Tippe auf ein beliebiges Bild, dann spielt die Musik. Errätst du, wer sie geschrieben hat, bekommst du die Karte des Komponisten!");
+  }
+  function play(tid) {
+    if (!CF.data) { cfLoad().then(() => play(tid)); return; }
+    const t = newScreen(), row = T.find(x => x[0] === tid) || [tid, '🎵', CTUNES[tid].n, ''], c = compOf(tid);
+    const opts = sample([c, ...sample(COMPOSERS.filter(x => x !== c), 2)], 3);
+    let miss = 0, done = false;
+    shell("Spieluhr", `<div class="cmp cbx-play">
+        <div class="cbx-stage" id="cbxSt"><span class="cbx-big" id="cbxBig">${row[1]}</span></div>
+        <h2 class="cbx-name">${esc(row[2])}</h2><p class="cbx-img">${esc(row[3])}</p>
+        <div id="cbxAsk"><h2 class="art-h">Wer hat diese Musik geschrieben?</h2>
+          <div class="cmp-grid three" id="cbxOpts">${opts.map(x => `<button class="cmp-c" data-c="${x.id}"><img src="${portrait(x)}" alt=""><b>${esc(x.n)}</b></button>`).join('')}</div>
+          <div class="og-btns"><button class="big ghost" id="cbxAgain">▶ Noch einmal hören</button></div></div>
+        <div id="cbxWin"></div>
+      </div>`, { back: screen });
+    const big = $('#cbxBig'), st = $('#cbxSt');
+    const onNote = i => {
+      if (t !== tok) return;
+      try { big.animate([{ transform: `scale(1.18) rotate(${i % 2 ? 7 : -7}deg)` }, { transform: 'scale(1) rotate(0)' }], { duration: 260, easing: 'ease-out' }); } catch (e) {}
+      if (i % 2 === 0) { const n = document.createElement('i'); n.className = 'cbx-n'; n.textContent = '♪♫♩♬'[i % 4]; n.style.left = (12 + Math.random() * 76) + '%'; st.append(n); setTimeout(() => n.remove(), 1500); }
+    };
+    const go = async () => {
+      hush(); st.classList.add('on');
+      const ended = await playTune(tid, { onNote }); if (t !== tok) return; st.classList.remove('on');
+      if (ended && !done) talk(`Wer hat diese Musik geschrieben? ${names(opts)}?`);
+    };
+    $('#cbxAgain').onclick = () => { sfx.pop(); go(); };
+    $('#cbxOpts').onclick = async e => {
+      const b = e.target.closest('[data-c]'); if (!b || b.disabled || done) return;
+      if (b.dataset.c !== c.id) {
+        miss++; b.disabled = true; b.classList.add('no'); wiggle(b); sfx.oops();
+        if (miss >= 2) { const r = $(`#cbxOpts [data-c="${c.id}"]`); if (r) r.classList.add('hint'); }
+        talk(miss >= 2 ? `Tipp: Es ist ${c.n}.` : "Er ist es nicht. Hör noch mal hin und versuch es wieder!");
+        return;
+      }
+      done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good();
+      const fresh = !has(c); if (fresh) { mine().push(c.id); P.stars += 1; weekAdd(P, 1); save(); }
+      const f = cfNext(c), all = fresh && COMPOSERS.every(has);
+      $('#cbxAsk').hidden = true;
+      $('#cbxWin').innerHTML = `<div class="cbx-card ${fresh ? 'new' : ''}"><img src="${portrait(c, 300)}" alt="${esc(c.full)}"><div><b>${fresh ? "🃏 Neue Karte!" : "✅ Richtig!"}</b><h3>${esc(c.full)}</h3><small>${FLAG(c.cc)} ${c.y}</small><p>${esc(f)}</p></div></div>
+        <div class="og-btns"><button class="big" id="cbxNext">🎵 Mehr Musik</button><button class="big ghost" id="cbxAbout">😄 Über den Komponisten</button><button class="big ghost" id="cbxAll">🃏 Meine Karten</button></div>`;
+      $('#cbxNext').onclick = () => { sfx.pop(); play(nextTune(tid)); };
+      $('#cbxAbout').onclick = () => { sfx.pop(); screenComposer(c.id, f); };
+      $('#cbxAll').onclick = () => { sfx.pop(); screen(); };
+      if (all) confetti && confetti();
+      talk(`${fresh ? "Hurra! Eine neue Karte!" : "Richtig!"} Es ist ${c.n}. ${f}${all ? ` Du hast${G("", '')} alle Komponisten gesammelt!` : ''}`);
+    };
+    (async () => { if (row[3]) await talk(`${row[3]} Hör zu!`); if (t !== tok) return; go(); })();
+  }
+  // the stories about this composer, under their music
+  function stories(c) {
+    const items = LEARN.music ? learnItems('music') : [], ids = STORY[c.id] || [];
+    const mine = items.map((x, i) => ({ x, i })).filter(({ x }) => ids.includes(x.id)); if (!mine.length) return;
+    const at = $('.cmp-tunes'); if (!at) return;
+    at.insertAdjacentHTML('afterend', `<div class="cbx-st">${mine.map(({ x, i }) => `<button class="link-btn" data-st="${i}">📖 Geschichte: ${esc(x.t)}</button>`).join('')}</div>`);
+    $('.cbx-st').onclick = e => { const b = e.target.closest('[data-st]'); if (b) { sfx.pop(); screenStory('music', +b.dataset.st, { back: () => screenComposer(c.id) }); } };
+  }
+  return { screen, play, stories, T };
+})();
+// the stories are inside the museum and the composers now: one place each, not two tiles
+{ const MERGED = { 'learn-art': 'museum', 'learn-music': 'composers' };
+  Object.keys(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g) g.hide = () => true; });
+  // and where the stories were («Узнаём») the museum and the composers are now
+  Object.values(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !(g.also || []).includes(10)) g.also = [...(g.also || []), 10]; });
+  [...INTEREST_CAT.flatMap(c => c.items || []), ...LIKES].forEach(it => { if (Array.isArray(it.tiles)) it.tiles = [...new Set(it.tiles.map(t => MERGED[t] || t))]; }); }
+/* CBOX-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
