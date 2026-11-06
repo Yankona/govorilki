@@ -2624,6 +2624,22 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 }
 @media (min-width:1000px){.ld-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
 /* LAND2-CSS-END */
+/* ARTFUN-CSS */
+.af-hook{margin:0 0 6px;font:900 18px/1.3 var(--f-body);color:var(--ink)}
+.artic-stage .steps{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.artic-stage .steps i{width:30px;height:30px;border-radius:50%;background:var(--line);display:grid;place-items:center;transition:transform .2s,background .2s}
+.artic-stage .steps i.on{background:var(--sun);box-shadow:0 3px 0 #D99A00;animation:afPop .35s ease-out}
+.artic-stage .steps i.on:after{content:'★';color:#fff;font:900 18px/1 var(--f-body)}
+@keyframes afPop{0%{transform:scale(.4)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+.af-house{background:var(--paper);border-radius:22px;padding:14px 16px;box-shadow:0 5px 0 var(--line-strong);margin-bottom:6px}
+.af-house h2{display:flex;align-items:center;gap:8px;margin:0 0 10px;font:900 20px var(--f-body)}.af-house h2 small{margin-left:auto;font:800 14px var(--f-body);color:var(--ink-soft)}
+.af-rooms{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.af-t{display:grid;place-items:center;aspect-ratio:1;border-radius:12px;background:var(--sky);font-size:24px}.af-t.off{background:var(--line);color:var(--ink-soft);font:900 15px var(--f-body)}
+@media (prefers-reduced-motion:reduce){.artic-stage .steps i.on{animation:none}}
+.art-fs-x{width:60px;height:60px;font-size:26px;background:#fff;color:#2A2346}
+.art-fs-back{position:fixed;left:0;right:0;margin:0 auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:72;box-shadow:0 6px 0 var(--tiger-deep),0 10px 26px rgba(0,0,0,.45)}
+.art-fs-hint{bottom:calc(env(safe-area-inset-bottom,0px) + 96px)!important}
+/* ARTFUN-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -2837,7 +2853,7 @@ function lessonPlan(id) {
     if (id === 'speech') {
       const o = 2 * n + 2 * s, lg = ['l-rap', 'l-rec', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house', ...(IS_RU ? ['twist-pen', 'neuro'] : [])];
       for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
-      const art = s === 0 ? ARTIC_L.map((_, i) => i) : [0, 1, 2, 3].map(k => (n + 4 * s + k) % ARTIC_L.length);
+      const art = s === 0 ? [0, 1, 2, 3].map(k => (4 * n + k) % ARTIC_L.length) : [0, 1, 2].map(k => (n + 3 * s + k) % ARTIC_L.length);
       art.forEach(i => steps.push({ key: 'artic:' + ARTIC_L[i].id, kind: 'artic', name: ARTIC_L[i].name, run: () => screenArtic(i, true) }));
       { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
@@ -2851,7 +2867,7 @@ function lessonPlan(id) {
     for (let k = 0; k < 2; k++) { const b = BREATH[(o + k) % BREATH.length]; steps.push({ key: 'breath:' + b.id, kind: 'breath', name: b.name, run: () => BREATH_RUN[b.id]() }); }
     // now the priority: hissing sounds every day, plus three С/З exercises in turn
     const AR = AL(), shI = ARTIC_SH.map((_, i) => ARTIC.length + i);
-    const art = s === 0 ? [...shI, ...[0, 1, 2].map(k => (3 * n + k) % ARTIC.length)] : [0, 1, 2, 3].map(k => (n + 4 * s + k) % AR.length);
+    const art = s === 0 ? [...[0, 1, 2].map(k => shI[(3 * n + k) % shI.length]), n % ARTIC.length] : [0, 1, 2].map(k => (n + 3 * s + k) % AR.length);
     art.forEach(i => steps.push({ key: 'artic:' + AR[i].id, kind: 'artic', name: AR[i].name, run: () => screenArtic(i, true) }));
     { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
     const pri = ['r-end', 'sh-sort', 'beauty', 'sh-syll', 'sh-house', ...(IS_RU && modOnG(15) ? ['sz-sort', 'snd-hold', 'sz-syll', 'sz-house'] : [])];
@@ -4035,7 +4051,7 @@ function screenArticMenu() {
   newScreen();
   const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
   const st = shell(Q() ? "Tongue workout" : "Tongue workout", `<p class="lead">Sit in front of the mirror and copy the girl. ${P.settings.track === 'l' ? "These exercises get your tongue ready for the L sound." : "The first nine are for the S and Z sounds, the next ones are for the SH, CH and J sounds."}</p>
-    <div class="cards">${AL().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceSVG(a.thumb)}<span>${a.name}</span>${P.best['artic:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
+    ${ARTFUN.house()}<div class="cards">${AL().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceSVG(a.thumb)}<span>${a.name}</span>${P.best['artic:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
   talk("Sit in front of the mirror. Choose an exercise.");
   st.onclick = e => { const c = e.target.closest('.card'); if (c) { sfx.pop(); screenArtic(+c.dataset.i); } };
 }
@@ -4046,7 +4062,7 @@ function screenArtic(i, auto = false, then = null) {
       <div class="mirror" id="mirror">${faceSVG(a.thumb)}<div class="say-b" id="sayB" hidden></div></div>
       ${camHTML}
       <div class="artic-side">
-        <p class="howto">${a.text}${a.tip ? `<em>${a.tip}</em>` : ''}</p>
+        <p class="af-hook">🎈 ${ARTFUN.hook(a)}</p><p class="howto">${a.text}${a.tip ? `<em>${a.tip}</em>` : ''}</p>
         <figure class="scheme"><div id="scheme">${profileSVG(profOf(a.thumb))}</div><figcaption>Picture: side view</figcaption></figure>
         <div class="steps" id="steps">${a.steps.map(() => '<i></i>').join('')}</div>
         <div class="prow-btns"><button class="big" id="go">${ICON.play}Start</button><button class="big ghost" id="camBtn"></button></div>
@@ -4075,19 +4091,19 @@ function screenArtic(i, auto = false, then = null) {
       const [pose, line, ms, fx] = a.steps[k];
       setFace(pose, fx); dots[k].classList.add('on');
       if (line) { sayB.hidden = false; sayB.textContent = line; sayB.style.animation = 'none'; void sayB.offsetWidth; sayB.style.animation = ''; say(line); } else sayB.hidden = true;
-      if (fx === 'tick') sfx.tick();
+      if (fx === 'tick') sfx.tick(); else if (line) ARTFUN.beat(a.id);
       await wait(ms * pace()); if (t !== tok) return;
     }
     sayB.hidden = true;
-    finish(then ? { key: 'artic:' + a.id, stars: 1, line: "Tongue warmed up — now let's draw!", again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: "Your tongue got stronger!", again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
+    finish(then ? { key: 'artic:' + a.id, stars: 1, line: "Tongue warmed up — now let's draw! " + ARTFUN.reward(), again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: "Your tongue got stronger! " + ARTFUN.reward(), again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
   };
   $('#go').onclick = start;
   // before «Начать»: the movement again and again, so the child sees what the tongue does
   { const demo = a.steps.map(s => s[0]).filter((p, j, all) => j === 0 || p !== all[j - 1]).slice(0, 8);
     let k = 0; const loop = () => { if (t !== tok || started) return; k = (k + 1) % demo.length; setFace(demo[k], ''); later(loop, demo.length > 1 ? 1100 : 1400); };
     later(loop, 1000); }
-  if (auto) talk(a.intro).then(() => later(start, 400));
-  else talk(a.intro + " Press “Start”.");
+  if (auto) talk(ARTFUN.hook(a) + ' ' + a.intro).then(() => later(start, 400));
+  else talk(ARTFUN.hook(a) + ' ' + a.intro + " Press “Start”.");
 }
 
 /* ---------- Vera's box ---------- */
@@ -4985,7 +5001,7 @@ function screenPaint(opts = {}) {
     const b = e.target.closest('.swc'); if (!b) return;
     const was = color; color = b.dataset.c; if (tool === 'eraser') tool = mode === 'color' ? 'fill' : 'brush';
     $$('.swc').forEach(x => x.classList.toggle('sel', x === b)); markTool(); sfx.tick();
-    const w = palL && was !== color && PAL_WORDS[PALETTE.indexOf(color)]; if (w) say(`${lsay(w[0]).toLowerCase()}… ${w[1]}`);
+    const w = palL && was !== color && PAL_WORDS[PALETTE.indexOf(color)]; if (w) say(`${cap(w[1])}: the letter ${lsay(w[0])}.`);
   };
   $('#tools').onclick = e => {
     const b = e.target.closest('.tool[data-t]'); if (!b) return;
@@ -11255,19 +11271,26 @@ const ART_HOW = [
   ['🎬', "Bring the painting to life", "Think: what happened a minute before? What will happen next? Every painting is like one picture from a cartoon!"]
 ];
 // the painting: the picture and the main buttons on one screen; the notes and the story below for whoever scrolls
-function artFull(x) {
+function artFull(x, onBack) {
+  // a child who enlarged the painting gets back by a big button at the bottom, the ✕, or the phone's «back»; the
+  // story goes on where it stopped (onBack says the current step again)
   const ov = document.createElement('div'); ov.className = 'art-fs';
   ov.innerHTML = `<div class="art-fs-in" id="fsIn"><img id="fsImg" src="${artImg(x.f, 1920)}" alt="${esc(x.t)}"></div>
-    <button class="ibtn art-fs-x" aria-label="Close">✕</button><p class="art-fs-hint">👆 ${"Tap the painting to see it bigger"}</p>`;
+    <button class="ibtn art-fs-x" aria-label="Close">✕</button><p class="art-fs-hint" id="fsHint">👆 ${"Tap the painting to make it bigger"}</p>
+    <button class="big art-fs-back" id="fsBack">⬅ Back to the story</button>`;
   document.body.append(ov); sfx.pop();
-  const box = ov.querySelector('#fsIn'), img = ov.querySelector('#fsImg');
-  ov.querySelector('.art-fs-x').onclick = () => { sfx.pop(); ov.remove(); };
+  const box = ov.querySelector('#fsIn'), img = ov.querySelector('#fsImg'), hint = ov.querySelector('#fsHint'), prevBack = NAV_BACK;
+  const close = () => { if (!ov.isConnected) return; sfx.pop(); ov.remove(); NAV_BACK = prevBack; if (onBack) onBack(); };
+  navEnter(close);
+  ov.querySelector('.art-fs-x').onclick = close; ov.querySelector('#fsBack').onclick = close;
   box.onclick = e => {
     const r = img.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
     const zoom = !ov.classList.contains('zoom'); ov.classList.toggle('zoom', zoom); sfx.tick();
-    const h = ov.querySelector('.art-fs-hint'); if (h) h.remove();
+    hint.textContent = zoom ? "👆 Tap again to make it smaller" : "👆 Tap the painting to make it bigger";
     if (zoom) requestAnimationFrame(() => { box.scrollLeft = img.offsetWidth * Math.min(1, Math.max(0, fx)) - box.clientWidth / 2; box.scrollTop = img.offsetHeight * Math.min(1, Math.max(0, fy)) - box.clientHeight / 2; });
   };
+  // the first few times the friend says how it works
+  if ((ROOT.fsTips || 0) < 3) { ROOT.fsTips = (ROOT.fsTips || 0) + 1; save(); talk("Have a good look! Tap the painting to make it bigger. To go back to the story, tap the big button at the bottom."); }
 }
 function screenArtView(x, list, back) {
   const t = newScreen(), my = artMy(), tr = ART.tours[x.q], nt = ART.notes[x.q];
@@ -11363,7 +11386,7 @@ function screenArtLook(x, back) {
       m.className = 'al-mark'; m.textContent = '✨'; m.style.left = (e.clientX - r.left) + 'px'; m.style.top = (e.clientY - r.top) + 'px'; $('#alPic').append(m);
       sfx.magic(); await talk(S.w); if (t !== tok) return; nextStep(); return;
     }
-    artFull(x);
+    artFull(x, () => { const S = steps[k]; if (S && t === tok) talk(S.q); });
   };
   show();
 }
@@ -12058,7 +12081,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '139';
+const APP_VER = '140';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13599,14 +13622,30 @@ function sayParts(text) {
   return (t.match(/[^.!?…]+[.!?…]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => IS_RU ? sayMark(x) : x);
 }
 // for Piper: the corrected phonemes of the marked words; words of the family not yet worked out go to the voice to work out
+// a soft Л before a consonant or at the end of a word (альбом, медаль, соль): the phonemizer drops its softness, so
+// the ʲ goes back after the matching ɭ (the k-th Л of the word is the k-th ɭ of its phonemes)
+function softL(w, ph) {
+  const ls = [...w].map((c, i) => c === RU('л') ? i : -1).filter(i => i >= 0), at = [...ph].map((c, i) => c === 'ɭ' ? i : -1).filter(i => i >= 0);
+  if (!ls.length || ls.length !== at.length) return ph;
+  let out = [...ph];
+  for (let k = ls.length - 1; k >= 0; k--) {
+    const i = ls[k]; if (w[i + 1] !== RU('ь') || /[аеёиоуыэюя]/.test(w[i + 2] || '')) continue;
+    if (out[at[k] + 1] !== 'ʲ') out.splice(at[k] + 1, 0, 'ʲ');
+  }
+  return out.join('');
+}
 function sayPatches(marked) {
-  const D = (SAYRU && SAYRU.p) || {}, own = (ROOT && ROOT.sayOwnPh) || {}, pairs = [], need = [];
+  const D = (SAYRU && SAYRU.p) || {}, own = (ROOT && ROOT.sayOwnPh) || {}, SL = (SAYRU && SAYRU.l) || {}, pairs = [], need = [];
   for (const m of marked.matchAll(/[А-Яа-яЁё́]+/g)) {
-    { const jo = PIPER_JO[m[0].toLowerCase().replace(/\u0301/g, '')]; if (jo) pairs.push(jo.split('|')); }
-    if (!m[0].includes(ACC)) continue;
-    const f = m[0].toLowerCase(), p = f in D ? D[f] : own[f];
-    if (p === undefined) { if (!need.includes(f)) need.push(f); continue; }
-    if (p) p.split('¦').forEach(x => pairs.push(x.split('|')));
+    const w = m[0].toLowerCase().replace(/\u0301/g, ''), mine = [];
+    { const jo = PIPER_JO[w]; if (jo) mine.push(jo.split('|')); }
+    if (m[0].includes(ACC)) {
+      const f = m[0].toLowerCase(), p = f in D ? D[f] : own[f];
+      if (p === undefined) { if (!need.includes(f)) need.push(f); }
+      else if (p) p.split('¦').forEach(x => mine.push(x.split('|')));
+    }
+    if (/ль(?![аеёиоуыэюя])/.test(w)) { if (mine.length) mine.forEach(x => { x[1] = softL(w, x[1]); }); else if (SL[w]) mine.push([SL[w], softL(w, SL[w])]); }
+    mine.forEach(x => { if (x[0] !== x[1]) pairs.push(x); });
   }
   return { pairs, need };
 }
@@ -18136,6 +18175,47 @@ const LANDX = (() => {
   return { apply };
 })();
 /* LANDX-END */
+/* ARTFUN-BEGIN */
+/* ---------- «Зарядка для язычка» as a fairy tale (Vera kept skipping it): each exercise starts with a short story
+   line («Ой, на губке вкусное варенье!»), the friend counts with big stars that flash, some exercises have their own
+   sound (the horse clops, the swing whooshes), and every exercise done brings a new thing into «Домик Язычка» — a
+   house that fills up: a bed, a teddy, a lamp… 24 things; the house is on top of the exercise list. ---------- */
+const ARTFUN = (() => {
+  const HOOK = {
+    frog: "The frog smiles at the sun, and the baby elephant stretches its trunk to the water!", spatula: "The little tongue is tired and lies down to rest on the porch.",
+    slap: "Oh, the little tongue is being naughty! Let’s pat it with our lips.", donkey: "The stubborn donkey doesn’t want to go and shouts!",
+    brush: "Morning! The little tongue wakes up and brushes its teeth.", swing: "The little tongue rides the swing: up and down, up and down!",
+    cat: "The kitty is cross and arches her back!", teeth: "The little tongue counts its teeth: are they all there?", tube: "The little tongue becomes a tube and blows like the wind.",
+    'sh-cup': "The little tongue made a cup. Let’s pour some tea!", 'sh-mushroom': "A mushroom grew in the forest after the rain!",
+    'sh-accordion': "The little tongue plays the accordion. A happy song!", 'sh-jam': "Oh, there’s yummy jam on the lip!",
+    'sh-horse': "Let’s ride the horse to visit friends!", 'sh-focus': "Hocus pocus! Blow the snowflake off your nose.", 'sh-horn': "Calling friends to play: lips like a megaphone!",
+    'l-smile': "The frog and the baby elephant play tag!", 'l-needle': "The little tongue became a sharp needle.", 'l-spoon': "The little tongue is a spade, then a needle: magic!",
+    'l-jam': "Oh, there’s yummy jam on the lip!", 'l-painter': "The little tongue painter paints the ceiling of its house.", 'l-turkey': "The turkey is cross and babbles: bl-bl-bl!",
+    'l-swing': "The little tongue rides the swing!", 'l-horse': "Let’s ride the horse to visit!", 'l-ship': "A big steamship hoots in the fog!"
+  };
+  // a sound for the beat of some exercises
+  const BEAT = { 'sh-horse': () => sfx.tick(), 'l-horse': () => sfx.tick(), swing: () => sfx.whoosh(.25, .08), 'l-swing': () => sfx.whoosh(.25, .08), slap: () => sfx.pop(), donkey: () => sfx.pop(), 'sh-accordion': () => sfx.pop() };
+  const THINGS = [['🛏️', "a little bed"], ['🧸', "a teddy bear"], ['💡', "a lamp"], ['🪑', "a little chair"], ['🌷', "a flower"], ['🖼️', "a picture"], ['🕰️', "a clock"], ['🪞', "a little mirror"],
+    ['📚', "books"], ['🎈', "a balloon"], ['🎨', "paints"], ['🧩', "a puzzle"], ['🚂', "a little train"], ['🎵', "a music box"], ['🐟', "a fish tank with a fish"], ['🍎', "an apple"],
+    ['🧁', "a cupcake"], ['🛁', "a little bath"], ['🪴', "a potted plant"], ['⭐', "a star on the ceiling"], ['🪁', "a kite"], ['🧺', "a basket"], ['🎁', "a present"], ['👑', "a crown for the Little Tongue"]];
+  const hook = a => HOOK[a.id] || "The little tongue woke up and wants to play!";
+  // a new thing for the house; the line the result card says
+  function reward() {
+    P.tongue = (P.tongue || 0) + 1; save();
+    if (P.tongue > THINGS.length) return "The Little Tongue’s house is full. Well done!";
+    const [e, n] = THINGS[P.tongue - 1];
+    return `Something new in the Little Tongue’s house: ${n}! ${e}`;
+  }
+  function house() {
+    const n = Math.min(P.tongue || 0, THINGS.length);
+    return `<section class="af-house"><h2>🏠 The Little Tongue’s house <small>${n} of ${THINGS.length}</small></h2>
+      <div class="af-rooms">${THINGS.map(([e, w], i) => i < n ? `<span class="af-t" title="${esc(w)}">${e}</span>` : '<span class="af-t off">?</span>').join('')}</div>
+      <p class="muted">Do an exercise and something new moves into the house.</p></section>`;
+  }
+  const beat = id => { const f = BEAT[id]; if (f) try { f(); } catch (e) {} };
+  return { hook, reward, house, beat };
+})();
+/* ARTFUN-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
