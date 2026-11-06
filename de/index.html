@@ -2556,7 +2556,10 @@ function speakOne(text, rate) {
 async function say(text, opts) {
   // the microphone stays deaf only while a line that was not hushed is still being made or played
   const my = sayTok + 1; SAYING++;
-  try { return await sayRun(text, opts); } finally { if (my > HUSHED) { SAYING = Math.max(0, SAYING - 1); MIC.quietUntil = Math.max(MIC.quietUntil, performance.now() + 450); MIC.voiceUntil = performance.now() + 450; } }
+  // a game that keeps listening pauses while the friend speaks: on iPhone a running microphone sends the voice to the
+  // quiet earpiece
+  let lv = null; try { lv = LIVE && LIVE.hold() ? LIVE : null; } catch (e) {}
+  try { return await sayRun(text, opts); } finally { if (my > HUSHED) { SAYING = Math.max(0, SAYING - 1); MIC.quietUntil = Math.max(MIC.quietUntil, performance.now() + 450); MIC.voiceUntil = performance.now() + 450; } if (lv) lv.unhold(); }
 }
 async function sayRun(text, { rate = 1 } = {}) {
   const my = ++sayTok;
@@ -8455,18 +8458,32 @@ function hearLive(onText, { onStart, onFail, onLost } = {}) {
   const first = new Map();   // when each phrase was first heard, so a game can ignore what was said before its question
   SR_ON++; audioSession('play-and-record');
   const L = {
-    stop() { if (!stopped) { SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); } stopped = true; alive = false; try { r && r.abort(); } catch (e) {} },
-    resume() { if (stopped || alive) return; L.lost = false; restarts = 0; go(); },
-    get on() { return alive; }, lost: false
+    stop() { if (!stopped && !L.held) { SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); } stopped = true; L.held = 0; alive = false; try { r && r.abort(); } catch (e) {} },
+    resume() { if (stopped || alive || L.held) return; L.lost = false; restarts = 0; go(); },
+    // the friend speaks: listening pauses and the sound goes back to the loud speaker; it starts again after the line
+    hold() {
+      if (stopped) return false;
+      if (L.held++) return true;
+      SR_ON = Math.max(0, SR_ON - 1); alive = false; const old = r; r = null; try { old && old.abort(); } catch (e) {}
+      if (!MIC.stream && !SR_ON) audioSession('playback');
+      return true;
+    },
+    unhold() {
+      if (!L.held || --L.held || stopped) return;
+      SR_ON++; audioSession('play-and-record');
+      if (!L.lost) { restarts = 0; go(); }
+    },
+    get on() { return alive; }, lost: false, held: 0
   };
   function go() {
     if (stopped) return;
     try { r = new SR(); } catch (e) { HEAR.off = true; L.stop(); if (onFail) onFail(); return; }
     r.lang = LOC; r.continuous = true; r.interimResults = true; r.maxAlternatives = 3; sess++;
-    r.onstart = () => { alive = true; if (!started) { started = true; if (onStart) onStart(); } };
+    const me = r;
+    r.onstart = () => { if (me !== r) return; alive = true; if (!started) { started = true; if (onStart) onStart(); } };
     r.onresult = e => {
       // game beeps do not confuse recognition (they only mute the loudness meter); the friend's own voice does
-      if (SAYING > 0 || performance.now() < MIC.voiceUntil) return;
+      if (me !== r || L.held || SAYING > 0 || performance.now() < MIC.voiceUntil) return;
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const res = e.results[i], alts = [], k = sess + ':' + i; for (let j = 0; j < res.length; j++) alts.push(res[j].transcript);
         if (!first.has(k)) { first.set(k, performance.now()); if (first.size > 300) first.delete(first.keys().next().value); }
@@ -8474,14 +8491,16 @@ function hearLive(onText, { onStart, onFail, onLost } = {}) {
       }
     };
     r.onerror = e => {
+      if (me !== r) return;
       const hard = ['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture'].includes(e.error);
       if (!hard) return;
       if (!started) { if (e.error !== 'audio-capture') HEAR.off = true; L.stop(); if (onFail) onFail(); }
       else { L.lost = true; if (onLost) onLost(); }
     };
     r.onend = () => {
+      if (me !== r) return;
       alive = false;
-      if (stopped || L.lost) return;
+      if (stopped || L.lost || L.held) return;
       if (++restarts > 80) { L.lost = true; if (onLost) onLost(); return; }
       setTimeout(go, 150);
     };
@@ -11647,7 +11666,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '112';
+const APP_VER = '113';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
