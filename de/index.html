@@ -11870,7 +11870,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '124';
+const APP_VER = '125';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -12168,7 +12168,7 @@ function screenInviteFamily(back) {
 // each phone sends a short summary every few hours, sealed with the author's public key: only her phone can open it.
 // Without the parents' tick there are no names in it — ages, language, country, stars, lessons, the games played most
 // the author's open key (sent from her phone); until it is here, nothing is sent
-const ADMIN_PUB = /*__ADMIN_PUB__*/null;
+const ADMIN_PUB = /*__ADMIN_PUB__*/{ x: 'Er9pozD45o7szpWBRZ0S_oB2qYm1Y5IXKJuhxRPVbq0', y: 'EmhA4ssBWuyIvZtgKoamHyO7ySBGF_9ghtF5A4nsETc' };
 const ST_TOPIC = 'govorilki-st-q7m2x9';
 const stB64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 const stUnB64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0));
