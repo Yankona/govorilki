@@ -2207,6 +2207,8 @@ body.pv-on #app{padding-top:52px}
 .ty-make{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 18px;border:3px dashed var(--line-strong);border-radius:24px;background:var(--paper);color:var(--ink);cursor:pointer}
 .ty-make span{font:400 44px/1 var(--f-emoji)}.ty-make b{font:800 19px var(--f-body)}.ty-make small{font:700 14px var(--f-body);color:var(--ink-soft)}
 .ty-acts{grid-column:auto;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start}
+.ty-stage[data-step="photo"]{width:min(100%,190px)}.ty-stage[data-step="photo"] .ty-empty{font-size:80px}
+.ty-pick{display:flex;flex-direction:column;align-items:stretch;gap:14px;width:min(100%,360px);margin:2px auto 0}.ty-pick .big{margin:0}
 /* TOY-CSS-END */
 /* OUT-CSS */
 .fo-p{margin:0;font:700 17px/1.45 var(--f-body);color:var(--ink)}.fo-row{justify-content:center;flex-wrap:wrap}
@@ -11516,7 +11518,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '109';
+const APP_VER = '110';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15822,7 +15824,7 @@ const TOY = (() => {
       if (s.step === 'photo') {
         box.innerHTML = `<p class="ty-h">Take a photo of your favourite toy, and it becomes your hero!</p>
           <p class="ty-p">Put the toy on a plain background: a table, the floor or a sheet of paper. Get close so the toy looks big.</p>
-          <div class="prow-btns ty-row"><button class="big" id="tyShoot">📷 Take a photo</button><button class="chip" id="tyFile">🖼️ Choose a photo</button></div>
+          <div class="ty-pick"><button class="big" id="tyShoot">📷 Take a photo</button><button class="big ghost" id="tyFile">🖼️ Choose from the gallery</button></div>
           <p class="ty-small">🔒 The photo stays only on this phone: it isn’t sent anywhere.</p>`;
         $('#tyShoot').onclick = () => { sfx.pop(); $('#tyCam').click(); }; $('#tyFile').onclick = () => { sfx.pop(); $('#tyPick').click(); };
       } else if (s.step === 'frame') {
