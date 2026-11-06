@@ -2591,6 +2591,39 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
   .pd-fm .pd-bar{height:10px}.pd-fm small{font:800 13px var(--f-body);color:var(--ink-soft);text-align:right}
 }
 /* PATH-CSS-END */
+/* LAND2-CSS */
+.ld-day-in{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:center}
+.ld-demo{pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.15));border-radius:28px;padding:14px 12px 4px}
+.ld-demo .pd-path{min-height:0;max-width:440px}
+.ld-pts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ld-pts li{display:flex;gap:12px;align-items:center;background:var(--paper);border-radius:20px;padding:12px 14px;box-shadow:0 4px 0 var(--line-strong)}
+.ld-pts .emo{font-size:30px;flex:none}
+.ld-pts b{display:block;font:900 17px/1.2 var(--f-body);color:var(--ink)}
+.ld-pts small{display:block;margin-top:3px;font:700 14px/1.35 var(--f-body);color:var(--ink-soft)}
+.ld-sub{margin:-4px 0 4px;text-align:center;font:800 16px var(--f-body);color:var(--ink-soft)}
+.ld-tab{background:var(--paper);border-radius:24px;padding:14px 14px 16px;box-shadow:0 5px 0 var(--line-strong)}
+.ld-tab h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;font:900 21px var(--f-body);color:var(--ink)}
+.ld-tab h3 .emo{font-size:30px}.ld-tab h3 .emo svg{width:34px;height:34px}
+.ld-tab h3 small{margin-left:auto;font:800 14px var(--f-body);color:var(--ink-soft);background:var(--sky);padding:5px 10px;border-radius:999px}
+.ld-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px}
+.ld-g{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;background:var(--bg,#F3F0FA);border-radius:18px;padding:10px 6px 12px;box-shadow:0 3px 0 rgba(42,35,70,.12)}
+.ld-g .tile-ico{transform:scale(.72);height:56px;width:76px;justify-content:center;margin:-4px 0 -6px}
+.ld-g>b{font:800 13px/1.2 var(--f-body);color:#2A2346}
+.ld-g .ico-letters{font-size:28px}.ld-g .syl-ico{transform:scale(.9)}
+.ld-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.ld-steps li{position:relative;display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:12px;align-items:start;background:var(--paper);border-radius:22px;padding:14px 16px;box-shadow:0 5px 0 var(--line-strong)}
+.ld-e{grid-row:1 / span 2;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:var(--sky);font-size:30px}.ld-e svg{width:38px;height:38px}
+.ld-n{position:absolute;left:8px;top:8px;width:22px;height:22px;border-radius:50%;background:var(--tiger);color:#fff;font:900 13px/22px var(--f-body);text-align:center;box-shadow:0 2px 0 var(--tiger-deep)}
+.ld-steps b{font:900 18px/1.2 var(--f-body);color:var(--ink)}
+.ld-steps p{margin:4px 0 0;font:700 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.ld-next .lp-cta{margin-top:8px}
+@media (min-width:760px){
+  .ld-day-in{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+  .ld-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ld-g .tile-ico{transform:scale(.8)}
+}
+@media (min-width:1000px){.ld-steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* LAND2-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -12025,7 +12058,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '138';
+const APP_VER = '139';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -18033,6 +18066,76 @@ const PATH = (() => {
   return { today, side, rail, lay, fresh };
 })();
 /* PATH-END */
+/* LANDX-BEGIN */
+/* ---------- the first page for new guests shows what awaits them (the redesign):
+   - «Каждый день — дорожка»: a live example of the day's path (the friend, three lessons, the chest) and what it gives;
+   - «Какие игры ждут»: real games of each tab with their drawn pictures and how many games each tab has;
+   - «Что будет дальше»: the first day, every day, a week, the long roads (letters, maths, chess), the wide world,
+     the whole family — only what the game really has. ---------- */
+const LANDX = (() => {
+  const PICKS = {
+    speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
+    learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
+    create: ['draw', 'color', 'songs', 'xylo', 'composers', 'conductor', 'museum', 'art-quiz'],
+    discover: ['travel', 'phys-lab', 'museum', 'composers']
+  };
+  // the games of a tab for any child: a little one and an older one, every game switched on
+  function tabGames(t) {
+    const keep = P.settings, seen = new Map();
+    for (const s of [{ track: 'r', age: 5 }, { track: 'l', age: 9 }]) {
+      P.settings = { ...keep, ...s, allGames: true };
+      try {
+        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id))
+          .forEach(g => { if (!seen.has(g.id)) seen.set(g.id, { g, ico: g.ico(), name: nm(g.name) }); }));
+      } catch (e) {}
+    }
+    P.settings = keep;
+    return [...seen.values()];
+  }
+  function demo() {
+    const L = LS(), ids = LIDS(), ico = ['👂', '📖', '🧮'], st = ['done', 'now', 'next'];
+    const nodes = ids.slice(0, 3).map((id, k) => `<div class="pd-n ${st[k]}"><span class="pd-c"><span class="pd-i">${pic(ico[k])}</span>${k === 0 ? '<span class="pd-ck">✓</span>' : ''}</span>
+      <span class="pd-lb"><b>${L[id].name}</b>${k === 0 ? `<small>fertig ${ICON.star.repeat(3)}</small>` : k === 1 ? `<span class="pd-cta">${ICON.play}Starten</span>` : ''}</span></div>`).join('');
+    return `<div class="pd ld-demo" aria-hidden="true">
+      <div class="pd-hero"><span class="pd-fr guide-ryz">${friendSVG('', 'tiger')}</span>
+        <div class="pd-bub"><div class="pd-say">Hallo! Heute gibt es 3 Übungen. Fangen wir an?</div>
+          <div class="pd-prog"><span class="pd-bar"><i style="width:33%"></i></span><small>1 von 3</small><span class="pd-pi">${pic('📦')}</span></div></div></div>
+      <div class="pd-path ld-path"><svg class="pd-svg"></svg>${nodes}
+        <div class="pd-n pd-chest next"><span class="pd-c"><span class="pd-i">${pic('📦')}</span></span><span class="pd-lb"><b>Truhe</b><small>Preis für den ganzen Tag</small></span></div></div></div>`;
+  }
+  function apply() {
+    const lp = $('.lp'); if (!lp || lp.querySelector('.ld-games')) return;
+    const tabs = HOME_TABS.filter(t => t.g).map(t => ({ t, gs: tabGames(t) })).filter(x => x.gs.length);
+    const total = new Set(tabs.flatMap(x => x.gs.map(y => y.g.id))).size;
+    const pick = (t, gs) => { const by = new Map(gs.map(x => [x.g.id, x])), out = (PICKS[t.id] || []).map(id => by.get(id)).filter(Boolean);
+      gs.forEach(x => { if (out.length < 8 && !out.includes(x)) out.push(x); }); return out.slice(0, 8); };
+    const tile = x => `<div class="ld-g" style="--bg:${x.g.bg}"><span class="tile-ico">${x.ico}</span><b>${x.name}</b></div>`;
+    const steps = [
+      ['🧸', "Der erste Tag", "Das Kind wählt einen Tierfreund und das, was es mag. Der Freund erklärt jede Aufgabe laut und hört, wenn das Kind antwortet."],
+      ['🗺️', "Jeden Tag", "Ein Weg aus drei kurzen Übungen und am Ende eine Truhe mit Sternen. Für je 5 Sterne gibt es einen neuen Sticker."],
+      ['🔥', "Jede Woche", "Tage in Folge und Medaillen für 3 Tage, eine Woche, zwei Wochen und einen Monat. Geschwister halten eine gemeinsame Serie."],
+      ['📈', "Schritt für Schritt", IS_RU ? "Die Fibel: 33 Buchstaben der Reihe nach; «Stufen» in Mathe: von Punkten bis zu Gleichungen; Schach gegen den Computer: 10 Stufen." : "Buchstaben und erste Wörter; «Stufen» in Mathe: von Punkten bis zu Gleichungen; Schach gegen den Computer: 10 Stufen."],
+      ['🖼️', "Die ganze Welt", "Das Museum der Welt mit mehr als 1000 Bildern, eine Spieldose mit Komponisten, Experimente auf dem Spielplatz und Reisen um die Welt."],
+      ['👵', "Die ganze Familie", "Ein Zugang für die ganze Familie: auf jedem Handy tippt jeder auf sich. Großeltern sehen, wie es den Enkeln geht, und spielen mit ihnen Schach."]];
+    const html = `<section class="lp-sec ld-day"><h2>Jeden Tag ein Weg</h2>
+        <div class="ld-day-in">${demo()}
+          <ul class="ld-pts">
+            <li><span class="emo">⏱️</span><span><b>Drei Übungen von wenigen Minuten</b><small>${IS_RU ? "Sprechen, Lesen und Mathe" : "Sprechen, Lesen und Mathe"}: der Freund führt Schritt für Schritt und lobt.</small></span></li>
+            <li><span class="emo">📦</span><span><b>Eine Truhe am Ende des Tages</b><small>Alles geschafft? Öffne die Truhe: +5 Sterne.</small></span></li>
+            <li><span class="emo">🎁</span><span><b>Sterne, Sticker, Medaillen</b><small>Alles Verdiente steht im Album und im Kalender.</small></span></li></ul></div></section>
+      <section class="lp-sec ld-games"><h2>Diese Spiele warten</h2><p class="ld-sub">${total} ${plural(total, ["Spiel", "Spiele", "Spiele"])} in vier Bereichen. Hier sind einige davon</p>
+        ${tabs.map(({ t, gs }) => `<div class="ld-tab"><h3>${tabIco(t.e)}<span>${nm(t.n)}</span><small>${gs.length} ${plural(gs.length, ["Spiel", "Spiele", "Spiele"])}</small></h3><div class="ld-grid">${pick(t, gs).map(tile).join('')}</div></div>`).join('')}</section>
+      <section class="lp-sec ld-next"><h2>Wie es weitergeht</h2>
+        <ol class="ld-steps">${steps.map(([e, h, p], i) => `<li><span class="ld-e">${pic(e)}</span><span class="ld-n">${i + 1}</span><b>${h}</b><p>${p}</p></li>`).join('')}</ol></section>`;
+    const hero = lp.querySelector('.lp-hero'); if (!hero) return;
+    hero.insertAdjacentHTML('afterend', html);
+    // the old «Что внутри» cards say the same in short
+    const old = lp.querySelector('.lp-cards'); if (old && old.closest('.lp-sec')) old.closest('.lp-sec').remove();
+    const pb = lp.querySelector('.ld-path'); if (pb) { PATH.lay(pb); if (window.ResizeObserver) new ResizeObserver(() => PATH.lay(pb)).observe(pb); }
+  }
+  return { apply };
+})();
+/* LANDX-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
@@ -18465,6 +18568,7 @@ function screenLanding({ liga = '' } = {}) {
       <p class="muted">Auf dem iPhone: „Teilen“ → „Zum Home-Bildschirm“. Auf Android: Menü ⋮ → „Zum Startbildschirm hinzufügen“.</p></section>
   </div></main></div>`;
   LANDUX.apply();
+  LANDX.apply();
   bindLang($('.lp-lang'), () => screenLanding({ liga }));
   const start = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
   $('#obStart').onclick = start; $('#obStart2').onclick = start;
