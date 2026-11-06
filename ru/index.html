@@ -2296,6 +2296,24 @@ body.pv-on #app{padding-top:52px}
 .hk-bar{display:block;height:8px;border-radius:5px;background:var(--line);overflow:hidden}
 .hk-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--leaf),var(--sun))}
 /* HIKE-CSS-END */
+/* MM-CSS */
+.mm{max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.mm-me{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:22px;background:var(--paper);box-shadow:0 5px 0 var(--line)}
+.mm-e{font:400 40px/1 var(--f-emoji);flex:none}
+.mm-t{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.mm-t b{font:800 20px var(--f-body);color:var(--ink)}
+.mm-t small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.mm .fam-s{margin:2px 0 0}
+.mm-lv{display:flex;flex-wrap:wrap;gap:8px}
+.mm-go{align-self:center}
+.mm-wait{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:22px;background:var(--paper);box-shadow:0 5px 0 var(--line);font:800 17px var(--f-body);color:var(--ink)}
+.mm-wait b{flex:1}
+.mm-spin{font:400 34px/1 var(--f-emoji);flex:none;animation:mmSpin 1.6s ease-in-out infinite}
+@keyframes mmSpin{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg) translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.mm-spin{animation:none}}
+.mm .fam-card p{margin:0}
+.mm-note{text-align:center;margin:4px 0 0}
+/* MM-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -6381,6 +6399,7 @@ function screenFamChess() {
       <p class="lead">В Португалии Lichess работает, а в России часто не открывается, поэтому партии с родными идут на нашей доске.</p>
       <div class="fam-more">${[['🧩', 'Задачи Lichess', 'https://lichess.org/training'], ['🎓', 'Учимся играть', 'https://lichess.org/learn'], ['🏋️', 'Тренировка', 'https://lichess.org/practice']].map(([e, n, u]) => `<a class="fam-link" href="${u}" target="_blank" rel="noopener">${pic(e)}<span><b>${n}</b></span></a>`).join('')}</div></details>
   </div>`);
+  CHESSMM.cta();
   $('#famAI').onclick = () => { sfx.pop(); screenChessAI(); };
   const gl = Object.values(GRAND).map(g => g.call.replace('Позвать ', ''));
   talk('Шахматы онлайн! Выбери цвет.' + (gl.length ? ' Потом нажми, кого позвать: ' + gl.join(' или ') + '.' : ''));
@@ -8687,7 +8706,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings();
+  HIKE.settings(); CHESSMM.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11690,7 +11709,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '114';
+const APP_VER = '115';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -16306,6 +16325,287 @@ const HIKE = (() => {
   return { home, screen, settings, miniHTML, on, state };
 })();
 /* HIKE-END */
+/* MM-BEGIN */
+/* ---------- «Соперник онлайн»: chess with any child who is looking for a game right now, at the same level or a level
+   the child picks, like «play online» on chess sites. Only the moves travel, with a made-up nickname (an animal and a
+   number) and the level: no names, no age, no photos, no chat. A grown-up allows it once on this phone.
+   The lobby is a public ntfy topic: each seeker says «I am looking» every 8 seconds; of two seekers at one level the one
+   with the smaller id proposes, the other accepts, and the game gets its own topic. Nobody there: the computer. ---------- */
+const CHESSMM = (() => {
+  const LOBBY = 'govorilki-mm1', FRESH = 20000, NONE_AFTER = 25000, LOST_AFTER = 60000, CLAIM_AFTER = 120000;
+  const ANIMALS = [['🦔', 'Ёжик'], ['🦊', 'Лисёнок'], ['🦉', 'Совёнок'], ['🐱', 'Котёнок'], ['🐰', 'Зайчик'], ['🐻', 'Медвежонок'],
+    ['🐧', 'Пингвин'], ['🐬', 'Дельфин'], ['🦝', 'Енот'], ['🐼', 'Панда'], ['🐯', 'Тигрёнок'], ['🐿️', 'Бельчонок']];
+  const LV = [['a', '🐣', 'Новичок'], ['b', '🦊', 'Любитель'], ['c', '🦁', 'Сильный']];
+  const ID = /^[a-z0-9]{6,16}$/;
+  const myLv = () => { const t = aiTop(); return t <= 2 ? 'a' : t <= 4 ? 'b' : 'c'; };
+  const lvOf = k => LV.find(x => x[0] === k) || LV[0];
+  const cleanNk = nk => Array.isArray(nk) && ANIMALS[nk[0]] && nk[1] >= 1 && nk[1] <= 99 ? [nk[0] | 0, nk[1] | 0] : [0, 1];
+  const nick = nk => { const k = cleanNk(nk), a = ANIMALS[k[0]]; return { e: a[0], n: `${a[1]} ${k[1]}` }; };
+  function myNick(fresh) {
+    if (fresh || !Array.isArray(P.mmNick)) { P.mmNick = [Math.floor(Math.random() * ANIMALS.length), 2 + Math.floor(Math.random() * 98)]; save(); }
+    return P.mmNick;
+  }
+  const on = () => !GUEST && !GPLAY && ROOT.curFam !== 'gk';
+  const allowed = () => !!ROOT.mmOk;
+
+  async function post(topic, msg) {
+    if (PREVIEW || DEMO) return true;
+    const body = JSON.stringify({ ...msg, at: Date.now() });
+    const r = await Promise.allSettled(RELAYS.map(u => fetch(u + topic, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
+    return r.some(x => x.status === 'fulfilled');
+  }
+  // every server at once, and a poll for networks that cut long connections; it all stops with the screen
+  function sub(topic, onMsg, onNet, every = 8000) {
+    const t = tok, seen = new Set(), since = Math.floor(Date.now() / 1000) - 30;
+    let lastOk = 0;
+    const net = () => onNet && onNet(Date.now() - lastOk < 30000);
+    const alive = () => { lastOk = Date.now(); net(); };
+    const take = (r, x) => {
+      if (t !== tok || !x || x.event !== 'message' || seen.has(r + x.id)) return; seen.add(r + x.id);
+      let m; try { m = JSON.parse(x.message); } catch (e) { return; }
+      if (m && typeof m === 'object' && m.k) onMsg(m, (x.time || 0) * 1000);
+    };
+    RELAYS.forEach(r => {
+      if (!window.EventSource) return;
+      const es = new EventSource(`${r}${topic}/sse?since=${since}`);
+      es.onopen = alive; es.onerror = net;
+      es.onmessage = e => { alive(); try { take(r, JSON.parse(e.data)); } catch (x) {} };
+      SUBS.push(es);
+    });
+    const poll = () => {
+      if (t !== tok) return;
+      RELAYS.forEach(r => fetch(`${r}${topic}/json?poll=1&since=${since}`).then(x => x.ok ? x.text() : Promise.reject())
+        .then(txt => { alive(); txt.split('\n').forEach(l => { try { take(r, JSON.parse(l)); } catch (e) {} }); }, net));
+      later(poll, every);
+    };
+    poll();
+  }
+
+  // the lobby: the nickname, the level, the search
+  function screen() {
+    const t = newScreen();
+    let lv = P.mmLv && lvOf(P.mmLv)[0] === P.mmLv ? P.mmLv : myLv(), state = 'idle', my = '', proposed = null, startAt = 0, srvMax = 0;
+    const seeks = new Map(), dead = new Map();
+    let nk = myNick();
+    shell('Соперник онлайн', `<div class="mm">
+      <div class="mm-me"><span class="mm-e" id="mmE"></span><span class="mm-t"><b id="mmN"></b><small>так тебя увидит соперник</small></span><button class="chip" id="mmRe" aria-label="Другое прозвище">🎲</button></div>
+      <h3 class="fam-s">Уровень</h3>
+      <div class="mm-lv" id="mmLv"></div>
+      <div id="mmBody"></div>
+      <p class="muted mm-note">Соперник видит только ходы, прозвище и уровень. Имени, возраста и чата нет.</p>
+    </div>`, { back: screenFamChess });
+    const showMe = () => { const m = nick(nk); $('#mmE').textContent = m.e; $('#mmN').textContent = m.n; };
+    const fresh = s => Date.now() - s.got < FRESH && s.time >= srvMax - FRESH;
+    const waiting = k => [...seeks.values()].filter(s => s.s !== my && s.lv === k && fresh(s)).length;
+    // the chips are drawn once; only their counts change, so a tap never lands on a button being redrawn
+    const chipText = (k, e, n) => { const w = waiting(k); return `${e} ${n}${k === myLv() ? ' · мой' : ''}${w ? ` · ждут: ${w}` : ''}`; };
+    function levels() {
+      const box = $('#mmLv'); if (!box) return;
+      if (!box.children.length) box.innerHTML = LV.map(([k]) => `<button class="chip" data-lv="${k}"></button>`).join('');
+      LV.forEach(([k, e, n]) => { const c = box.querySelector(`[data-lv="${k}"]`), x = chipText(k, e, n); if (c.textContent !== x) c.textContent = x; c.classList.toggle('sel', k === lv); });
+    }
+    function body() {
+      const b = $('#mmBody'); if (!b) return;
+      if (!allowed()) {
+        b.innerHTML = `<div class="fam-card mm-ask"><p>Здесь можно сыграть с ребёнком, которого ты не знаешь. Сначала это должен разрешить взрослый.</p><button class="big" id="mmAllow">👪 Разрешить</button></div>`;
+        $('#mmAllow').onclick = () => { sfx.pop(); grownUp(() => { ROOT.mmOk = 1; save(); sfx.good(); body(); talk('Готово! Выбери уровень и нажми «Найти соперника».'); }, 'Разрешить шахматы с детьми, которых вы не знаете? Видны только ходы, придуманное прозвище и уровень. Чата нет. Выключить можно в «Для взрослых» → «Друзья».'); };
+        return;
+      }
+      if (state === 'idle') { b.innerHTML = '<button class="big mm-go" id="mmGo">🔎 Найти соперника</button>'; $('#mmGo').onclick = () => { sfx.pop(); start(); }; return; }
+      if (state === 'paired') { b.innerHTML = '<div class="mm-wait"><span class="mm-spin">♟️</span><b>Соперник найден! Соединяю…</b></div>'; return; }
+      // the search: drawn once, then only the seconds tick and the «nobody yet» card appears
+      const s = Math.floor((Date.now() - startAt) / 1000), none = Date.now() - startAt > NONE_AFTER;
+      if (!$('#mmSec')) {
+        b.innerHTML = `<div class="mm-wait"><span class="mm-spin">♟️</span><b>Ищу соперника… <span id="mmSec">0</span> с</b><button class="chip" id="mmStop">Отмена</button></div>
+          <div class="fam-card mm-none" id="mmNone" hidden><p>Пока никого нет на этом уровне. Можно подождать или сыграть с компьютером.</p><div class="prow-btns"><button class="big" id="mmAI">🤖 Сыграть с компьютером</button></div></div>`;
+        $('#mmStop').onclick = () => { sfx.pop(); stop(); talk('Поиск остановлен.'); };
+        $('#mmAI').onclick = () => { sfx.pop(); stop(); screenChessAI({ lv: Math.min(aiTop(), { a: 1, b: 3, c: 5 }[lv]) }); };
+      }
+      $('#mmSec').textContent = s;
+      if (none && $('#mmNone').hidden) { $('#mmNone').hidden = false; talk('Пока никого нет на этом уровне. Можно подождать или сыграть с компьютером.'); }
+    }
+    function start() {
+      my = rid(10); state = 'search'; startAt = Date.now(); proposed = null; body(); seek();
+      talk('Ищу соперника. Подожди немного: как только кто-то найдётся, начнём партию.');
+    }
+    function seek() { if (t !== tok || state !== 'search') return; post(LOBBY, { k: 'seek', s: my, lv, nk }); later(seek, 8000); }
+    function stop() { if (my && state === 'search') post(LOBBY, { k: 'gone', s: my }); state = 'idle'; proposed = null; body(); }
+    function begin(g) { state = 'paired'; body(); post(LOBBY, { k: 'gone', s: my }); sfx.magic(); later(() => game(g), 700); }
+    // of two seekers the smaller id proposes, to the one who has waited longest; no answer in 6 seconds: the next one
+    function match() {
+      if (state !== 'search' || proposed) return;
+      const c = [...seeks.values()].filter(s => s.s > my && s.lv === lv && fresh(s) && !(dead.get(s.s) > Date.now())).sort((a, b) => a.time - b.time)[0];
+      if (!c) return;
+      const p = proposed = { to: c.s, g: rid(10), w: Math.random() < .5 ? 'a' : 'b', nk: c.nk };
+      post(LOBBY, { k: 'pair', a: my, b: c.s, g: p.g, w: p.w, nk });
+      later(() => { if (proposed === p && state === 'search') { dead.set(p.to, Date.now() + 30000); proposed = null; match(); } }, 6000);
+    }
+    sub(LOBBY, (m, time) => {
+      if (time > srvMax) srvMax = time;
+      if (m.k === 'seek' && ID.test(m.s || '') && LV.some(x => x[0] === m.lv)) { seeks.set(m.s, { s: m.s, lv: m.lv, nk: cleanNk(m.nk), time, got: Date.now() }); levels(); match(); return; }
+      if (m.k === 'gone' && seeks.delete(m.s)) { levels(); return; }
+      if (state !== 'search' || !ID.test(m.g || '') || Date.now() - time > FRESH && time < srvMax - FRESH) return;
+      // a smaller seeker asks me: yes, and my own proposal is called off
+      if (m.k === 'pair' && m.b === my && ID.test(m.a || '') && m.a < my) {
+        if (proposed) post(LOBBY, { k: 'cancel', a: my, b: proposed.to, g: proposed.g });
+        post(LOBBY, { k: 'ok', a: m.a, b: my, g: m.g });
+        begin({ g: m.g, me: m.w === 'b' ? 'white' : 'black', my, opp: m.a, nk: cleanNk(m.nk), lv });
+      } else if (m.k === 'ok' && proposed && m.a === my && m.b === proposed.to && m.g === proposed.g) {
+        begin({ g: proposed.g, me: proposed.w === 'a' ? 'white' : 'black', my, opp: proposed.to, nk: proposed.nk, lv });
+      }
+    });
+    const tick = () => { if (t !== tok) return; levels(); if (state === 'search') { body(); match(); } later(tick, 1000); };
+    showMe(); levels(); body(); later(tick, 1000);
+    $('#mmLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b) return; sfx.tick(); const was = state === 'search'; if (was) stop(); lv = P.mmLv = b.dataset.lv; save(); levels(); if (was) start(); };
+    $('#mmRe').onclick = () => { if (state !== 'idle') return; sfx.tick(); nk = myNick(true); showMe(); };
+    talk(allowed() ? 'Сыграй с ребёнком, который сейчас тоже в игре. Выбери уровень и нажми «Найти соперника».' : 'Здесь можно сыграть с ребёнком, которого ты не знаешь. Позови взрослого: он разрешит.');
+  }
+
+  // the game: its own topic; the moves, «я здесь» every 15 seconds, a draw offer, resigning, leaving
+  function game(G0) {
+    const t = newScreen(), opp = nick(G0.nk), me = nick(myNick()), topic = 'govorilki-mmg-' + G0.g, flip = G0.me === 'black', mine = G0.me === 'white';
+    let h = '', R = chReplay(''), sel = -1, promo = null, res = null, oppSeen = 0, started = false, offerFrom = 0, leaveAsk = false, resignAsk = false, closed = false;
+    const opened = Date.now();
+    shell('Соперник онлайн', `<div class="og mm-game">
+      <div class="og-p" id="ogOpp"><span class="og-e">${opp.e}</span><span class="og-n"><b>${esc(opp.n)}</b><small id="ogSeen">${colorName(otherColor(G0.me))}</small></span></div>
+      <div class="og-wrap"><div class="ch-board" id="ogB"></div></div>
+      <div class="og-p me"><span class="og-e">${me.e}</span><span class="og-n"><b>${esc(me.n)}</b><small>${colorName(G0.me)}</small></span></div>
+      <p class="og-st" id="ogSt"></p>
+      <div class="og-promo" id="ogPromo" hidden>${'qrbn'.split('').map(x => `<button class="sq l" data-pr="${x}"><span class="pc ${mine ? 'w' : 'b'}">${GLYPH[x]}︎</span></button>`).join('')}</div>
+      <div class="og-offer" id="ogOffer" hidden></div>
+      <div class="og-moves" id="ogM"></div>
+      <div class="og-btns"><button class="chip" id="ogDraw">🤝 Предложить ничью</button><button class="chip" id="ogResign">🏳️ Сдаться</button></div>
+      <div class="og-offer" id="ogClaim" hidden></div>
+      <p class="og-msg" id="ogMsg" role="status"></p>
+      <p class="og-net" id="ogNet">Подключаюсь…</p>
+    </div>`, { back: leave, guide: false });
+    const B = $('#ogB');
+    const st = () => res || chStatus(R.s);
+    const myTurn = () => started && !st().over && R.s.w === mine;
+    function line(s) {
+      if (s.draw) return `Ничья (${s.draw}).`;
+      const won = s.win === G0.me;
+      if (s.left) return won ? `${opp.n} выходит из партии. Победа твоя!` : G('Ты вышла из партии.', 'Ты вышел из партии.');
+      if (s.resign) return won ? `${opp.n} сдаёт партию. Победа твоя! 🎉` : `Партия сдана. Победа: ${opp.n}.`;
+      return won ? 'Мат! Победа твоя! 🎉' : `Мат. Победа: ${opp.n}.`;
+    }
+    function draw() {
+      const legal = myTurn() ? chLegal(R.s) : [], dests = sel >= 0 ? legal.filter(m => m.a === sel) : [];
+      const moves = h ? h.split(' ') : [], lm = moves.length ? moves[moves.length - 1] : '', last = lm ? [sqIdx(lm.slice(0, 2)), sqIdx(lm.slice(2, 4))] : [];
+      const kc = chInCheck(R.s) ? R.s.b.indexOf(R.s.w ? 'K' : 'k') : -1;
+      B.innerHTML = Array.from({ length: 64 }, (_, k) => {
+        const i = flip ? 63 - k : k, r = i >> 3, f = i & 7, p = R.s.b[i], d = dests.find(m => m.t === i);
+        const lab = ((k & 7) === 0 ? `<em class="rk">${8 - r}</em>` : '') + (k >> 3 === 7 ? `<em class="fl">${'abcdefgh'[f]}</em>` : '');
+        return `<button class="sq ${(r + f) % 2 ? 'd' : 'l'} ${i === sel ? 'sel' : ''} ${last.includes(i) ? 'last' : ''} ${d ? 'dest' + (p ? ' cap' : '') : ''} ${i === kc ? 'chk' : ''}" data-i="${i}" aria-label="${sqName(i)}">${p ? `<span class="pc ${isW(p) ? 'w' : 'b'}">${GLYPH[p.toLowerCase()]}︎</span>` : ''}${lab}</button>`;
+      }).join('');
+      $('#ogM').innerHTML = R.sans.map((s, j) => `${j % 2 === 0 ? `<i>${j / 2 + 1}.</i>` : ''}<span>${esc(s)}</span>`).join(' ');
+      const mv = $('#ogM'); mv.scrollLeft = mv.scrollWidth;
+      status();
+    }
+    function status() {
+      const s = st(), el = $('#ogSt'); if (!el) return;
+      $('#ogDraw').hidden = $('#ogResign').hidden = s.over || !started;
+      if (s.over) { el.textContent = line(s); el.className = 'og-st over'; return; }
+      if (!started) { el.textContent = 'Соединяю с соперником…'; el.className = 'og-st'; return; }
+      el.className = 'og-st' + (myTurn() ? ' mine' : '');
+      el.textContent = (s.check ? 'Шах! ' : '') + (myTurn() ? 'Твой ход' : `Ход соперника: ${opp.n}…`);
+      const gone = Date.now() - oppSeen;
+      $('#ogSeen').textContent = colorName(otherColor(G0.me)) + (gone < LOST_AFTER ? ' · в игре' : ' · не отвечает');
+      const c = $('#ogClaim');
+      if (gone >= CLAIM_AFTER && c.hidden) { c.hidden = false; c.innerHTML = `<p>${esc(opp.n)} давно не отвечает.</p><button class="big" data-c="win">🏆 Засчитать победу</button><button class="chip" data-c="wait">Ждать ещё</button>`; }
+    }
+    const send = msg => post(topic, { ...msg, g: G0.g, by: G0.my });
+    function ended() {
+      const s = st(); if (!s.over || closed) return;
+      closed = true; sfx.good(); send({ k: 'bye' });
+      const won = s.win === G0.me;
+      later(() => finish({ key: 'chess-mm', stars: won ? 3 : s.draw ? 2 : 1, line: `${line(s)} Спасибо за партию!`, again: screen, menu: screenFamChess }), 1600);
+    }
+    function play(m) {
+      sel = -1; promo = null; $('#ogPromo').hidden = true;
+      R = { ...R, sans: [...R.sans, chSan(R.s, m)], s: chApply(R.s, m) };
+      h = (h ? h + ' ' : '') + chUci(m); sfx.pop(); draw();
+      send({ k: 'mv', h }); ended();
+    }
+    function leave() {
+      if (st().over || !started) { if (!started) send({ k: 'bye' }); screen(); return; }
+      if (!leaveAsk) { leaveAsk = true; $('#ogMsg').textContent = 'Выйти из партии? Это засчитается как поражение. Нажми «назад» ещё раз.'; later(() => { leaveAsk = false; }, 4000); return; }
+      res = { over: true, win: otherColor(G0.me), left: true }; send({ k: 'end', r: 'left' }); draw(); ended();
+    }
+    B.onclick = e => {
+      const c = e.target.closest('.sq'); if (!c) return;
+      const i = +c.dataset.i, p = R.s.b[i];
+      if (!myTurn()) { if (!st().over) wiggle($('#ogSt')); return; }
+      if (p && isW(p) === mine) { sel = i; sfx.tick(); draw(); return; }
+      if (sel < 0) return;
+      const ms = chLegal(R.s).filter(m => m.a === sel && m.t === i);
+      if (!ms.length) { sel = -1; draw(); return; }
+      if (ms.length > 1) { promo = ms; $('#ogPromo').hidden = false; return; }
+      play(ms[0]);
+    };
+    $('#ogPromo').onclick = e => { const b = e.target.closest('[data-pr]'); if (b && promo) play(promo.find(m => m.pr === b.dataset.pr)); };
+    $('#ogDraw').onclick = () => { sfx.pop(); send({ k: 'draw', a: 'offer' }); $('#ogMsg').textContent = G('Ты предложила ничью. Ждём ответа.', 'Ты предложил ничью. Ждём ответа.'); };
+    $('#ogResign').onclick = () => {
+      sfx.pop();
+      if (!resignAsk) { resignAsk = true; $('#ogResign').textContent = '🏳️ Точно сдаться?'; later(() => { resignAsk = false; const b = $('#ogResign'); if (b) b.textContent = '🏳️ Сдаться'; }, 4000); return; }
+      res = { over: true, win: otherColor(G0.me), resign: true }; send({ k: 'end', r: 'resign' }); draw(); ended();
+    };
+    $('#ogOffer').onclick = e => {
+      const b = e.target.closest('[data-a]'); if (!b) return; sfx.pop(); $('#ogOffer').hidden = true;
+      if (b.dataset.a === 'yes') { res = { over: true, draw: 'по согласию' }; send({ k: 'end', r: 'draw' }); draw(); ended(); }
+      else send({ k: 'draw', a: 'no' });
+    };
+    $('#ogClaim').onclick = e => {
+      const b = e.target.closest('[data-c]'); if (!b) return; sfx.pop(); const c = $('#ogClaim'); c.hidden = true; c.innerHTML = '';
+      if (b.dataset.c === 'win') { res = { over: true, win: G0.me, left: true }; draw(); ended(); } else oppSeen = Date.now() - LOST_AFTER;
+    };
+    sub(topic, (m, time) => {
+      if (m.g !== G0.g || m.by !== G0.opp || closed) return;
+      if (!started) { started = true; sfx.star(); talk(myTurn() ? `Соперник здесь: ${opp.n}. Ты играешь белыми, твой ход!` : `Соперник здесь: ${opp.n}. Ты играешь чёрными, первый ход у соперника.`); }
+      oppSeen = Date.now(); const c = $('#ogClaim'); if (c && !c.hidden) { c.hidden = true; c.innerHTML = ''; }
+      if (m.k === 'mv' && typeof m.h === 'string' && m.h.length > h.length && m.h.startsWith(h) && m.h.slice(h.length).trim().split(' ').length === 1) {
+        if (R.s.w === mine) return;   // not the other side's turn
+        const r = chReplay(m.h); if (r.bad) return;
+        R = r; h = m.h; sel = -1; draw();
+        if (st().over) ended(); else { sfx.star(); try { navigator.vibrate && navigator.vibrate(120); } catch (er) {} say('Твой ход!'); }
+      } else if (m.k === 'mv' && typeof m.h === 'string' && m.h.length < h.length && h.startsWith(m.h)) send({ k: 'mv', h });
+      else if (m.k === 'end' && !res) { res = m.r === 'draw' ? { over: true, draw: 'по согласию' } : { over: true, win: G0.me, [m.r === 'left' ? 'left' : 'resign']: true }; draw(); ended(); }
+      else if (m.k === 'draw' && m.a === 'offer' && time > offerFrom && !st().over) { offerFrom = time; const o = $('#ogOffer'); o.hidden = false; o.innerHTML = `<p>${esc(opp.n)} предлагает ничью.</p><button class="big" data-a="yes">🤝 Согласиться</button><button class="chip" data-a="no">Играем дальше</button>`; }
+      else if (m.k === 'draw' && m.a === 'no') $('#ogMsg').textContent = `${opp.n} хочет играть дальше.`;
+      else if (m.k === 'bye' && !st().over) {
+        // gone before the first move: another opponent; later: the win can be counted at once
+        if (!h) { closed = true; talk('Соперник ушёл. Поищем другого!'); later(screen, 1500); return; }
+        oppSeen = Date.now() - CLAIM_AFTER;
+      }
+      status();
+    }, ok => { const n = $('#ogNet'); if (n) n.textContent = ok ? '📶 Связь есть' : 'Нет связи. Проверь интернет: ходы дойдут, когда связь вернётся.'; }, 6000);
+    // «я здесь»; the other side never came: back to the search
+    const hello = () => { if (t !== tok || closed) return; send(h ? { k: 'mv', h } : { k: 'hi' }); later(hello, 15000); };
+    hello();
+    const watch = () => {
+      if (t !== tok || closed) return;
+      if (!started && Date.now() - opened > 15000) { talk('Соперник не пришёл. Поищем другого!'); later(screen, 1500); return; }
+      status(); later(watch, 3000);
+    };
+    later(watch, 3000);
+    draw();
+  }
+
+  // the chess menu: the entry above «Играть с компьютером»; the grown-ups' switch in «Друзья»
+  function cta() {
+    const ai = $('#famAI'); if (!ai || !on()) return;
+    ai.insertAdjacentHTML('beforebegin', `<button class="lg-cta" id="famMM"><span class="emo">🌍</span><span class="lg-t"><b>Соперник онлайн</b><small>ребёнок твоего уровня, который сейчас в игре</small></span></button>`);
+    $('#famMM').onclick = () => { sfx.pop(); screen(); };
+  }
+  function settingsRow() {
+    const sec = $('#frSec'); if (!sec || !on()) return;
+    sec.insertAdjacentHTML('beforeend', `<label class="sw" for="mmIn"><input id="mmIn" type="checkbox" ${allowed() ? 'checked' : ''}>♟️ Шахматы с детьми, которых мы не знаем: только ходы, прозвище и уровень, без чата</label>`);
+    $('#mmIn').onchange = e => { ROOT.mmOk = e.target.checked ? 1 : 0; save(); sfx.tick(); };
+  }
+  return { screen, cta, settingsRow, on };
+})();
+GAMES.push({ id: 'chess-mm', name: 'Соперник онлайн', sub: 'шахматы с ребёнком, который сейчас в игре', ico: () => pic('🌍'), bg: 'var(--t-blue)', go: () => CHESSMM.screen(), grp: 8, hide: () => !CHESSMM.on() });
+/* MM-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
