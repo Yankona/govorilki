@@ -2442,6 +2442,16 @@ body.pv-on #app{padding-top:52px}
 .ast-who{position:relative;padding-right:44px}
 .ast-who .ag-say{position:absolute;top:8px;right:8px}
 /* CBOX-CSS-END */
+/* LETTERS-CSS */
+.lt-k{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.lt textarea,.lt input[type=text]{width:100%;box-sizing:border-box;font:600 17px/1.4 var(--f-body);border-radius:14px;border:3px solid var(--line-strong);padding:10px 12px;background:#fff;color:#2A2346}
+.lt input[type=text]{margin:4px 0 6px}
+.lt-out{margin:8px 0 0;font:800 17px var(--f-body);color:var(--leaf,#2FA865)}
+.lt-s{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:2px solid var(--line)}
+.lt-s b{font:700 15px/1.35 var(--f-body)}.lt-s small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.lt-in.fresh{box-shadow:0 0 0 3px var(--sun,#FFC94A)}
+.lt-t{white-space:pre-wrap;font:600 17px/1.45 var(--f-body)}
+/* LETTERS-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -8947,6 +8957,7 @@ function screenParents(focus) {
     $('#elOff').onclick = () => { ROOT.eleven = { key: '', voice: '', voiceName: '' }; save(); screenParents(); };
   }
   SETUI.build(focus);
+  LETTERS.row();
 }
 
 /* ---------- families: each family has its children and grandparents; one phone can keep several families.
@@ -11819,6 +11830,7 @@ function screenPult() {
     on1('pvSet', () => { PAR_BACK = screenPult; SETUI.reset(); screenParents(); });
     on1('pvTest', () => screenPultTest());
     on1('pvAdm', () => screenAdmin());
+    LETTERS.pultBtn();
     on1('pvAuthor', () => { authorKeys().then(() => screenPult(), () => {}); });
     on1('pvKeyCopy', () => { const t = authorText(); if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => { $('#pvKeyOut').textContent = 'Скопировано'; }, () => {}); });
     on1('pvUpd', () => appUpdate($('#pvVer')));
@@ -11853,7 +11865,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '122';
+const APP_VER = '123';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17277,6 +17289,113 @@ const CBOX = (() => {
   Object.values(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !(g.also || []).includes(10)) g.also = [...(g.also || []), 10]; });
   [...INTEREST_CAT.flatMap(c => c.items || []), ...LIKES].forEach(it => { if (Array.isArray(it.tiles)) it.tiles = [...new Set(it.tiles.map(t => MERGED[t] || t))]; }); }
 /* CBOX-END */
+/* LETTERS-BEGIN */
+/* ---------- «Написать автору»: ideas and feedback from any family (⚙️ Для взрослых → «💌 Написать автору»). The
+   letter is sealed on the phone with the author's open key and kept on the family server; only her phone can open it.
+   With the letter go the game's language and version and the children's ages — no names, unless the grown-up writes
+   them. Until the app carries the author's key, letters wait on the phone and leave with the first update that has it.
+   The author reads them in «Как дела у всех» → «💌 Письма». ---------- */
+const LETTERS = (() => {
+  const KINDS = [['idea', '💡', 'Идея'], ['game', '🎮', 'Хочу такую игру'], ['bug', '🐞', 'Что-то не работает'], ['love', '❤️', 'Нравится']];
+  const KIND = k => KINDS.find(x => x[0] === k) || KINDS[0];
+  const out = () => (ROOT.lettersOut = ROOT.lettersOut || []);    // letters still waiting on this phone
+  const sent = () => (ROOT.lettersSent = ROOT.lettersSent || []);  // what this phone has written (shown under the form)
+  async function post(it) {
+    if (!ADMIN_PUB || !CLOUD || !window.crypto || !crypto.subtle) return false;
+    const blob = { ...(await sealForAdmin(it)), k: 'fb' };
+    const r = await fetch(CLOUD + '/v1/idea', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(blob) });
+    return r.ok;
+  }
+  async function flush() {
+    const q = out(); if (!q.length || !ADMIN_PUB) return;
+    for (const it of [...q]) {
+      let ok = false; try { ok = await post(it); } catch (e) {}
+      if (!ok) break;
+      q.splice(q.indexOf(it), 1); const s = sent().find(x => x.at === it.at); if (s) s.ok = 1; save();
+    }
+  }
+  function screen(back) {
+    const t = newScreen(), f = fam();
+    let kind = 'idea', who = 'adult';
+    const ages = f ? f.kids.map(id => ROOT.profiles[id] && ROOT.profiles[id].settings.age).filter(Boolean) : [];
+    const draw = () => sent().length ? `<section class="psec"><h2>Ваши письма</h2>${sent().slice(0, 10).map(x => `<div class="lt-s"><b>${KIND(x.k)[1]} ${esc(x.t.slice(0, 120))}${x.t.length > 120 ? '…' : ''}</b><small>${new Date(x.at).toLocaleDateString(LOC)} · ${x.ok ? '✓ отправлено' : '⏳ ждёт отправки'}</small></div>`).join('')}</section>` : '';
+    shell('Написать автору', `<div class="pult lt">
+        <section class="psec"><h2>💌 Идеи и отзывы</h2>
+          <p>Придумали игру? Что-то не работает? Что-то очень понравилось? Напишите — всё прочитает автор «Говорилок».</p>
+          <div class="lt-k" id="ltK">${KINDS.map(([k, e, n]) => `<button class="chip ${k === kind ? 'sel' : ''}" data-k="${k}">${e} ${esc(n)}</button>`).join('')}</div>
+          <textarea id="ltT" rows="6" maxlength="3000" placeholder="Например: хотим игру про динозавров, где надо рычать на звук Р"></textarea>
+          <div class="lt-k" id="ltW"><button class="chip sel" data-w="adult">👩 Пишет взрослый</button><button class="chip" data-w="kid">🧒 Это идея ребёнка</button></div>
+          <input id="ltC" type="text" maxlength="120" autocomplete="off" placeholder="Как с вами связаться, если нужно (по желанию)">
+          <p class="muted">🔒 Письмо зашифровано: открыть его может только телефон автора. Вместе с ним уходят язык и версия игры и возраст детей${ages.length ? ` (${ages.join(', ')})` : ''}, без имён.</p>
+          <div class="prow-btns"><button class="big" id="ltSend">📨 Отправить</button></div>
+          <p class="lt-out" id="ltOut"></p>
+        </section>
+        <div id="ltSent">${draw()}</div>
+      </div>`, { back, guide: false, raw: true });
+    $('#ltK').onclick = e => { const b = e.target.closest('[data-k]'); if (!b) return; sfx.pop(); kind = b.dataset.k; $$('#ltK .chip').forEach(x => x.classList.toggle('sel', x === b)); };
+    $('#ltW').onclick = e => { const b = e.target.closest('[data-w]'); if (!b) return; sfx.pop(); who = b.dataset.w; $$('#ltW .chip').forEach(x => x.classList.toggle('sel', x === b)); };
+    $('#ltSend').onclick = async () => {
+      const txt = $('#ltT').value.trim(), o = $('#ltOut');
+      if (txt.length < 3) { o.textContent = 'Напишите хотя бы пару слов.'; $('#ltT').focus(); return; }
+      sfx.pop(); $('#ltSend').disabled = true;
+      const it = { k: kind, t: txt.slice(0, 3000), w: who, c: $('#ltC').value.trim().slice(0, 120), ages, cc: f && f.cc || '', lang: LANG, ver: APP_VER, at: Date.now() };
+      out().push(it); sent().unshift({ k: kind, t: it.t, at: it.at, ok: 0 }); ROOT.lettersSent = sent().slice(0, 30); save();
+      await flush(); if (t !== tok) return;
+      const ok = !out().some(x => x.at === it.at);
+      o.textContent = ok ? 'Спасибо! Письмо у автора.' : 'Спасибо! Письмо сохранено и уйдёт автору, как только появится связь.';
+      $('#ltT').value = ''; $('#ltC').value = ''; $('#ltSend').disabled = false; $('#ltSent').innerHTML = draw();
+    };
+  }
+  // ⚙️ Для взрослых: one more row at the end of the menu
+  function row() {
+    const l = $('.set-menu .set-list'); if (!l || $('#ltRow')) return;
+    l.insertAdjacentHTML('beforeend', `<button class="set-row" id="ltRow"><span class="set-i">💌</span><span class="set-t"><b>Написать автору</b><small>идеи, отзывы, что не работает</small></span><span class="set-go">›</span></button>`);
+    $('#ltRow').onclick = () => { sfx.pop(); screen(() => { SETUI.reset(); screenParents(); }); };
+  }
+  // the author's inbox: the sealed letters from the family server, opened with her key and kept on her phone
+  const inb = () => (ROOT.lettersIn = ROOT.lettersIn || []);
+  async function poll() {
+    if (!ROOT.adminKey || !CLOUD) return 0;
+    const prv = await adminPrivate(ROOT.adminKey); let n = 0, after = ROOT.lettersAfter || 0;
+    for (let page = 0; page < 10; page++) {
+      const r = await fetch(`${CLOUD}/v1/ideas?after=${after}`).then(x => x.ok ? x.json() : null); if (!r || !r.ideas || !r.ideas.length) break;
+      for (const m of r.ideas) {
+        after = Math.max(after, m.id);
+        try { const x = await openForAdmin(m, prv); if (x && x.t) { inb().unshift({ ...x, got: m.at, id: m.id, fresh: 1 }); n++; } } catch (e) {}
+      }
+      if (r.ideas.length < 300) break;
+    }
+    ROOT.lettersAfter = after; ROOT.lettersIn = inb().slice(0, 500); if (n) save();
+    return n;
+  }
+  function inbox(back) {
+    const t = newScreen();
+    const L = { ru: 'русский', en: 'English', pt: 'português', de: 'Deutsch' };
+    const draw = () => inb().length ? inb().map(x => `<section class="psec lt-in ${x.fresh ? 'fresh' : ''}"><h2>${KIND(x.k)[1]} ${esc(KIND(x.k)[2])}${x.w === 'kid' ? ' · 🧒 идея ребёнка' : ''}</h2>
+        <p class="lt-t">${esc(x.t)}</p>
+        ${x.c ? `<p>📮 ${esc(x.c)}</p>` : ''}
+        <p class="muted">${new Date(x.at || x.got).toLocaleString(LOC)} · ${FLAG(x.cc || 'PT')} ${L[x.lang] || esc(x.lang || '')} · дети: ${(x.ages || []).join(', ') || '—'} · версия ${esc(String(x.ver || '—'))}</p></section>`).join('')
+      : '<p class="lead">Пока писем нет. Они появятся здесь, когда кто-нибудь напишет через «⚙️ Для взрослых → 💌 Написать автору».</p>';
+    const head = msg => `<div class="prow-btns"><button class="big ghost" id="ltRe">🔄 Проверить</button></div><p class="muted" id="ltInOut">${msg}</p>`;
+    shell('Письма', `<div class="pult" id="ltIn">${head('')}${draw()}</div>`, { back, guide: false, raw: true });
+    const bind = () => { $('#ltRe').onclick = () => { sfx.pop(); $('#ltInOut').textContent = 'Проверяю…'; run(); }; };
+    const run = () => poll().then(n => {
+      if (t !== tok) return;
+      $('#ltIn').innerHTML = head(n ? `Новых писем: ${n}` : 'Новых писем нет') + draw(); bind();
+      inb().forEach(x => { delete x.fresh; }); save();
+    }, () => { if (t === tok) $('#ltInOut').textContent = 'Не получилось проверить. Нужен интернет.'; });
+    bind(); run();
+  }
+  // in the author's «Как дела у всех»: the letters next to «Все семьи»
+  function pultBtn() {
+    const a = $('#pvAdm'); if (!a || $('#pvLetters')) return;
+    a.insertAdjacentHTML('afterend', `<button class="lg-cta pv-adm" id="pvLetters"><span class="emo">💌</span><span class="lg-t"><b>Письма</b><small>идеи и отзывы семей</small></span><span class="g-go">▶</span></button>`);
+    $('#pvLetters').onclick = () => { sfx.pop(); inbox(() => screenPult()); };
+  }
+  setTimeout(() => { flush().catch(() => {}); }, 8000);
+  return { screen, row, flush, inbox, pultBtn, poll };
+})();
+/* LETTERS-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in

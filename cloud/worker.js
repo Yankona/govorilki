@@ -4,6 +4,7 @@
 // slows down an address that keeps guessing; each new lock lasts twice as long (up to a day) until the right code. Codes are stored as HMAC with a key that lives only in this database.
 const ORIGINS = ['https://govorilki.com', 'https://www.govorilki.com', 'https://yankona.github.io', 'http://localhost:8765'];
 const LOCK_AFTER = 5, LOCK_MS = 15 * 60e3, LOCK_MAX = 24 * 3600e3, IP_MAX = 40, IP_WINDOW = 60 * 60e3, TOKEN_DAYS = 400;
+const MAX_IDEA = 12e3, IDEA_IP_MAX = 20, IDEA_KEEP = 3000;
 const MAX_PROFILE = 600e3, MAX_META = 40e3, MAX_KIDS = 12, MAX_MOVE = 1.9e6, MOVE_TTL = 24 * 3600e3, MOVE_IP_MAX = 30;
 
 const now = () => Date.now();
@@ -98,6 +99,26 @@ async function route(req, env) {
     if (!r || now() - r.created > MOVE_TTL) return json({ ok: false, error: 'gone' }, 404);
     await env.DB.prepare('DELETE FROM moves WHERE id = ?').bind(mv[1]).run();
     return json({ ok: true, data: r.data });
+  }
+
+  // ideas and feedback for the author: a sealed letter (only the author's phone can open it); anyone may read the
+  // sealed letters, since they are useless without her key. An address sends at most IDEA_IP_MAX letters an hour.
+  if (path === '/v1/idea' && M === 'POST') {
+    const r = await env.DB.prepare('SELECT n, since FROM ipfails WHERE ip = ?').bind('idea:' + ip).first();
+    if (r && now() - r.since < IP_WINDOW && r.n >= IDEA_IP_MAX) return json({ ok: false, error: 'slow' }, 429);
+    const b = await body(req, MAX_IDEA + 500), B64 = /^[A-Za-z0-9_-]+$/;
+    if (b.k !== 'fb' || ![b.ex, b.ey, b.iv, b.ct].every(x => typeof x === 'string' && B64.test(x)) || b.ct.length > MAX_IDEA) return json({ ok: false, error: 'letter' }, 400);
+    await env.DB.batch([
+      env.DB.prepare('INSERT INTO ideas (at, blob) VALUES (?, ?)').bind(now(), JSON.stringify({ k: 'fb', ex: b.ex, ey: b.ey, iv: b.iv, ct: b.ct })),
+      env.DB.prepare('DELETE FROM ideas WHERE id <= (SELECT MAX(id) FROM ideas) - ?').bind(IDEA_KEEP),
+      !r || now() - r.since >= IP_WINDOW ? env.DB.prepare('INSERT OR REPLACE INTO ipfails (ip, n, since) VALUES (?, 1, ?)').bind('idea:' + ip, now()) : env.DB.prepare('UPDATE ipfails SET n = n + 1 WHERE ip = ?').bind('idea:' + ip)
+    ]);
+    return json({ ok: true });
+  }
+  if (path === '/v1/ideas' && M === 'GET') {
+    const after = Math.max(0, parseInt(url.searchParams.get('after') || '0', 10) || 0);
+    const r = await env.DB.prepare('SELECT id, at, blob FROM ideas WHERE id > ? ORDER BY id LIMIT 300').bind(after).all();
+    return json({ ok: true, ideas: (r.results || []).map(x => ({ id: x.id, at: x.at, ...JSON.parse(x.blob) })) });
   }
 
   if (path === '/v1/check' && M === 'GET') {
