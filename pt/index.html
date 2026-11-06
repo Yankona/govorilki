@@ -2488,6 +2488,17 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 .pd{display:flex;flex-direction:column;gap:14px;--pd-c:84px;--pd-dot:#CFC6EA;--pd-off:#ECE8F6;--pd-offd:#D3CCE6;--pd-done:#2FA865;--pd-doned:#1F7F48}
 .quest .pd{--pd-dot:#4A5890;--pd-off:#39456F;--pd-offd:#28325A}
 .pd-top{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+/* 🔥 and ⭐ sit in the top row; on a phone the children's buttons get a row of their own, so none is cut */
+.kids-top .pd-pill{flex:none;padding:5px 11px 5px 8px;font-size:18px}.kids-top .pd-pill .star-i{width:22px;height:22px}.kids-top .pd-pill .emo{font-size:20px}
+@media (max-width:599px){
+  .home-t .kids-top{flex-wrap:wrap;row-gap:10px}
+  .home-t .kids-top .kids-in{order:9;flex:1 0 100%}
+  .home-t .kids-top .kids-in + .ibtn{margin-left:auto}
+}
+@media (max-width:359px){
+  .home-t .kids-top{gap:6px}.home-t .kids-top .kb-ic{width:40px;height:40px;font-size:18px}
+  .kids-top .pd-pill{padding:4px 9px 4px 6px;font-size:16px;min-height:40px}.kids-top .pd-pill .star-i{width:19px;height:19px}.kids-top .pd-pill .emo{font-size:17px}
+}
 .pd-pill{display:flex;align-items:center;gap:6px;border:0;background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 14px 6px 10px;min-height:44px;font:900 20px/1 var(--f-body);box-shadow:0 4px 0 var(--line-strong);font-variant-numeric:tabular-nums;cursor:pointer}
 .pd-pill .emo{font-size:22px}.pd-pill .star-i{width:26px;height:26px}
 .pd-hero{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px}
@@ -2559,7 +2570,7 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
   .home-t .stage:has(>.pd-side){display:grid;grid-template-columns:minmax(0,1fr) 300px;column-gap:32px;align-items:start;align-content:start}
   .home-t .stage:has(>.pd-side)>*{max-width:none;margin:0}
   .pd{--pd-c:92px}
-  .pd-top{display:none}
+  .pd-top,.kids-top .pd-pill{display:none}
   .pd-say{font-size:20px}
   .pd-hero .pd-fr.guide-ryz{width:96px;height:96px}
   .pd-path{max-width:600px}
@@ -8665,7 +8676,7 @@ async function run({ id, voice, text, pairs, need }) {
 self.onmessage = e => { q = q.then(() => run(e.data)); };
 `;
 const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, mem: new Map() };
-const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : PIPER_VOICES[0][0];
+const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : (PIPER_VOICES.find(v => v[0] === 'ru_RU-ruslan-medium') || PIPER_VOICES[0])[0];
 const piperName = () => PIPER_VOICES.find(v => v[0] === piperVoice())[1];
 const piperLean = () => { try { const c = navigator.connection; return !!(c && (c.saveData || c.type === 'cellular')); } catch (e) { return false; } };
 const engineNow = () => ROOT.engine || ((GUEST || piperLean()) ? 'device' : 'piper');
@@ -12014,7 +12025,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '137';
+const APP_VER = '138';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -13934,7 +13945,7 @@ function screenPrimerLesson(i, stage) {
   // 3. hearing the sound: where it is in a word (start, middle, end), or, for the first letters, whether a word starts with it
   const pool = PR_WORDS.filter(([w, e]) => e), whereW = pool.filter(([w]) => prWhere(w, L) >= 0);
   const posMode = i >= PRIMER.indexOf('Р') && (!isV || L === 'Ы') && !sign && whereW.length >= 4 && new Set(whereW.map(([w]) => prWhere(w, L))).size >= 2;
-  const yes = pool.filter(([w]) => w.startsWith(L) && prClean(w.replace(/-/g, ''), 0) && !PR_REDUCED.has(w)), no = pool.filter(([w]) => !w.includes(L));
+  const yes = pool.filter(([w]) => w.startsWith(L) && prClean(w.replace(/-/g, ''), 0) && !PR_REDUCED.has(w)), no = pool.filter(([w]) => !w.includes(L) && w[0] !== ({ 'А': 'Я', 'О': 'Ё', 'У': 'Ю', 'Э': 'Е' })[L] && !(L === 'А' && w[0] === 'О'));
   const PL = ['в начале', 'в середине', 'в конце'];
   if (posMode) p1.push(['Где звук?', box => new Promise(done => {
     const deck = shuffle([0, 1, 2].flatMap(p => shuffle(whereW.filter(([w]) => prWhere(w, L) === p)).slice(0, 2))).slice(0, 5);
@@ -13964,13 +13975,16 @@ function screenPrimerLesson(i, stage) {
       busy = false; const [w, e] = deck[k];
       box.innerHTML = `<div class="pr-card"><div class="pr-pic">${pic(e)}</div><p class="pr-q">«${esc(cap(wordOf(w)))}» начинается со звука ${prBig(L)}?</p>
         <div class="og-btns"><button class="big" data-a="1">👍 Да</button><button class="big ghost" data-a="0">👎 Нет</button></div></div>`;
-      talk(`${k === 0 ? `Послушай звук: ${PR_SOUND[L][1].replace(/[.!]+$/, '')}. ` : ''}${cap(wordOf(w))}. Это слово начинается ${isV ? 'со звука ' + L : 'с этого звука'}?`);
+      talk(`${k === 0 ? `Послушай звук: ${PR_SOUND[L][1].replace(/[.!]+$/, '')}. ` : ''}${cap(wordOf(w))}. Начинается ${isV ? 'со звука ' + L : 'с этого звука'}: да или нет?`);
     };
     box.onclick = async e => {
       const b = e.target.closest('[data-a]'); if (!b || busy) return; busy = true;
       const right = (b.dataset.a === '1') === deck[k][0].startsWith(L);
       if (!right) { sfx.oops(); wiggle(b); await talk(`Послушай ещё: ${wordOf(deck[k][0])}.`); busy = false; return; }
-      sfx.good(); b.classList.add('right'); await wait(500); if (t !== tok) return;
+      sfx.good(); b.classList.add('right');
+      { const w0 = deck[k][0], W = cap(wordOf(w0)), f0 = w0[0], own = 'АУЫИЭ'.includes(f0) || (f0 === 'О' && !PR_REDUCED.has(w0));
+        await talk(b.dataset.a === '1' ? `Да! ${W} начинается ${isV ? 'со звука ' + L : 'с этого звука'}.` : `Правильно, нет! ${W} начинается ${own ? 'со звука ' + f0 : 'с другого звука'}.`); }
+      if (t !== tok) return;
       k++; if (k >= deck.length) done(); else show();
     };
     show();
@@ -17674,7 +17688,7 @@ const POLISH = (() => {
      browser's later click: on iPhone that click sometimes never comes (right after the app opens, or when the family's
      sync redraws the screen in between), and the child had to tap twice. The browser's own click that follows is
      dropped, so it cannot land on whatever the next screen has under the finger. */
-  const PICK = '.who-kid, .who-adult, .kids-in .kid';
+  const PICK = '.who-kid, .who-adult, .who-famc, .kids-in .kid, #homeWho';
   let down = null, fired = 0, lastTouch = 0;
   document.addEventListener('pointerdown', e => {
     lastTouch = Date.now();
@@ -17973,6 +17987,9 @@ const PATH = (() => {
         <button class="chip" id="likeBtn"><span class="emo">💛</span>Eu gosto</button>
         <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? "O meu amigo" : "Escolhe um amigo!"}</button></div>`;
     hero.before(box); hero.remove(); plan.remove();
+    // 🔥 and ⭐ go up into the top row, after the search
+    const kt = st.querySelector('.kids-top'), top = box.querySelector('.pd-top');
+    if (kt && top) { const sb = kt.querySelector('#homeSearch'); [...top.children].reverse().forEach(x => sb ? sb.after(x) : kt.prepend(x)); top.remove(); }
     box.querySelectorAll('.pd-n[data-l]').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); startLesson(b.dataset.l); });
     const fr = box.querySelector('#pdFriend');
     fr.onclick = () => { hopEl(fr); say(line(state())); };
@@ -18512,6 +18529,10 @@ function whoBoot() {
   if (DEMO || PREVIEW) return false;
   whoLangs();
   if (LIGA_HASH || PULT_HASH) return false;
+  if (WHO_HASH && !CL_BOOTED && cloudFams().length) {
+    const id = WHO_HASH, f = whoFams().find(x => x.kids.includes(id));
+    if (f) { WHO_HASH = null; CL_BOOTED = true; whoEnter(f.id, id, true); cloudPullAll(3500).then(ch => { CL_SETTLED = true; if (ch) POLISH.calm(() => { if ($('#tabBar')) goHome(); }); }); return true; }
+  }
   if (cloudBootWait()) return true;
   // …/#login on a phone that has a family but not its login yet: straight to the sign-in
   if (LAND_LOGIN && cloudOn() && !cloudFams().length) { screenCloudLogin({ back: () => screenWho() }); return true; }
