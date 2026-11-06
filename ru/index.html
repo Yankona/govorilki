@@ -2484,6 +2484,99 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 .img-off-note{margin:4px 0 0;text-align:center}
 .m-rules>small{display:block;margin-top:6px}
 /* POLISH-CSS-END */
+/* PATH-CSS */
+.pd{display:flex;flex-direction:column;gap:14px;--pd-c:84px;--pd-dot:#CFC6EA;--pd-off:#ECE8F6;--pd-offd:#D3CCE6;--pd-done:#2FA865;--pd-doned:#1F7F48}
+.quest .pd{--pd-dot:#4A5890;--pd-off:#39456F;--pd-offd:#28325A}
+.pd-top{display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.pd-pill{display:flex;align-items:center;gap:6px;border:0;background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 14px 6px 10px;min-height:44px;font:900 20px/1 var(--f-body);box-shadow:0 4px 0 var(--line-strong);font-variant-numeric:tabular-nums;cursor:pointer}
+.pd-pill .emo{font-size:22px}.pd-pill .star-i{width:26px;height:26px}
+.pd-hero{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px}
+.pd-hero .pd-fr.guide-ryz{width:84px;height:84px}
+.pd-bub{position:relative;background:var(--paper);border-radius:22px;padding:12px 16px 13px;box-shadow:0 5px 0 var(--line-strong)}
+.pd-bub:before{content:'';position:absolute;left:-10px;top:26px;border:10px solid transparent;border-right-color:var(--paper);border-left:0}
+.pd-say{font:800 18px/1.28 var(--f-body);color:var(--ink)}
+.pd-prog{display:flex;align-items:center;gap:8px;margin-top:9px}
+.pd-bar{flex:1;min-width:30px;height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+.pd-bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--sun),var(--tiger))}
+.pd-prog small{font:900 14px var(--f-body);color:var(--ink-soft);white-space:nowrap}
+.pd-pi{display:grid;place-items:center;font-size:24px;line-height:1}.pd-pi svg{width:28px;height:28px;display:block}
+.pd-path{position:relative;width:100%;max-width:520px;margin:6px auto 0;min-height:420px}
+.pd-svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.pd-svg path{stroke:var(--pd-dot);stroke-width:9;stroke-dasharray:1 17}
+.pd-svg path.on{stroke:var(--pd-done);stroke-dasharray:none}
+.pd-n{position:absolute;left:30%;top:0;width:max-content;display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;margin:0;cursor:pointer;color:var(--ink);text-align:left;font:inherit;transform:translateX(calc(var(--pd-c) / -2));-webkit-tap-highlight-color:transparent}
+.pd-n.r{flex-direction:row-reverse;transform:translateX(calc(-100% + var(--pd-c) / 2))}
+.pd-c{position:relative;flex:none;width:var(--pd-c);height:calc(var(--pd-c) * .92);border-radius:50%;display:grid;place-items:center;background:var(--pd-off);box-shadow:0 7px 0 var(--pd-offd);transition:transform .1s}
+.pd-n:active .pd-c{transform:translateY(5px)}
+.pd-i{display:grid;place-items:center;font-size:40px;line-height:1}
+.pd-i svg{width:calc(var(--pd-c) * .58);height:calc(var(--pd-c) * .58);display:block}
+.pd-n.next .pd-i{filter:grayscale(1);opacity:.5}
+.pd-n.done .pd-c{background:var(--pd-done);box-shadow:0 7px 0 var(--pd-doned)}
+.pd-n.now .pd-c{background:var(--tiger);box-shadow:0 7px 0 var(--tiger-deep)}
+.pd-n.now .pd-c:after{content:'';position:absolute;inset:-10px;border-radius:50%;border:5px solid var(--tiger);opacity:.45;animation:pdRing 1.6s ease-out infinite;pointer-events:none}
+@keyframes pdRing{to{transform:scale(1.18);opacity:0}}
+.pd-ck{position:absolute;right:-5px;top:-5px;width:28px;height:28px;border-radius:50%;background:#fff;color:var(--pd-done);font:900 17px/28px var(--f-body);text-align:center;box-shadow:0 2px 0 rgba(0,0,0,.14)}
+.pd-lb{display:flex;flex-direction:column;align-items:flex-start;background:var(--paper);padding:9px 13px;border-radius:16px;box-shadow:0 4px 0 var(--line-strong);max-width:min(210px,calc(100vw - var(--pd-c) - 64px))}
+.pd-lb b{font:900 18px/1.15 var(--f-body);color:var(--ink)}
+.pd-lb small{display:flex;align-items:center;gap:2px;margin-top:3px;font:800 13px/1.2 var(--f-body);color:var(--ink-soft)}
+.pd-lb small .star-i{width:15px;height:15px}
+.pd-n.next .pd-lb b{color:var(--ink-soft)}
+.pd-n.now .pd-lb{background:var(--tiger);box-shadow:0 5px 0 var(--tiger-deep);padding:10px 14px 11px}
+.pd-n.now .pd-lb b{color:#fff;font-size:19px}
+.pd-cta{display:flex;align-items:center;justify-content:center;gap:6px;align-self:stretch;margin-top:7px;background:#fff;color:var(--tiger-deep);border-radius:12px;padding:7px 12px;font:900 15px/1 var(--f-body);letter-spacing:.03em;text-transform:uppercase;box-shadow:0 3px 0 rgba(0,0,0,.16)}
+.pd-cta svg{width:15px;height:15px;fill:currentColor}
+.pd-chest .pd-i{filter:none!important;opacity:1!important}
+.pd-chest.next .pd-i{opacity:.75!important}
+.pd-chest.ready .pd-c,.pd-chest.done .pd-c{background:var(--sun);box-shadow:0 7px 0 #D99A00}
+.pd-chest.ready .pd-c{animation:pdWob 1.5s ease-in-out infinite}
+.pd-chest.ready .pd-lb{background:var(--sun);box-shadow:0 5px 0 #D99A00}.pd-chest.ready .pd-lb small{color:var(--ink)}
+@keyframes pdWob{0%,60%,100%{transform:rotate(0)}15%{transform:rotate(-7deg)}30%{transform:rotate(7deg)}45%{transform:rotate(-4deg)}}
+.pd-mine{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.pd-win .pd-box{font-size:84px;line-height:1;display:grid;place-items:center;animation:pdWob 1s ease-in-out 2}.pd-win .pd-box svg{width:120px;height:120px}
+.pd-main{display:flex;flex-direction:column;gap:22px;min-width:0}
+.pd-side,.rail-logo{display:none}
+@media (prefers-reduced-motion:reduce){.pd-n.now .pd-c:after,.pd-chest.ready .pd-c,.pd-win .pd-box{animation:none}}
+@media (max-width:360px){.pd{--pd-c:72px}.pd-lb b{font-size:16px}.pd-say{font-size:16px}.pd-hero .pd-fr.guide-ryz{width:68px;height:68px}}
+/* the reading reminder in the older child's dark theme: dark card, light words */
+.quest .rf-card{background:#3A3352;border-color:#FFC83A;color:var(--ink)}.quest .rf-card.soft{background:#2B2F52}
+/* a wide screen: the tabs in a column on the left, the path in the middle, the week and the family on the right */
+@media (min-width:1024px){
+  #app:has(>.home-t){max-width:none;margin:0;padding-left:236px}
+  .home-t .tabbar{top:0;bottom:0;left:0;right:auto;width:236px;display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:22px 14px;border-radius:0;box-shadow:2px 0 0 var(--line)}
+  .rail-logo{display:flex;align-items:center;gap:10px;margin:0 6px 18px;font:900 24px/1 var(--f-display);color:var(--ink)}
+  .rail-logo .emo{flex:none;width:44px;height:44px;display:grid;place-items:center;font-size:36px}.rail-logo .emo svg{width:44px;height:44px;display:block}
+  .home-t .tb{flex:none;flex-direction:row;justify-content:flex-start;gap:14px;padding:10px 14px;border-radius:16px}
+  .home-t .tb .emo{font-size:30px}.home-t .tb .emo svg{width:36px;height:36px}
+  .home-t .tb small{font:900 17px/1.1 var(--f-body)}
+  .home-t .tb.sel{background:var(--sun-soft,#FFF1D6);box-shadow:inset 0 0 0 2px var(--sun)}.home-t .tb.sel .emo{transform:none}
+  .quest .home-t .tb.sel{background:#2E3866}
+  .home-t .tb-dot{right:auto;left:40px}
+  .home-t .stage{padding:8px 32px 28px}
+  .home-t .stage>*{width:100%;max-width:1060px;margin-inline:auto}
+  .home-t .stage:has(>.pd-side){display:grid;grid-template-columns:minmax(0,1fr) 300px;column-gap:32px;align-items:start;align-content:start}
+  .home-t .stage:has(>.pd-side)>*{max-width:none;margin:0}
+  .pd{--pd-c:92px}
+  .pd-top{display:none}
+  .pd-say{font-size:20px}
+  .pd-hero .pd-fr.guide-ryz{width:96px;height:96px}
+  .pd-path{max-width:600px}
+  .pd-side{display:flex;flex-direction:column;gap:16px;position:sticky;top:0;padding-top:6px}
+  .pd-card{display:block;width:100%;text-align:left;border:0;background:var(--paper);color:var(--ink);border-radius:22px;padding:16px 18px;box-shadow:0 5px 0 var(--line-strong);font:inherit}
+  button.pd-card{cursor:pointer}button.pd-card:active{transform:translateY(3px)}
+  .pd-card h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;font:900 18px/1.2 var(--f-body)}
+  .pd-card h3 small{margin-left:auto;font:800 13px var(--f-body);color:var(--ink-soft)}
+  .pd-card>small{display:block;margin-top:6px;font:800 14px/1.3 var(--f-body);color:var(--ink-soft)}
+  .pd-wk{display:flex;justify-content:space-between}
+  .pd-wd{display:flex;flex-direction:column;align-items:center;gap:5px;font:800 12px var(--f-body);color:var(--ink-soft)}
+  .pd-wd i{width:30px;height:30px;border-radius:50%;background:var(--line);display:grid;place-items:center;font:900 15px var(--f-body);font-style:normal;color:#fff}
+  .pd-wd.on i{background:var(--tiger)}.pd-wd.now i{box-shadow:0 0 0 3px var(--sun)}
+  .pd-big{display:flex;align-items:center;gap:8px;font:900 34px/1 var(--f-body)}.pd-big .star-i{width:36px;height:36px}
+  .pd-fm{display:grid;grid-template-columns:36px 64px minmax(0,1fr) 34px;align-items:center;gap:10px;padding:6px 0}
+  .pd-fm .chip-face{width:36px;height:36px}.pd-fm .chip-face svg{width:100%;height:100%}
+  .pd-fm b{font:900 16px var(--f-body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pd-fm .pd-bar{height:10px}.pd-fm small{font:800 13px var(--f-body);color:var(--ink-soft);text-align:right}
+}
+/* PATH-CSS-END */
 /* FIX-CSS */
 .kp-ov .kp{position:static;flex:none;min-height:0;height:100%;border-radius:0;overflow:visible;background:none;align-items:stretch;justify-content:flex-start;padding:0;max-width:none;margin:0}
 .kp-ov .kp-h,.kp-ov .kp-grid{padding-left:max(12px,calc(50% - 368px));padding-right:max(12px,calc(50% - 368px))}
@@ -11912,7 +12005,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '133';
+const APP_VER = '136';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17061,6 +17154,7 @@ const HOMEUX = (() => {
   function apply(tab) {
     const st = $('#stage'); if (!st) return;
     POLISH.home(st);
+    PATH.rail();
     // the header: one row
     const fr = st.querySelector('.kids-fam'); if (fr) fr.remove();
     const pult = $('#homePult');
@@ -17075,6 +17169,7 @@ const HOMEUX = (() => {
     // no empty stars under games never played
     st.querySelectorAll('.tile .prog, .mini .prog').forEach(p => { const s = p.querySelectorAll('span'); if (s.length && !p.textContent.trim() && [...s].every(x => x.classList.contains('off'))) p.remove(); });
     if (tab === 'today') {
+      PATH.today(st);
       const hero = st.querySelector('.hero'), plan = st.querySelector('section.today');
       if (hero && plan) hero.after(plan);
       const all = st.querySelector('.alltabs'); if (all) all.remove();
@@ -17085,6 +17180,7 @@ const HOMEUX = (() => {
       const tr = st.querySelector('.tryit .tiles'); if (tr) [...tr.children].slice(4).forEach(x => x.remove());
       const pb = $('#parentsBtn'); if (pb) pb.textContent = '⚙️ Для взрослых';
       POLISH.today(st);
+      PATH.side(st);
       return;
     }
     // the other tabs: each game once, long sections folded
@@ -17652,7 +17748,7 @@ const MUSIC = (() => {
     danube: ['US Marine Band', 'PD'], spring: ['Modena Chamber Orchestra / Musopen', 'PD'], turca: ['Romuald Greiss', 'PD'],
     joy: ['US Navy Band', 'PD'], elise: ['V. Gao', 'CC0'], nacht: ['European Archive / Musopen', 'PD'], promenade: ['Musopen', 'PD'] };
   // only the pieces whose recording is already on the site (build/music_avail.py fills this in)
-  const AVAIL = ["lullaby", "morning", "nacht", "promenade", "spring", "swan", "toccata"];
+  const AVAIL = ["elise", "fifth", "joy", "king", "lullaby", "morning", "nacht", "promenade", "spring", "swan", "tell", "toccata", "turca"];
   Object.keys(REC).forEach(k => { if (!AVAIL.includes(k)) delete REC[k]; });
   let au = null;
   const mmss = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
@@ -17769,6 +17865,144 @@ var DRAWN = (() => {
 // a tab's picture: the drawing when there is one
 const tabIco = e => typeof DRAWN === 'object' && DRAWN && DRAWN[e] ? `<span class="emo drawn">${DRAWN[e]}</span>` : `<span class="emo">${e}</span>`;
 /* ICONS-END */
+/* PATH-BEGIN */
+/* ---------- «Дорожка дня» (the redesign, step 1): the tab «Сегодня» is a path of the day's lessons.
+   - the friend says the plan in a bubble with a progress bar;
+   - each lesson is a big round step on a winding path: done — green with a tick, the next one — orange with «Начать»,
+     the rest — quiet; any step can be pressed;
+   - a chest at the end opens when every lesson of the day is done and gives 5 stars once a day;
+   - stickers, «Я люблю» and the friend's page are chips under the path;
+   - on a wide screen (a laptop, a tablet held sideways) the tab bar is a column on the left, and a panel on the right
+     shows the week, the stars and how each child of the family is doing today. ---------- */
+const PATH = (() => {
+  const CHEST = 5;
+  const ICO = { speech: '👂', read: '📖', math: '🧮', book: '📚' };
+  const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
+  function state() {
+    const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;
+    return { ids, c, td, done, now, all: !now, opened: P.chest === dayKey() };
+  }
+  function line(s) {
+    const N = s.ids.length, d = s.done.length;
+    let t;
+    if (!d) t = Q() ? `Миссия дня: ${N} ${plural(N, ['шаг', 'шага', 'шагов'])}. Погнали!` : `Привет${nameBit()}! Сегодня ${N} ${plural(N, ['занятие', 'занятия', 'занятий'])}. Начнём?`;
+    else if (!s.all) t = `Уже ${d} из ${N}! Дальше: ${LS()[s.now].name}.`;
+    else if (!s.opened) t = 'Всё сделано! Открывай сундук!';
+    else t = Q() ? 'Миссия выполнена! Теперь играй во что хочешь.' : `Сегодня всё сделано${nameBit()}! Молодец!`;
+    return gx(t + holGreet());
+  }
+  function node(s, id) {
+    const L = LS()[id], n = s.c[id] || 0, plan = lessonPlan(id), dn = s.td.done[id].length;
+    const st = n ? 'done' : id === s.now ? 'now' : 'next';
+    const go = dn ? `Дальше ${dn}/${plan.length}` : id === 'book' ? 'Отметить' : 'Начать';
+    const sub = st === 'done' ? `<small>готово ${ICON.star.repeat(3)}${n > 1 ? ` ×${n}` : ''}</small>`
+      : st === 'now' ? `<span class="pd-cta">${ICON.play}${go}</span>`
+      : dn ? `<small>${dn} из ${plan.length}</small>` : '';
+    return `<button class="pd-n ${st}" data-l="${id}" aria-label="${esc(L.name)}: ${st === 'done' ? 'готово' : go}">
+      <span class="pd-c"><span class="pd-i">${ico(id)}</span>${st === 'done' ? '<span class="pd-ck">✓</span>' : ''}</span>
+      <span class="pd-lb"><b>${L.name}</b>${sub}</span></button>`;
+  }
+  function chest(s) {
+    const st = s.opened ? 'done' : s.all ? 'ready' : 'next';
+    const sub = s.opened ? `+${CHEST} ${ICON.star} получено` : s.all ? 'Открой!' : 'приз за весь день';
+    return `<button class="pd-n pd-chest ${st}" id="pdChest" aria-label="Сундук: ${s.opened ? 'открыт' : s.all ? 'открой' : 'закрыт'}">
+      <span class="pd-c"><span class="pd-i">${pic('📦')}</span>${s.opened ? '<span class="pd-ck">✓</span>' : ''}</span>
+      <span class="pd-lb"><b>Сундук</b><small>${sub}</small></span></button>`;
+  }
+  // the steps zigzag; the path is drawn from where they really are, again when the width changes
+  function lay(box) {
+    const W = box.clientWidth; if (!W) return;
+    const ns = [...box.querySelectorAll('.pd-n')], c0 = ns[0] && ns[0].querySelector('.pd-c'); if (!c0) return;
+    const ch = c0.offsetHeight, DY = Math.round(ch * 1.32), X = k => k % 2 ? .7 : .3;
+    ns.forEach((n, k) => { n.style.left = X(k) * 100 + '%'; n.style.top = k * DY + 'px'; n.classList.toggle('r', k % 2 === 1); });
+    const H = (ns.length - 1) * DY + ch + 16; box.style.height = H + 'px';
+    const cx = k => X(k) * W, cy = k => k * DY + ch / 2, svg = box.querySelector('.pd-svg');
+    svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = ns.slice(0, -1).map((n, k) => {
+      const on = n.classList.contains('done');
+      return `<path d="M${cx(k)} ${cy(k)} C ${cx(k)} ${cy(k) + DY * .55}, ${cx(k + 1)} ${cy(k + 1) - DY * .55}, ${cx(k + 1)} ${cy(k + 1)}" class="${on ? 'on' : ''}" fill="none" stroke-linecap="round"/>`;
+    }).join('');
+  }
+  function openChest() {
+    const before = stickerCount();
+    P.chest = dayKey(); P.stars += CHEST; weekAdd(P, CHEST); save();
+    try { leagueSoon(); progSoon(); } catch (e) {}
+    const after = stickerCount(), sticker = after > before ? STK()[after - 1] : null;
+    const ov = document.createElement('div'); ov.className = 'overlay';
+    ov.innerHTML = `<div class="winbox pd-win" role="dialog" aria-label="Сундук дня">
+      <div class="pd-box">${pic('📦')}</div>
+      <h2>Сундук дня!</h2>
+      <div class="win-stars">${Array.from({ length: CHEST }, (_, i) => `<span style="animation-delay:${.3 + i * .18}s">${ICON.star}</span>`).join('')}</div>
+      <p class="win-line">${Q() ? 'Все миссии дня выполнены!' : 'Все занятия дня сделаны!'}</p>
+      ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Новая наклейка!</div>` : ''}
+      <div class="win-btns"><button class="big" data-a="home">Ура!</button></div></div>`;
+    $('.screen').append(ov);
+    ov.onclick = e => { if (!e.target.closest('[data-a]')) return; sfx.pop(); goHome(); };
+    sfx.good(); confetti(80); later(sfx.star, 450); later(() => confetti(50), 900);
+    say(`Ура${nameBit()}! В сундуке ${CHEST} звёздочек!${sticker ? ' И новая наклейка!' : ''}`);
+    ov.querySelector('[data-a]').focus({ preventScroll: true });
+  }
+  // the old friend-and-plan block becomes the path
+  function today(st) {
+    const hero = st.querySelector('.hero'), plan = st.querySelector('section.today'); if (!hero || !plan) return;
+    const s = state(), N = s.ids.length, d = s.done.length, sk = streak(), sc = stickerCount();
+    const box = document.createElement('section'); box.className = 'pd'; box.id = 'pdBox';
+    box.innerHTML = `<div class="pd-top">
+        <button class="pd-pill" id="weekBtn" aria-label="Мой календарь: ${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд"><span class="emo">🔥</span><b>${sk}</b></button>
+        <div class="pd-pill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div></div>
+      <div class="pd-hero">
+        <button class="pd-fr guide-ryz${Q() && P.cos && P.cos.frame ? ' frame-' + P.cos.frame : ''}" id="pdFriend" aria-label="Поздороваться">${friendSVG()}</button>
+        <div class="pd-bub"><div class="pd-say">${esc(line(s))}</div>
+          <div class="pd-prog"><span class="pd-bar"><i style="width:${Math.round(d / N * 100)}%"></i></span><small>${d} из ${N}</small><span class="pd-pi">${pic('📦')}</span></div></div></div>
+      <div class="pd-path" id="pdPath"><svg class="pd-svg" aria-hidden="true"></svg>${s.ids.map(id => node(s, id)).join('')}${chest(s)}</div>
+      <div class="pd-mine">
+        <button class="chip" id="albumBtn"><span class="emo">${sc ? stickerHTML(STK()[sc - 1]) : '🎁'}</span>${Q() ? 'Трофеи' : 'Наклейки'}</button>
+        <button class="chip" id="likeBtn"><span class="emo">💛</span>Я люблю</button>
+        <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? 'Мой друг' : 'Выбери друга!'}</button></div>`;
+    hero.before(box); hero.remove(); plan.remove();
+    box.querySelectorAll('.pd-n[data-l]').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); startLesson(b.dataset.l); });
+    const fr = box.querySelector('#pdFriend');
+    fr.onclick = () => { hopEl(fr); say(line(state())); };
+    box.querySelector('#pdChest').onclick = () => {
+      sfx.pop(); const t = state();
+      if (t.opened) say('Сундук уже открыт. Завтра будет новый!');
+      else if (t.all) openChest();
+      else { const left = t.ids.length - t.done.length; say(`Сундук откроется, когда всё будет сделано. Осталось ${left} ${plural(left, Q() ? ['миссия', 'миссии', 'миссий'] : ['занятие', 'занятия', 'занятий'])}.`); wiggle(box.querySelector('#pdChest .pd-c')); }
+    };
+    const pb = box.querySelector('#pdPath'); lay(pb);
+    if (window.ResizeObserver) new ResizeObserver(() => lay(pb)).observe(pb); else addEventListener('resize', () => lay(pb));
+  }
+  // the right panel of a wide screen: the week, the stars, the family today
+  function side(st) {
+    if (st.querySelector('.pd-side') || !st.querySelector('#pdBox')) return;
+    const sk = streak(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
+    const days = WEEK.map((w, i) => { const k = dayKey(new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i)), on = dayTotal(k) > 0;
+      return `<span class="pd-wd ${on ? 'on' : ''} ${k === tk ? 'now' : ''}"><i>${on ? '✓' : ''}</i>${w}</span>`; }).join('');
+    const sc = stickerCount(), all = STK().length, left = (sc + 1) * 5 - P.stars;
+    const kid = id => {
+      const pr = id === ROOT.cur ? P : ROOT.profiles[id], ids = Object.keys(pr.settings.track === 'l' ? LESSONS_L : LESSONS_R);
+      const v = pr.days && pr.days[tk], c = v === true ? { speech: 1 } : (v || {}), d = ids.filter(x => c[x]).length;
+      return `<div class="pd-fm"><span class="chip-face">${kidFace(id)}</span><b>${esc(pr.settings.label || pr.settings.name || '…')}</b><span class="pd-bar"><i style="width:${Math.round(d / ids.length * 100)}%"></i></span><small>${d}/${ids.length}</small></div>`;
+    };
+    const el = document.createElement('aside'); el.className = 'pd-side';
+    el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд<small>эта неделя</small></h3><div class="pd-wk">${days}</div></button>
+      <button class="pd-card" id="pdStars"><h3>Звёзды</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc < all ? `ещё ${left} — и новая наклейка` : 'все наклейки собраны!'}</small></button>
+      ${KIDS.length > 1 ? `<div class="pd-card pd-fam"><h3>Семья сегодня</h3>${KIDS.map(kid).join('')}</div>` : ''}`;
+    // everything else of the tab goes into the middle column
+    const main = document.createElement('div'); main.className = 'pd-main';
+    [...st.children].forEach(x => main.append(x));
+    st.append(main, el);
+    el.querySelector('#pdWeek').onclick = () => { sfx.pop(); homeLeave(); screenCalendar(); };
+    el.querySelector('#pdStars').onclick = () => { sfx.pop(); homeLeave(); screenAlbum(); };
+  }
+  // the tab bar as a column on a wide screen: the game's name on top (hidden on a phone)
+  function rail() {
+    const tb = $('#tabBar'); if (!tb || tb.querySelector('.rail-logo')) return;
+    tb.insertAdjacentHTML('afterbegin', `<div class="rail-logo" aria-hidden="true">${pic('🗣️')}<b>Говорилки</b></div>`);
+  }
+  return { today, side, rail, lay };
+})();
+/* PATH-END */
 /* CLOUD-BEGIN */
 /* ---------- the family's login: a word (usually the children's names) and a code of 4 pictures (each picture is a digit).
    The server (cloud/worker.js on Cloudflare) keeps every child's profile; each phone, tablet or browser that signed in
