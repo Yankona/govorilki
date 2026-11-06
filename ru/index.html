@@ -11888,7 +11888,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '126';
+const APP_VER = '127';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -17069,12 +17069,7 @@ const HOMEUX = (() => {
       [...box.querySelectorAll(':scope > .tile')].forEach(t => { if (seen.has(t.dataset.id)) t.remove(); else seen.add(t.dataset.id); });
       const left = [...box.querySelectorAll(':scope > .tile')];
       if (!left.length) { const nb = st.querySelector(`#secNav [data-sec="${sec.id.replace('sec', '')}"]`); if (nb) nb.remove(); sec.remove(); return; }
-      const key = tab + ':' + sec.id;
-      // «Слушаю и говорю» shows all its games (the family asked); long sections elsewhere fold
-      if (left.length > 6 && !OPEN[key] && sec.id !== 'sec16') {
-        left.slice(4).forEach(t => t.classList.add('tile-more'));
-        box.insertAdjacentHTML('afterend', `<button class="more-btn" data-more="${key}">Ещё ${left.length - 4} ▾</button>`);
-      }
+      // every section shows all its games: folded under «Ещё N» they were never found (the family asked)
     });
     st.querySelectorAll('[data-more]').forEach(b => b.onclick = () => {
       sfx.pop(); OPEN[b.dataset.more] = 1;
@@ -17517,7 +17512,27 @@ const POLISH = (() => {
   });
   const go = () => { const app = $('#app') || document.body; mo.observe(app, { childList: true, subtree: true }); };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
-  return { home, today };
+  /* picking a child (on «Кто играет?» and in the chips at the top of home) acts when the finger lifts, not on the
+     browser's later click: on iPhone that click sometimes never comes (right after the app opens, or when the family's
+     sync redraws the screen in between), and the child had to tap twice. The browser's own click that follows is
+     dropped, so it cannot land on whatever the next screen has under the finger. */
+  const PICK = '.who-kid, .who-adult, .kids-in .kid';
+  let down = null, fired = 0, lastTouch = 0;
+  document.addEventListener('pointerdown', e => {
+    lastTouch = Date.now();
+    const el = e.target.closest && e.target.closest(PICK); down = el && e.pointerType !== 'mouse' ? { el, x: e.clientX, y: e.clientY, at: Date.now() } : null;
+  }, true);
+  document.addEventListener('pointerup', e => {
+    const d = down; down = null; if (!d) return;
+    const el = e.target.closest && e.target.closest(PICK);
+    if (el !== d.el || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 12 || Date.now() - d.at > 900) return;
+    fired = Date.now(); el.click();
+  }, true);
+  document.addEventListener('pointercancel', () => { down = null; }, true);
+  document.addEventListener('click', e => { if (e.isTrusted && Date.now() - fired < 700) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+  // the family's sync redraws «Кто играет?» or home only when no finger has touched the screen for a moment
+  function calm(fn) { const w = 1500 - (Date.now() - lastTouch); if (w > 0) setTimeout(() => calm(fn), w); else fn(); }
+  return { home, today, calm };
 })();
 /* POLISH-END */
 /* CLOUD-BEGIN */
@@ -17676,7 +17691,7 @@ document.addEventListener('visibilitychange', () => {
   if (!cloudOn() || !cloudFams().length) return;
   if (document.hidden) { clearTimeout(CL_T); cloudPushNow(); return; }
   // back on the screen: another phone may have played meanwhile
-  cloudPullAll().then(ch => { if (!ch) return; if ($('.who-grid') && !$('.who-pick')) screenWho(ROOT.curFam); else if ($('#tabBar')) goHome(); });
+  cloudPullAll().then(ch => { if (!ch) return; POLISH.calm(() => { if ($('.who-grid') && !$('.who-pick')) screenWho(ROOT.curFam); else if ($('#tabBar')) goHome(); }); });
 });
 // at the start: the children's newest progress before anyone taps themself (a short wait, then whatever is here)
 function cloudBootWait() {
