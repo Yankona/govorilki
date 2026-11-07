@@ -10,7 +10,9 @@ export SITE=$(cd "${SITE:-$D/..}" && pwd)
 V=$1; [[ "$V" =~ ^[0-9]+$ ]] || { echo "usage: $0 <version number> [--voice]"; exit 2; }
 CUR=$(grep -o 'govorilki-v[0-9]*' "$SITE/sw.js" | head -1 | tr -dc 0-9)
 [ "$V" -gt "$CUR" ] || { echo "version $V is not above the published $CUR"; exit 2; }
-if [ -d site-add ] && [ -n "$(ls -A site-add 2>/dev/null)" ]; then cp -r site-add/. "$SITE/"; echo "site-add: $(find site-add -type f | wc -l) files copied into the site"; fi
+N=0   # every real file of site-add/ (not the .gitkeep placeholder) to the same path in the site
+while IFS= read -r -d '' f; do r=${f#site-add/}; mkdir -p "$SITE/$(dirname "$r")"; cp "$f" "$SITE/$r"; N=$((N + 1)); done < <(find site-add -type f ! -name .gitkeep -print0 2>/dev/null)
+if [ $N -gt 0 ]; then echo "site-add: $N files copied into the site"; fi
 sed -i -E "s/govorilki-v[0-9]+/govorilki-v$V/" "$SITE/sw.js"
 if [ "$2" = "--voice" ]; then timeout 1500 python3 build/say_ru.py | tail -2; fi
 OUT=$(./build/build_all.sh 2>&1) || { echo "$OUT" | tail -20; exit 1; }
