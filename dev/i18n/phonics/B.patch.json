@@ -1,0 +1,354 @@
+[
+ {
+  "old": "const hiS = (s, ch) => esc(s).replace(new RegExp('[' + ch.toLowerCase() + ch.toUpperCase() + ']', 'g'), '<b class=\"r\">$&</b>');",
+  "new": "// which letters to highlight: in Russian the letters themselves; elsewhere LANGDATA.HI_RE gives a regex per sound key\n// (r, l, sh, ch, j, sz, shf = the whole hushing family, and the SND_HI groups); Russian code letters map to those keys\nconst HI_RE = LX('HI_RE', null);\nfunction hiRe(ch) {\n  if (!HI_RE) return new RegExp('[' + ch.toLowerCase() + ch.toUpperCase() + ']', 'g');\n  const s = ch.toLowerCase().replace(/[шжчщ]{2,}/g, 'shf').replace(/[рлшжчщсз]/g, c => ({ 'р': 'r', 'л': 'l', 'ш': 'sh', 'ж': 'j', 'ч': 'ch', 'щ': 'sh', 'с': 'sz', 'з': 'sz' })[c]);\n  const keys = Object.keys(HI_RE), byLen = [...keys].sort((a, b) => b.length - a.length), got = new Set(), extra = [];\n  for (let i = 0; i < s.length;) {\n    const k = byLen.find(x => s.startsWith(x, i));\n    if (k) { got.add(k); i += k.length; continue; }\n    if (/\\p{L}/u.test(s[i]) && !extra.includes(s[i])) extra.push(s[i]);\n    i++;\n  }\n  const parts = [...new Set([...keys.filter(k => got.has(k)).map(k => HI_RE[k]), ...extra])];\n  return new RegExp(parts.join('|') || '(?!)', 'giu');\n}\nconst hiS = (s, ch) => esc(s).replace(hiRe(ch), '<b class=\"r\">$&</b>');"
+ },
+ {
+  "old": "const W = {\n  korona:",
+  "new": "const W = LX('W', {\n  korona:"
+ },
+ {
+  "old": "morkovka: ['морковка', '🥕']\n};",
+  "new": "morkovka: ['морковка', '🥕']\n});"
+ },
+ {
+  "old": "const CNT = [\n",
+  "new": "const CNT = LX('CNT', [\n"
+ },
+ {
+  "old": "find: 'Найди все ручки!' }\n];",
+  "new": "find: 'Найди все ручки!' }\n]);"
+ },
+ {
+  "old": "const HOUSE = [\n",
+  "new": "const HOUSE = LX('HOUSE', [\n"
+ },
+ {
+  "old": "['сыр', '🧀', 2]\n];",
+  "new": "['сыр', '🧀', 2]\n]);"
+ },
+ {
+  "old": "const BOXI = [\n",
+  "new": "const BOXI = LX('BOXI', [\n"
+ },
+ {
+  "old": "{ e: '🚀', f: ['ракета', 'ракеты', 'ракет'], g: 'f' }\n];",
+  "new": "{ e: '🚀', f: ['ракета', 'ракеты', 'ракет'], g: 'f' }\n]);"
+ },
+ {
+  "old": "function screenHouse(S = 'Р') {\n",
+  "new": "function screenHouse(S0 = RU('Р')) {\n  const S = SOUNDS[sndIdx(S0)].L;\n"
+ },
+ {
+  "old": "const H = S === 'Л' ? HOUSE_L : S === 'Ш' ? HOUSE_SH : HOUSE, deck = shuffle([...sample(H.filter(h => h[2] === 0), 3), ...sample(H.filter(h => h[2] === 1), 3),",
+  "new": "const H = S0 === RU('Л') ? HOUSE_L : S0 === RU('Ш') ? HOUSE_SH : HOUSE, n3 = H.some(h => h[2] === 2) ? 3 : 4, deck = shuffle([...sample(H.filter(h => h[2] === 0), n3), ...sample(H.filter(h => h[2] === 1), n3),"
+ },
+ {
+  "old": "finish({ key: S === 'Л' ? 'l-house' : S === 'Ш' ? 'sh-house' : 'house',",
+  "new": "finish({ key: S0 === RU('Л') ? 'l-house' : S0 === RU('Ш') ? 'sh-house' : 'house',"
+ },
+ {
+  "old": "again: () => screenHouse(S) });",
+  "new": "again: () => screenHouse(S0) });"
+ },
+ {
+  "old": "go: () => screenHouse('Л'),",
+  "new": "go: () => screenHouse(RU('Л')),"
+ },
+ {
+  "old": "go: () => screenHouse('Ш'),",
+  "new": "go: () => screenHouse(RU('Ш')),"
+ },
+ {
+  "old": "profileSVG(SOUNDS[sndIdx('Л')].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx('Л')),",
+  "new": "profileSVG(SOUNDS[sndIdx(RU('Л'))].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx(RU('Л'))),"
+ },
+ {
+  "old": "profileSVG(SOUNDS[sndIdx('Ш')].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx('Ш')),",
+  "new": "profileSVG(SOUNDS[sndIdx(RU('Ш'))].prof)}</span>`, bg: 'var(--t-mint)', go: () => screenSounds(sndIdx(RU('Ш'))),"
+ },
+ {
+  "old": "function screenSounds(si = P.settings.track === 'l' ? sndIdx('Л') : 0) {",
+  "new": "function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {"
+ },
+ {
+  "old": "'Р в конце слова', 'р'),",
+  "new": "'Р в конце слова', RU('р')),"
+ },
+ {
+  "old": "'Шипящие слоги', 'шжчщ'),",
+  "new": "'Шипящие слоги', RU('шжчщ')),"
+ },
+ {
+  "old": "const SONGS = [\n",
+  "new": "const SONGS = LX('SONGS', [\n"
+ },
+ {
+  "old": "['по ка|муш|кам ска|чут.', 'D4 E4 F4 E4 D4 C4:2']] }\n];",
+  "new": "['по ка|муш|кам ска|чут.', 'D4 E4 F4 E4 D4 C4:2']] }\n]);"
+ },
+ {
+  "old": "const SOUNDS = [\n",
+  "new": "const SOUNDS = LX('SOUNDS', [\n"
+ },
+ {
+  "old": "и всё получится!' }\n];",
+  "new": "и всё получится!' }\n]);"
+ },
+ {
+  "old": "SOUNDS.push({ L: 'Л', pose: 'swingUp',",
+  "new": "SOUNDS.push(LX('SOUND_L', { L: 'Л', pose: 'swingUp',"
+ },
+ {
+  "old": "как пароход.' });",
+  "new": "как пароход.' }));"
+ },
+ {
+  "old": "SOUNDS.push(\n  { L: 'Ш', pose: 'horn',",
+  "new": "SOUNDS.push(...LX('SOUNDS_SH', [\n  { L: 'Ш', pose: 'horn',"
+ },
+ {
+  "old": "как жук.' }\n);",
+  "new": "как жук.' }\n]));"
+ },
+ {
+  "old": "const sndIdx = L => Math.max(0, SOUNDS.findIndex(x => x.L === L));",
+  "new": "const sndIdx = L => { const i = SOUNDS.findIndex(x => x.L === L); return Math.max(0, i >= 0 ? i : RU('СЗРЛШЖ').indexOf(L)); };"
+ },
+ {
+  "old": "const CHIST_L = ['Ла-ла-ла",
+  "new": "const CHIST_L = LX('CHIST_L', ['Ла-ла-ла"
+ },
+ {
+  "old": "белка прыгает в дупло.'];",
+  "new": "белка прыгает в дупло.']);"
+ },
+ {
+  "old": "const TWIST_L = ['Мила",
+  "new": "const TWIST_L = LX('TWIST_L', ['Мила"
+ },
+ {
+  "old": "а Валюша — оладушки.'];",
+  "new": "а Валюша — оладушки.']);"
+ },
+ {
+  "old": "const CHIST_R = ['Ра-ра-ра",
+  "new": "const CHIST_R = LX('CHIST_R', ['Ра-ра-ра"
+ },
+ {
+  "old": "у мышонка сыр.'];",
+  "new": "у мышонка сыр.']);"
+ },
+ {
+  "old": "const HOUSE_L = [\n",
+  "new": "const HOUSE_L = LX('HOUSE_L', [\n"
+ },
+ {
+  "old": "['стол', 'svg:table', 2]];",
+  "new": "['стол', 'svg:table', 2]]);"
+ },
+ {
+  "old": "CHIST_L.push('Ла-ла-ла — по волне",
+  "new": "CHIST_L.push(...LX('CHIST_L2', ['Ла-ла-ла — по волне"
+ },
+ {
+  "old": "Сава пианино открыл.');",
+  "new": "Сава пианино открыл.']));"
+ },
+ {
+  "old": "TWIST_L.push('Слон ходит",
+  "new": "TWIST_L.push(...LX('TWIST_L2', ['Слон ходит"
+ },
+ {
+  "old": "трюк выполнял.');",
+  "new": "трюк выполнял.']));"
+ },
+ {
+  "old": "CATCH_L.push(['велосипед', '🚲'],",
+  "new": "CATCH_L.push(...LX('CATCH_L2', [['велосипед', '🚲'],"
+ },
+ {
+  "old": "['ладья', '♜']);",
+  "new": "['ладья', '♜']]));"
+ },
+ {
+  "old": "CATCH_X.push(['скейт', '🛹'],",
+  "new": "CATCH_X.push(...LX('CATCH_X2', [['скейт', '🛹'],"
+ },
+ {
+  "old": "['пешка', '♟️']);",
+  "new": "['пешка', '♟️']]));"
+ },
+ {
+  "old": "const RAP = [\n",
+  "new": "const RAP = LX('RAP', [\n"
+ },
+ {
+  "old": "'уронила!', 'Йо!'] }\n];",
+  "new": "'уронила!', 'Йо!'] }\n]);"
+ },
+ {
+  "old": "const CATCH_L = [['лодка', '🛶'],",
+  "new": "const CATCH_L = LX('CATCH_L', [['лодка', '🛶'],"
+ },
+ {
+  "old": "['лимон', '🍋'], ['лев', '🦁']];",
+  "new": "['лимон', '🍋'], ['лев', '🦁']]);"
+ },
+ {
+  "old": "const CATCH_X = [['рыба', '🐟'],",
+  "new": "const CATCH_X = LX('CATCH_X', [['рыба', '🐟'],"
+ },
+ {
+  "old": "['роза', '🌹'], ['мяч', '🏀']];",
+  "new": "['роза', '🌹'], ['мяч', '🏀']]);"
+ },
+ {
+  "old": "'ЛА — ЛО — ЛУ — ЛЫ', 'Скажи чётко: ла, ло, лу, лы.']",
+  "new": "...LX('BOSS_1', ['ЛА — ЛО — ЛУ — ЛЫ', 'Скажи чётко: ла, ло, лу, лы.'])]"
+ },
+ {
+  "old": "'АЛ — ОЛ — УЛ — ЫЛ', 'Скажи: ал, ол, ул, ыл.']",
+  "new": "...LX('BOSS_2', ['АЛ — ОЛ — УЛ — ЫЛ', 'Скажи: ал, ол, ул, ыл.'])]"
+ },
+ {
+  "old": "'ЛОДКА · ЛАМПА · ЛОЖКА · ЛЫЖИ', 'Быстро и чётко: лодка, лампа, ложка, лыжи.']",
+  "new": "...LX('BOSS_F', ['ЛОДКА · ЛАМПА · ЛОЖКА · ЛЫЖИ', 'Быстро и чётко: лодка, лампа, ложка, лыжи.'])]"
+ },
+ {
+  "old": "const MOVES = [\n",
+  "new": "const MOVES = LX('MOVES', [\n"
+ },
+ {
+  "old": "'АЛ — ОЛ × 5']\n];",
+  "new": "'АЛ — ОЛ × 5']\n]);"
+ },
+ {
+  "old": "const SYL_SH = [['ша',",
+  "new": "const SYL_SH = LX('SYL_SH', [['ша',"
+ },
+ {
+  "old": "['ще', 'ЩЕ', 'щенок', '🐶']];",
+  "new": "['ще', 'ЩЕ', 'щенок', '🐶']]);"
+ },
+ {
+  "old": "const SYL_REND = [['ар',",
+  "new": "const SYL_REND = LX('SYL_REND', [['ар',"
+ },
+ {
+  "old": "['ар', 'АР', 'повар', '🧑‍🍳']];",
+  "new": "['ар', 'АР', 'повар', '🧑‍🍳']]);"
+ },
+ {
+  "old": "const HOUSE_SH = [['шапка',",
+  "new": "const HOUSE_SH = LX('HOUSE_SH', [['шапка',"
+ },
+ {
+  "old": "['карандаш', '✏️', 2]];",
+  "new": "['карандаш', '✏️', 2]]);"
+ },
+ {
+  "old": "const SH_ITEMS = [['Ш', 'шапка',",
+  "new": "const SH_ITEMS = LX('SH_ITEMS', [['Ш', 'шапка',"
+ },
+ {
+  "old": "['Щ', 'щука', '🐟']];",
+  "new": "['Щ', 'щука', '🐟']]);"
+ },
+ {
+  "old": "const SH_BINS = { 'Ш': ['🐍', 'змейка шипит'], 'Ж': ['🪲', 'жук жужжит'], 'Ч': ['🚂', 'паровоз пыхтит'], 'Щ': ['🪥', 'щёточка чистит'] };",
+  "new": "const SH_BINS = LX('SH_BINS', { 'Ш': ['🐍', 'змейка шипит'], 'Ж': ['🪲', 'жук жужжит'], 'Ч': ['🚂', 'паровоз пыхтит'], 'Щ': ['🪥', 'щёточка чистит'] });"
+ },
+ {
+  "old": "pickOne([['Ш', 'Ж'], ['Ш', 'Щ'], ['Ч', 'Щ'], ['Ж', 'Ш']])",
+  "new": "pickOne(LX('SH_PAIRS', [['Ш', 'Ж'], ['Ш', 'Щ'], ['Ч', 'Щ'], ['Ж', 'Ш']]))"
+ },
+ {
+  "old": "const BEAUTY = [\n",
+  "new": "const BEAUTY = LX('BEAUTY', [\n"
+ },
+ {
+  "old": "line: 'Скажи: корона.' }\n];",
+  "new": "line: 'Скажи: корона.' }\n]).map(b => typeof b.line === 'string' && b.line.includes('{c}') ? { ...b, line: c => b.line.split('{c}').join(c) } : b);"
+ },
+ {
+  "old": "const MOTO_WORDS = [...CATCH_L.map(x => x[0]), 'колесо',",
+  "new": "const MOTO_WORDS = [...CATCH_L.map(x => x[0]), ...LX('MOTO_WORDS', ['колесо',"
+ },
+ {
+  "old": "'лидер', 'финал'];",
+  "new": "'лидер', 'финал'])];"
+ },
+ {
+  "old": "const MOTO_R = ['гонка',",
+  "new": "const MOTO_R = LX('MOTO_R', ['гонка',"
+ },
+ {
+  "old": "'радар', 'шофёр'];",
+  "new": "'радар', 'шофёр']);"
+ },
+ {
+  "old": "const MOTO_SH = ['машина',",
+  "new": "const MOTO_SH = LX('MOTO_SH', ['машина',"
+ },
+ {
+  "old": "'мяч', 'часы'];",
+  "new": "'мяч', 'часы']);"
+ },
+ {
+  "old": "const MOTO_SZ = ['скорость',",
+  "new": "const MOTO_SZ = LX('MOTO_SZ', ['скорость',"
+ },
+ {
+  "old": "'сигнал', 'стоп'];",
+  "new": "'сигнал', 'стоп']);"
+ },
+ {
+  "old": "const KP_R = [['рыба', '🐟'],",
+  "new": "const KP_R = LX('KP_R', [['рыба', '🐟'],"
+ },
+ {
+  "old": "['гитара', '🎸'], ['помидор', '🍅']];",
+  "new": "['гитара', '🎸'], ['помидор', '🍅']]);"
+ },
+ {
+  "old": "const KP_CHANTS = ['Ра-ра-ра",
+  "new": "const KP_CHANTS = LX('KP_CHANTS', ['Ра-ра-ра"
+ },
+ {
+  "old": "Раз, два, три!'];",
+  "new": "Раз, два, три!']);"
+ },
+ {
+  "old": "hiS(w.toUpperCase(), 'рршжчщ')",
+  "new": "hiS(w.toUpperCase(), RU('рршжчщ'))"
+ },
+ {
+  "old": "hiS(chant, 'рршжщч')",
+  "new": "hiS(chant, RU('рршжщч'))"
+ },
+ {
+  "old": "const MC_NAMES = ['MC Лава',",
+  "new": "const MC_NAMES = LX('MC_NAMES', ['MC Лава',"
+ },
+ {
+  "old": "'Лёд Рэп'];",
+  "new": "'Лёд Рэп']);"
+ },
+ {
+  "old": "const VERSES = [\n",
+  "new": "const VERSES = LX('VERSES', [\n"
+ },
+ {
+  "old": "'Лёгкий полёт — я лучший, наверно!']\n];",
+  "new": "'Лёгкий полёт — я лучший, наверно!']\n]);"
+ },
+ {
+  "old": "const HOOK = ['Л-Л-Л — это мой флоу,', 'Ла-ла-лэй — слышишь, как легко?'];",
+  "new": "const HOOK = LX('HOOK', ['Л-Л-Л — это мой флоу,', 'Ла-ла-лэй — слышишь, как легко?']);"
+ },
+ {
+  "old": "const HYPE = ['ЧИСТО!', 'ФЛОУ!', 'ЖАРА!', 'ЛЕГЕНДА!', 'ОГОНЬ!'];",
+  "new": "const HYPE = LX('HYPE', ['ЧИСТО!', 'ФЛОУ!', 'ЖАРА!', 'ЛЕГЕНДА!', 'ОГОНЬ!']);"
+ }
+]

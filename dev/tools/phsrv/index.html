@@ -1,0 +1,12 @@
+<!doctype html><meta charset="utf-8"><script type="module">
+import { createPiperPhonemize } from './pp.js';
+const cfg = await (await fetch('ru.json')).json();
+const inv = {}; for (const [k, v] of Object.entries(cfg.phoneme_id_map)) inv[v[0]] = k;
+window.ph = text => Promise.race([new Promise(r => setTimeout(() => r({ phoneme_ids: [] }), 8000)), new Promise(async res => {
+  const mod = await createPiperPhonemize({ print: d => res(JSON.parse(d)), printErr: () => {},
+    locateFile: u => u.endsWith('.wasm') ? 'piper_phonemize.wasm' : 'piper_phonemize.data' });
+  try { mod.callMain(['-l', 'ru', '--input', JSON.stringify([{ text }]), '--espeak_data', '/espeak-ng-data']); } catch (e) { res({ phoneme_ids: [] }); }
+})]);
+window.ipa = async text => { const r = await ph(text); return { s: r.phoneme_ids.map(i => inv[i] ?? `<${i}>`).filter(c => c !== '_').join(''), keys: Object.keys(r), r }; };
+window.ready = true;
+</script>

@@ -1,0 +1,242 @@
+[
+ {
+  "old": "const MAGIC = [['кит', '🐋', 'кот', '🐈'],",
+  "new": "const MAGIC = LX('MAGIC', [['кит', '🐋', 'кот', '🐈'],"
+ },
+ {
+  "old": "['мышка', '🐭', 'мишка', '🧸']];",
+  "new": "['мышка', '🐭', 'мишка', '🧸']]);"
+ },
+ {
+  "old": "const BOOK_ITEMS = [\n",
+  "new": "const BOOK_ITEMS = LX('BOOK_ITEMS', [\n"
+ },
+ {
+  "old": "['РЫ', 'Рыжик', 'svg:ryzhik']\n];",
+  "new": "['РЫ', 'Рыжик', 'svg:ryzhik']\n]);"
+ },
+ {
+  "old": "const t = newScreen(), sy = ['РА', 'РО', 'РУ', 'РЫ'];",
+  "new": "// a card may carry how the voice says its start (4th item), for languages where the two letters alone read badly\n  const t = newScreen(), sy = LX('BOOK_SY', ['РА', 'РО', 'РУ', 'РЫ']), bs = x => x[3] || x[0].toLowerCase();"
+ },
+ {
+  "old": "shell('Книжки РА РО РУ РЫ', `<div class=\"books-wrap\">",
+  "new": "shell(LX('BOOK_TITLE', 'Книжки РА РО РУ РЫ'), `<div class=\"books-wrap\">"
+ },
+ {
+  "old": "talk(`Послушай: ${s.toLowerCase()}… ${w}!`); }",
+  "new": "talk(`Послушай: ${bs(deck[k])}… ${w}!`); }"
+ },
+ {
+  "old": "`<b class=\"r\">${w.slice(0, 2).toUpperCase()}</b>${w.slice(2).toUpperCase()}`",
+  "new": "`<b class=\"r\">${w.slice(0, s.length).toUpperCase()}</b>${w.slice(s.length).toUpperCase()}`"
+ },
+ {
+  "old": "await talk(`${s.toLowerCase()}… ${w}!`); if (t !== tok) return;\n    k++;\n    if (k >= deck.length) finish({ key: 'books'",
+  "new": "await talk(`${bs(deck[k])}… ${w}!`); if (t !== tok) return;\n    k++;\n    if (k >= deck.length) finish({ key: 'books'"
+ },
+ {
+  "old": "const SYL = [['кры', 'КРЫ', 'крыса', '🐀'],",
+  "new": "const SYL = LX('SYL', [['кры', 'КРЫ', 'крыса', '🐀'],"
+ },
+ {
+  "old": "['кра', 'КРА', 'краб', '🦀']];",
+  "new": "['кра', 'КРА', 'краб', '🦀']]);"
+ },
+ {
+  "old": "title = 'Слоги и слова', hl = 'р') {",
+  "new": "title = 'Слоги и слова', hl = RU('р')) {"
+ },
+ {
+  "old": "const ABC = [\n  ['А', 'арбуз', '🍉'],",
+  "new": "const ABC = LX('ABC', [\n  ['А', 'арбуз', '🍉'],"
+ },
+ {
+  "old": "['Я', 'яблоко', '🍎']\n];",
+  "new": "['Я', 'яблоко', '🍎']\n]);"
+ },
+ {
+  "old": "const VOWELS = 'АЕЁИОУЫЭЮЯ';",
+  "new": "const VOWELS = LX('VOWELS', 'АЕЁИОУЫЭЮЯ');"
+ },
+ {
+  "old": "const lcls = ch => VOWELS.includes(ch) ? 'v' : 'ЪЬ'.includes(ch) ? 's' : 'c';",
+  "new": "const lcls = ch => VOWELS.includes(ch) ? 'v' : RU('ЪЬ').includes(ch) ? 's' : 'c';"
+ },
+ {
+  "old": "const LNAME = { 'Ъ': 'твёрдый знак', 'Ь': 'мягкий знак', 'Й': 'и краткое' };",
+  "new": "// how the voice names a letter (Portuguese gives every letter its name: bê, guê, agá…)\nconst LNAME = LX('LNAME', { 'Ъ': 'твёрдый знак', 'Ь': 'мягкий знак', 'Й': 'и краткое' });"
+ },
+ {
+  "old": "const hiLetter = (w, L) => [...w.toUpperCase()].map(ch => ch === L ? `<b class=\"hl\">${ch}</b>` : ch).join('');\n",
+  "new": "const hiLetter = (w, L) => [...w.toUpperCase()].map(ch => ch === L ? `<b class=\"hl\">${ch}</b>` : ch).join('');\n// how a syllable is said: Portuguese reads an open syllable with a clear vowel (pá, pé, pó — the alphabet method),\n// so SYL_TTS respells the last vowel of a syllable that is consonants + one vowel; Russian and English say it as written\nconst SYL_TTS = LX('SYL_TTS', null);\nconst sylSay = x => { const s = String(x).toLowerCase(), v = SYL_TTS && SYL_TTS[s.slice(-1)]; return v && s.length > 1 && [...s.slice(0, -1)].every(c => !VOWELS.includes(c.toUpperCase())) ? s.slice(0, -1) + v : s; };\n"
+ },
+ {
+  "old": "function abcLine(i) {\n  const [L, w] = ABC[i];\n",
+  "new": "function abcLine(i) {\n  const [L, w] = ABC[i];\n  // other languages: «{L} is for {w}.», and the second form for a letter inside its word (x in fox)\n  const T = LX('ABC_LINE', null);\n  if (T) return (w.toUpperCase().startsWith(L) ? T[0] : T[1]).replace('{L}', cap(lsay(L))).replace('{w}', w);\n"
+ },
+ {
+  "old": "pool = ABC.filter(a => !'ЪЬ'.includes(a[0])), deck = sample(pool, 6);",
+  "new": "pool = ABC.filter(a => !RU('ЪЬ').includes(a[0])), deck = sample(pool, 6);"
+ },
+ {
+  "old": "await talk(`Да! ${L}. ${cap(w)}.`);",
+  "new": "await talk(`Да! ${IS_RU ? L : cap(lsay(L))}. ${cap(w)}.`);"
+ },
+ {
+  "old": "pool = ABC.filter(a => !'ЪЬЫ'.includes(a[0])), deck = sample(pool, 6);",
+  "new": "pool = ABC.filter(a => !LX('ABC_NOT_FIRST', 'ЪЬЫ').includes(a[0])), deck = sample(pool, 6);"
+ },
+ {
+  "old": "const M_CONS = ['М', 'Н', 'Л', 'Р', 'С', 'В', 'П', 'Т', 'К', 'Д', 'Б', 'Ш', 'З'], M_VOW = ['А', 'О', 'У', 'Ы', 'И'];",
+  "new": "const M_CONS = LX('M_CONS', ['М', 'Н', 'Л', 'Р', 'С', 'В', 'П', 'Т', 'К', 'Д', 'Б', 'Ш', 'З']), M_VOW = LX('M_VOW', ['А', 'О', 'У', 'Ы', 'И']);\n// pairs that are not read (КЫ, ШЫ); a language whose pairs are not free (English word families c + at) lists them all in M_LIST\nconst M_BAD = LX('M_BAD', ['КЫ', 'ШЫ']), M_LIST = LX('M_LIST', null);"
+ },
+ {
+  "old": "const s = pickOne(M_CONS) + pickOne(M_VOW); if (!['КЫ', 'ШЫ'].includes(s) && !deck.includes(s)) deck.push(s); }",
+  "new": "const s = M_LIST ? pickOne(M_LIST) : pickOne(M_CONS) + pickOne(M_VOW); if (!M_BAD.includes(s) && !deck.includes(s)) deck.push(s); }"
+ },
+ {
+  "old": "<span class=\"mg-l mg-v\" id=\"mv\">${Lspan(s[1])}</span>`;",
+  "new": "<span class=\"mg-l mg-v\" id=\"mv\">${s.length > 2 ? `<b class=\"L v\">${s.slice(1)}</b>` : Lspan(s[1])}</span>`;"
+ },
+ {
+  "old": "talk(k === 0 ? `Буква ${lsay(s[0])} бежит к букве ${s[1]}. Нажми на синюю букву.` : 'Нажми на синюю букву.');",
+  "new": "talk(k === 0 ? (LX('M_INTRO', '') ? LX('M_INTRO', '').replace('{0}', lsay(s[0])).replace('{1}', s.slice(1)) : `Буква ${lsay(s[0])} бежит к букве ${lsay(s.slice(1))}. Нажми на синюю букву.`) : 'Нажми на синюю букву.');"
+ },
+ {
+  "old": "ms.innerHTML = Lspan(s[0]) + Lspan(s[1]); sfx.pop();",
+  "new": "ms.innerHTML = [...s].map(Lspan).join(''); sfx.pop();"
+ },
+ {
+  "old": "await talk(`${s.toLowerCase()}! Повтори: ${s.toLowerCase()}.`);",
+  "new": "await talk(`${sylSay(s)}! Повтори: ${sylSay(s)}.`);"
+ },
+ {
+  "old": "const RWORDS = [['МА-МА', '👩'],",
+  "new": "const RWORDS = LX('RWORDS', [['МА-МА', '👩'],"
+ },
+ {
+  "old": "['ДЫ-НЯ', '🍈'], ['ЗУБ', '🦷']];",
+  "new": "['ДЫ-НЯ', '🍈'], ['ЗУБ', '🦷']]);"
+ },
+ {
+  "old": "if (c) { hopEl(c); talk(c.dataset.s.toLowerCase()); } }; }",
+  "new": "if (c) { hopEl(c); talk(sylSay(c.dataset.s)); } }; }"
+ },
+ {
+  "old": "const LROWS = [['ЛА', 'ЛО', 'ЛУ', 'ЛЫ', 'ЛЭ'],",
+  "new": "const LROWS = LX('LROWS', [['ЛА', 'ЛО', 'ЛУ', 'ЛЫ', 'ЛЭ'],"
+ },
+ {
+  "old": "'ЛЫЛ', 'ЛЭЛ']];",
+  "new": "'ЛЫЛ', 'ЛЭЛ']]);"
+ },
+ {
+  "old": "if (!run) { if (!idx) { hopEl(c); talk(c.dataset.s.toLowerCase()); } return; }",
+  "new": "if (!run) { if (!idx) { hopEl(c); talk(sylSay(c.dataset.s)); } return; }"
+ },
+ {
+  "old": "const WORDS5 = [['ЛОДКА', '🛶'],",
+  "new": "const WORDS5 = LX('WORDS5', [['ЛОДКА', '🛶'],"
+ },
+ {
+  "old": "['ЛЫЖНЯ', '🎿'], ['СКАЛА', '🧗']];",
+  "new": "['ЛЫЖНЯ', '🎿'], ['СКАЛА', '🧗']]);"
+ },
+ {
+  "old": "const KB = ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ'];",
+  "new": "const KB = LX('KB', ['ЙЦУКЕНГШЩЗХ', 'ФЫВАПРОЛДЖЭ', 'ЯЧСМИТЬБЮ']);"
+ },
+ {
+  "old": "`Это было слово ${hiS(word, 'л')} ${pic(emo)}`",
+  "new": "`Это было слово ${hiS(word, RU('л'))} ${pic(emo)}`"
+ },
+ {
+  "old": "else { const c = e.key.toUpperCase().replace('Ё', 'Е'); if (/^[А-Я]$/.test(c)) press(c); }",
+  "new": "else { const c = e.key.toUpperCase().replace(RU('Ё'), RU('Е')); if (IS_RU ? /^[А-Я]$/.test(c) : c.length === 1 && KB.join('').includes(c)) press(c); }"
+ },
+ {
+  "old": "WORDS5.push(['ЛАДЬЯ', '♜'], ['ЛИДЕР', '🏆'], ['ЛИМОН', '🍋']);",
+  "new": "WORDS5.push(...LX('WORDS5_PUSH', [['ЛАДЬЯ', '♜'], ['ЛИДЕР', '🏆'], ['ЛИМОН', '🍋']]));"
+ },
+ {
+  "old": "const CHESS1 = [[\"6R1/1k6/",
+  "new": "const CHESS1 = RU([[\"6R1/1k6/"
+ },
+ {
+  "old": "\"fxg6#\", \"P\"]];\nconst CHESS2 = [[\"6k1/1R4pp/",
+  "new": "\"fxg6#\", \"P\"]]);\nconst CHESS2 = RU([[\"6k1/1R4pp/"
+ },
+ {
+  "old": "\"Фe8#\", \"R\"]];\n",
+  "new": "\"Фe8#\", \"R\"]]);\n"
+ },
+ {
+  "old": "const PIECE_RU = { K: 'король', Q: 'ферзь', R: 'ладья', B: 'слон', N: 'конь', P: 'пешка' };",
+  "new": "const PIECE_RU = LX('PIECE_RU', { K: 'король', Q: 'ферзь', R: 'ладья', B: 'слон', N: 'конь', P: 'пешка' });"
+ },
+ {
+  "old": "san = mode === 1 ? z[2] : `1. ${z[2]} ${z[4]} 2. ${z[6]}`,",
+  "new": "san = chL(mode === 1 ? z[2] : `1. ${z[2]} ${z[4]} 2. ${z[6]}`),"
+ },
+ {
+  "old": "const RU_PC = { k: 'Кр', q: 'Ф', r: 'Л', b: 'С', n: 'К' };",
+  "new": "const RU_PC = LX('RU_PC', { k: 'Кр', q: 'Ф', r: 'Л', b: 'С', n: 'К' });\n// a move written in the puzzles' Russian letters, shown in this page's letters (EN K Q R B N, PT R D T B C)\nconst chL = s => s.replace(/Кр|Ф|Л|С|К/g, m => ({ 'Кр': RU_PC.k, 'Ф': RU_PC.q, 'Л': RU_PC.r, 'С': RU_PC.b, 'К': RU_PC.n })[m]);"
+ },
+ {
+  "old": "const DOT_PICS = (() => {",
+  "new": "const DOT_W = LX('DOT_W', { crown: 'корона', boat: 'кораблик', star: 'звезда', ball: 'шар', mushroom: 'мухомор', fish: 'рыба', heart: 'сердце', rocket: 'ракета', pear: 'груша' });\nconst DOT_PICS = (() => {"
+ },
+ {
+  "old": "{ id: 'crown', w: 'корона',",
+  "new": "{ id: 'crown', w: DOT_W.crown,"
+ },
+ {
+  "old": "{ id: 'boat', w: 'кораблик',",
+  "new": "{ id: 'boat', w: DOT_W.boat,"
+ },
+ {
+  "old": "{ id: 'star', w: 'звезда',",
+  "new": "{ id: 'star', w: DOT_W.star,"
+ },
+ {
+  "old": "{ id: 'ball', w: 'шар',",
+  "new": "{ id: 'ball', w: DOT_W.ball,"
+ },
+ {
+  "old": "{ id: 'mushroom', w: 'мухомор',",
+  "new": "{ id: 'mushroom', w: DOT_W.mushroom,"
+ },
+ {
+  "old": "{ id: 'fish', w: 'рыба',",
+  "new": "{ id: 'fish', w: DOT_W.fish,"
+ },
+ {
+  "old": "{ id: 'heart', w: 'сердце',",
+  "new": "{ id: 'heart', w: DOT_W.heart,"
+ },
+ {
+  "old": "{ id: 'rocket', w: 'ракета',",
+  "new": "{ id: 'rocket', w: DOT_W.rocket,"
+ },
+ {
+  "old": "{ id: 'pear', w: 'груша',",
+  "new": "{ id: 'pear', w: DOT_W.pear,"
+ },
+ {
+  "old": "const ABC_ORDER = 'АБВГДЕЁЖЗИЙКЛМНОП';",
+  "new": "const ABC_ORDER = LX('ABC_ORDER', 'АБВГДЕЁЖЗИЙКЛМНОП');"
+ },
+ {
+  "old": "hiS(d.w.toUpperCase(), 'рршжчщсз')",
+  "new": "hiS(d.w.toUpperCase(), RU('рршжчщсз'))"
+ },
+ {
+  "old": "    const pool = Q() ? ['Л', 'Р', 'Ш', 'Ж', 'Ч', 'Щ', 'Ц', 'Ы', 'Ё', 'Ю', 'Я', 'Э'] : ['А', 'О', 'У', 'И', 'Ы', 'Э', ...(s.includes('r') ? ['Р'] : []), ...(s.includes('sh') ? ['Ш', 'Ж'] : []), ...(s.includes('l') ? ['Л'] : [])];\n    return sample(pool, 4).map(c => ({ c, say: c, ans: c }));",
+  "new": "    const D = LX('CODE_ABC', { hard: ['Л', 'Р', 'Ш', 'Ж', 'Ч', 'Щ', 'Ц', 'Ы', 'Ё', 'Ю', 'Я', 'Э'], base: ['А', 'О', 'У', 'И', 'Ы', 'Э'], r: ['Р'], sh: ['Ш', 'Ж'], l: ['Л'] });\n    const pool = Q() ? D.hard : [...D.base, ...(s.includes('r') ? D.r : []), ...(s.includes('sh') ? D.sh : []), ...(s.includes('l') ? D.l : [])];\n    return sample(pool, 4).map(c => ({ c, say: lsay(c), ans: c }));"
+ },
+ {
+  "old": "    const v = ['А', 'О', 'У', 'Ы'], cons = [...(s.includes('r') ? ['Р'] : []), ...(s.includes('l') ? ['Л'] : []), ...(s.includes('sh') ? ['Ш', 'Ж'] : []), ...(s.includes('sz') ? ['С', 'З'] : [])];\n    const C = cons.length ? cons : ['М', 'П', 'Н'];\n    const all = C.flatMap(c => v.map(x => c + x)).filter(x => !/[ШЖ]Ы/.test(x));\n    return sample(all, 4).map(c => ({ c, say: c.toLowerCase(), ans: c }));",
+  "new": "    // consonants × vowels; with no vowels (English) the lists are ready short words to read\n    const D = LX('CODE_SYL', { v: ['А', 'О', 'У', 'Ы'], r: ['Р'], l: ['Л'], sh: ['Ш', 'Ж'], sz: ['С', 'З'], def: ['М', 'П', 'Н'] });\n    const v = D.v, cons = [...(s.includes('r') ? D.r : []), ...(s.includes('l') ? D.l : []), ...(s.includes('sh') ? D.sh : []), ...(s.includes('sz') ? D.sz : [])];\n    const C = cons.length ? cons : D.def;\n    const all = C.flatMap(c => v.length ? v.map(x => c + x) : [c]).filter(x => !/[ШЖ]Ы/.test(x));\n    return sample(all, 4).map(c => ({ c, say: sylSay(c), ans: c }));"
+ }
+]
