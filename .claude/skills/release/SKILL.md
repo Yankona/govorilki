@@ -24,6 +24,7 @@ From `dev/`, on an up-to-date `main` (`git pull -q origin main`), with the child
 6. **Artifact**: Artifact publish of `ru/index.html` (repo root) with
    `url: https://claude.ai/artifact/QGYxZFefN7EH7khLeqiVvt` and `label: "vN <коротко>"` (read it first if this session has
    not published it). The warning about downloads is known — ignore it.
-7. **Branches**: delete the merged `task/*` branches (`git push origin --delete task/<slug>`).
+7. **Branches**: merged `task/*` branches stay on GitHub (the session's git proxy refuses branch deletion with 403);
+   the owner can delete them on GitHub if they get in the way.
 8. **Report** to the owner in Russian: point by point what they asked for and what is live now, then what is still open.
    Link: https://govorilki.com/play/ru/ — the game updates itself on the next start.
