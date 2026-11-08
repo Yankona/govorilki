@@ -787,6 +787,15 @@ b.r{color:var(--berry)}
 .oc-card h2 small{font:800 14px var(--f-body);color:var(--ink-soft,#5a6b80)}
 .oc-card p{margin:0;font:700 15px/1.4 var(--f-body)}
 .oc-prog{margin-top:4px;font:800 13px var(--f-body);color:var(--leaf)}
+.wh{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;width:100%;max-width:880px;margin:0 auto;padding:4px 0 20px}
+.wh-b{display:flex;align-items:center;gap:14px;padding:14px 16px;border:0;border-radius:24px;background:var(--paper);box-shadow:0 5px 0 var(--line-strong);color:var(--ink);text-align:left;cursor:pointer}
+.wh-b:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line-strong)}
+.wh-e{flex:none;width:72px;height:72px;display:grid;place-items:center;border-radius:20px;background:var(--t-blue);font-size:44px}
+.wh-e img,.wh-e svg{width:56px;height:56px}
+.wh-t{display:flex;flex-direction:column;gap:3px}
+.wh-t b{font:900 19px/1.2 var(--f-body)}
+.wh-t small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft,#5a6b80)}
+.wh-t i{font:800 13px var(--f-body);font-style:normal;color:var(--leaf)}
 .wc{display:flex;flex-direction:column;gap:10px;width:100%;max-width:960px;margin:0 auto;padding-bottom:20px}
 .wc-main{display:flex;flex-direction:column;align-items:center;gap:12px}
 .wc-fig{width:100%;max-width:560px;border-radius:24px;overflow:hidden;box-shadow:0 5px 0 var(--line-strong);line-height:0}
@@ -12044,7 +12053,7 @@ const OCEAN = (() => {
       <div class="oc-hud"><div class="oc-meter"><span>🤿</span><b id="ocD">0 ${UM}</b><small id="ocZ">${zone(0)}</small></div><button class="oc-dn" id="ocDn" aria-label="Глубже">⬇</button></div>
       ${sea}
       <div class="oc-card" id="ocCard"><p>Листай вниз и ныряй! Нажимай на жителей океана.</p></div>
-    </div>`);
+    </div>`, { back: () => hub() });
     const st = $('#stage'), seaEl = $('#ocSea'), card = $('#ocCard'), seen = new Set();
     let done = false;
     const top0 = () => seaEl.offsetTop;
@@ -12116,7 +12125,7 @@ const OCEAN = (() => {
       <div class="lab-tabs"><button class="chip ${learn ? 'sel' : ''}" data-m="learn">🔍 Узнать</button><button class="chip ${learn ? '' : 'sel'}" data-m="order">🔢 По порядку</button></div>
       <div class="wc-main"><div class="wc-fig ${learn ? '' : 'ord'}">${scene()}</div>
         <div class="wc-side"><div class="bd-card" id="wcCard"></div>${learn ? `<div class="bd-chips" id="wcChips">${S.map((s, i) => `<button class="chip" data-s="${i}">${s.e} ${s.n}</button>`).join('')}</div>` : `<div class="wc-slots" id="wcSlots">${S.map((_, i) => `<div class="wc-slot" data-i="${i}"><b>${i + 1}</b></div>`).join('')}</div><div class="wc-cards" id="wcCards"></div>`}</div></div>
-    </div>`);
+    </div>`, { back: () => hub() });
     $('.wc .lab-tabs').onclick = e => { const b = e.target.closest('[data-m]'); if (b && b.dataset.m !== mode) { sfx.pop(); cycle(b.dataset.m); } };
     const sv = $('#wcSvg'), card = $('#wcCard');
     const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
@@ -12171,12 +12180,23 @@ const OCEAN = (() => {
     };
     ask();
   }
-  return { deep, cycle };
+  // one water tile: the ocean, the water cycle and (Russian only) the stories about seas and rivers
+  function hub() {
+    newScreen();
+    const parts = [['deep', '🐋', 'Океан в глубину', 'ныряем до самого дна: кто где живёт', P.best['ocean-deep'] ? '⭐' : ''],
+      ['cycle', '💧', 'Как вода путешествует', 'круговорот воды: море, облака, дождь, река', P.best['water-order'] ? '⭐' : ''],
+      ...(LEARN.water ? [['stories', '📖', 'Истории про моря и реки', 'волны, приливы, Волга, Байкал, Амазонка', learnProg('water')]] : [])];
+    const st = shell('Океан и вода', `<div class="wh">${parts.map(([k, e, n, s, pr]) => `<button class="wh-b" data-k="${k}"><span class="wh-e">${pic(e)}</span><span class="wh-t"><b>${n}</b><small>${s}</small>${pr ? `<i>${pr}</i>` : ''}</span></button>`).join('')}</div>`);
+    talk(LEARN.water ? 'Океан и вода! Можно нырнуть в океан до самого дна, узнать, как вода путешествует по кругу, или послушать истории про моря и реки.' : 'Океан и вода! Можно нырнуть в океан до самого дна или узнать, как вода путешествует по кругу.');
+    st.onclick = e => { const b = e.target.closest('.wh-b'); if (!b) return; sfx.pop(); const k = b.dataset.k; if (k === 'deep') deep(); else if (k === 'cycle') cycle(); else screenLearn('water'); };
+  }
+  return { deep, cycle, hub };
 })();
-GAMES.push(
-  { id: 'ocean-deep', name: 'Океан в глубину', sub: 'ныряем до самого дна: кто где живёт', ico: () => pic('🐋'), bg: 'var(--t-blue)', go: () => OCEAN.deep(), grp: 10, kw: 'море рыбы кит акула осьминог глубина дно впадина' },
-  { id: 'water-cycle', name: 'Как вода путешествует', sub: 'круговорот воды: море, облака, дождь, река', ico: () => pic('💧'), bg: 'var(--t-mint)', go: () => OCEAN.cycle(), grp: 10, kw: 'круговорот дождь снег облака пар река море' }
-);
+GAMES.push({ id: 'water', name: 'Океан и вода', sub: 'океан в глубину, круговорот воды, моря и реки', ico: () => pic('🌊'), bg: 'var(--t-blue)', go: () => OCEAN.hub(), grp: 10, kw: 'океан море рыбы кит акула осьминог глубина дно впадина круговорот дождь снег облака пар река озеро волны' });
+// the old separate tiles live inside «Океан и вода» now (their stars stay: the same game keys)
+{ const OLD = ['ocean-deep', 'water-cycle', 'learn-water'];
+  OLD.forEach(id => { const g = GAMES.find(x => x.id === id); if (g) g.hide = () => true; });
+  [...INTEREST_CAT.flatMap(c => c.items || []), ...LIKES].forEach(it => { if (!Array.isArray(it.tiles)) return; it.tiles = [...new Set(it.tiles.map(t => OLD.includes(t) ? 'water' : t))]; if ((it.id === 'ocean' || it.id === 'fish') && !it.tiles.includes('water')) it.tiles.push('water'); }); }
 /* OCEAN-END */
 /* PLANTS-BEGIN */
 /* ---------- «Растения»: two games with an original SVG drawing (no words in the pictures, all texts are translated by the build).
