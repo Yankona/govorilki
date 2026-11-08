@@ -22029,6 +22029,13 @@ function roundProg(k, n) {
 function funSpark() {
   try {
     if (LIVE_STILL || !(P.homeTab === 'speak' || P.homeTab === 'today' || ACTIVE)) return;
+    // a game that makes its own star burst at the answer (the stories and quizzes of «Узнаём», also opened from
+    // «Сегодня») keeps only its own: one celebration per right answer
+    if (!funSpark.wait) { funSpark.wait = 1; requestAnimationFrame(() => { funSpark.wait = 0; if (!document.querySelector('.burst')) funSparkGo(); }); }
+  } catch (e) {}
+}
+function funSparkGo() {
+  try {
     const f = document.querySelector('.screen .guide-ryz'); if (!f || document.querySelector('.overlay')) return;
     const r = f.getBoundingClientRect(); if (!r.width) return;
     const L = document.createElement('div'); L.className = 'fsp'; L.setAttribute('aria-hidden', 'true');
