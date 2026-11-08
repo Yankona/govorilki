@@ -2886,6 +2886,30 @@ body.pv-on #app{padding-top:52px}
 #scheme{transition:opacity .18s ease}
 @media (prefers-reduced-motion:reduce){.face.f-in .mth,.face.hold .mth{animation:none}}
 /* ARTIC-CSS-END */
+/* HOWSAY-CSS */
+.how{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:720px;margin:0 auto}
+.how-tabs{gap:8px}.how-tabs .snd-tab{width:58px;height:58px;font-size:30px;border-radius:18px}
+.how-page .how-line{display:none}
+.how-pair{display:flex;align-items:center;justify-content:center;gap:12px;width:100%}
+.how-face{flex:0 0 auto;width:min(36%,210px);aspect-ratio:200/220;border-radius:50%/48%;background:radial-gradient(circle at 30% 18%,var(--paper),var(--t-blue) 70%);box-shadow:inset 0 0 0 6px var(--line)}
+.how-face svg,.how-prof svg{display:block;width:100%;height:auto}
+.how-prof{flex:1 1 0;max-width:380px;min-width:0;padding:6px;background:var(--paper);border-radius:20px;box-shadow:0 4px 0 var(--line)}
+.how-cap{display:flex;justify-content:space-around;width:100%;margin:-4px 0 0;font:700 13px var(--f-body);color:var(--ink-soft)}
+.how-line{margin:0;padding:10px 14px;background:var(--paper);border-radius:18px;box-shadow:inset 0 0 0 2px var(--line);font:700 17px/1.4 var(--f-body);text-align:left}
+.how-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.how-btns .big{min-width:0;padding:10px 18px;font-size:19px;flex:0 1 auto}
+.how .cam{width:min(60vw,240px)}
+.how-par{width:100%;padding:8px 14px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);text-align:left;font:600 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.how-par summary{cursor:pointer;font-weight:800;color:var(--ink)}
+.how-par ol{margin:6px 0;padding-left:20px}.how-par p{margin:6px 0 2px}
+.how-ov{place-items:start center;overflow-y:auto;padding:12px}
+.how-box{position:relative;width:min(100%,760px);margin:auto;padding:14px 14px 18px;background:var(--sky);border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.how-box h2{margin:2px 44px 8px;text-align:center;font:800 24px/1.15 var(--f-display)}
+.how-x{position:absolute;top:10px;right:10px}
+.how-b{flex:none;padding:6px 10px;min-height:0}
+.how-sec{margin-top:6px;align-self:flex-start}
+@media (max-width:520px){.how-tabs .snd-tab{width:48px;height:48px;font-size:24px;border-radius:14px;box-shadow:0 3px 0 var(--line-strong)}.how-bt{display:none}.how-b .emo{margin:0}.how-line{font-size:16px}.how-face{width:38%}}
+/* HOWSAY-CSS-END */
 /* WORLD2-CSS */
 .wr-heard{padding:12px 14px;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 var(--line);text-align:center}
 .wr-heard.good{box-shadow:0 4px 0 var(--line),inset 0 0 0 3px var(--leaf)}
@@ -4101,6 +4125,7 @@ function mouth(p) {
     case 'lickUp': { const h = 24, yT = -.75 * h - .75; return mOpen({ w: 38, h, c: 3, upper: false, over: `<g class="tg"><path d="M-22 12Q-28 ${yT - 2} 0 ${yT - 12}Q28 ${yT - 2} 22 12Z" fill="${T}"/><path d="M0 ${yT - 6}V6" stroke="${TD}" stroke-width="2" stroke-linecap="round"/></g>` }); }
     case 'paintBack': return mouth('swingUp');
     case 'cup': { const h = 22, yB = .9375 * h - 1; return mOpen({ w: 40, h, c: 4, lower: false, tongue: `<ellipse cx="0" cy="${yB}" rx="24" ry="9" fill="${T}"/>`, over: `<path d="M-30 ${yB + 2}Q-32 ${yB + 26} 0 ${yB + 26}Q32 ${yB + 26} 30 ${yB + 2}Q20 ${yB + 12} 0 ${yB + 12}Q-20 ${yB + 12} -30 ${yB + 2}Z" fill="${T}"/><path d="M-30 ${yB + 2}Q0 ${yB - 8} 30 ${yB + 2}" fill="none" stroke="${TD}" stroke-width="2.5"/>` }); }
+    case 'clockL': case 'clockR': { const s = p === 'clockL' ? -1 : 1, h = 18, yB = .9375 * h - .75; return mOpen({ w: 40, h, c: 3, lower: false, over: `<path d="M${s * 2} ${yB - 7}Q${s * 30} ${yB - 7} ${s * 52} ${yB - 4}Q${s * 30} ${yB + 7} ${-s * 4} ${yB + 4}Z" fill="${T}"/>` }); }
     case 'horn': return `<ellipse cx="0" cy="2" rx="24" ry="19" fill="${FC.lip}"/><ellipse cx="0" cy="2" rx="14" ry="11" fill="${FC.inn}"/><rect x="-8" y="-6" width="16" height="6" rx="2" fill="${FC.tooth}"/><rect x="-7" y="4" width="14" height="6" rx="2" fill="${FC.tooth}"/>`;
     case 'ship': return mOpen({ w: 34, h: 22, c: 3, tongue: `<ellipse cx="0" cy="16" rx="20" ry="7" fill="${T}"/>` });
     default:
@@ -4122,7 +4147,7 @@ function faceSVG(pose, cls = '') {
   <circle cx="74.5" cy="99.5" r="2.6" fill="#fff"/><circle cx="130.5" cy="99.5" r="2.6" fill="#fff"/>
   <circle cx="54" cy="138" r="12" fill="#FF8FA3" opacity=".45"/><circle cx="146" cy="138" r="12" fill="#FF8FA3" opacity=".45"/>
   <path d="M95 125q5 5 10 0" stroke="#D99A7A" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <g transform="translate(100 156)"><g class="mth">${mouth(pose)}</g></g></svg>`;
+  <g transform="translate(100 156)"><g class="mth">${typeof pose === 'string' ? mouth(pose) : pose.html}</g></g></svg>`;
 }
 
 /* ---------- content (from the speech therapist's sheets) ---------- */
@@ -4245,6 +4270,8 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
   </div>`;
   $('#backBtn').onclick = () => { sfx.pop(); (back || goHome)(); };
   if ($('#homeBtn2')) $('#homeBtn2').onclick = () => { sfx.pop(); goHome(); };
+  if (HOW_CUR && HOW_CUR.length) $('.bar h1').insertAdjacentHTML('afterend', howBtnHTML());
+  if ($('#howBtn')) $('#howBtn').onclick = () => { sfx.pop(); howOpen(); };
   navEnter(back || goHome);
   stageFollow($('#stage'));
   if (!guide) guideWatch();
@@ -4661,7 +4688,7 @@ function goHome() {
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
-  newScreen(); ACTIVE = null; BATTLE = null;
+  newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
   const RF = readFineCheck();
@@ -4677,7 +4704,7 @@ function goHome() {
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
   const tiles = g => vis(g).map(tileHTML).join('');
   const secs = gs => SECTIONS.filter(x => gs.includes(x.g) && (x.g === 13 || modOnG(x.g)) && (!x.only || x.only === P.settings.track || P.settings.allGames) && vis(x.g).length);
-  const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
+  const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p>${howList(x.g).length ? `<button class="chip how-sec" data-how="${x.g}"><span class="emo">👄</span>Как сказать?</button>` : ''}</div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
   const fy = forYou(), likeEm = (P.settings.likes || []).map(l => (LIKES.find(x => x.id === l) || {}).e || '').filter(Boolean), likesE = likeEm.slice(0, 6).join(' ') + (likeEm.length > 6 ? ` +${likeEm.length - 6}` : '');  // a few of the child's interests, not a wall of them
   const sc = stickerCount(), inboxN = inbox(P).length;
   // every tab with its games: a new child sees at once how much there is
@@ -4771,6 +4798,7 @@ function goHome() {
   on('#tripCard', () => { sfx.pop(); homeLeave(); screenTrip(); });
   on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
+  $$('.how-sec').forEach(b => b.onclick = e => { e.stopPropagation(); sfx.pop(); howOpen(howList(+b.dataset.how)); });
   $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   if (GUEST) on('#guestTop', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
@@ -4979,13 +5007,15 @@ function screenArtic(i, auto = false, then = null) {
   const setFace = (pose, fx) => {
     const faces = mirror.querySelectorAll('svg.face'), old = faces[faces.length - 1];
     if (pose === cur && !fx) { old.classList.remove('hold', 'f-in'); void old.getBoundingClientRect(); old.classList.add('hold'); return; }
-    cur = pose; const my = ++swap, dur = 360;
+    const prev = cur; cur = pose; const my = ++swap, dur = 360;
     old.insertAdjacentHTML('afterend', faceSVG(pose, `${fx || ''} f-new f-in`));
     const nw = old.nextElementSibling;
     nw.style.transition = old.style.transition = `opacity ${dur}ms ease`;
     requestAnimationFrame(() => requestAnimationFrame(() => { nw.style.opacity = 1; old.style.opacity = 0; }));
     setTimeout(() => { if (my !== swap) return; mirror.querySelectorAll('svg.face').forEach(f => { if (f !== nw) f.remove(); }); nw.classList.remove('f-new'); nw.removeAttribute('style'); }, dur + 60);
-    const sc = $('#scheme'); sc.style.opacity = 0; setTimeout(() => { if (my !== swap) return; sc.innerHTML = profileSVG(profOf(pose)); sc.style.opacity = 1; }, dur / 2);
+    // the side cut moves with the face: the tongue slides from the last pose into this one
+    const sc = $('#scheme'), pb = profOf(pose);
+    if (howCalm()) sc.innerHTML = profileSVG(pb); else { sc.innerHTML = profileMove([[profOf(prev), 0, 0], [pb, 1, 1]], { dur: dur + 160, loop: false }); try { sc.firstElementChild.setCurrentTime(0); } catch (e) {} }
   };
   const start = async () => {
     if (started || t !== tok) return; started = true;
@@ -6275,29 +6305,32 @@ const PROF = {
   swingUp: { j: 14, lips: 'smile', tip: [166, 68], hump: [128, 82] },
   swingDown: { j: 14, lips: 'smile', tip: [165, 120], hump: [116, 100] },
   catHill: { j: 12, lips: 'smile', tip: [165, 116], hump: [124, 60] },
-  tube: { j: 10, lips: 'neutral', tip: [202, 100], hump: [126, 88], out: 1, roll: 1, air: 'M128 78Q176 86 216 100' }
+  tube: { j: 10, lips: 'neutral', tip: [202, 100], hump: [126, 88], out: 1, roll: 1, air: 'M128 78Q176 86 216 100' },
+  cup: { j: 10, lips: 'smile', tip: [205, 94], hump: [122, 94], out: 1 },
+  horn: { j: 3, lips: 'round', tip: [160, 100], hump: [112, 90] }
 };
-const profOf = pose => PROF[pose] || PROF[{ brushL: 'low', brushR: 'low', catFlat: 'swingDown' }[pose]] || (pose.startsWith('count') ? PROF.low : PROF.rest);
-function profileSVG(c) {
+const profOf = pose => PROF[pose] || PROF[{ brushL: 'low', brushR: 'low', catFlat: 'swingDown', clockL: 'needle', clockR: 'needle' }[pose]] || (pose.startsWith('count') ? PROF.low : PROF.rest);
+function profileSVG(c, o = {}) {
   const j = c.j, sx = c.lips === 'smile' ? -5 : c.lips === 'round' ? 9 : 0, [tx, ty] = c.tip, [hx, hy] = c.hump, fl = 132 + j, ah = 'ah' + (++fid);
-  const tongue = `<path d="M50 150L51 108C58 ${hy + 8} ${hx - 32} ${hy} ${hx} ${hy}${c.dip ? `C${hx + 30} ${c.dip} ${tx - 30} ${c.dip} ${tx} ${ty}` : `C${hx + 18} ${hy} ${tx - 14} ${ty - 6} ${tx} ${ty}`}Q${tx + 6} ${ty + 4} ${tx - 1} ${ty + 9}C${tx - 22} ${ty + 15} 132 ${fl} 110 ${fl + 2}L50 150Z" fill="#FF8FA0" stroke="#D9485F" stroke-width="2" stroke-linejoin="round"/>${c.roll ? `<ellipse cx="${tx - 6}" cy="${ty + 3}" rx="4" ry="5" fill="#D9485F"/>` : ''}`;
-  return `<svg viewBox="0 0 220 170" role="img" aria-label="Схема: губы, зубы и язык сбоку">
+  const tongue = `<path data-k="tg" d="M50 150L51 108C58 ${hy + 8} ${hx - 32} ${hy} ${hx} ${hy}${c.dip ? `C${hx + 30} ${c.dip} ${tx - 30} ${c.dip} ${tx} ${ty}` : `C${hx + 18} ${hy} ${tx - 14} ${ty - 6} ${tx} ${ty}`}Q${tx + 6} ${ty + 4} ${tx - 1} ${ty + 9}C${tx - 22} ${ty + 15} 132 ${fl} 110 ${fl + 2}L50 150Z" fill="#FF8FA0" stroke="#D9485F" stroke-width="2" stroke-linejoin="round"/>${c.roll ? `<ellipse cx="${tx - 6}" cy="${ty + 3}" rx="4" ry="5" fill="#D9485F"/>` : ''}`;
+  const lab = 'Схема: губы, зубы и язык сбоку';
+  return `<svg viewBox="0 0 220 170" role="img" aria-label="${lab}">
     <defs><marker id="${ah}" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#3D8BFD"/></marker></defs>
-    <path d="M0 0H150C176 0 183 18 187 28L208 46Q211 53 202 55Q193 57 192 61L188 80L188 ${92 + j}C195 ${112 + j} 193 ${132 + j} 178 ${140 + j}Q160 ${147 + j} 152 170H0Z" fill="#FFE3D0" stroke="#E8B79A" stroke-width="2"/>
-    <path d="M171 62C163 58 159 55 151 55C136 41 106 37 86 43C71 47 63 55 59 65Q57 71 52 77L47 92V150L120 ${136 + j}Q160 ${133 + j} 170 ${121 + j}Z" fill="#FCE9EC"/>
-    <path d="M171 62H190V${105 + j}L170 ${121 + j}Z" fill="#FCE9EC"/>
+    <path data-k="jw" d="M0 0H150C176 0 183 18 187 28L208 46Q211 53 202 55Q193 57 192 61L188 80L188 ${92 + j}C195 ${112 + j} 193 ${132 + j} 178 ${140 + j}Q160 ${147 + j} 152 170H0Z" fill="#FFE3D0" stroke="#E8B79A" stroke-width="2"/>
+    <path data-k="c1" d="M171 62C163 58 159 55 151 55C136 41 106 37 86 43C71 47 63 55 59 65Q57 71 52 77L47 92V150L120 ${136 + j}Q160 ${133 + j} 170 ${121 + j}Z" fill="#FCE9EC"/>
+    <path data-k="c2" d="M171 62H190V${105 + j}L170 ${121 + j}Z" fill="#FCE9EC"/>
     <path d="M171 62C163 58 159 55 151 55C136 41 106 37 86 43C71 47 63 55 59 65Q57 71 52 77L47 92V150" fill="none" stroke="#C98A93" stroke-width="3" stroke-linecap="round"/>
     ${c.out ? '' : tongue}
-    <path d="M167 ${120 + j}L176 ${119 + j}L177 ${91 + j}Q173 ${85 + j} 168 ${89 + j}Z" fill="#FFFFFF" stroke="#B8B0C8" stroke-width="1.5"/>
+    <path data-k="lt" d="M167 ${120 + j}L176 ${119 + j}L177 ${91 + j}Q173 ${85 + j} 168 ${89 + j}Z" fill="#FFFFFF" stroke="#B8B0C8" stroke-width="1.5"/>
     <path d="M167 58L177 57L181 81Q177 86 171 82Z" fill="#FFFFFF" stroke="#B8B0C8" stroke-width="1.5"/>
-    <path d="M181 ${85 + j}L${187 + sx} ${85 + j}Q${200 + sx} ${87 + j} ${200 + sx} ${97 + j}Q${198 + sx} ${107 + j} ${187 + sx} ${107 + j}L181 ${105 + j}Z" fill="#E3707F"/>
+    <path data-k="ll" d="M181 ${85 + j}L${187 + sx} ${85 + j}Q${200 + sx} ${87 + j} ${200 + sx} ${97 + j}Q${198 + sx} ${107 + j} ${187 + sx} ${107 + j}L181 ${105 + j}Z" fill="#E3707F"/>
     ${c.out && !c.over ? tongue : ''}
-    <path d="M${186 + sx} 57Q${200 + sx} 61 ${200 + sx} 72Q${198 + sx} 80 ${187 + sx} 80L181 80V60Z" fill="#E3707F"/>
+    <path data-k="ul" d="M${186 + sx} 57Q${200 + sx} 61 ${200 + sx} 72Q${198 + sx} 80 ${187 + sx} 80L181 80V60Z" fill="#E3707F"/>
     ${c.over ? tongue : ''}
-    ${c.air ? `<path d="${c.air}" fill="none" stroke="#3D8BFD" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#${ah})"/>` : ''}
+    <g data-ov="1">${c.air ? `<path d="${c.air}" fill="none" stroke="#3D8BFD" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#${ah})">${o.flow ? '<animate attributeName="stroke-dashoffset" from="18" to="0" dur=".7s" repeatCount="indefinite"/>' : ''}</path>` : ''}
     ${c.vib ? `<path d="M${c.vib[0] + 2} ${c.vib[1] - 8}l4-4 4 4 4-4M${c.vib[0] + 6} ${c.vib[1] - 2}l4-4 4 4 4-4" stroke="#EF4F7E" stroke-width="2" fill="none" stroke-linecap="round"/>` : ''}
-    ${c.voice ? '<path d="M18 132q4-6 8 0t8 0 8 0M18 142q4-6 8 0t8 0 8 0" stroke="#8C6CF2" stroke-width="2.2" fill="none"/><text x="14" y="160" font-size="11" font-weight="800" fill="#8C6CF2" font-family="Nunito, sans-serif">голос</text>' : ''}
-    ${(c.marks || []).map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="7.5" fill="#FFC83A" stroke="#2A2346" stroke-width="1.5"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#2A2346" font-family="Nunito, sans-serif">${n}</text>`).join('')}
+    ${c.voice ? '<path d="M18 132q4-6 8 0t8 0 8 0M18 142q4-6 8 0t8 0 8 0" stroke="#8C6CF2" stroke-width="2.2" fill="none"/><text x="14" y="160" font-size="11" font-weight="800" fill="#8C6CF2" font-family="Nunito, sans-serif">голос</text>' : ''}</g>
+    ${o.marks === false ? '' : (c.marks || []).map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="7.5" fill="#FFC83A" stroke="#2A2346" stroke-width="1.5"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#2A2346" font-family="Nunito, sans-serif">${n}</text>`).join('')}
   </svg>`;
 }
 const SOUNDS = LX('SOUNDS', [
@@ -6348,24 +6381,10 @@ function bindCam(stage) {
   };
 }
 function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {
-  newScreen();
-  const S = SOUNDS[si];
-  const st = shell('Как ставить язык', `<div class="snd-tabs" id="sndTabs">${SOUNDS.map((x, i) => `<button class="snd-tab ${i === si ? 'sel' : ''}" data-i="${i}" aria-label="Звук ${x.L}">${Lspan(x.L)}</button>`).join('')}</div>
-    <div class="artic-stage" id="sndStage">
-      <div class="mirror">${faceSVG(S.pose)}</div>
-      ${camHTML}
-      <div class="artic-side">
-        <figure class="scheme">${profileSVG(S.prof)}<figcaption>Звук ${S.L}: вид сбоку. Цифры — как в списке.</figcaption></figure>
-        <ol class="snd-steps">${S.steps.map(x => `<li>${x}</li>`).join('')}</ol>
-        <div class="prow-btns"><button class="big" id="sndSay">${ICON.speaker}Послушать</button><button class="big ghost" id="camBtn"></button></div>
-        <p class="muted" id="camNote" hidden></p>
-      </div>
-    </div>`);
-  talk(S.line);
-  bindCam($('#sndStage'));
-  $('#sndTabs').onclick = e => { const b = e.target.closest('.snd-tab'); if (b) { sfx.pop(); screenSounds(+b.dataset.i); } };
-  $('#sndSay').onclick = () => talk(S.line);
-  void st;
+  newScreen(); HOW_CUR = null;
+  const list = IS_RU ? HOW_ORDER.map(howIdx).filter(i => i >= 0) : SOUNDS.map((_, i) => i);
+  shell('Как ставить язык', '<div class="how how-page" id="howBox"></div>');
+  howBind($('#howBox'), list, si, i => screenSounds(i));
 }
 
 /* ---------- Sava: sound Л, reading speed, the book diary; and things the two children do together ---------- */
@@ -6408,6 +6427,7 @@ const ARTIC_L = [
   { id: 'l-painter', name: 'Маляр', thumb: 'swingUp', text: 'Улыбнись, открой рот. Кончиком языка «покрась» нёбо: от верхних зубов назад и обратно.', tip: 'Челюсть не двигается.', intro: 'Язык — кисточка. Красим нёбо: от зубов назад и обратно.', steps: rep(4, [['swingUp', 'Вперёд', 1200], ['paintBack', 'Назад', 1200]]) },
   { id: 'l-turkey', name: 'Индюк', thumb: 'lickUp', text: 'Широким кончиком языка быстро води по верхней губе вперёд-назад, не отрывая: «бл-бл-бл».', intro: 'Индюк болтает: бл-бл-бл! Води языком по верхней губе быстро-быстро.', steps: rep(4, [['lickUp', 'Бл-бл-бл!', 1700, 'turkey']]) },
   { id: 'l-swing', name: 'Качели', thumb: 'swingUp', text: 'Открой рот. Кончик языка то к верхним зубам, то к нижним.', tip: 'Нижняя челюсть неподвижна.', intro: 'Я скажу: вверх. Язык к верхним зубам. Я скажу: вниз. Язык к нижним.', steps: rep(4, [['swingUp', 'Вверх', 1200], ['swingDown', 'Вниз', 1200]]) },
+  { id: 'l-clock', name: 'Часики', thumb: 'clockL', text: 'Улыбнись, приоткрой рот. Узким кончиком языка тянись то к правому уголку рта, то к левому.', tip: 'Губы и нижняя челюсть не двигаются.', intro: 'Часики идут: тик-так. Кончик языка — то влево, то вправо.', steps: rep(5, [['clockL', 'Тик', 900, 'tick'], ['clockR', 'Так', 900, 'tick']]) },
   { id: 'l-horse', name: 'Лошадка', thumb: 'swingUp', text: 'Присоси язык к нёбу и щёлкни: «цок-цок».', tip: 'Нижняя челюсть неподвижна, щёлкает только язык.', intro: 'Поскачем на лошадке! Присоси язык к нёбу и щёлкни: цок-цок!', steps: rep(5, [['swingUp', 'Цок!', 900], ['swingDown', '', 700]]) },
   { id: 'l-ship', name: 'Пароход гудит', thumb: 'ship', text: 'Приоткрой рот и долго тяни «ы-ы-ы». Кончик языка опущен, корень приподнят.', intro: 'Пароход гудит: ы-ы-ы! Тяни долго-долго.', steps: [['ship', 'Ы-ы-ы!', 2300], ['ship', '', 1600], ['ship', 'Ы-ы-ы!', 2300], ['ship', '', 1400]] }
 ];
@@ -7193,6 +7213,138 @@ SOUNDS.push(...LX('SOUNDS_SH', [
     steps: ['Губы округлены и вытянуты вперёд, как рупор.', 'Зубки почти сомкнуты.', 'Широкий кончик языка поднят к бугоркам за верхними зубками — язык как чашечка.', 'По середине языка идёт тёплый воздух.', 'Горлышко работает: ж-ж-ж, как жук жужжит.'],
     line: 'Звук Ж — как звук Ш, только с голосом. Губки рупором, язычок чашечкой наверху. Пусть горлышко жужжит, как жук.' }
 ]));
+/* HOWSAY-BEGIN «Как сказать?»: a calm animated teacher for every trained sound — the mouth in front and the side cut,
+   moving together in a 3-second loop (rest → the sound → rest), «медленно» and «ещё раз», the camera as a mirror and a
+   short tip for the grown-ups. Positions follow the standard Russian speech-therapy profiles (only the method, our own
+   drawing). Ц and Ч first close (the tongue stops the air), then open; Р and Рь tremble at the tip. */
+SOUNDS.push(...LX('SOUNDS_RU2', [
+  { L: 'Ц', pose: 'frog', pre: { j: 2, lips: 'smile', tip: [165, 104], hump: [150, 58] },
+    prof: { j: 2, lips: 'smile', tip: [165, 104], hump: [126, 66], air: 'M60 74Q110 56 150 72Q170 80 216 86' },
+    steps: ['Губы в улыбке, зубки почти сомкнуты.', 'Кончик языка упирается в нижние зубки.', 'Сначала спинка языка на миг прижимается к верхним зубкам — воздух останавливается.', 'Потом язык отходит, и воздух коротко вырывается по желобку: ц!', 'Горлышко молчит. Звук короткий, его не тянут.'],
+    line: 'Звук Ц — короткий, как щелчок. Улыбнись. Кончик языка спрячь за нижние зубки. Спинка языка на миг прижмётся к верхним зубкам и отпустит воздух: ц, ц, ц!' },
+  { L: 'Ч', pose: 'horn', pre: { j: 3, lips: 'round', tip: [160, 57], hump: [126, 58] },
+    prof: { j: 3, lips: 'round', tip: [157, 64], hump: [124, 61], air: 'M62 70Q96 49 128 51Q152 54 162 68Q182 78 218 80' },
+    steps: ['Губы чуть округлены и вытянуты вперёд.', 'Зубки почти сомкнуты.', 'Кончик языка прижимается к бугоркам за верхними зубками, середина языка поднята.', 'Язык быстро отходит, и воздух коротко вырывается: ч!', 'Горлышко молчит. Звук мягкий и короткий.'],
+    line: 'Звук Ч — короткий и мягкий. Губки чуть вперёд. Прижми кончик языка к бугоркам за верхними зубками. Быстро отпусти и подуй: ч, ч, ч, как паровозик пыхтит.' },
+  { L: 'Щ', pose: 'horn',
+    prof: { j: 3, lips: 'round', tip: [155, 63], hump: [124, 58], air: 'M62 70Q96 48 128 49Q152 53 162 68Q182 78 218 80' },
+    steps: ['Губы чуть округлены и вытянуты вперёд.', 'Зубки почти сомкнуты.', 'Кончик языка поднят к бугоркам за верхними зубками, но не касается их.', 'Середина языка поднята, язык напряжён. По нему долго идёт воздух.', 'Горлышко молчит. Звук мягкий и долгий.'],
+    line: 'Звук Щ — мягкий и долгий. Губки чуть вперёд. Кончик языка подними к бугоркам за верхними зубками. Подуй долго-долго: щ-щ-щ, как щёточка шуршит.' },
+  { L: 'Рь', pose: 'swingUp',
+    prof: { j: 10, lips: 'smile', tip: [161, 58], hump: [128, 60], air: 'M62 70Q98 48 130 50Q152 52 160 54Q172 80 216 98', vib: [162, 56], voice: 1 },
+    steps: ['Губы в лёгкой улыбке, рот приоткрыт.', 'Кончик языка у бугорков за верхними зубками, он дрожит.', 'Середина языка поднята к нёбу — от этого звук мягкий.', 'Сильная струя воздуха бежит на кончик языка.', 'Горлышко работает.'],
+    say: 'Мягкий звук: ри, ри, ри. Губки в лёгкой улыбке. Кончик языка у бугорков за верхними зубками дрожит, а серединка языка поднимается вверх. Скажи: ри, ри, ри.',
+    line: 'Звук Рь — мягкий. Губки в лёгкой улыбке. Кончик языка у бугорков за верхними зубками дрожит, а серединка языка поднимается вверх. Скажи: ри, ри, ри.' },
+  { L: 'Ль', pose: 'swingUp',
+    prof: { j: 8, lips: 'smile', tip: [166, 63], hump: [126, 62], air: 'M58 100Q110 108 150 104Q174 98 216 100', voice: 1 },
+    steps: ['Губы в лёгкой улыбке.', 'Кончик языка касается верхних зубок или бугорков за ними.', 'Середина языка поднята к нёбу, а не опущена, как у Л.', 'Воздух проходит по бокам языка.', 'Горлышко работает.'],
+    say: 'Мягкий звук: ля, ля, ля. Улыбнись. Кончик языка коснётся бугорков за верхними зубками, а серединка языка поднимется вверх. Пусть горлышко поёт: ля, ля, ля.',
+    line: 'Звук Ль — мягкий. Улыбнись. Кончик языка коснётся бугорков за верхними зубками, а серединка языка поднимется вверх. Пусть горлышко поёт: ля, ля, ля.' }
+]));
+// for the grown-ups, under the picture: the usual mistakes and what helps (Russian only)
+const HOW_PAR = LX('HOW_PAR', {
+  'С': 'Частые ошибки: язык между зубами или свист сбоку, когда щёки надуваются. Проверьте ладонью: холодная струя идёт ровно посередине. Кончик языка всегда внизу.',
+  'З': 'З ставят после С: язык тот же, только включается голос. Ладошка ребёнка на горле чувствует «моторчик». Пары слов: суп — зуб, коса — коза.',
+  'Ц': 'Ц — это Т и С, слитые вместе. Если выходит «тс» раздельно или «с», сначала добейтесь чистого С, потом говорите «тсс» всё быстрее. Кончик языка внизу, за нижними зубами.',
+  'Ш': 'Частые ошибки: шипение сбоку или язык внизу, и звук похож на С. Помогают «Чашечка», «Фокус» и «Вкусное варенье». Обычно Ш ставят после С.',
+  'Ж': 'Ж ставят после Ш: всё то же, только с голосом. Пары слов: шар — жар, шить — жить.',
+  'Ч': 'Ч — мягкий звук, Ть и Щ слиты вместе. Частые замены — «ть» или «щ». Помогает слог «ать-ча»: сначала медленно, потом быстрее. Губы не растягиваются в улыбку.',
+  'Щ': 'Щ — долгий мягкий звук; его путают с Ш или С. Сравните «ш-ш-ш» и «щ-щ-щ»: для Щ губы вытянуты меньше, середина языка выше. Обычно Щ ставят после Ш.',
+  'Л': 'Частые ошибки: «уампа» (губы вместо языка) или мягкое Ль вместо твёрдого. Для начала можно сказать Л с кончиком языка между зубами — так легче поймать звук, потом язык уходит за зубы.',
+  'Ль': 'Ль часто получается раньше твёрдого Л: «ляпа» вместо «лапа». Сравните пары: лук — люк, угол — уголь. У Л середина языка опущена, у Ль — поднята.',
+  'Р': 'Р обычно ставят последним, после Л и шипящих. Дрожит только кончик языка, не горло. Перед звуком — «Лошадка», «Грибок», «Маляр». Если за несколько месяцев занятий звук не появился, покажите ребёнка логопеду.',
+  'Рь': 'Рь получается вместе с Р или чуть позже. Сравните пары: рад — ряд, рок — рёв. Улыбка помогает мягкости, а кончик языка всё равно наверху.'
+});
+// the paths with data-k morph between the frames; SMIL, so the mouth in front and the side cut stay in step
+const PK_RE = /<path data-k="(\w+)" d="([^"]*)"([^>]*)\/>/g;
+function profileMove(frames, { dur = 3200, loop = true } = {}) {
+  const kt = frames.map(f => +f[1].toFixed(3)).join(';'), sp = frames.slice(1).map(() => '.45 0 .55 1').join(';');
+  const rc = loop ? 'repeatCount="indefinite"' : 'repeatCount="1" fill="freeze"';
+  const ds = frames.map(([c]) => { const m = {}; profileSVG(c).replace(PK_RE, (_, k, d) => { m[k] = d; }); return m; });
+  const main = (frames.find(f => f[2]) || frames[frames.length - 1])[0];
+  let svg = profileSVG(main, { flow: 1, marks: false }).replace(PK_RE, (all, k, d, rest) => {
+    const vs = ds.map(m => m[k] || d);
+    if (vs.every(v => v === vs[0])) return all;
+    return `<path data-k="${k}" d="${vs[0]}"${rest}><animate attributeName="d" values="${vs.join(';')}" keyTimes="${kt}" calcMode="spline" keySplines="${sp}" dur="${dur}ms" ${rc}/></path>`;
+  });
+  if (frames.some(f => f[2]) && frames.some(f => !f[2])) svg = svg.replace('<g data-ov="1">', `<g data-ov="1" opacity="${frames[0][2] ? 1 : 0}"><animate attributeName="opacity" values="${frames.map(f => f[2] ? 1 : 0).join(';')}" keyTimes="${kt}" dur="${dur}ms" ${rc}/>`);
+  return svg;
+}
+// the face in front with one mouth per pose; each mouth shows while its frames last
+function faceMove(frames, { dur = 3200, loop = true } = {}) {
+  const kt = frames.map(f => +f[1].toFixed(3)).join(';'), rc = loop ? 'repeatCount="indefinite"' : 'repeatCount="1" fill="freeze"';
+  const poses = [...new Set(frames.map(f => f[3]))];
+  const html = poses.map(p => { const vs = frames.map(f => f[3] === p ? 1 : 0); return `<g opacity="${vs[0]}"><animate attributeName="opacity" values="${vs.join(';')}" keyTimes="${kt}" dur="${dur}ms" ${rc}/>${mouth(p)}</g>`; }).join('');
+  return faceSVG({ html });
+}
+// a sound's loop: rest, (the closure of Ц and Ч), the sound held (the tip trembles for Р), rest again
+function howFrames(S) {
+  const R = PROF.rest, P0 = S.prof, f = [[R, 0, 0, 'rest'], [R, .1, 0, 'rest']];
+  if (S.pre) f.push([S.pre, .3, 0, S.pose], [S.pre, .44, 0, S.pose], [P0, .52, 1, S.pose]);
+  else f.push([P0, .38, 1, S.pose]);
+  if (P0.vib) { const P1 = { ...P0, tip: [P0.tip[0] - 1, P0.tip[1] + 6] }, t0 = f[f.length - 1][1], n = 12; for (let i = 1; i <= n; i++) f.push([i % 2 ? P1 : P0, t0 + (.84 - t0) * i / n, 1, S.pose]); }
+  else f.push([P0, .84, 1, S.pose]);
+  f.push([R, 1, 0, 'rest']);
+  return f;
+}
+const HOW_ORDER = [RU('С'), RU('З'), RU('Ц'), RU('Ш'), RU('Ж'), RU('Ч'), RU('Щ'), RU('Л'), RU('Ль'), RU('Р'), RU('Рь')];
+// the sounds of a home section (games' groups): Р Рь, Л Ль, Ш Ж Ч Щ, С З Ц; other languages keep the sounds they have
+const HOW_GRP = { 1: [RU('Р'), RU('Рь')], 5: [RU('Л'), RU('Ль')], 9: [RU('Ш'), RU('Ж'), RU('Ч'), RU('Щ')], 15: [RU('С'), RU('З'), RU('Ц')] };
+const howIdx = L => { const i = SOUNDS.findIndex(x => x.L === L); if (i >= 0) return i; const j = RU('СЗРЛШЖ').indexOf(L); return !IS_RU && L.length === 1 && j >= 0 && SOUNDS[j] ? j : -1; };
+const howList = g => [...new Set((HOW_GRP[g] || []).map(howIdx).filter(i => i >= 0))];
+var HOW_CUR = null;  // the sounds of the game being played: its screens get «Как сказать?»
+const howCalm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function howPairHTML(S, slow) {
+  if (howCalm()) return `<div class="how-face">${faceSVG(S.pose)}</div><div class="how-prof">${profileSVG(S.prof, { marks: false })}</div>`;
+  const fr = howFrames(S), o = { dur: slow ? 6400 : 3200 };
+  return `<div class="how-face">${faceMove(fr, o)}</div><div class="how-prof">${profileMove(fr, o)}</div>`;
+}
+function howHTML(list, si) {
+  const S = SOUNDS[si], par = HOW_PAR[S.L];
+  return `${list.length > 1 ? `<div class="snd-tabs how-tabs">${list.map(i => `<button class="snd-tab ${i === si ? 'sel' : ''}" data-i="${i}" aria-label="Звук ${SOUNDS[i].L}">${Lspan(SOUNDS[i].L)}</button>`).join('')}</div>` : ''}
+    <div class="how-pair" id="howPair">${howPairHTML(S)}</div>
+    <p class="how-cap"><span>Спереди</span><span>Сбоку: губы, зубы, язык</span></p>
+    <p class="how-line">${esc(S.line)}</p>
+    <div class="how-btns"><button class="big" id="howAgain">↻ Ещё раз</button><button class="big ghost" id="howSlow">🐢 Медленно</button><button class="big ghost" id="camBtn"></button></div>
+    ${camHTML}<p class="muted" id="camNote" hidden></p>
+    <details class="how-par"><summary>Для взрослых: как ставится звук ${esc(S.L)}</summary><ol>${S.steps.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${par ? `<p>${esc(par)}</p>` : ''}</details>`;
+}
+// fills a box with the teacher; the tabs switch sounds in place
+function howBind(box, list, si, onPick) {
+  const S = SOUNDS[si];
+  box.innerHTML = howHTML(list, si);
+  const play = slow => {
+    const pr = $('#howPair', box); pr.innerHTML = howPairHTML(S, slow);
+    pr.querySelectorAll('svg').forEach(s => { try { s.setCurrentTime(0); } catch (e) {} });
+    talk(S.say || S.line, slow ? { rate: .8 } : undefined);  // say: the soft sounds by their syllables, not by letters
+  };
+  play(false);
+  $('#howAgain', box).onclick = () => { sfx.pop(); play(false); };
+  $('#howSlow', box).onclick = () => { sfx.pop(); play(true); };
+  bindCam(box);
+  const tabs = box.querySelector('.how-tabs');
+  if (tabs) tabs.onclick = e => { const b = e.target.closest('.snd-tab'); if (b) { sfx.pop(); (onPick || (i => howBind(box, list, i, onPick)))(+b.dataset.i); } };
+}
+function howOpen(list = HOW_CUR, si) {
+  if (!list || !list.length) return;
+  const ov = document.createElement('div'); ov.className = 'overlay how-ov';
+  ov.innerHTML = `<div class="how-box" role="dialog" aria-label="Как сказать?"><button class="ibtn how-x" aria-label="Закрыть">✕</button><h2>Как сказать?</h2><div class="how" id="howBox"></div></div>`;
+  $('.screen').append(ov);
+  const close = () => { stopCam(); ov.remove(); };
+  ov.querySelector('.how-x').onclick = () => { sfx.pop(); close(); };
+  ov.onclick = e => { if (e.target === ov) close(); };
+  howBind($('#howBox', ov), list, si == null ? list[0] : si);
+}
+const howBtnHTML = () => HOW_CUR && HOW_CUR.length ? `<button class="chip how-b" id="howBtn" aria-label="Как сказать?"><span class="emo">👄</span><span class="how-bt">Как сказать?</span></button>` : '';
+// every game remembers its sounds when it starts; home forgets them
+function howWrap() {
+  GAMES.forEach(g => {
+    if (g.howW) return; g.howW = 1;
+    const go = g.go, gs = [g.grp, ...(g.also || [])].filter(x => HOW_GRP[x]);
+    g.go = (...a) => { HOW_CUR = !g.info && gs.length ? howList(gs[0]) : null; return go(...a); };
+  });
+}
+/* HOWSAY-END */
 const ARTIC_SH = [
   { id: 'sh-cup', name: 'Чашечка', thumb: 'cup', text: 'Улыбнись, открой рот. Высунь широкий язык и подними его края — получится чашечка. Держи, пока считаем до пяти.', tip: 'Губы не помогают, язык широкий.', intro: 'Сделаем из язычка чашечку! Высунь широкий язычок и подними края. Держим до пяти.', steps: count5('cup') },
   { id: 'sh-mushroom', name: 'Грибок', thumb: 'swingUp', text: 'Улыбнись, открой рот. Присоси широкий язык к нёбу: язык — шляпка грибка, уздечка — ножка. Держи до пяти.', intro: 'Прилепи язычок к нёбу, как шляпку грибка. Держим до пяти.', steps: count5('swingUp') },
