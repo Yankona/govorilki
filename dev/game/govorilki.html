@@ -3182,6 +3182,42 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .cmp .pw-head{width:auto;aspect-ratio:auto;flex:none}.pinwheel .pw-head{display:block}
 .pick-b.sel,.wr-opt.yes,.wr-ans{color:var(--ink)}
 /* FIX-END */
+/* FUN-CSS: «Моя выставка», the framed drawing on the win screen, paint splashes, the xylophone concert, museum stamps */
+.fun-frame{padding:9px;background:linear-gradient(135deg,#F6D77E,#C8902A 28%,#F8E39A 50%,#B47A16 74%,#E9C25F);border-radius:8px;box-shadow:0 6px 0 rgba(42,35,70,.18),inset 0 0 0 2px #8A5A0A,inset 0 0 0 5px rgba(255,255,255,.35)}
+.fun-frame img{display:block;width:100%;height:auto;background:#FFFFFF;border:7px solid #FFF8E6;box-shadow:inset 0 0 0 1px #D9B45A}
+.fun-show{flex:none;display:flex;gap:16px;overflow-x:auto;width:100%;padding:8px 4px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.fun-th{flex:0 0 132px;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start;transform:rotate(-1.5deg);transition:transform .15s}
+.fun-th:nth-child(even){transform:rotate(1.5deg)}
+.fun-th:active{transform:scale(.95)}
+.fun-empty .fun-frame{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:none;border:4px dashed var(--line-strong);box-shadow:none}
+.fun-empty span{font-size:34px;opacity:.75}
+.fun-hint{align-self:flex-start;margin:-4px 0 4px}
+.winbox .win-art{width:min(230px,62vw);transform:rotate(-2deg);animation:popin .6s ease-out both}
+.fun-view{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 30%,#FFF7E8,#F1DFC2 70%,#E3CBA4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));animation:popin .35s ease-out}
+.fun-wall{display:flex;flex-direction:column;align-items:center;gap:12px;width:min(100%,520px)}
+.fun-big{width:min(100%,62vh)}
+.fun-plaque{margin:0;padding:6px 18px;background:linear-gradient(#F8E7B0,#E2C477);border-radius:8px;box-shadow:0 3px 0 #B48A2E;font:700 18px/1.25 var(--f-body);color:#4A3510;text-align:center}
+.fun-plaque small{font-weight:600;font-size:14px}
+.fun-n{margin:0;font:800 15px var(--f-body);color:#6B5A3A}
+.fun-view .av-arr{position:fixed;top:42%}
+.fun-view .av-arr.l{left:8px}.fun-view .av-arr.r{right:8px}
+.fun-close{min-width:180px}
+.fun-splash{position:fixed;width:0;height:0;pointer-events:none;z-index:61}
+.fun-splash i{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.7);animation:fly .55s ease-out forwards}
+.xy-con{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+.xy-con .big{animation:bob 1.6s ease-in-out infinite}
+.fun-stamp{--c:#C8324B;width:132px;height:132px;flex:none;border-radius:50%;border:4px double var(--c);color:var(--c);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:12px;text-align:center;background:rgba(255,255,255,.6);transform:rotate(-8deg)}
+.fun-stamp:nth-child(even){transform:rotate(6deg)}
+.fun-stamp span{font-size:24px;line-height:1}
+.fun-stamp b{font:800 12px/1.15 var(--f-body);text-transform:uppercase;letter-spacing:.02em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fun-stamp small{font:700 11px/1.1 var(--f-body)}
+.fun-pass{flex:none;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%;padding:8px 0 14px}
+.fun-stamp-fly{position:fixed;left:50%;top:38%;z-index:65;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;animation:stampin 2.6s ease-out forwards}
+.fun-stamp-fly .fun-stamp{width:150px;height:150px;background:#FFFDF6;box-shadow:0 8px 24px rgba(42,35,70,.25)}
+.fun-stamp-fly>b{padding:6px 14px;border-radius:14px;background:var(--paper);font:800 16px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
+@keyframes stampin{0%{transform:translate(-50%,-50%) scale(2.4);opacity:0}14%{transform:translate(-50%,-50%) scale(.92);opacity:1}20%{transform:translate(-50%,-50%) scale(1)}82%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-90%) scale(.6);opacity:0}}
+@media (prefers-reduced-motion:reduce){.xy-con .big,.fun-stamp-fly,.winbox .win-art{animation:none}.fun-stamp-fly{transform:translate(-50%,-50%)}}
+/* FUN-CSS-END */
 </style>
 
 <div id="app"></div>
@@ -4291,7 +4327,7 @@ function bindHold(btn, on, off) {
 }
 const nameBit = () => P.settings.name ? ', ' + P.settings.name : '';
 
-function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra = '', nextLabel = '' }) {
+function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra = '', nextLabel = '', pic = null }) {
   const fair = fairStars(key, stars); stars = fair.s;
   const before = stickerCount(), xp0 = P.stars;
   P.stars += stars; P.best[key] = Math.max(P.best[key] || 0, stars); P.plays[key] = (P.plays[key] || 0) + 1;
@@ -4321,7 +4357,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
   const title = pickOne(Q() ? ['Чётко!', 'Мощно!', 'Есть!', 'Отлично!', 'Красиво!', 'Огонь!'] : ['Молодец!', 'Ура!', 'Супер!', 'Здорово!', 'Браво!', 'Чудесно!', 'Ты звезда!']), bv = battleVerdict(key, ev);
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="${title}">
-    <div class="ryz-w">${friendSVG()}</div>
+    ${pic ? FUN.frameHTML(pic, 'win-art') : `<div class="ryz-w">${friendSVG()}</div>`}
     <h2>${title}</h2>
     <div class="win-stars">${Array.from({ length: stars }, (_, i) => `<span style="animation-delay:${.25 + i * .25}s">${ICON.star}</span>`).join('')}</div>
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
@@ -5804,9 +5840,10 @@ function screenSong(i) {
 const XN = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'], XNAME = ['до', 'ре', 'ми', 'фа', 'соль', 'ля', 'си', 'до'];
 const XCOL = ['#FF4D4D', '#FF9F1C', '#F2C200', '#4CC261', '#2BB3A3', '#3D8BFD', '#9B5DE5', '#FF5FA8'];
 function screenXylo() {
-  newScreen();
-  let follow = null, fi = 0;
+  const t0 = newScreen();
+  let follow = null, fi = 0, rec = [], show = false;
   shell('Ксилофон', `<div class="xy-line" id="xl"><span class="muted">Играй что хочешь или выбери песенку внизу</span></div>
+    <div class="xy-con" id="xyCon" hidden><button class="big" id="xyShow">🎤 Мой концерт</button><button class="ibtn" id="xyNew" aria-label="Новая мелодия">🗑️</button></div>
     <div class="xylo" id="xy">${XN.map((n, i) => `<button class="xbar" data-n="${n}" style="--c:${XCOL[i]};--h:${100 - i * 5}%" aria-label="${XNAME[i]}"><i></i><span>${XNAME[i]}</span><i></i></button>`).join('')}</div>
     <div class="xy-songs" id="xs">${SONGS.map((s, i) => `<button class="chip" data-i="${i}"><span class="emo">${s.e}</span>${s.title}</button>`).join('')}</div>`);
   talk('Нажимай на цветные палочки — они звенят! Или выбери песенку внизу: нужная палочка будет светиться.');
@@ -5822,18 +5859,45 @@ function screenXylo() {
     const b = e.target.closest('.xbar'); if (!b) return;
     e.preventDefault();
     if (!ac()) return;
+    if (show) return;
     mallet(FREQ(b.dataset.n), AC.currentTime + .01, 1, music || musicBus(), .26); hopEl(b);
+    if (!follow) { rec.push([b.dataset.n, performance.now()]); if (rec.length > 48) rec.shift(); if (rec.length === 6) { $('#xyCon').hidden = false; hopEl($('#xyShow')); talk('Красиво! Нажми «Мой концерт» — и я сыграю всю твою мелодию.'); } }
     if (!follow || b.dataset.n !== follow[fi].note) return;
     fi++;
     if (fi < follow.length) { showNext(); return; }
     const sg = follow.song; follow = null; showNext();
-    xl.innerHTML = '<span>Ура! Ты сыграла песенку!</span>';
-    later(() => finish({ key: 'xylo:' + sg.id, stars: 1, line: 'Ты сыграла песенку!', again: screenXylo }), 900);
+    xl.innerHTML = `<span>${G('Ура! Ты сыграла песенку!', 'Ура! Ты сыграл песенку!')}</span>`;
+    // the whole song once more, the bars lighting up as it plays: the child hears what they played
+    later(async () => {
+      await talk('А теперь послушай всю песенку целиком!'); if (t0 !== tok) return;
+      const toks = songTokens(sg); show = true;
+      playSong(sg, { bpm: 104, onNote: j => { const b = $(`.xbar[data-n="${toks[j].note}"]`); $$('.xbar').forEach(x => x.classList.toggle('glow', x === b)); if (b) hopEl(b); },
+        onEnd: () => { show = false; $$('.xbar').forEach(x => x.classList.remove('glow')); FUN.applause(); finish({ key: 'xylo:' + sg.id, stars: 1, line: 'Ты сыграла песенку!', again: screenXylo }); } });
+    }, 700);
   });
+  // «Мой концерт»: the notes the child played freely, played back with their own rhythm, then applause
+  $('#xyShow').onclick = () => {
+    if (show || rec.length < 2 || !ac()) return; show = true; sfx.pop();
+    const bus = musicBus(); let tt = AC.currentTime + .4;
+    $('#xyShow').disabled = true; xl.innerHTML = '<span>🎤 Концерт! Слушаем…</span>';
+    rec.forEach(([n, at], i) => {
+      mallet(FREQ(n), tt, 1, bus, .26);
+      later(() => { const b = $(`.xbar[data-n="${n}"]`); $$('.xbar').forEach(x => x.classList.toggle('glow', x === b)); if (b) hopEl(b); }, (tt - AC.currentTime) * 1000);
+      const gap = i + 1 < rec.length ? (rec[i + 1][1] - at) / 1000 : 0; tt += Math.min(.9, Math.max(.16, gap));
+    });
+    later(() => {
+      show = false; $('#xyShow').disabled = false; $$('.xbar').forEach(x => x.classList.remove('glow'));
+      FUN.applause(); confetti(40); xl.innerHTML = '<span>👏 Браво! 👏</span>';
+      talk(pickOne(['Браво! Какой концерт!', 'Браво! Вот это музыка!', 'Ура! Зрители хлопают!']));
+      if (!P.best['xylo-show']) { P.best['xylo-show'] = 1; P.stars += 1; save(); const n = $('#starN'); if (n) n.textContent = P.stars; burst(innerWidth / 2, innerHeight / 3, 9); }
+    }, (tt - AC.currentTime) * 1000 + 500);
+  };
+  $('#xyNew').onclick = () => { if (show) return; sfx.whoosh(.3, .15); rec = []; $('#xyCon').hidden = true; xl.innerHTML = '<span class="muted">Играй что хочешь или выбери песенку внизу</span>'; };
   $('#xs').onclick = e => {
     const c = e.target.closest('.chip'); if (!c) return;
     sfx.pop(); const sg = SONGS[+c.dataset.i];
-    follow = songTokens(sg); follow.song = sg; fi = 0; showNext();
+    if (show) return;
+    follow = songTokens(sg); follow.song = sg; fi = 0; showNext(); $('#xyCon').hidden = true;
     talk(`Сыграем «${sg.title}». Нажимай на палочку, которая светится.`);
   };
 }
@@ -5856,31 +5920,34 @@ function outlineSVG(svg) {
 }
 const svgImage = svg => new Promise(res => { const img = new Image(); img.onload = () => res(img); img.onerror = () => res(null); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); });
 const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
-function saveArt(d) {
-  P.art = [{ d, at: Date.now() }, ...(P.art || [])].slice(0, 12);
+function saveArt(d, w = '') {
+  P.art = [{ d, at: Date.now(), ...(w ? { w } : {}) }, ...(P.art || [])].slice(0, 12);
   for (let i = 0; i < 6; i++) { try { localStorage.setItem(KEY2, JSON.stringify(ROOT)); return true; } catch (e) { P.art.pop(); } }
   return false;
 }
 function screenDrawMenu() {
   newScreen();
-  const art = P.art || [];
-  const st = shell('Рисовалка', `<div class="cards draw-menu">
+  const st = shell('Рисовалка', `${FUN.showHTML()}
+    <h2 class="sec-h">Рисуем</h2>
+    <div class="cards draw-menu">
+      <button class="card" data-m="free" style="--bg:var(--t-yellow)">${pic('🎨')}<span>Чистый лист</span></button>
+      <button class="card" data-m="magic" style="--bg:var(--t-blue)">${pic('🔮')}<span>Волшебный узор</span></button>
+      <button class="card" data-m="task" style="--bg:var(--t-lilac)">${pic('📝')}<span>Нарисуй по заданию</span>${P.best['draw-task'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
+      <button class="card" data-m="color" style="--bg:var(--t-pink)">${pic('🖍️')}<span>Раскраски</span></button>
+      <button class="card" data-m="dots" style="--bg:var(--t-green)">${pic('🔢')}<span>Точки по порядку</span>${P.best.dots ? `<i class="done">${ICON.star}</i>` : ''}</button>
+    </div>
+    <h2 class="sec-h">С буквами и цифрами</h2>
+    <div class="cards draw-menu">
       <button class="card" data-m="code-col" style="--bg:var(--t-peach)"><span class="ico-letters"><b class="L" style="color:#FF4D4D">${esc(PAL_WORDS[0][0])}</b><b class="L" style="color:#E0A800">${esc(PAL_WORDS[2][0])}</b></span><span>Буква — цвет</span>${P.best['code-col'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-colw" style="--bg:var(--t-green)">${pic('📖')}<span>Прочитай цвет</span>${P.best['code-colw'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-abc" style="--bg:var(--t-pink)"><span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b></span><span>Раскрась по буквам</span>${P.best['code-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-syl" style="--bg:var(--t-yellow)"><span class="ico-letters"><b class="L c">Р</b><b class="L v">А</b></span><span>Раскрась по слогам</span>${P.best['code-syl'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-math" style="--bg:var(--t-blue)"><span class="ico-num">2+3</span><span>Раскрась по примерам</span>${P.best['code-math'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="dots-abc" style="--bg:var(--t-mint)">${pic('🔤')}<span>Точки по алфавиту</span>${P.best['dots-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
-      <button class="card" data-m="dots" style="--bg:var(--t-green)">${pic('🔢')}<span>Точки по порядку</span>${P.best.dots ? `<i class="done">${ICON.star}</i>` : ''}</button>
-      <button class="card" data-m="task" style="--bg:var(--t-lilac)">${pic('📝')}<span>Нарисуй по заданию</span>${P.best['draw-task'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
-      <button class="card" data-m="magic" style="--bg:var(--t-blue)">${pic('🔮')}<span>Волшебный узор</span></button>
-      <button class="card" data-m="color" style="--bg:var(--t-pink)">${pic('🖍️')}<span>Раскраски</span></button>
-      <button class="card" data-m="free" style="--bg:var(--t-yellow)">${pic('🎨')}<span>Чистый лист</span></button>
-    </div>
-    <h2 class="sec-h">Мои рисунки</h2>
-    ${art.length ? `<div class="gallery">${art.map(a => `<img src="${a.d}" alt="Рисунок">`).join('')}</div>` : '<p class="lead">Здесь будут твои рисунки. Когда закончишь рисовать, нажми «Готово».</p>'}`);
-  talk('Что будем рисовать? Точки по порядку, рисунок по заданию, волшебный узор или раскраску?');
+    </div>`);
+  talk((P.art || []).length ? 'Твоя выставка! Нажми на рисунок, чтобы посмотреть. Или нарисуем новый?' : 'Что будем рисовать? Чистый лист, волшебный узор или раскраску?');
   st.onclick = e => {
+    if (FUN.showClick(e)) return;
     const c = e.target.closest('[data-m]'); if (!c) return; sfx.pop();
     const m = c.dataset.m;
     if (m === 'dots') screenDots(); else if (m === 'dots-abc') screenDots(0, dotDeck(), true); else if (m.startsWith('code-')) screenCodeColor(m.slice(5)); else if (m === 'color') screenColorMenu(); else screenPaint({ mode: m });
@@ -5892,7 +5959,7 @@ function screenColorMenu() {
   // ballet pages in their own group: first for a child who likes ballet or dance
   const bal = PAGES.filter(p => BALLET_PAGES.includes(p)), rest = PAGES.filter(p => !BALLET_PAGES.includes(p));
   const likes = P.settings.likes || [], groups = [['Балет', bal], ['Ещё раскраски', rest]];
-  if (!likes.some(l => l === 'ballet' || l === 'dance')) groups.reverse();
+  if (!likes.some(l => l === 'ballet' || l === 'dance')) { groups.reverse(); groups[0][0] = 'Зверята и игрушки'; }
   const st = shell('Раскраски', groups.map(([h, ps]) => `<h2 class="sec-h">${h}</h2><div class="cards">${ps.map(card).join('')}</div>`).join(''), { back: screenDrawMenu });
   talk('Выбери картинку, которую будешь раскрашивать.');
   st.onclick = e => { const c = e.target.closest('.page'); if (c) { sfx.pop(); screenPaint({ mode: 'color', page: c.dataset.p }); } };
@@ -5952,7 +6019,7 @@ function screenPaint(opts = {}) {
       e.preventDefault();
       if (el.getAttribute('fill') === 'none' || (dark(el) && !el.style.fill)) return;
       undo.push({ el, prev: el.style.fill }); if (undo.length > 40) undo.shift();
-      el.style.fill = color; sfx.pop();
+      el.style.fill = color; sfx.pop(); FUN.splash(e.clientX, e.clientY, color);
     });
   }
   const used = new Set();
@@ -5999,7 +6066,7 @@ function screenPaint(opts = {}) {
   }
   cB.addEventListener('pointerdown', e => {
     e.preventDefault(); const p = pt(e);
-    if (tool === 'fill') { pushUndo(); fillAt(Math.floor(p.x), Math.floor(p.y)); sfx.pop(); return; }
+    if (tool === 'fill') { pushUndo(); fillAt(Math.floor(p.x), Math.floor(p.y)); sfx.pop(); FUN.splash(e.clientX, e.clientY, color); return; }
     pushUndo(); drawing = true; last = p;
     try { cB.setPointerCapture(e.pointerId); } catch (x) {}
     line(p, { x: p.x + .1, y: p.y + .1 });
@@ -6024,6 +6091,7 @@ function screenPaint(opts = {}) {
   $('#clear').onclick = () => { pushUndo(); xB.clearRect(0, 0, cB.width, cB.height); $$('#svgPage [style]').forEach(x => { x.style.fill = ''; }); sfx.whoosh(.3, .15); };
   const t0 = performance.now();
   const ink = () => { try { const w = cB.width, h = cB.height, d = xB.getImageData(0, 0, w, h).data; let n = 0, all = 0; for (let y = 0; y < h; y += 6) for (let x = 0; x < w; x += 6) { all++; if (d[(y * w + x) * 4 + 3] > 40) n++; } return n / all; } catch (e) { return 1; } };
+  let artPic = null;
   $('#done').onclick = async () => {
     sfx.pop();
     if (TK) {
@@ -6036,18 +6104,18 @@ function screenPaint(opts = {}) {
       try {
         const tw = 480, th = Math.round(tw * cB.height / cB.width), c = document.createElement('canvas'), x = c.getContext('2d');
         c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color') { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
-        saveArt(c.toDataURL('image/jpeg', .75));
+        artPic = c.toDataURL('image/jpeg', .75); saveArt(artPic, TK ? TK.w : '');
       } catch (err) {}
     }
     if (TK) {
       await talk(G(`Какой рисунок! Расскажи, что ты нарисовала. Скажи: я нарисовала ${TK.w}.`, `Какой рисунок! Расскажи, что ты нарисовал. Скажи: я нарисовал ${TK.w}.`)); if (t !== tok) return;
       await askSaid(G('Я сказала!', 'Я сказал!'), { expect: TK.w }); if (t !== tok) return;
       if (opts.done) opts.done();
-      finish({ key: taskObj ? 'draw-hol' : 'draw-task', stars: 3, line: 'Рисунок по заданию теперь в альбоме!', again: () => screenPaint(taskObj ? opts : { mode: 'task' }), menu: opts.back || screenDrawMenu });
+      finish({ key: taskObj ? 'draw-hol' : 'draw-task', stars: 3, pic: artPic, line: 'Рисунок по заданию теперь на твоей выставке!', again: () => screenPaint(taskObj ? opts : { mode: 'task' }), menu: opts.back || screenDrawMenu });
       return;
     }
-    finish({ key: mode === 'write' ? 'write' : mode === 'color' ? 'color' : mode === 'magic' ? 'magic' : 'draw', stars: 1,
-      line: mode === 'write' ? 'Красивая буква!' : 'Какая красота! Рисунок теперь в альбоме.',
+    finish({ key: mode === 'write' ? 'write' : mode === 'color' ? 'color' : mode === 'magic' ? 'magic' : 'draw', stars: 1, pic: artPic,
+      line: mode === 'write' ? 'Красивая буква!' : 'Какая красота! Рисунок теперь на твоей выставке.',
       again: () => screenPaint({ mode, page, li }), next: mode === 'write' ? () => screenPaint({ mode, li: (li + 1) % ABC.length }) : null, menu: back });
   };
   if (mode === 'write') {
@@ -13752,12 +13820,13 @@ function screenMuseum(tab = 'day', arg = null) {
       const x = pool[(n * 7919) % pool.length];
       box._list = pool;
       box.innerHTML = `<button class="art-day art-th" data-q="${x.q}"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"></button><h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p>
-        <p class="art-cnt">👀 Ты посмотрел${G('а', '')} ${my.seen.length} из ${P2.length} картин</p>`;
+        <p class="art-cnt">👀 Ты посмотрел${G('а', '')} ${my.seen.length} из ${P2.length} картин · 🎟️ ${(my.stamps || []).length} ${plural((my.stamps || []).length, ['штамп', 'штампа', 'штампов'])}</p>`;
       talk(`Картина дня: «${x.t}». Нажми на картину, чтобы рассмотреть её и послушать рассказ.`);
     } else if (tab === 'how') {
       const d = new Date(), n = Math.floor(d.getTime() / 864e5 - d.getTimezoneOffset() / 1440), pool = Q() ? P2 : P2.slice(0, 300), k0 = (n * 7919) % pool.length;
       const x = (arg && P2.find(p => p.q === arg)) || pool[k0], k = pool.indexOf(x), next = pool[((k < 0 ? k0 : k) + 1) % pool.length], tr = ART.tours[x.q];
       if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+      later(() => FUN.stamp(x), 900);
       box.innerHTML = `<button class="ag-pic" id="agPic" aria-label="Открыть картину целиком"><img id="agImg" src="${artImg(x.f, 960)}" alt="${esc(x.t)}"><span class="ag-ring" id="agRing" hidden></span></button>
         <h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p>
         <div class="og-btns"><button class="big" id="artTry">👀 Рассмотри по шагам</button><button class="big ghost" id="agNext">Другая картина ›</button></div>
@@ -13782,7 +13851,7 @@ function screenMuseum(tab = 'day', arg = null) {
       ARTISTS.one(box, P2, arg);
     } else if (tab === 'my') {
       const list = my.likes.map(q => P2.find(x => x.q === q)).filter(Boolean); box._list = list;
-      box.innerHTML = list.length ? `<h2 class="art-h">❤️ Мой музей: ${list.length}</h2>${artThumbs(list)}` : '<p class="lead">Здесь будут картины, которые тебе понравились. Нажимай ❤️ под картиной.</p>';
+      box.innerHTML = FUN.passportHTML() + (list.length ? `<h2 class="art-h">❤️ Мой музей: ${list.length}</h2>${artThumbs(list)}` : '<p class="lead">Здесь будут картины, которые тебе понравились. Нажимай ❤️ под картиной.</p>');
       talk(list.length ? 'Твой музей! Здесь картины, которые тебе понравились.' : 'Нажимай на сердечко под картиной, и она попадёт в твой музей.');
     }
   }, () => { if (t === tok) $('#artBox').innerHTML = '<p class="lead">Чтобы открыть музей, нужен интернет. Попробуй ещё раз, когда он появится.</p>'; });
@@ -13820,6 +13889,7 @@ function artFull(x, onBack) {
 function screenArtView(x, list, back) {
   const t = newScreen(), my = artMy(), tr = ART.tours[x.q], nt = ART.notes[x.q];
   if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+  later(() => FUN.stamp(x), 900);
   const k = list.indexOf(x), prev = list[(k - 1 + list.length) % list.length], next = list[(k + 1) % list.length];
   const liked = () => my.likes.includes(x.q);
   shell('Музей мира', `<div class="art art-v">
@@ -14012,7 +14082,7 @@ function screenArtQuiz() {
       const b = e.target.closest('[data-a]'); if (!b || busy) return; busy = true;
       const box = $('#aqBox'), right = b.dataset.a === box._ok, x = box._x;
       b.classList.add(right ? 'ok' : 'no');
-      if (right) { ok++; $('#aqOk').textContent = ok; sfx.good(); await talk(`Верно! «${x.t}». ${x.a || ''}`); }
+      if (right) { ok++; $('#aqOk').textContent = ok; sfx.good(); FUN.cheer(b); await talk(`Верно! «${x.t}». ${x.a || ''}`); }
       else { sfx.oops(); box.querySelectorAll('[data-a]').forEach(c => { if (c.dataset.a === box._ok) c.classList.add('ok'); }); await talk(`Это «${x.t}». ${x.a ? 'Автор: ' + x.a + '.' : ''} ${artMus(x) ? 'Музей: ' + artMus(x) + '.' : ''}`); }
       if (t !== tok) return;
       const my = artMy(); if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
@@ -14287,7 +14357,8 @@ const COMPOSERS = [
     f: ['Его «Колыбельную» поют малышам по всему миру.', 'Мальчиком он играл на пианино в портовом городе Гамбурге, чтобы помочь семье.', 'Брамс очень любил детей и, говорят, носил в карманах конфеты, чтобы их угощать.'] }
 ];
 const compOf = tid => COMPOSERS.find(c => c.tunes.includes(tid));
-const portrait = (c, w = 330) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(c.img)}?width=${w}`;
+// the portraits live on our own site (Wikimedia answers 429 and they vanished); `img` names the Commons file they came from
+const portrait = c => `${SITE_ROOT}img/learn/cmp-${c.id}.webp`;
 // the little synth: piano, strings, organ; everything stops with the screen
 let CPLAY = null;
 function compStop() { if (CPLAY) { CPLAY.stop = true; CPLAY.nodes.forEach(n => { try { n.stop(); } catch (e) {} }); CPLAY = null; } }
@@ -14448,7 +14519,7 @@ function screenGuessComposer() {
   $('#gcOpts').onclick = async e => {
     const b = e.target.closest('[data-c]'); if (!b || busy) return; busy = true; compStop();
     const right = b.dataset.c === cur.c.id; b.classList.add(right ? 'ok' : 'no');
-    if (right) { ok++; $('#gcOk').textContent = ok; sfx.good(); } else { sfx.oops(); $$('#gcOpts [data-c]').forEach(x => { if (x.dataset.c === cur.c.id) x.classList.add('ok'); }); }
+    if (right) { ok++; $('#gcOk').textContent = ok; sfx.good(); FUN.cheer(b); } else { sfx.oops(); $$('#gcOpts [data-c]').forEach(x => { if (x.dataset.c === cur.c.id) x.classList.add('ok'); }); }
     await talk(`${right ? 'Верно!' : 'Это'} ${cur.c.n}: «${CTUNES[cur.tid].n}».`); if (t !== tok) return;
     n++;
     if (n >= 5) finish({ key: 'guess-composer', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: `Угадано ${ok} из 5! У тебя музыкальный слух.`, again: screenGuessComposer, menu: screenComposers });
@@ -15620,7 +15691,7 @@ function artMusList(box, D, P2) {
   const home = famCountries();
   const ms = Object.keys(cnt).filter(k => D.m[k] && (cnt[k] >= 3 || home.includes(musCC(k)))).sort((a, b) => cnt[b] - cnt[a]);
   const row = k => { const top = P2.find(x => x.m === k), city = musCity(k);
-    return `<button class="art-row" data-mus="${k}" data-s="${esc((D.m[k] + ' ' + city).toLowerCase())}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(D.m[k])}</b><small>${city ? `${FLAG(musCC(k))} ${esc(city)} · ` : ''}${cnt[k]} ${plural(cnt[k], ['картина', 'картины', 'картин'])}</small></span></button>`; };
+    return `<button class="art-row" data-mus="${k}" data-s="${esc((D.m[k] + ' ' + city).toLowerCase())}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(D.m[k])}${(artMy().stamps || []).includes(k) ? ' 🎟️' : ''}</b><small>${city ? `${FLAG(musCC(k))} ${esc(city)} · ` : ''}${cnt[k]} ${plural(cnt[k], ['картина', 'картины', 'картин'])}</small></span></button>`; };
   const mine = ms.filter(k => home.includes(musCC(k))), rest = ms.filter(k => !mine.includes(k));
   box.innerHTML = `<input class="art-find" id="musFind" type="search" placeholder="🔎 Найти музей или город" autocomplete="off">
     ${mine.length ? `<h2 class="art-h mus-h">🏠 Музеи наших стран</h2><div class="art-list">${mine.map(row).join('')}</div><h2 class="art-h mus-h">🌍 Все музеи мира</h2>` : ''}
@@ -15737,7 +15808,7 @@ function screenTF({ title, key, items, back, again, n = 6 }) {
   $('#tfB').onclick = e => {
     const b = e.target.closest('[data-v]'); if (!b || busy) return; busy = true;
     const q = qs[k], right = (b.dataset.v === '1') === q.t;
-    if (right) { ok++; sfx.good(); } else tone(300, .2, 'sine', .13, 0, 210);
+    if (right) { ok++; sfx.good(); FUN.cheer(b); } else tone(300, .2, 'sine', .13, 0, 210);
     b.classList.add(right ? 'ok' : 'no'); $$('#tfB button').forEach(x => { x.disabled = true; });
     const w = `${right ? 'Верно!' : 'Не угадал' + G('а', '') + '!'} ${q.t ? 'Это правда.' : 'Это выдумка.'} ${q.w}`;
     $('#tfW').textContent = w; $('#tfW').hidden = false; $('#tfNext').hidden = false; talk(w);
@@ -15845,7 +15916,7 @@ function tripWords(lg) {
   $('#twO').onclick = e => {
     const b = e.target.closest('[data-m]'); if (!b || busy) return; busy = true;
     const q = qs[k], right = b.dataset.m === q.id;
-    if (right) { ok++; sfx.good(); } else tone(300, .2, 'sine', .13, 0, 210);
+    if (right) { ok++; sfx.good(); FUN.cheer(b); } else tone(300, .2, 'sine', .13, 0, 210);
     $$('#twO .pick-b').forEach(x => { x.disabled = true; if (x.dataset.m === q.id) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
     $('#twW').textContent = `${q.w} — ${q.m} (${q.hint})`; $('#twW').hidden = false; $('#twNext').hidden = false;
   };
@@ -20754,7 +20825,7 @@ const CBOX = (() => {
         talk(miss >= 2 ? `Подсказка: это ${c.n}.` : 'Не он. Послушай ещё и попробуй снова!');
         return;
       }
-      done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good();
+      done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good(); FUN.cheer(b);
       win(true);
     };
     // «Не знаю»: the answer and the story; the card comes too (learning is the point), without the star
@@ -21385,6 +21456,86 @@ const MUSIC = (() => {
   return { full, composer, stop, has: t => !!REC[t] };
 })();
 /* THEMES-END */
+/* FUN-BEGIN */
+/* ---------- «Творим» more fun (the owner: «Сделай все игры более интересными и привлекательными»): the child's
+   drawings hang in gold frames on «Моя выставка» (tap one — it opens big with a little plaque), a finished drawing shows
+   itself framed on the win screen, paint splashes where the colour pours, the xylophone plays back the child's own
+   «концерт» with applause, and the museum stamps a «музейный паспорт» for every museum whose painting the child
+   looked at. ---------- */
+const FUN = (() => {
+  const frameHTML = (src, cls = '') => `<div class="fun-frame ${cls}"><img src="${src}" alt="Рисунок"></div>`;
+  const art = () => P.art || [];
+  function showHTML() {
+    const a = art();
+    return `<h2 class="sec-h">🖼️ Моя выставка</h2><div class="fun-show">${a.map((x, i) => `<button class="fun-th" data-art="${i}" aria-label="Рисунок">${frameHTML(x.d)}</button>`).join('')}${a.length < 3 ? `<button class="fun-th fun-empty" data-m="free" aria-label="Нарисовать"><div class="fun-frame"><span>➕🎨</span></div></button>` : ''}</div>${a.length ? '' : '<p class="muted fun-hint">Нарисуй картину — и она повиснет здесь в золотой рамке!</p>'}`;
+  }
+  const day = at => { try { return new Date(at).toLocaleDateString(LOC, { day: 'numeric', month: 'long' }); } catch (e) { return ''; } };
+  const PRAISE = ['Какие яркие цвета!', 'Настоящая картина для музея!', 'Мне очень нравится! Ты художник!', 'Красота! Повесим её на самое видное место.', 'Вот это да! Сразу хочется рассматривать.'];
+  function view(i) {
+    const a = art(); if (!a[i]) return;
+    const ov = document.createElement('div'); ov.className = 'fun-view'; ov.setAttribute('role', 'dialog');
+    const draw = () => {
+      const x = a[i];
+      ov.innerHTML = `<div class="fun-wall">${frameHTML(x.d, 'fun-big')}<p class="fun-plaque"><b>${esc(P.settings.name || '')}</b>${x.w ? ` · «${esc(cap(x.w))}»` : ''}<br><small>${esc(day(x.at))}</small></p></div>
+        ${a.length > 1 ? `<button class="av-arr l" data-v="-1" aria-label="Предыдущий">‹</button><button class="av-arr r" data-v="1" aria-label="Следующий">›</button>` : ''}
+        <p class="fun-n">${i + 1} / ${a.length}</p>
+        <button class="big fun-close" data-v="x">⬅ Назад</button>`;
+    };
+    draw(); document.body.append(ov); sfx.magic();
+    const prevBack = NAV_BACK, close = () => { if (!ov.isConnected) return; sfx.pop(); ov.remove(); NAV_BACK = prevBack; };
+    navEnter(close);
+    ov.onclick = e => {
+      const b = e.target.closest('[data-v]'); if (!b) return;
+      if (b.dataset.v === 'x') { close(); return; }
+      i = (i + +b.dataset.v + a.length) % a.length; sfx.tick(); draw(); talk(pickOne(PRAISE));
+    };
+    talk(pickOne(PRAISE));
+  }
+  function showClick(e) {
+    const b = e.target.closest('.fun-th[data-art]'); if (!b) return false;
+    sfx.pop(); view(+b.dataset.art); return true;
+  }
+  // a splash of paint where the colour pours
+  function splash(x, y, c) {
+    const B = document.createElement('div'); B.className = 'fun-splash'; B.style.left = x + 'px'; B.style.top = y + 'px';
+    for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + Math.random() * .4, d = 22 + Math.random() * 26, s = document.createElement('i'); s.style.setProperty('--x', Math.cos(a) * d + 'px'); s.style.setProperty('--y', Math.sin(a) * d + 'px'); s.style.background = c === 'rainbow' ? `hsl(${i * 45},90%,60%)` : c; B.append(s); }
+    document.body.append(B); setTimeout(() => B.remove(), 700);
+  }
+  // stars fly out of a right answer
+  function cheer(el) { if (!el) return; const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 7); }
+  // applause: many soft claps of noise
+  function applause(d = 1.8) {
+    if (!P.settings.sfx || MIC.live) return; const a = ac(); if (!a) return;
+    MIC.quietUntil = Math.max(MIC.quietUntil, performance.now() + d * 1000 + 300);
+    for (let i = 0; i < 46; i++) {
+      const t = a.currentTime + Math.random() * d, s = noiseSrc(a), f = a.createBiquadFilter(), g = a.createGain(), v = .16 * (1 - (t - a.currentTime) / d * .7);
+      f.type = 'bandpass'; f.Q.value = 1.4; f.frequency.value = 900 + Math.random() * 1600;
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .06);
+      s.connect(f); f.connect(g); g.connect(a.destination); s.start(t, Math.random()); s.stop(t + .08);
+    }
+  }
+  // the museum passport: a stamp for each museum whose painting the child looked at
+  function stamp(x) {
+    const my = artMy(); my.stamps = my.stamps || [];
+    if (!x || !x.m || !artMus(x) || my.stamps.includes(x.m)) return;
+    my.stamps.push(x.m); save();
+    const el = document.createElement('div'); el.className = 'fun-stamp-fly';
+    el.innerHTML = stampHTML(x.m) + `<b>Новый штамп в паспорте!</b>`;
+    document.body.append(el); later(() => { tone(140, .18, 'sine', .3); tone(90, .22, 'triangle', .2); }, 250); setTimeout(() => el.remove(), 2600);
+  }
+  const SC = ['#C8324B', '#2D6CDF', '#2E9B5A', '#8C4FD6', '#D2691E', '#1F8A8A'];
+  function stampHTML(k) {
+    const n = artMus({ m: k }) || '', city = musCity(k), cc = musCC(k);
+    const c = SC[[...k].reduce((s, ch) => s + ch.charCodeAt(0), 0) % SC.length];
+    return `<div class="fun-stamp" style="--c:${c}"><span>🏛️</span><b>${esc(n)}</b>${city ? `<small>${cc ? FLAG(cc) + ' ' : ''}${esc(city)}</small>` : ''}</div>`;
+  }
+  function passportHTML() {
+    const st = (artMy().stamps || []).filter(k => artMus({ m: k }));
+    return `<h2 class="art-h">🎟️ Мой музейный паспорт: ${st.length}</h2>${st.length ? `<div class="fun-pass">${st.map(stampHTML).join('')}</div>` : '<p class="lead">Открой картину из любого музея — и в паспорте появится штамп этого музея.</p>'}`;
+  }
+  return { frameHTML, showHTML, showClick, view, splash, cheer, applause, stamp, passportHTML };
+})();
+/* FUN-END */
 /* LAYOUT-BEGIN */
 /* ---------- the home tabs split by meaning (the owner: «Короче говоря, сделай логические разделения»): each tile in one
    tab. Books, audio tales and every game whose aim is letters and reading (the colourings that teach letters too) —
