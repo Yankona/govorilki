@@ -36,7 +36,8 @@ def walk(x):
         if re.search('[а-яё]', x, re.I): corpus.add(x)
     elif isinstance(x, list): [walk(y) for y in x]
     elif isinstance(x, dict): [walk(y) for y in x.values()]
-for f in glob.glob(SITE + '/art/*-ru.json') + glob.glob(SITE + '/trips/*-ru.json'): walk(json.load(open(f, encoding='utf-8')))
+# the audio tales (tales/*.json, Russian only) are read aloud too
+for f in glob.glob(SITE + '/art/*-ru.json') + glob.glob(SITE + '/trips/*-ru.json') + glob.glob(SITE + '/tales/*.json'): walk(json.load(open(f, encoding='utf-8')))
 save(T + '/corpus.json', sorted(corpus))
 subprocess.run(['node', B + '/say_norm.js', T + '/corpus.json', T + '/sents.json'], check=True)
 SENTS = json.load(open(T + '/sents.json', encoding='utf-8'))
