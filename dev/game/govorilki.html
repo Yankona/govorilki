@@ -3254,14 +3254,14 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
   --bg:#F6F3EE; --surface:#FFFFFF; --accent:var(--tiger); --accent-deep:var(--tiger-deep); --ok:#2FA865; --warn:#F2B630;
   --sky:#F6F3EE; --ink-soft:#6B6585;
   --t-blue:#E6EDF8; --t-green:#E6F1E2; --t-peach:#FBECE0; --t-lilac:#EEE9F7; --t-pink:#F8E8EC; --t-yellow:#FAF1D9; --t-mint:#E1F1EA;
-  --tint:var(--surface); --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
+  --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
   --sh-1:0 1px 2px rgba(42,35,70,.06),0 3px 10px rgba(42,35,70,.06); --sh-2:0 2px 4px rgba(42,35,70,.07),0 8px 22px rgba(42,35,70,.08);
   --r-card:22px; --r-chip:999px;
   --fs-h1:26px; --fs-h2:22px; --fs-title:18px; --fs-body:16px; --fs-small:13px;
   --line-strong:rgba(42,35,70,.11);
 }
 .pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
-body.quest{--bg:#141A31;--surface:#20284A;--sky:#141A31;--ink-soft:#A8B0D8;
+body.quest{--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#A8B0D8;
   --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
   --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
   --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
@@ -3272,6 +3272,7 @@ body.quest{background-color:var(--bg)}
 /* one tint per tab on the home tiles */
 .home-t[data-tab="speak"]{--tint:var(--tint-speak)}.home-t[data-tab="learn"]{--tint:var(--tint-learn)}
 .home-t[data-tab="create"]{--tint:var(--tint-create)}.home-t[data-tab="discover"]{--tint:var(--tint-discover)}
+.home-t{--tint:var(--surface)}
 .home-t .tile,.home-t .mini{background:var(--tint)}
 /* tiles: a clear picture and a short name; the second line small and on one line */
 .tile{min-height:156px;border-radius:var(--r-card);padding:14px;gap:6px;box-shadow:var(--sh-1)}
@@ -15814,7 +15815,8 @@ function readFineHTML() {
     const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
     return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ['день', 'дня', 'дней'])} без чтения` : 'Вчера не было чтения'}: −${sum} ⭐</b><small>${done ? 'Сегодня чтение уже есть — молодец!' : 'Почитай сегодня, и завтра звёзды останутся с тобой.'}</small></span>${done ? '' : '<button class="chip" id="rfGo">📖 Читать</button>'}</div>`;
   }
-  if (!done && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Сегодня ещё не читали</b><small>День без чтения стоит ${READ_FINE} звёзд. Одно занятие «Чтение» или книга — и всё в порядке.</small></span><button class="chip" id="rfGo">📖 Читать</button></div>`;
+  // not on the very first day: a new child first meets the game, then its rules
+  if (!done && P.readFrom !== today && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Сегодня ещё не читали</b><small>День без чтения стоит ${READ_FINE} звёзд. Одно занятие «Чтение» или книга — и всё в порядке.</small></span><button class="chip" id="rfGo">📖 Читать</button></div>`;
   return '';
 }
 function bindReadFine(fines) {
