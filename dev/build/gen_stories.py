@@ -6,7 +6,7 @@ B = os.path.dirname(os.path.abspath(__file__))
 import glob
 FILES = sorted(glob.glob(os.path.join(B, '..', 'stories', '*', '*.json')))
 T = os.path.join(B, '..', 'i18n') + '/'
-ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia']
+ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp']
 more = {k: [] for k in ORDER}; stress = {}; ids = set(); warn = []
 for f in FILES:
     d = json.load(open(f, encoding='utf-8'))

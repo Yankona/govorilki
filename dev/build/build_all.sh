@@ -6,6 +6,8 @@ D=$(cd "$(dirname "$0")/.." && pwd)
 T=$D/i18n
 export SITE=$(cd "${SITE:-$D/..}" && pwd)
 cd $D
+# a fresh clone has no node_modules (gitignored): install acorn for the translator once
+[ -d $T/node_modules/acorn-walk ] || (cd $T && npm ci --silent)
 # English is the main page (site/), Russian and Portuguese one folder down; site/en/ stays English for old links
 python3 build/build.py game/govorilki.html $SITE/ru ru
 python3 $T/merge.py         # English, Portuguese: translated batches + i18n/fixed.json → tables/{en,pt}.json, langdata/{en,pt}.json
