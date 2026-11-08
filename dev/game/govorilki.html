@@ -12393,7 +12393,7 @@ async function wiktLookup(word) {
 async function wikiSummary(word) {
   const t = word.charAt(0).toUpperCase() + word.slice(1);
   const d = await wGet(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(t)}`);
-  return d && d.type !== 'disambiguation' && d.extract ? { title: d.title, text: d.extract.split(/(?<=[.!?])\s/).slice(0, 2).join(' '), url: d.content_urls && d.content_urls.mobile && d.content_urls.mobile.page } : null;
+  return d && d.type !== 'disambiguation' && d.extract ? { title: d.title, text: plainText(d.extract).split(/(?<=[.!?])\s/).slice(0, 2).join(' '), url: d.content_urls && d.content_urls.mobile && d.content_urls.mobile.page } : null;
 }
 const dictLinks = w => LANG === 'en' ? [
   ['Cambridge Dictionary', `https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(w)}`],
@@ -14847,7 +14847,7 @@ function artLightText(a) {
 async function artWiki(x, n) {
   if (!x.w) return '';
   if (ART_WIKI[x.q] === undefined) ART_WIKI[x.q] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(x.w)}`)
-    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
   const s = await ART_WIKI[x.q];
   return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, n).join(' ') : '';
 }
@@ -15096,7 +15096,7 @@ const MONTHS_IN = ['в январе', 'в феврале', 'в марте', 'в 
 async function tripWiki(name) {
   try {
     const d = await fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`).then(r => r.ok ? r.json() : null);
-    const s = d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
+    const s = d && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
     return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, 4) : [];
   } catch (e) { return []; }
 }
@@ -15494,9 +15494,17 @@ function sayMark(sent) {
     return f ? sayForm(t, f) : t;
   });
 }
+// what no voice should read aloud: Wikipedia's formulas ({\displaystyle …}), HTML tags, backslashes and other markup,
+// which the voices say as «бэкслэш», «слэш», «нижнее подчёркивание»; a slash becomes a pause (и/или → и или)
+function plainText(t) {
+  let s = String(t == null ? '' : t), prev;
+  do { prev = s; s = s.replace(/\{\\displaystyle[^{}]*(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}[^{}]*)*\}/g, ' '); } while (s !== prev);
+  return s.replace(/\[\d+\]/g, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\\[a-zA-Z]+/g, ' ').replace(/[\\{}_^|~\[\]]/g, ' ')
+    .replace(/\s*\/\s*/g, ' ').replace(/\s+([,.;:!?…])/g, '$1').replace(/[ \t]+/g, ' ').trim();
+}
 // the text a voice gets: numbers in words, then sentence by sentence with the stress marks
 function sayParts(text) {
-  const t = IS_RU ? ruNums(text) : String(text);
+  const t = IS_RU ? ruNums(plainText(text)) : plainText(text);
   return (t.match(/[^.!?…]+[.!?…]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => IS_RU ? sayMark(x) : x);
 }
 // for Piper: the corrected phonemes of the marked words; words of the family not yet worked out go to the voice to work out
@@ -19876,7 +19884,7 @@ const ARTISTS = (() => {
   function about(a) {
     const w = ART.data && ART.data.aw && ART.data.aw[a]; if (!w) return Promise.resolve('');
     if (WIKI[a] === undefined) WIKI[a] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(w.replace(/ /g, '_'))}`)
-      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
     return WIKI[a].then(s => s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, Q() ? 3 : 2).join(' ') : '');
   }
   function list(box, P2) {
