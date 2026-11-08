@@ -381,6 +381,18 @@ b.r{color:var(--berry)}
 @media (min-width:700px){.lt-opts{grid-template-columns:repeat(4,minmax(0,1fr));width:min(100%,640px)}.lt-opts.three{grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,520px)}}
 .lt-b{aspect-ratio:1.1;border:0;border-radius:26px;background:var(--paper);font:900 clamp(56px,13vmin,90px)/1 var(--f-body);cursor:pointer;box-shadow:0 7px 0 var(--line-strong)}
 .lt-b.right{background:var(--t-green);box-shadow:0 7px 0 var(--leaf)}
+.lq{flex:none;display:flex;align-items:center;gap:8px;width:min(100%,520px);padding:6px 10px;border-radius:24px;background:var(--paper);box-shadow:0 4px 0 var(--line)}
+.lq .pic{font-size:34px;line-height:1}.lq-who,.lq-goal{flex:none;display:grid;place-items:center}
+.lq-row{flex:1;display:flex;justify-content:space-between;gap:4px;min-width:0}
+.lq-s{position:relative;flex:1;max-width:44px;aspect-ratio:1;border-radius:50%;border:3px dashed var(--line-strong);display:grid;place-items:center;font-style:normal}
+.lq-s .pic{font-size:22px}.lq-s.on{border:3px solid var(--sun);background:var(--t-yellow);animation:popin .35s}
+.lq-s b{position:absolute;right:-7px;bottom:-7px;min-width:18px;padding:0 3px;border-radius:9px;background:var(--paper);color:var(--ink);font:900 13px/18px var(--f-body);text-align:center;box-shadow:0 1px 0 var(--line-strong)}
+.lq.won .lq-goal{animation:lqwin .8s 2}.lq.won{box-shadow:0 4px 0 var(--sun),0 0 0 3px var(--sun)}
+@keyframes lqwin{50%{transform:scale(1.5) rotate(-10deg)}}
+.lq-fly{position:fixed;z-index:60;width:44px;height:44px;display:grid;place-items:center;font-size:34px;pointer-events:none}
+.lq-hint{animation:lqhint 1.1s ease-in-out infinite;outline:4px solid var(--sun);outline-offset:3px}
+@keyframes lqhint{50%{outline-offset:9px;outline-color:rgba(255,200,58,.45)}}
+@media (prefers-reduced-motion:reduce){.lq-hint,.lq.won .lq-goal{animation:none}}
 .fl-pic{width:clamp(150px,32vmin,230px);aspect-ratio:1;border:0;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:clamp(90px,20vmin,150px);cursor:pointer;box-shadow:0 6px 0 var(--line)}
 .merge{position:relative;display:flex;align-items:flex-end;width:min(100%,560px);height:clamp(190px,36vmin,280px);margin-top:8px}
 .mg-l{position:relative;z-index:2;flex:none;width:clamp(96px,22vmin,140px);aspect-ratio:1;border:0;border-radius:24px;background:var(--paper);display:grid;place-items:center;font:900 clamp(60px,14vmin,96px)/1 var(--f-body);box-shadow:0 7px 0 var(--line-strong)}
@@ -779,6 +791,7 @@ b.r{color:var(--berry)}
 .lab{display:flex;flex-direction:column;gap:10px;width:100%;max-width:660px;margin:0 auto;padding-bottom:20px}
 .big.now{background:var(--leaf);box-shadow:0 7px 0 #1E8A4F,0 0 0 6px rgba(47,168,101,.35)}
 .lab-tabs,.lab-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.lab-tabs .chip{min-height:46px}
 .lab-tabs .chip.sel,.lab-row .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
 .lab-box{position:relative;width:100%;height:min(52vh,380px);border-radius:24px;overflow:hidden;box-shadow:0 5px 0 var(--line-strong)}
 .lab-box canvas{width:100%;height:100%;display:block}
@@ -1073,7 +1086,7 @@ b.r{color:var(--berry)}
 .lf-o.right{opacity:1;background:var(--t-green);box-shadow:0 4px 0 var(--leaf),inset 0 0 0 3px var(--leaf)}
 .lf-o.hint{animation:bdBlink .7s ease-in-out infinite}
 .lf-crown{width:54px;height:54px}
-.pl-hub .card small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.pl-hub{max-width:680px;margin-inline:auto}.pl-hub .card small{font:700 13px var(--f-body);color:var(--ink-soft)}
 .pl-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .pl-btns .big{flex:1 1 90px;font-size:17px;padding:12px 8px}
 .pl-btns .big.want{box-shadow:0 5px 0 #D39A00,inset 0 0 0 3px var(--sun)}
@@ -1457,6 +1470,9 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .sprint{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
 .sp-hud{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:center;font:800 18px var(--f-body)}
 .sp-hud b{font-size:28px;color:var(--plum)}
+.st-row{display:flex;gap:6px;justify-content:center}.st-row i{width:24px;height:24px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line-strong);display:grid;place-items:center;font:900 15px/1 var(--f-body);font-style:normal;color:#E59A00}
+.st-row i.ok{background:var(--t-yellow);box-shadow:inset 0 0 0 2px var(--sun);animation:popin .3s}.st-row i.no{color:var(--ink-soft)}
+.sprint.st.playing .st-ladder,.sprint.st.playing .st-name{display:none}
 .sp-q{min-width:min(100%,360px);padding:16px 22px;border-radius:24px;background:var(--paper);text-align:center;font:900 clamp(36px,9vw,54px)/1 var(--f-body);font-variant-numeric:tabular-nums;box-shadow:0 5px 0 var(--line)}
 .sp-q span{color:var(--plum)}
 .keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
@@ -1913,6 +1929,7 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .tl-read h2{margin:0;font:700 28px/1.15 var(--f-display);text-align:center}.tl-by{margin:4px 0 14px;text-align:center;color:var(--ink-soft);font:700 15px var(--f-body)}
 .tl-text{font:600 21px/1.6 var(--f-body)}.tl-p{margin:0 0 14px}.tl-p.verse{white-space:pre-line}
 .tl-text .ss{cursor:pointer}
+.tl-mode{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 6px}.tl-cr{margin:0 0 14px;text-align:center;color:var(--ink-soft);font:600 14px/1.4 var(--f-body)}
 .tl-end{text-align:center;font:700 24px var(--f-display);color:var(--ink-soft)}
 .tl-ctl{position:sticky;bottom:8px;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;width:max-content;max-width:100%;margin:-96px auto 0;padding:8px 12px;border-radius:999px;background:var(--paper);box-shadow:0 6px 18px rgba(42,35,70,.25)}
 .tl-ctl .big{min-height:52px;min-width:150px;padding:8px 18px;font-size:20px}
@@ -1988,6 +2005,7 @@ body.quest .fam-ok{color:#7BE0A0}
 .sb-b.up{margin-bottom:56px}.sb-b.up.on{transform:translateY(56px)}
 .sb-b.lo:not(.on){transform:translateY(64px)}
 .sb.sm .sb-rod{height:220px}
+@media (max-height:780px){#sbBox{zoom:.76}.soro{gap:8px}}
 .st .st-ladder{display:flex;gap:6px;overflow-x:auto;width:100%;padding:4px 2px 8px;scrollbar-width:none}
 .st-step{flex:none;width:40px;height:40px;border:0;border-radius:12px;background:var(--paper);font:900 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
 .st-step.done{background:var(--t-green)}.st-step.sel{outline:3px solid var(--sea)}.st-step[disabled]{opacity:.45}
@@ -2728,6 +2746,39 @@ body.pv-on #app{padding-top:52px}
 .tv-o.yes{background:var(--t-mint);box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}.tv-o.no{opacity:.5}
 .tv-ans{padding:12px 14px;border-radius:18px;background:var(--t-yellow);color:var(--ink)}.tv-ans p{margin:0 0 8px;font:700 17px/1.45 var(--f-body)}
 /* TRAVEL-CSS-END */
+/* DISCOVER-FUN-CSS: «А знаешь ли ты?», the story list's progress and next story, the picture while listening, stamps, a line of time */
+.lr-prog{display:flex;align-items:center;gap:10px;width:100%;max-width:680px;margin:0 auto 10px}
+.lr-pb{flex:1;height:12px;border-radius:8px;background:var(--line);overflow:hidden}.lr-pb i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#FFC83A,#FF8A2A);transition:width .6s}
+.lr-prog b{display:flex;align-items:center;gap:4px;font:800 16px var(--f-body);color:var(--ink);white-space:nowrap}.lr-prog .star-i{width:22px;height:22px}
+.lr-hook{display:flex;align-items:center;gap:12px;width:100%;max-width:680px;margin:4px auto 12px;padding:12px 14px;border:0;border-radius:22px;background:var(--bg,var(--t-yellow));color:var(--ink);text-align:left;cursor:pointer;box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px rgba(255,255,255,.55);font:inherit}
+.lr-hook:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line-strong)}
+.lr-he{flex:none;display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.7)}.lr-he .pic{font-size:40px;animation:hkWob 2.6s ease-in-out infinite}
+.lr-ht{display:flex;flex-direction:column;gap:2px;min-width:0}.lr-ht small{font:800 14px var(--f-body);color:var(--tiger-deep,#C2561A)}
+.lr-ht b{font:800 18px/1.25 var(--f-body)}.lr-ht i{font:700 13px/1.3 var(--f-body);font-style:normal;color:var(--ink-soft)}
+.home-t .lr-hook{margin:0 0 10px}
+@keyframes hkWob{0%,100%{transform:rotate(0)}20%{transform:rotate(-9deg) scale(1.06)}40%{transform:rotate(7deg)}60%{transform:rotate(0)}}
+.story-c.nx{box-shadow:0 0 0 4px #FFC83A,0 6px 0 var(--line-strong)}
+.nx-b{position:absolute;z-index:2;top:-8px;left:-6px;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--tiger,#FF8A2A);color:#fff;font:900 16px/1 var(--f-body);font-style:normal;box-shadow:0 3px 0 rgba(0,0,0,.18);animation:pulse 1.4s ease-in-out infinite}
+.si-w{display:block;overflow:hidden;border-radius:20px;box-shadow:0 4px 0 var(--line)}.si-w img{display:block;box-shadow:none;border-radius:0;transform-origin:50% 45%}
+.story.reading .si-w img{animation:kenB 18s ease-in-out infinite alternate}
+.story.reading .story-e .pic{display:inline-block;animation:bob 1.6s ease-in-out infinite}
+@keyframes kenB{from{transform:scale(1)}to{transform:scale(1.12) translate(-2%,-2%)}}
+.st-next{display:flex;align-items:center;gap:12px;width:100%;padding:10px;border:0;border-radius:20px;background:var(--sky,#E6F4FF);color:var(--ink);text-align:left;cursor:pointer;box-shadow:inset 0 0 0 3px var(--line);font:inherit}
+.st-nt{flex:none;display:grid;place-items:center;width:72px;height:72px;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.6)}.st-nt img{width:100%;height:100%;object-fit:cover}.st-nt .pic{font-size:44px}
+.st-nx{display:flex;flex-direction:column;gap:2px;min-width:0}.st-nx small{font:800 13px var(--f-body);color:var(--ink-soft)}.st-nx b{font:800 17px/1.2 var(--f-body)}.st-nx i{font:700 14px/1.3 var(--f-body);font-style:normal;color:var(--ink-soft)}
+.tv-s{border:0;padding:0;cursor:pointer}
+.tv-s.on{background:#FFF8E6;box-shadow:inset 0 0 0 2.5px #C8553D,0 0 0 2px #FFF8E6,0 0 0 3.5px rgba(200,85,61,.45);transform:rotate(var(--r,-8deg))}
+.tv-s.new{animation:stamp .7s cubic-bezier(.3,1.6,.5,1) both,glow 1.6s .7s ease-in-out 2}
+.tv-stbox{width:min(100%,420px);background:var(--paper);border-radius:32px;padding:22px 20px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;animation:popin .4s}
+.tv-stt{margin:0;font:800 22px/1.25 var(--f-body);color:var(--ink)}.tv-stn{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+.tv-stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:200px;height:200px;border-radius:50%;background:#FFF8E6;color:#B5432F;box-shadow:inset 0 0 0 7px #FFF8E6,inset 0 0 0 10px #C8553D,inset 0 0 0 16px #FFF8E6,inset 0 0 0 18px #C8553D;animation:stamp .6s .25s cubic-bezier(.3,1.6,.5,1) both}
+.tv-stf{font:400 70px/1 var(--f-emoji)}.tv-stamp b{max-width:150px;font:900 17px/1.15 var(--f-body);text-transform:uppercase;letter-spacing:.04em}.tv-stamp small{font:800 13px var(--f-body);opacity:.8}
+.tl-line{position:relative;height:74px;margin:0 6px 8px}
+.tl-line>i{position:absolute;left:0;right:0;top:30px;height:6px;border-radius:4px;background:linear-gradient(90deg,#B38B5D,#FFC83A 70%,#3D8BFD)}
+.tl-line>span{position:absolute;top:8px;transform:translateX(-50%);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--paper);font:400 28px/1 var(--f-emoji);box-shadow:0 3px 0 var(--line-strong);animation:popin .45s both}
+.tl-line>span.old{box-shadow:0 0 0 4px #2FA865,0 3px 0 var(--line-strong)}
+.tl-line small{position:absolute;bottom:0;font:800 13px var(--f-body);color:var(--ink-soft)}.tl-a{left:0}.tl-b{right:0}
+@media (prefers-reduced-motion:reduce){.story.reading .si-w img,.story.reading .story-e .pic,.nx-b,.lr-he .pic,.tv-s.new{animation:none}}
 /* GLOBE-CSS */
 .gl{max-width:1040px;width:100%;margin:0 auto;display:grid;gap:12px;align-items:start}
 @media (min-width:860px){.gl{grid-template-columns:minmax(0,1fr) 340px}}
@@ -2747,6 +2798,7 @@ body.pv-on #app{padding-top:52px}
 .gl-info>.gl-t{min-height:46px}.gl-t .gl-ai{width:36px;height:36px;flex:none}.gl-ac>span{font:400 26px/1 var(--f-emoji)}.gl-ac .gl-ai{width:28px;height:28px}
 .gl-modes .chip.sel{background:var(--t-yellow)}
 .tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,var(--t-blue),var(--t-mint));color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
+.tv-mem{position:relative;background:linear-gradient(135deg,var(--t-lilac),var(--t-pink))}.tv-memst{position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:2px;font:800 15px var(--f-body);font-style:normal;color:var(--ink)}.tv-memst .star-i{width:20px;height:20px}
 .tv-globe>span:first-child{font:400 46px/1 var(--f-emoji)}.tv-globe>span+span{display:flex;flex-direction:column;gap:2px}.tv-globe b{font:800 20px/1.2 var(--f-body)}.tv-globe small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
 /* GLOBE-CSS-END */
 /* SAID-CSS */
@@ -3036,8 +3088,50 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 .pd-chest.ready .pd-lb{background:var(--sun);box-shadow:0 5px 0 #D99A00}.pd-chest.ready .pd-lb small{color:var(--ink)}
 @keyframes pdWob{0%,60%,100%{transform:rotate(0)}15%{transform:rotate(-7deg)}30%{transform:rotate(7deg)}45%{transform:rotate(-4deg)}}
 .pd-mine{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+/* a lesson begun today: a golden arc round its step shows how much of it is done */
+.pd-c.pd-part:before{content:'';position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(var(--sun) var(--p),transparent 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));pointer-events:none}
 .pd-win .pd-box{font-size:84px;line-height:1;display:grid;place-items:center;animation:pdWob 1s ease-in-out 2}.pd-win .pd-box svg{width:120px;height:120px}
 .pd-main{display:flex;flex-direction:column;gap:22px;min-width:0}
+/* FUNSPEAK: the lesson's trail of stones and a round's pips under a game's header; stars and hearts from the friend */
+.gstrip{display:flex;flex-direction:column;align-items:center;gap:5px;padding-bottom:2px}
+.gstrip:empty{display:none}
+.ls-trail{display:flex;align-items:center;width:100%;max-width:560px;padding:4px 2px 6px}
+.ls-st{flex:0 1 30px;min-width:20px;aspect-ratio:1;position:relative;border-radius:50%;display:grid;place-items:center;background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
+.ls-st .star-i{width:20px;height:20px}
+.ls-st.done{background:#2FA865;box-shadow:0 3px 0 #1F7F48}
+.ls-st.done .star-i{width:18px;height:18px}
+.ls-i{display:grid;place-items:center;font-size:18px;line-height:1;opacity:.85;max-width:24px;max-height:24px;overflow:hidden}
+.ls-i svg,.ls-i .pic{max-width:22px;max-height:22px}
+.ls-i .ico-letters,.ls-i .syl-ico,.ls-i .ico-num,.ls-i .ico-prof,.ls-i .mini-crate{font-size:7px;max-width:22px;overflow:hidden}
+.ls-st.now{flex:0 0 40px;background:var(--tiger);box-shadow:0 3px 0 var(--tiger-deep)}
+.ls-fr{position:absolute;left:-4px;right:-4px;bottom:4px;height:44px;animation:lsHop 1.8s ease-in-out infinite}
+.ls-fr svg{width:100%;height:100%;display:block}
+.ls-st.goal{background:none;box-shadow:none;font-size:20px}
+.ls-d{flex:1;min-width:3px;height:4px;margin:0 2px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 4px,transparent 4px 8px)}
+.ls-st.done+.ls-d{background:#2FA865}
+@keyframes lsHop{0%,70%,100%{transform:translateY(0)}80%{transform:translateY(-7px)}90%{transform:translateY(0)}}
+/* on the result card: bigger, the step just done pops, the friend lands on the next stone */
+.winbox .ls-trail{max-width:100%;padding:18px 0 8px}
+.winbox .ls-st{flex-basis:34px}.winbox .ls-st.now{flex-basis:44px}.winbox .ls-i{font-size:21px}
+.ls-win .ls-st.just{animation:popin .6s .2s both}
+.ls-win .ls-st.now .ls-fr{animation:lsLand .7s .5s both,lsHop 1.8s 1.3s ease-in-out infinite}
+@keyframes lsLand{0%{transform:translate(-34px,-26px) scale(.8);opacity:.2}60%{transform:translate(0,-10px) scale(1.05);opacity:1}100%{transform:translate(0,0)}}
+.surp{display:flex;align-items:center;gap:12px;width:100%;border:0;cursor:pointer;margin:0 0 10px;padding:10px 16px;min-height:64px;border-radius:22px;background:linear-gradient(100deg,#FFE7A3,#FFC6DA 55%,#D9CCFF);color:#2A2346;box-shadow:0 5px 0 rgba(0,0,0,.12);font:inherit;text-align:left}
+.surp b{flex:1;font:900 20px/1.15 var(--f-body)}
+.surp-g{font-size:38px;line-height:1;animation:pdWob 2.4s ease-in-out infinite}
+.surp-q{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;font:900 24px/1 var(--f-body);color:var(--plum,#8C6CF2)}
+.surp:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.12)}
+@media (prefers-reduced-motion:reduce){.surp-g{animation:none}}
+.rd{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;max-width:100%}
+.rd i{width:11px;height:11px;border-radius:50%;background:var(--line-strong);transition:background .3s}
+.rd i.on{background:var(--sun);box-shadow:0 0 0 2px #E59A00 inset}
+.rd i.cur{background:var(--paper);box-shadow:0 0 0 3px var(--tiger) inset}
+.rd i.pop{animation:popin .45s}
+.fsp{position:fixed;width:0;height:0;pointer-events:none;z-index:62}
+.fsp span{position:absolute;left:-12px;top:-12px;font-size:22px;line-height:1;opacity:0;animation:fspUp 1.1s ease-out forwards}
+@keyframes fspUp{0%{transform:translate(0,0) scale(.4);opacity:0}25%{opacity:1}100%{transform:translate(var(--x),var(--y)) scale(1);opacity:0}}
+@media (max-height:700px){.ls-trail{padding:2px 2px 3px}.ls-st{flex-basis:24px}.ls-st.now{flex-basis:34px}.ls-fr{height:38px}}
+@media (prefers-reduced-motion:reduce){.ls-fr,.ls-win .ls-st.just,.ls-win .ls-st.now .ls-fr,.rd i.pop{animation:none!important}}
 .pd-side,.rail-logo{display:none}
 @media (prefers-reduced-motion:reduce){.pd-n.now .pd-c:after,.pd-chest.ready .pd-c,.pd-win .pd-box{animation:none}}
 @media (max-width:360px){.pd{--pd-c:72px}.pd-lb b{font-size:16px}.pd-say{font-size:16px}.pd-hero .pd-fr.guide-ryz{width:68px;height:68px}}
@@ -3145,6 +3239,42 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .cmp .pw-head{width:auto;aspect-ratio:auto;flex:none}.pinwheel .pw-head{display:block}
 .pick-b.sel,.wr-opt.yes,.wr-ans{color:var(--ink)}
 /* FIX-END */
+/* FUN-CSS: «Моя выставка», the framed drawing on the win screen, paint splashes, the xylophone concert, museum stamps */
+.fun-frame{padding:9px;background:linear-gradient(135deg,#F6D77E,#C8902A 28%,#F8E39A 50%,#B47A16 74%,#E9C25F);border-radius:8px;box-shadow:0 6px 0 rgba(42,35,70,.18),inset 0 0 0 2px #8A5A0A,inset 0 0 0 5px rgba(255,255,255,.35)}
+.fun-frame img{display:block;width:100%;height:auto;background:#FFFFFF;border:7px solid #FFF8E6;box-shadow:inset 0 0 0 1px #D9B45A}
+.fun-show{flex:none;display:flex;gap:16px;overflow-x:auto;width:100%;padding:8px 4px 14px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.fun-th{flex:0 0 132px;border:0;background:none;padding:0;cursor:pointer;scroll-snap-align:start;transform:rotate(-1.5deg);transition:transform .15s}
+.fun-th:nth-child(even){transform:rotate(1.5deg)}
+.fun-th:active{transform:scale(.95)}
+.fun-empty .fun-frame{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:none;border:4px dashed var(--line-strong);box-shadow:none}
+.fun-empty span{font-size:34px;opacity:.75}
+.fun-hint{align-self:flex-start;margin:-4px 0 4px}
+.winbox .win-art{width:min(230px,62vw);transform:rotate(-2deg);animation:popin .6s ease-out both}
+.fun-view{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 30%,#FFF7E8,#F1DFC2 70%,#E3CBA4);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));animation:popin .35s ease-out}
+.fun-wall{display:flex;flex-direction:column;align-items:center;gap:12px;width:min(100%,520px)}
+.fun-big{width:min(100%,62vh)}
+.fun-plaque{margin:0;padding:6px 18px;background:linear-gradient(#F8E7B0,#E2C477);border-radius:8px;box-shadow:0 3px 0 #B48A2E;font:700 18px/1.25 var(--f-body);color:#4A3510;text-align:center}
+.fun-plaque small{font-weight:600;font-size:14px}
+.fun-n{margin:0;font:800 15px var(--f-body);color:#6B5A3A}
+.fun-view .av-arr{position:fixed;top:42%}
+.fun-view .av-arr.l{left:8px}.fun-view .av-arr.r{right:8px}
+.fun-close{min-width:180px}
+.fun-splash{position:fixed;width:0;height:0;pointer-events:none;z-index:61}
+.fun-splash i{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.7);animation:fly .55s ease-out forwards}
+.xy-con{display:flex;align-items:center;justify-content:center;gap:10px;width:100%}
+.xy-con .big{animation:bob 1.6s ease-in-out infinite}
+.fun-stamp{--c:#C8324B;width:132px;height:132px;flex:none;border-radius:50%;border:4px double var(--c);color:var(--c);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:12px;text-align:center;background:rgba(255,255,255,.6);transform:rotate(-8deg)}
+.fun-stamp:nth-child(even){transform:rotate(6deg)}
+.fun-stamp span{font-size:24px;line-height:1}
+.fun-stamp b{font:800 12px/1.15 var(--f-body);text-transform:uppercase;letter-spacing:.02em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.fun-stamp small{font:700 11px/1.1 var(--f-body)}
+.fun-pass{flex:none;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%;padding:8px 0 14px}
+.fun-stamp-fly{position:fixed;left:50%;top:38%;z-index:65;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;animation:stampin 2.6s ease-out forwards}
+.fun-stamp-fly .fun-stamp{width:150px;height:150px;background:#FFFDF6;box-shadow:0 8px 24px rgba(42,35,70,.25)}
+.fun-stamp-fly>b{padding:6px 14px;border-radius:14px;background:var(--paper);font:800 16px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
+@keyframes stampin{0%{transform:translate(-50%,-50%) scale(2.4);opacity:0}14%{transform:translate(-50%,-50%) scale(.92);opacity:1}20%{transform:translate(-50%,-50%) scale(1)}82%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-90%) scale(.6);opacity:0}}
+@media (prefers-reduced-motion:reduce){.xy-con .big,.fun-stamp-fly,.winbox .win-art{animation:none}.fun-stamp-fly{transform:translate(-50%,-50%)}}
+/* FUN-CSS-END */
 </style>
 </head>
 <body>
@@ -3380,7 +3510,7 @@ function lessonPlan(id) {
 }
 const nextStepOf = id => { const t = todayState(); return lessonPlan(id).find(s => !t.done[id].includes(s.key)) || null; };
 let ACTIVE = null;
-function startLesson(id) { ACTIVE = id; const s = nextStepOf(id); if (s) s.run(); }
+function startLesson(id) { ACTIVE = id; const s = nextStepOf(id); if (!s) return; if (lessonIntroWanted(id)) lessonIntro(id, () => s.run()); else s.run(); }
 
 
 /* ---------- voice ---------- */
@@ -3396,11 +3526,11 @@ function pickVoice() {
   } catch (e) {}
 }
 if ('speechSynthesis' in window) { pickVoice(); try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) {} }
-let sayTok = 0, SAYING = 0, HUSHED = 0;
+let sayTok = 0, SAYING = 0, HUSHED = 0, TALE_AUDIO = null;   // TALE_AUDIO: the actor's recording of an audio tale, stopped with every hush()
 const MIC = { stream: null, an: null, buf: null, denied: false, pending: null, timer: 0, keep: 0, live: false, quietUntil: 0, voiceUntil: 0 };
 const GUARD = { until: 0, run: 0, miss: 0, free: false };
 const pace = () => P.settings.rate < 1 ? 1.5 : 1.25;
-function hush() { sayTok++; HUSHED = sayTok; SAYING = 0; elStop(); try { speechSynthesis.cancel(); } catch (e) {} }
+function hush() { sayTok++; HUSHED = sayTok; SAYING = 0; elStop(); if (TALE_AUDIO) { try { TALE_AUDIO.pause(); } catch (e) {} } try { speechSynthesis.cancel(); } catch (e) {} }
 function speakOne(text, rate) {
   return new Promise(res => {
     let done = false;
@@ -3441,6 +3571,8 @@ async function sayRun(text, { rate = 1 } = {}) {
       return;
     } catch (e) { if (e && (e.status === 401 || e.status === 402 || e.status === 403)) elBroken = true; if (my !== sayTok) return; }
   }
+  // a voice saved on the phone takes a few seconds to wake up: the line waits for it instead of going to the phone's voice
+  if (P.settings.voice && piperOn() && !PIPER.isReady && PIPER.local && PIPER.ready) { await Promise.race([PIPER.ready, wait(6000)]); if (my !== sayTok) return; }
   // the app's own voice once it has loaded; the next sentence is made while this one plays
   if (P.settings.voice && piperOn() && PIPER.isReady) {
     try {
@@ -4086,6 +4218,7 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
       <h1>${title}</h1>
       <div class="starpill" title="Estrelas">${ICON.star}<b id="starN">${P.stars}</b></div>
     </header>
+    <div class="gstrip" id="gstrip">${lessonTrailHTML()}</div>
     <main class="stage" id="stage">${raw ? body : gx(body)}</main>
     ${guide ? `<div class="guide"><button class="guide-ryz" id="ryzBtn" aria-label="Ouvir outra vez">${friendSVG()}</button><p class="bubble" id="bubble"></p><button class="ibtn" id="replay" aria-label="Repetir">${ICON.speaker}</button></div>` : ''}
   </div>`;
@@ -4251,7 +4384,7 @@ function bindHold(btn, on, off) {
 }
 const nameBit = () => P.settings.name ? ', ' + P.settings.name : '';
 
-function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
+function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra = '', nextLabel = '', pic = null }) {
   const fair = fairStars(key, stars); stars = fair.s;
   const before = stickerCount(), xp0 = P.stars;
   P.stars += stars; P.best[key] = Math.max(P.best[key] || 0, stars); P.plays[key] = (P.plays[key] || 0) + 1;
@@ -4278,19 +4411,19 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
   const ns = ACTIVE ? nextStepOf(ACTIVE) : null;
   if (ns) { next = () => ns.run(); menu = null; }
   const plan = ACTIVE ? lessonPlan(ACTIVE) : [], doneN = ACTIVE ? td.done[ACTIVE].length : 0;
-  const title = pickOne(Q() ? ["Em cheio!", "Brutal!", "Conseguiste!", "Excelente!"] : ["Muito bem!", "Hurra!", "Super!", "Ótimo!"]), bv = battleVerdict(key, ev);
+  const title = pickOne(Q() ? ["Em cheio!", "Brutal!", "Conseguiste!", "Excelente!", "Lindo!", "Brutal!"] : ["Muito bem!", "Hurra!", "Super!", "Ótimo!", "Bravo!", "Maravilha!", "És uma estrela!"]), bv = battleVerdict(key, ev);
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="${title}">
-    <div class="ryz-w">${friendSVG()}</div>
+    ${pic ? FUN.frameHTML(pic, 'win-art') : `<div class="ryz-w">${friendSVG()}</div>`}
     <h2>${title}</h2>
     <div class="win-stars">${Array.from({ length: stars }, (_, i) => `<span style="animation-delay:${.25 + i * .25}s">${ICON.star}</span>`).join('')}</div>
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
     ${fair.note ? `<p class="fair-note">${fair.note}</p>` : ''}
     ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Novo autocolante!</div>` : ''}
-    ${ns ? `<p class="day-prog">${LS()[ACTIVE].name}: ${doneN} de ${plan.length}</p>` : ''}
+    ${ns ? lessonTrailHTML(key) : extra}
     <div class="win-btns win-main">
       ${again ? `<button class="big ${next ? 'ghost' : ''}" data-a="again">↻ Outra vez</button>` : ''}
-      ${next ? "<button class=\"big\" data-a=\"next\">Seguinte</button>" : ''}
+      ${next ? `<button class="big" data-a="next">${ns || !nextLabel ? "Seguinte" : esc(nextLabel)}</button>` : ''}
     </div>
     <div class="win-btns"><button class="big ghost" data-a="menu">${menu ? "Voltar à lista" : "Início"}</button></div></div>`;
   $('.screen').append(ov);
@@ -4517,7 +4650,7 @@ function goHome() {
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
-  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
+  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !x.inside && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
   const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
@@ -4570,8 +4703,10 @@ function goHome() {
     ${GUEST ? `<button class="link-btn" id="guestBtn">${GRAND[GUEST.who].e} Voltar à página de ${esc(lcFirst(decl(GUEST.name, GUEST.she)[1]))}</button>` : ''}`;
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
+    // «Учимся» for the little ones: letters and numbers first, chess after them (fun-learn)
+    if (tab === 'learn' && !Q()) list.sort((x, y) => T.g.indexOf(x.g) - T.g.indexOf(y.g));
     body = `<div class="tab-head">${tabIco(T.e)}<h1>${nm(T.n)}</h1><div class="starpill" title="Estrelas">${ICON.star}<b id="starN">${P.stars}</b></div></div>
-      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Onde vive a nossa família</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Calendário e festas</b></button></div>` : ''}
+      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Onde vive a nossa família</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Calendário e festas</b></button></div>${hookHTML(learnHook(discHookKs()))}` : tab === 'speak' ? `<button class="surp" id="surpBtn"><span class="surp-g">🎁</span><b>Jogo surpresa</b><span class="surp-q">?</span></button>` : ''}
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || "<p class=\"lead\">Ainda não há nada aqui. Os jogos ligam-se em «Para adultos» → «Interesses e jogos».</p>"}`;
   }
@@ -4601,7 +4736,12 @@ function goHome() {
   on('#invChip', () => { sfx.pop(); screenInviteWho(); });
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
+  hookBind(app, homeLeave);
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
+  // «Говорим»: a surprise game of this tab for a child who does not know what to pick (not the grown-ups' pages)
+  on('#surpBtn', () => { const T = HOME_TABS.find(x => x.id === tab), gs = tabGames(T).filter(g => !g.info && !['swab', 'speech-check', 'kpop-pick', 'kpop-color'].includes(g.id)), last = (P.recent || [])[0];
+    const pool = gs.filter(g => !last || g.id !== last[3]), g = pickOne(pool.length ? pool : gs); if (!g) return;
+    sfx.magic(); const b = $('#surpBtn'); if (b) hopEl(b); homeLeave(); later(() => g.go(), 350); });
   on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
   on('#whoChip', () => { sfx.pop(); homeLeave(); screenWho(); });
@@ -4949,6 +5089,7 @@ function screenMagic() {
   const diffIdx = (a, b) => [...a].findIndex((ch, i) => ch !== b[i]);
   const letters = (w, di) => `<span class="word">${[...w].map((ch, i) => `<span class="${i === di ? 'diff' : ''}">${ch.toUpperCase()}</span>`).join('')}</span>`;
   function show() {
+    roundProg(k, rounds.length);
     busy = false;
     const [a, ae, bw] = rounds[k];
     src.innerHTML = `${pic(ae)}${letters(a, -1)}`; dst.innerHTML = '<span class="q">?</span>'; dst.classList.remove('poof');
@@ -4984,6 +5125,7 @@ function screenBooks() {
     <div class="books" id="books">${sy.map((s, i) => `<button class="book" data-s="${s}" style="--c:${BOOKC[i]}" aria-label="Livro ${s}"><span class="pages"></span><b>${s}</b><span class="got"></span></button>`).join('')}</div></div>`);
   const cslot = $('#cslot'), books = $('#books');
   function show() {
+    roundProg(k, deck.length);
     busy = false; miss = 0; $$('.book').forEach(b => b.classList.remove('glow'));
     const [, w, e] = deck[k];
     cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-7, 7).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
@@ -5062,6 +5204,7 @@ function screenHouse(S0 = RU('Р')) {
     <p class="house-word" id="hword"></p>`);
   const attic = $('#attic'), wnds = $('#wnds'), hword = $('#hword');
   function show() {
+    roundProg(k, deck.length);
     busy = false; miss = 0;
     const [w, e] = deck[k];
     attic.innerHTML = pic(e); hword.textContent = '';
@@ -5174,28 +5317,76 @@ function screenABC() {
   };
   $('#abcGrid').onclick = e => { const b = e.target.closest('.abc-k'); if (b) { sfx.pop(); show(+b.dataset.i, true); } };
 }
+/* LEARNQ-BEGIN */
+/* ---------- a little story for the short letter and number games (the owner: «сделай все игры более интересными»):
+   a strip on top — a hedgehog fills a basket with apples, a train gets its carriages, a rocket flies to a planet.
+   Every right answer flies into the next place (with what was found written on it), the notes climb up the scale,
+   the goal jumps at the end. A new story every round. Two misses on one task: the right answer softly glows, so a
+   small child never gets stuck. The level grows with the plays of that game (smooth difficulty). ---------- */
+const LQ = (() => {
+  const ST = [
+    { who: '🦔', it: '🍎', goal: '🧺', s: "O ouriço está a apanhar maçãs para o inverno. Cada resposta põe uma maçã no cesto!", end: "O cesto está cheio! O ouriço diz obrigado." },
+    { who: '🐿️', it: '🌰', goal: '🌳', s: "O esquilo está a esconder nozes no buraco da árvore. Ajuda-o!", end: "Todas as nozes estão no buraco da árvore!" },
+    { who: '🚀', it: '⭐', goal: '🪐', s: "O foguetão voa para um planeta. Cada resposta é uma estrela pelo caminho!", end: "O foguetão chegou ao planeta!" },
+    { who: '🐝', it: '🌼', goal: '🍯', s: "A abelha voa para fazer mel. Cada resposta é uma flor nova!", end: "A abelha fez o mel!" },
+    { who: '🐧', it: '🐟', goal: '🧊', s: "O pinguinzinho está a apanhar peixes. Ajuda-o!", end: "O pinguinzinho está cheio e contente!" },
+    { who: '🌱', it: '💧', goal: '🌻', s: "Vamos regar a flor: cada resposta é uma gota de água!", end: "Cresceu um girassol!" }
+  ];
+  const TRAIN = { who: '🚂', it: '🚃', goal: '🏁', s: "Vamos montar um comboio: cada sílaba é uma carruagem nova!", end: "O comboio está pronto — pouca-terra!" };
+  const NOTES = [523, 587, 659, 698, 784, 880, 988, 1047];
+  // the level of a game: 0 on the first plays, 1 after two, 2 after five (and the youngest stay a step lower)
+  const lv = key => { const n = (P.plays || {})[key] || 0, a = P.settings.age || 0; return Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0)); };
+  function start(key, n = 6, train = false) {
+    let last = (P.lqLast || {})[key];
+    const pool = ST.filter((x, i) => i !== last), st = train ? TRAIN : pickOne(pool);
+    if (!train) { P.lqLast = P.lqLast || {}; P.lqLast[key] = ST.indexOf(st); }
+    const box = document.createElement('div'); box.className = 'lq'; box.id = 'lq';
+    box.innerHTML = `<span class="lq-who">${pic(st.who)}</span><span class="lq-row">${Array.from({ length: n }, () => '<i class="lq-s"></i>').join('')}</span><span class="lq-goal">${pic(st.goal)}</span>`;
+    const stage = $('#stage'); if (stage) stage.prepend(box);
+    const slots = [...box.querySelectorAll('.lq-s')], who = box.querySelector('.lq-who');
+    let k = 0, miss = 0;
+    return {
+      intro: st.s, end: st.end,
+      // a right answer: the item flies from the button into the next place
+      hit(from, label) {
+        miss = 0; $$('.lq-hint').forEach(x => x.classList.remove('lq-hint'));
+        const s = slots[k]; if (!s) return; const i = k++;
+        const put = () => { s.innerHTML = pic(st.it) + (label != null && label !== '' ? `<b>${esc(String(label))}</b>` : ''); s.classList.add('on'); hopEl(who); tone(NOTES[i % NOTES.length], .16, 'triangle', .1); if (k >= n) { box.classList.add('won'); const r = box.querySelector('.lq-goal').getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 8); } };
+        if (!from || !from.getBoundingClientRect || k >= n) { put(); return; }
+        const a = from.getBoundingClientRect(), f = document.createElement('span');
+        f.className = 'lq-fly'; f.innerHTML = pic(st.it);
+        Object.assign(f.style, { left: a.left + a.width / 2 - 22 + 'px', top: a.top + a.height / 2 - 22 + 'px' });
+        document.body.append(f); fly(f, s).then(put); f.remove();
+      },
+      // a miss: the second one on the same task lights the right answer
+      miss(right) { if (++miss >= 2 && right) right.classList.add('lq-hint'); }
+    };
+  }
+  return { start, lv };
+})();
+/* LEARNQ-END */
 function screenFindLetter() {
-  const t = newScreen(), pool = ABC.filter(a => !RU('ЪЬ').includes(a[0])), deck = sample(pool, 6);
+  const t = newScreen(), pool = ABC.filter(a => !RU('ЪЬ').includes(a[0])), deck = sample(pool, 6), nOpt = LQ.lv('abc-find') ? 4 : 3;
   let k = 0, busy = false;
-  shell("Encontra a letra", `<button class="lt-ask" id="ask"></button><div class="lt-opts" id="opts"></div>`);
-  const ask = $('#ask'), opts = $('#opts');
+  shell("Encontra a letra", `<button class="lt-ask" id="ask"></button><div class="lt-opts${nOpt === 3 ? ' three' : ''}" id="opts"></div>`);
+  const ask = $('#ask'), opts = $('#opts'), q = LQ.start('abc-find', deck.length);
   const askLine = () => `Encontra a letra ${lsay(deck[k][0])}.`;
   function show() {
     busy = false; const [L] = deck[k];
     ask.innerHTML = `${ICON.speaker}<span>Ouve outra vez</span>`;
-    opts.innerHTML = shuffle([L, ...sample(pool.filter(a => a[0] !== L), 3).map(a => a[0])]).map(ch => `<button class="lt-b" data-c="${ch}">${Lspan(ch)}</button>`).join('');
-    talk(k === 0 ? `Ouve a letra e carrega nela. ${askLine()}` : askLine());
+    opts.innerHTML = shuffle([L, ...sample(pool.filter(a => a[0] !== L), nOpt - 1).map(a => a[0])]).map(ch => `<button class="lt-b" data-c="${ch}">${Lspan(ch)}</button>`).join('');
+    talk(k === 0 ? q.intro + ' ' + `Ouve a letra e carrega nela. ${askLine()}` : askLine());
   }
   ask.onclick = () => { if (!busy) talk(askLine()); };
   opts.onclick = async e => {
     const b = e.target.closest('.lt-b'); if (!b || busy) return;
     const [L, w, em] = deck[k];
-    if (b.dataset.c !== L) { wiggle(b); sfx.oops(); talk(`Isso é ${lsay(b.dataset.c)}. ${askLine()}`); return; }
-    busy = true; b.classList.add('right'); sfx.good();
+    if (b.dataset.c !== L) { wiggle(b); sfx.oops(); q.miss(opts.querySelector(`[data-c="${L}"]`)); talk(`Isso é ${lsay(b.dataset.c)}. ${askLine()}`); return; }
+    busy = true; b.classList.add('right'); sfx.good(); q.hit(b, L);
     ask.innerHTML = `<span class="lt-show">${Lspan(L)}${pic(em)}</span><span class="abc-w">${hiLetter(w, L)}</span>`;
     await talk(`Sim! ${IS_RU ? L : cap(lsay(L))}. ${cap(w)}.`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'abc-find', line: "Já sabes as letras!", again: screenFindLetter });
+    if (k >= deck.length) finish({ key: 'abc-find', line: q.end + ' ' + "Já sabes as letras!", again: screenFindLetter });
     else later(show, 300);
   };
   show();
@@ -5204,23 +5395,23 @@ function screenFirstLetter() {
   const t = newScreen(), pool = ABC.filter(a => !LX('ABC_NOT_FIRST', 'ЪЬЫ').includes(a[0])), deck = sample(pool, 6);
   let k = 0, busy = false;
   shell("Primeira letra", `<button class="fl-pic" id="flp" aria-label="Ouvir a palavra"></button><p class="abc-w" id="flw"></p><div class="lt-opts three" id="opts"></div>`);
-  const flp = $('#flp'), flw = $('#flw'), opts = $('#opts');
+  const flp = $('#flp'), flw = $('#flw'), opts = $('#opts'), q = LQ.start('abc-first', deck.length), nOpt = LQ.lv('abc-first') ? 3 : 2;
   function show() {
     busy = false; const [L, w, e] = deck[k];
     flp.innerHTML = pic(e); flw.textContent = '';
-    opts.innerHTML = shuffle([L, ...sample(pool.filter(a => a[0] !== L), 2).map(a => a[0])]).map(ch => `<button class="lt-b" data-c="${ch}">${Lspan(ch)}</button>`).join('');
-    talk(k === 0 ? `Olha para a imagem. A palavra é ${w}. Com que letra começa? Carrega na letra.` : `${cap(w)}. Com que letra começa?`);
+    opts.innerHTML = shuffle([L, ...sample(pool.filter(a => a[0] !== L), nOpt - 1).map(a => a[0])]).map(ch => `<button class="lt-b" data-c="${ch}">${Lspan(ch)}</button>`).join('');
+    talk(k === 0 ? q.intro + ' ' + `Olha para a imagem. A palavra é ${w}. Com que letra começa? Carrega na letra.` : `${cap(w)}. Com que letra começa?`);
   }
   flp.onclick = () => talk(cap(deck[k][1]) + '.');
   opts.onclick = async e => {
     const b = e.target.closest('.lt-b'); if (!b || busy) return;
     const [L, w] = deck[k];
-    if (b.dataset.c !== L) { wiggle(b); sfx.oops(); talk(`Não. Ouve: ${w}.`); return; }
-    busy = true; b.classList.add('right'); sfx.good();
+    if (b.dataset.c !== L) { wiggle(b); sfx.oops(); q.miss(opts.querySelector(`[data-c="${L}"]`)); talk(`Ups, é outra letra. Ouve: ${w}.`); return; }
+    busy = true; b.classList.add('right'); sfx.good(); q.hit(b, L);
     flw.innerHTML = `<b class="hl">${w[0].toUpperCase()}</b>${w.slice(1).toUpperCase()}`;
     await talk(`${cap(w)} começa com a letra ${lsay(L)}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'abc-first', line: "Consegues ouvir a primeira letra!", again: screenFirstLetter });
+    if (k >= deck.length) finish({ key: 'abc-first', line: q.end + ' ' + "Consegues ouvir a primeira letra!", again: screenFirstLetter });
     else later(show, 300);
   };
   show();
@@ -5233,13 +5424,13 @@ function screenMerge() {
   while (deck.length < 6) { const s = M_LIST ? pickOne(M_LIST) : pickOne(M_CONS) + pickOne(M_VOW); if (!M_BAD.includes(s) && !deck.includes(s)) deck.push(s); }
   let k = 0, busy = false;
   shell("Comboios de sílabas", `<div class="merge" id="mg"></div><p class="merge-syl" id="ms"></p>`);
-  const mg = $('#mg'), ms = $('#ms');
+  const mg = $('#mg'), ms = $('#ms'), q = LQ.start('read-merge', deck.length, true);
   function show() {
     busy = false; const s = deck[k];
     mg.classList.remove('joined');
     mg.innerHTML = `<button class="mg-l mg-c" id="mc" aria-label="Letra ${lsay(s[0])}"><span class="mg-loco" aria-hidden="true">🚂</span>${Lspan(s[0])}</button><span class="mg-path" aria-hidden="true"></span><span class="mg-l mg-v" id="mv">${s.length > 2 ? `<b class="L v">${s.slice(1)}</b>` : Lspan(s[1])}</span>`;
     ms.textContent = '';
-    talk(k === 0 ? (LX('M_INTRO', '') ? LX('M_INTRO', '').replace('{0}', lsay(s[0])).replace('{1}', s.slice(1)) : `A letra ${lsay(s[0])} corre para a letra ${lsay(s.slice(1))}. Carrega na letra azul.`) : "Carrega na letra azul.");
+    talk(k === 0 ? q.intro + ' ' + (LX('M_INTRO', '') ? LX('M_INTRO', '').replace('{0}', lsay(s[0])).replace('{1}', s.slice(1)) : `A letra ${lsay(s[0])} corre para a letra ${lsay(s.slice(1))}. Carrega na letra azul.`) : "Carrega na letra azul.");
     $('#mc').onclick = run;
   }
   async function run() {
@@ -5249,11 +5440,11 @@ function screenMerge() {
     mc.classList.add('go'); mc.style.transform = `translate(${vr.left - cr.right + 4}px, ${vr.top - cr.top}px)`; sfx.whoosh(.5, .14);
     if (IS_RU) say(prDraw(s), { rate: .8 });
     await wait(IS_RU ? 2700 : 800); if (t !== tok) return;
-    mg.classList.add('joined'); ms.innerHTML = [...s].map(Lspan).join(''); sfx.pop();
+    mg.classList.add('joined'); ms.innerHTML = [...s].map(Lspan).join(''); sfx.pop(); q.hit(ms, s);
     await talk(IS_RU ? RU(`Повтори протяжно: ${prDraw(s)}`) : `${sylSay(s)}! Repete: ${sylSay(s)}.`); if (t !== tok) return;
     await askSaid(); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'read-merge', line: "Estás a ler sílabas!", again: screenMerge });
+    if (k >= deck.length) finish({ key: 'read-merge', line: q.end + ' ' + "Estás a ler sílabas!", again: screenMerge });
     else show();
   }
   show();
@@ -5269,16 +5460,16 @@ function screenReadWords() {
   const t = newScreen(), deck = sample(RWORDS, 6);
   let k = 0;
   shell("Ler palavras", `<div class="rw-word" id="rw"></div><div class="rw-pic" id="rp"></div>`);
-  const rw = $('#rw'), rp = $('#rp'); chipHint(rw);
+  const rw = $('#rw'), rp = $('#rp'), q = LQ.start('read-words', deck.length); chipHint(rw);
   async function show() {
     const [w] = deck[k];
     rw.innerHTML = wordChips(w); rp.innerHTML = '<span class="mystery">?</span>'; rp.classList.remove('open');
-    await talk(k === 0 ? "Lê a palavra por partes. Se for difícil, carrega numa parte e eu ajudo. Depois carrega no botão amarelo." : "Lê a palavra."); if (t !== tok) return;
+    await talk(k === 0 ? q.intro + ' ' + "Lê a palavra por partes. Se for difícil, carrega numa parte e eu ajudo. Depois carrega no botão amarelo." : "Lê a palavra."); if (t !== tok) return;
     await askSaid("Já li!"); if (t !== tok) return;
-    rp.innerHTML = pic(deck[k][1]); rp.classList.add('open'); sfx.good();
+    rp.innerHTML = pic(deck[k][1]); rp.classList.add('open'); sfx.good(); q.hit(rp);
     await talk(`${cap(wordOf(w))}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'read-words', line: "Já lês palavras por ti!", again: screenReadWords });
+    if (k >= deck.length) finish({ key: 'read-words', line: q.end + ' ' + "Já lês palavras por ti!", again: screenReadWords });
     else later(show, 500);
   }
   show();
@@ -5287,20 +5478,20 @@ function screenReadPick() {
   const t = newScreen(), deck = sample(RWORDS, 6);
   let k = 0, busy = false;
   shell("Lê e encontra", `<div class="rw-word" id="rw"></div><div class="opts" id="opts"></div>`);
-  const rw = $('#rw'), opts = $('#opts'); chipHint(rw);
+  const rw = $('#rw'), opts = $('#opts'), q = LQ.start('read-pick', deck.length); chipHint(rw);
   function show() {
     busy = false; const [w, e] = deck[k];
     rw.innerHTML = wordChips(w);
     opts.innerHTML = shuffle([[e, 1], ...sample(RWORDS.filter(x => x[0] !== w), 2).map(x => [x[1], 0])]).map(([p, ok]) => `<button class="opt" data-ok="${ok}">${pic(p)}</button>`).join('');
-    talk(k === 0 ? "Lê a palavra. Depois carrega na imagem certa." : "Lê e carrega na imagem.");
+    talk(k === 0 ? q.intro + ' ' + "Lê a palavra. Depois carrega na imagem certa." : "Lê e carrega na imagem.");
   }
   opts.onclick = async e => {
     const b = e.target.closest('.opt'); if (!b || busy) return;
-    if (b.dataset.ok !== '1') { wiggle(b); sfx.oops(); talk("Não. Lê outra vez. Podes carregar nas partes da palavra."); return; }
-    busy = true; b.classList.add('right'); sfx.good();
+    if (b.dataset.ok !== '1') { wiggle(b); sfx.oops(); q.miss(opts.querySelector('[data-ok="1"]')); talk("Ups, é outra palavra. Lê outra vez. Podes tocar nas partes da palavra."); return; }
+    busy = true; b.classList.add('right'); sfx.good(); q.hit(b);
     await talk(`${cap(wordOf(deck[k][0]))}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'read-pick', line: "Leste todas as palavras!", again: screenReadPick });
+    if (k >= deck.length) finish({ key: 'read-pick', line: q.end + ' ' + "Leste todas as palavras!", again: screenReadPick });
     else later(show, 400);
   };
   show();
@@ -5313,14 +5504,16 @@ function numOpts(n, lo = 1, hi = 10, cnt = 3) { const s = new Set([n]); let i = 
 const framed = (n, e) => `<div class="frame">${Array.from({ length: n }, (_, i) => `<span class="it" data-i="${i}">${pic(e)}</span>`).join('')}</div>`;
 const numBtns = list => list.map(x => `<button class="num-b" data-n="${x}">${x}</button>`).join('');
 function screenMathCount() {
-  const t = newScreen(), deck = Array.from({ length: 6 }, () => ri(2, 10));
+  const lv = LQ.lv('math-count'), [lo, hi] = [[2, 5], [3, 7], [2, 10]][lv], deck = [];
+  while (deck.length < 6) { const x = ri(lo, hi); if (x !== deck[deck.length - 1]) deck.push(x); }
+  const t = newScreen();
   let k = 0, busy = false, tapped = 0;
   shell("Quantos?", `<div class="m-items" id="mi"></div><div class="num-opts" id="no"></div>`);
-  const mi = $('#mi'), no = $('#no');
+  const mi = $('#mi'), no = $('#no'), q = LQ.start('math-count', deck.length);
   function show() {
     busy = false; tapped = 0; const n = deck[k];
-    mi.innerHTML = framed(n, pickOne(MATH_E)); no.innerHTML = numBtns(numOpts(n));
-    talk(k === 0 ? "Conta as imagens. Toca em cada uma com o dedo e eu vou contando. Depois carrega no número." : "Quantos há aqui? Conta e carrega no número.");
+    mi.innerHTML = framed(n, pickOne(MATH_E)); no.innerHTML = numBtns(numOpts(n, 1, Math.max(hi, 6)));
+    talk(k === 0 ? q.intro + ' ' + "Conta as imagens. Toca em cada uma com o dedo e eu vou contando. Depois carrega no número." : "Quantos há aqui? Conta e carrega no número.");
   }
   mi.onclick = e => {
     const it = e.target.closest('.it'); if (!it || busy || it.classList.contains('cnt')) return;
@@ -5329,91 +5522,91 @@ function screenMathCount() {
   no.onclick = async e => {
     const b = e.target.closest('.num-b'); if (!b || busy) return;
     const n = deck[k];
-    if (+b.dataset.n !== n) { wiggle(b); sfx.oops(); $$('.it', mi).forEach(x => x.classList.remove('cnt')); tapped = 0; talk("Conta outra vez. Toca em cada imagem."); return; }
-    busy = true; b.classList.add('right'); sfx.good();
+    if (+b.dataset.n !== n) { wiggle(b); sfx.oops(); q.miss(no.querySelector(`[data-n="${n}"]`)); $$('.it', mi).forEach(x => x.classList.remove('cnt')); tapped = 0; talk("Conta outra vez. Toca em cada imagem."); return; }
+    busy = true; b.classList.add('right'); sfx.good(); q.hit(b, n);
     $$('.it', mi).forEach((x, i) => { x.classList.add('cnt'); x.dataset.n = i + 1; });
     await talk(`Certo! ${cap(NUM[n])}.`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'math-count', line: "Contas muito bem!", again: screenMathCount });
+    if (k >= deck.length) finish({ key: 'math-count', line: q.end + ' ' + "Contas muito bem!", again: screenMathCount });
     else later(show, 300);
   };
   show();
 }
 function screenMathDigits() {
-  const t = newScreen(), deck = sample(Array.from({ length: 11 }, (_, i) => i), 6);
+  const lv = LQ.lv('math-digits'), top = lv ? 10 : 5, t = newScreen(), deck = sample(Array.from({ length: top + 1 }, (_, i) => i), 6);
   let k = 0, busy = false;
-  shell("Encontra o número", `<button class="lt-ask" id="ask"></button><div class="num-opts four" id="no"></div><div class="dots-row" id="dr"></div>`);
-  const ask = $('#ask'), no = $('#no'), dr = $('#dr');
+  shell("Encontra o número", `<button class="lt-ask" id="ask"></button><div class="num-opts ${lv ? 'four' : ''}" id="no"></div><div class="dots-row" id="dr"></div>`);
+  const ask = $('#ask'), no = $('#no'), dr = $('#dr'), q = LQ.start('math-digits', deck.length);
   const line = () => `Encontra o número ${NUM[deck[k]]}.`;
   function show() {
     busy = false; const n = deck[k];
     ask.innerHTML = `${ICON.speaker}<span>Ouve outra vez</span>`; dr.innerHTML = '';
-    no.innerHTML = numBtns(numOpts(n, 0, 10, 4));
-    talk(k === 0 ? `Ouve e carrega no número. ${line()}` : line());
+    no.innerHTML = numBtns(numOpts(n, 0, top, lv ? 4 : 3));
+    talk(k === 0 ? q.intro + ' ' + `Ouve e carrega no número. ${line()}` : line());
   }
   ask.onclick = () => { if (!busy) talk(line()); };
   no.onclick = async e => {
     const b = e.target.closest('.num-b'); if (!b || busy) return;
     const n = deck[k], x = +b.dataset.n;
-    if (x !== n) { wiggle(b); sfx.oops(); talk(`Isso é ${NUM[x]}. ${line()}`); return; }
-    busy = true; b.classList.add('right'); sfx.good();
+    if (x !== n) { wiggle(b); sfx.oops(); q.miss(no.querySelector(`[data-n="${n}"]`)); talk(`Isso é ${NUM[x]}. ${line()}`); return; }
+    busy = true; b.classList.add('right'); sfx.good(); q.hit(b, n);
     dr.innerHTML = n ? Array.from({ length: n }, () => pic('⭐')).join('') : "<span class=\"muted\">zero é quando não há nada</span>";
     await talk(`${cap(NUM[n])}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'math-digits', line: "Já sabes os números!", again: screenMathDigits });
+    if (k >= deck.length) finish({ key: 'math-digits', line: q.end + ' ' + "Já sabes os números!", again: screenMathDigits });
     else later(show, 500);
   };
   show();
 }
 function screenMathAdd() {
-  const t = newScreen(), deck = [];
-  while (deck.length < 6) { const a = ri(1, 5), b = ri(1, 4); if (a + b <= 9) deck.push([a, b]); }
+  const t = newScreen(), deck = [], top = [5, 7, 9][LQ.lv('math-add')];
+  while (deck.length < 6) { const a = ri(1, 5), b = ri(1, 4); if (a + b <= top) deck.push([a, b]); }
   let k = 0, busy = false, e = '';
   shell("Mais", `<div class="eq" id="eq"></div><div class="num-opts" id="no"></div>`);
-  const eq = $('#eq'), no = $('#no');
+  const eq = $('#eq'), no = $('#no'), q = LQ.start('math-add', deck.length);
   const grp = (n, label) => `<div class="grp"><div class="gi">${Array.from({ length: n }, () => pic(e)).join('')}</div><small>${label}</small></div>`;
   function show() {
     busy = false; const [a, b] = deck[k]; e = pickOne(MATH_E);
     eq.innerHTML = `${grp(a, a)}<span class="op">+</span>${grp(b, b)}<span class="op">=</span><div class="grp q" id="ans">?</div>`;
     no.innerHTML = numBtns(numOpts(a + b, 1, 10));
-    talk(k === 0 ? `Havia ${NUM[a]}. Juntámos ${NUM[b]}. Quantos há agora? Conta todas as imagens e carrega no número.` : `${cap(NUM[a])} mais ${NUM[b]}. Quanto é?`);
+    talk(k === 0 ? q.intro + ' ' + `Havia ${NUM[a]}. Juntámos ${NUM[b]}. Quantos há agora? Conta todas as imagens e carrega no número.` : `${cap(NUM[a])} mais ${NUM[b]}. Quanto é?`);
   }
   no.onclick = async ev => {
     const btn = ev.target.closest('.num-b'); if (!btn || busy) return;
     const [a, b] = deck[k], s = a + b;
-    if (+btn.dataset.n !== s) { wiggle(btn); sfx.oops(); talk("Conta todas as imagens juntas."); return; }
-    busy = true; btn.classList.add('right'); sfx.good();
+    if (+btn.dataset.n !== s) { wiggle(btn); sfx.oops(); q.miss(no.querySelector(`[data-n="${s}"]`)); talk("Conta todas as imagens juntas."); return; }
+    busy = true; btn.classList.add('right'); sfx.good(); q.hit(btn, s);
     $('#ans').outerHTML = grp(s, s);
     await talk(`${cap(NUM[a])} mais ${NUM[b]} dá ${NUM[s]}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'math-add', line: "Sabes somar!", again: screenMathAdd });
+    if (k >= deck.length) finish({ key: 'math-add', line: q.end + ' ' + "Sabes somar!", again: screenMathAdd });
     else later(show, 400);
   };
   show();
 }
 function screenMathCompare() {
-  const t = newScreen(), deck = [];
-  while (deck.length < 6) { const x = ri(1, 9), y = ri(1, 9); if (Math.abs(x - y) >= 1 && x !== y) deck.push([x, y, Math.random() < .5]); }
+  const t = newScreen(), deck = [], gap = [3, 2, 1][LQ.lv('math-compare')];
+  while (deck.length < 6) { const x = ri(1, 9), y = ri(1, 9); if (Math.abs(x - y) >= gap) deck.push([x, y, Math.random() < .5]); }
   let k = 0, busy = false;
   shell("Mais ou menos", `<p class="cmp-q" id="cq"></p><div class="cmp" id="cmp"></div>`);
-  const cq = $('#cq'), cmp = $('#cmp');
+  const cq = $('#cq'), cmp = $('#cmp'), q = LQ.start('math-compare', deck.length);
   function show() {
     busy = false; const [x, y, more] = deck[k], e = pickOne(MATH_E);
     cmp.innerHTML = [x, y].map((n, i) => `<button class="cmp-g" data-i="${i}">${framed(n, e)}<b class="cn"></b></button>`).join('');
     cq.textContent = more ? "Onde há mais?" : "Onde há menos?";
-    talk(k === 0 ? `${more ? "Onde há mais" : "Onde há menos"}? Olha para as duas caixinhas e carrega na certa.` : `${more ? "Onde há mais" : "Onde há menos"}?`);
+    talk(k === 0 ? q.intro + ' ' + `${more ? "Onde há mais" : "Onde há menos"}? Olha para as duas caixinhas e carrega na certa.` : `${more ? "Onde há mais" : "Onde há menos"}?`);
   }
   cmp.onclick = async ev => {
     const g = ev.target.closest('.cmp-g'); if (!g || busy) return;
     const [x, y, more] = deck[k], vals = [x, y], i = +g.dataset.i, j = 1 - i;
     const ok = more ? vals[i] > vals[j] : vals[i] < vals[j];
-    if (!ok) { wiggle(g); sfx.oops(); talk("Conta outra vez. Quantos há aqui e quantos há ali?"); return; }
-    busy = true; g.classList.add('right'); sfx.good();
+    if (!ok) { wiggle(g); sfx.oops(); q.miss(cmp.querySelector(`[data-i="${j}"]`)); talk("Conta outra vez. Quantos há aqui e quantos há ali?"); return; }
+    busy = true; g.classList.add('right'); sfx.good(); q.hit(g, vals[i]);
     $$('.cmp-g .cn', cmp).forEach((c, n) => { c.textContent = vals[n]; });
     const big = Math.max(x, y), small = Math.min(x, y);
     await talk(more ? `Sim! ${cap(NUM[big])} é mais do que ${NUM[small]}.` : `Sim! ${cap(NUM[small])} é menos do que ${NUM[big]}.`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) finish({ key: 'math-compare', line: "Sabes onde há mais e onde há menos!", again: screenMathCompare });
+    if (k >= deck.length) finish({ key: 'math-compare', line: q.end + ' ' + "Sabes onde há mais e onde há menos!", again: screenMathCompare });
     else later(show, 400);
   };
   show();
@@ -5445,7 +5638,7 @@ function screenN100Tens() {
   const deck = shuffle(lv === 0 ? sample([2, 3, 4, 5, 6, 7, 8], 5).concat([10]) : sample([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 6));
   let k = 0, busy = false, cnt = 0, miss = 0;
   shell("Dezenas", `${nLvTag('tens')}<div class="n-rods" id="rods"></div><div class="num-opts" id="no"></div>`);
-  const rods = $('#rods'), no = $('#no');
+  const rods = $('#rods'), no = $('#no'), q = LQ.start('n100-tens', deck.length);
   function opts(n) {
     const near = lv === 0 ? [-3, -2, 2, 3, 4, -4] : [-1, 1, -2, 2, 3, -3], s = new Set([n]);
     for (let i = 0; i < 200 && s.size < (lv === 2 ? 4 : 3); i++) { const x = n + pickOne(near); if (x >= 1 && x <= 10) s.add(x); }
@@ -5455,7 +5648,7 @@ function screenN100Tens() {
     busy = false; cnt = 0; const n = deck[k];
     rods.innerHTML = Array.from({ length: n }, (_, i) => `<button class="n-tap" data-i="${i}">${nRod()}<b></b></button>`).join('');
     no.innerHTML = opts(n);
-    talk(k === 0 ? "Isto são barras de dez. Cada barra tem dez cubinhos. Toca nas barras, uma a uma, e conta de dez em dez: 10, 20, 30… Quantos cubinhos há?" : "Quantos cubinhos há aqui? Toca nas barras e conta de dez em dez.");
+    talk(k === 0 ? q.intro + ' ' + "Isto são barras de dez. Cada barra tem dez cubinhos. Toca nas barras, uma a uma, e conta de dez em dez: 10, 20, 30… Quantos cubinhos há?" : "Quantos cubinhos há aqui? Toca nas barras e conta de dez em dez.");
   }
   rods.onclick = e => {
     const b = e.target.closest('.n-tap'); if (!b || busy || b.classList.contains('on')) return;
@@ -5465,15 +5658,15 @@ function screenN100Tens() {
     const b = e.target.closest('.num-b'); if (!b || busy) return;
     const n = deck[k], x = +b.dataset.n;
     if (x !== n * 10) {
-      wiggle(b); sfx.oops(); miss++; cnt = 0;
+      wiggle(b); sfx.oops(); miss++; cnt = 0; q.miss(no.querySelector(`[data-n="${n * 10}"]`));
       $$('.n-tap', rods).forEach(r => { r.classList.remove('on'); $('b', r).textContent = ''; });
       talk(`Isso é ${x}. Vamos contar juntos: toca em cada barra.`); return;
     }
-    busy = true; b.classList.add('right'); sfx.good();
+    busy = true; b.classList.add('right'); sfx.good(); q.hit(b, n * 10);
     $$('.n-tap', rods).forEach((r, i) => { r.classList.add('on'); $('b', r).textContent = (i + 1) * 10; });
     await talk(n === 10 ? "Dez dezenas são 100! Cem cubinhos." : `${n * 10}! São ${nTU(n * 10)}.`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) nDone('tens', miss, "Já sabes contar de dez em dez!", screenN100Tens);
+    if (k >= deck.length) nDone('tens', miss, q.end + ' ' + "Já sabes contar de dez em dez!", screenN100Tens);
     else later(show, 400);
   };
   show();
@@ -5488,7 +5681,7 @@ function screenN100Build() {
   shell("Monta o número", `${nLvTag('build')}<button class="n-goal" id="goal"></button>
     <div class="n-tray" id="tray"></div><div class="n-sum" id="sum"></div>
     <div class="n-add"><button id="addT">${nRod()}<span>+ 10</span></button><button id="addU">${nOne()}<span>+ 1</span></button></div>`);
-  const goal = $('#goal'), tray = $('#tray'), sum = $('#sum');
+  const goal = $('#goal'), tray = $('#tray'), sum = $('#sum'), q = LQ.start('n100-build', deck.length);
   const line = () => `Monta o número ${deck[k]}.`;
   function draw() {
     tray.innerHTML = `<div class="n-ts">${Array.from({ length: tn }, () => `<button data-r="t">${nRod()}</button>`).join('')}</div><div class="n-us">${Array.from({ length: un }, () => `<button data-r="u">${nOne()}</button>`).join('')}</div>`;
@@ -5498,15 +5691,15 @@ function screenN100Build() {
     busy = false; tn = 0; un = 0; const n = deck[k]; goal.dataset.n = n;
     goal.innerHTML = lv === 2 ? `${ICON.speaker}<span>?</span>` : `${ICON.speaker}<span>${nDig(n)}</span>`;
     draw();
-    talk(k === 0 ? `Uma barra azul vale dez, um cubinho laranja vale um. ${line()} Carrega em «+ 10» e «+ 1». Se puseres a mais, toca nele para o tirar.` : line());
+    talk(k === 0 ? q.intro + ' ' + `Uma barra azul vale dez, um cubinho laranja vale um. ${line()} Carrega em «+ 10» e «+ 1». Se puseres a mais, toca nele para o tirar.` : line());
   }
   async function check() {
     const n = deck[k], v = tn * 10 + un;
     if (v !== n) return;
-    busy = true; sfx.good(); goal.innerHTML = `<span>${nDig(n)}</span>`;
+    busy = true; sfx.good(); goal.innerHTML = `<span>${nDig(n)}</span>`; q.hit(goal, n);
     await talk(`${nTU(n)} são ${n}!`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) nDone('build', miss, "Já sabes montar números!", screenN100Build);
+    if (k >= deck.length) nDone('build', miss, q.end + ' ' + "Já sabes montar números!", screenN100Build);
     else later(show, 500);
   }
   goal.onclick = () => { if (!busy) talk(line()); };
@@ -5537,7 +5730,7 @@ function screenN100Grid() {
   const deck = lv === 0 ? [ri(1, 3) * 10 + ri(1, 9), ri(4, 6) * 10 + ri(1, 9), ri(7, 9) * 10 + ri(1, 9), ri(2, 9) * 10, ri(1, 9) * 10 + ri(1, 9)].sort(() => Math.random() - .5) : sample(Array.from({ length: 99 }, (_, i) => i + 2), 6);
   let k = 0, busy = false, miss = 0, wrong = 0, hid = new Set();
   shell("Quadro do cem", `${nLvTag('grid')}<button class="lt-ask" id="ask"></button><div class="n-grid" id="grid"></div>`);
-  const ask = $('#ask'), grid = $('#grid');
+  const ask = $('#ask'), grid = $('#grid'), q = LQ.start('n100-grid', deck.length);
   const line = () => `Encontra o número ${deck[k]}.`;
   function show() {
     busy = false; wrong = 0; const n = deck[k]; ask.dataset.n = n;
@@ -5545,7 +5738,7 @@ function screenN100Grid() {
     grid.innerHTML = Array.from({ length: 100 }, (_, i) => { const x = i + 1, row = Math.ceil(x / 10); return `<button data-n="${x}" class="${row % 2 ? '' : 'r5'}${hid.has(x) ? ' hid' : ''}">${x}</button>`; }).join('');
     ask.innerHTML = `${ICON.speaker}<span>${lv === 2 ? '?' : n}</span>`;
     if (lv === 0) hint(n);
-    talk(k === 0 ? `Isto é o quadro do cem: cem números. Cada fila é uma nova dezena. ${line()}` : line());
+    talk(k === 0 ? q.intro + ' ' + `Isto é o quadro do cem: cem números. Cada fila é uma nova dezena. ${line()}` : line());
   }
   function hint(n) { const r = Math.ceil(n / 10); $$('button', grid).forEach(b => b.classList.toggle('hint', Math.ceil(+b.dataset.n / 10) === r)); }
   ask.onclick = () => { if (!busy) talk(line()); };
@@ -5553,15 +5746,15 @@ function screenN100Grid() {
     const b = e.target.closest('button'); if (!b || busy) return;
     const n = deck[k], x = +b.dataset.n;
     if (x !== n) {
-      wiggle(b); sfx.oops(); miss++; wrong++; b.classList.remove('hid');
+      wiggle(b); sfx.oops(); miss++; wrong++; b.classList.remove('hid'); q.miss(grid.querySelector(`[data-n="${n}"]`));
       if (wrong >= 1) hint(n);
       const tip = Math.floor(x / 10) === Math.floor(n / 10) || x % 10 === 0 ? '' : x > n ? " Procura mais acima." : " Procura mais abaixo.";
       talk(`Isso é ${x}.${tip} ${line()}`); return;
     }
-    busy = true; b.classList.remove('hid'); b.classList.add('right'); sfx.good(); ask.innerHTML = `<span>${nDig(n)}</span>`;
+    busy = true; b.classList.remove('hid'); b.classList.add('right'); sfx.good(); q.hit(b, n); ask.innerHTML = `<span>${nDig(n)}</span>`;
     await talk(`${n}! ${cap(nTU(n))}.`); if (t !== tok) return;
     k++;
-    if (k >= deck.length) nDone('grid', miss, "Já sabes onde moram os números!", screenN100Grid);
+    if (k >= deck.length) nDone('grid', miss, q.end + ' ' + "Já sabes onde moram os números!", screenN100Grid);
     else later(show, 500);
   };
   show();
@@ -5585,14 +5778,14 @@ function screenN100Order() {
   }
   let k = 0, busy = false, miss = 0;
   shell("Depois e maior", `${nLvTag('order')}<p class="cmp-q" id="cq"></p><div id="box"></div><div class="num-opts" id="no"></div>`);
-  const cq = $('#cq'), box = $('#box'), no = $('#no');
+  const cq = $('#cq'), box = $('#box'), no = $('#no'), lq = LQ.start('n100-order', deck.length);
   const q = d => d.c ? (d.more ? "Qual é o número maior?" : "Qual é o número menor?") : d.before ? `O que vem antes do ${d.n}?` : `O que vem depois do ${d.n}?`;
   function show() {
     busy = false; const d = deck[k];
     cq.textContent = q(d); no.innerHTML = ''; box.dataset.ans = d.c ? (d.more ? Math.max(d.a, d.b) : Math.min(d.a, d.b)) : d.before ? d.n - 1 : d.n + 1;
     if (d.c) {
       box.innerHTML = `<div class="n-pair">${[d.a, d.b].map(x => `<button data-n="${x}"><span>${nDig(x)}</span>${lv === 0 ? nMini(x) : ''}</button>`).join('')}</div>`;
-      talk(k === 0 ? `${q(d)} Olha primeiro para as dezenas — os algarismos azuis.` : q(d));
+      talk(k === 0 ? lq.intro + ' ' + `${q(d)} Olha primeiro para as dezenas — os algarismos azuis.` : q(d));
     } else {
       const ans = d.before ? d.n - 1 : d.n + 1;
       const seq = d.before ? ['?', d.n, d.n + 1] : [d.n - 2, d.n - 1, d.n, '?'];
@@ -5603,10 +5796,10 @@ function screenN100Order() {
     }
   }
   async function good(el, text) {
-    busy = true; el.classList.add('right'); sfx.good();
+    busy = true; el.classList.add('right'); sfx.good(); lq.hit(el, box.dataset.ans);
     await talk(text); if (t !== tok) return;
     k++;
-    if (k >= deck.length) nDone('order', miss, "Conheces bem os números!", screenN100Order);
+    if (k >= deck.length) nDone('order', miss, lq.end + ' ' + "Conheces bem os números!", screenN100Order);
     else later(show, 400);
   }
   box.onclick = e => {
@@ -5621,7 +5814,7 @@ function screenN100Order() {
   no.onclick = e => {
     const b = e.target.closest('.num-b'); if (!b || busy) return;
     const d = deck[k], x = +b.dataset.n, ans = d.before ? d.n - 1 : d.n + 1;
-    if (x !== ans) { wiggle(b); sfx.oops(); miss++; talk(d.before ? `Conta para trás: ${d.n + 1}, ${d.n}… E o que vem antes do ${d.n}?` : `Continua a contar: ${d.n - 1}, ${d.n}… E depois?`); return; }
+    if (x !== ans) { wiggle(b); sfx.oops(); miss++; lq.miss(no.querySelector(`[data-n="${ans}"]`)); talk(d.before ? `Conta para trás: ${d.n + 1}, ${d.n}… E o que vem antes do ${d.n}?` : `Continua a contar: ${d.n - 1}, ${d.n}… E depois?`); return; }
     const q2 = $('.n-line .q', box); if (q2) { q2.classList.remove('q'); q2.innerHTML = nDig(ans); }
     good(b, d.before ? `Sim! Antes do ${d.n} vem o ${ans}.` : ans % 10 === 0 ? `Sim! Depois do ${d.n} vem o ${ans}: começa uma nova dezena.` : `Sim! Depois do ${d.n} vem o ${ans}.`);
   };
@@ -5756,9 +5949,10 @@ function screenSong(i) {
 const XN = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5'], XNAME = ["dó", "ré", "mi", "fá", "sol", "lá", "si", "dó"];
 const XCOL = ['#FF4D4D', '#FF9F1C', '#F2C200', '#4CC261', '#2BB3A3', '#3D8BFD', '#9B5DE5', '#FF5FA8'];
 function screenXylo() {
-  newScreen();
-  let follow = null, fi = 0;
+  const t0 = newScreen();
+  let follow = null, fi = 0, rec = [], show = false;
   shell("Xilofone", `<div class="xy-line" id="xl"><span class="muted">Toca o que quiseres ou escolhe uma canção em baixo</span></div>
+    <div class="xy-con" id="xyCon" hidden><button class="big" id="xyShow">🎤 O meu concerto</button><button class="ibtn" id="xyNew" aria-label="Nova melodia">🗑️</button></div>
     <div class="xylo" id="xy">${XN.map((n, i) => `<button class="xbar" data-n="${n}" style="--c:${XCOL[i]};--h:${100 - i * 5}%" aria-label="${XNAME[i]}"><i></i><span>${XNAME[i]}</span><i></i></button>`).join('')}</div>
     <div class="xy-songs" id="xs">${SONGS.map((s, i) => `<button class="chip" data-i="${i}"><span class="emo">${s.e}</span>${s.title}</button>`).join('')}</div>`);
   talk("Carrega nas barras coloridas — elas tocam! Ou escolhe uma canção em baixo: a barra certa vai acender-se.");
@@ -5774,18 +5968,45 @@ function screenXylo() {
     const b = e.target.closest('.xbar'); if (!b) return;
     e.preventDefault();
     if (!ac()) return;
+    if (show) return;
     mallet(FREQ(b.dataset.n), AC.currentTime + .01, 1, music || musicBus(), .26); hopEl(b);
+    if (!follow) { rec.push([b.dataset.n, performance.now()]); if (rec.length > 48) rec.shift(); if (rec.length === 6) { $('#xyCon').hidden = false; hopEl($('#xyShow')); talk("Que bonito! Carrega em «O meu concerto» e eu toco a tua melodia toda."); } }
     if (!follow || b.dataset.n !== follow[fi].note) return;
     fi++;
     if (fi < follow.length) { showNext(); return; }
     const sg = follow.song; follow = null; showNext();
-    xl.innerHTML = "<span>Hurra! Tocaste a canção!</span>";
-    later(() => finish({ key: 'xylo:' + sg.id, stars: 1, line: "Tocaste a canção!", again: screenXylo }), 900);
+    xl.innerHTML = `<span>${G("Viva! Tocaste a canção!", "Viva! Tocaste a canção!")}</span>`;
+    // the whole song once more, the bars lighting up as it plays: the child hears what they played
+    later(async () => {
+      await talk("Agora ouve a canção inteira!"); if (t0 !== tok) return;
+      const toks = songTokens(sg); show = true;
+      playSong(sg, { bpm: 104, onNote: j => { const b = $(`.xbar[data-n="${toks[j].note}"]`); $$('.xbar').forEach(x => x.classList.toggle('glow', x === b)); if (b) hopEl(b); },
+        onEnd: () => { show = false; $$('.xbar').forEach(x => x.classList.remove('glow')); FUN.applause(); finish({ key: 'xylo:' + sg.id, stars: 1, line: "Tocaste a canção!", again: screenXylo }); } });
+    }, 700);
   });
+  // «Мой концерт»: the notes the child played freely, played back with their own rhythm, then applause
+  $('#xyShow').onclick = () => {
+    if (show || rec.length < 2 || !ac()) return; show = true; sfx.pop();
+    const bus = musicBus(); let tt = AC.currentTime + .4;
+    $('#xyShow').disabled = true; xl.innerHTML = "<span>🎤 Concerto! Vamos ouvir…</span>";
+    rec.forEach(([n, at], i) => {
+      mallet(FREQ(n), tt, 1, bus, .26);
+      later(() => { const b = $(`.xbar[data-n="${n}"]`); $$('.xbar').forEach(x => x.classList.toggle('glow', x === b)); if (b) hopEl(b); }, (tt - AC.currentTime) * 1000);
+      const gap = i + 1 < rec.length ? (rec[i + 1][1] - at) / 1000 : 0; tt += Math.min(.9, Math.max(.16, gap));
+    });
+    later(() => {
+      show = false; $('#xyShow').disabled = false; $$('.xbar').forEach(x => x.classList.remove('glow'));
+      FUN.applause(); confetti(40); xl.innerHTML = "<span>👏 Bravo! 👏</span>";
+      talk(pickOne(["Bravo! Que concerto!", "Bravo! Isto é que é música!", "Viva! O público está a aplaudir!"]));
+      if (!P.best['xylo-show']) { P.best['xylo-show'] = 1; P.stars += 1; save(); const n = $('#starN'); if (n) n.textContent = P.stars; burst(innerWidth / 2, innerHeight / 3, 9); }
+    }, (tt - AC.currentTime) * 1000 + 500);
+  };
+  $('#xyNew').onclick = () => { if (show) return; sfx.whoosh(.3, .15); rec = []; $('#xyCon').hidden = true; xl.innerHTML = "<span class=\"muted\">Toca o que quiseres ou escolhe uma canção em baixo</span>"; };
   $('#xs').onclick = e => {
     const c = e.target.closest('.chip'); if (!c) return;
     sfx.pop(); const sg = SONGS[+c.dataset.i];
-    follow = songTokens(sg); follow.song = sg; fi = 0; showNext();
+    if (show) return;
+    follow = songTokens(sg); follow.song = sg; fi = 0; showNext(); $('#xyCon').hidden = true;
     talk(`Vamos tocar «${sg.title}». Carrega na barra que está acesa.`);
   };
 }
@@ -5808,31 +6029,34 @@ function outlineSVG(svg) {
 }
 const svgImage = svg => new Promise(res => { const img = new Image(); img.onload = () => res(img); img.onerror = () => res(null); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); });
 const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
-function saveArt(d) {
-  P.art = [{ d, at: Date.now() }, ...(P.art || [])].slice(0, 12);
+function saveArt(d, w = '') {
+  P.art = [{ d, at: Date.now(), ...(w ? { w } : {}) }, ...(P.art || [])].slice(0, 12);
   for (let i = 0; i < 6; i++) { try { localStorage.setItem(KEY2, JSON.stringify(ROOT)); return true; } catch (e) { P.art.pop(); } }
   return false;
 }
 function screenDrawMenu() {
   newScreen();
-  const art = P.art || [];
-  const st = shell("Desenhar", `<div class="cards draw-menu">
+  const st = shell("Desenhar", `${FUN.showHTML()}
+    <h2 class="sec-h">Vamos desenhar</h2>
+    <div class="cards draw-menu">
+      <button class="card" data-m="free" style="--bg:var(--t-yellow)">${pic('🎨')}<span>Folha em branco</span></button>
+      <button class="card" data-m="magic" style="--bg:var(--t-blue)">${pic('🔮')}<span>Padrão mágico</span></button>
+      <button class="card" data-m="task" style="--bg:var(--t-lilac)">${pic('📝')}<span>Desenha com uma tarefa</span>${P.best['draw-task'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
+      <button class="card" data-m="color" style="--bg:var(--t-pink)">${pic('🖍️')}<span>Desenhos para colorir</span></button>
+      <button class="card" data-m="dots" style="--bg:var(--t-green)">${pic('🔢')}<span>Pontos por ordem</span>${P.best.dots ? `<i class="done">${ICON.star}</i>` : ''}</button>
+    </div>
+    <h2 class="sec-h">Com letras e números</h2>
+    <div class="cards draw-menu">
       <button class="card" data-m="code-col" style="--bg:var(--t-peach)"><span class="ico-letters"><b class="L" style="color:#FF4D4D">${esc(PAL_WORDS[0][0])}</b><b class="L" style="color:#E0A800">${esc(PAL_WORDS[2][0])}</b></span><span>Letra e cor</span>${P.best['code-col'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-colw" style="--bg:var(--t-green)">${pic('📖')}<span>Lê a cor</span>${P.best['code-colw'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-abc" style="--bg:var(--t-pink)"><span class="ico-letters"><b class="L v">A</b><b class="L c">B</b></span><span>Pinta por letras</span>${P.best['code-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-syl" style="--bg:var(--t-yellow)"><span class="ico-letters"><b class="L c">R</b><b class="L v">A</b></span><span>Pinta por sílabas</span>${P.best['code-syl'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="code-math" style="--bg:var(--t-blue)"><span class="ico-num">2+3</span><span>Pinta por contas</span>${P.best['code-math'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
       <button class="card" data-m="dots-abc" style="--bg:var(--t-mint)">${pic('🔤')}<span>Pontos por alfabeto</span>${P.best['dots-abc'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
-      <button class="card" data-m="dots" style="--bg:var(--t-green)">${pic('🔢')}<span>Pontos por ordem</span>${P.best.dots ? `<i class="done">${ICON.star}</i>` : ''}</button>
-      <button class="card" data-m="task" style="--bg:var(--t-lilac)">${pic('📝')}<span>Desenha com uma tarefa</span>${P.best['draw-task'] ? `<i class="done">${ICON.star}</i>` : ''}</button>
-      <button class="card" data-m="magic" style="--bg:var(--t-blue)">${pic('🔮')}<span>Padrão mágico</span></button>
-      <button class="card" data-m="color" style="--bg:var(--t-pink)">${pic('🖍️')}<span>Desenhos para colorir</span></button>
-      <button class="card" data-m="free" style="--bg:var(--t-yellow)">${pic('🎨')}<span>Folha em branco</span></button>
-    </div>
-    <h2 class="sec-h">Os meus desenhos</h2>
-    ${art.length ? `<div class="gallery">${art.map(a => `<img src="${a.d}" alt="Desenho">`).join('')}</div>` : "<p class=\"lead\">Aqui vão aparecer os teus desenhos. Quando acabares de desenhar, carrega em «Pronto».</p>"}`);
-  talk("O que vamos desenhar? Pontos por ordem, um desenho com tarefa, um padrão mágico ou um desenho para colorir?");
+    </div>`);
+  talk((P.art || []).length ? "A tua exposição! Toca num desenho para o veres. Ou fazemos um novo?" : "O que vamos desenhar? Uma folha em branco, um padrão mágico ou um desenho para colorir?");
   st.onclick = e => {
+    if (FUN.showClick(e)) return;
     const c = e.target.closest('[data-m]'); if (!c) return; sfx.pop();
     const m = c.dataset.m;
     if (m === 'dots') screenDots(); else if (m === 'dots-abc') screenDots(0, dotDeck(), true); else if (m.startsWith('code-')) screenCodeColor(m.slice(5)); else if (m === 'color') screenColorMenu(); else screenPaint({ mode: m });
@@ -5844,7 +6068,7 @@ function screenColorMenu() {
   // ballet pages in their own group: first for a child who likes ballet or dance
   const bal = PAGES.filter(p => BALLET_PAGES.includes(p)), rest = PAGES.filter(p => !BALLET_PAGES.includes(p));
   const likes = P.settings.likes || [], groups = [["Ballet", bal], ["Mais desenhos para colorir", rest]];
-  if (!likes.some(l => l === 'ballet' || l === 'dance')) groups.reverse();
+  if (!likes.some(l => l === 'ballet' || l === 'dance')) { groups.reverse(); groups[0][0] = "Animais e brinquedos"; }
   const st = shell("Desenhos para colorir", groups.map(([h, ps]) => `<h2 class="sec-h">${h}</h2><div class="cards">${ps.map(card).join('')}</div>`).join(''), { back: screenDrawMenu });
   talk("Escolhe a imagem que vais colorir.");
   st.onclick = e => { const c = e.target.closest('.page'); if (c) { sfx.pop(); screenPaint({ mode: 'color', page: c.dataset.p }); } };
@@ -5904,7 +6128,7 @@ function screenPaint(opts = {}) {
       e.preventDefault();
       if (el.getAttribute('fill') === 'none' || (dark(el) && !el.style.fill)) return;
       undo.push({ el, prev: el.style.fill }); if (undo.length > 40) undo.shift();
-      el.style.fill = color; sfx.pop();
+      el.style.fill = color; sfx.pop(); FUN.splash(e.clientX, e.clientY, color);
     });
   }
   const used = new Set();
@@ -5951,7 +6175,7 @@ function screenPaint(opts = {}) {
   }
   cB.addEventListener('pointerdown', e => {
     e.preventDefault(); const p = pt(e);
-    if (tool === 'fill') { pushUndo(); fillAt(Math.floor(p.x), Math.floor(p.y)); sfx.pop(); return; }
+    if (tool === 'fill') { pushUndo(); fillAt(Math.floor(p.x), Math.floor(p.y)); sfx.pop(); FUN.splash(e.clientX, e.clientY, color); return; }
     pushUndo(); drawing = true; last = p;
     try { cB.setPointerCapture(e.pointerId); } catch (x) {}
     line(p, { x: p.x + .1, y: p.y + .1 });
@@ -5976,6 +6200,7 @@ function screenPaint(opts = {}) {
   $('#clear').onclick = () => { pushUndo(); xB.clearRect(0, 0, cB.width, cB.height); $$('#svgPage [style]').forEach(x => { x.style.fill = ''; }); sfx.whoosh(.3, .15); };
   const t0 = performance.now();
   const ink = () => { try { const w = cB.width, h = cB.height, d = xB.getImageData(0, 0, w, h).data; let n = 0, all = 0; for (let y = 0; y < h; y += 6) for (let x = 0; x < w; x += 6) { all++; if (d[(y * w + x) * 4 + 3] > 40) n++; } return n / all; } catch (e) { return 1; } };
+  let artPic = null;
   $('#done').onclick = async () => {
     sfx.pop();
     if (TK) {
@@ -5988,18 +6213,18 @@ function screenPaint(opts = {}) {
       try {
         const tw = 480, th = Math.round(tw * cB.height / cB.width), c = document.createElement('canvas'), x = c.getContext('2d');
         c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color') { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
-        saveArt(c.toDataURL('image/jpeg', .75));
+        artPic = c.toDataURL('image/jpeg', .75); saveArt(artPic, TK ? TK.w : '');
       } catch (err) {}
     }
     if (TK) {
       await talk(G(`Que desenho! Conta-me o que desenhaste. Diz: desenhei ${TK.w}.`, `Que desenho! Conta-me o que desenhaste. Diz: desenhei ${TK.w}.`)); if (t !== tok) return;
       await askSaid(G("Já disse!", "Já disse!"), { expect: TK.w }); if (t !== tok) return;
       if (opts.done) opts.done();
-      finish({ key: taskObj ? 'draw-hol' : 'draw-task', stars: 3, line: "O desenho da tarefa já está no álbum!", again: () => screenPaint(taskObj ? opts : { mode: 'task' }), menu: opts.back || screenDrawMenu });
+      finish({ key: taskObj ? 'draw-hol' : 'draw-task', stars: 3, pic: artPic, line: "O teu desenho já está na tua exposição!", again: () => screenPaint(taskObj ? opts : { mode: 'task' }), menu: opts.back || screenDrawMenu });
       return;
     }
-    finish({ key: mode === 'write' ? 'write' : mode === 'color' ? 'color' : mode === 'magic' ? 'magic' : 'draw', stars: 1,
-      line: mode === 'write' ? "Que letra bonita!" : "Que beleza! O desenho já está no álbum.",
+    finish({ key: mode === 'write' ? 'write' : mode === 'color' ? 'color' : mode === 'magic' ? 'magic' : 'draw', stars: 1, pic: artPic,
+      line: mode === 'write' ? "Que letra bonita!" : "Que bonito! O desenho já está na tua exposição.",
       again: () => screenPaint({ mode, page, li }), next: mode === 'write' ? () => screenPaint({ mode, li: (li + 1) % ABC.length }) : null, menu: back });
   };
   if (mode === 'write') {
@@ -6971,6 +7196,7 @@ function screenSort() {
   const cslot = $('#cslot'), bins = $('#bins');
   const intro = pair.map(L => `${SH_BINS[L][1]} — o som ${L}`).join('. ');
   function show() {
+    roundProg(k, deck.length);
     busy = false; const [, w, e] = deck[k];
     cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
     talk(k === 0 ? `${intro}. Ouve a palavra e carrega no som certo. ${cap(w)}.` : `${cap(w)}. Que som é?`);
@@ -8432,21 +8658,38 @@ const learnItems = k => LEARN[k].items.filter(x => !x.big || Q());
 const learnDone = id => !!(P.learn && P.learn[id]);
 const learnProg = k => { const it = learnItems(k), n = it.filter(x => learnDone(x.id)).length; return n ? `${n} de ${it.length}` : `${it.length} histórias`; };
 const sentences = s => s.match(/[^.!?…]+[.!?…]+[»"]?\s*|[^.!?…]+$/g) || [s];
+// «А знаешь ли ты?»: the question of a story not heard yet, as a door into that story (lists, hubs, the «Узнаём» tab)
+function learnHook(ks) {
+  const pool = [];
+  ks.forEach(k => { if (!LEARN[k]) return; let its = []; try { its = learnItems(k); } catch (e) {} its.forEach((it, i) => { if (it.q && it.t && !learnDone(it.id)) pool.push({ k, i, it }); }); });
+  return pool.length ? pickOne(pool) : null;
+}
+const hookHTML = h => h ? `<button class="lr-hook" data-hk="${h.k}" data-hi="${h.i}" style="--bg:${LEARN[h.k].bg}"><span class="lr-he">${pic(h.it.e)}</span><span class="lr-ht"><small>🤔 Sabias que…?</small><b>${esc(h.it.q)}</b><i>${esc(h.it.t)} · ouve a história ▶</i></span></button>` : '';
+// the stories behind the tiles of «Узнаём» that are on for this family
+const discHookKs = () => ['space', 'water', 'plants', 'phys', 'old', ...PLACES().filter(placeOn)].filter(k => LEARN[k] && !gameOff(k === 'phys' ? 'phys-lab' : k === 'old' ? 'learn-old' : k === 'space' ? 'space' : k));
+function hookBind(root, before) {
+  root.querySelectorAll('.lr-hook').forEach(b => b.onclick = e => { e.stopPropagation(); sfx.magic(); if (before) before(); screenStory(b.dataset.hk, +b.dataset.hi); });
+}
 function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
-  const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
+  const nx = items.findIndex(x => !learnDone(x.id)), nDone = items.filter(x => learnDone(x.id)).length;
+  const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''} ${i === nx && nDone ? 'nx' : ''}" data-i="${i}" style="--bg:${T.bg}">${i === nx && nDone ? '<i class="nx-b">▶</i>' : ''}${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
+  const hook = learnHook([k]);
   const st = shell(T.name, `<p class="lead">${Q() ? "Lê em voz alta e depois responde à pergunta." : "Ouve a história e responde à pergunta."}</p>
+    <div class="lr-prog"><span class="lr-pb"><i style="width:${Math.round(100 * nDone / Math.max(1, items.length))}%"></i></span><b>${ICON.star}${nDone} de ${items.length}</b></div>
+    ${hookHTML(hook)}
     ${k === 'old' ? `<div class="prow-btns"><button class="big" id="oldQuiz">⏳ O que veio primeiro?</button></div>` : ''}
-    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : null });
-  talk(Q() ? "Escolhe uma história. Lê-a em voz alta e responde à pergunta." : "Escolhe uma história. Eu conto, e tu respondes à pergunta.");
+    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : k === 'water' ? () => OCEAN.hub() : k === 'space' ? () => SPACE.screen() : null });
+  hookBind(st);
+  talk((Q() ? "Escolhe uma história. Lê-a em voz alta e responde à pergunta." : "Escolhe uma história. Eu conto, e tu respondes à pergunta.") + (hook && !Q() ? ' ' + "Sabias que…?" + ' ' + hook.it.q : ''));
   st.onclick = e => { if (e.target.closest('#oldQuiz')) { sfx.pop(); screenTimeline(); return; } const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
 function screenStory(k, i, o = {}) {
   const t = newScreen(), T = LEARN[k], items = learnItems(k), it = items[i], parts = sentences(it.s), back = o.back || (() => screenLearn(k));
   let miss = 0, rd = 0, reading = 0;
   shell(T.name, `<article class="story">
-      ${learnImg(it.id) ? `<figure class="story-img"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.parentNode.outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">fonte</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
+      ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">fonte</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
       <p class="story-t" id="stT">${parts.map((p, j) => `<span class="ss" data-j="${j}">${esc(p)}</span>`).join('')}</p>
       ${it.try ? `<p class="story-try"><b>🧪 Experimenta</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
@@ -8460,6 +8703,7 @@ function screenStory(k, i, o = {}) {
   async function readAloud() {
     const my = ++rd; reading++; hush();
     const bb = $('#bubble'); if (bb) bb.textContent = "Ouve a história!";
+    const ar = $('.story'); if (ar) ar.classList.add('reading');
     try {
       for (let j = 0; j < parts.length; j++) {
         spans.forEach(s => s.classList.toggle('on', +s.dataset.j === j));
@@ -8467,7 +8711,7 @@ function screenStory(k, i, o = {}) {
         await wait(250);
       }
       spans.forEach(s => s.classList.remove('on'));
-    } finally { reading--; }
+    } finally { reading--; if (!reading && ar) ar.classList.remove('reading'); }
   }
   $('#stListen').onclick = () => { sfx.pop(); readAloud(); };
   function ask() {
@@ -8485,9 +8729,16 @@ function screenStory(k, i, o = {}) {
         return;
       }
       sfx.good(); b.classList.add('right'); hopEl(b);
+      { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); }
+      const stamp0 = T.place && TRAVEL.stamped(k);
       P.learn = { ...(P.learn || {}), [it.id]: 1 }; save(); if (o.done) o.done();
-      later(() => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Agora sabes mais uma história.`,
-        next: o.back ? null : i + 1 < items.length ? () => screenStory(k, i + 1) : null, menu: back }), 700);
+      // the next story: the next one not heard yet (after this one, then from the top), shown with its picture and its question
+      const order = items.map((x, j) => (i + 1 + j) % items.length).filter(j => j !== i), nj = o.back ? -1 : (order.find(j => !learnDone(items[j].id)) ?? (i + 1 < items.length ? i + 1 : -1));
+      const nIt = nj >= 0 ? items[nj] : null;
+      const nextCard = nIt ? `<button class="st-next" data-a="next"><span class="st-nt">${learnImg(nIt.id) ? `<img src="${esc(learnImg(nIt.id)[4] || `${SITE_ROOT}img/learn/${nIt.id}-s.webp`)}" alt="" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(nIt.e))}">` : pic(nIt.e)}</span><span class="st-nx"><small>Próxima história</small><b>${esc(nIt.t)}</b>${nIt.q ? `<i>🤔 ${esc(nIt.q)}</i>` : ''}</span></button>` : '';
+      const done = () => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Agora sabes mais uma história.`, extra: nextCard, nextLabel: nIt ? (Q() ? "▶ Continuar a ler" : "▶ Continuar a ouvir") : '',
+        next: nIt ? () => screenStory(k, nj) : null, menu: back });
+      later(() => { if (T.place && !stamp0 && TRAVEL.stamped(k)) TRAVEL.stampShow(k, done); else done(); }, 700);
     };
   }
   (async () => {
@@ -8596,8 +8847,11 @@ function screenTimeline() {
       $$('.tv-o').forEach(x => { x.disabled = true; x.classList.toggle('yes', +x.dataset.j === first); x.classList.toggle('no', x === b && !ok); });
       const line = `${pr[first].t} — há cerca de ${ago(pr[first].y)} anos. ${pr[1 - first].t} — há cerca de ${ago(pr[1 - first].y)} anos.`;
       $('#tvAns').hidden = false;
-      $('#tvAns').innerHTML = `<p><b>${ok ? "Sim!" : "Não."}</b> ${esc(line)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < pairs.length ? "Seguinte →" : "Pronto"}</button></div>`;
-      if (ok) { sfx.good(); talk(`Sim! ${line}`); } else { sfx.oops(); talk(`Não. ${line}`); }
+      // both events on a line of time: long ago on the left, today on the right (a log scale, so a mammoth and a phone both fit)
+      const pos = y => Math.max(4, Math.min(92, 100 - 100 * Math.log10(Math.max(2, 2026 - y)) / Math.log10(60000)));
+      $('#tvAns').innerHTML = `<div class="tl-line"><i></i>${pr.map(x => `<span class="${x === pr[first] ? 'old' : ''}" style="left:${pos(x.y)}%">${x.e}</span>`).join('')}<small class="tl-a">⏳ há muito</small><small class="tl-b">agora</small></div>
+        <p><b>${ok ? "Sim!" : "Não."}</b> ${esc(line)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < pairs.length ? "Seguinte →" : "Pronto"}</button></div>`;
+      if (ok) { sfx.good(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); talk(`Sim! ${line}`); } else { sfx.oops(); wiggle(b); talk(`Não. ${line}`); }
       $('#tvNext').onclick = () => { sfx.pop(); n++; if (n < pairs.length) show(); else finish({ key: 'old-quiz', stars: right >= 6 ? 3 : right >= 4 ? 2 : 1, line: `${right} certas em ${pairs.length}`, again: screenTimeline, menu: () => screenLearn('old') }); };
     };
   };
@@ -9144,10 +9398,11 @@ FOOT_IDS.forEach((id, i) => {
 /*FOOT-END*/
 /* PETS-BEGIN: two family pets the owner asked for (names public with the owner's consent; drawings only, no photos) */
 // Лилу: a chocolate (havana) Oriental cat, soft and round like the other animals — very big wide ears with rounded tips,
-// big round golden-amber eyes, a slightly narrow lighter muzzle
+// big round golden-amber eyes and the Oriental long straight nose
 const LILU_EYE = x => `<ellipse cx="${x}" cy="62" rx="7" ry="8.5" fill="#D9A93A"/><ellipse cx="${x}" cy="63" rx="4.6" ry="6.6" fill="#2A1408"/><circle cx="${x + 2.2}" cy="58.6" r="2.4" fill="#fff"/>`;
-// Омик: a chocolate chihuahua girl — huge upright ears (one turned a little), big glossy amber eyes, tan brows, white bib
-const OMIK_EYE = (x) => `<circle cx="${x}" cy="62" r="11" fill="#C8955A"/><circle cx="${x}" cy="62" r="9.5" fill="#7A3E14"/><circle cx="${x}" cy="62.5" r="5.5" fill="#2A1408"/><circle cx="${x + 3.5}" cy="58" r="3" fill="#fff"/><circle cx="${x - 3}" cy="66" r="1.4" fill="#fff" opacity=".7"/>`;
+// Омик: a chocolate chihuahua girl, round and soft like the other animals — big wide rounded ears set low to the sides
+// (one tilted), big glossy amber-brown eyes, tan «eyebrows», a lighter muzzle, a white bib
+const OMIK_EYE = x => `<ellipse cx="${x}" cy="62" rx="8" ry="9" fill="#9A5A20"/><ellipse cx="${x}" cy="63" rx="5.4" ry="6.4" fill="#1E100A"/><circle cx="${x + 2.6}" cy="58.4" r="2.8" fill="#fff"/><circle cx="${x - 2.6}" cy="67" r="1.3" fill="#fff" opacity=".8"/>`;
 const PETS = {
   lilu: { name: "Leeloo", kind: "gata", who: "a gata Leeloo", with: "a gata Leeloo", hello: "Purr! Tenho as orelhas maiores de todas!", pitch: 1.2, pm: 92,
     puff: { c: '#7A4428', x: [24, 96], y: 86 }, smile: '<path d="M60 86v3M53 90q3.5 4 7 0 3.5 4 7 0" stroke="#2A1408" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
@@ -9156,20 +9411,19 @@ const PETS = {
       <ellipse cx="60" cy="68" rx="42" ry="38" fill="#7A4428"/>
       <ellipse cx="50" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="70" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="60" cy="97" rx="9" ry="6" fill="#9A5C3A"/>
       <g class="lv-eyes">${LILU_EYE(44)}${LILU_EYE(76)}</g>${BLUSH(80, 28)}
-      <path d="M55.5 80h9q0 4-4.5 5.5Q55.5 84 55.5 80z" fill="#C97A78"/>
+      <path d="M55.5 54Q60 50 64.5 54L66 80Q60 83 54 80Z" fill="#8E5232"/><path d="M58 57v19" stroke="#A86A46" stroke-width="2" stroke-linecap="round"/><path d="M53.5 79.5h13q0 5.5-6.5 8Q53.5 85 53.5 79.5z" fill="#C97A78"/>
       <path d="M38 86l-16-2M38 91l-15 3M82 86l16-2M82 91l15 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
-  omik: { name: "Omik", kind: "chihuahua", who: "a cadelinha Omik", with: "a cadelinha Omik", hello: "Ão! Sou pequenina, mas muito corajosa!", pitch: 1.35, pm: 96,
-    puff: { c: '#5A3420', x: [32, 88], y: 86 }, smile: '<path d="M53 94q7 5 14 0" stroke="#1E100A" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
-    art: `<path d="M38 44 8 2 22 60z" fill="#4A2A1A"/><path d="M33 42 14 13l11 38z" fill="#E3B19A"/>
-      <g transform="rotate(14 86 40)"><path d="M82 44l30-42-14 58z" fill="#4A2A1A"/><path d="M87 42l19-29-11 38z" fill="#E3B19A"/></g>
-      <path d="M16 120Q20 98 40 92h40q20 6 24 28z" fill="#4A2A1A"/><path d="M38 96Q42 120 60 120T82 96L76 92H44Z" fill="#FFFFFF" stroke="#E6DCD6" stroke-width="1.5"/>
-      <path d="M60 18Q96 18 96 56Q96 84 76 96Q68 102 60 102T44 96Q24 84 24 56Q24 18 60 18Z" fill="#4A2A1A"/>
-      <path d="M46 99Q60 108 74 99L68 94H52Z" fill="#FFFFFF"/>
-      <ellipse cx="60" cy="86" rx="16" ry="12" fill="#7A4A30"/>
-      <ellipse cx="42" cy="44" rx="5" ry="3.2" fill="#C8955A"/><ellipse cx="78" cy="44" rx="5" ry="3.2" fill="#C8955A"/>
-      <g class="lv-eyes">${OMIK_EYE(42)}${OMIK_EYE(78)}</g>
-      <ellipse cx="60" cy="81" rx="5.5" ry="4" fill="#1E100A"/><circle cx="58" cy="79.6" r="1.4" fill="#fff" opacity=".6"/>
-      ` }
+  omik: { name: "Omik", kind: "chihuahua", who: "a cadelinha Omik", with: "a cadelinha Omik", hello: "Ão! Sou pequenina, mas muito corajosa!", pitch: 1.35, pm: 93,
+    puff: { c: '#5A3420', x: [26, 94], y: 86 }, smile: '<path d="M60 87v2M53 90q3.5 4 7 0 3.5 4 7 0" stroke="#1E100A" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+    art: `<path d="M20 120Q24 100 42 96h36q18 4 22 24z" fill="#4A2A1A"/><path d="M40 98Q42 120 60 120T80 98L72 94H48Z" fill="#FFFFFF" stroke="#E6DCD6" stroke-width="1.5"/>
+      <path d="M30 62Q6 56 3 30Q2 20 11 22Q34 28 44 40z" fill="#4A2A1A"/><path d="M30 55Q14 50 11 32Q26 34 39 42z" fill="#E8B49A"/>
+      <g transform="rotate(10 90 50)"><path d="M90 62Q114 56 117 30Q118 20 109 22Q86 28 76 40z" fill="#4A2A1A"/><path d="M90 55Q106 50 109 32Q94 34 81 42z" fill="#E8B49A"/></g>
+      <ellipse cx="60" cy="68" rx="40" ry="36" fill="#4A2A1A"/>
+      <path d="M48 98Q60 106 72 98L66 92H54Z" fill="#FFFFFF"/>
+      <ellipse cx="50" cy="87" rx="12" ry="10" fill="#7A4A30"/><ellipse cx="70" cy="87" rx="12" ry="10" fill="#7A4A30"/><ellipse cx="60" cy="95" rx="8" ry="5" fill="#7A4A30"/>
+      <ellipse cx="44" cy="48" rx="5" ry="3.2" fill="#C8955A"/><ellipse cx="76" cy="48" rx="5" ry="3.2" fill="#C8955A"/>
+      <g class="lv-eyes">${OMIK_EYE(44)}${OMIK_EYE(76)}</g>${BLUSH(80, 29)}
+      <ellipse cx="60" cy="81" rx="5.5" ry="4" fill="#1E100A"/><circle cx="58" cy="79.6" r="1.4" fill="#fff" opacity=".6"/>` }
 };
 /*PETS-END*/
 Object.assign(FRIENDS, PETS);
@@ -9891,12 +10145,14 @@ async function run({ id, voice, text, pairs, need }) {
 }
 self.onmessage = e => { q = q.then(() => run(e.data)); };
 `;
-const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, mem: new Map() };
+const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, failedAt: 0, local: false, mem: new Map() };
 const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : (PIPER_VOICES.find(v => v[0] === 'ru_RU-ruslan-medium') || PIPER_VOICES[0])[0];
 const piperName = () => PIPER_VOICES.find(v => v[0] === piperVoice())[1];
-const piperLean = () => { try { const c = navigator.connection; return !!(c && (c.saveData || c.type === 'cellular')); } catch (e) { return false; } };
-const engineNow = () => ROOT.engine || ((GUEST || piperLean()) ? 'device' : 'piper');
-const piperOn = () => !EMBEDDED && engineNow() === 'piper' && !PIPER.failed && typeof Worker === 'function' && typeof WebAssembly === 'object';
+// the app's voice (Руслан for Russian) is the main voice for every family, grandparents and phones on mobile data too;
+// the phone's voice speaks only when the family chose it in the settings, or while the app's voice is not loaded yet
+const engineNow = () => ROOT.engine || 'piper';
+// a voice that failed to load (no internet, a stalled download) is tried again at a touch half a minute later
+const piperOn = () => !EMBEDDED && engineNow() === 'piper' && !(PIPER.failed && performance.now() - PIPER.failedAt < 30000) && typeof Worker === 'function' && typeof WebAssembly === 'object';
 // while the voice downloads (about 60 MB, once): a small note with the percent
 function sayOwnHTML() {
   const own = ROOT.sayOwn || {};
@@ -9930,9 +10186,9 @@ function piperNote() {
 function piperCall(text, fix) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
-    catch (e) { PIPER.failed = true; return Promise.reject(e); }
+    catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
-    PIPER.w.onerror = () => { PIPER.failed = true; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
+    PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
   const voice = piperVoice();
   return new Promise((res, rej) => {
@@ -9947,9 +10203,9 @@ function piperCall(text, fix) {
 function piperWarm() {
   if (!piperOn()) return Promise.resolve(false);
   const v = piperVoice();
-  if (PIPER.ready && PIPER.readyVoice === v) return PIPER.ready;
-  PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0;
-  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { PIPER.failed = true; piperNote(); return false; });
+  if (PIPER.ready && PIPER.readyVoice === v && !PIPER.failed) return PIPER.ready;
+  PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0; PIPER.failed = false;
+  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { PIPER.failed = true; PIPER.failedAt = performance.now(); piperNote(); return false; });
   return PIPER.ready;
 }
 async function piperAudio(text) {
@@ -9969,8 +10225,16 @@ async function piperAudio(text) {
   job.catch(() => PIPER.mem.delete(key));
   return job;
 }
-// the voice starts loading at the first touch, so nobody downloads it by just glancing at the page
-document.addEventListener('pointerdown', () => { if (piperOn()) piperWarm(); }, { once: true, capture: true });
+// the voice starts loading at the first touch, so nobody downloads it by just glancing at the page; a voice already
+// saved on the phone starts at once, so even the first greeting is said by Руслан, not by the phone
+document.addEventListener('pointerdown', () => { if (piperOn() && !PIPER.isReady) piperWarm(); }, { capture: true });
+(async () => {
+  try {
+    if (!piperOn()) return;
+    const dir = await (await navigator.storage.getDirectory()).getDirectoryHandle('piper');
+    if ((await (await dir.getFileHandle(piperVoice() + '.onnx')).getFile()).size > 1e6) { PIPER.local = true; piperWarm(); }
+  } catch (e) {}
+})();
 
 /* ---------- hearing WHAT was said: the browser's speech recognition (Chrome, Safari) checks the word itself.
    A slipped Л (лодка → водка) comes back as a different word, and the child sees what was heard.
@@ -12247,12 +12511,13 @@ const OCEAN = (() => {
   // one water tile: the ocean, the water cycle and (Russian only) the stories about seas and rivers
   function hub() {
     newScreen();
-    const parts = [['deep', '🐋', "Mergulho no oceano", "mergulha até ao fundo: quem vive onde", P.best['ocean-deep'] ? '⭐' : ''],
-      ['cycle', '💧', "Como a água viaja", "o ciclo da água: mar, nuvens, chuva, rio", P.best['water-order'] ? '⭐' : ''],
-      ...(LEARN.water ? [['stories', '📖', "Histórias sobre mares e rios", "ondas, marés, o Volga, o Baikal, o Amazonas", learnProg('water')]] : [])];
-    const st = shell("Oceano e água", `<div class="wh">${parts.map(([k, e, n, s, pr]) => `<button class="wh-b" data-k="${k}"><span class="wh-e">${pic(e)}</span><span class="wh-t"><b>${n}</b><small>${s}</small>${pr ? `<i>${pr}</i>` : ''}</span></button>`).join('')}</div>`);
+    const parts = [['deep', '🐋', "Mergulho no oceano", 'var(--t-blue)', "até ao fundo", P.best['ocean-deep'] ? '⭐' : ''],
+      ['cycle', '💧', "Como a água viaja", 'var(--t-mint)', "mar, nuvens, chuva", P.best['water-order'] ? '⭐' : ''],
+      ...(LEARN.water ? [['stories', '📖', "Histórias sobre mares e rios", 'var(--t-yellow)', learnProg('water'), '']] : [])];
+    const st = shell("Oceano e água", `<p class="lead">Escolhe o que queres jogar.</p><div class="cards pl-hub">${parts.map(([k, e, n, bg, sub, pr]) => `<button class="card oc-t" data-k="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small>${pr ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>${hookHTML(learnHook(['water']))}`);
+    hookBind(st);
     talk(LEARN.water ? "Oceano e água! Podes mergulhar até ao fundo do oceano, descobrir como a água viaja em círculo ou ouvir histórias sobre mares e rios." : "Oceano e água! Podes mergulhar até ao fundo do oceano ou descobrir como a água viaja em círculo.");
-    st.onclick = e => { const b = e.target.closest('.wh-b'); if (!b) return; sfx.pop(); const k = b.dataset.k; if (k === 'deep') deep(); else if (k === 'cycle') cycle(); else screenLearn('water'); };
+    st.onclick = e => { const b = e.target.closest('.oc-t'); if (!b) return; sfx.pop(); const k = b.dataset.k; if (k === 'deep') deep(); else if (k === 'cycle') cycle(); else screenLearn('water'); };
   }
   return { deep, cycle, hub };
 })();
@@ -12588,7 +12853,8 @@ const PLANTS = (() => {
     const st = LEARN.plants.items.length;
     const cards = [['grow', '🌱', "Faz crescer uma árvore", 'var(--t-green)', "semente → maçãs"], ['parts', '🌿', "Partes da planta", 'var(--t-mint)', "raiz, caule, folha…"], ['leaves', '🍃', "Adivinha a árvore", 'var(--t-yellow)', "pela folha"],
       ...(st ? [['stories', '🌳', "Plantas incríveis", 'var(--t-peach)', learnProg('plants')]] : [])];
-    const s = shell("Plantas", `<p class="lead">Escolhe o que queres jogar.</p><div class="cards pl-hub">${cards.map(([k, e, n, bg, sub]) => `<button class="card" data-a="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small></button>`).join('')}</div>`);
+    const s = shell("Plantas", `<p class="lead">Escolhe o que queres jogar.</p><div class="cards pl-hub">${cards.map(([k, e, n, bg, sub]) => `<button class="card" data-a="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small></button>`).join('')}</div>${hookHTML(learnHook(['plants']))}`);
+    hookBind(s);
     talk("Vamos aprender sobre as plantas! Escolhe o que queres jogar.");
     s.onclick = e => {
       const c = e.target.closest('[data-a]'); if (!c) return; sfx.pop();
@@ -12974,7 +13240,7 @@ async function wiktLookup(word) {
 async function wikiSummary(word) {
   const t = word.charAt(0).toUpperCase() + word.slice(1);
   const d = await wGet(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(t)}`);
-  return d && d.type !== 'disambiguation' && d.extract ? { title: d.title, text: d.extract.split(/(?<=[.!?])\s/).slice(0, 2).join(' '), url: d.content_urls && d.content_urls.mobile && d.content_urls.mobile.page } : null;
+  return d && d.type !== 'disambiguation' && d.extract ? { title: d.title, text: plainText(d.extract).split(/(?<=[.!?])\s/).slice(0, 2).join(' '), url: d.content_urls && d.content_urls.mobile && d.content_urls.mobile.page } : null;
 }
 const dictLinks = w => LANG === 'en' ? [
   ['Cambridge Dictionary', `https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(w)}`],
@@ -13668,12 +13934,13 @@ function screenMuseum(tab = 'day', arg = null) {
       const x = pool[(n * 7919) % pool.length];
       box._list = pool;
       box.innerHTML = `<button class="art-day art-th" data-q="${x.q}"><img src="${artImg(x.f, 960)}" alt="${esc(x.t)}"></button><h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p>
-        <p class="art-cnt">👀 Já viste ${my.seen.length} de ${P2.length} pinturas${G("", '')}</p>`;
+        <p class="art-cnt">👀 Já viste ${my.seen.length} de ${P2.length} pinturas${G("", '')} · 🎟️ ${(my.stamps || []).length} ${plural((my.stamps || []).length, ["carimbo", "carimbos", "carimbos"])}</p>`;
       talk(`Pintura do dia: «${x.t}». Carrega na pintura para a observares de perto e ouvires a sua história.`);
     } else if (tab === 'how') {
       const d = new Date(), n = Math.floor(d.getTime() / 864e5 - d.getTimezoneOffset() / 1440), pool = Q() ? P2 : P2.slice(0, 300), k0 = (n * 7919) % pool.length;
       const x = (arg && P2.find(p => p.q === arg)) || pool[k0], k = pool.indexOf(x), next = pool[((k < 0 ? k0 : k) + 1) % pool.length], tr = ART.tours[x.q];
       if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+      later(() => FUN.stamp(x), 900);
       box.innerHTML = `<button class="ag-pic" id="agPic" aria-label="Abrir a pintura inteira"><img id="agImg" src="${artImg(x.f, 960)}" alt="${esc(x.t)}"><span class="ag-ring" id="agRing" hidden></span></button>
         <h2 class="art-t">${esc(x.t)}</h2><p class="art-a">${esc(artLine(x))}</p>
         <div class="og-btns"><button class="big" id="artTry">👀 Observa passo a passo</button><button class="big ghost" id="agNext">Outra pintura ›</button></div>
@@ -13698,7 +13965,7 @@ function screenMuseum(tab = 'day', arg = null) {
       ARTISTS.one(box, P2, arg);
     } else if (tab === 'my') {
       const list = my.likes.map(q => P2.find(x => x.q === q)).filter(Boolean); box._list = list;
-      box.innerHTML = list.length ? `<h2 class="art-h">❤️ O meu museu: ${list.length}</h2>${artThumbs(list)}` : "<p class=\"lead\">Aqui vão aparecer as pinturas de que gostares. Carrega no ❤️ por baixo da pintura.</p>";
+      box.innerHTML = FUN.passportHTML() + (list.length ? `<h2 class="art-h">❤️ O meu museu: ${list.length}</h2>${artThumbs(list)}` : "<p class=\"lead\">Aqui vão aparecer as pinturas de que gostares. Carrega no ❤️ por baixo da pintura.</p>");
       talk(list.length ? "O teu museu! Aqui estão as pinturas de que gostaste." : "Carrega no coraçãozinho por baixo da pintura e ela vai para o teu museu.");
     }
   }, () => { if (t === tok) $('#artBox').innerHTML = "<p class=\"lead\">Para abrir o museu, é preciso internet. Tenta outra vez quando a tiveres.</p>"; });
@@ -13736,6 +14003,7 @@ function artFull(x, onBack) {
 function screenArtView(x, list, back) {
   const t = newScreen(), my = artMy(), tr = ART.tours[x.q], nt = ART.notes[x.q];
   if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+  later(() => FUN.stamp(x), 900);
   const k = list.indexOf(x), prev = list[(k - 1 + list.length) % list.length], next = list[(k + 1) % list.length];
   const liked = () => my.likes.includes(x.q);
   shell("Museu do Mundo", `<div class="art art-v">
@@ -13864,7 +14132,7 @@ function screenFlagMemory(size) {
   const t = newScreen();
   const wins = (P.flagMem && P.flagMem.w) || 0;
   size = size || (wins >= 6 ? 8 : wins >= 4 ? 6 : wins >= 2 ? 4 : 3);
-  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => goHome();
+  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => TRAVEL.screen();
   document.body.classList.toggle('quest', Q());
   app.innerHTML = `<div class="screen mem"><div class="mem-bar">
       <button class="ibtn" id="memBack" aria-label="Voltar">${ICON.back}</button>
@@ -13896,7 +14164,7 @@ function screenFlagMemory(size) {
     } else later(() => { a.classList.remove('up'); c.classList.remove('up'); open = []; busy = false; }, 1100);
   };
 }
-GAMES.push({ id: 'flag-memory', name: "Memória: bandeiras", sub: "encontra os pares e descobre o país", ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, kw: "bandeiras países memória" });
+GAMES.push({ id: 'flag-memory', name: "Memória: bandeiras", sub: "encontra os pares e descobre o país", ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, inside: 'travel', kw: "bandeiras países memória viagem" });
 /* FLAGMEM-END */
 function screenArtQuiz() {
   const t = newScreen();
@@ -13928,7 +14196,7 @@ function screenArtQuiz() {
       const b = e.target.closest('[data-a]'); if (!b || busy) return; busy = true;
       const box = $('#aqBox'), right = b.dataset.a === box._ok, x = box._x;
       b.classList.add(right ? 'ok' : 'no');
-      if (right) { ok++; $('#aqOk').textContent = ok; sfx.good(); await talk(`Certo! «${x.t}». ${x.a || ''}`); }
+      if (right) { ok++; $('#aqOk').textContent = ok; sfx.good(); FUN.cheer(b); await talk(`Certo! «${x.t}». ${x.a || ''}`); }
       else { sfx.oops(); box.querySelectorAll('[data-a]').forEach(c => { if (c.dataset.a === box._ok) c.classList.add('ok'); }); await talk(`É «${x.t}». ${x.a ? "Artista: " + x.a + '.' : ''} ${artMus(x) ? "Museu: " + artMus(x) + '.' : ''}`); }
       if (t !== tok) return;
       const my = artMy(); if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
@@ -13940,7 +14208,7 @@ function screenArtQuiz() {
   }, () => { if (t === tok) $('#aqBox').innerHTML = "<p class=\"lead\">Para abrir o museu, é preciso internet.</p>"; });
 }
 GAMES.push(
-  { id: 'museum', name: "Museu do Mundo", sub: "1000 pinturas e 200 pintores", ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenMuseum(), grp: 4, also: [13], prog: () => { const n = (P.museum && P.museum.seen || []).length; return n ? `vistas: ${n}` : ''; } },
+  { id: 'museum', name: "Museu do Mundo", sub: "1000 pinturas e 200 pintores", ico: () => pic('🏛️'), bg: 'var(--t-peach)', go: () => screenMuseum(), grp: 4, also: [13], prog: () => { const n = (P.museum && P.museum.seen || []).length; return n ? `vistas: ${n}` : ''; } },
   { id: 'art-quiz', name: "Quiz: pinturas", sub: "quem pintou? onde está?", ico: () => pic('🎯'), bg: 'var(--t-yellow)', go: () => screenArtQuiz(), grp: 4, also: [13] }
 );
 INTEREST_CAT.forEach(c => (c.items || []).forEach(i => { if (Array.isArray(i.tiles) && (i.tiles.includes('learn-art') || i.id === 'draw' || i.id === 'art') && !i.tiles.includes('museum')) i.tiles.splice(0, 0, 'museum'); }));
@@ -14089,7 +14357,8 @@ function screenSteps(lv) {
         <button class="big" id="stGo">${ICON.play}Começar</button>
       </div>
       <div class="st-play" id="stPlay" hidden>
-        <div class="sp-hud"><span>Conta <b id="stK">1</b>/10</span><span>Certas <b id="stOk">0</b></span><span>⏱️ <b id="stT">0</b> / ${S.t} s</span></div>
+        <div class="sp-hud"><span>Conta <b id="stK">1</b>/10</span><span>Certas <b id="stOk">0</b></span></div>
+        <div class="st-row" id="stRow" aria-hidden="true">${'<i></i>'.repeat(10)}</div>
         <div class="st-q" id="stQ">?</div>
         <div class="sp-q">= <span id="stA">?</span></div>
         ${keypadHTML('stKp')}
@@ -14098,8 +14367,10 @@ function screenSteps(lv) {
   $('#stLad').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); screenSteps(+b.dataset.lv); };
   const sel = $('#stLad .sel'); if (sel) later(() => sel.scrollIntoView({ inline: 'center', block: 'nearest' }), 50);
   function show() { task = S.g(); input = ''; $('#stQ').innerHTML = task.q; $('#stA').textContent = '?'; $('#stK').textContent = k + 1; }
-  function tick() { if (t !== tok || busy) return; $('#stT').textContent = Math.floor((performance.now() - t0) / 1000); timer = setTimeout(tick, 250); }
-  const start = () => { if (!busy || t0) return; sfx.pop(); $('#stIntro').hidden = true; $('#stPlay').hidden = false; busy = false; t0 = performance.now(); show(); tick(); talk(task.say || "Vamos lá! Resolve e carrega em OK."); };
+  // no ticking clock on the screen (fun-learn: calm, no stressful timers): the time is told at the end
+  function tick() {}
+  const mark = (i, good) => { const m = $$('#stRow i')[i]; if (m) { m.className = good ? 'ok' : 'no'; m.textContent = good ? '★' : '·'; } };
+  const start = () => { if (!busy || t0) return; sfx.pop(); $('#stIntro').hidden = true; $('#stPlay').hidden = false; $('.sprint.st').classList.add('playing'); busy = false; t0 = performance.now(); show(); tick(); talk(task.say || "Vamos lá! Resolve e carrega em OK."); };
   $('#stGo').onclick = start;
   $('#stKp').onclick = e => {
     const b = e.target.closest('[data-k]'); if (!b || busy) return; const key = b.dataset.k; sfx.tick();
@@ -14107,7 +14378,7 @@ function screenSteps(lv) {
     else if (key === 'ok') {
       if (!input) return;
       const good = +input === task.a; if (good) right++; else { sfx.oops(); $('#stQ').innerHTML = `${task.q} = <b class="st-right">${task.a}</b>`; }
-      $('#stOk').textContent = right; k++;
+      $('#stOk').textContent = right; mark(k, good); k++;
       if (k >= 10) { end(); return; }
       if (good) { sfx.good(); show(); } else { busy = true; later(() => { busy = false; show(); }, 1300); }
       return;
@@ -14203,7 +14474,8 @@ const COMPOSERS = [
     f: ["A sua «Canção de Embalar» é cantada aos bebés em todo o mundo.", "Em pequeno, tocava piano em Hamburgo, uma cidade portuária, para ajudar a família.", "Brahms gostava muito de crianças e, dizem, trazia rebuçados nos bolsos para lhes oferecer."] }
 ];
 const compOf = tid => COMPOSERS.find(c => c.tunes.includes(tid));
-const portrait = (c, w = 330) => `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(c.img)}?width=${w}`;
+// the portraits live on our own site (Wikimedia answers 429 and they vanished); `img` names the Commons file they came from
+const portrait = c => `${SITE_ROOT}img/learn/cmp-${c.id}.webp`;
 // the little synth: piano, strings, organ; everything stops with the screen
 let CPLAY = null;
 function compStop() { if (CPLAY) { CPLAY.stop = true; CPLAY.nodes.forEach(n => { try { n.stop(); } catch (e) {} }); CPLAY = null; } }
@@ -14364,7 +14636,7 @@ function screenGuessComposer() {
   $('#gcOpts').onclick = async e => {
     const b = e.target.closest('[data-c]'); if (!b || busy) return; busy = true; compStop();
     const right = b.dataset.c === cur.c.id; b.classList.add(right ? 'ok' : 'no');
-    if (right) { ok++; $('#gcOk').textContent = ok; sfx.good(); } else { sfx.oops(); $$('#gcOpts [data-c]').forEach(x => { if (x.dataset.c === cur.c.id) x.classList.add('ok'); }); }
+    if (right) { ok++; $('#gcOk').textContent = ok; sfx.good(); FUN.cheer(b); } else { sfx.oops(); $$('#gcOpts [data-c]').forEach(x => { if (x.dataset.c === cur.c.id) x.classList.add('ok'); }); }
     await talk(`${right ? "Certo!" : "É"} ${cur.c.n}: «${CTUNES[cur.tid].n}».`); if (t !== tok) return;
     n++;
     if (n >= 5) finish({ key: 'guess-composer', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: `Adivinhaste ${ok} em 5! Tens ouvido musical.`, again: screenGuessComposer, menu: screenComposers });
@@ -14552,7 +14824,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '148';
+const APP_VER = '149';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -15455,7 +15727,7 @@ function artLightText(a) {
 async function artWiki(x, n) {
   if (!x.w) return '';
   if (ART_WIKI[x.q] === undefined) ART_WIKI[x.q] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(x.w)}`)
-    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
   const s = await ART_WIKI[x.q];
   return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, n).join(' ') : '';
 }
@@ -15536,7 +15808,7 @@ function artMusList(box, D, P2) {
   const home = famCountries();
   const ms = Object.keys(cnt).filter(k => D.m[k] && (cnt[k] >= 3 || home.includes(musCC(k)))).sort((a, b) => cnt[b] - cnt[a]);
   const row = k => { const top = P2.find(x => x.m === k), city = musCity(k);
-    return `<button class="art-row" data-mus="${k}" data-s="${esc((D.m[k] + ' ' + city).toLowerCase())}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(D.m[k])}</b><small>${city ? `${FLAG(musCC(k))} ${esc(city)} · ` : ''}${cnt[k]} ${plural(cnt[k], ["pintura", "pinturas", "pinturas"])}</small></span></button>`; };
+    return `<button class="art-row" data-mus="${k}" data-s="${esc((D.m[k] + ' ' + city).toLowerCase())}"><img loading="lazy" src="${artImg(top.f, 120)}" alt=""><span><b>${esc(D.m[k])}${(artMy().stamps || []).includes(k) ? ' 🎟️' : ''}</b><small>${city ? `${FLAG(musCC(k))} ${esc(city)} · ` : ''}${cnt[k]} ${plural(cnt[k], ["pintura", "pinturas", "pinturas"])}</small></span></button>`; };
   const mine = ms.filter(k => home.includes(musCC(k))), rest = ms.filter(k => !mine.includes(k));
   box.innerHTML = `<input class="art-find" id="musFind" type="search" placeholder="🔎 Procurar um museu ou uma cidade" autocomplete="off">
     ${mine.length ? `<h2 class="art-h mus-h">🏠 Museus dos nossos países</h2><div class="art-list">${mine.map(row).join('')}</div><h2 class="art-h mus-h">🌍 Todos os museus do mundo</h2>` : ''}
@@ -15653,7 +15925,7 @@ function screenTF({ title, key, items, back, again, n = 6 }) {
   $('#tfB').onclick = e => {
     const b = e.target.closest('[data-v]'); if (!b || busy) return; busy = true;
     const q = qs[k], right = (b.dataset.v === '1') === q.t;
-    if (right) { ok++; sfx.good(); } else tone(300, .2, 'sine', .13, 0, 210);
+    if (right) { ok++; sfx.good(); FUN.cheer(b); } else tone(300, .2, 'sine', .13, 0, 210);
     b.classList.add(right ? 'ok' : 'no'); $$('#tfB button').forEach(x => { x.disabled = true; });
     const w = `${right ? "Certo!" : "Não acertaste" + G("", '') + '!'} ${q.t ? "É verdade." : "É invenção."} ${q.w}`;
     $('#tfW').textContent = w; $('#tfW').hidden = false; $('#tfNext').hidden = false; talk(w);
@@ -15704,7 +15976,7 @@ const MONTHS_IN = ["em janeiro", "em fevereiro", "em março", "em abril", "em ma
 async function tripWiki(name) {
   try {
     const d = await fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`).then(r => r.ok ? r.json() : null);
-    const s = d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
+    const s = d && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
     return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, 4) : [];
   } catch (e) { return []; }
 }
@@ -15761,7 +16033,7 @@ function tripWords(lg) {
   $('#twO').onclick = e => {
     const b = e.target.closest('[data-m]'); if (!b || busy) return; busy = true;
     const q = qs[k], right = b.dataset.m === q.id;
-    if (right) { ok++; sfx.good(); } else tone(300, .2, 'sine', .13, 0, 210);
+    if (right) { ok++; sfx.good(); FUN.cheer(b); } else tone(300, .2, 'sine', .13, 0, 210);
     $$('#twO .pick-b').forEach(x => { x.disabled = true; if (x.dataset.m === q.id) x.classList.add('ok'); else if (x === b) x.classList.add('no'); });
     $('#twW').textContent = `${q.w} — ${q.m} (${q.hint})`; $('#twW').hidden = false; $('#twNext').hidden = false;
   };
@@ -16102,9 +16374,17 @@ function sayMark(sent) {
     return f ? sayForm(t, f) : t;
   });
 }
+// what no voice should read aloud: Wikipedia's formulas ({\displaystyle …}), HTML tags, backslashes and other markup,
+// which the voices say as «бэкслэш», «слэш», «нижнее подчёркивание»; a slash becomes a pause (и/или → и или)
+function plainText(t) {
+  let s = String(t == null ? '' : t), prev;
+  do { prev = s; s = s.replace(/\{\\displaystyle[^{}]*(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}[^{}]*)*\}/g, ' '); } while (s !== prev);
+  return s.replace(/\[\d+\]/g, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\\[a-zA-Z]+/g, ' ').replace(/[\\{}_^|~\[\]]/g, ' ')
+    .replace(/\s*\/\s*/g, ' ').replace(/\s+([,.;:!?…])/g, '$1').replace(/[ \t]+/g, ' ').trim();
+}
 // the text a voice gets: numbers in words, then sentence by sentence with the stress marks
 function sayParts(text) {
-  const t = IS_RU ? ruNums(text) : String(text);
+  const t = IS_RU ? ruNums(plainText(text)) : plainText(text);
   return (t.match(/[^.!?…]+[.!?…]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => IS_RU ? sayMark(x) : x);
 }
 // for Piper: the corrected phonemes of the marked words; words of the family not yet worked out go to the voice to work out
@@ -16860,10 +17140,12 @@ const LOGO = (() => {
     const t = newScreen(), pair = pickOne([['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
     const deck = shuffle(pair.flatMap(L => sample(SZ_ITEMS.filter(x => x[0] === L), 3)));
     let k = 0, busy = false;
-    shell('Водичка или комарик?', `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
+    // the title names the two sounds of this round: «Водичка или тише?» when С meets Ц
+    shell({ 'С,З': 'Водичка или комарик?', 'С,Ц': 'Водичка или тише?', 'З,Ц': 'Комарик или тише?' }[pair.join()], `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
       <div class="bins" id="bins">${pair.map(L => `<button class="bin" data-l="${L}"><span class="emo">${SZ_BINS[L][0]}</span><b class="L c">${L}</b><small>${SZ_BINS[L][1]}</small></button>`).join('')}</div></div>`);
     const cslot = $('#cslot'), bins = $('#bins');
     function show() {
+      roundProg(k, deck.length);
       busy = false; const [, w, e] = deck[k];
       cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
       talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${pair.map(L => SZ_BINS[L][1].split(':')[0]).join(' или ')}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
@@ -16899,6 +17181,7 @@ const LOGO = (() => {
       <button class="chip" id="lgAgain">🔊 Ещё раз</button></div>`);
     $('#lgAgain').onclick = () => { if (target) say(cap(target[0]) + '.', { rate: .8 }); };
     const show = () => {
+      roundProg(k, deck.length);
       busy = false; const set = shuffle([...deck[k]]); target = pickOne(set);
       $('#lgP').innerHTML = tiles(set);
       (k === 0 ? talk('Слова похожи, но звучат по-разному. Я скажу одно — найди его.') : wait(250)).then(() => { if (t === tok) say(cap(target[0]) + '.'); });
@@ -16934,6 +17217,7 @@ const LOGO = (() => {
     $('#lgAgain').onclick = () => say(cap(word()) + '.');
     const dots = () => { $('#lgDots').innerHTML = '<i></i>'.repeat(n); };
     const show = () => {
+      roundProg(k, deck.length);
       busy = false; n = 0; tries = 0; dots(); $('#lgAns').textContent = '';
       $('#lgW').innerHTML = pic(deck[k][1]);
       (k === 0 ? talk('Я скажу слово. Хлопни по барабану на каждый слог: ма-ши-на — три хлопка. Потом нажми «Готово».') : wait(200)).then(() => { if (t === tok) say(cap(word()) + '.'); });
@@ -16966,6 +17250,7 @@ const LOGO = (() => {
     let syls = [], miss = -1, at = 0, build = false;
     const slots = () => { $('#lgSl').innerHTML = syls.map((s, i) => `<span class="lg-slot ${(build ? i < at : i !== miss) ? 'full' : ''}">${(build ? i < at : i !== miss) ? esc(prc(s)) : ''}</span>`).join('<i>-</i>'); };
     const show = () => {
+      roundProg(k, deck.length);
       busy = false; const [w, e] = deck[k]; syls = w.toLowerCase().split('-'); build = k % 2 === 1; at = 0;
       $('#lgW').innerHTML = pic(e);
       let opts;
@@ -16992,6 +17277,7 @@ const LOGO = (() => {
     const t = newScreen(); let k = 0, busy = true, opts = [], wrongs = 0;
     shell(title, `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
     const show = async () => {
+      roundProg(k, deck.length);
       busy = true; const it = deck[k]; opts = shuffle([it.right, ...it.wrong]);
       $('#lgC').innerHTML = card(it); $('#lgO').innerHTML = '';
       await talk(`${ask(it, k)} ${opts.slice(0, -1).join(', ')} или ${opts[opts.length - 1]}?`); if (t !== tok) return;
@@ -17019,11 +17305,13 @@ const LOGO = (() => {
     ['пчела', 'пчёл', '🐝', 'пчелов', 'пчёлы'], ['мышь', 'мышей', '🐭', 'мышов', 'мыши'], ['гусь', 'гусей', '🪿', 'гусов', 'гуси'], ['чашка', 'чашек', '☕', 'чашков', 'чашки'],
     ['карандаш', 'карандашей', '✏️', 'карандашов', 'карандаши'], ['помидор', 'помидоров', '🍅', 'помидор', 'помидоры'], ['апельсин', 'апельсинов', '🍊', 'апельсин', 'апельсины'],
     ['шар', 'шаров', '🎈', 'шарей', 'шары'], ['платье', 'платьев', '👗', 'платей', 'платья'], ['дом', 'домов', '🏠', 'домей', 'дома']];
+  // «одно яблоко», «одна ложка», «один кот»: the friend's model is always right
+  const ONE = w => /[оеё]$/.test(w) ? 'одно' : /[ая]$/.test(w) || w === 'мышь' ? 'одна' : 'один';
   const gramMany = () => quiz({
     key: 'gram-many', title: 'Один — много', line: 'Ты знаешь, как сказать «много»!', again: gramMany,
     deck: sample(MANY, 6).map(([one, many, e, w1, w2]) => ({ one, e, right: 'много ' + many, wrong: ['много ' + w1, 'много ' + w2] })),
     card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.one))}</b></div><span class="lg-arrow">→</span><div class="lg-many">${pic(it.e).repeat(5)}</div>`,
-    ask: (it, k) => `${k === 0 ? 'Один и много. ' : ''}Один ${it.one}. А если их много? Как сказать:`,
+    ask: (it, k) => `${k === 0 ? 'Один и много. ' : ''}${cap(ONE(it.one))} ${it.one}. А если их много? Как сказать:`,
     phrase: it => it.right
   });
   // [big, small said kindly, picture, two wrong ways]
@@ -17051,7 +17339,7 @@ const LOGO = (() => {
   const OF = { 'лиса': 'лисы', 'волк': 'волка', 'заяц': 'зайца', 'медведь': 'медведя', 'кошка': 'кошки', 'собака': 'собаки', 'корова': 'коровы', 'коза': 'козы', 'птица': 'птицы', 'лошадь': 'лошади', 'утка': 'утки', 'курица': 'курицы', 'рыба': 'рыбы', 'лев': 'льва' };
   const WHOSE_Q = { 'хвост': 'Чей это хвост', 'уши': 'Чьи это уши', 'лапа': 'Чья это лапа', 'молоко': 'Чьё это молоко', 'перо': 'Чьё это перо', 'грива': 'Чья это грива', 'яйцо': 'Чьё это яйцо' };
   const gramWhose = () => quiz({
-    key: 'gram-whose', title: 'Чей хвост?', line: 'Ты знаешь, чей хвост и чья лапа!', again: gramWhose,
+    key: 'gram-whose', title: 'Чей, чья, чьё?', line: 'Ты знаешь, чей хвост и чья лапа!', again: gramWhose,
     deck: sample(WHOSE, 6).map(([who, e, part, right, w1, w2]) => ({ who, e, part, right, wrong: [w1, w2] })),
     card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.part))} ${esc(OF[it.who])}</b></div>`,
     ask: it => `${cap(it.part)} ${OF[it.who]}. ${WHOSE_Q[it.part]}?`,
@@ -17314,7 +17602,7 @@ const LOGO = (() => {
   // one of these in the daily speech lesson, in turn
   const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
   const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
-  return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID };
+  return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
 })();
 
 /* ---------- «Грамматика: страница в день»: a grammar course for 4–6 year olds in the order of a speech therapist's
@@ -17458,9 +17746,9 @@ const GRAM = (() => {
   const JAM_E = { 'малина': '🫐', 'клубника': '🍓', 'вишня': '🍒', 'яблоко': '🍎', 'груша': '🍐', 'абрикос': '🍑', 'слива': '🟣' };
   const OF_JAM = { 'малина': 'малины', 'клубника': 'клубники', 'вишня': 'вишни', 'яблоко': 'яблок', 'груша': 'груш', 'абрикос': 'абрикосов', 'слива': 'слив' };
   const jamPage = () => [pick(sample(JAM, 5).map(([f, r, w1, w2]) => ({ card: `${look(JAM_E[f])}${look('🍯')}`, q: `Варенье из ${OF_JAM[f]}. Какое?`, right: r, wrong: [w1, w2], ph: `${cap(r)} варенье` })), 'Бабушка варит варенье. Скажи, какое получилось.')];
-  const whosePage = () => [pick(sample(LOGO.WHOSE, 5).map(([who, e, part, r, w1, w2]) => ({ card: `${look(e)}<b>${esc(cap(part))} ${esc(LOGO.OF[who])}</b>`, q: `${cap(part)} ${LOGO.OF[who]}. Чей?`, right: r, wrong: [w1, w2], ph: cap(r) })), 'Чей хвост, чья лапа, чьё яйцо?')];
+  const whosePage = () => [pick(sample(LOGO.WHOSE, 5).map(([who, e, part, r, w1, w2]) => ({ card: `${look(e)}<b>${esc(cap(part))} ${esc(LOGO.OF[who])}</b>`, q: `${cap(part)} ${LOGO.OF[who]}. ${LOGO.WHOSE_Q[part]}?`, right: r, wrong: [w1, w2], ph: cap(r) })), 'Чей хвост, чья лапа, чьё яйцо?')];
   // cases
-  const manyPage = () => [pick(sample(LOGO.MANY, 5).map(([one, many, e, w1, w2]) => ({ card: `<span class="gr-many">${pic(e).repeat(5)}</span>`, q: `Один ${one}. А много?`, right: `много ${many}`, wrong: [`много ${w1}`, `много ${w2}`], ph: `Много ${many}` })), 'Один и много.')];
+  const manyPage = () => [pick(sample(LOGO.MANY, 5).map(([one, many, e, w1, w2]) => ({ card: `<span class="gr-many">${pic(e).repeat(5)}</span>`, q: `${cap(LOGO.ONE(one))} ${one}. А много?`, right: `много ${many}`, wrong: [`много ${w1}`, `много ${w2}`], ph: `Много ${many}` })), 'Один и много.')];
   const NUMS = [[5, 'пять'], [6, 'шесть'], [7, 'семь'], [8, 'восемь'], [9, 'девять']];
   const countPage = () => [pick(sample(LOGO.MANY.filter(x => x[0] !== 'глаз' && x[0] !== 'сапог'), 5).map(([one, many, e, w1, w2]) => { const [n, nw] = pickOne(NUMS); return { card: `<span class="gr-many">${pic(e).repeat(n)}</span>`, q: `Сколько? Посчитай.`, right: `${nw} ${many}`, wrong: [`${nw} ${w1}`, `${nw} ${w2}`], ph: `${cap(nw)} ${many}` }; }), 'Считаем и говорим, сколько.')];
   // [who picture, у кого, the thing, the thing after «нет», two wrong ways after «у», two wrong ways after «нет»]
@@ -18170,7 +18458,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && !L
   const s0 = say; say = function (text, opts) { LIVE_TXT = String(text || '').toLowerCase(); return s0(text, opts); };
   const s1 = sayIn; sayIn = function (c, text, rate) { LIVE_TXT = String(text || '').toLowerCase(); return s1(c, text, rate); };
   const g0 = sfx.good, b0 = sfx.oops;
-  sfx.good = (...a) => { liveMood('happy'); return g0(...a); };
+  sfx.good = (...a) => { liveMood('happy'); funSpark(); return g0(...a); };
   sfx.oops = (...a) => { liveMood('oops'); return b0(...a); };
   LIVE_RAF = requestAnimationFrame(liveTick);
 }
@@ -19159,12 +19447,13 @@ const TRAVEL = (() => {
     const ps = places(), own = ownPlaces().filter(k => ps.includes(k)), rest = ps.filter(k => !own.includes(k)), got = ps.filter(stamped);
     shell("Viagem à volta do mundo", `<div class="tv">
       <div class="tv-pass"><div class="tv-ph"><b>🛂 O meu passaporte</b><span>carimbos: ${got.length} de ${ps.length}</span></div>
-        <div class="tv-stamps">${ps.map(k => `<span class="tv-s ${stamped(k) ? 'on' : ''}" title="${esc(LEARN[k].name)}">${flag(k)}</span>`).join('')}</div>
+        <div class="tv-stamps">${ps.map((k, j) => `<button class="tv-s ${stamped(k) ? 'on' : ''} ${P.tvNew === k ? 'new' : ''}" data-k="${k}" style="--r:${[-10, 6, -4, 9, -7, 3][j % 6]}deg" aria-label="${esc(LEARN[k].name)}">${flag(k)}</button>`).join('')}</div>
         <small>Lê ${STAMP} histórias sobre um lugar, e aparece um carimbo no passaporte.</small></div>
       <div class="prow-btns tv-row"><button class="big" id="tvQuiz">🧭 Adivinha onde é</button><button class="chip" id="tvRand">🎲 Voar ao acaso</button></div>
       ${own.length ? `<h2 class="tv-h">Os nossos lugares</h2><div class="tv-grid">${own.map(card).join('')}</div>` : ''}
       ${rest.length ? `<h2 class="tv-h">${own.length ? "O mundo inteiro" : "Para onde voamos?"}</h2><div class="tv-grid">${rest.map(card).join('')}</div>` : ''}
     </div>`);
+    if (P.tvNew) { delete P.tvNew; save(); }
     talk(got.length ? `O passaporte já tem ${got.length} ${plural(got.length, ["carimbo", "carimbos", "carimbos"])}! Para onde voamos a seguir?` : "Para onde voamos? Escolhe uma cidade ou um país. Ou joga «Adivinha onde é».");
     $('.tv').onclick = e => { const c = e.target.closest('[data-k]'); if (c) { sfx.pop(); screenLearn(c.dataset.k); } };
     $('#tvRand').onclick = () => { sfx.magic(); const pool = ps.filter(k => !stamped(k)); screenLearn(pickOne(pool.length ? pool : ps)); };
@@ -19172,6 +19461,11 @@ const TRAVEL = (() => {
     // the globe above the games of the journey (its own line, so the passport screen's text stays as it was)
     $('.tv-row').insertAdjacentHTML('beforebegin', `<button class="tv-globe" id="tvGlobe"><span>🌍</span><span><b>Globo</b><small>roda a Terra e toca num país ou numa cidade</small></span></button>`);
     $('#tvGlobe').onclick = () => { sfx.pop(); GLOBE_SCREEN.screen(); };
+    // «Мемори: флаги» lives here, in the journey (the owner: flags belong to travelling), not as its own tile
+    if (!gameOff('flag-memory')) {
+      $('#tvGlobe').insertAdjacentHTML('afterend', `<button class="tv-globe tv-mem" id="tvMem"><span>🚩</span><span><b>Memória: bandeiras</b><small>encontra os pares e descobre o país</small></span>${P.best['flag-memory'] ? `<i class="tv-memst">${ICON.star}${P.best['flag-memory']}</i>` : ''}</button>`);
+      $('#tvMem').onclick = () => { sfx.pop(); screenFlagMemory(); };
+    }
   }
 
   // a story whose title names its own place would give the answer away
@@ -19204,7 +19498,7 @@ const TRAVEL = (() => {
         const first = sentences(q.it.s)[0].trim();
         $('#tvAns').hidden = false;
         $('#tvAns').innerHTML = `<p><b>${ok ? "Sim!" : "É"} ${esc(LEARN[q.k].name)} ${flag(q.k)}</b> ${esc(first)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < qs.length ? "Seguinte →" : "Pronto"}</button></div>`;
-        if (ok) { sfx.good(); talk(`Sim! É ${LEARN[q.k].name}. ${first}`); } else { sfx.oops(); talk(`É ${LEARN[q.k].name}. ${first}`); }
+        if (ok) { sfx.good(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); hopEl($('.tv-big')); talk(`Sim! É ${LEARN[q.k].name}. ${first}`); } else { sfx.oops(); wiggle(b); talk(`É ${LEARN[q.k].name}. ${first}`); }
         $('#tvNext').onclick = () => { sfx.pop(); n++; if (n < qs.length) show(); else finish({ key: 'travel-quiz', stars: right >= 4 ? 3 : right >= 2 ? 2 : 1, line: `Acertaste ${right} de ${qs.length}`, again: quiz, menu: screen }); };
       };
     };
@@ -19218,7 +19512,22 @@ const TRAVEL = (() => {
     kw: () => places().map(k => LEARN[k].name).join(' '), ico: () => pic('✈️'), bg: 'var(--t-blue)', go: () => screen(), grp: 10 });
   // interests that pointed at a city tile point at the journey now
   LIKES_BASE.forEach(x => { if (!Array.isArray(x.tiles)) return; const t = x.tiles.map(id => /^learn-/.test(id) && LEARN[id.slice(6)] && LEARN[id.slice(6)].place ? 'travel' : id); x.tiles.splice(0, x.tiles.length, ...new Set(t)); });
-  return { screen, quiz };
+  // a new stamp: an ink stamp lands on the screen with the place's flag and name, then the story's reward
+  function stampShow(k, then) {
+    P.tvNew = k; save();
+    const ps = places(), got = ps.filter(stamped).length;
+    const ov = document.createElement('div'); ov.className = 'overlay tv-stov';
+    ov.innerHTML = `<div class="tv-stbox" role="dialog"><p class="tv-stt">🛂 Um carimbo novo no passaporte!</p>
+      <div class="tv-stamp" style="--bg:${LEARN[k].bg}"><span class="tv-stf">${flag(k)}</span><b>${esc(LEARN[k].name)}</b><small>${(d => `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`)(new Date())}</small></div>
+      <p class="tv-stn">carimbos: ${got} de ${ps.length}</p>
+      <button class="big" id="tvStOk">Viva!</button></div>`;
+    $('.screen').append(ov);
+    setTimeout(() => { sfx.magic(); confetti(40); }, 380);
+    talk(`Um carimbo novo no passaporte: ${LEARN[k].name}!`);
+    let gone = 0; const go = () => { if (gone++) return; ov.remove(); then(); };
+    $('#tvStOk').onclick = () => { sfx.pop(); go(); };
+  }
+  return { screen, quiz, stamped, stampShow };
 })();
 /* TRAVEL-END */
 /* GLOBE-BEGIN */
@@ -20484,7 +20793,7 @@ const ARTISTS = (() => {
   function about(a) {
     const w = ART.data && ART.data.aw && ART.data.aw[a]; if (!w) return Promise.resolve('');
     if (WIKI[a] === undefined) WIKI[a] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(w.replace(/ /g, '_'))}`)
-      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
     return WIKI[a].then(s => s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, Q() ? 3 : 2).join(' ') : '');
   }
   function list(box, P2) {
@@ -20633,7 +20942,7 @@ const CBOX = (() => {
         talk(miss >= 2 ? `Dica: é ${c.n}.` : "Não é ele. Ouve outra vez e tenta de novo!");
         return;
       }
-      done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good();
+      done = true; compStop(); st.classList.remove('on'); b.classList.add('ok'); sfx.good(); FUN.cheer(b);
       win(true);
     };
     // «Не знаю»: the answer and the story; the card comes too (learning is the point), without the star
@@ -20835,6 +21144,13 @@ const TALES = (() => {
     const r = await fetch(base() + 'index.json'); if (!r.ok) throw new Error('no tales');
     IDX = await r.json(); return IDX;
   }
+  // human-narrated recordings (LibriVox, public domain): tales/audio/index.json {id: {f, who, src, lic, dur, ts[sentence starts]}}
+  let RECS = null;
+  async function recs() {
+    if (RECS) return RECS;
+    try { const r = await fetch(base() + 'audio/index.json'); RECS = r.ok ? await r.json() : {}; } catch (e) { return {}; }
+    return RECS;
+  }
   async function text(id) {
     if (TXT[id]) return TXT[id];
     const r = await fetch(base() + id + '.json'); if (!r.ok) throw new Error('no tale');
@@ -20857,15 +21173,16 @@ const TALES = (() => {
     const t = newScreen();
     shell('Аудиосказки', `<div class="tl-wrap"><p class="lead" id="tlLead">Выбери сказку — я прочитаю её вслух. Текст будет на экране.</p>
       <div class="tl-list" id="tlList"><p class="muted">Открываю сказки…</p></div>
-      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
+      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
     talk('Выбери сказку. Я прочитаю её вслух.');
     let xs;
+    const RC = await recs().catch(() => ({}));
     try { xs = await index(); } catch (e) { if (t === tok) $('#tlList').innerHTML = '<p class="muted">Сказки не загрузились. Они откроются, когда появится интернет, а потом будут работать и без него.</p>'; return; }
     if (t !== tok) return;
     warm();
     const H = heard(), age = P.settings.age || 0;
     const row = x => { const h = H[x.id] || {};
-      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
+      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
     const mine = age ? xs.filter(x => !x.age || age <= x.age[1] + 1) : xs, rest = xs.filter(x => !mine.includes(x));
     $('#tlList').innerHTML = mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
     $('#tlList').onclick = e => { const b = e.target.closest('.tl-i'); if (b) { sfx.pop(); play(b.dataset.id, () => list(back)); } };
@@ -20877,9 +21194,12 @@ const TALES = (() => {
       shell('Аудиосказки', '<p class="lead">Эта сказка не загрузилась. Проверьте интернет и попробуйте ещё раз.</p>', { back: back || (() => list()) }); return;
     }
     if (t !== tok) return;
+    const R = ((await recs().catch(() => ({})))[id]) || null;
+    if (t !== tok) return;
     const S = [];
     const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${sentences(p).map(s => { const j = S.push({ s: s.trim(), pi }) - 1; return `<span class="ss" data-j="${j}">${esc(s)}</span>`; }).join('')}</p>`).join('');
     shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>
+        ${R ? `<div class="tl-mode" id="tlMode"><button class="chip" data-m="actor">🎙 Слушать актёра</button><button class="chip" data-m="voice">🔊 Голос игры</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
         <div class="tl-text" id="tlText">${html}</div><p class="tl-end" id="tlEnd" hidden>Конец 🌙</p></article>
       <div class="tl-ctl"><button class="ibtn" id="tlPrev" aria-label="Фраза назад">⏮</button><button class="big" id="tlPlay"></button>
         <button class="ibtn" id="tlNext" aria-label="Фраза вперёд">⏭</button><button class="ibtn" id="tlNight" aria-label="Ночной режим">🌙</button></div>`, { back: back || (() => list()), guide: false, raw: true });
@@ -20891,7 +21211,43 @@ const TALES = (() => {
       const el = spans[j]; if (el && !night) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
       const nt = $('#tlNightT'); if (nt && S[j]) nt.textContent = S[j].s;
     };
-    async function go() {
+    // the actor's recording (LibriVox): the same sentences lit up by their start times in the file; the game voice is the other way
+    let mode = R && me.mode !== 'voice' ? 'actor' : 'voice', au = null, auRun = 0;
+    const finish = () => {
+      playing = false; me.at = 0; me.done = 1; save();
+      spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
+      const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
+    };
+    const credit = () => { const c = $('#tlCr'); if (!c) return;
+      c.textContent = mode === 'actor' ? `🎙 Читает ${R.who}. Запись проекта LibriVox — общественное достояние (Public Domain).` : '🔊 Читает голос игры.';
+      $$('#tlMode .chip').forEach(b => b.classList.toggle('sel', b.dataset.m === mode)); };
+    function actorGo() {
+      auRun = ++run; playing = true; btn();
+      if (at >= S.length) at = 0;
+      $('#tlEnd').hidden = true; mark(at);
+      if (!au) {
+        au = new Audio(base() + 'audio/' + R.f); au.preload = 'auto';
+        au.addEventListener('timeupdate', () => {
+          if (t !== tok) { au.pause(); return; }
+          if (!playing) return;
+          let j = 0; for (let k = 0; k < R.ts.length; k++) { if (R.ts[k] <= au.currentTime + 0.12) j = k; else break; }
+          if (j !== at) { at = j; mark(j); if (at % 5 === 4) { me.at = at; save(); } }
+        });
+        au.addEventListener('ended', () => { if (t === tok && playing) { at = S.length; finish(); } });
+        au.addEventListener('pause', () => { if (t === tok && playing && !au.ended) { playing = false; btn(); } });
+        au.addEventListener('error', () => {
+          if (t !== tok) return;
+          const was = playing; au = null; TALE_AUDIO = null; mode = 'voice'; credit(); btn();
+          const c = $('#tlCr'); if (c) c.textContent = 'Запись не загрузилась (нужен интернет). Читает голос игры.';
+          if (was) { playing = false; go(); }
+        });
+      }
+      TALE_AUDIO = au;
+      const to = R.ts[at] || 0, seek = () => { try { au.currentTime = to; } catch (e) {} };
+      if (au.readyState >= 1) seek(); else au.addEventListener('loadedmetadata', seek, { once: true });
+      const pr = au.play(); if (pr && pr.catch) pr.catch(() => { playing = false; btn(); });
+    }
+    async function voiceGo() {
       const my = ++run; playing = true; btn();
       if (at >= S.length) at = 0;
       $('#tlEnd').hidden = true;
@@ -20902,10 +21258,9 @@ const TALES = (() => {
         await pause(para ? 700 : 280); if (t !== tok || my !== run) return;
         if (at % 5 === 4) { me.at = at + 1; save(); }
       }
-      playing = false; me.at = 0; me.done = 1; save();
-      spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
-      const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
+      finish();
     }
+    function go() { return mode === 'actor' && R ? actorGo() : voiceGo(); }
     function stop() { run++; playing = false; hush(); me.at = at < S.length ? at : 0; save(); btn(); }
     const jump = j => { at = Math.max(0, Math.min(S.length - 1, j)); if (playing) { run++; hush(); go(); } else { mark(at); btn(); } };
     const toggle = () => playing ? stop() : go();
@@ -20917,6 +21272,13 @@ const TALES = (() => {
         <button class="tl-nx" id="tlNightX" aria-label="Выйти из ночного режима">☀️</button></div>`);
       $('#tlNightOv').onclick = e => { if (e.target.closest('#tlNightX')) { setNight(false); return; } toggle(); };
       if (!playing) go();
+    }
+    if (R) {
+      credit();
+      $('#tlMode').onclick = e => {
+        const b = e.target.closest('[data-m]'); if (!b || b.dataset.m === mode) return; sfx.pop();
+        const was = playing; run++; playing = false; hush(); mode = b.dataset.m; me.mode = mode; save(); credit(); btn(); if (was) go();
+      };
     }
     $('#tlPlay').onclick = () => { if (!night) sfx.pop(); toggle(); };
     $('#tlPrev').onclick = () => jump(at - 1);
@@ -21264,6 +21626,86 @@ const MUSIC = (() => {
   return { full, composer, stop, has: t => !!REC[t] };
 })();
 /* THEMES-END */
+/* FUN-BEGIN */
+/* ---------- «Творим» more fun (the owner: «Сделай все игры более интересными и привлекательными»): the child's
+   drawings hang in gold frames on «Моя выставка» (tap one — it opens big with a little plaque), a finished drawing shows
+   itself framed on the win screen, paint splashes where the colour pours, the xylophone plays back the child's own
+   «концерт» with applause, and the museum stamps a «музейный паспорт» for every museum whose painting the child
+   looked at. ---------- */
+const FUN = (() => {
+  const frameHTML = (src, cls = '') => `<div class="fun-frame ${cls}"><img src="${src}" alt="Desenho"></div>`;
+  const art = () => P.art || [];
+  function showHTML() {
+    const a = art();
+    return `<h2 class="sec-h">🖼️ A minha exposição</h2><div class="fun-show">${a.map((x, i) => `<button class="fun-th" data-art="${i}" aria-label="Desenho">${frameHTML(x.d)}</button>`).join('')}${a.length < 3 ? `<button class="fun-th fun-empty" data-m="free" aria-label="Desenhar"><div class="fun-frame"><span>➕🎨</span></div></button>` : ''}</div>${a.length ? '' : "<p class=\"muted fun-hint\">Faz um desenho e ele fica aqui pendurado numa moldura dourada!</p>"}`;
+  }
+  const day = at => { try { return new Date(at).toLocaleDateString(LOC, { day: 'numeric', month: 'long' }); } catch (e) { return ''; } };
+  const PRAISE = ["Que cores tão vivas!", "Um verdadeiro quadro de museu!", "Adoro! És um artista!", "Que lindo! Vamos pendurá-lo onde todos o vejam.", "Uau! Apetece ficar a olhar para ele."];
+  function view(i) {
+    const a = art(); if (!a[i]) return;
+    const ov = document.createElement('div'); ov.className = 'fun-view'; ov.setAttribute('role', 'dialog');
+    const draw = () => {
+      const x = a[i];
+      ov.innerHTML = `<div class="fun-wall">${frameHTML(x.d, 'fun-big')}<p class="fun-plaque"><b>${esc(P.settings.name || '')}</b>${x.w ? ` · «${esc(cap(x.w))}»` : ''}<br><small>${esc(day(x.at))}</small></p></div>
+        ${a.length > 1 ? `<button class="av-arr l" data-v="-1" aria-label="Anterior">‹</button><button class="av-arr r" data-v="1" aria-label="Seguinte">›</button>` : ''}
+        <p class="fun-n">${i + 1} / ${a.length}</p>
+        <button class="big fun-close" data-v="x">⬅ Voltar</button>`;
+    };
+    draw(); document.body.append(ov); sfx.magic();
+    const prevBack = NAV_BACK, close = () => { if (!ov.isConnected) return; sfx.pop(); ov.remove(); NAV_BACK = prevBack; };
+    navEnter(close);
+    ov.onclick = e => {
+      const b = e.target.closest('[data-v]'); if (!b) return;
+      if (b.dataset.v === 'x') { close(); return; }
+      i = (i + +b.dataset.v + a.length) % a.length; sfx.tick(); draw(); talk(pickOne(PRAISE));
+    };
+    talk(pickOne(PRAISE));
+  }
+  function showClick(e) {
+    const b = e.target.closest('.fun-th[data-art]'); if (!b) return false;
+    sfx.pop(); view(+b.dataset.art); return true;
+  }
+  // a splash of paint where the colour pours
+  function splash(x, y, c) {
+    const B = document.createElement('div'); B.className = 'fun-splash'; B.style.left = x + 'px'; B.style.top = y + 'px';
+    for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + Math.random() * .4, d = 22 + Math.random() * 26, s = document.createElement('i'); s.style.setProperty('--x', Math.cos(a) * d + 'px'); s.style.setProperty('--y', Math.sin(a) * d + 'px'); s.style.background = c === 'rainbow' ? `hsl(${i * 45},90%,60%)` : c; B.append(s); }
+    document.body.append(B); setTimeout(() => B.remove(), 700);
+  }
+  // stars fly out of a right answer
+  function cheer(el) { if (!el) return; const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 7); }
+  // applause: many soft claps of noise
+  function applause(d = 1.8) {
+    if (!P.settings.sfx || MIC.live) return; const a = ac(); if (!a) return;
+    MIC.quietUntil = Math.max(MIC.quietUntil, performance.now() + d * 1000 + 300);
+    for (let i = 0; i < 46; i++) {
+      const t = a.currentTime + Math.random() * d, s = noiseSrc(a), f = a.createBiquadFilter(), g = a.createGain(), v = .16 * (1 - (t - a.currentTime) / d * .7);
+      f.type = 'bandpass'; f.Q.value = 1.4; f.frequency.value = 900 + Math.random() * 1600;
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .06);
+      s.connect(f); f.connect(g); g.connect(a.destination); s.start(t, Math.random()); s.stop(t + .08);
+    }
+  }
+  // the museum passport: a stamp for each museum whose painting the child looked at
+  function stamp(x) {
+    const my = artMy(); my.stamps = my.stamps || [];
+    if (!x || !x.m || !artMus(x) || my.stamps.includes(x.m)) return;
+    my.stamps.push(x.m); save();
+    const el = document.createElement('div'); el.className = 'fun-stamp-fly';
+    el.innerHTML = stampHTML(x.m) + `<b>Um carimbo novo no passaporte!</b>`;
+    document.body.append(el); later(() => { tone(140, .18, 'sine', .3); tone(90, .22, 'triangle', .2); }, 250); setTimeout(() => el.remove(), 2600);
+  }
+  const SC = ['#C8324B', '#2D6CDF', '#2E9B5A', '#8C4FD6', '#D2691E', '#1F8A8A'];
+  function stampHTML(k) {
+    const n = artMus({ m: k }) || '', city = musCity(k), cc = musCC(k);
+    const c = SC[[...k].reduce((s, ch) => s + ch.charCodeAt(0), 0) % SC.length];
+    return `<div class="fun-stamp" style="--c:${c}"><span>🏛️</span><b>${esc(n)}</b>${city ? `<small>${cc ? FLAG(cc) + ' ' : ''}${esc(city)}</small>` : ''}</div>`;
+  }
+  function passportHTML() {
+    const st = (artMy().stamps || []).filter(k => artMus({ m: k }));
+    return `<h2 class="art-h">🎟️ O meu passaporte de museus: ${st.length}</h2>${st.length ? `<div class="fun-pass">${st.map(stampHTML).join('')}</div>` : "<p class=\"lead\">Abre um quadro de qualquer museu e o carimbo desse museu aparece no teu passaporte.</p>"}`;
+  }
+  return { frameHTML, showHTML, showClick, view, splash, cheer, applause, stamp, passportHTML };
+})();
+/* FUN-END */
 /* LAYOUT-BEGIN */
 /* ---------- the home tabs split by meaning (the owner: «Короче говоря, сделай логические разделения»): each tile in one
    tab. Books, audio tales and every game whose aim is letters and reading (the colourings that teach letters too) —
@@ -21676,6 +22118,9 @@ var DRAWN = (() => {
     '🥁': svg(`<path d="M16 42v30q34 14 68 0V42" fill="${BERRY}"/><ellipse cx="50" cy="42" rx="34" ry="12" fill="#fff" stroke="${SUN}" stroke-width="5"/><path d="M16 72q34 14 68 0" stroke="${SUN}" stroke-width="5" fill="none"/><path d="M22 50l12 22M78 50 66 72M50 56v22" stroke="#FFD7E2" stroke-width="3"/><path d="M30 10l18 28M78 8 56 36" stroke="#C98A4B" stroke-width="5" stroke-linecap="round"/><circle cx="30" cy="10" r="5" fill="${SUN}"/><circle cx="78" cy="8" r="5" fill="${SUN}"/>`),
     '🔍': svg(`<path d="M62 62 86 86" stroke="${PLUM}" stroke-width="12" stroke-linecap="round"/><circle cx="42" cy="42" r="28" fill="#DDF2FF" stroke="${SEA}" stroke-width="7"/>${shine(32, 30, 7, 5)}${face(34, 50, 42, 7)}`),
     '🧙': svg(`<path d="M18 80 52 8l30 72z" fill="${PLUM}"/><ellipse cx="50" cy="80" rx="40" ry="9" fill="#6A4BD0"/><path d="M40 56l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1z" fill="${SUN}"/><circle cx="60" cy="36" r="3" fill="${SUN}"/><circle cx="48" cy="30" r="2" fill="#fff"/><path d="M80 30l4-10 4 10" stroke="${SUN}" stroke-width="3" fill="none" stroke-linecap="round"/>`),
+    // the museum (the owner: «поменять картинку, сейчас не привлекательная»): a cheerful building with columns and a
+    // painting in a gold frame between them
+    '🏛️': svg(`<path d="M50 6l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L41 13l6-1z" fill="${SUN}"/><path d="M12 38 50 16l38 22z" fill="${BERRY}" stroke="${BERRY}" stroke-width="6" stroke-linejoin="round"/>${eyes(43, 57, 29, 3.2)}${smile(50, 33, 3.5)}<rect x="10" y="38" width="80" height="8" rx="3" fill="${SUN}"/><g fill="#fff" stroke="#E3D6F7" stroke-width="2"><rect x="15" y="46" width="9" height="34" rx="2"/><rect x="27" y="46" width="9" height="34" rx="2"/><rect x="64" y="46" width="9" height="34" rx="2"/><rect x="76" y="46" width="9" height="34" rx="2"/></g><rect x="39" y="50" width="22" height="26" rx="3" fill="${SUN}" stroke="#E59A00" stroke-width="2"/><rect x="43" y="54" width="14" height="18" fill="#BDE8FF"/><circle cx="53" cy="58" r="3" fill="${OR}"/><path d="M43 72l5-7 4 4 5-6v9z" fill="${LEAF}"/><rect x="8" y="80" width="84" height="7" rx="3" fill="${PLUM}"/><rect x="4" y="87" width="92" height="7" rx="3" fill="#6A4BD0"/>`),
     '📚': svg(`<rect x="14" y="66" width="72" height="16" rx="4" fill="${SEA}"/><rect x="20" y="50" width="62" height="16" rx="4" fill="${LEAF}"/><rect x="16" y="34" width="66" height="16" rx="4" fill="${BERRY}"/><path d="M22 74h60M26 58h52M22 42h56" stroke="#fff" stroke-width="2.5" opacity=".7"/>${eyes(40, 60, 22)}${smile(50, 26, 4)}`),
     '🍉': svg(`<path d="M8 40a42 42 0 0 0 84 0z" fill="${LEAF}"/><path d="M15 40a35 35 0 0 0 70 0z" fill="#fff"/><path d="M19 40a31 31 0 0 0 62 0z" fill="#FF5E7A"/><g fill="${K}"><ellipse cx="34" cy="52" rx="2" ry="3.4"/><ellipse cx="66" cy="52" rx="2" ry="3.4"/><ellipse cx="50" cy="62" rx="2" ry="3.4"/></g>${eyes(40, 60, 47, 3.6)}${smile(50, 50, 3.5)}`),
     '🐼': svg(`<circle cx="24" cy="26" r="13" fill="${K}"/><circle cx="76" cy="26" r="13" fill="${K}"/><ellipse cx="50" cy="56" rx="38" ry="34" fill="#fff" stroke="#E2E4EE" stroke-width="2"/><ellipse cx="36" cy="52" rx="9" ry="11" transform="rotate(-20 36 52)" fill="${K}"/><ellipse cx="64" cy="52" rx="9" ry="11" transform="rotate(20 64 52)" fill="${K}"/><circle cx="37" cy="51" r="3.4" fill="#fff"/><circle cx="63" cy="51" r="3.4" fill="#fff"/><ellipse cx="50" cy="66" rx="5" ry="3.5" fill="${K}"/>${blush(28, 72, 66)}${smile(50, 72, 4)}`),
@@ -21768,7 +22213,7 @@ const PATH = (() => {
       : st === 'now' ? `<span class="pd-cta">${ICON.play}${go}</span>`
       : dn ? `<small>${dn} de ${plan.length}</small>` : '';
     return `<button class="pd-n ${st}" data-l="${id}" aria-label="${esc(L.name)}: ${st === 'done' ? "feito" : go}">
-      <span class="pd-c"><span class="pd-i">${ico(id)}</span>${st === 'done' ? '<span class="pd-ck">✓</span>' : ''}</span>
+      <span class="pd-c${dn && st !== 'done' ? ' pd-part' : ''}"${dn && st !== 'done' ? ` style="--p:${Math.round(dn / plan.length * 100)}%"` : ''}><span class="pd-i">${ico(id)}</span>${st === 'done' ? '<span class="pd-ck">✓</span>' : ''}</span>
       <span class="pd-lb"><b>${L.name}</b>${sub}</span></button>`;
   }
   function chest(s) {
@@ -21875,6 +22320,74 @@ const PATH = (() => {
   return { today, side, rail, lay, fresh };
 })();
 /* PATH-END */
+/* FUNSPEAK-BEGIN */
+/* ---------- The speech games feel like a walk with the friend, not a drill:
+   - during a lesson of «Сегодня» a trail of stones under a game's header shows every step of it: a done step is a star,
+     the friend stands on the step being played, the rest show their pictures, a flag at the end; the result card shows
+     the same trail with the friend stepping on (a child who cannot read sees how far it is to the end);
+   - a game's round shows pips under the header that fill up, one for each card (roundProg(k, n) from the game);
+   - a right answer sends a few stars and hearts out of the friend (only on «Сегодня» and «Говорим», calm, and not with
+     «reduce motion»). Function declarations only: shell, finish and the LIVE hook call them from earlier code. ---------- */
+function lessonStepIco(s) {
+  const k = (s && s.key) || '';
+  if (k.startsWith('breath:')) { const b = BREATH.find(x => 'breath:' + x.id === k); return pic(b ? b.icon : '💨'); }
+  if (k.startsWith('artic:')) return pic('👅');
+  // a game's own tile picture when it is a plain picture; letters and crates would be a blur on a small stone
+  const g = GAMES.find(x => x.id === k), h = g ? g.ico() : ''; return h && !/ico-|syl-ico|mini-crate/.test(h) ? h : pic('🎮');
+}
+// just: the step that was finished a moment ago (the result card makes it pop and the friend hop onto the next one)
+function lessonTrailHTML(just) {
+  if (!ACTIVE || !LS()[ACTIVE]) return '';
+  const plan = lessonPlan(ACTIVE), done = todayState().done[ACTIVE] || [], cur = plan.findIndex(x => !done.includes(x.key));
+  if (plan.length < 2) return '';
+  return `<div class="ls-trail${just ? ' ls-win' : ''}" role="img" aria-label="${esc(LS()[ACTIVE].name)}: ${done.length} de ${plan.length}">${plan.map((x, i) => {
+    const st = done.includes(x.key) ? 'done' : i === cur ? 'now' : 'next';
+    return `<span class="ls-st ${st}${x.key === just ? ' just' : ''}">${st === 'now' ? `<span class="ls-fr">${friendSVG()}</span>` : st === 'done' ? ICON.star : `<span class="ls-i">${lessonStepIco(x)}</span>`}</span>`;
+  }).join('<i class="ls-d"></i>')}<i class="ls-d"></i><span class="ls-st goal">${pic('🏁')}</span></div>`;
+}
+function roundProg(k, n) {
+  const el = document.getElementById('gstrip'); if (!el || !(n > 1)) return;
+  let r = el.querySelector('.rd'); if (!r) { r = document.createElement('div'); r.className = 'rd'; r.setAttribute('aria-hidden', 'true'); el.append(r); }
+  r.innerHTML = Array.from({ length: n }, (_, i) => `<i class="${i < k ? 'on' : i === k ? 'cur' : ''}${i === k - 1 ? ' pop' : ''}"></i>`).join('');
+}
+function funSpark() {
+  try {
+    if (LIVE_STILL || !(P.homeTab === 'speak' || P.homeTab === 'today' || ACTIVE)) return;
+    // a game that makes its own star burst at the answer (the stories and quizzes of «Узнаём», also opened from
+    // «Сегодня») keeps only its own: one celebration per right answer
+    if (!funSpark.wait) { funSpark.wait = 1; requestAnimationFrame(() => { funSpark.wait = 0; if (!document.querySelector('.burst')) funSparkGo(); }); }
+  } catch (e) {}
+}
+function funSparkGo() {
+  try {
+    const f = document.querySelector('.screen .guide-ryz'); if (!f || document.querySelector('.overlay')) return;
+    const r = f.getBoundingClientRect(); if (!r.width) return;
+    const L = document.createElement('div'); L.className = 'fsp'; L.setAttribute('aria-hidden', 'true');
+    L.style.left = r.left + r.width / 2 + 'px'; L.style.top = r.top + r.height * .3 + 'px';
+    const E = ['⭐', '💛', '✨', '⭐', '💖'];
+    L.innerHTML = E.map((e, i) => `<span style="--x:${Math.round((i - 2) * 26 + rnd(-8, 8))}px;--y:${Math.round(-70 - rnd(0, 50))}px;animation-delay:${i * 50}ms">${e}</span>`).join('');
+    document.body.append(L); setTimeout(() => L.remove(), 1300);
+  } catch (e) {}
+}
+// the speech lesson starts like a little trip: the friend shows the whole trail and says where we go today
+function lessonIntroWanted(id) { return id === 'speech' && !(todayState().done[id] || []).length && lessonPlan(id).length > 2 && !!document.querySelector('.screen'); }
+function lessonIntro(id, go) {
+  const N = lessonPlan(id).length, k = (dayNo() + (dayCounts(dayKey())[id] || 0)) % 3;
+  const line = Q() ? [`A missão começa! ${N} ${plural(N, ["passo", "passos", "passos"])} até à bandeira. Bora!`, `Treino${nameBit()}! Aquecimento, língua, arena — e a bandeira. Vamos${G("", '')}?`, `Uma nova rota! Cada pedra é uma tarefa. Em frente!`][k]
+    : [`Vamos a caminho${nameBit()}! Vamos soprar, aquecer a língua e brincar. E no fim — uma bandeirinha!`, `Hoje vamos visitar a Casinha da Língua. Pelo caminho há jogos!`, `Vamos${nameBit()}! Cada pedrinha é um jogo. Chegamos à bandeirinha?`][k];
+  const ov = document.createElement('div'); ov.className = 'overlay';
+  ov.innerHTML = `<div class="winbox ls-intro" role="dialog" aria-label="${esc(LS()[id].name)}">
+    <div class="ryz-w">${friendSVG()}</div>
+    <h2>${Q() ? "Missão!" : "A caminho!"}</h2>
+    ${lessonTrailHTML()}
+    <div class="win-btns"><button class="big" data-a="go">Vamos!</button></div></div>`;
+  $('.screen').append(ov);
+  let gone = false;
+  ov.onclick = e => { if (gone || !e.target.closest('[data-a]')) return; gone = true; sfx.pop(); hush(); go(); };
+  sfx.magic(); say(line);
+  ov.querySelector('[data-a]').focus({ preventScroll: true });
+}
+/* FUNSPEAK-END */
 /* LANDX-BEGIN */
 /* ---------- the first page for new guests shows what awaits them (the redesign):
    - «Каждый день — дорожка»: a live example of the day's path (the friend, three lessons, the chest) and what it gives;
@@ -21886,7 +22399,7 @@ const LANDX = (() => {
     speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
     learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
     create: ['draw', 'color', 'songs', 'xylo', 'composers', 'ballet', 'museum', 'piano'],
-    discover: ['travel', 'phys-lab', 'body', 'space', 'flag-memory']
+    discover: ['travel', 'phys-lab', 'body', 'space', 'plants']
   };
   // the games of a tab for any child: a little one and an older one, every game switched on
   function tabGames(t) {
@@ -21894,7 +22407,7 @@ const LANDX = (() => {
     for (const s of [{ track: 'r', age: 5 }, { track: 'l', age: 9 }]) {
       P.settings = { ...keep, ...s, allGames: true };
       try {
-        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id))
+        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !g.inside && !(g.hide && g.hide()) && !gameOff(g.id))
           .forEach(g => { if (!seen.has(g.id)) seen.set(g.id, { g, ico: g.ico(), name: nm(g.name) }); }));
       } catch (e) {}
     }
