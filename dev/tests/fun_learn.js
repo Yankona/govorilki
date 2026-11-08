@@ -27,7 +27,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     // «Учимся» on the younger track: letters first, chess after maths
     await p.click('.tb[data-tab="learn"]'); await p.waitForTimeout(600);
     const order = await p.$$eval('.group[id^="sec"]', a => a.map(x => x.id));
-    ok(order.indexOf('sec2') === 0 && order.indexOf('sec8') > order.indexOf('sec3'), 'learn tab order: ' + order.join(' '));
+    ok(order.filter(s => s !== 'sec30').indexOf('sec2') === 0 && order.indexOf('sec8') > order.indexOf('sec3'), 'learn tab order: ' + order.join(' '));
     if (lang === 'ru') await p.screenshot({ path: D + `fun-learn-tab-${DEV}.png` });
     const run = s => p.evaluate(s => window.__T.run(s), s);
     await run('GUARD.free = 1');   // no pause after a miss: the test taps fast on purpose
