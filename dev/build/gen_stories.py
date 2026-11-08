@@ -6,7 +6,7 @@ B = os.path.dirname(os.path.abspath(__file__))
 import glob
 FILES = sorted(glob.glob(os.path.join(B, '..', 'stories', '*', '*.json')))
 T = os.path.join(B, '..', 'i18n') + '/'
-ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'old']
+ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'sgp', 'jpn', 'old']
 more = {k: [] for k in ORDER}; stress = {}; ids = set(); warn = []
 for f in FILES:
     d = json.load(open(f, encoding='utf-8'))
@@ -70,6 +70,13 @@ const MORE_STORIES = LX('MORE_STORIES', """ + js + """);
   });
   LEARN.pt.name = 'Португалия';
   Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });
+})();
+// Asia 1: Сингапур and Япония, each its own section; the country code ties it to the stamp, the passport and the globe
+(() => {
+  [['sgp', 'Сингапур', '🦁', 'var(--t-mint)', 'SG', 'город-сад, супердеревья и хокер-центры'], ['jpn', 'Япония', '🗻', 'var(--t-pink)', 'JP', 'Токио, Киото, Фудзи, сакура и синкансэн']].forEach(([k, name, e, bg, place, sub]) => {
+    if (!LEARN[k]) LEARN[k] = { name, e, bg, place, sub, items: [] };
+    ((MORE_STORIES || {})[k] || []).forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); });
+  });
 })();
 """
 open(B + '/part_stories.js', 'w', encoding='utf-8').write(part)
