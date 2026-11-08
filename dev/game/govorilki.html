@@ -21308,9 +21308,9 @@ const TALES = (() => {
     warm();
     const H = heard(), age = P.settings.age || 0;
     const row = x => { const h = H[x.id] || {};
-      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
+      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${x.age ? ' · ' + x.age[0] + '+' : ''}${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
     const live = (a, b) => !!RC[b.id] - !!RC[a.id];      // read by an actor: first
-    const mine = (age ? xs.filter(x => !x.age || age <= x.age[1] + 1) : xs).slice().sort(live), rest = xs.filter(x => !mine.includes(x)).sort(live);
+    const mine = (age ? xs.filter(x => !x.age || age >= x.age[0] - 1) : xs).slice().sort(live), rest = xs.filter(x => !mine.includes(x)).sort(live);
     $('#tlList').innerHTML = mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
     $('#tlList').onclick = e => { const b = e.target.closest('.tl-i'); if (b) { sfx.pop(); play(b.dataset.id, () => list(back)); } };
   }

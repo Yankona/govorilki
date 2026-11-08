@@ -6,7 +6,7 @@ Config: recordings.json, a list of entries
    file ws = a saved raw wikitext page, var = its variant header or null: then the best variant is chosen by the recording)
 For every entry not yet published (tales/audio/index.json at the site root): the tale text (existing tales/<id>.json or Wikisource),
 the recogniser's word times of the downloaded file (asr.py writes <file>.asr.json), the start time of every sentence (split
-exactly like the game's sentences()), a trimmed mono 48 kbps MP3 (LibriVox's spoken intro, title and end note are cut), and
+exactly like the game's sentences()), a trimmed mono 32 kbps MP3 (LibriVox's spoken intro, title and end note are cut), and
 the merged audio/index.json + index.json. An entry whose recording reads less than MIN_COVER of the text is refused and listed.
 
   python3 recordings.py DOWNLOAD_DIR WIKISOURCE_DIR [--all]     (both folders are only read; --all redoes the published ones too)
@@ -97,11 +97,13 @@ for c in json.load(open(os.path.join(HERE, 'recordings.json'), encoding='utf-8')
         json.dump({'id': c['id'], 't': n['t'], 'by': n['by'], 'p': ps}, open(os.path.join(OUT, c['id'] + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
     mp3 = os.path.join(OUT, 'audio', c['id'] + '.mp3')
     subprocess.run(['ffmpeg', '-y', '-v', 'error', '-ss', f'{a0:.2f}', '-to', f'{a1:.2f}', '-i', os.path.join(DL, c['file']), '-af', f'afade=t=out:st={a1 - a0 - 0.5:.2f}:d=0.5',
-                    '-ac', '1', '-ar', '24000', '-c:a', 'libmp3lame', '-b:a', '48k', '-map_metadata', '-1', mp3], check=True)
+                    '-ac', '1', '-ar', '24000', '-c:a', 'libmp3lame', '-b:a', '32k', '-map_metadata', '-1', mp3], check=True)
     rec[c['id']] = dict(f=c['id'] + '.mp3', who=c['who'], src=c['src'], lic=PD, dur=round(a1 - a0, 1), ts=[round(x - a0, 2) for x in start], kb=os.path.getsize(mp3) // 1024)
     print(c['id'], 'variant', best, 'sentences', len(S), 'cover %.2f' % cov, 'audio %.0fs' % (a1 - a0), os.path.getsize(mp3) // 1024, 'KB')
     if 'new' in c:
         n = c['new']; by_id[c['id']] = dict(id=c['id'], t=n['t'], by=n['by'], e=n['e'], age=n['age'], min=max(1, round((a1 - a0) / 60)), w=len(' '.join(ps).split()))
+for c in json.load(open(os.path.join(HERE, 'recordings.json'), encoding='utf-8')):     # an age fixed later for a tale published earlier
+    if c.get('age') and c['id'] in by_id: by_id[c['id']]['age'] = c['age']
 index_new = [by_id[x['id']] for x in index_old] + [v for k, v in by_id.items() if k not in {x['id'] for x in index_old}]
 json.dump(index_new, open(os.path.join(OUT, 'index.json'), 'w', encoding='utf-8'), ensure_ascii=False)
 json.dump(rec, open(os.path.join(OUT, 'audio', 'index.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
