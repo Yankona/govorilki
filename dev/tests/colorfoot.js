@@ -59,7 +59,12 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
     const cm = await p.evaluate(() => ({ h: [...document.querySelectorAll('.sec-h')].map(x => x.textContent), n: document.querySelector('.cards').querySelectorAll('.page').length }));
     if (cm.n !== 7) fail.push('ballet group first has ' + cm.n);
     await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-colormenu.png` });
-    const pages = await R('BALLET_PAGES');
+    // football and cars/bikes lovers: those two groups first
+    await R(`(() => { P.settings.likes = ['football', 'moto']; screenColorMenu(); })()`); await p.waitForTimeout(600);
+    const cm2 = await p.evaluate(() => [...document.querySelectorAll('.cards')].slice(0, 2).map(c => c.querySelectorAll('.page').length));
+    if (cm2[0] !== 8 || cm2[1] !== 10) fail.push('football/cars groups first: ' + cm2);
+    await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-colormenu2.png`, fullPage: DEV === 'laptop' });
+    const pages = await R('[...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES]');
     for (const pg of pages) {
       await R(`screenPaint({ mode: 'color', page: '${pg}' })`); await p.waitForTimeout(500);
       await p.click('.tool[data-t="fill"]').catch(() => fail.push('no fill tool'));
@@ -71,7 +76,7 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
       for (let i = 0; i < pts.length; i++) { await p.click(`.swc[data-c="${cols[i % 4]}"]`); await p.mouse.click(pts[i][0], pts[i][1]); }
       const filled = await p.evaluate(() => document.querySelectorAll('#svgPage [style*="fill"]').length);
       if (pts.length < 6 || filled < pts.length * .9) fail.push(`${pg}: ${filled}/${pts.length} filled`);
-      if (pg === 'svg:bl-arabesque' || pg === 'svg:bl-nutcracker') await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-${pg.slice(7)}.png` });
+      if (['svg:bl-arabesque', 'svg:bl-nutcracker', 'svg:fb-kick', 'svg:vh-super', 'svg:vh-sportbike'].includes(pg)) await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-${pg.slice(7)}.png` });
       // colouring by letters finds enough parts on this page (no fallback to another picture)
       await R(`screenCodeColor('abc', '${pg}')`); await p.waitForTimeout(700);
       const cc = await R(`[(CC_FEW.abc || []).includes('${pg}'), document.querySelectorAll('.cc-t').length]`);
