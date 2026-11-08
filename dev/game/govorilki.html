@@ -706,6 +706,62 @@ b.r{color:var(--berry)}
 .lab-meter b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--leaf),var(--sun),var(--berry))}
 .lab-stat,.lab-task{margin:0;text-align:center;font:800 16px/1.35 var(--f-body)}
 .lab-note{margin:0;padding:10px 14px;border-radius:16px;background:var(--t-green);color:var(--ink);font:700 15px/1.4 var(--f-body);text-align:center}
+.bd{display:flex;flex-direction:column;gap:10px;width:100%;max-width:880px;margin:0 auto;padding-bottom:20px}
+.bd-main{display:flex;flex-direction:column;align-items:center;gap:12px}
+.bd-fig{position:relative;border-radius:24px;background:linear-gradient(#EAF6FF,#F7FBFF);box-shadow:0 5px 0 var(--line-strong);padding:6px 10px;line-height:0}
+.bd-fig svg{height:min(54vh,520px);width:auto;max-width:100%;display:block;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.bd-side{display:flex;flex-direction:column;gap:10px;width:100%;max-width:420px}
+.bd-card{padding:12px 16px;border-radius:20px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);color:var(--ink)}
+.bd-card h2{margin:0 0 4px;font:900 22px/1.2 var(--f-body);display:flex;align-items:center;gap:8px}
+.bd-card p{margin:0;font:700 16px/1.45 var(--f-body)}
+.bd-card .link-btn{margin-top:6px}
+.bd-dot{display:inline-block;width:16px;height:16px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15)}
+.bd-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.bd-chips .chip{font-size:15px;padding:6px 12px 6px 8px;position:relative}
+.bd-chips .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.bd-chips .chip.seen::after{content:'✓';font:900 13px var(--f-body);color:var(--leaf)}
+.bd-prog{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.bd-prog i{width:14px;height:14px;border-radius:50%;background:var(--line-strong)}
+.bd-prog i.ok{background:var(--leaf)}
+@media (min-width:720px){.bd-main{flex-direction:row;align-items:flex-start;justify-content:center}.bd-fig svg{height:min(68vh,560px)}}
+.bd-o{cursor:pointer}
+.bd-o .bd-s{transition:opacity .25s,stroke-width .2s}
+.bd svg[data-on] .bd-o:not(.on){opacity:.35}
+.bd-o.on .bd-s{stroke:#FFB000;stroke-width:3.5}
+.bd-o.yes .bd-s{stroke:#2FA865;stroke-width:4}
+.bd-o.hint{animation:bdBlink .7s ease-in-out infinite}
+@keyframes bdBlink{50%{opacity:.25}}
+.bd-fx,.bd-rib{pointer-events:none;opacity:0;transition:opacity .3s}
+.bd-o.on .bd-hb,.bd-o.on .bd-lu,.bd-o.on .bd-st,.bd-o.on .bd-li,.bd-o.on .bd-bi{transform-box:fill-box;transform-origin:center}
+.bd-o.on .bd-hb{animation:bdBeat 1s ease-in-out infinite}
+@keyframes bdBeat{0%,40%,100%{transform:scale(1)}12%{transform:scale(1.2)}26%{transform:scale(1.08)}}
+.bd-o.on .bd-lu{transform-origin:center top;animation:bdBreathe 3.4s ease-in-out infinite}
+@keyframes bdBreathe{0%,100%{transform:scale(.9)}50%{transform:scale(1.1)}}
+.bd-o.on .bd-st{animation:bdSquish 1.6s ease-in-out infinite}
+@keyframes bdSquish{0%,100%{transform:scale(1)}30%{transform:scale(1.08,.92)}60%{transform:scale(.94,1.06)}}
+.bd-o.on .bd-li{animation:bdGlow 1.6s ease-in-out infinite}
+@keyframes bdGlow{50%{transform:scale(1.05);filter:brightness(1.25)}}
+.bd-o.on .bd-in{stroke-dasharray:10 6;animation:bdFlow 1.2s linear infinite}
+@keyframes bdFlow{to{stroke-dashoffset:-32}}
+.bd-o.on .bd-bi{animation:bdBulge 2.4s ease-in-out infinite}
+@keyframes bdBulge{0%,15%,85%,100%{transform:scale(1)}40%,60%{transform:scale(1.35,1.05)}}
+.bd svg[data-on=muscles] .bd-fa{transform-box:view-box;animation:bdFlex 2.4s ease-in-out infinite}
+.bd svg[data-on=muscles] .bd-fa-l{transform-origin:76px 256px;--a:120deg}
+.bd svg[data-on=muscles] .bd-fa-r{transform-origin:224px 256px;--a:-120deg}
+@keyframes bdFlex{0%,15%,85%,100%{transform:rotate(0)}40%,60%{transform:rotate(var(--a))}}
+.bd svg[data-on=bones] .bd-rib{opacity:1}
+.bd svg[data-on=stomach] .bd-food,.bd svg[data-on=kidneys] .bd-drop,.bd svg[data-on=brain] .bd-spark,.bd svg[data-on=lungs] .bd-air,.bd svg[data-on=heart] .bd-blood{opacity:1}
+.bd-food{animation:bdFood 2.6s ease-in infinite}
+@keyframes bdFood{0%{transform:translate(150px,124px)}45%{transform:translate(150px,204px)}65%{transform:translate(168px,242px)}85%,100%{transform:translate(180px,270px);opacity:0}}
+.bd-drop{animation:bdDropL 1.8s ease-in infinite}
+.bd-drop.r{animation-name:bdDropR;animation-delay:.9s}
+@keyframes bdDropL{0%{transform:translate(118px,318px)}50%{transform:translate(128px,346px)}90%,100%{transform:translate(146px,366px);opacity:0}}
+@keyframes bdDropR{0%{transform:translate(182px,318px)}50%{transform:translate(172px,346px)}90%,100%{transform:translate(154px,366px);opacity:0}}
+.bd svg[data-on=brain] .bd-spark{animation:bdSpark 1.2s ease-in-out infinite}
+@keyframes bdSpark{0%,100%{opacity:0}50%{opacity:1}}
+.bd svg[data-on=lungs] .bd-air{animation:bdAir 3.4s ease-in-out infinite}
+@keyframes bdAir{0%,100%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(26px);opacity:0}}
+.bd svg[data-on=heart] .bd-blood{stroke-dasharray:6 10;animation:bdFlow .9s linear infinite}
 .lab-sl{display:flex;align-items:center;gap:10px;font:800 16px var(--f-body)}
 .lab-sl input{width:180px}
 .hol-card{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:26px;padding:14px 16px;background:linear-gradient(120deg,var(--t-pink),var(--t-yellow));color:var(--ink);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 3px var(--berry);text-align:left;font:inherit;cursor:pointer}
@@ -10406,6 +10462,164 @@ GAMES.push({ id: 'phys-lab', name: 'Опыты на площадке', sub: 'о�
 // «Физика на площадке» (the stories) lives inside the experiments now: one game, not two
 { const g = GAMES.find(x => x.id === 'learn-phys'); if (g) g.hide = () => true;
   INTEREST_CAT.forEach(c => (c.items || []).forEach(it => { if (it.tiles) it.tiles = [...new Set(it.tiles.map(t => t === 'learn-phys' ? 'phys-lab' : t))]; })); }
+/* BODY-BEGIN */
+/* ---------- «Как устроено тело»: a friendly see-through child drawn in SVG (original drawing). «Узнать»: tap an organ —
+   it lights up, shows how it works (the heart beats, the lungs breathe, food goes down to the stomach, the kidneys send
+   water to the bladder, the arm flexes its muscle) and the friend tells what it does in 2–3 sentences. «Найди»: «Покажи,
+   где печень» — the child taps the place; a miss gets a hint, the second miss makes the right organ blink; no failing.
+   The texts are translated by the build; the drawing has no words. ---------- */
+const BODY = (() => {
+  // k, colour, name, what it does, short fact (after a find), the question, a hint where it is, «this is …»
+  const O = [
+    { k: 'brain', c: '#F7B6C8', n: 'Мозг', t: 'Это мозг. Он в голове и управляет всем телом: думает, запоминает, видит глазами и слышит ушами. Даже ночью, когда ты спишь, мозг работает.', s: 'Мозг думает и командует телом.', q: 'Покажи, где мозг.', h: 'Он в голове.', is: 'Это мозг.' },
+    { k: 'heart', c: '#E5484D', n: 'Сердце', t: 'Это сердце. Оно размером с твой кулачок и всё время качает кровь: тук-тук, тук-тук. Кровь бежит по всему телу и приносит ему воздух и еду.', s: 'Сердце качает кровь.', q: 'Покажи, где сердце.', h: 'Оно в груди, между лёгкими.', is: 'Это сердце.' },
+    { k: 'lungs', c: '#F7A8B8', n: 'Лёгкие', t: 'Это лёгкие. Когда ты вдыхаешь, они надуваются, как два воздушных шарика, и берут из воздуха кислород. Когда выдыхаешь, они сдуваются.', s: 'Лёгкими мы дышим.', q: 'Покажи, где лёгкие.', h: 'Их два, они в груди.', is: 'Это лёгкие.' },
+    { k: 'stomach', c: '#F5B48A', n: 'Желудок', t: 'Это желудок — мешочек для еды. Еда приходит в него изо рта по длинной трубочке. Желудок мнёт и перемешивает её, пока она не станет мягкой кашкой.', s: 'Желудок переваривает еду.', q: 'Покажи, где желудок.', h: 'Он в животе, повыше. Туда по трубочке падает еда.', is: 'Это желудок.' },
+    { k: 'liver', c: '#B0563F', n: 'Печень', t: 'Это печень — самый большой орган внутри тела. Она справа, под лёгкими. Печень чистит кровь от всего вредного и помогает переваривать еду.', s: 'Печень чистит кровь.', q: 'Покажи, где печень.', h: 'Она большая, под лёгкими, рядом с желудком.', is: 'Это печень.' },
+    { k: 'kidneys', c: '#B4514C', n: 'Почки', t: 'Это почки. Их две, они похожи на большие фасолины и прячутся сзади, у пояса. Почки очищают кровь, а лишнюю воду отправляют в мочевой пузырь — поэтому мы ходим в туалет.', s: 'Почки очищают кровь.', q: 'Покажи, где почки.', h: 'Их две, они по бокам, у пояса.', is: 'Это почки.' },
+    { k: 'intest', c: '#F6C29A', n: 'Кишечник', t: 'Это кишечник — длинная извилистая трубка в животе. Если его вытянуть, он будет в несколько раз длиннее, чем ты ростом! Здесь из еды забирается всё полезное для тела.', s: 'Кишечник забирает из еды всё полезное.', q: 'Покажи, где кишечник.', h: 'Он внизу живота, весь в петельках.', is: 'Это кишечник.' },
+    { k: 'bones', c: '#F3EBD8', n: 'Скелет', t: 'Это скелет. Кости крепкие и держат тело, как каркас держит домик. Череп защищает мозг, а рёбра защищают сердце и лёгкие.', s: 'Кости держат тело.', q: 'Покажи, где кости.', h: 'Посмотри на ноги: там видно кости.', is: 'Это кости.' },
+    { k: 'muscles', c: '#E8807A', n: 'Мышцы', t: 'Это мышцы. Они тянут кости, и мы двигаемся: бегаем, прыгаем и даже улыбаемся. Согни руку и потрогай: мышца стала твёрдой!', s: 'Мышцы двигают тело.', q: 'Покажи, где мышцы.', h: 'Посмотри на руки.', is: 'Это мышцы.' }
+  ];
+  const by = k => O.find(o => o.k === k);
+  const SK = '#FFD9B8', SL = '#E8B48F';
+  const limb = (d, w) => `<path d="${d}" stroke="${SL}" stroke-width="${w + 5}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${SK}" stroke-width="${w}" stroke-linecap="round" fill="none"/>`;
+  const hit = (d, w) => `<path d="${d}" stroke="#000" stroke-opacity="0" stroke-width="${w}" stroke-linecap="round" fill="none"/>`;
+  const bone = d => `<path d="${d}" stroke="#CFC3A6" stroke-width="10" stroke-linecap="round" fill="none"/><path class="bd-s" d="${d}" stroke="#FFFDF5" stroke-width="6.5" stroke-linecap="round" fill="none"/>`;
+  const svg = () => `<svg viewBox="0 0 300 560" id="bdSvg" role="img" aria-label="${esc('Тело человека')}">
+    <g class="bd-body">
+      ${limb('M100,166 L76,256', 29)}<g class="bd-fa bd-fa-l">${limb('M76,256 L66,338', 26)}<circle cx="66" cy="346" r="14" fill="${SK}" stroke="${SL}" stroke-width="2.5"/></g>
+      ${limb('M200,166 L224,256', 29)}<g class="bd-fa bd-fa-r">${limb('M224,256 L234,338', 26)}<circle cx="234" cy="346" r="14" fill="${SK}" stroke="${SL}" stroke-width="2.5"/></g>
+      ${limb('M126,384 L122,532', 39)}${limb('M174,384 L178,532', 39)}
+      <ellipse cx="114" cy="544" rx="24" ry="11" fill="#FF8A5B" stroke="#D9673C" stroke-width="2.5"/><ellipse cx="186" cy="544" rx="24" ry="11" fill="#FF8A5B" stroke="#D9673C" stroke-width="2.5"/>
+      <rect x="137" y="128" width="26" height="30" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
+      <path d="M92,172 Q92,150 116,150 L184,150 Q208,150 208,172 L200,370 Q198,392 175,392 L125,392 Q102,392 100,370 Z" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
+      <path d="M98,378 L202,378 L206,440 L158,440 L150,412 L142,440 L94,440 Z" fill="#6C9BF2" stroke="#4C78CF" stroke-width="2.5" stroke-linejoin="round"/>
+      <circle cx="90" cy="86" r="11" fill="${SK}" stroke="${SL}" stroke-width="2.5"/><circle cx="210" cy="86" r="11" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
+      <circle cx="150" cy="78" r="60" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
+      <path d="M90,72 Q94,16 150,16 Q206,16 210,72 Q198,40 150,40 Q102,40 90,72Z" fill="#9A6440"/>
+      <circle cx="128" cy="102" r="6.5" fill="#3B2A4A"/><circle cx="172" cy="102" r="6.5" fill="#3B2A4A"/><circle cx="130" cy="100" r="2" fill="#fff"/><circle cx="174" cy="100" r="2" fill="#fff"/>
+      <ellipse cx="114" cy="117" rx="9" ry="5" fill="#FFB0A8" opacity=".7"/><ellipse cx="186" cy="117" rx="9" ry="5" fill="#FFB0A8" opacity=".7"/>
+      <path d="M136,118 Q150,131 164,118" stroke="#B4505A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </g>
+    <path class="bd-eso" d="M150,126 L150,206 Q151,232 170,244" stroke="#F0A58C" stroke-width="6" fill="none" stroke-linecap="round" pointer-events="none"/>
+    <path class="bd-fx bd-blood" d="M156,202 Q140,172 150,140 M152,214 Q112,196 84,250 L70,330 M168,214 Q190,196 216,250 L230,330 M164,232 Q178,300 176,372 L178,520 M156,232 Q122,300 124,372 L122,520" stroke="#E5484D" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <g class="bd-o" data-o="bones">${hit('M123,446 L121,536', 40)}${hit('M178,446 L179,536', 40)}${hit('M150,158 Q125,152 104,162 M150,158 Q175,152 196,162', 14)}
+      ${bone('M150,157 Q125,151 106,161')}${bone('M150,157 Q175,151 194,161')}
+      ${bone('M123,448 L122,478')}${bone('M122,492 L121,526')}${bone('M177,448 L178,478')}${bone('M178,492 L179,526')}
+      <circle class="bd-s" cx="122" cy="485" r="6" fill="#FFFDF5" stroke="#CFC3A6" stroke-width="2"/><circle class="bd-s" cx="178" cy="485" r="6" fill="#FFFDF5" stroke="#CFC3A6" stroke-width="2"/></g>
+    <g class="bd-o" data-o="muscles">${hit('M100,166 L76,256', 34)}${hit('M200,166 L224,256', 34)}
+      <g transform="rotate(15 88 210)"><ellipse class="bd-s bd-bi" cx="88" cy="210" rx="10" ry="30" fill="#E8807A" stroke="#C85F59" stroke-width="2"/></g>
+      <g transform="rotate(-15 212 210)"><ellipse class="bd-s bd-bi" cx="212" cy="210" rx="10" ry="30" fill="#E8807A" stroke="#C85F59" stroke-width="2"/></g></g>
+    <g class="bd-o" data-o="intest"><rect x="122" y="300" width="56" height="70" fill="#000" fill-opacity="0"/>
+      <path class="bd-s" d="M126,362 L126,312 Q126,304 134,304 L166,304 Q174,304 174,312 L174,356 Q174,364 166,364 L156,364" stroke="#E39A63" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="bd-in" d="M136,318 C142,310 150,322 156,314 C162,308 168,318 162,324 C156,330 146,322 140,328 C134,334 140,342 148,338 C156,334 164,340 162,346 C160,352 148,350 142,352" stroke="#F6C29A" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M136,318 C142,310 150,322 156,314 C162,308 168,318 162,324 C156,330 146,322 140,328 C134,334 140,342 148,338 C156,334 164,340 162,346 C160,352 148,350 142,352" stroke="#D9965F" stroke-width="1" fill="none" opacity=".5"/></g>
+    <g class="bd-o" data-o="kidneys"><circle cx="110" cy="311" r="17" fill="#000" fill-opacity="0"/><circle cx="190" cy="311" r="17" fill="#000" fill-opacity="0"/>
+      <path d="M118,318 Q128,350 146,366 M182,318 Q172,350 154,366" stroke="#E6B85C" stroke-width="3" fill="none"/>
+      <path class="bd-s" d="M112,294 C100,294 98,310 101,318 C104,328 118,328 120,318 C121,312 116,310 117,305 C118,299 118,294 112,294Z" fill="#B4514C" stroke="#8E3A36" stroke-width="2"/>
+      <path class="bd-s" d="M188,294 C200,294 202,310 199,318 C196,328 182,328 180,318 C179,312 184,310 183,305 C182,299 182,294 188,294Z" fill="#B4514C" stroke="#8E3A36" stroke-width="2"/>
+      <ellipse class="bd-s" cx="150" cy="370" rx="10" ry="7" fill="#F4D27A" stroke="#C9A445" stroke-width="2"/></g>
+    <g class="bd-o" data-o="liver"><path class="bd-s bd-li" d="M104,254 Q130,246 168,252 Q170,262 160,272 Q132,292 110,290 Q102,276 104,254Z" fill="#B0563F" stroke="#8A3F2D" stroke-width="2"/></g>
+    <g class="bd-o" data-o="lungs"><path d="M150,140 L150,168 M150,168 Q146,172 140,180 M150,168 Q154,172 160,180" stroke="#E9A0B0" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path class="bd-s bd-lu" d="M146,172 Q120,166 110,196 Q104,228 108,250 Q126,256 146,246 Z" fill="#F7A8B8" stroke="#D9788F" stroke-width="2"/>
+      <path class="bd-s bd-lu" d="M154,172 Q180,166 190,196 Q196,228 192,250 Q176,256 162,248 Q172,234 158,226 Z" fill="#F7A8B8" stroke="#D9788F" stroke-width="2"/></g>
+    <g class="bd-o" data-o="heart"><circle cx="160" cy="218" r="22" fill="#000" fill-opacity="0"/>
+      <g class="bd-hb"><path d="M156,204 Q156,192 168,192" stroke="#C93B40" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path class="bd-s" d="M160,236 C140,222 140,204 150,202 C156,201 159,205 160,209 C161,205 164,201 170,202 C180,204 180,222 160,236 Z" fill="#E5484D" stroke="#B8323A" stroke-width="2"/></g></g>
+    <g class="bd-o" data-o="stomach"><path class="bd-s bd-st" d="M168,240 Q176,238 178,248 Q196,252 196,272 Q194,298 172,298 Q156,296 160,284 Q172,282 172,268 Q168,256 168,240Z" fill="#F5B48A" stroke="#D88A5A" stroke-width="2"/></g>
+    <g class="bd-o" data-o="brain"><path class="bd-s" d="M112,70 Q104,46 124,38 Q134,24 152,28 Q170,22 180,36 Q198,42 192,64 Q196,82 176,84 L124,84 Q106,84 112,70Z" fill="#F7B6C8" stroke="#D9849C" stroke-width="2"/>
+      <path d="M130,44 q8,8 0,16 M150,34 q-6,12 4,22 q6,8 -2,18 M172,44 q-8,10 2,20 M120,70 q10,-4 18,2 M162,72 q10,-6 20,0" stroke="#D9849C" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+    <g class="bd-rib" stroke="#FFFDF5" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9">${[0, 1, 2, 3, 4].map(i => `<path d="M${108 + i},${174 + i * 17} Q150,${190 + i * 17} ${192 - i},${174 + i * 17}"/>`).join('')}<path d="M150,166 L150,236" stroke-width="6"/>
+      <circle cx="150" cy="70" r="54" stroke-dasharray="7 6"/></g>
+    <circle class="bd-fx bd-food" r="6" fill="#FFC83A" stroke="#D99A00" stroke-width="1.5"/>
+    <circle class="bd-fx bd-drop" r="3.5" fill="#7FC8FF"/><circle class="bd-fx bd-drop r" r="3.5" fill="#7FC8FF"/>
+    ${[[106, 34, 0], [196, 40, .3], [98, 66, .6], [202, 70, .9], [150, 14, .45]].map(([x, y, d]) => `<path class="bd-fx bd-spark" d="M${x},${y - 6} L${x + 2},${y - 1} L${x + 6},${y} L${x + 2},${y + 1} L${x},${y + 6} L${x - 2},${y + 1} L${x - 6},${y} L${x - 2},${y - 1}Z" fill="#FFD43B" style="animation-delay:${d}s"/>`).join('')}
+    ${[0, .4, .8].map(d => `<circle class="bd-fx bd-air" cx="150" cy="122" r="3.5" fill="#9ED8FF" style="animation-delay:${d}s"/>`).join('')}
+  </svg>`;
+
+  function sound(k) {
+    if (k === 'heart') [0, .18, .9, 1.08, 1.8, 1.98].forEach(w => tone(70, .12, 'sine', .3, w, 50));
+    else if (k === 'lungs') { whoosh(1.4, .07); }
+    else if (k === 'stomach') [0, .25, .5].forEach(w => tone(180, .14, 'sine', .1, w, 120));
+    else if (k === 'brain') [0, .12, .24].forEach(w => tone(1400 + w * 1000, .08, 'sine', .05, w));
+    else if (k === 'kidneys') [0, .5, 1].forEach(w => tone(900, .08, 'sine', .07, w, 500));
+    else sfx.pop();
+  }
+
+  function screen(mode = 'learn') {
+    const t = newScreen(), learn = mode === 'learn';
+    shell('Как устроено тело', `<div class="bd">
+      <div class="lab-tabs"><button class="chip ${learn ? 'sel' : ''}" data-m="learn">🔍 Узнать</button><button class="chip ${learn ? '' : 'sel'}" data-m="find">🎯 Найди</button></div>
+      <div class="bd-main"><div class="bd-fig">${svg()}</div>
+        <div class="bd-side"><div class="bd-card" id="bdCard"></div>${learn ? `<div class="bd-chips" id="bdChips">${O.map(o => `<button class="chip" data-o="${o.k}"><i class="bd-dot" style="background:${o.c}"></i>${o.n}</button>`).join('')}</div>` : ''}</div></div>
+    </div>`);
+    $('.bd .lab-tabs').onclick = e => { const b = e.target.closest('[data-m]'); if (b && b.dataset.m !== mode) { sfx.pop(); screen(b.dataset.m); } };
+    const sv = $('#bdSvg'), card = $('#bdCard');
+    // the card keeps its text visible (the friend's bubble would otherwise hide what it repeats)
+    const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
+    const groups = () => $$('#bdSvg .bd-o');
+    const light = k => { if (k) sv.dataset.on = k; else delete sv.dataset.on; groups().forEach(g => g.classList.toggle('on', g.dataset.o === k)); };
+    const tapped = e => { const g = e.target.closest('.bd-o'); return g ? g.dataset.o : null; };
+    if (learn) {
+      const seen = new Set(); let done = false;
+      fill(`<h2>👆 Нажми на любой орган</h2><p>Внутри у человечка всё как у тебя. Нажми на сердце, лёгкие, печень — и узнай, как они работают.</p>`);
+      talk('Внутри у человечка всё как у тебя. Нажми на любой орган и узнай, как он работает.');
+      const show = async k => {
+        const o = by(k); if (!o) return;
+        light(k); sound(k); seen.add(k);
+        $$('#bdChips .chip').forEach(b => { b.classList.toggle('sel', b.dataset.o === k); b.classList.toggle('seen', seen.has(b.dataset.o)); });
+        fill(`<h2><i class="bd-dot" style="background:${o.c}"></i>${o.n}</h2><p>${o.t}</p><button class="link-btn" id="bdAgain">🔊 Послушать ещё раз</button>`);
+        $('#bdAgain').onclick = () => talk(o.t);
+        await talk(o.t);
+        if (t === tok && seen.size === O.length && !done && sv.dataset.on === k) {
+          done = true;
+          finish({ key: 'body-learn', stars: 3, line: G('Ты узнала про всё тело: мозг, сердце, лёгкие, желудок, печень, почки, кишечник, кости и мышцы! Теперь поиграй в «Найди».', 'Ты узнал про всё тело: мозг, сердце, лёгкие, желудок, печень, почки, кишечник, кости и мышцы! Теперь поиграй в «Найди».'), again: () => screen('learn'), next: () => screen('find') });
+        }
+      };
+      sv.addEventListener('click', e => { const k = tapped(e); if (k) show(k); });
+      $('#bdChips').onclick = e => { const b = e.target.closest('[data-o]'); if (b) show(b.dataset.o); };
+      return;
+    }
+    // «Найди»: six organs in a random order
+    const order = shuffle(O).slice(0, 6);
+    let i = 0, miss = 0, busy = false;
+    const ask = () => {
+      const o = order[i]; miss = 0; busy = false; light(null);
+      groups().forEach(g => g.classList.remove('hint', 'yes'));
+      fill(`<h2>🎯 ${o.q}</h2><p>Нажми на рисунке, где это.</p><div class="bd-prog">${order.map((_, j) => `<i class="${j < i ? 'ok' : ''}"></i>`).join('')}</div>`);
+      talk(o.q);
+    };
+    sv.addEventListener('click', async e => {
+      if (busy) return;
+      const o = order[i], k = tapped(e);
+      if (k === o.k) {
+        busy = true; sound(k); sfx.good(); burst(e.clientX, e.clientY);
+        groups().forEach(g => { g.classList.remove('hint'); g.classList.toggle('yes', g.dataset.o === k); });
+        light(k);
+        const line = `${pickOne(['Правильно!', 'Да, верно!', G('Нашла!', 'Нашёл!'), 'Точно!'])} ${o.s}`;
+        card.querySelector('p').textContent = line;
+        await talk(line);
+        if (t !== tok) return;
+        i++;
+        if (i >= order.length) finish({ key: 'body-find', stars: 3, line: G('Ты нашла всё! Теперь ты знаешь, где что у человека внутри.', 'Ты нашёл всё! Теперь ты знаешь, где что у человека внутри.'), again: () => screen('find'), next: () => screen('learn') });
+        else ask();
+        return;
+      }
+      miss++; tone(330, .15, 'sine', .08);
+      const w = k ? by(k) : null;
+      let line = (w ? w.is + ' ' : '') + o.h;
+      if (miss >= 2) { $$(`#bdSvg .bd-o[data-o="${o.k}"]`).forEach(g => g.classList.add('hint')); line += ' Смотри, где мигает!'; }
+      card.querySelector('p').textContent = line;
+      talk(line);
+    });
+    ask();
+  }
+  return { screen };
+})();
+GAMES.push({ id: 'body', name: 'Как устроено тело', sub: 'сердце, лёгкие, печень: где что и как работает', ico: () => pic('🫀'), bg: 'var(--t-pink)', go: () => BODY.screen(), grp: 10, kw: 'организм органы человек анатомия' });
+{ const sc = INTEREST_CAT.find(c => c.id === 'science-cat'), ch = sc && (sc.items || []).find(it => it.id === 'chem'); if (ch && ch.tiles && !ch.tiles.includes('body')) ch.tiles.push('body'); }
+/* BODY-END */
 /* ---------- «Что значит слово?»: a dictionary for the book. The child types or says the word; the meaning comes from
    Wiktionary (the free Russian dictionary, even for a word in another form: «колыбели» finds «колыбель»), a person or a
    place from Wikipedia; links open Ozhegov, Ushakov, Efremova and Dahl on dictionary sites. Words looked up go into the
@@ -18096,7 +18310,7 @@ const LANDX = (() => {
     speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
     learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
     create: ['draw', 'color', 'songs', 'xylo', 'composers', 'conductor', 'museum', 'art-quiz'],
-    discover: ['travel', 'phys-lab', 'museum', 'composers']
+    discover: ['travel', 'phys-lab', 'body', 'museum', 'composers']
   };
   // the games of a tab for any child: a little one and an older one, every game switched on
   function tabGames(t) {
