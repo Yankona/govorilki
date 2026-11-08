@@ -11,7 +11,10 @@ NEXT = '<button class="st-next" data-a="next"><span class="st-nt">{0}</span><spa
 TL = '<div class="tl-line"><i></i>{0}<small class="tl-a">⏳ %s</small><small class="tl-b">%s</small></div>\n        <p><b>{1}</b> {2}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">{3}</button></div>'
 HUB = '<p class="lead">%s</p><div class="cards pl-hub">{0}</div>{1}'
 STAMP = '<div class="tv-stbox" role="dialog"><p class="tv-stt">🛂 %s</p>\n      <div class="tv-stamp" style="--bg:{0}"><span class="tv-stf">{1}</span><b>{2}</b><small>{3}</small></div>\n      <p class="tv-stn">%s {4} %s {5}</p>\n      <button class="big" id="tvStOk">%s</button></div>'
+MEM = '<button class="tv-globe tv-mem" id="tvMem"><span>🚩</span><span><b>%s</b><small>%s</small></span>{0}</button>'
 T = {  # en, pt, de
+  MEM % ('Мемори: флаги', 'найди пары — и узнай страну'): tuple(MEM % x for x in [('Memory: flags', 'find the pairs and learn the country'), ('Memória: bandeiras', 'encontra os pares e descobre o país'), ('Memory: Flaggen', 'finde die Paare und lerne das Land kennen')]),
+  'флаги страны мемори путешествие': ('flags countries memory journey', 'bandeiras países memória viagem', 'Flaggen Länder Memory Reise'),
   'Дальше': ('Next', 'Seguinte', 'Weiter'),
   DISC % ('Где живёт наша семья?', 'Календарь и праздники'): tuple(DISC % x for x in [('Where our family lives', 'Calendar and holidays'), ('Onde vive a nossa família', 'Calendário e festas'), ('Wo unsere Familie wohnt', 'Kalender und Feste')]),
   HOOK % ('А знаешь ли ты?', 'послушай историю'): tuple(HOOK % x for x in [('Did you know?', 'listen to the story'), ('Sabias que…?', 'ouve a história'), ('Wusstest du schon?', 'hör dir die Geschichte an')]),
