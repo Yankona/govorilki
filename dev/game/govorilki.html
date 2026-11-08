@@ -9104,10 +9104,11 @@ FOOT_IDS.forEach((id, i) => {
 /*FOOT-END*/
 /* PETS-BEGIN: two family pets the owner asked for (names public with the owner's consent; drawings only, no photos) */
 // Лилу: a chocolate (havana) Oriental cat, soft and round like the other animals — very big wide ears with rounded tips,
-// big round golden-amber eyes, a slightly narrow lighter muzzle
+// big round golden-amber eyes and the Oriental long straight nose
 const LILU_EYE = x => `<ellipse cx="${x}" cy="62" rx="7" ry="8.5" fill="#D9A93A"/><ellipse cx="${x}" cy="63" rx="4.6" ry="6.6" fill="#2A1408"/><circle cx="${x + 2.2}" cy="58.6" r="2.4" fill="#fff"/>`;
-// Омик: a chocolate chihuahua girl — huge upright ears (one turned a little), big glossy amber eyes, tan brows, white bib
-const OMIK_EYE = (x) => `<circle cx="${x}" cy="62" r="11" fill="#C8955A"/><circle cx="${x}" cy="62" r="9.5" fill="#7A3E14"/><circle cx="${x}" cy="62.5" r="5.5" fill="#2A1408"/><circle cx="${x + 3.5}" cy="58" r="3" fill="#fff"/><circle cx="${x - 3}" cy="66" r="1.4" fill="#fff" opacity=".7"/>`;
+// Омик: a chocolate chihuahua girl, round and soft like the other animals — big wide rounded ears set low to the sides
+// (one tilted), big glossy amber-brown eyes, tan «eyebrows», a lighter muzzle, a white bib
+const OMIK_EYE = x => `<ellipse cx="${x}" cy="62" rx="8" ry="9" fill="#9A5A20"/><ellipse cx="${x}" cy="63" rx="5.4" ry="6.4" fill="#1E100A"/><circle cx="${x + 2.6}" cy="58.4" r="2.8" fill="#fff"/><circle cx="${x - 2.6}" cy="67" r="1.3" fill="#fff" opacity=".8"/>`;
 const PETS = {
   lilu: { name: 'Лилу', kind: 'кошка', who: 'кошка Лилу', with: 'кошкой Лилу', hello: 'Мур-р! У меня самые большие уши!', pitch: 1.2, pm: 92,
     puff: { c: '#7A4428', x: [24, 96], y: 86 }, smile: '<path d="M60 86v3M53 90q3.5 4 7 0 3.5 4 7 0" stroke="#2A1408" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
@@ -9116,20 +9117,19 @@ const PETS = {
       <ellipse cx="60" cy="68" rx="42" ry="38" fill="#7A4428"/>
       <ellipse cx="50" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="70" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="60" cy="97" rx="9" ry="6" fill="#9A5C3A"/>
       <g class="lv-eyes">${LILU_EYE(44)}${LILU_EYE(76)}</g>${BLUSH(80, 28)}
-      <path d="M55.5 80h9q0 4-4.5 5.5Q55.5 84 55.5 80z" fill="#C97A78"/>
+      <path d="M55.5 54Q60 50 64.5 54L66 80Q60 83 54 80Z" fill="#8E5232"/><path d="M58 57v19" stroke="#A86A46" stroke-width="2" stroke-linecap="round"/><path d="M53.5 79.5h13q0 5.5-6.5 8Q53.5 85 53.5 79.5z" fill="#C97A78"/>
       <path d="M38 86l-16-2M38 91l-15 3M82 86l16-2M82 91l15 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
-  omik: { name: 'Омик', kind: 'собачка чихуахуа', who: 'собачка Омик', with: 'собачкой Омиком', hello: 'Гав! Я маленькая, но очень смелая!', pitch: 1.35, pm: 96,
-    puff: { c: '#5A3420', x: [32, 88], y: 86 }, smile: '<path d="M53 94q7 5 14 0" stroke="#1E100A" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
-    art: `<path d="M38 44 8 2 22 60z" fill="#4A2A1A"/><path d="M33 42 14 13l11 38z" fill="#E3B19A"/>
-      <g transform="rotate(14 86 40)"><path d="M82 44l30-42-14 58z" fill="#4A2A1A"/><path d="M87 42l19-29-11 38z" fill="#E3B19A"/></g>
-      <path d="M16 120Q20 98 40 92h40q20 6 24 28z" fill="#4A2A1A"/><path d="M38 96Q42 120 60 120T82 96L76 92H44Z" fill="#FFFFFF" stroke="#E6DCD6" stroke-width="1.5"/>
-      <path d="M60 18Q96 18 96 56Q96 84 76 96Q68 102 60 102T44 96Q24 84 24 56Q24 18 60 18Z" fill="#4A2A1A"/>
-      <path d="M46 99Q60 108 74 99L68 94H52Z" fill="#FFFFFF"/>
-      <ellipse cx="60" cy="86" rx="16" ry="12" fill="#7A4A30"/>
-      <ellipse cx="42" cy="44" rx="5" ry="3.2" fill="#C8955A"/><ellipse cx="78" cy="44" rx="5" ry="3.2" fill="#C8955A"/>
-      <g class="lv-eyes">${OMIK_EYE(42)}${OMIK_EYE(78)}</g>
-      <ellipse cx="60" cy="81" rx="5.5" ry="4" fill="#1E100A"/><circle cx="58" cy="79.6" r="1.4" fill="#fff" opacity=".6"/>
-      ` }
+  omik: { name: 'Омик', kind: 'собачка чихуахуа', who: 'собачка Омик', with: 'собачкой Омиком', hello: 'Гав! Я маленькая, но очень смелая!', pitch: 1.35, pm: 93,
+    puff: { c: '#5A3420', x: [26, 94], y: 86 }, smile: '<path d="M60 87v2M53 90q3.5 4 7 0 3.5 4 7 0" stroke="#1E100A" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+    art: `<path d="M20 120Q24 100 42 96h36q18 4 22 24z" fill="#4A2A1A"/><path d="M40 98Q42 120 60 120T80 98L72 94H48Z" fill="#FFFFFF" stroke="#E6DCD6" stroke-width="1.5"/>
+      <path d="M30 62Q6 56 3 30Q2 20 11 22Q34 28 44 40z" fill="#4A2A1A"/><path d="M30 55Q14 50 11 32Q26 34 39 42z" fill="#E8B49A"/>
+      <g transform="rotate(10 90 50)"><path d="M90 62Q114 56 117 30Q118 20 109 22Q86 28 76 40z" fill="#4A2A1A"/><path d="M90 55Q106 50 109 32Q94 34 81 42z" fill="#E8B49A"/></g>
+      <ellipse cx="60" cy="68" rx="40" ry="36" fill="#4A2A1A"/>
+      <path d="M48 98Q60 106 72 98L66 92H54Z" fill="#FFFFFF"/>
+      <ellipse cx="50" cy="87" rx="12" ry="10" fill="#7A4A30"/><ellipse cx="70" cy="87" rx="12" ry="10" fill="#7A4A30"/><ellipse cx="60" cy="95" rx="8" ry="5" fill="#7A4A30"/>
+      <ellipse cx="44" cy="48" rx="5" ry="3.2" fill="#C8955A"/><ellipse cx="76" cy="48" rx="5" ry="3.2" fill="#C8955A"/>
+      <g class="lv-eyes">${OMIK_EYE(44)}${OMIK_EYE(76)}</g>${BLUSH(80, 29)}
+      <ellipse cx="60" cy="81" rx="5.5" ry="4" fill="#1E100A"/><circle cx="58" cy="79.6" r="1.4" fill="#fff" opacity=".6"/>` }
 };
 /*PETS-END*/
 Object.assign(FRIENDS, PETS);
