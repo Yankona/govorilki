@@ -23,14 +23,17 @@ const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
     const tap = async (x, y) => { if (DEV === 'phone') await p.touchscreen.tap(x, y); else await p.mouse.click(x, y); };
     await p.evaluate(() => { const t = document.querySelector('[data-tab="discover"]'); if (t) t.click(); }); await p.waitForTimeout(700);
-    const tiles = await p.evaluate(() => ['ocean-deep', 'water-cycle', 'learn-water'].map(id => { const t = document.querySelector(`.tile[data-id="${id}"]`); return t ? t.innerText.replace(/\s+/g, ' ') : null; }));
-    ok(tiles[0] && tiles[1], 'tiles on the discover tab: ' + tiles.slice(0, 2).join(' | '));
-    ok(lang === 'ru' ? !!tiles[2] : !tiles[2], 'water stories tile only in Russian: ' + tiles[2]);
-    ok(!(lang !== 'ru' && cyr(tiles.join(''))), 'tiles translated');
-    // ---- the ocean
-    const tile = await p.$('.tile[data-id="ocean-deep"]');
+    const tiles = await p.evaluate(() => ['water', 'ocean-deep', 'water-cycle', 'learn-water'].map(id => { const t = document.querySelector(`.tile[data-id="${id}"]`); return t ? t.innerText.replace(/\s+/g, ' ') : null; }));
+    ok(tiles[0] && !tiles[1] && !tiles[2] && !tiles[3], 'one water tile on the discover tab: ' + tiles.join(' | '));
+    ok(!(lang !== 'ru' && cyr(tiles.join(''))), 'tile translated');
+    // ---- the water menu: three parts in Russian, two in the other languages
+    const tile = await p.$('.tile[data-id="water"]');
     if (tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(600); }
-    if (!await p.$('#ocSea')) await p.evaluate(() => window.__T.run('OCEAN.deep()'));
+    if (!await p.$('.wh')) await p.evaluate(() => window.__T.run('OCEAN.hub()'));
+    await p.waitForTimeout(500); await p.screenshot({ path: D + `water-${lang}-${DEV}-hub.png` });
+    const parts = await p.$$eval('.wh-b', b => b.map(x => x.dataset.k + ':' + x.innerText.replace(/\s+/g, ' ')));
+    ok(parts.length === (lang === 'ru' ? 3 : 2) && !(lang !== 'ru' && cyr(parts.join(''))), 'water menu: ' + parts.join(' | '));
+    await p.click('.wh-b[data-k="deep"]'); await p.waitForTimeout(400);
     await p.waitForTimeout(800); await p.screenshot({ path: D + `ocean-${lang}-${DEV}-top.png` });
     ok(await p.$('#ocSea') !== null, 'ocean opened: ' + await p.$eval('.bar h1', e => e.textContent).catch(() => '-'));
     const ks = await p.$$eval('#ocSea .oc-a', a => a.map(x => x.dataset.k));
@@ -51,7 +54,7 @@ const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
     ok(await p.$('.winbox') !== null, 'all animals seen → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
     // ---- the water cycle: learn
-    await p.evaluate(() => window.__T.run('OCEAN.cycle()')); await p.waitForTimeout(800);
+    await p.evaluate(() => window.__T.run('OCEAN.hub()')); await p.waitForTimeout(400); await p.click('.wh-b[data-k="cycle"]'); await p.waitForTimeout(800);
     await p.screenshot({ path: D + `water-${lang}-${DEV}-open.png` });
     for (let s = 0; s < 6; s++) {
       const pt = await p.evaluate(s => { const g = document.querySelector(`#wcSvg .wc-g[data-s="${s}"]`), h = g.querySelector('circle,rect,path'), r = h.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, e = document.elementFromPoint(x, y), w = e && e.closest('.wc-g'); return { x, y, hit: w ? +w.dataset.s : null }; }, s);
@@ -78,7 +81,7 @@ const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     if (lang === 'ru') {
       const n = await p.evaluate(() => window.__T.run('LEARN.water.items.length'));
       ok(n === 20, 'water stories: ' + n);
-      await p.evaluate(() => window.__T.run("screenLearn('water')")); await p.waitForTimeout(700);
+      await p.evaluate(() => window.__T.run('OCEAN.hub()')); await p.waitForTimeout(400); await p.click('.wh-b[data-k="stories"]'); await p.waitForTimeout(700);
       await p.screenshot({ path: D + `water-stories-${DEV}.png` });
       ok((await p.$eval('#stage', e => e.innerText)).includes('Байкал'), 'stories list shows');
     } else ok(await p.evaluate(() => window.__T.run('!LEARN.water')), 'no water stories section');
