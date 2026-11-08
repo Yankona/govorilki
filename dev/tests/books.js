@@ -65,7 +65,7 @@ let bad = 0; const log = (...a) => console.log(...a), check = (name, ok, more = 
     await p.click('#bkTales'); await p.waitForTimeout(1500);
     const n = (await p.$$('.tl-i')).length; check('tales in the list', n >= 20, `${n}`);
     await p.screenshot({ path: D + `books-${TAG}-${DEV}-tales.png` });
-    await said(); await p.click('.tl-i'); await p.waitForTimeout(600);
+    await said(); await p.click('.tl-i[data-id="petushok"]'); await p.waitForTimeout(600);   // read by the game voice (the tales an actor reads come first in the list)
     await p.click('#tlPlay'); await p.waitForTimeout(1500);
     check('a sentence is lit', !!(await p.$('#tlText .ss.on')));
     const s1 = await said(); check('the voice reads the tale', s1.length > 0, JSON.stringify(s1.slice(0, 2)));
