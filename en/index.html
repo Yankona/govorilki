@@ -760,6 +760,7 @@ b.r{color:var(--berry)}
 .d-card{display:flex;flex-direction:column;gap:10px;background:var(--paper);color:var(--ink);border-radius:24px;padding:16px;box-shadow:0 5px 0 var(--line)}
 .d-card h2{margin:0;font:700 28px/1.1 var(--f-display)}
 .d-m{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font:700 17px/1.45 var(--f-body)}
+.d-m .d-lb{font:italic 700 15px/1.4 var(--f-body);color:var(--ink-soft)}
 .d-m em{display:block;font:italic 600 15px/1.4 var(--f-body);color:var(--ink-soft)}
 .d-wp{padding:10px 12px;border-radius:14px;background:var(--sky)}
 .d-wp p{margin:4px 0 0;font:600 15px/1.45 var(--f-body)}
@@ -1475,6 +1476,19 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .sprint.st.playing .st-ladder,.sprint.st.playing .st-name{display:none}
 .sp-q{min-width:min(100%,360px);padding:16px 22px;border-radius:24px;background:var(--paper);text-align:center;font:900 clamp(36px,9vw,54px)/1 var(--f-body);font-variant-numeric:tabular-nums;box-shadow:0 5px 0 var(--line)}
 .sp-q span{color:var(--plum)}
+.mk{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.mk-head{display:flex;align-items:center;justify-content:space-between;gap:8px;width:min(100%,560px)}.mk-head .chip{flex:none;font-size:15px;padding:8px 10px}
+.mk-rank{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}.mk-rank b{font:900 18px/1.2 var(--f-display)}.mk-rank small{font:700 13px/1.25 var(--f-body);color:var(--ink-soft)}
+.mk-step{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+.mk-q{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;min-width:min(100%,360px);max-width:560px;padding:14px 18px;border-radius:24px;background:var(--paper);text-align:center;font:900 clamp(32px,8vw,48px)/1.2 var(--f-body);font-variant-numeric:tabular-nums;box-shadow:0 5px 0 var(--line-strong)}
+.mk-q.long{font:700 clamp(19px,4.6vw,24px)/1.4 var(--f-body);text-align:left}
+.mk-box,.mk-ans{display:inline-grid;place-items:center;min-width:1.3em;padding:0 6px;border-radius:12px;background:var(--t-yellow);color:var(--plum);font-weight:900}.mk-box.ok,.mk-ans.ok{background:var(--t-green);color:var(--leaf)}
+.mk .keypad{gap:6px}.mk .kp-k{height:50px}.mk-head .chip{min-height:0}
+@media (max-height:780px){.mk{gap:8px}.mk-rank small{display:none}.mk-rank b{font-size:16px}.mk-q.long{padding:10px 14px}.mk .kp-k{height:46px}.mk-in{font-size:32px}}
+.mk-in{min-width:140px;padding:4px 18px;border-radius:18px;background:var(--paper);text-align:center;font:900 38px/1.2 var(--f-body);color:var(--plum);box-shadow:inset 0 0 0 3px var(--line-strong)}
+.mk-pics{display:inline-flex;flex-wrap:wrap;gap:2px;max-width:150px;justify-content:center}.mk-pics .pic{font-size:30px}.mk-op{font-style:normal}
+.mk-pie{width:120px;height:120px}.mk-t{flex-basis:100%;font:700 19px/1.3 var(--f-body)}
+.mk-opts .num-b{width:auto;min-width:clamp(80px,19vmin,120px);padding:0 14px;font-size:clamp(34px,8vmin,52px)}
 .keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
 .kp-k{height:58px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:900 26px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
 .kp-k.ok{background:var(--leaf);color:#fff}
@@ -1486,6 +1500,8 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .svg-page{position:absolute;inset:0;display:grid;place-items:center;padding:3%}
 .svg-page svg{display:block;width:100%;height:100%}
 .svg-page svg *{cursor:pointer}
+.page-thumb img{display:block;width:100%;height:100%;object-fit:contain}
+.img-credit{margin:-4px 0 0;text-align:center;font:700 11px/1.3 var(--f-body);color:var(--ink-soft,#6B6585)}
 
 .beauty-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
 .beauty-face{width:clamp(170px,38vmin,260px);overflow:hidden;border:10px solid #F7B6CF;border-radius:50%/46%;background:radial-gradient(circle at 50% 40%,#FFF5FA,#FFE0EC);box-shadow:0 8px 0 #E58FB1}
@@ -3353,7 +3369,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 
 const LANG = 'en';
-const LANGDATA =  {"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"], "PAL_WORDS": [["r", "red"], ["o", "orange"], ["y", "yellow"], ["g", "green"], ["t", "turquoise"], ["s", "sky blue"], ["b", "blue"], ["p", "purple"], ["p", "pink"], ["b", "brown"], ["b", "black"], ["w", "white"]], "MORE_STORIES": {}, "WATER_STORIES": {}, "PLANT_STORIES": [], "BALLET_STORIES": {}, "SOUNDS_RU2": [], "HOW_PAR": {}};
+const LANGDATA =  {"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "W_LB": {}, "W_AB": [], "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"], "PAL_WORDS": [["r", "red"], ["o", "orange"], ["y", "yellow"], ["g", "green"], ["t", "turquoise"], ["s", "sky blue"], ["b", "blue"], ["p", "purple"], ["p", "pink"], ["b", "brown"], ["b", "black"], ["w", "white"]], "MORE_STORIES": {}, "WATER_STORIES": {}, "PLANT_STORIES": [], "BALLET_STORIES": {}, "SOUNDS_RU2": [], "HOW_PAR": {}};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
@@ -4239,6 +4255,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
+  if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
   tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
@@ -5403,7 +5420,12 @@ const LQ = (() => {
   const TRAIN = { who: '🚂', it: '🚃', goal: '🏁', s: "Let's build a train: every syllable is a new carriage!", end: "The train is ready — choo-choo!" };
   const NOTES = [523, 587, 659, 698, 784, 880, 988, 1047];
   
-  const lv = key => { const n = (P.plays || {})[key] || 0, a = P.settings.age || 0; return Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0)); };
+  const lv = key => {
+    const n = (P.plays || {})[key] || 0, a = P.settings.age || 0, own = Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0));
+    
+    const m = /^math-/.test(key) && P.mskill && P.mskill.lv || 0;
+    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0);
+  };
   function start(key, n = 6, train = false) {
     let last = (P.lqLast || {})[key];
     const pool = ST.filter((x, i) => i !== last), st = train ? TRAIN : pickOne(pool);
@@ -6090,13 +6112,16 @@ function screenDrawMenu() {
 }
 function screenColorMenu() {
   newScreen();
-  const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Colouring page"><span class="page-thumb">${outlineSVG(pageSVG(p))}</span></button>`;
+  const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Colouring page"><span class="page-thumb">${p.startsWith('img:') ? `<img src="${colorImgSrc(p.slice(4))}" alt="" loading="lazy">` : outlineSVG(pageSVG(p))}</span></button>`;
   
-  
-  const likes = P.settings.likes || [], themed = [...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES];
-  const themes = [["Ballet", BALLET_PAGES, ['ballet', 'dance']], ["Football", FOOTBALL_PAGES, ['football']], ["Cool cars and bikes", WHEELS_PAGES, ['race', 'moto', 'trucks']]];
-  const liked = t => t[2].some(l => likes.includes(l));
-  const groups = [...themes.filter(liked), ["Animals and toys", PAGES.filter(p => !themed.includes(p))], ...themes.filter(t => !liked(t))];
+  const likes = P.settings.likes || [], friends = FRIEND_PAGES();
+  const themes = [["Ballet", BALLET_PAGES, ['ballet', 'dance']], ["Football", [...FOOTBALL_PAGES, ...imgOf('football')], ['football']],
+    ["Cool cars and bikes", [...WHEELS_PAGES, ...imgOf('cars')], ['race', 'moto', 'trucks', 'rescue']],
+    ["Animals", imgOf('animals'), ['animals', 'dogs', 'cats', 'horses', 'wild', 'farm', 'birds', 'hamsters']], ["Dinosaurs", imgOf('dino'), ['dino', 'dragon']],
+    ["Fairy tales", imgOf('fairy'), ['unicorn', 'princess', 'mermaid', 'fairies', 'knights', 'dragon']], ["The sea", imgOf('sea'), ['ocean', 'fish', 'beach', 'swim']],
+    ["Space", imgOf('space'), ['space']], ["Butterflies and flowers", imgOf('nature'), ['nature', 'plants', 'insects']], ["Mandalas", imgOf('mandala'), ['draw', 'art', 'crafts']]];
+  const themed = themes.flatMap(t => t[1]), liked = t => t[2].some(l => likes.includes(l));
+  const groups = [["My friends", friends], ...themes.filter(liked), ["Animals and toys", PAGES.filter(p => !themed.includes(p) && !friends.includes(p))], ...themes.filter(t => !liked(t))];
   const st = shell("Colouring pages", groups.map(([h, ps]) => `<h2 class="sec-h">${h}</h2><div class="cards">${ps.map(card).join('')}</div>`).join(''), { back: screenDrawMenu });
   talk("Choose a picture to colour in.");
   st.onclick = e => { const c = e.target.closest('.page'); if (c) { sfx.pop(); screenPaint({ mode: 'color', page: c.dataset.p }); } };
@@ -6107,10 +6132,12 @@ function screenPaint(opts = {}) {
   const title = mode === 'color' ? "Colouring page" : mode === 'write' ? "Writing letters" : TK ? "Drawing task" : mode === 'magic' ? "Magic pattern" : "Drawing";
   const back = opts.back || (mode === 'color' ? screenColorMenu : mode === 'write' ? null : screenDrawMenu);
   const L = ABC[li], palL = !Q() && mode !== 'magic' && mode !== 'write';
+  
+  const RASTER = mode === 'color' && !!page && page.startsWith('img:'), CR = RASTER && COLOR_IMG[page.slice(4)];
   shell(title, `<div class="paint">
       ${TK ? `<div class="task-card" id="taskCard"><span class="emo">📝</span><p>${TK.t}</p></div>` : ''}
       ${mode === 'write' ? `<div class="wr-head"><button class="ibtn" id="prevL" aria-label="Previous letter">${ICON.back}</button><span class="wr-ex">${pic(L[2])}<span>${hiLetter(L[1], L[0])}</span></span><button class="ibtn" id="nextL" aria-label="Next letter">${ICON.fwd}</button></div>` : ''}
-      <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
+      <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' && !RASTER ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
       <div class="swatches" id="sw">${mode === 'magic' ? "<button class=\"swc sel rainbow\" data-c=\"rainbow\" aria-label=\"Rainbow\"></button>" : ''}${PALETTE.map((c, i) => `<button class="swc ${i === 0 && mode !== 'magic' ? 'sel' : ''}" data-c="${c}" style="--c:${c}" aria-label="${esc(PAL_WORDS[i] ? PAL_WORDS[i][1] : "Colour")}">${palL && PAL_WORDS[i] ? `<b class="swl">${esc(PAL_WORDS[i][0])}</b>` : ''}</button>`).join('')}</div>
       <div class="tools" id="tools">
         <button class="tool" data-t="brush" data-s="6" aria-label="Thin brush"><i style="--d:8px"></i></button>
@@ -6123,11 +6150,12 @@ function screenPaint(opts = {}) {
         <button class="big tool-done" id="done">${ICON.star}Done</button>
       </div>
     </div>`, { back });
+  if (CR) $('#sw').insertAdjacentHTML('beforebegin', `<p class="img-credit">Picture: ${esc(CR[1])} · Openclipart · CC0</p>`);
   const paper = $('#paper'), cB = $('#cvB'), cL = $('#cvL');
   const xB = cB.getContext('2d', { willReadFrequently: true }), xL = cL.getContext('2d', { willReadFrequently: true });
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   let W = 0, H = 0, color = mode === 'magic' ? 'rainbow' : PALETTE[0], size = 14, hue = 0, tool = mode === 'color' ? 'fill' : 'brush', drawing = false, last = null, undo = [], lineImg = null;
-  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' ? 'none' : 'auto'; };
+  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' && !RASTER ? 'none' : 'auto'; };
   markTool();
   function drawLines() {
     xL.clearRect(0, 0, cL.width, cL.height);
@@ -6146,9 +6174,10 @@ function screenPaint(opts = {}) {
     drawLines(); undo = [];
   }
   fit(); resizeFn = fit;
+  if (RASTER) { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => { if (t !== tok) return; lineImg = im; drawLines(); }; im.src = colorImgSrc(page.slice(4)); }
   const pt = e => { const r = cB.getBoundingClientRect(); return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr }; };
   const pushUndo = () => { try { undo.push(xB.getImageData(0, 0, cB.width, cB.height)); if (undo.length > 12) undo.shift(); } catch (e) {} };
-  if (mode === 'color') {
+  if (mode === 'color' && !RASTER) {
     const pg = $('#svgPage'), dark = el => { const m = getComputedStyle(el).fill.match(/\d+/g); return !m || (m[0] * .3 + m[1] * .59 + m[2] * .11) < 80; };
     pg.addEventListener('pointerdown', e => {
       if (tool !== 'fill') return;
@@ -6240,7 +6269,7 @@ function screenPaint(opts = {}) {
     if (mode !== 'write') {
       try {
         const tw = 480, th = Math.round(tw * cB.height / cB.width), c = document.createElement('canvas'), x = c.getContext('2d');
-        c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color') { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
+        c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color' && !RASTER) { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
         artPic = c.toDataURL('image/jpeg', .75); saveArt(artPic, TK ? TK.w : '');
       } catch (err) {}
     }
@@ -7063,6 +7092,7 @@ function screenPiano() {
 }
 
 function mathTask() {
+  const own = MSK.sprintTask(); if (own) return own;
   const ty = pickOne(['+', '−', '×', '÷']);
   if (ty === '+') { const a = ri(12, 65), b = ri(5, 34); return { q: `${a} + ${b}`, ans: a + b }; }
   if (ty === '−') { const a = ri(20, 99), b = ri(5, a - 3); return { q: `${a} − ${b}`, ans: a - b }; }
@@ -7091,12 +7121,12 @@ function screenSprint() {
     const b = e.target.closest('.kp-k'); if (!b) return;
     if (!run) { if (!stop && $('#spGo')) $('#spGo').click(); return; }
     const k = b.dataset.k;
-    if (k === 'ok') submit(); else if (k === 'del') { input = input.slice(0, -1); show(); } else if (input.length < 3) { input += k; show(); }
+    if (k === 'ok') submit(); else if (k === 'del') { input = input.slice(0, -1); show(); } else if (input.length < 4) { input += k; show(); }
   };
   const onKey = e => {
     if (t !== tok) { document.removeEventListener('keydown', onKey); return; }
     if (!run) return;
-    if (e.key === 'Enter') submit(); else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 3) { input += e.key; show(); }
+    if (e.key === 'Enter') submit(); else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 4) { input += e.key; show(); }
   };
   document.addEventListener('keydown', onKey);
   $('#spGo').onclick = () => {
@@ -7478,6 +7508,8 @@ function guardMiss() {
   if (e.target.closest('#stage')) { e.stopPropagation(); e.preventDefault(); }
 }, true));
 const FREE_KEYS = ['draw', 'magic'];
+
+var SAY_MISS = { n: 0, words: [] };
 function fairStars(key, stars) {
   const d = dayKey();
   if (!P.daily || P.daily.d !== d) P.daily = { d, k: {} };
@@ -7486,6 +7518,12 @@ function fairStars(key, stars) {
   if (!GUARD.free && GUARD.miss >= 3) s = Math.max(1, s - (GUARD.miss >= 6 ? 2 : 1));
   if (FREE_KEYS.includes(key)) { if (n > 1) { s = 0; note = "You get a star for a free drawing once a day. A drawing from a task and dot-to-dot give more stars!"; } }
   else if (n > 3) { s = Math.min(s, 1); note = "You already played this game today. Pick another one — it gives more stars!"; }
+  
+  if (SAY_MISS.n && !FREE_KEYS.includes(key)) {
+    s = Math.max(1, s - Math.min(2, SAY_MISS.n));
+    if (!note) note = `Let’s practise these again: ${SAY_MISS.words.slice(0, 4).join(', ')}.`;
+  }
+  SAY_MISS.n = 0; SAY_MISS.words = [];
   return { s, note };
 }
 
@@ -7514,9 +7552,13 @@ function askSaid(label = "I said it!", { need = saidNeed(label), expect = '', ti
       if (opened || t !== tok || !b.isConnected) return; opened = true;
       b.disabled = false; b.classList.remove('wait'); b.innerHTML = `${ICON.star}<span>${gx(label)}</span>`; sfx.tick();
     };
+    let checking = false, right = false;   
     b.onclick = () => {
       if (!opened) return;
-      micRelease(); sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); b.remove(); if (card) card.remove(); res();
+      micRelease(); if (right || !checking) { sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); } else sfx.pop();
+      
+      if (checking && !right) { SAY_MISS.n++; if (!SAY_MISS.words.includes(expect)) SAY_MISS.words.push(expect); }
+      b.remove(); if (card) card.remove(); res({ ok: right || !checking, again: checking && !right });
     };
     function byLoudness() {
       micOn().then(ok => {
@@ -7546,28 +7588,48 @@ function askSaid(label = "I said it!", { need = saidNeed(label), expect = '', ti
     if (!expect || !srOk()) { byLoudness(); return; }
     
 
-    tx.textContent = gx("Say it out loud!");
+    checking = true; tx.textContent = gx("Say it out loud!");
+    const howAt = L => { const c = IS_RU ? L.toUpperCase() : { r: RU('Р'), l: RU('Л'), s: RU('С') }[L]; return c ? howIdx(c) : -1; };
+    let howShown = false;
+    const showHow = L => {
+      const i = howAt(L); if (howShown || i < 0 || !card) return; howShown = true;
+      const hb = document.createElement('button'); hb.className = 'chip how-b said-how'; hb.innerHTML = "<span class=\"emo\">👄</span>How to say it?";
+      hb.onclick = e => { e.stopPropagation(); sfx.pop(); hush(); howOpen([i], i); };
+      card.append(hb);
+    };
     (async () => {
       let tries = 0;
       const on = () => t === tok && b.isConnected;
-      while (on() && tries < 6) {
+      while (on() && tries < 6 && !right) {
         while (SAYING && t === tok) await wait(150);
-        if (!on()) return;
+        if (!on() || $('.how-ov')) { await wait(400); continue; }   
         b.classList.add('ear'); if (!opened) tx.textContent = gx("I’m listening…");
         const r = await hear(expect, { times, loose, onHeard: h => { if (heardEl) heardEl.textContent = `I hear: “${h}”`; } });
         b.classList.remove('ear');
         if (!on()) return;
         if (r.ok) {
-          bar.style.transform = 'scaleY(1)';
+          right = true; bar.style.transform = 'scaleY(1)';
           if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`;
-          if (r.lvl < 2 && !loose && !opened) { sfx.good(); await talk(`${pickOne(["Well done!", "Good!", "Great!"])} Listen to how I say it: ${expect}.`); if (!on()) return; }
+          if (opened) { sfx.good(); b.innerHTML = `${ICON.star}<span>${gx(label)}</span>`; }
           open(); return;
         }
-        if (HEAR.off || !srOk()) { if (!opened) { if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
+        if (HEAR.off || !srOk()) { if (!opened) { checking = false; if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
         tries++;
-        if (heardEl) heardEl.textContent = r.heard ? `I hear “${r.heard}”. But we need “${expect}”${Q() ? ": tip of your tongue to the top teeth!" : '!'}` : "I cannot hear you. Say it louder!";
-        if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
-        if (tries >= 2 && !opened) { open(); if (heardEl) heardEl.textContent += ' ' + gx("Try again — or press the button."); }
+        if (r.slip) {
+          const L = r.slip, snd = L === 't' && /th/i.test(expect) ? 'TH' : L.toUpperCase(), how = ASR.HOW[L];
+          if (heardEl) heardEl.textContent = `Almost! I hear “${r.heard}”. We need the sound ${snd}.`;
+          showHow(L);
+          await talk(how ? `Almost! I hear: ${r.heard}. ${how} Listen: ${expect}.` : `Almost! I hear: ${r.heard}. Listen to how to say the sound ${snd}: ${expect}.`, { rate: .8 });
+          if (!on()) return;
+          if (heardEl) heardEl.textContent = `Say it again clearly: “${expect}”`;
+        } else {
+          if (heardEl) heardEl.textContent = r.heard ? `I hear “${r.heard}”. But we need “${expect}”${Q() ? ": tip of your tongue to the top teeth!" : '!'}` : "I cannot hear you. Say it louder!";
+          if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
+        }
+        if (tries >= 3 && !opened) {
+          open(); b.classList.add('later'); b.innerHTML = `<span>${gx("Next")} →</span>`;
+          if (heardEl) heardEl.textContent += ' ' + gx("We’ll practise it again — you can go on.");
+        }
       }
       if (on()) open();
     })();
@@ -9100,7 +9162,12 @@ function screenMoto() {
     if (!showing()) return;
     $('#mHeard').textContent = `I hear: “${txt}”`;
     if (matchSay(txt, sign.word) || alts.some(a => matchSay(a, sign.word))) { $('#mLv').style.width = '100%'; fire(); }
-    else if (final) { $('#mHeard').textContent = `That is “${txt}”, but the sign says “${sign.word}”!`; wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210); }
+    else if (final) {
+      
+      const m = ASR.best([txt, ...alts], sign.word);
+      $('#mHeard').textContent = m.lvl && m.slip ? `Almost! I hear “${m.text}”. Say the sound ${m.slip.toUpperCase()} clearly: “${sign.word}”!` : `That is “${txt}”, but the sign says “${sign.word}”!`;
+      wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210);
+    }
   }
   
   function lost() { if (t !== tok) return; const h = $('#mHeard'); if (h) h.textContent = "🎤 Tap the sign so I can listen again"; }
@@ -9393,7 +9460,9 @@ function screenKpop() {
       const [w, e] = deck[k];
       C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), RU('рршжчщ'))}</b>`;
       await talk(k === 0 ? `A naughty little monster has taken the word ${w}! Say it loud and clear. The Firebirds' song will chase it away. ${cap(w)}!` : `A little monster has taken the word ${w}! Say: ${w}.`); if (t !== tok) return;
-      await askSaid(undefined, { expect: w }); if (t !== tok) return;
+      const said = await askSaid(undefined, { expect: w }); if (t !== tok) return;
+      
+      if (said && said.again && !deck.redo) { deck.redo = 1; deck.push(deck[k]); }
       await attack(false); if (t !== tok) return;
       k++; await talk(pickOne(["The little monster turned into a star!", "Hooray! One more light stick!", "The song won!"])); if (t !== tok) return;
       round(); return;
@@ -10164,18 +10233,29 @@ const ASR = (() => {
   const PAIRS = IS_RU
     ? [[.25, 'бп вф гк дт жш зс оа еи ея яи иы еэ юу ий кх гх ьъ'], [.35, 'рл рй лв лй рв шс жз щс щш чщ чц цс чт зд рд']]
     : [[.25, 'bp dt gk vf zs ck kq ie yi ou ao ea'], [.35, 'rl rw lw vw lj sz fv fs dz jy tf ts']];
+  const LOST = IS_RU ? 'рл' : 'rl';
   const SUB = new Map(); PAIRS.forEach(([c, s]) => s.split(' ').forEach(p => { SUB.set(p, c); SUB.set(p[1] + p[0], c); }));
   const VOW = IS_RU ? 'аеиоуыэюя' : 'aeiouy';
   const DROP = IS_RU ? { 'ь': .2, 'ъ': .2, 'й': .4, 'р': .4, 'л': .4 } : { 'h': .4, 'r': .4, 'l': .4, 'e': .6 };
   const sub = (a, b) => a === b ? 0 : SUB.get(a + b) || (!IS_RU && VOW.includes(a) && VOW.includes(b) ? .5 : 1);
   const ind = c => DROP[c] || (VOW.includes(c) ? .8 : 1);
-  function dist(a, b) {
-    const d = [0]; for (let j = 1; j <= b.length; j++) d[j] = d[j - 1] + ind(b[j - 1]);
-    for (let i = 1; i <= a.length; i++) {
-      let p = d[0]; d[0] += ind(a[i - 1]);
-      for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(q + ind(a[i - 1]), d[j - 1] + ind(b[j - 1]), p + sub(a[i - 1], b[j - 1])); p = q; }
+  
+  const CHILD = .35, LEARN = IS_RU ? 'рлшжчщсзц' : 'rlst';
+  
+  function dist(a, b, why) {
+    const n = a.length, m = b.length, d = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
+    for (let i = 1; i <= n; i++) d[i][0] = d[i - 1][0] + ind(a[i - 1]);
+    for (let j = 1; j <= m; j++) d[0][j] = d[0][j - 1] + ind(b[j - 1]);
+    for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) d[i][j] = Math.min(d[i - 1][j] + ind(a[i - 1]), d[i][j - 1] + ind(b[j - 1]), d[i - 1][j - 1] + sub(a[i - 1], b[j - 1]));
+    if (why) {
+      let i = n, j = m; why.slip = '';
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && Math.abs(d[i][j] - d[i - 1][j - 1] - sub(a[i - 1], b[j - 1])) < 1e-9) { if (sub(a[i - 1], b[j - 1]) >= CHILD && LEARN.includes(b[j - 1])) why.slip = b[j - 1]; i--; j--; }
+        else if (j > 0 && Math.abs(d[i][j] - d[i][j - 1] - ind(b[j - 1])) < 1e-9) { if (LOST.includes(b[j - 1])) why.slip = b[j - 1]; j--; }
+        else i--;
+      }
     }
-    return d[b.length];
+    return d[n][m];
   }
   
   const room = n => n <= 2 ? .3 : n <= 3 ? .6 : n <= 5 ? .8 : n <= 7 ? .95 : n <= 8 ? 1.3 : Math.min(3, 1.8 + (n - 9) * .15);
@@ -10184,48 +10264,65 @@ const ASR = (() => {
   const stem = w => { for (const e of END) if (w.length - e.length >= 3 && w.endsWith(e)) return w.slice(0, -e.length); return w; };
   
   function word(h, t) {
-    if (h === t) return 2;
-    const a = key(h), b = key(t);
-    if (a === b) return 2;
-    if (dist(a, b) <= room(b.length)) return 1;
+    if (h === t) return { v: 2, slip: '' };
+    const a = key(h), b = key(t), why = {};
+    if (a === b) return { v: 2, slip: '' };
+    if (dist(a, b, why) <= room(b.length)) return { v: 1, slip: why.slip };
     const sa = stem(a), sb = stem(b);
-    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb) <= room(sb.length) * .75) return 1;
-    return 0;
+    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb, why) <= room(sb.length) * .75) return { v: 1, slip: why.slip };
+    return { v: 0, slip: '' };
   }
   
+  const rank = w => w.v ? (w.slip ? 1 : 2 + w.v) : 0;
+  
   function find(hw, t, from = 0) {
-    let best = 0, at = -1, len = 1;
-    for (let i = from; i < hw.length && best < 2; i++) {
-      const v = word(hw[i], t); if (v > best) { best = v; at = i; len = 1; }
-      if (best < 2 && i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (v2 > best) { best = v2; at = i; len = 2; } }
+    let best = { v: 0, slip: '' }, at = -1, len = 1;
+    for (let i = from; i < hw.length && rank(best) < 4; i++) {
+      const v = word(hw[i], t); if (rank(v) > rank(best)) { best = v; at = i; len = 1; }
+      if (i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (rank(v2) > rank(best)) { best = v2; at = i; len = 2; } }
     }
-    return { v: best, at, len };
+    return { ...best, at, len };
   }
+  const NO = { lvl: 0, slip: '' };
   function match(heard, expect, times = 1, loose = false) {
     const hw = norm(heard).split(' ').filter(Boolean), tw = norm(expect).split(' ').filter(Boolean);
-    if (!tw.length || !hw.length) return 0;
+    if (!tw.length || !hw.length) return NO;
     
-    if (loose) return word(hw.join(''), tw.join('')) === 2 ? 2 : 1;
+    if (loose) return { lvl: word(hw.join(''), tw.join('')).v === 2 ? 2 : 1, slip: '' };
     if (tw.length === 1) {
-      let n = 0, lvl = 2, from = 0;
-      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); from = f.at + f.len; }
-      if (!n) { const v = word(hw.join(''), tw[0]); return v ? Math.min(v, 1) : 0; }
-      return n >= Math.min(times, 2) || hw.length >= times ? lvl : 0;
+      let n = 0, lvl = 2, slip = '', from = 0;
+      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); slip = slip || f.slip; from = f.at + f.len; }
+      if (!n) { const w = word(hw.join(''), tw[0]); return w.v ? { lvl: 1, slip: w.slip } : NO; }
+      return n >= Math.min(times, 2) || hw.length >= times ? { lvl, slip } : NO;
     }
     
-    let got = 0, all = 2;
-    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); } });
-    if (got / tw.length >= .6) return got === tw.length ? all : 1;
-    const a = key(hw.join('')), b = key(tw.join(''));
-    return dist(a, b) <= room(b.length) * 1.2 ? 1 : 0;
+    let got = 0, all = 2, slip = '';
+    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); slip = slip || f.slip; } });
+    if (got / tw.length >= .6) return { lvl: got === tw.length ? all : 1, slip };
+    const why = {}, a = key(hw.join('')), b = key(tw.join(''));
+    return dist(a, b, why) <= room(b.length) * 1.2 ? { lvl: 1, slip: why.slip } : NO;
   }
   
   function best(list, expect, times = 1, loose = false) {
-    let lvl = 0, text = '';
-    for (const s of list) { if (!s || !s.trim()) continue; const v = match(s, expect, times, loose); if (v > lvl) { lvl = v; text = s.trim(); if (v === 2) break; } }
-    return { lvl, text };
+    let out = { lvl: 0, slip: '', text: '' }, r0 = 0;
+    for (const s of list) {
+      if (!s || !s.trim()) continue;
+      const m = match(s, expect, times, loose), r = m.lvl ? (m.slip ? 1 : 2 + m.lvl) : 0;
+      if (r > r0) { r0 = r; out = { ...m, text: s.trim() }; if (r === 4) break; }
+    }
+    return out;
   }
-  return { norm, dist, word, match, best };
+  
+  const HOW = IS_RU ? {
+    'р': 'Скажи с рычащим звуком Р, как тигрёнок. Кончик языка дрожит за верхними зубками.',
+    'л': 'Скажи с твёрдым звуком Л. Кончик языка прижми к верхним зубкам.',
+    'ш': 'Скажи с шипящим звуком Ш, как змейка. Губки вперёд, язычок чашечкой.',
+    'ж': 'Скажи с жужжащим звуком Ж, как жук. Губки вперёд, язычок чашечкой.',
+    'ч': 'Скажи с коротким звуком Ч, как паровозик.', 'щ': 'Скажи с мягким звуком Щ, как щёточка.',
+    'с': 'Скажи со свистящим звуком С, как насос. Кончик языка за нижними зубками.',
+    'з': 'Скажи со звенящим звуком З, как комарик. Кончик языка за нижними зубками.', 'ц': 'Скажи с коротким звуком Ц, как синичка.'
+  } : {};
+  return { norm, dist, word, match, best, HOW };
 })();
 const normW = ASR.norm;
 function lev(a, b) {
@@ -10233,16 +10330,17 @@ function lev(a, b) {
   for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] !== b[j - 1])); p = q; } }
   return d[b.length];
 }
-const matchSay = (heard, expect, times = 1) => ASR.match(heard, expect, times) > 0;
+
+const matchSay = (heard, expect, times = 1) => { const m = ASR.match(heard, expect, times); return m.lvl > 0 && !m.slip; };
  
 
 
 
 function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) {
   return new Promise(res => {
-    let r = null, best = '', done = false, lvl = 0;
-    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: ok && lvl > 0, heard: best, lvl }); };
-    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0 }); return; }
+    let r = null, best = '', done = false, got = { lvl: 0, slip: '' };
+    const end = () => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: got.lvl > 0 && !got.slip, heard: best, lvl: got.lvl, slip: got.slip }); };
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0, slip: '' }); return; }
     audioSession('play-and-record'); SR_ON++;
     r.lang = LOC; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
     r.onresult = e => {
@@ -10250,17 +10348,19 @@ function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) 
       for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (!x || !x[0]) continue; all += ' ' + x[0].transcript; for (let j = 0; j < x.length; j++) alts.push(x[j].transcript); }
       all = all.trim();
       const m = ASR.best([all, ...alts], expect, times, loose);
-      best = m.lvl ? m.text : all || best; if (onHeard && best) onHeard(best);
-      if (m.lvl) { lvl = m.lvl; end(true); }
+      
+      if (m.lvl && (!got.lvl || got.slip)) { got = m; best = m.text; } else if (!got.lvl) best = all || best;
+      if (onHeard && best) onHeard(best);
+      if (got.lvl && !got.slip) end();
     };
     r.onerror = e => {
       if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true;
       if (e.error === 'network') HEAR.netAt = Date.now();
-      end(false);
+      end();
     };
-    r.onend = () => end(false);
-    setTimeout(() => end(false), maxMs);
-    try { r.start(); } catch (e) { end(false); }
+    r.onend = end;
+    setTimeout(end, maxMs);
+    try { r.start(); } catch (e) { end(); }
   });
 }
 
@@ -10481,7 +10581,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11106,7 +11206,7 @@ function screenMyWords() {
   screenSayWords({ title: "My words", intro: "Words about the things you love. Say each word clearly!", words: all, key: 'my-words', line: n => `${n} words about the things you love!`, again: screenMyWords });
 }
 function screenSayWords({ title, intro, words, key, line, again, back, done }) {
-  const t = newScreen(), pool = shuffle(words).slice(0, 6), hl = sndLetters() || "rlshcj";
+  const t = newScreen(), pool = shuffle(words).slice(0, 6), hl = sndLetters() || "rlshcj", redo = new Set();
   let i = 0;
   shell(title, `<div class="mw"><p class="lead">${esc(intro)}</p>
     <div class="mw-card" id="mwCard"></div><div class="mw-dots" id="mwDots">${pool.map(() => '<i></i>').join('')}</div></div>`, { back });
@@ -11118,7 +11218,9 @@ function screenSayWords({ title, intro, words, key, line, again, back, done }) {
     $('#mwCard').innerHTML = `<span class="mw-e">${pic(e)}</span><b class="mw-w">${hiS(w.toUpperCase(), hl)}</b>`;
     hopEl($('#mwCard'));
     await talk(`Say: ${w}.`); if (t !== tok) return;
-    await askSaid("I said it!", { expect: w }); if (t !== tok) return;
+    const r = await askSaid("I said it!", { expect: w }); if (t !== tok) return;
+    
+    if (r && r.again && !redo.has(w)) { redo.add(w); pool.push(pool[i]); }
     i++; step();
   }
   step();
@@ -13105,23 +13207,80 @@ GAMES.push({ id: 'space', name: "Space", sub: "the Sun, the planets, the Moon, d
 
 
 const WIKT = 'https://ru.wiktionary.org/w/api.php';
+
+
+const W_LB = LX('W_LB', null);
+
+const W_AB = LX('W_AB', null);
+
+function wLabel(n) {
+  const raw = String(n || '').replace(/\u00a0/g, ' ').trim(), k = raw.replace(/\s+/g, '').toLowerCase();
+  if (k in W_LB) return W_LB[k];
+  const ps = k.match(/[^.]+\./g);
+  if (ps && ps.join('') === k && ps.length > 1) return ps.map(x => W_LB[x]).filter(Boolean).join(', ');
+  const w = wAbbr(raw);
+  if (/^[а-яё ,-]{4,50}$/i.test(w) && !/(?<![а-яё])[а-яё]{1,6}\./i.test(w)) return w;
+  return /\./.test(k) ? '' : undefined;
+}
+const WL_A = '\u0001', WL_B = '\u0002', WL_C = '\u0003';
 function wTmpl(body) {
   const ps = body.split('|').map(x => x.trim()), name = ps[0], args = ps.slice(1).filter(a => a && !a.includes('=') && a !== 'ru');
   const a0 = args[0] || '';
-  if (name === "example" || /^(помета|источник|нужен|Нужно)/i.test(name)) return '';
-  if (name === '=') return "same as " + a0;
-  if (name === "action") return "the action of the verb " + a0;
-  if (name === "property") return "the quality of the adjective " + a0;
-  if (name === "state") return "the state of " + a0;
-  if (/^(отн\.|соотн\.|относящийся)/.test(name)) return "related to " + a0;
-  if (/\.$/.test(name) && name.length < 14) return '(' + name + ')';
-  return '';
+  if (name === 'пример' || name === 'семантика' || /^(источник|нужен|Нужно|lang|as |Даль|скр)/i.test(name)) return '';
+  if (name === 'выдел' || name === 'выделение') return WL_C + a0 + WL_C;
+  if (name === '-' || name === '--' || name === '—') return ' — ';
+  if (name === 'L') return ' ';
+  if (name === 't:=') return args.join(' — ');
+  if (name === '=') return 'то же, что ' + a0;
+  if (name === 'действие') return 'действие по значению глагола ' + a0;
+  if (name === 'свойство') return 'свойство по значению прилагательного ' + a0;
+  if (name === 'состояние') return 'состояние по значению ' + a0;
+  if (/^(отн\.|соотн\.|относящийся)/.test(name)) return 'связанный с ' + a0;
+  
+  const lb = name === 'помета' || name === 'помета.' ? (wLabel(a0) || '') : wLabel(name);
+  if (lb === undefined) return '';
+  if (name === 'итп' || name === 'итд') return ' ' + lb;
+  return lb ? WL_A + lb + WL_B : '';
+}
+function wAbbr(t) {
+  t = t.replace(/\u00a0/g, ' ');
+  W_AB.forEach(([re, to]) => { t = t.replace(re, to); });
+  
+  return t.replace(/\s*\([^()]*(?<![а-яёА-ЯЁ])[а-яё]{1,6}\.(?=[\s),«»]|$)[^()]*\)/g, '');
 }
 function wClean(t) {
   let prev;
+  
+  t = t.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1');
   do { prev = t; t = t.replace(/\{\{([^{}]*)\}\}/g, (m, b) => wTmpl(b)); } while (t !== prev);
-  return t.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/'{2,}/g, '').replace(/<ref[^>]*\/>/g, '').replace(/<ref[\s\S]*?<\/ref>/g, '')
-    .replace(/<[^>]+>/g, '').replace(/\(\s*\)/g, '').replace(/\s+/g, ' ').replace(/\s+([,.;:])/g, '$1').trim().replace(/^[;,.\s]+|[;,\s]+$/g, '');
+  t = t.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/'{2,}/g, '').replace(/<ref[^>]*\/>/g, '').replace(/<ref[\s\S]*?<\/ref>/g, '')
+    .replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\s*\/\/\s*/g, ', ');
+  
+  t = t.replace(/\s*\[\d+\]/g, '').replace(/\s*\[[IVX]+\.[\dIVX.,\s]*\]/g, '').replace(/\s+[IVX]+\.\d+(?![\d.])/g, '').replace(/\s*\((?:[A-Za-z][^()а-яёА-ЯЁ]*)?\)/g, '');
+  return wAbbr(t).replace(/(\s*[—–]\s*){2,}/g, ' — ').replace(/,(\s*,)+/g, ',').replace(/\s+/g, ' ').replace(/\s+([,.;:])/g, '$1').trim().replace(/^[;,.\s]+|[;,\s]+$/g, '');
+}
+
+function wExample(line) {
+  const at = line.indexOf('{{пример|'); if (at < 0) return '';
+  let d = 0, i = at, parts = [], cur = '';
+  for (; i < line.length; i++) {
+    const two = line.slice(i, i + 2);
+    if (two === '{{' || two === '[[') { d++; cur += two; i++; continue; }
+    if (two === '}}' || two === ']]') { d--; if (d === 0) break; cur += two; i++; continue; }
+    if (line[i] === '|' && d === 1) { parts.push(cur); cur = ''; continue; }
+    cur += line[i];
+  }
+  parts.push(cur);
+  const q = (parts.slice(1).find(x => x.trim() && !/^[^{\[]*=/.test(x)) || '');
+  return q && parts.slice(1)[0] === q ? q : '';
+}
+
+function wWhole(ex) {
+  let s = ex.replace(/\s+/g, ' ').trim();
+  
+  if (s.length > 200) s = s.split(/(?<=[.!?…])\s+(?=[«„"—–(]?\s*\p{Lu})/u).find(x => x.includes(WL_C) && x.length <= 200) || '';
+  s = s.split(WL_C).join('');
+  return s.length > 8 && s.length < 240 && /^[«„"—–(]?\s*[\p{Lu}]/u.test(s) && /[.!?…]["»”)]*$/.test(s) && !/^\.\.\.|^…|…["»”]?$|\.\.\.["»”]?$/.test(s) && !/[A-Za-z]{4}/.test(s) ? s : '';
 }
 function wMeanings(wt) {
   const i = wt.indexOf('{{-ru-}}'); let ru = i >= 0 ? wt.slice(i) : wt;
@@ -13131,12 +13290,19 @@ function wMeanings(wt) {
     if (/^=+\s*Значение\s*=+/.test(line)) { inM = true; continue; }
     if (/^=+/.test(line)) { inM = false; continue; }
     if (!inM || !/^#(?![#:*])/.test(line)) continue;
-    const ex = (line.match(/\{\{пример\|([^{}|]+)/) || [])[1];
-    const d = wClean(line.slice(1).replace(/\{\{пример\|[\s\S]*$/, ''));
-    if (d.length > 3 && !/^\(?[^а-яё]*\)?$/i.test(d)) out.push({ d, ex: ex ? wClean(ex) : '' });
+    const ex = wWhole(wClean(wExample(line)).replace(new RegExp('[' + WL_A + WL_B + ']', 'g'), ''));
+    const noC = t => t.split(WL_C).join('');
+    let d = noC(wClean(line.slice(1).replace(/\{\{пример\|[\s\S]*$/, '')));
+    const lb = [];
+    d = d.replace(new RegExp(WL_A + '([^' + WL_B + ']*)' + WL_B, 'g'), (m, x) => { if (!lb.includes(x)) lb.push(x); return ' '; });
+    
+    d = d.replace(/^(?:[\s,;:—]|или(?![а-яё])|и(?![а-яё]))+/, '').replace(/\s+/g, ' ').replace(/\s+([,.;:])/g, '$1').trim();
+    if (d.length > 3 && !/^\(?[^а-яё]*\)?$/i.test(d)) out.push({ d, lb, ex });
   }
   return out.slice(0, 6);
 }
+
+const wSay = x => (x.lb && x.lb.length ? x.lb.join(', ') + ': ' : '') + x.d;
 
 function lemmaGuesses(w) {
   const out = [w], add = x => { if (x.length > 1 && !out.includes(x)) out.push(x); };
@@ -13263,16 +13429,21 @@ function screenDict({ back = null, word = '' } = {}) {
     if (!r || !r.m.length || /^\p{Lu}/u.test(w)) { try { wp = await wikiSummary(w); } catch (e) {} if (t !== tok) return; }
     if (!r && !wp) { out.innerHTML = `<div class="d-card"><p>No connection to the dictionary. Check your internet.</p>${linksHTML(w)}</div>`; return; }
     const m = r ? r.m : [], title = r && r.m.length ? r.title : w;
+    
+    let shown = (P.settings.age || 6) <= 8 ? Math.min(1, m.length) : m.length;
+    const li = (x, i) => `<li${i >= shown ? ' hidden' : ''}>${x.lb && x.lb.length ? `<i class="d-lb">${esc(x.lb.join(', '))}:</i> ` : ''}${esc(x.d)}${x.ex ? `<em>«${esc(x.ex.replace(/^[«"„]|[»"”]$/g, ''))}»</em>` : ''}</li>`;
     out.innerHTML = `<div class="d-card"><h2>${esc(title)}</h2>
-      ${m.length ? `<ol class="d-m">${m.map(x => `<li>${esc(x.d)}${x.ex ? `<em>«${esc(x.ex)}»</em>` : ''}</li>`).join('')}</ol>` : `<p>This word was not found in the dictionary.${wp ? '' : " Check how it is spelled, or look in other dictionaries."}</p>`}
+      ${m.length ? `<ol class="d-m">${m.map(li).join('')}</ol>${shown < m.length ? `<button class="big ghost" id="dMore">➕ More meanings (${m.length - shown})</button>` : ''}` : `<p>This word was not found in the dictionary.${wp ? '' : " Check how it is spelled, or look in other dictionaries."}</p>`}
       ${wp ? `<div class="d-wp"><b>From Wikipedia: ${esc(wp.title)}</b><p>${esc(wp.text)}</p></div>` : ''}
       <div class="prow-btns">${m.length || wp ? "<button class=\"big ghost\" id=\"dSay\">🔊 Listen</button><button class=\"big\" id=\"dSave\">⭐ Add to my dictionary</button>" : ''}</div>
       ${linksHTML(title)}</div>`;
-    const text = m.length ? m[0].d : wp ? wp.text : '';
+    const text = m.length ? wSay(m[0]) : wp ? wp.text : '';
     if (text) talk(`${title}. ${text}`);
-    if ($('#dSay')) $('#dSay').onclick = () => { sfx.pop(); talk(`${title}. ${m.length ? m.map((x, i) => (m.length > 1 ? `${i + 1}. ` : '') + x.d).join('. ') : wp.text}`); };
+    const sayM = (from, to) => m.slice(from, to).map((x, i) => (m.length > 1 ? `${from + i + 1}. ` : '') + wSay(x)).join('. ');
+    if ($('#dMore')) $('#dMore').onclick = () => { sfx.pop(); const from = shown; shown = m.length; out.querySelectorAll('.d-m li[hidden]').forEach(x => { x.hidden = false; }); $('#dMore').remove(); talk(sayM(from, m.length)); };
+    if ($('#dSay')) $('#dSay').onclick = () => { sfx.pop(); talk(`${title}. ${m.length ? sayM(0, shown) : wp.text}`); };
     if ($('#dSave')) $('#dSave').onclick = () => {
-      const v = vocab(); if (!v.some(x => x.w === title)) v.unshift({ w: title, d: text, at: Date.now() }); if (v.length > 300) v.length = 300; save();
+      const v = vocab(); if (!v.some(x => x.w === title)) v.unshift({ w: title, d: m.length ? m[0].d : text, at: Date.now() }); if (v.length > 300) v.length = 300; save();
       sfx.star(); $('#dSave').textContent = "✓ In my dictionary"; $('#dSave').disabled = true; book();
     };
   }
@@ -14449,6 +14620,8 @@ function screenMathPath() {
   const age = P.settings.age || (Q() ? 9 : 5), so = (P.soro && P.soro.top) || 1, st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
   const card = (id, e, h, sub, prog, rec) => `<button class="mp-card ${rec ? 'rec' : ''}" data-go="${id}"><span class="emo">${e}</span><span class="mp-t"><b>${h}</b><small>${sub}</small><em>${prog}</em></span>${rec ? '<span class="mp-rec">⭐</span>' : ''}</button>`;
   shell("Maths path", `<div class="mp">
+      ${card('m-skill', '🎯', "Maths at your level", "we check your level — then tasks just right for you", MSK.has() ? MSK.rankTxt() : '', true)}
+      <div class="mp-arrow">⬇️</div>
       ${card('soroban', '🧮', "Abacus: counting in your head", "Ages 4–7: beads first, then counting in your head", `level ${so} of ${SORO.length}`, age <= 6)}
       ${card('flash', '⚡', "Flash Count", "numbers flash by: add them in your head", `level ${P.flashLv || 1}`, false)}
       <div class="mp-arrow">⬇️</div>
@@ -14465,6 +14638,198 @@ GAMES.push(
   { id: 'soroban', name: "Abacus", sub: "counting in your head", ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `level ${(P.soro && P.soro.top) || 1}` },
   { id: 'steps', name: "Step by Step", sub: "one step higher every day", ico: () => pic('🪜'), bg: 'var(--t-blue)', go: () => screenSteps(), grp: 3, also: [8], prog: () => `step ${stepsTop()}` }
 );
+ 
+
+
+const MSK = (() => {
+  const box = '<b class="mk-box">□</b>';
+  const pics = (n, e) => `<span class="mk-pics">${Array.from({ length: n }, () => pic(e)).join('')}</span>`;
+  const X = (q, a) => ({ q, a, x: 1 });                       
+  const hm = m => `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
+  const pie = (parts, fill) => {
+    const r = 46, c = 50, sl = Array.from({ length: parts }, (_, i) => {
+      const a0 = i / parts * 2 * Math.PI - Math.PI / 2, a1 = (i + 1) / parts * 2 * Math.PI - Math.PI / 2;
+      return `<path d="M${c},${c} L${(c + r * Math.cos(a0)).toFixed(1)},${(c + r * Math.sin(a0)).toFixed(1)} A${r},${r} 0 0 1 ${(c + r * Math.cos(a1)).toFixed(1)},${(c + r * Math.sin(a1)).toFixed(1)} Z" fill="${i < fill ? '#FF8A2A' : '#FFF6E8'}" stroke="#7A4A1E" stroke-width="2"/>`;
+    }).join('');
+    return `<svg class="mk-pie" viewBox="0 0 100 100" aria-hidden="true">${sl}</svg>`;
+  };
+  const FR = { '1/2': '½', '1/4': '¼', '3/4': '¾', '1/3': '⅓', '2/3': '⅔' };
+  const COIN = ["coin", "coins", "coins"];
+  
+  const L = [
+    { n: "Adding up to 5", h: "Count all the pictures together.", g: () => { const a = ri(1, 3), b = ri(1, 5 - a), e = pickOne(MATH_E); return { q: `${pics(a, e)}<i class="mk-op">+</i>${pics(b, e)}`, a: a + b, opts: numOpts(a + b, 1, 6), say: `${a} + ${b}` }; } },
+    { n: "Adding up to 10", h: "Start from the bigger number and count on.", g: () => { const a = ri(2, 8), b = ri(1, 10 - a); return { ...X(`${a} + ${b}`, a + b), opts: numOpts(a + b, 1, 10) }; } },
+    { n: "Plus and minus up to 10", h: "Minus is how many are left. You can count on your fingers.", g: () => { const a = ri(3, 10), b = ri(1, a - 1); return Math.random() < .5 ? { ...X(`${a} − ${b}`, a - b), opts: numOpts(a - b, 0, 10) } : { ...X(`${a - b} + ${b}`, a), opts: numOpts(a, 1, 10) }; } },
+    { n: "Up to 20, no crossing ten", h: "Leave the ten alone: count only the ones.", g: () => { const u = ri(1, 7), a = 10 + u, b = ri(1, 9 - u); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: "Crossing ten", h: "First make 10, then add the rest.", g: () => { const a = ri(5, 9), b = ri(11 - a, 9); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: "The box", h: "Which number is hiding in the box? Check: put it in.", g: () => { const a = ri(3, 12), b = ri(2, 8), k = ri(0, 2); return k === 0 ? { q: `${box} + ${b} = ${a + b}`, a } : k === 1 ? { q: `${a} + ${box} = ${a + b}`, a: b } : { q: `${a + b} − ${box} = ${a}`, a: b }; } },
+    { n: "Up to 100, no carrying", h: "Add tens to tens and ones to ones.", g: () => { const t1 = ri(1, 6), t2 = ri(1, 8 - t1), u1 = ri(0, 6), u2 = ri(0, 9 - u1), a = t1 * 10 + u1, b = t2 * 10 + u2; return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: "Up to 100 with carrying", h: "More than ten ones make one more ten.", g: () => { let a, b; do { a = ri(15, 68); b = ri(12, 29); } while (a % 10 + b % 10 < 10 || a + b > 99); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: "Times tables of 2, 3, 5 and 10", h: "Multiplying is adding the same number several times.", g: () => { const m = pickOne([2, 3, 5, 10]), k = ri(1, 10); return Math.random() < .8 ? X(`${m} × ${k}`, m * k) : X(`${k} × ${m}`, m * k); } },
+    { n: "All the times tables", h: "Remember the tables: swapping the numbers doesn't change the answer.", g: () => { const a = ri(2, 9), b = ri(2, 9); return Math.random() < .35 ? { q: `${a} × ${box} = ${a * b}`, a: b } : X(`${a} × ${b}`, a * b); } },
+    { n: "Division and word problems", h: "Division is multiplication backwards. In a problem, first find what you had after the first step.", g: () => {
+      if (Math.random() < .55) { const a = ri(2, 9), b = ri(2, 9); return X(`${a * b} ${DIV} ${a}`, b); }
+      const k = ri(0, 2);
+      if (k === 0) { const a = ri(12, 40), b = ri(5, 20), c = ri(3, a + b - 2); return { q: `There are ${a} ${plural(a, ["book", "books", "books"])} on the shelf. ${b} more were put there, then ${c} were taken. How many books are on the shelf now?`, a: a + b - c, long: 1 }; }
+      if (k === 1) { const a = ri(2, 6), b = ri(2, 9), c = ri(1, a * b - 1); return { q: `There are ${b} ${plural(b, ["sweet", "sweets", "sweets"])} in each of ${a} boxes. ${c} were given away. How many sweets are left?`, a: a * b - c, long: 1 }; }
+      const a = ri(8, 30), b = ri(3, 12); return { q: `One basket has ${a} ${plural(a, ["apple", "apples", "apples"])}, and the other has ${b} more. How many apples are in the two baskets?`, a: a + a + b, long: 1 };
+    } },
+    { n: "Money and time", h: "An hour has 60 minutes. Add and take away coins like ordinary numbers.", g: () => {
+      const k = ri(0, 2);
+      if (k === 0) { const a = ri(12, 45), b = ri(15, 48); return { q: `A bun costs ${a} ${plural(a, COIN)} and a juice costs ${b}. How many coins do you need for both?`, a: a + b, long: 1 }; }
+      if (k === 1) { const p = ri(18, 76), have = pickOne([50, 80, 100].filter(x => x > p)); return { q: `You have ${have} ${plural(have, COIN)}. A toy costs ${p}. How many coins will be left?`, a: have - p, long: 1 }; }
+      const st = ri(8, 17) * 60 + pickOne([10, 20, 30, 40, 45, 50]), d = pickOne([20, 25, 30, 35, 40, 45, 50]), e = st + d;
+      const o = shuffle([...new Set([hm(e), hm(e + 10), hm(e - 10), hm(st + d + 60)])]).slice(0, 3); if (!o.includes(hm(e))) o[0] = hm(e);
+      return { q: `A cartoon started at ${hm(st)} and lasted ${d} minutes. What time did it end?`, a: hm(e), opts: shuffle(o), long: 1 };
+    } },
+    { n: "Fractions: a half and a quarter", h: "A half is 2 equal parts. A quarter is 4.", g: () => {
+      if (Math.random() < .45) { const [parts, fill] = pickOne([[2, 1], [4, 1], [4, 3], [3, 1], [4, 2]]), a = fill === 2 && parts === 4 ? '1/2' : `${fill}/${parts}`;
+        return { q: `${pie(parts, fill)}<span class="mk-t">What part of the circle is coloured?</span>`, a: FR[a], opts: shuffle([...new Set([FR[a], ...shuffle(['½', '¼', '¾', '⅓'].filter(x => x !== FR[a])).slice(0, 2)])]), say: "What part of the circle is coloured?" }; }
+      const half = Math.random() < .5, n = half ? ri(3, 25) * 2 : ri(2, 12) * 4; return { ...X(`${half ? '½' : '¼'} of ${n}`, half ? n / 2 : n / 4), say: half ? `Half of ${n}?` : `A quarter of ${n}?` };
+    } },
+    { n: "Up to 1000 with carrying", h: "Do it in columns in your head: ones, then tens, then hundreds.", g: () => { const a = ri(125, 589), b = ri(118, 299); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: "Remainders and brackets", h: "First what's in brackets, then times and divide, then plus and minus.", g: () => {
+      const k = ri(0, 3), a = ri(2, 9), b = ri(2, 9), c = ri(2, 6);
+      if (k === 0) { const r = ri(1, a - 1 || 1), n = a * b + r; return a > 2 ? { q: `${n} ${DIV} ${a} = ${b}, remainder ?`, a: r, say: `${n} ${DIV} ${a}. What is the remainder?` } : X(`(${a} + ${b}) × ${c}`, (a + b) * c); }
+      if (k === 1) return X(`(${a} + ${b}) × ${c}`, (a + b) * c);
+      if (k === 2) return X(`${a} + ${b} × ${c}`, a + b * c);
+      const s = ri(2, 4), d = ri(1, 5); return X(`${(s + d) * c * 2} ${DIV} (${s} + ${d})`, c * 2);
+    } },
+    { n: "Olympiad", h: "Take your time: find the rule or work backwards.", g: () => {
+      const k = ri(0, 4);
+      if (k === 0) { const a = ri(1, 5), d = ri(2, 7); return { q: `${a}, ${a + d}, ${a + 2 * d}, ${a + 3 * d}, ?`, a: a + 4 * d, say: "Which number comes next?" }; }
+      if (k === 1) { const a = pickOne([1, 2, 3]); return { q: `${a}, ${a * 2}, ${a * 4}, ${a * 8}, ?`, a: a * 16, say: "Which number comes next?" }; }
+      if (k === 2) { const c = ri(2, 6), h = ri(2, 6); return { q: `How many legs do ${c} cats and ${h} hens have altogether?`, a: c * 4 + h * 2, long: 1 }; }
+      if (k === 3) { const x = ri(3, 15), p = ri(3, 9); return { q: `I thought of a number, added ${p} and multiplied by 2. I got ${(x + p) * 2}. What was my number?`, a: x, long: 1 }; }
+      const n = ri(3, 9); return { q: `A log was sawn into ${n} ${plural(n, ["piece", "pieces", "pieces"])}. How many cuts were made?`, a: n - 1, long: 1 };
+    } }
+  ];
+  const RANK = [[1, '🐣', "Little Counter"], [3, '🐥', "Ten Expert"], [5, '🦊', "Master of Twenty"], [7, '🦉', "Hundred Conqueror"], [9, '🐯', "Times Table Expert"], [11, '🦁', "Problem Master"], [13, '🚀', "Fraction Expert"], [14, '🏔️', "Thousand Climber"], [16, '🏆', "Olympian"]];
+  const S = () => (P.mskill = P.mskill && typeof P.mskill === 'object' ? P.mskill : {});
+  const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : a === 5 ? 2 : a === 6 ? 3 : a === 7 ? 5 : a === 8 ? 7 : a === 9 ? 9 : 11; };
+  const has = () => !!(P.mskill && P.mskill.lv);
+  const lv = () => Math.max(1, Math.min(L.length, (P.mskill && P.mskill.lv) || startLv()));
+  const rank = (l = lv()) => RANK.reduce((r, x) => l >= x[0] ? x : r, RANK[0]);
+  const rankTxt = (l = lv()) => `${rank(l)[1]} ${rank(l)[2]}`;
+  
+  const STEP_OF = [1, 6, 8, 9, 9, 10, 11, 12, 13, 14, 15, 15, 15, 16, 18, 20];
+  function share() {
+    const l = S().lv; if (!l) return;
+    stepsTop(); P.steps.top = Math.max(P.steps.top, Math.min(STEPS.length, STEP_OF[l - 1] || 1));
+    P.n100 = P.n100 || {}; const want = l >= 8 ? 2 : l >= 7 ? 1 : 0;
+    ['tens', 'build', 'grid', 'order'].forEach(id => { if ((P.n100[id] || 0) < want) P.n100[id] = want; });
+  }
+  function setLv(n) { S().lv = Math.max(1, Math.min(L.length, n)); share(); save(); }
+  
+  function pick(l) { const at = l > 1 && Math.random() < .2 ? l - 1 : l, t = L[at - 1].g(); t.lv = at; t.h = L[at - 1].h; return t; }
+  const SAYW = [[/×/g, " times "], [/÷|:(?!\d\d)/g, " divided by "], [/−/g, " minus "], [/\+/g, " plus "], [/=/g, " equals "], [/□/g, " box "], [/[()]/g, ' '], [/\?/g, '']];
+  const sayOf = t => t.say || (t.x || /□/.test(t.q) ? SAYW.reduce((s, [re, w]) => s.replace(re, w), t.q.replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim() + (t.x ? '?' : '') : t.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+  const qHTML = t => `<div class="mk-q ${t.long ? 'long' : ''}">${t.q}${t.x ? ' = <b class="mk-ans">?</b>' : ''}</div>`;
+  const ansHTML = t => t.opts ? `<div class="num-opts mk-opts">${t.opts.map(o => `<button class="num-b mk-o" data-v="${esc(String(o))}">${o}</button>`).join('')}</div>`
+    : `${t.x || /□/.test(t.q) ? '' : '<div class="mk-in" id="mkIn">?</div>'}${keypadHTML('mkKp')}`;
+  
+  function ask(t, cb) {
+    const b = $('#mkBox'); b.innerHTML = qHTML(t) + ansHTML(t); b.dataset.a = t.a; b.dataset.k = +(b.dataset.k || 0) + 1;
+    let input = '';
+    const show = () => { const i = $('#mkIn') || $('.mk-q .mk-ans') || $('.mk-q .mk-box'); if (i) i.textContent = input || (i.classList.contains('mk-box') ? '□' : '?'); };
+    if (t.opts) $('.mk-opts').onclick = e => { const o = e.target.closest('.mk-o'); if (o) cb(o.dataset.v, o); };
+    else $('#mkKp').onclick = e => { const k = e.target.closest('[data-k]'); if (!k) return; const v = k.dataset.k; sfx.tick(); if (v === 'del') input = input.slice(0, -1); else if (v === 'ok') { if (input) { const x = input; input = ''; cb(x, $('#mkIn') || $('.mk-q')); if (!$('.mk-q .ok')) show(); } return; } else if (input.length < 4) input += v; show(); };
+    const onKey = e => { if (!$('#mkKp')) { document.removeEventListener('keydown', onKey); return; } if (e.key === 'Enter' && input) { const x = input; input = ''; cb(x, $('#mkIn') || $('.mk-q')); if (!$('.mk-q .ok')) show(); } else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 4) { input += e.key; show(); } };
+    if (!t.opts) document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }
+  const solved = t => { const q = $('.mk-q'); if (!q) return; const a = q.querySelector('.mk-ans') || q.querySelector('.mk-box'); if (a) { a.textContent = t.a; a.classList.add('ok'); } };
+  const head = l => `<div class="mk-head"><button class="chip" id="mkDown">🐢 Easier</button><span class="mk-rank" id="mkRank"><b>${rankTxt(l)} · ${l}</b><small>${esc(L[l - 1].n)}</small></span><button class="chip" id="mkUp">🚀 Harder</button></div>`;
+  
+  function check() {
+    const t = newScreen(); let l = startLv(), k = 0, best = 0, task = null, busy = false, off = () => {};
+    const N = 8;
+    shell("Let's see what you can do", `<div class="mk"><p class="mk-step" id="mkStep"></p><div id="mkBox"></div></div>`);
+    const q = LQ.start('m-skill', N);
+    function next() {
+      busy = false; task = L[l - 1].g(); task.lv = l; $('#mkStep').textContent = `Task ${k + 1} of ${N}`;
+      off(); off = ask(task, answer);
+      talk((k === 0 ? "Let's see what you can already do! Eight tasks: easy ones first, then harder and harder. Mistakes are fine — that's how we find your level. " : '') + sayOf(task));
+    }
+    async function answer(v, el) {
+      if (busy) return; busy = true;
+      const good = String(v) === String(task.a);
+      if (good) { sfx.good(); best = Math.max(best, l); solved(task); l = Math.min(L.length, l + (k < 3 ? 2 : 1)); }
+      else { sfx.pop(); solved(task); l = Math.max(1, l - 1); }
+      q.hit(el, task.a);
+      await talk(good ? pickOne(["Right!", "Yes!", "Exactly!"]) : `That's okay! The answer is ${task.a}. Let's go on.`); if (t !== tok) return;
+      k++;
+      if (k < N) { later(next, 300); return; }
+      off(); setLv(Math.max(best || l, startLv() - 5)); S().checked = dayKey();
+      finish({ key: 'm-skill', stars: 3, line: `${q.end} Your level: ${lv()} — ${rank()[2]}. Now the tasks will be just right for you.`, again: () => play() });
+    }
+    next();
+  }
+  
+  function play() {
+    if (!has()) { check(); return; }
+    const t = newScreen(); let l = lv(), k = 0, task = null, tries = 0, t0 = 0, streak = 0, missRun = 0, right = 0, busy = false, off = () => {};
+    const N = 8, l0 = l;
+    shell("Maths at your level", `<div class="mk">${head(l)}<div id="mkBox"></div><button class="link-btn" id="mkRe">🔁 Check my level again</button></div>`);
+    const q = LQ.start('m-skill', N);
+    const reHead = () => { $('.mk-head').outerHTML = head(l); bindHead(); };
+    function bindHead() {
+      $('#mkDown').onclick = () => { if (l <= 1) return; sfx.pop(); setLv(l - 1); off(); play(); };
+      $('#mkUp').onclick = () => { if (l >= L.length) return; sfx.pop(); setLv(l + 1); off(); play(); };
+    }
+    bindHead();
+    $('#mkRe').onclick = () => { sfx.pop(); off(); delete S().lv; check(); };
+    function next() {
+      busy = false; tries = 0; task = pick(l); t0 = performance.now();
+      off(); off = ask(task, answer);
+      talk((k === 0 ? q.intro + ' ' : '') + sayOf(task));
+    }
+    async function answer(v, el) {
+      if (busy) return;
+      if (String(v) === String(task.a)) {
+        busy = true; sfx.good(); solved(task); q.hit(el, task.a);
+        const fast = performance.now() - t0 < (task.opts && !task.long ? 15000 : task.long ? 60000 : 25000);
+        if (tries === 0) { right++; missRun = 0; streak = fast ? streak + 1 : 0; } else { streak = 0; missRun++; }
+        let line = pickOne(["Right!", "Yes!", "Exactly!", "Correct!"]);
+        if (streak >= 3 && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + "Wow, that was easy! Let's make it harder."; }
+        else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + "Let's make it a little easier."; }
+        await talk(line); if (t !== tok) return;
+        return step();
+      }
+      tries++; streak = 0; sfx.oops();
+      if (el && el.classList) wiggle(el);
+      if (tries === 1) { if (task.opts) q.miss(null); talk("Almost! " + task.h); return; }
+      
+      busy = true; missRun++; solved(task); q.hit(null, task.a);
+      await talk(`The answer is ${task.a}. That's okay, it was a hard one!`); if (t !== tok) return;
+      if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); await talk("Let's make it a little easier."); if (t !== tok) return; }
+      return step();
+    }
+    function step() {
+      k++;
+      if (k < N) { later(next, 350); return; }
+      off();
+      finish({ key: 'm-skill', stars: right >= 7 ? 3 : right >= 5 ? 2 : 1, line: `${q.end} ${rankTxt(l)} · level ${l}.` + (l > l0 ? ' ' + "New level!" : ''), again: () => play() });
+    }
+    next();
+  }
+  
+  function sprintTask() {
+    if (!has()) return null;
+    const l = lv();
+    for (let i = 0; i < 30; i++) { const at = Math.max(2, l - ri(0, 2)), t = L[at - 1].g(); if (t.x && !t.opts) return { q: t.q, ans: t.a }; }
+    return null;
+  }
+  
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="mkLvIn">🔢 Maths: level <select id="mkLvIn"><option value="">check on first entry</option>${L.map((x, i) => `<option value="${i + 1}" ${P.mskill && P.mskill.lv === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)}</option>`).join('')}</select></label>`);
+    $('#mkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
+  }
+  GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'math-count')), 0, { id: 'm-skill', name: "Maths at your level", sub: "tasks just right for you: harder or easier", kw: "maths level harder easier times tables", ico: () => pic('🎯'), bg: 'var(--t-peach)', go: () => play(), grp: 3, also: [17], prog: () => has() ? rankTxt() : "start with a check" });
+  return { play, check, lv, has, setLv, rank, rankTxt, sprintTask, settingsRow, L, pick, startLv };
+})();
+ 
 
 
 
@@ -14868,7 +15233,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '151';
+const APP_VER = '152';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 
@@ -15560,6 +15925,46 @@ const WHEELS_CP = {
 Object.assign(CPAGES, FOOTBALL_CP, WHEELS_CP);
 const FOOTBALL_PAGES = Object.keys(FOOTBALL_CP).map(k => 'svg:' + k), WHEELS_PAGES = Object.keys(WHEELS_CP).map(k => 'svg:' + k);
 PAGES.push(...FOOTBALL_PAGES, ...WHEELS_PAGES);
+
+
+const COLOR_IMG = {
+  'cat': ['animals', 'GDJ', 312543],
+  'owl': ['animals', 'gammillian', 75271],
+  'turtle': ['sea', 'horse50', 74233],
+  'lion': ['animals', 'horse50', 74749],
+  'horse': ['animals', 'Superolli', 284788],
+  'giraffe': ['animals', 'frankes', 214355],
+  'savanna': ['animals', 'frankes', 220149],
+  'bunny': ['animals', 'frankes', 213606],
+  'bear': ['animals', 'johnny_automatic', 603],
+  'husky': ['animals', 'pianoBrad', 187790],
+  'panda': ['animals', 'pianoBrad', 187797],
+  'triceratops': ['dino', 'Mystharia', 316177],
+  'dino-happy': ['dino', 'Firkin', 281169],
+  'dino-rawr': ['dino', 'Tavin', 234370],
+  'unicorn': ['fairy', 'GDJ', 312536],
+  'mermaid': ['fairy', 'GDJ', 312542],
+  'fish': ['sea', 'redglove', 275734],
+  'octopus-baby': ['sea', 'Deadly44', 245072],
+  'octopus': ['sea', 'FunDraw_dot_com', 5515],
+  'dolphin': ['sea', 'frankes', 170167],
+  'rocket': ['space', 'mvolz', 272531],
+  'saturn': ['space', 'spacefem', 195161],
+  'retro-car': ['cars', 'liftarn', 321462],
+  'antique-car': ['cars', 'GDJ', 338146],
+  'emergency': ['cars', 'mvolz', 273681],
+  'soccer': ['football', 'buggywindows', 306433],
+  'butterfly': ['nature', 'teck5', 352671],
+  'butterfly-meadow': ['nature', 'j4p4n', 195905],
+  'flower': ['nature', 'teck5', 352740],
+  'mandala-floral': ['mandala', 'GDJ', 312268],
+  'mandala-lotus': ['mandala', 'GDJ', 305191]
+};
+const IMG_PAGES = Object.keys(COLOR_IMG).map(k => 'img:' + k), imgOf = t => IMG_PAGES.filter(p => COLOR_IMG[p.slice(4)][0] === t);
+const colorImgSrc = k => `${EMBEDDED ? 'https://govorilki.com/play/' : SITE_ROOT}img/color/${k}.png`;
+
+const FRIEND_PAGES = () => Object.keys(FRIENDS).filter(k => !k.startsWith('toy:'));
+PAGES.push(...FRIEND_PAGES().filter(k => !PAGES.includes(k)));
 
 
 
@@ -18244,7 +18649,8 @@ const IDEAS = (() => {
           for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
           box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
-          for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
+          const ws = sample(R_WORDS, 5), redo = new Set();
+          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
         } else {
           box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
           await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;

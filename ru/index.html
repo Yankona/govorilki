@@ -760,6 +760,7 @@ b.r{color:var(--berry)}
 .d-card{display:flex;flex-direction:column;gap:10px;background:var(--paper);color:var(--ink);border-radius:24px;padding:16px;box-shadow:0 5px 0 var(--line)}
 .d-card h2{margin:0;font:700 28px/1.1 var(--f-display)}
 .d-m{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px;font:700 17px/1.45 var(--f-body)}
+.d-m .d-lb{font:italic 700 15px/1.4 var(--f-body);color:var(--ink-soft)}
 .d-m em{display:block;font:italic 600 15px/1.4 var(--f-body);color:var(--ink-soft)}
 .d-wp{padding:10px 12px;border-radius:14px;background:var(--sky)}
 .d-wp p{margin:4px 0 0;font:600 15px/1.45 var(--f-body)}
@@ -1475,6 +1476,19 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .sprint.st.playing .st-ladder,.sprint.st.playing .st-name{display:none}
 .sp-q{min-width:min(100%,360px);padding:16px 22px;border-radius:24px;background:var(--paper);text-align:center;font:900 clamp(36px,9vw,54px)/1 var(--f-body);font-variant-numeric:tabular-nums;box-shadow:0 5px 0 var(--line)}
 .sp-q span{color:var(--plum)}
+.mk{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.mk-head{display:flex;align-items:center;justify-content:space-between;gap:8px;width:min(100%,560px)}.mk-head .chip{flex:none;font-size:15px;padding:8px 10px}
+.mk-rank{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}.mk-rank b{font:900 18px/1.2 var(--f-display)}.mk-rank small{font:700 13px/1.25 var(--f-body);color:var(--ink-soft)}
+.mk-step{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+.mk-q{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;min-width:min(100%,360px);max-width:560px;padding:14px 18px;border-radius:24px;background:var(--paper);text-align:center;font:900 clamp(32px,8vw,48px)/1.2 var(--f-body);font-variant-numeric:tabular-nums;box-shadow:0 5px 0 var(--line-strong)}
+.mk-q.long{font:700 clamp(19px,4.6vw,24px)/1.4 var(--f-body);text-align:left}
+.mk-box,.mk-ans{display:inline-grid;place-items:center;min-width:1.3em;padding:0 6px;border-radius:12px;background:var(--t-yellow);color:var(--plum);font-weight:900}.mk-box.ok,.mk-ans.ok{background:var(--t-green);color:var(--leaf)}
+.mk .keypad{gap:6px}.mk .kp-k{height:50px}.mk-head .chip{min-height:0}
+@media (max-height:780px){.mk{gap:8px}.mk-rank small{display:none}.mk-rank b{font-size:16px}.mk-q.long{padding:10px 14px}.mk .kp-k{height:46px}.mk-in{font-size:32px}}
+.mk-in{min-width:140px;padding:4px 18px;border-radius:18px;background:var(--paper);text-align:center;font:900 38px/1.2 var(--f-body);color:var(--plum);box-shadow:inset 0 0 0 3px var(--line-strong)}
+.mk-pics{display:inline-flex;flex-wrap:wrap;gap:2px;max-width:150px;justify-content:center}.mk-pics .pic{font-size:30px}.mk-op{font-style:normal}
+.mk-pie{width:120px;height:120px}.mk-t{flex-basis:100%;font:700 19px/1.3 var(--f-body)}
+.mk-opts .num-b{width:auto;min-width:clamp(80px,19vmin,120px);padding:0 14px;font-size:clamp(34px,8vmin,52px)}
 .keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
 .kp-k{height:58px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:900 26px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
 .kp-k.ok{background:var(--leaf);color:#fff}
@@ -1486,6 +1500,8 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .svg-page{position:absolute;inset:0;display:grid;place-items:center;padding:3%}
 .svg-page svg{display:block;width:100%;height:100%}
 .svg-page svg *{cursor:pointer}
+.page-thumb img{display:block;width:100%;height:100%;object-fit:contain}
+.img-credit{margin:-4px 0 0;text-align:center;font:700 11px/1.3 var(--f-body);color:var(--ink-soft,#6B6585)}
 
 .beauty-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
 .beauty-face{width:clamp(170px,38vmin,260px);overflow:hidden;border:10px solid #F7B6CF;border-radius:50%/46%;background:radial-gradient(circle at 50% 40%,#FFF5FA,#FFE0EC);box-shadow:0 8px 0 #E58FB1}
@@ -3357,7 +3373,7 @@ const LANGDATA =  {};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
-const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"5f5bf805fd","HOLT":"3d8cb3624e","GLOBE_GEO":"f06c660690","sayru":"7a93cdd991"};
+const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"5f5bf805fd","HOLT":"3d8cb3624e","GLOBE_GEO":"f06c660690","sayru":"3fe35ce4b9"};
 const PACK = (() => {
   const got = {}, run = {}, root = location.pathname.replace(/[^/]*$/, '').replace(/(en|pt|ru|de)\/$/, '');
   const url = n => root + 'data/' + LANG + '/' + n + '.json?h=' + PACKS[n];
@@ -4267,6 +4283,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
+  if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
   tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
@@ -5437,7 +5454,12 @@ const LQ = (() => {
   const TRAIN = { who: '🚂', it: '🚃', goal: '🏁', s: 'Собираем поезд: каждый слог — новый вагончик!', end: 'Поезд собран — ту-ту!' };
   const NOTES = [523, 587, 659, 698, 784, 880, 988, 1047];
   
-  const lv = key => { const n = (P.plays || {})[key] || 0, a = P.settings.age || 0; return Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0)); };
+  const lv = key => {
+    const n = (P.plays || {})[key] || 0, a = P.settings.age || 0, own = Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0));
+    
+    const m = /^math-/.test(key) && P.mskill && P.mskill.lv || 0;
+    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0);
+  };
   function start(key, n = 6, train = false) {
     let last = (P.lqLast || {})[key];
     const pool = ST.filter((x, i) => i !== last), st = train ? TRAIN : pickOne(pool);
@@ -6161,13 +6183,16 @@ function screenDrawMenu() {
 }
 function screenColorMenu() {
   newScreen();
-  const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Раскраска"><span class="page-thumb">${outlineSVG(pageSVG(p))}</span></button>`;
+  const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Раскраска"><span class="page-thumb">${p.startsWith('img:') ? `<img src="${colorImgSrc(p.slice(4))}" alt="" loading="lazy">` : outlineSVG(pageSVG(p))}</span></button>`;
   
-  
-  const likes = P.settings.likes || [], themed = [...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES];
-  const themes = [['Балет', BALLET_PAGES, ['ballet', 'dance']], ['Футбол', FOOTBALL_PAGES, ['football']], ['Тачки и мотики', WHEELS_PAGES, ['race', 'moto', 'trucks']]];
-  const liked = t => t[2].some(l => likes.includes(l));
-  const groups = [...themes.filter(liked), ['Зверята и игрушки', PAGES.filter(p => !themed.includes(p))], ...themes.filter(t => !liked(t))];
+  const likes = P.settings.likes || [], friends = FRIEND_PAGES();
+  const themes = [['Балет', BALLET_PAGES, ['ballet', 'dance']], ['Футбол', [...FOOTBALL_PAGES, ...imgOf('football')], ['football']],
+    ['Тачки и мотики', [...WHEELS_PAGES, ...imgOf('cars')], ['race', 'moto', 'trucks', 'rescue']],
+    ['Звери', imgOf('animals'), ['animals', 'dogs', 'cats', 'horses', 'wild', 'farm', 'birds', 'hamsters']], ['Динозавры', imgOf('dino'), ['dino', 'dragon']],
+    ['Сказки', imgOf('fairy'), ['unicorn', 'princess', 'mermaid', 'fairies', 'knights', 'dragon']], ['Море', imgOf('sea'), ['ocean', 'fish', 'beach', 'swim']],
+    ['Космос', imgOf('space'), ['space']], ['Бабочки и цветы', imgOf('nature'), ['nature', 'plants', 'insects']], ['Мандалы', imgOf('mandala'), ['draw', 'art', 'crafts']]];
+  const themed = themes.flatMap(t => t[1]), liked = t => t[2].some(l => likes.includes(l));
+  const groups = [['Мои друзья', friends], ...themes.filter(liked), ['Зверята и игрушки', PAGES.filter(p => !themed.includes(p) && !friends.includes(p))], ...themes.filter(t => !liked(t))];
   const st = shell('Раскраски', groups.map(([h, ps]) => `<h2 class="sec-h">${h}</h2><div class="cards">${ps.map(card).join('')}</div>`).join(''), { back: screenDrawMenu });
   talk('Выбери картинку, которую будешь раскрашивать.');
   st.onclick = e => { const c = e.target.closest('.page'); if (c) { sfx.pop(); screenPaint({ mode: 'color', page: c.dataset.p }); } };
@@ -6178,10 +6203,12 @@ function screenPaint(opts = {}) {
   const title = mode === 'color' ? 'Раскраска' : mode === 'write' ? 'Пишем буквы' : TK ? 'Рисунок по заданию' : mode === 'magic' ? 'Волшебный узор' : 'Рисовалка';
   const back = opts.back || (mode === 'color' ? screenColorMenu : mode === 'write' ? null : screenDrawMenu);
   const L = ABC[li], palL = !Q() && mode !== 'magic' && mode !== 'write';
+  
+  const RASTER = mode === 'color' && !!page && page.startsWith('img:'), CR = RASTER && COLOR_IMG[page.slice(4)];
   shell(title, `<div class="paint">
       ${TK ? `<div class="task-card" id="taskCard"><span class="emo">📝</span><p>${TK.t}</p></div>` : ''}
       ${mode === 'write' ? `<div class="wr-head"><button class="ibtn" id="prevL" aria-label="Предыдущая буква">${ICON.back}</button><span class="wr-ex">${pic(L[2])}<span>${hiLetter(L[1], L[0])}</span></span><button class="ibtn" id="nextL" aria-label="Следующая буква">${ICON.fwd}</button></div>` : ''}
-      <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
+      <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' && !RASTER ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
       <div class="swatches" id="sw">${mode === 'magic' ? '<button class="swc sel rainbow" data-c="rainbow" aria-label="Радуга"></button>' : ''}${PALETTE.map((c, i) => `<button class="swc ${i === 0 && mode !== 'magic' ? 'sel' : ''}" data-c="${c}" style="--c:${c}" aria-label="${esc(PAL_WORDS[i] ? PAL_WORDS[i][1] : 'Цвет')}">${palL && PAL_WORDS[i] ? `<b class="swl">${esc(PAL_WORDS[i][0])}</b>` : ''}</button>`).join('')}</div>
       <div class="tools" id="tools">
         <button class="tool" data-t="brush" data-s="6" aria-label="Тонкая кисть"><i style="--d:8px"></i></button>
@@ -6194,11 +6221,12 @@ function screenPaint(opts = {}) {
         <button class="big tool-done" id="done">${ICON.star}Готово</button>
       </div>
     </div>`, { back });
+  if (CR) $('#sw').insertAdjacentHTML('beforebegin', `<p class="img-credit">Рисунок: ${esc(CR[1])} · Openclipart · CC0</p>`);
   const paper = $('#paper'), cB = $('#cvB'), cL = $('#cvL');
   const xB = cB.getContext('2d', { willReadFrequently: true }), xL = cL.getContext('2d', { willReadFrequently: true });
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   let W = 0, H = 0, color = mode === 'magic' ? 'rainbow' : PALETTE[0], size = 14, hue = 0, tool = mode === 'color' ? 'fill' : 'brush', drawing = false, last = null, undo = [], lineImg = null;
-  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' ? 'none' : 'auto'; };
+  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' && !RASTER ? 'none' : 'auto'; };
   markTool();
   function drawLines() {
     xL.clearRect(0, 0, cL.width, cL.height);
@@ -6217,9 +6245,10 @@ function screenPaint(opts = {}) {
     drawLines(); undo = [];
   }
   fit(); resizeFn = fit;
+  if (RASTER) { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => { if (t !== tok) return; lineImg = im; drawLines(); }; im.src = colorImgSrc(page.slice(4)); }
   const pt = e => { const r = cB.getBoundingClientRect(); return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr }; };
   const pushUndo = () => { try { undo.push(xB.getImageData(0, 0, cB.width, cB.height)); if (undo.length > 12) undo.shift(); } catch (e) {} };
-  if (mode === 'color') {
+  if (mode === 'color' && !RASTER) {
     const pg = $('#svgPage'), dark = el => { const m = getComputedStyle(el).fill.match(/\d+/g); return !m || (m[0] * .3 + m[1] * .59 + m[2] * .11) < 80; };
     pg.addEventListener('pointerdown', e => {
       if (tool !== 'fill') return;
@@ -6311,7 +6340,7 @@ function screenPaint(opts = {}) {
     if (mode !== 'write') {
       try {
         const tw = 480, th = Math.round(tw * cB.height / cB.width), c = document.createElement('canvas'), x = c.getContext('2d');
-        c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color') { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
+        c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color' && !RASTER) { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
         artPic = c.toDataURL('image/jpeg', .75); saveArt(artPic, TK ? TK.w : '');
       } catch (err) {}
     }
@@ -7168,6 +7197,7 @@ function screenPiano() {
 }
 
 function mathTask() {
+  const own = MSK.sprintTask(); if (own) return own;
   const ty = pickOne(['+', '−', '×', '÷']);
   if (ty === '+') { const a = ri(12, 65), b = ri(5, 34); return { q: `${a} + ${b}`, ans: a + b }; }
   if (ty === '−') { const a = ri(20, 99), b = ri(5, a - 3); return { q: `${a} − ${b}`, ans: a - b }; }
@@ -7196,12 +7226,12 @@ function screenSprint() {
     const b = e.target.closest('.kp-k'); if (!b) return;
     if (!run) { if (!stop && $('#spGo')) $('#spGo').click(); return; }
     const k = b.dataset.k;
-    if (k === 'ok') submit(); else if (k === 'del') { input = input.slice(0, -1); show(); } else if (input.length < 3) { input += k; show(); }
+    if (k === 'ok') submit(); else if (k === 'del') { input = input.slice(0, -1); show(); } else if (input.length < 4) { input += k; show(); }
   };
   const onKey = e => {
     if (t !== tok) { document.removeEventListener('keydown', onKey); return; }
     if (!run) return;
-    if (e.key === 'Enter') submit(); else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 3) { input += e.key; show(); }
+    if (e.key === 'Enter') submit(); else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 4) { input += e.key; show(); }
   };
   document.addEventListener('keydown', onKey);
   $('#spGo').onclick = () => {
@@ -7653,6 +7683,8 @@ function guardMiss() {
   if (e.target.closest('#stage')) { e.stopPropagation(); e.preventDefault(); }
 }, true));
 const FREE_KEYS = ['draw', 'magic'];
+
+var SAY_MISS = { n: 0, words: [] };
 function fairStars(key, stars) {
   const d = dayKey();
   if (!P.daily || P.daily.d !== d) P.daily = { d, k: {} };
@@ -7661,6 +7693,12 @@ function fairStars(key, stars) {
   if (!GUARD.free && GUARD.miss >= 3) s = Math.max(1, s - (GUARD.miss >= 6 ? 2 : 1));
   if (FREE_KEYS.includes(key)) { if (n > 1) { s = 0; note = 'Звёздочка за свободный рисунок бывает один раз в день. За рисунок по заданию и точки звёзд больше!'; } }
   else if (n > 3) { s = Math.min(s, 1); note = 'В эту игру сегодня уже играли. Выбери другую — за неё больше звёзд!'; }
+  
+  if (SAY_MISS.n && !FREE_KEYS.includes(key)) {
+    s = Math.max(1, s - Math.min(2, SAY_MISS.n));
+    if (!note) note = `Потренируем ещё: ${SAY_MISS.words.slice(0, 4).join(', ')}.`;
+  }
+  SAY_MISS.n = 0; SAY_MISS.words = [];
   return { s, note };
 }
 
@@ -7689,9 +7727,13 @@ function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect 
       if (opened || t !== tok || !b.isConnected) return; opened = true;
       b.disabled = false; b.classList.remove('wait'); b.innerHTML = `${ICON.star}<span>${gx(label)}</span>`; sfx.tick();
     };
+    let checking = false, right = false;   
     b.onclick = () => {
       if (!opened) return;
-      micRelease(); sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); b.remove(); if (card) card.remove(); res();
+      micRelease(); if (right || !checking) { sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); } else sfx.pop();
+      
+      if (checking && !right) { SAY_MISS.n++; if (!SAY_MISS.words.includes(expect)) SAY_MISS.words.push(expect); }
+      b.remove(); if (card) card.remove(); res({ ok: right || !checking, again: checking && !right });
     };
     function byLoudness() {
       micOn().then(ok => {
@@ -7721,28 +7763,48 @@ function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect 
     if (!expect || !srOk()) { byLoudness(); return; }
     
 
-    tx.textContent = gx('Скажи вслух!');
+    checking = true; tx.textContent = gx('Скажи вслух!');
+    const howAt = L => { const c = IS_RU ? L.toUpperCase() : { r: RU('Р'), l: RU('Л'), s: RU('С') }[L]; return c ? howIdx(c) : -1; };
+    let howShown = false;
+    const showHow = L => {
+      const i = howAt(L); if (howShown || i < 0 || !card) return; howShown = true;
+      const hb = document.createElement('button'); hb.className = 'chip how-b said-how'; hb.innerHTML = '<span class="emo">👄</span>Как сказать?';
+      hb.onclick = e => { e.stopPropagation(); sfx.pop(); hush(); howOpen([i], i); };
+      card.append(hb);
+    };
     (async () => {
       let tries = 0;
       const on = () => t === tok && b.isConnected;
-      while (on() && tries < 6) {
+      while (on() && tries < 6 && !right) {
         while (SAYING && t === tok) await wait(150);
-        if (!on()) return;
+        if (!on() || $('.how-ov')) { await wait(400); continue; }   
         b.classList.add('ear'); if (!opened) tx.textContent = gx('Я слушаю…');
         const r = await hear(expect, { times, loose, onHeard: h => { if (heardEl) heardEl.textContent = `Слышу: «${h}»`; } });
         b.classList.remove('ear');
         if (!on()) return;
         if (r.ok) {
-          bar.style.transform = 'scaleY(1)';
+          right = true; bar.style.transform = 'scaleY(1)';
           if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`;
-          if (r.lvl < 2 && !loose && !opened) { sfx.good(); await talk(`${pickOne(['Молодец!', 'Хорошо!', 'Здорово!'])} Послушай, как я скажу: ${expect}.`); if (!on()) return; }
+          if (opened) { sfx.good(); b.innerHTML = `${ICON.star}<span>${gx(label)}</span>`; }
           open(); return;
         }
-        if (HEAR.off || !srOk()) { if (!opened) { if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
+        if (HEAR.off || !srOk()) { if (!opened) { checking = false; if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
         tries++;
-        if (heardEl) heardEl.textContent = r.heard ? `Слышу «${r.heard}». А нужно «${expect}»${Q() ? ': кончик языка к верхним зубам!' : '!'}` : 'Не слышно. Скажи громче!';
-        if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
-        if (tries >= 2 && !opened) { open(); if (heardEl) heardEl.textContent += ' ' + gx('Попробуй ещё раз — или нажми кнопку.'); }
+        if (r.slip) {
+          const L = r.slip, snd = L === 't' && /th/i.test(expect) ? 'TH' : L.toUpperCase(), how = ASR.HOW[L];
+          if (heardEl) heardEl.textContent = `Почти! Слышу «${r.heard}». Нужен звук ${snd}.`;
+          showHow(L);
+          await talk(how ? `Почти! Я слышу: ${r.heard}. ${how} Послушай: ${expect}.` : `Почти! Я слышу: ${r.heard}. Послушай, как сказать звук ${snd}: ${expect}.`, { rate: .8 });
+          if (!on()) return;
+          if (heardEl) heardEl.textContent = `Скажи ещё раз чётко: «${expect}»`;
+        } else {
+          if (heardEl) heardEl.textContent = r.heard ? `Слышу «${r.heard}». А нужно «${expect}»${Q() ? ': кончик языка к верхним зубам!' : '!'}` : 'Не слышно. Скажи громче!';
+          if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
+        }
+        if (tries >= 3 && !opened) {
+          open(); b.classList.add('later'); b.innerHTML = `<span>${gx('Дальше')} →</span>`;
+          if (heardEl) heardEl.textContent += ' ' + gx('Потренируем ещё — можно идти дальше.');
+        }
       }
       if (on()) open();
     })();
@@ -9275,7 +9337,12 @@ function screenMoto() {
     if (!showing()) return;
     $('#mHeard').textContent = `Слышу: «${txt}»`;
     if (matchSay(txt, sign.word) || alts.some(a => matchSay(a, sign.word))) { $('#mLv').style.width = '100%'; fire(); }
-    else if (final) { $('#mHeard').textContent = `Это «${txt}», а на знаке «${sign.word}»!`; wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210); }
+    else if (final) {
+      
+      const m = ASR.best([txt, ...alts], sign.word);
+      $('#mHeard').textContent = m.lvl && m.slip ? `Почти! Слышу «${m.text}». Скажи чётко звук ${m.slip.toUpperCase()}: «${sign.word}»!` : `Это «${txt}», а на знаке «${sign.word}»!`;
+      wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210);
+    }
   }
   
   function lost() { if (t !== tok) return; const h = $('#mHeard'); if (h) h.textContent = '🎤 Нажми на знак, чтобы я снова слушал'; }
@@ -9568,7 +9635,9 @@ function screenKpop() {
       const [w, e] = deck[k];
       C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), RU('рршжчщ'))}</b>`;
       await talk(k === 0 ? `Демончик-шалун утащил слово ${w}! Скажи его громко и чётко, и песня Жар-птиц его прогонит. ${cap(w)}!` : `Демончик утащил слово ${w}! Скажи: ${w}.`); if (t !== tok) return;
-      await askSaid(undefined, { expect: w }); if (t !== tok) return;
+      const said = await askSaid(undefined, { expect: w }); if (t !== tok) return;
+      
+      if (said && said.again && !deck.redo) { deck.redo = 1; deck.push(deck[k]); }
       await attack(false); if (t !== tok) return;
       k++; await talk(pickOne(['Демончик стал звёздочкой!', 'Ура! Ещё одна световая палочка!', 'Песня победила!'])); if (t !== tok) return;
       round(); return;
@@ -10344,18 +10413,29 @@ const ASR = (() => {
   const PAIRS = IS_RU
     ? [[.25, 'бп вф гк дт жш зс оа еи ея яи иы еэ юу ий кх гх ьъ'], [.35, 'рл рй лв лй рв шс жз щс щш чщ чц цс чт зд рд']]
     : [[.25, 'bp dt gk vf zs ck kq ie yi ou ao ea'], [.35, 'rl rw lw vw lj sz fv fs dz jy tf ts']];
+  const LOST = IS_RU ? 'рл' : 'rl';
   const SUB = new Map(); PAIRS.forEach(([c, s]) => s.split(' ').forEach(p => { SUB.set(p, c); SUB.set(p[1] + p[0], c); }));
   const VOW = IS_RU ? 'аеиоуыэюя' : 'aeiouy';
   const DROP = IS_RU ? { 'ь': .2, 'ъ': .2, 'й': .4, 'р': .4, 'л': .4 } : { 'h': .4, 'r': .4, 'l': .4, 'e': .6 };
   const sub = (a, b) => a === b ? 0 : SUB.get(a + b) || (!IS_RU && VOW.includes(a) && VOW.includes(b) ? .5 : 1);
   const ind = c => DROP[c] || (VOW.includes(c) ? .8 : 1);
-  function dist(a, b) {
-    const d = [0]; for (let j = 1; j <= b.length; j++) d[j] = d[j - 1] + ind(b[j - 1]);
-    for (let i = 1; i <= a.length; i++) {
-      let p = d[0]; d[0] += ind(a[i - 1]);
-      for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(q + ind(a[i - 1]), d[j - 1] + ind(b[j - 1]), p + sub(a[i - 1], b[j - 1])); p = q; }
+  
+  const CHILD = .35, LEARN = IS_RU ? 'рлшжчщсзц' : 'rlst';
+  
+  function dist(a, b, why) {
+    const n = a.length, m = b.length, d = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
+    for (let i = 1; i <= n; i++) d[i][0] = d[i - 1][0] + ind(a[i - 1]);
+    for (let j = 1; j <= m; j++) d[0][j] = d[0][j - 1] + ind(b[j - 1]);
+    for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) d[i][j] = Math.min(d[i - 1][j] + ind(a[i - 1]), d[i][j - 1] + ind(b[j - 1]), d[i - 1][j - 1] + sub(a[i - 1], b[j - 1]));
+    if (why) {
+      let i = n, j = m; why.slip = '';
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && Math.abs(d[i][j] - d[i - 1][j - 1] - sub(a[i - 1], b[j - 1])) < 1e-9) { if (sub(a[i - 1], b[j - 1]) >= CHILD && LEARN.includes(b[j - 1])) why.slip = b[j - 1]; i--; j--; }
+        else if (j > 0 && Math.abs(d[i][j] - d[i][j - 1] - ind(b[j - 1])) < 1e-9) { if (LOST.includes(b[j - 1])) why.slip = b[j - 1]; j--; }
+        else i--;
+      }
     }
-    return d[b.length];
+    return d[n][m];
   }
   
   const room = n => n <= 2 ? .3 : n <= 3 ? .6 : n <= 5 ? .8 : n <= 7 ? .95 : n <= 8 ? 1.3 : Math.min(3, 1.8 + (n - 9) * .15);
@@ -10364,48 +10444,65 @@ const ASR = (() => {
   const stem = w => { for (const e of END) if (w.length - e.length >= 3 && w.endsWith(e)) return w.slice(0, -e.length); return w; };
   
   function word(h, t) {
-    if (h === t) return 2;
-    const a = key(h), b = key(t);
-    if (a === b) return 2;
-    if (dist(a, b) <= room(b.length)) return 1;
+    if (h === t) return { v: 2, slip: '' };
+    const a = key(h), b = key(t), why = {};
+    if (a === b) return { v: 2, slip: '' };
+    if (dist(a, b, why) <= room(b.length)) return { v: 1, slip: why.slip };
     const sa = stem(a), sb = stem(b);
-    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb) <= room(sb.length) * .75) return 1;
-    return 0;
+    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb, why) <= room(sb.length) * .75) return { v: 1, slip: why.slip };
+    return { v: 0, slip: '' };
   }
   
+  const rank = w => w.v ? (w.slip ? 1 : 2 + w.v) : 0;
+  
   function find(hw, t, from = 0) {
-    let best = 0, at = -1, len = 1;
-    for (let i = from; i < hw.length && best < 2; i++) {
-      const v = word(hw[i], t); if (v > best) { best = v; at = i; len = 1; }
-      if (best < 2 && i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (v2 > best) { best = v2; at = i; len = 2; } }
+    let best = { v: 0, slip: '' }, at = -1, len = 1;
+    for (let i = from; i < hw.length && rank(best) < 4; i++) {
+      const v = word(hw[i], t); if (rank(v) > rank(best)) { best = v; at = i; len = 1; }
+      if (i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (rank(v2) > rank(best)) { best = v2; at = i; len = 2; } }
     }
-    return { v: best, at, len };
+    return { ...best, at, len };
   }
+  const NO = { lvl: 0, slip: '' };
   function match(heard, expect, times = 1, loose = false) {
     const hw = norm(heard).split(' ').filter(Boolean), tw = norm(expect).split(' ').filter(Boolean);
-    if (!tw.length || !hw.length) return 0;
+    if (!tw.length || !hw.length) return NO;
     
-    if (loose) return word(hw.join(''), tw.join('')) === 2 ? 2 : 1;
+    if (loose) return { lvl: word(hw.join(''), tw.join('')).v === 2 ? 2 : 1, slip: '' };
     if (tw.length === 1) {
-      let n = 0, lvl = 2, from = 0;
-      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); from = f.at + f.len; }
-      if (!n) { const v = word(hw.join(''), tw[0]); return v ? Math.min(v, 1) : 0; }
-      return n >= Math.min(times, 2) || hw.length >= times ? lvl : 0;
+      let n = 0, lvl = 2, slip = '', from = 0;
+      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); slip = slip || f.slip; from = f.at + f.len; }
+      if (!n) { const w = word(hw.join(''), tw[0]); return w.v ? { lvl: 1, slip: w.slip } : NO; }
+      return n >= Math.min(times, 2) || hw.length >= times ? { lvl, slip } : NO;
     }
     
-    let got = 0, all = 2;
-    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); } });
-    if (got / tw.length >= .6) return got === tw.length ? all : 1;
-    const a = key(hw.join('')), b = key(tw.join(''));
-    return dist(a, b) <= room(b.length) * 1.2 ? 1 : 0;
+    let got = 0, all = 2, slip = '';
+    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); slip = slip || f.slip; } });
+    if (got / tw.length >= .6) return { lvl: got === tw.length ? all : 1, slip };
+    const why = {}, a = key(hw.join('')), b = key(tw.join(''));
+    return dist(a, b, why) <= room(b.length) * 1.2 ? { lvl: 1, slip: why.slip } : NO;
   }
   
   function best(list, expect, times = 1, loose = false) {
-    let lvl = 0, text = '';
-    for (const s of list) { if (!s || !s.trim()) continue; const v = match(s, expect, times, loose); if (v > lvl) { lvl = v; text = s.trim(); if (v === 2) break; } }
-    return { lvl, text };
+    let out = { lvl: 0, slip: '', text: '' }, r0 = 0;
+    for (const s of list) {
+      if (!s || !s.trim()) continue;
+      const m = match(s, expect, times, loose), r = m.lvl ? (m.slip ? 1 : 2 + m.lvl) : 0;
+      if (r > r0) { r0 = r; out = { ...m, text: s.trim() }; if (r === 4) break; }
+    }
+    return out;
   }
-  return { norm, dist, word, match, best };
+  
+  const HOW = IS_RU ? {
+    'р': 'Скажи с рычащим звуком Р, как тигрёнок. Кончик языка дрожит за верхними зубками.',
+    'л': 'Скажи с твёрдым звуком Л. Кончик языка прижми к верхним зубкам.',
+    'ш': 'Скажи с шипящим звуком Ш, как змейка. Губки вперёд, язычок чашечкой.',
+    'ж': 'Скажи с жужжащим звуком Ж, как жук. Губки вперёд, язычок чашечкой.',
+    'ч': 'Скажи с коротким звуком Ч, как паровозик.', 'щ': 'Скажи с мягким звуком Щ, как щёточка.',
+    'с': 'Скажи со свистящим звуком С, как насос. Кончик языка за нижними зубками.',
+    'з': 'Скажи со звенящим звуком З, как комарик. Кончик языка за нижними зубками.', 'ц': 'Скажи с коротким звуком Ц, как синичка.'
+  } : {};
+  return { norm, dist, word, match, best, HOW };
 })();
 const normW = ASR.norm;
 function lev(a, b) {
@@ -10413,16 +10510,17 @@ function lev(a, b) {
   for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] !== b[j - 1])); p = q; } }
   return d[b.length];
 }
-const matchSay = (heard, expect, times = 1) => ASR.match(heard, expect, times) > 0;
+
+const matchSay = (heard, expect, times = 1) => { const m = ASR.match(heard, expect, times); return m.lvl > 0 && !m.slip; };
  
 
 
 
 function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) {
   return new Promise(res => {
-    let r = null, best = '', done = false, lvl = 0;
-    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: ok && lvl > 0, heard: best, lvl }); };
-    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0 }); return; }
+    let r = null, best = '', done = false, got = { lvl: 0, slip: '' };
+    const end = () => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: got.lvl > 0 && !got.slip, heard: best, lvl: got.lvl, slip: got.slip }); };
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0, slip: '' }); return; }
     audioSession('play-and-record'); SR_ON++;
     r.lang = LOC; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
     r.onresult = e => {
@@ -10430,17 +10528,19 @@ function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) 
       for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (!x || !x[0]) continue; all += ' ' + x[0].transcript; for (let j = 0; j < x.length; j++) alts.push(x[j].transcript); }
       all = all.trim();
       const m = ASR.best([all, ...alts], expect, times, loose);
-      best = m.lvl ? m.text : all || best; if (onHeard && best) onHeard(best);
-      if (m.lvl) { lvl = m.lvl; end(true); }
+      
+      if (m.lvl && (!got.lvl || got.slip)) { got = m; best = m.text; } else if (!got.lvl) best = all || best;
+      if (onHeard && best) onHeard(best);
+      if (got.lvl && !got.slip) end();
     };
     r.onerror = e => {
       if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true;
       if (e.error === 'network') HEAR.netAt = Date.now();
-      end(false);
+      end();
     };
-    r.onend = () => end(false);
-    setTimeout(() => end(false), maxMs);
-    try { r.start(); } catch (e) { end(false); }
+    r.onend = end;
+    setTimeout(end, maxMs);
+    try { r.start(); } catch (e) { end(); }
   });
 }
 
@@ -10661,7 +10761,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11286,7 +11386,7 @@ function screenMyWords() {
   screenSayWords({ title: 'Мои слова', intro: 'Слова про то, что ты любишь. Скажи каждое слово чётко!', words: all, key: 'my-words', line: n => `${n} слов про то, что ты любишь!`, again: screenMyWords });
 }
 function screenSayWords({ title, intro, words, key, line, again, back, done }) {
-  const t = newScreen(), pool = shuffle(words).slice(0, 6), hl = sndLetters() || 'рлшж';
+  const t = newScreen(), pool = shuffle(words).slice(0, 6), hl = sndLetters() || 'рлшж', redo = new Set();
   let i = 0;
   shell(title, `<div class="mw"><p class="lead">${esc(intro)}</p>
     <div class="mw-card" id="mwCard"></div><div class="mw-dots" id="mwDots">${pool.map(() => '<i></i>').join('')}</div></div>`, { back });
@@ -11298,7 +11398,9 @@ function screenSayWords({ title, intro, words, key, line, again, back, done }) {
     $('#mwCard').innerHTML = `<span class="mw-e">${pic(e)}</span><b class="mw-w">${hiS(w.toUpperCase(), hl)}</b>`;
     hopEl($('#mwCard'));
     await talk(`Скажи: ${w}.`); if (t !== tok) return;
-    await askSaid('Я сказала!', { expect: w }); if (t !== tok) return;
+    const r = await askSaid('Я сказала!', { expect: w }); if (t !== tok) return;
+    
+    if (r && r.again && !redo.has(w)) { redo.add(w); pool.push(pool[i]); }
     i++; step();
   }
   step();
@@ -13284,23 +13386,125 @@ GAMES.push({ id: 'space', name: 'Космос', sub: 'Солнце, планет
 
 
 const WIKT = 'https://ru.wiktionary.org/w/api.php';
+
+
+const W_LB = LX('W_LB', {
+  
+  'авиац.': 'у лётчиков', 'авто.': 'про машины', 'автомоб.': 'про машины', 'агрон.': 'в сельском хозяйстве', 'анат.': 'про тело человека',
+  'антроп.': 'про людей', 'археол.': 'у археологов', 'архит.': 'у архитекторов, про здания', 'астрол.': 'у звездочётов', 'астрон.': 'про звёзды и планеты',
+  'банк.': 'в банке', 'библ.': 'в Библии', 'биол.': 'про живую природу', 'биохим.': 'у учёных', 'бот.': 'про растения', 'ботан.': 'про растения',
+  'бухг.': 'у бухгалтеров', 'вет.': 'у ветеринаров', 'воен.': 'у военных', 'военн.': 'у военных', 'воен.-морск.': 'у военных моряков', 'воен.-мор.': 'у военных моряков',
+  'вулк.': 'про вулканы', 'геогр.': 'в географии', 'геод.': 'у землемеров', 'геол.': 'про камни и землю', 'геом.': 'в геометрии', 'геометр.': 'в геометрии',
+  'геральд.': 'на гербах', 'гидрол.': 'про воду и реки', 'горн.': 'у горняков', 'грам.': 'в грамматике', 'грамм.': 'в грамматике', 'дипл.': 'у дипломатов',
+  'ж.-д.': 'на железной дороге', 'жд': 'на железной дороге', 'живоп.': 'у художников', 'журн.': 'у журналистов', 'зоол.': 'про животных',
+  'ихтиол.': 'про рыб', 'иск.': 'в искусстве', 'истор.': 'в старину', 'ист.': 'в старину', 'карт.': 'в карточных играх', 'кино': 'в кино', 'кинол.': 'про собак',
+  'комп.': 'про компьютеры', 'косм.': 'про космос', 'кулин.': 'про еду и готовку', 'кул.': 'про еду и готовку', 'лес.': 'про лес', 'лингв.': 'про слова и язык',
+  'лит.': 'в литературе', 'литер.': 'в литературе', 'матем.': 'в математике', 'мат.': 'в математике', 'мед.': 'у врачей', 'метеорол.': 'про погоду',
+  'метал.': 'у металлургов', 'мех.': 'в механике', 'минер.': 'про камни', 'миф.': 'в мифах', 'мифол.': 'в мифах', 'мор.': 'у моряков', 'морск.': 'у моряков',
+  'муз.': 'в музыке', 'нумизм.': 'про старые монеты', 'оптич.': 'про стёкла и линзы', 'орнит.': 'про птиц', 'орнитол.': 'про птиц', 'охот.': 'у охотников',
+  'палеонт.': 'про древних животных', 'пед.': 'у учителей', 'полиграф.': 'в типографии', 'полигр.': 'в типографии', 'полит.': 'в политике', 'портн.': 'у портных',
+  'психол.': 'у психологов', 'психиатр.': 'у врачей', 'радио': 'в радио', 'религ.': 'в религии', 'рыб.': 'у рыбаков', 'с.-х.': 'в сельском хозяйстве',
+  'спорт.': 'в спорте', 'стомат.': 'у зубных врачей', 'столяр.': 'у столяров', 'строит.': 'у строителей', 'театр.': 'в театре', 'текст.': 'про ткани',
+  'техн.': 'в технике', 'тех.': 'в технике', 'торг.': 'в торговле', 'трансп.': 'про транспорт', 'фарм.': 'про лекарства', 'физ.': 'в физике',
+  'физиол.': 'про то, как работает тело', 'филат.': 'про марки', 'филол.': 'про слова и язык', 'филос.': 'у философов', 'фин.': 'про деньги',
+  'фотогр.': 'в фотографии', 'хим.': 'в химии', 'церк.': 'в церкви', 'шахм.': 'в шахматах', 'эк.': 'в экономике', 'экон.': 'в экономике', 'эконом.': 'в экономике',
+  'электр.': 'про электричество', 'эл.-техн.': 'про электричество', 'энтомол.': 'про насекомых', 'энтом.': 'про насекомых', 'этногр.': 'про обычаи народов',
+  'юр.': 'в законах', 'архитект.': 'про здания', 'бирж.': 'на бирже', 'гастрон.': 'про еду', 'бран.': 'бранное слово', 'сниж.': 'грубоватое слово', 'мол.': 'так говорит молодёжь', 'уг.': 'так говорят преступники', 'народно-поэт.': 'в народных песнях и сказках', 'гом.': '', 'информ.': 'про компьютеры', 'радиоэл.': 'про радио', 'прогр.': 'у программистов', 'социол.': 'у социологов', 'рел.': 'в религии', 'юрид.': 'в законах', 'трамвайн.': 'про трамваи', 'бакт.': 'про микробов', 'микробиол.': 'про микробов', 'генет.': 'про гены',
+  'спелеол.': 'про пещеры', 'гидротехн.': 'в технике', 'тракт.': 'про трактор', 'хоз.': 'в хозяйстве', 'ювел.': 'у ювелиров', 'парикмах.': 'у парикмахеров',
+  
+  'разг.': 'так говорят в обычной речи', 'разг.-сниж.': 'так говорят в обычной речи', 'прост.': 'простое слово', 'книжн.': 'так пишут в книгах',
+  'высок.': 'торжественное слово', 'торж.': 'торжественное слово', 'ритор.': 'красивое торжественное слово', 'поэт.': 'в стихах', 'трад.-поэт.': 'в стихах',
+  'нар.-поэт.': 'в народных песнях и сказках', 'фольк.': 'в сказках и песнях', 'устар.': 'старое слово', 'уст.': 'старое слово', 'стар.': 'старое слово',
+  'устарев.': 'старое слово', 'архаизм': 'очень старое слово', 'обл.': 'так говорят в некоторых местах', 'рег.': 'так говорят в некоторых местах',
+  'местн.': 'так говорят в некоторых местах', 'диал.': 'так говорят в некоторых местах', 'жарг.': 'так говорят между собой', 'сленг.': 'так говорят между собой',
+  'сленг': 'так говорят между собой', 'молод.': 'так говорит молодёжь', 'угол.': 'так говорят преступники', 'крим.': 'так говорят преступники',
+  'проф.': 'так говорят мастера своего дела', 'спец.': 'так говорят знатоки', 'офиц.': 'в официальной речи', 'канц.': 'в официальных бумагах',
+  'неодобр.': 'с неодобрением', 'пренебр.': 'с пренебрежением', 'презр.': 'с презрением', 'презрит.': 'с презрением', 'бранн.': 'бранное слово',
+  'груб.': 'грубое слово', 'шутл.': 'в шутку', 'ирон.': 'с насмешкой', 'насмешл.': 'с насмешкой', 'ласк.': 'ласково', 'уменьш.': 'о маленьком',
+  'уменьш.-ласк.': 'ласково, о маленьком', 'увелич.': 'о большом', 'одобр.': 'с одобрением', 'эвф.': 'вежливая замена слова', 'неол.': 'новое слово',
+  'фам.': 'запросто', 'детск.': 'детское слово', 'редк.': 'редкое слово', 'п.': 'не в прямом смысле', 'перен.': 'не в прямом смысле',
+  'собир.': 'обо всех вместе', 'мн.': 'когда их много', 'мн.ч.': 'когда их много', 'ед.': '', 'ед.ч.': '',
+  'экспр.': 'с чувством', 'эмоц.': 'с чувством', 'усилит.': 'с силой', 'частичн.': '', 'итп': 'и тому подобное', 'итд': 'и так далее'
+});
+
+const W_AB = LX('W_AB', [[/(?<![а-яёА-ЯЁ])и т\.\s?п\./g, 'и тому подобное'], [/(?<![а-яёА-ЯЁ])и т\.\s?д\./g, 'и так далее'], [/(?<![а-яёА-ЯЁ])и пр\./g, 'и прочее'], [/(?<![а-яёА-ЯЁ])и др\./g, 'и другие'],
+  [/(?<![а-яёА-ЯЁ])т\.\s?е\./g, 'то есть'], [/(?<![а-яёА-ЯЁ])т\.\s?н\./g, 'так называемый'], [/(?<![а-яёА-ЯЁ])т\.\s?к\./g, 'так как'], [/(?<![а-яёА-ЯЁ])напр\./g, 'например'], [/(?<![а-яёА-ЯЁ])см\./g, 'смотри'],
+  [/(?<![а-яёА-ЯЁ])преимущ\./g, 'чаще всего'], [/(?<![а-яёА-ЯЁ])употр\./g, 'употребляется'], [/(?<![а-яёА-ЯЁ])обыкн\./g, 'обыкновенно'], [/(?<![а-яёА-ЯЁ])гл\.\s?обр\./g, 'главным образом'],
+  [/(?<![а-яёА-ЯЁ])особ\./g, 'особенно'], [/(?<![а-яёА-ЯЁ])букв\./g, 'буквально'], [/(?<![а-яёА-ЯЁ])сокр\./g, 'сокращение'], [/(?<![а-яёА-ЯЁ])прибл\./g, 'примерно'], [/(?<![а-яёА-ЯЁ])ок\.(?=\s?\d)/g, 'около'],
+  [/(?<![а-яёА-ЯЁ])знач\./g, 'значение'], [/(?<![а-яёА-ЯЁ])лат\./g, 'по-латыни'], [/(?<![а-яёА-ЯЁ])англ\./g, 'по-английски'], [/(?<![а-яёА-ЯЁ])фр(?:анц)?\./g, 'по-французски'], [/(?<![а-яёА-ЯЁ])нем\./g, 'по-немецки'],
+  [/(?<![а-яёА-ЯЁ])греч\./g, 'по-гречески'], [/(?<![а-яёА-ЯЁ])итал\./g, 'по-итальянски'], [/(?<![а-яёА-ЯЁ])исп\./g, 'по-испански'], [/(?<![а-яёА-ЯЁ])русск\./g, 'по-русски'], [/-л\.(?![а-яё])/g, '-либо'],
+  [/-н\.(?![а-яё])/g, '-нибудь'], [/(?<![а-яёА-ЯЁ])мн\.\s?ч\./g, 'множественное число'], [/(?<![а-яёА-ЯЁ])ед\.\s?ч\./g, 'единственное число'], [/(?<![а-яёА-ЯЁ])вв\./g, 'веков'], [/(?<![а-яёА-ЯЁ])гг\./g, 'годов'],
+  [/(\d)\s?тыс\./g, '$1 тысяч'], [/(\d)\s?млн(?![а-яё])\.?/g, '$1 миллионов'], [/(\d)\s?млрд(?![а-яё])\.?/g, '$1 миллиардов'], [/(\d)\s?км(?![а-яё])/g, '$1 километров'],
+  [/(\d)\s?см(?![а-яё])/g, '$1 сантиметров'], [/(\d)\s?мм(?![а-яё])/g, '$1 миллиметров'], [/(\d)\s?кг(?![а-яё])/g, '$1 килограммов'], [/(\d)\s?м(?![а-яё.])/g, '$1 метров']]);
+
+function wLabel(n) {
+  const raw = String(n || '').replace(/\u00a0/g, ' ').trim(), k = raw.replace(/\s+/g, '').toLowerCase();
+  if (k in W_LB) return W_LB[k];
+  const ps = k.match(/[^.]+\./g);
+  if (ps && ps.join('') === k && ps.length > 1) return ps.map(x => W_LB[x]).filter(Boolean).join(', ');
+  const w = wAbbr(raw);
+  if (/^[а-яё ,-]{4,50}$/i.test(w) && !/(?<![а-яё])[а-яё]{1,6}\./i.test(w)) return w;
+  return /\./.test(k) ? '' : undefined;
+}
+const WL_A = '\u0001', WL_B = '\u0002', WL_C = '\u0003';
 function wTmpl(body) {
   const ps = body.split('|').map(x => x.trim()), name = ps[0], args = ps.slice(1).filter(a => a && !a.includes('=') && a !== 'ru');
   const a0 = args[0] || '';
-  if (name === 'пример' || /^(помета|источник|нужен|Нужно)/i.test(name)) return '';
+  if (name === 'пример' || name === 'семантика' || /^(источник|нужен|Нужно|lang|as |Даль|скр)/i.test(name)) return '';
+  if (name === 'выдел' || name === 'выделение') return WL_C + a0 + WL_C;
+  if (name === '-' || name === '--' || name === '—') return ' — ';
+  if (name === 'L') return ' ';
+  if (name === 't:=') return args.join(' — ');
   if (name === '=') return 'то же, что ' + a0;
   if (name === 'действие') return 'действие по значению глагола ' + a0;
   if (name === 'свойство') return 'свойство по значению прилагательного ' + a0;
   if (name === 'состояние') return 'состояние по значению ' + a0;
   if (/^(отн\.|соотн\.|относящийся)/.test(name)) return 'связанный с ' + a0;
-  if (/\.$/.test(name) && name.length < 14) return '(' + name + ')';
-  return '';
+  
+  const lb = name === 'помета' || name === 'помета.' ? (wLabel(a0) || '') : wLabel(name);
+  if (lb === undefined) return '';
+  if (name === 'итп' || name === 'итд') return ' ' + lb;
+  return lb ? WL_A + lb + WL_B : '';
+}
+function wAbbr(t) {
+  t = t.replace(/\u00a0/g, ' ');
+  W_AB.forEach(([re, to]) => { t = t.replace(re, to); });
+  
+  return t.replace(/\s*\([^()]*(?<![а-яёА-ЯЁ])[а-яё]{1,6}\.(?=[\s),«»]|$)[^()]*\)/g, '');
 }
 function wClean(t) {
   let prev;
+  
+  t = t.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1');
   do { prev = t; t = t.replace(/\{\{([^{}]*)\}\}/g, (m, b) => wTmpl(b)); } while (t !== prev);
-  return t.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/'{2,}/g, '').replace(/<ref[^>]*\/>/g, '').replace(/<ref[\s\S]*?<\/ref>/g, '')
-    .replace(/<[^>]+>/g, '').replace(/\(\s*\)/g, '').replace(/\s+/g, ' ').replace(/\s+([,.;:])/g, '$1').trim().replace(/^[;,.\s]+|[;,\s]+$/g, '');
+  t = t.replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1').replace(/'{2,}/g, '').replace(/<ref[^>]*\/>/g, '').replace(/<ref[\s\S]*?<\/ref>/g, '')
+    .replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\s*\/\/\s*/g, ', ');
+  
+  t = t.replace(/\s*\[\d+\]/g, '').replace(/\s*\[[IVX]+\.[\dIVX.,\s]*\]/g, '').replace(/\s+[IVX]+\.\d+(?![\d.])/g, '').replace(/\s*\((?:[A-Za-z][^()а-яёА-ЯЁ]*)?\)/g, '');
+  return wAbbr(t).replace(/(\s*[—–]\s*){2,}/g, ' — ').replace(/,(\s*,)+/g, ',').replace(/\s+/g, ' ').replace(/\s+([,.;:])/g, '$1').trim().replace(/^[;,.\s]+|[;,\s]+$/g, '');
+}
+
+function wExample(line) {
+  const at = line.indexOf('{{пример|'); if (at < 0) return '';
+  let d = 0, i = at, parts = [], cur = '';
+  for (; i < line.length; i++) {
+    const two = line.slice(i, i + 2);
+    if (two === '{{' || two === '[[') { d++; cur += two; i++; continue; }
+    if (two === '}}' || two === ']]') { d--; if (d === 0) break; cur += two; i++; continue; }
+    if (line[i] === '|' && d === 1) { parts.push(cur); cur = ''; continue; }
+    cur += line[i];
+  }
+  parts.push(cur);
+  const q = (parts.slice(1).find(x => x.trim() && !/^[^{\[]*=/.test(x)) || '');
+  return q && parts.slice(1)[0] === q ? q : '';
+}
+
+function wWhole(ex) {
+  let s = ex.replace(/\s+/g, ' ').trim();
+  
+  if (s.length > 200) s = s.split(/(?<=[.!?…])\s+(?=[«„"—–(]?\s*\p{Lu})/u).find(x => x.includes(WL_C) && x.length <= 200) || '';
+  s = s.split(WL_C).join('');
+  return s.length > 8 && s.length < 240 && /^[«„"—–(]?\s*[\p{Lu}]/u.test(s) && /[.!?…]["»”)]*$/.test(s) && !/^\.\.\.|^…|…["»”]?$|\.\.\.["»”]?$/.test(s) && !/[A-Za-z]{4}/.test(s) ? s : '';
 }
 function wMeanings(wt) {
   const i = wt.indexOf('{{-ru-}}'); let ru = i >= 0 ? wt.slice(i) : wt;
@@ -13310,12 +13514,19 @@ function wMeanings(wt) {
     if (/^=+\s*Значение\s*=+/.test(line)) { inM = true; continue; }
     if (/^=+/.test(line)) { inM = false; continue; }
     if (!inM || !/^#(?![#:*])/.test(line)) continue;
-    const ex = (line.match(/\{\{пример\|([^{}|]+)/) || [])[1];
-    const d = wClean(line.slice(1).replace(/\{\{пример\|[\s\S]*$/, ''));
-    if (d.length > 3 && !/^\(?[^а-яё]*\)?$/i.test(d)) out.push({ d, ex: ex ? wClean(ex) : '' });
+    const ex = wWhole(wClean(wExample(line)).replace(new RegExp('[' + WL_A + WL_B + ']', 'g'), ''));
+    const noC = t => t.split(WL_C).join('');
+    let d = noC(wClean(line.slice(1).replace(/\{\{пример\|[\s\S]*$/, '')));
+    const lb = [];
+    d = d.replace(new RegExp(WL_A + '([^' + WL_B + ']*)' + WL_B, 'g'), (m, x) => { if (!lb.includes(x)) lb.push(x); return ' '; });
+    
+    d = d.replace(/^(?:[\s,;:—]|или(?![а-яё])|и(?![а-яё]))+/, '').replace(/\s+/g, ' ').replace(/\s+([,.;:])/g, '$1').trim();
+    if (d.length > 3 && !/^\(?[^а-яё]*\)?$/i.test(d)) out.push({ d, lb, ex });
   }
   return out.slice(0, 6);
 }
+
+const wSay = x => (x.lb && x.lb.length ? x.lb.join(', ') + ': ' : '') + x.d;
 
 function lemmaGuesses(w) {
   const out = [w], add = x => { if (x.length > 1 && !out.includes(x)) out.push(x); };
@@ -13442,16 +13653,21 @@ function screenDict({ back = null, word = '' } = {}) {
     if (!r || !r.m.length || /^\p{Lu}/u.test(w)) { try { wp = await wikiSummary(w); } catch (e) {} if (t !== tok) return; }
     if (!r && !wp) { out.innerHTML = `<div class="d-card"><p>Нет связи со словарём. Проверь интернет.</p>${linksHTML(w)}</div>`; return; }
     const m = r ? r.m : [], title = r && r.m.length ? r.title : w;
+    
+    let shown = (P.settings.age || 6) <= 8 ? Math.min(1, m.length) : m.length;
+    const li = (x, i) => `<li${i >= shown ? ' hidden' : ''}>${x.lb && x.lb.length ? `<i class="d-lb">${esc(x.lb.join(', '))}:</i> ` : ''}${esc(x.d)}${x.ex ? `<em>«${esc(x.ex.replace(/^[«"„]|[»"”]$/g, ''))}»</em>` : ''}</li>`;
     out.innerHTML = `<div class="d-card"><h2>${esc(title)}</h2>
-      ${m.length ? `<ol class="d-m">${m.map(x => `<li>${esc(x.d)}${x.ex ? `<em>«${esc(x.ex)}»</em>` : ''}</li>`).join('')}</ol>` : `<p>В словаре такого слова не нашлось.${wp ? '' : ' Проверь, как оно написано, или посмотри в других словарях.'}</p>`}
+      ${m.length ? `<ol class="d-m">${m.map(li).join('')}</ol>${shown < m.length ? `<button class="big ghost" id="dMore">➕ Ещё значения (${m.length - shown})</button>` : ''}` : `<p>В словаре такого слова не нашлось.${wp ? '' : ' Проверь, как оно написано, или посмотри в других словарях.'}</p>`}
       ${wp ? `<div class="d-wp"><b>Из Википедии: ${esc(wp.title)}</b><p>${esc(wp.text)}</p></div>` : ''}
       <div class="prow-btns">${m.length || wp ? '<button class="big ghost" id="dSay">🔊 Послушать</button><button class="big" id="dSave">⭐ В мой словарик</button>' : ''}</div>
       ${linksHTML(title)}</div>`;
-    const text = m.length ? m[0].d : wp ? wp.text : '';
+    const text = m.length ? wSay(m[0]) : wp ? wp.text : '';
     if (text) talk(`${title}. ${text}`);
-    if ($('#dSay')) $('#dSay').onclick = () => { sfx.pop(); talk(`${title}. ${m.length ? m.map((x, i) => (m.length > 1 ? `${i + 1}. ` : '') + x.d).join('. ') : wp.text}`); };
+    const sayM = (from, to) => m.slice(from, to).map((x, i) => (m.length > 1 ? `${from + i + 1}. ` : '') + wSay(x)).join('. ');
+    if ($('#dMore')) $('#dMore').onclick = () => { sfx.pop(); const from = shown; shown = m.length; out.querySelectorAll('.d-m li[hidden]').forEach(x => { x.hidden = false; }); $('#dMore').remove(); talk(sayM(from, m.length)); };
+    if ($('#dSay')) $('#dSay').onclick = () => { sfx.pop(); talk(`${title}. ${m.length ? sayM(0, shown) : wp.text}`); };
     if ($('#dSave')) $('#dSave').onclick = () => {
-      const v = vocab(); if (!v.some(x => x.w === title)) v.unshift({ w: title, d: text, at: Date.now() }); if (v.length > 300) v.length = 300; save();
+      const v = vocab(); if (!v.some(x => x.w === title)) v.unshift({ w: title, d: m.length ? m[0].d : text, at: Date.now() }); if (v.length > 300) v.length = 300; save();
       sfx.star(); $('#dSave').textContent = '✓ В словарике'; $('#dSave').disabled = true; book();
     };
   }
@@ -14624,6 +14840,8 @@ function screenMathPath() {
   const age = P.settings.age || (Q() ? 9 : 5), so = (P.soro && P.soro.top) || 1, st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
   const card = (id, e, h, sub, prog, rec) => `<button class="mp-card ${rec ? 'rec' : ''}" data-go="${id}"><span class="emo">${e}</span><span class="mp-t"><b>${h}</b><small>${sub}</small><em>${prog}</em></span>${rec ? '<span class="mp-rec">⭐</span>' : ''}</button>`;
   shell('Путь по математике', `<div class="mp">
+      ${card('m-skill', '🎯', 'Математика по силам', 'проверим уровень — и задания как раз для тебя', MSK.has() ? MSK.rankTxt() : '', true)}
+      <div class="mp-arrow">⬇️</div>
       ${card('soroban', '🧮', 'Счёты — ментальная арифметика', '4–7 лет: бусины, а потом счёт в уме', `уровень ${so} из ${SORO.length}`, age <= 6)}
       ${card('flash', '⚡', 'Флеш-счёт', 'числа мелькают — складывай в уме', `уровень ${P.flashLv || 1}`, false)}
       <div class="mp-arrow">⬇️</div>
@@ -14640,6 +14858,198 @@ GAMES.push(
   { id: 'soroban', name: 'Счёты', sub: 'ментальная арифметика', ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `уровень ${(P.soro && P.soro.top) || 1}` },
   { id: 'steps', name: 'Ступеньки', sub: 'каждый день на шаг выше', ico: () => pic('🪜'), bg: 'var(--t-blue)', go: () => screenSteps(), grp: 3, also: [8], prog: () => `ступенька ${stepsTop()}` }
 );
+ 
+
+
+const MSK = (() => {
+  const box = '<b class="mk-box">□</b>';
+  const pics = (n, e) => `<span class="mk-pics">${Array.from({ length: n }, () => pic(e)).join('')}</span>`;
+  const X = (q, a) => ({ q, a, x: 1 });                       
+  const hm = m => `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`;
+  const pie = (parts, fill) => {
+    const r = 46, c = 50, sl = Array.from({ length: parts }, (_, i) => {
+      const a0 = i / parts * 2 * Math.PI - Math.PI / 2, a1 = (i + 1) / parts * 2 * Math.PI - Math.PI / 2;
+      return `<path d="M${c},${c} L${(c + r * Math.cos(a0)).toFixed(1)},${(c + r * Math.sin(a0)).toFixed(1)} A${r},${r} 0 0 1 ${(c + r * Math.cos(a1)).toFixed(1)},${(c + r * Math.sin(a1)).toFixed(1)} Z" fill="${i < fill ? '#FF8A2A' : '#FFF6E8'}" stroke="#7A4A1E" stroke-width="2"/>`;
+    }).join('');
+    return `<svg class="mk-pie" viewBox="0 0 100 100" aria-hidden="true">${sl}</svg>`;
+  };
+  const FR = { '1/2': '½', '1/4': '¼', '3/4': '¾', '1/3': '⅓', '2/3': '⅔' };
+  const COIN = ['монетка', 'монетки', 'монеток'];
+  
+  const L = [
+    { n: 'Сложение до 5', h: 'Посчитай все картинки вместе.', g: () => { const a = ri(1, 3), b = ri(1, 5 - a), e = pickOne(MATH_E); return { q: `${pics(a, e)}<i class="mk-op">+</i>${pics(b, e)}`, a: a + b, opts: numOpts(a + b, 1, 6), say: `${a} + ${b}` }; } },
+    { n: 'Сложение до 10', h: 'Начни с большего числа и досчитай.', g: () => { const a = ri(2, 8), b = ri(1, 10 - a); return { ...X(`${a} + ${b}`, a + b), opts: numOpts(a + b, 1, 10) }; } },
+    { n: 'Плюс и минус до 10', h: 'Минус — это сколько осталось. Можно посчитать на пальчиках.', g: () => { const a = ri(3, 10), b = ri(1, a - 1); return Math.random() < .5 ? { ...X(`${a} − ${b}`, a - b), opts: numOpts(a - b, 0, 10) } : { ...X(`${a - b} + ${b}`, a), opts: numOpts(a, 1, 10) }; } },
+    { n: 'До 20 без перехода', h: 'Десяток не трогаем: считай только единицы.', g: () => { const u = ri(1, 7), a = 10 + u, b = ri(1, 9 - u); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: 'Через десяток', h: 'Сначала добери до 10, потом прибавь остаток.', g: () => { const a = ri(5, 9), b = ri(11 - a, 9); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: 'Окошко', h: 'Какое число спряталось в окошке? Проверь: подставь его.', g: () => { const a = ri(3, 12), b = ri(2, 8), k = ri(0, 2); return k === 0 ? { q: `${box} + ${b} = ${a + b}`, a } : k === 1 ? { q: `${a} + ${box} = ${a + b}`, a: b } : { q: `${a + b} − ${box} = ${a}`, a: b }; } },
+    { n: 'До 100 без перехода', h: 'Десятки складывай с десятками, единицы с единицами.', g: () => { const t1 = ri(1, 6), t2 = ri(1, 8 - t1), u1 = ri(0, 6), u2 = ri(0, 9 - u1), a = t1 * 10 + u1, b = t2 * 10 + u2; return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: 'До 100 с переходом', h: 'Единиц стало больше десяти — это ещё один десяток.', g: () => { let a, b; do { a = ri(15, 68); b = ri(12, 29); } while (a % 10 + b % 10 < 10 || a + b > 99); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: 'Таблица на 2, 3, 5 и 10', h: 'Умножить — это сложить несколько раз одно и то же число.', g: () => { const m = pickOne([2, 3, 5, 10]), k = ri(1, 10); return Math.random() < .8 ? X(`${m} × ${k}`, m * k) : X(`${k} × ${m}`, m * k); } },
+    { n: 'Вся таблица умножения', h: 'Вспомни таблицу: от перестановки множителей ответ не меняется.', g: () => { const a = ri(2, 9), b = ri(2, 9); return Math.random() < .35 ? { q: `${a} × ${box} = ${a * b}`, a: b } : X(`${a} × ${b}`, a * b); } },
+    { n: 'Деление и задачи', h: 'Деление — это обратное умножение. В задаче сначала найди, что было после первого шага.', g: () => {
+      if (Math.random() < .55) { const a = ri(2, 9), b = ri(2, 9); return X(`${a * b} ${DIV} ${a}`, b); }
+      const k = ri(0, 2);
+      if (k === 0) { const a = ri(12, 40), b = ri(5, 20), c = ri(3, a + b - 2); return { q: `На полке ${a} ${plural(a, ['книга', 'книги', 'книг'])}. Поставили ещё ${b}, а потом взяли ${c}. Сколько книг стало на полке?`, a: a + b - c, long: 1 }; }
+      if (k === 1) { const a = ri(2, 6), b = ri(2, 9), c = ri(1, a * b - 1); return { q: `В ${a} коробках по ${b} ${plural(b, ['конфете', 'конфеты', 'конфет'])}. Раздали ${c}. Сколько конфет осталось?`, a: a * b - c, long: 1 }; }
+      const a = ri(8, 30), b = ri(3, 12); return { q: `В одной корзине ${a} ${plural(a, ['яблоко', 'яблока', 'яблок'])}, а в другой — на ${b} больше. Сколько яблок в двух корзинах?`, a: a + a + b, long: 1 };
+    } },
+    { n: 'Деньги и время', h: 'В часе 60 минут. Монетки складывай и вычитай как обычные числа.', g: () => {
+      const k = ri(0, 2);
+      if (k === 0) { const a = ri(12, 45), b = ri(15, 48); return { q: `Булочка стоит ${a} ${plural(a, COIN)}, а сок — ${b}. Сколько монеток нужно за всё?`, a: a + b, long: 1 }; }
+      if (k === 1) { const p = ri(18, 76), have = pickOne([50, 80, 100].filter(x => x > p)); return { q: `У тебя ${have} ${plural(have, COIN)}. Игрушка стоит ${p}. Сколько монеток останется?`, a: have - p, long: 1 }; }
+      const st = ri(8, 17) * 60 + pickOne([10, 20, 30, 40, 45, 50]), d = pickOne([20, 25, 30, 35, 40, 45, 50]), e = st + d;
+      const o = shuffle([...new Set([hm(e), hm(e + 10), hm(e - 10), hm(st + d + 60)])]).slice(0, 3); if (!o.includes(hm(e))) o[0] = hm(e);
+      return { q: `Мультфильм начался в ${hm(st)} и шёл ${d} минут. Во сколько он закончился?`, a: hm(e), opts: shuffle(o), long: 1 };
+    } },
+    { n: 'Доли: половина и четверть', h: 'Половина — разделить на 2 равные части. Четверть — на 4.', g: () => {
+      if (Math.random() < .45) { const [parts, fill] = pickOne([[2, 1], [4, 1], [4, 3], [3, 1], [4, 2]]), a = fill === 2 && parts === 4 ? '1/2' : `${fill}/${parts}`;
+        return { q: `${pie(parts, fill)}<span class="mk-t">Какая часть круга закрашена?</span>`, a: FR[a], opts: shuffle([...new Set([FR[a], ...shuffle(['½', '¼', '¾', '⅓'].filter(x => x !== FR[a])).slice(0, 2)])]), say: 'Какая часть круга закрашена?' }; }
+      const half = Math.random() < .5, n = half ? ri(3, 25) * 2 : ri(2, 12) * 4; return { ...X(`${half ? '½' : '¼'} от ${n}`, half ? n / 2 : n / 4), say: half ? `Половина от ${n}?` : `Четверть от ${n}?` };
+    } },
+    { n: 'До 1000 с переходом', h: 'Пиши столбиком в уме: единицы, потом десятки, потом сотни.', g: () => { const a = ri(125, 589), b = ri(118, 299); return Math.random() < .5 ? X(`${a} + ${b}`, a + b) : X(`${a + b} − ${b}`, a); } },
+    { n: 'Остаток и скобки', h: 'Сначала то, что в скобках, потом умножение и деление, потом плюс и минус.', g: () => {
+      const k = ri(0, 3), a = ri(2, 9), b = ri(2, 9), c = ri(2, 6);
+      if (k === 0) { const r = ri(1, a - 1 || 1), n = a * b + r; return a > 2 ? { q: `${n} ${DIV} ${a} = ${b}, остаток ?`, a: r, say: `${n} ${DIV} ${a}. Какой остаток?` } : X(`(${a} + ${b}) × ${c}`, (a + b) * c); }
+      if (k === 1) return X(`(${a} + ${b}) × ${c}`, (a + b) * c);
+      if (k === 2) return X(`${a} + ${b} × ${c}`, a + b * c);
+      const s = ri(2, 4), d = ri(1, 5); return X(`${(s + d) * c * 2} ${DIV} (${s} + ${d})`, c * 2);
+    } },
+    { n: 'Олимпиада', h: 'Не спеши: найди правило или попробуй с конца.', g: () => {
+      const k = ri(0, 4);
+      if (k === 0) { const a = ri(1, 5), d = ri(2, 7); return { q: `${a}, ${a + d}, ${a + 2 * d}, ${a + 3 * d}, ?`, a: a + 4 * d, say: 'Какое число дальше?' }; }
+      if (k === 1) { const a = pickOne([1, 2, 3]); return { q: `${a}, ${a * 2}, ${a * 4}, ${a * 8}, ?`, a: a * 16, say: 'Какое число дальше?' }; }
+      if (k === 2) { const c = ri(2, 6), h = ri(2, 6); return { q: `Сколько ног у ${c} кошек и ${h} кур вместе?`, a: c * 4 + h * 2, long: 1 }; }
+      if (k === 3) { const x = ri(3, 15), p = ri(3, 9); return { q: `Я задумал число, прибавил ${p} и умножил на 2. Получилось ${(x + p) * 2}. Какое число я задумал?`, a: x, long: 1 }; }
+      const n = ri(3, 9); return { q: `Бревно распилили на ${n} ${plural(n, ['часть', 'части', 'частей'])}. Сколько было распилов?`, a: n - 1, long: 1 };
+    } }
+  ];
+  const RANK = [[1, '🐣', 'Считалочка'], [3, '🐥', 'Знаток десятка'], [5, '🦊', 'Мастер двадцати'], [7, '🦉', 'Покоритель сотни'], [9, '🐯', 'Знаток таблицы'], [11, '🦁', 'Мастер задач'], [13, '🚀', 'Знаток долей'], [14, '🏔️', 'Тысячник'], [16, '🏆', 'Олимпиец']];
+  const S = () => (P.mskill = P.mskill && typeof P.mskill === 'object' ? P.mskill : {});
+  const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : a === 5 ? 2 : a === 6 ? 3 : a === 7 ? 5 : a === 8 ? 7 : a === 9 ? 9 : 11; };
+  const has = () => !!(P.mskill && P.mskill.lv);
+  const lv = () => Math.max(1, Math.min(L.length, (P.mskill && P.mskill.lv) || startLv()));
+  const rank = (l = lv()) => RANK.reduce((r, x) => l >= x[0] ? x : r, RANK[0]);
+  const rankTxt = (l = lv()) => `${rank(l)[1]} ${rank(l)[2]}`;
+  
+  const STEP_OF = [1, 6, 8, 9, 9, 10, 11, 12, 13, 14, 15, 15, 15, 16, 18, 20];
+  function share() {
+    const l = S().lv; if (!l) return;
+    stepsTop(); P.steps.top = Math.max(P.steps.top, Math.min(STEPS.length, STEP_OF[l - 1] || 1));
+    P.n100 = P.n100 || {}; const want = l >= 8 ? 2 : l >= 7 ? 1 : 0;
+    ['tens', 'build', 'grid', 'order'].forEach(id => { if ((P.n100[id] || 0) < want) P.n100[id] = want; });
+  }
+  function setLv(n) { S().lv = Math.max(1, Math.min(L.length, n)); share(); save(); }
+  
+  function pick(l) { const at = l > 1 && Math.random() < .2 ? l - 1 : l, t = L[at - 1].g(); t.lv = at; t.h = L[at - 1].h; return t; }
+  const SAYW = [[/×/g, ' умножить на '], [/÷|:(?!\d\d)/g, ' разделить на '], [/−/g, ' минус '], [/\+/g, ' плюс '], [/=/g, ' равно '], [/□/g, ' окошко '], [/[()]/g, ' '], [/\?/g, '']];
+  const sayOf = t => t.say || (t.x || /□/.test(t.q) ? SAYW.reduce((s, [re, w]) => s.replace(re, w), t.q.replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim() + (t.x ? '?' : '') : t.q.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+  const qHTML = t => `<div class="mk-q ${t.long ? 'long' : ''}">${t.q}${t.x ? ' = <b class="mk-ans">?</b>' : ''}</div>`;
+  const ansHTML = t => t.opts ? `<div class="num-opts mk-opts">${t.opts.map(o => `<button class="num-b mk-o" data-v="${esc(String(o))}">${o}</button>`).join('')}</div>`
+    : `${t.x || /□/.test(t.q) ? '' : '<div class="mk-in" id="mkIn">?</div>'}${keypadHTML('mkKp')}`;
+  
+  function ask(t, cb) {
+    const b = $('#mkBox'); b.innerHTML = qHTML(t) + ansHTML(t); b.dataset.a = t.a; b.dataset.k = +(b.dataset.k || 0) + 1;
+    let input = '';
+    const show = () => { const i = $('#mkIn') || $('.mk-q .mk-ans') || $('.mk-q .mk-box'); if (i) i.textContent = input || (i.classList.contains('mk-box') ? '□' : '?'); };
+    if (t.opts) $('.mk-opts').onclick = e => { const o = e.target.closest('.mk-o'); if (o) cb(o.dataset.v, o); };
+    else $('#mkKp').onclick = e => { const k = e.target.closest('[data-k]'); if (!k) return; const v = k.dataset.k; sfx.tick(); if (v === 'del') input = input.slice(0, -1); else if (v === 'ok') { if (input) { const x = input; input = ''; cb(x, $('#mkIn') || $('.mk-q')); if (!$('.mk-q .ok')) show(); } return; } else if (input.length < 4) input += v; show(); };
+    const onKey = e => { if (!$('#mkKp')) { document.removeEventListener('keydown', onKey); return; } if (e.key === 'Enter' && input) { const x = input; input = ''; cb(x, $('#mkIn') || $('.mk-q')); if (!$('.mk-q .ok')) show(); } else if (e.key === 'Backspace') { input = input.slice(0, -1); show(); } else if (/^\d$/.test(e.key) && input.length < 4) { input += e.key; show(); } };
+    if (!t.opts) document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }
+  const solved = t => { const q = $('.mk-q'); if (!q) return; const a = q.querySelector('.mk-ans') || q.querySelector('.mk-box'); if (a) { a.textContent = t.a; a.classList.add('ok'); } };
+  const head = l => `<div class="mk-head"><button class="chip" id="mkDown">🐢 Полегче</button><span class="mk-rank" id="mkRank"><b>${rankTxt(l)} · ${l}</b><small>${esc(L[l - 1].n)}</small></span><button class="chip" id="mkUp">🚀 Посложнее</button></div>`;
+  
+  function check() {
+    const t = newScreen(); let l = startLv(), k = 0, best = 0, task = null, busy = false, off = () => {};
+    const N = 8;
+    shell('Проверим, что ты умеешь', `<div class="mk"><p class="mk-step" id="mkStep"></p><div id="mkBox"></div></div>`);
+    const q = LQ.start('m-skill', N);
+    function next() {
+      busy = false; task = L[l - 1].g(); task.lv = l; $('#mkStep').textContent = `Задание ${k + 1} из ${N}`;
+      off(); off = ask(task, answer);
+      talk((k === 0 ? 'Проверим, что ты уже умеешь! Восемь заданий: сначала лёгкие, потом всё труднее. Ошибаться не страшно — так мы найдём твой уровень. ' : '') + sayOf(task));
+    }
+    async function answer(v, el) {
+      if (busy) return; busy = true;
+      const good = String(v) === String(task.a);
+      if (good) { sfx.good(); best = Math.max(best, l); solved(task); l = Math.min(L.length, l + (k < 3 ? 2 : 1)); }
+      else { sfx.pop(); solved(task); l = Math.max(1, l - 1); }
+      q.hit(el, task.a);
+      await talk(good ? pickOne(['Верно!', 'Да!', 'Точно!']) : `Ничего! Ответ: ${task.a}. Идём дальше.`); if (t !== tok) return;
+      k++;
+      if (k < N) { later(next, 300); return; }
+      off(); setLv(Math.max(best || l, startLv() - 5)); S().checked = dayKey();
+      finish({ key: 'm-skill', stars: 3, line: `${q.end} Твой уровень: ${lv()} — ${rank()[2]}. Теперь задания будут как раз для тебя.`, again: () => play() });
+    }
+    next();
+  }
+  
+  function play() {
+    if (!has()) { check(); return; }
+    const t = newScreen(); let l = lv(), k = 0, task = null, tries = 0, t0 = 0, streak = 0, missRun = 0, right = 0, busy = false, off = () => {};
+    const N = 8, l0 = l;
+    shell('Математика по силам', `<div class="mk">${head(l)}<div id="mkBox"></div><button class="link-btn" id="mkRe">🔁 Проверить уровень заново</button></div>`);
+    const q = LQ.start('m-skill', N);
+    const reHead = () => { $('.mk-head').outerHTML = head(l); bindHead(); };
+    function bindHead() {
+      $('#mkDown').onclick = () => { if (l <= 1) return; sfx.pop(); setLv(l - 1); off(); play(); };
+      $('#mkUp').onclick = () => { if (l >= L.length) return; sfx.pop(); setLv(l + 1); off(); play(); };
+    }
+    bindHead();
+    $('#mkRe').onclick = () => { sfx.pop(); off(); delete S().lv; check(); };
+    function next() {
+      busy = false; tries = 0; task = pick(l); t0 = performance.now();
+      off(); off = ask(task, answer);
+      talk((k === 0 ? q.intro + ' ' : '') + sayOf(task));
+    }
+    async function answer(v, el) {
+      if (busy) return;
+      if (String(v) === String(task.a)) {
+        busy = true; sfx.good(); solved(task); q.hit(el, task.a);
+        const fast = performance.now() - t0 < (task.opts && !task.long ? 15000 : task.long ? 60000 : 25000);
+        if (tries === 0) { right++; missRun = 0; streak = fast ? streak + 1 : 0; } else { streak = 0; missRun++; }
+        let line = pickOne(['Верно!', 'Да!', 'Точно!', 'Правильно!']);
+        if (streak >= 3 && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + 'Ого, как легко! Давай посложнее.'; }
+        else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + 'Давай чуть полегче.'; }
+        await talk(line); if (t !== tok) return;
+        return step();
+      }
+      tries++; streak = 0; sfx.oops();
+      if (el && el.classList) wiggle(el);
+      if (tries === 1) { if (task.opts) q.miss(null); talk('Почти! ' + task.h); return; }
+      
+      busy = true; missRun++; solved(task); q.hit(null, task.a);
+      await talk(`Ответ: ${task.a}. Ничего, это было трудно!`); if (t !== tok) return;
+      if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); await talk('Давай чуть полегче.'); if (t !== tok) return; }
+      return step();
+    }
+    function step() {
+      k++;
+      if (k < N) { later(next, 350); return; }
+      off();
+      finish({ key: 'm-skill', stars: right >= 7 ? 3 : right >= 5 ? 2 : 1, line: `${q.end} ${rankTxt(l)} · уровень ${l}.` + (l > l0 ? ' ' + 'Новый уровень!' : ''), again: () => play() });
+    }
+    next();
+  }
+  
+  function sprintTask() {
+    if (!has()) return null;
+    const l = lv();
+    for (let i = 0; i < 30; i++) { const at = Math.max(2, l - ri(0, 2)), t = L[at - 1].g(); if (t.x && !t.opts) return { q: t.q, ans: t.a }; }
+    return null;
+  }
+  
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="mkLvIn">🔢 Математика: уровень <select id="mkLvIn"><option value="">проверить при входе</option>${L.map((x, i) => `<option value="${i + 1}" ${P.mskill && P.mskill.lv === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)}</option>`).join('')}</select></label>`);
+    $('#mkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
+  }
+  GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'math-count')), 0, { id: 'm-skill', name: 'Математика по силам', sub: 'задания как раз для тебя: посложнее или полегче', kw: 'математика уровень сложнее легче таблица умножения', ico: () => pic('🎯'), bg: 'var(--t-peach)', go: () => play(), grp: 3, also: [17], prog: () => has() ? rankTxt() : 'начни с проверки' });
+  return { play, check, lv, has, setLv, rank, rankTxt, sprintTask, settingsRow, L, pick, startLv };
+})();
+ 
 
 
 
@@ -15043,7 +15453,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '151';
+const APP_VER = '152';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -15735,6 +16145,46 @@ const WHEELS_CP = {
 Object.assign(CPAGES, FOOTBALL_CP, WHEELS_CP);
 const FOOTBALL_PAGES = Object.keys(FOOTBALL_CP).map(k => 'svg:' + k), WHEELS_PAGES = Object.keys(WHEELS_CP).map(k => 'svg:' + k);
 PAGES.push(...FOOTBALL_PAGES, ...WHEELS_PAGES);
+
+
+const COLOR_IMG = {
+  'cat': ['animals', 'GDJ', 312543],
+  'owl': ['animals', 'gammillian', 75271],
+  'turtle': ['sea', 'horse50', 74233],
+  'lion': ['animals', 'horse50', 74749],
+  'horse': ['animals', 'Superolli', 284788],
+  'giraffe': ['animals', 'frankes', 214355],
+  'savanna': ['animals', 'frankes', 220149],
+  'bunny': ['animals', 'frankes', 213606],
+  'bear': ['animals', 'johnny_automatic', 603],
+  'husky': ['animals', 'pianoBrad', 187790],
+  'panda': ['animals', 'pianoBrad', 187797],
+  'triceratops': ['dino', 'Mystharia', 316177],
+  'dino-happy': ['dino', 'Firkin', 281169],
+  'dino-rawr': ['dino', 'Tavin', 234370],
+  'unicorn': ['fairy', 'GDJ', 312536],
+  'mermaid': ['fairy', 'GDJ', 312542],
+  'fish': ['sea', 'redglove', 275734],
+  'octopus-baby': ['sea', 'Deadly44', 245072],
+  'octopus': ['sea', 'FunDraw_dot_com', 5515],
+  'dolphin': ['sea', 'frankes', 170167],
+  'rocket': ['space', 'mvolz', 272531],
+  'saturn': ['space', 'spacefem', 195161],
+  'retro-car': ['cars', 'liftarn', 321462],
+  'antique-car': ['cars', 'GDJ', 338146],
+  'emergency': ['cars', 'mvolz', 273681],
+  'soccer': ['football', 'buggywindows', 306433],
+  'butterfly': ['nature', 'teck5', 352671],
+  'butterfly-meadow': ['nature', 'j4p4n', 195905],
+  'flower': ['nature', 'teck5', 352740],
+  'mandala-floral': ['mandala', 'GDJ', 312268],
+  'mandala-lotus': ['mandala', 'GDJ', 305191]
+};
+const IMG_PAGES = Object.keys(COLOR_IMG).map(k => 'img:' + k), imgOf = t => IMG_PAGES.filter(p => COLOR_IMG[p.slice(4)][0] === t);
+const colorImgSrc = k => `${EMBEDDED ? 'https://govorilki.com/play/' : SITE_ROOT}img/color/${k}.png`;
+
+const FRIEND_PAGES = () => Object.keys(FRIENDS).filter(k => !k.startsWith('toy:'));
+PAGES.push(...FRIEND_PAGES().filter(k => !PAGES.includes(k)));
 
 
 
@@ -18419,7 +18869,8 @@ const IDEAS = (() => {
           for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
           box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
-          for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
+          const ws = sample(R_WORDS, 5), redo = new Set();
+          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
         } else {
           box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
           await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;
