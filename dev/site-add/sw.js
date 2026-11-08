@@ -26,6 +26,8 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
+  // recordings of the tales: straight to the network (Range requests; iOS media breaks when a SW answers them)
+  if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
   // the voice's program (Piper, ONNX runtime) from the CDN: kept once, never fetched again for each phrase
   if (/^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {
     e.respondWith(caches.open('govorilki-voice').then(async c => (await c.match(req)) || fetch(req).then(res => { if (res && res.ok) c.put(req, res.clone()); return res; })));
