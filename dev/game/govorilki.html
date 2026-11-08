@@ -20048,8 +20048,8 @@ const CBOX = (() => {
 // the stories are inside the museum and the composers now: one place each, not two tiles
 { const MERGED = { 'learn-art': 'museum', 'learn-music': 'composers' };
   Object.keys(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g) g.hide = () => true; });
-  // and where the stories were («Узнаём») the museum and the composers are now
-  Object.values(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !(g.also || []).includes(10)) g.also = [...(g.also || []), 10]; });
+  // and where the stories were («Узнаём») the composers are now; the museum lives in «Творим» only (the owner asked)
+  ['composers'].forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !(g.also || []).includes(10)) g.also = [...(g.also || []), 10]; });
   [...INTEREST_CAT.flatMap(c => c.items || []), ...LIKES].forEach(it => { if (Array.isArray(it.tiles)) it.tiles = [...new Set(it.tiles.map(t => MERGED[t] || t))]; }); }
 /* CBOX-END */
 /* BOOKS-BEGIN */
@@ -21244,7 +21244,7 @@ const LANDX = (() => {
     speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
     learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
     create: ['draw', 'color', 'songs', 'xylo', 'composers', 'conductor', 'museum', 'art-quiz'],
-    discover: ['travel', 'phys-lab', 'body', 'museum', 'composers']
+    discover: ['travel', 'phys-lab', 'body', 'composers', 'ballet']
   };
   // the games of a tab for any child: a little one and an older one, every game switched on
   function tabGames(t) {
@@ -21731,8 +21731,8 @@ const LAND_CARDS = [
   ['🔢', 'Математика', 'Счёты для малышей, «Ступеньки» от точек до уравнений, олимпиадные задачи для старших.'],
   ['🏍️', 'Игры голосом', 'Л-трасса: прочитай слово вслух — и включится нитро; трюки, гараж, монеты. Микрофон слышит, когда ребёнок говорит.'],
   ['♟️', 'Шахматы', 'Десять уровней с компьютером и тренером, партии с бабушкой и дедушкой прямо в игре.'],
-  ['🎨', 'Творчество', 'Раскраски, рисовалка, песенки, ксилофон, весёлые композиторы с их музыкой.'],
-  ['🌍', 'Узнаём', 'Музей мира — 1000 картин, истории о городах, опыты на площадке, праздники, подготовка к поездке, слова на 11 языках.'],
+  ['🎨', 'Творчество', 'Раскраски, рисовалка, песенки, ксилофон, весёлые композиторы с их музыкой, Музей мира — 1000 картин, балет.'],
+  ['🌍', 'Узнаём', 'Истории о городах и странах, опыты на площадке, праздники, подготовка к поездке, слова на 11 языках.'],
   ['🏆', 'Вместе', 'Звёзды, серии дней и медали, командная серия братьев и сестёр, лига семей и баттлы.']];
 function screenLanding({ liga = '' } = {}) {
   newScreen(); document.body.classList.remove('quest');
