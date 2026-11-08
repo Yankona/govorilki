@@ -1447,6 +1447,8 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .svg-page{position:absolute;inset:0;display:grid;place-items:center;padding:3%}
 .svg-page svg{display:block;width:100%;height:100%}
 .svg-page svg *{cursor:pointer}
+.page-thumb img{display:block;width:100%;height:100%;object-fit:contain}
+.img-credit{margin:-4px 0 0;text-align:center;font:700 11px/1.3 var(--f-body);color:var(--ink-soft,#6B6585)}
 
 .beauty-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
 .beauty-face{width:clamp(170px,38vmin,260px);overflow:hidden;border:10px solid #F7B6CF;border-radius:50%/46%;background:radial-gradient(circle at 50% 40%,#FFF5FA,#FFE0EC);box-shadow:0 8px 0 #E58FB1}
@@ -6140,13 +6142,16 @@ function screenDrawMenu() {
 }
 function screenColorMenu() {
   newScreen();
-  const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Раскраска"><span class="page-thumb">${outlineSVG(pageSVG(p))}</span></button>`;
-  // themed groups (ballet, football, cars and bikes): the ones the child likes come first, then the animals and toys,
-  // then the other themes
-  const likes = P.settings.likes || [], themed = [...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES];
-  const themes = [['Балет', BALLET_PAGES, ['ballet', 'dance']], ['Футбол', FOOTBALL_PAGES, ['football']], ['Тачки и мотики', WHEELS_PAGES, ['race', 'moto', 'trucks']]];
-  const liked = t => t[2].some(l => likes.includes(l));
-  const groups = [...themes.filter(liked), ['Зверята и игрушки', PAGES.filter(p => !themed.includes(p))], ...themes.filter(t => !liked(t))];
+  const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Раскраска"><span class="page-thumb">${p.startsWith('img:') ? `<img src="${colorImgSrc(p.slice(4))}" alt="" loading="lazy">` : outlineSVG(pageSVG(p))}</span></button>`;
+  // «Мои друзья» first; then the themes the child likes; then the animals and toys; then the other themes
+  const likes = P.settings.likes || [], friends = FRIEND_PAGES();
+  const themes = [['Балет', BALLET_PAGES, ['ballet', 'dance']], ['Футбол', [...FOOTBALL_PAGES, ...imgOf('football')], ['football']],
+    ['Тачки и мотики', [...WHEELS_PAGES, ...imgOf('cars')], ['race', 'moto', 'trucks', 'rescue']],
+    ['Звери', imgOf('animals'), ['animals', 'dogs', 'cats', 'horses', 'wild', 'farm', 'birds', 'hamsters']], ['Динозавры', imgOf('dino'), ['dino', 'dragon']],
+    ['Сказки', imgOf('fairy'), ['unicorn', 'princess', 'mermaid', 'fairies', 'knights', 'dragon']], ['Море', imgOf('sea'), ['ocean', 'fish', 'beach', 'swim']],
+    ['Космос', imgOf('space'), ['space']], ['Бабочки и цветы', imgOf('nature'), ['nature', 'plants', 'insects']], ['Мандалы', imgOf('mandala'), ['draw', 'art', 'crafts']]];
+  const themed = themes.flatMap(t => t[1]), liked = t => t[2].some(l => likes.includes(l));
+  const groups = [['Мои друзья', friends], ...themes.filter(liked), ['Зверята и игрушки', PAGES.filter(p => !themed.includes(p) && !friends.includes(p))], ...themes.filter(t => !liked(t))];
   const st = shell('Раскраски', groups.map(([h, ps]) => `<h2 class="sec-h">${h}</h2><div class="cards">${ps.map(card).join('')}</div>`).join(''), { back: screenDrawMenu });
   talk('Выбери картинку, которую будешь раскрашивать.');
   st.onclick = e => { const c = e.target.closest('.page'); if (c) { sfx.pop(); screenPaint({ mode: 'color', page: c.dataset.p }); } };
@@ -6157,10 +6162,12 @@ function screenPaint(opts = {}) {
   const title = mode === 'color' ? 'Раскраска' : mode === 'write' ? 'Пишем буквы' : TK ? 'Рисунок по заданию' : mode === 'magic' ? 'Волшебный узор' : 'Рисовалка';
   const back = opts.back || (mode === 'color' ? screenColorMenu : mode === 'write' ? null : screenDrawMenu);
   const L = ABC[li], palL = !Q() && mode !== 'magic' && mode !== 'write';
+  // a downloaded page: its lines go to the top canvas and the bucket fills the canvas under them
+  const RASTER = mode === 'color' && !!page && page.startsWith('img:'), CR = RASTER && COLOR_IMG[page.slice(4)];
   shell(title, `<div class="paint">
       ${TK ? `<div class="task-card" id="taskCard"><span class="emo">📝</span><p>${TK.t}</p></div>` : ''}
       ${mode === 'write' ? `<div class="wr-head"><button class="ibtn" id="prevL" aria-label="Предыдущая буква">${ICON.back}</button><span class="wr-ex">${pic(L[2])}<span>${hiLetter(L[1], L[0])}</span></span><button class="ibtn" id="nextL" aria-label="Следующая буква">${ICON.fwd}</button></div>` : ''}
-      <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
+      <div class="paper ${mode === 'magic' ? 'magic' : ''}" id="paper">${mode === 'write' ? `<span class="guide-l">${L[0]}${L[0].toLowerCase()}</span>` : ''}${mode === 'color' && !RASTER ? `<div class="svg-page" id="svgPage">${outlineSVG(pageSVG(page))}</div>` : ''}<canvas id="cvB"></canvas><canvas id="cvL"></canvas></div>
       <div class="swatches" id="sw">${mode === 'magic' ? '<button class="swc sel rainbow" data-c="rainbow" aria-label="Радуга"></button>' : ''}${PALETTE.map((c, i) => `<button class="swc ${i === 0 && mode !== 'magic' ? 'sel' : ''}" data-c="${c}" style="--c:${c}" aria-label="${esc(PAL_WORDS[i] ? PAL_WORDS[i][1] : 'Цвет')}">${palL && PAL_WORDS[i] ? `<b class="swl">${esc(PAL_WORDS[i][0])}</b>` : ''}</button>`).join('')}</div>
       <div class="tools" id="tools">
         <button class="tool" data-t="brush" data-s="6" aria-label="Тонкая кисть"><i style="--d:8px"></i></button>
@@ -6173,11 +6180,12 @@ function screenPaint(opts = {}) {
         <button class="big tool-done" id="done">${ICON.star}Готово</button>
       </div>
     </div>`, { back });
+  if (CR) $('#sw').insertAdjacentHTML('beforebegin', `<p class="img-credit">Рисунок: ${esc(CR[1])} · Openclipart · CC0</p>`);
   const paper = $('#paper'), cB = $('#cvB'), cL = $('#cvL');
   const xB = cB.getContext('2d', { willReadFrequently: true }), xL = cL.getContext('2d', { willReadFrequently: true });
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   let W = 0, H = 0, color = mode === 'magic' ? 'rainbow' : PALETTE[0], size = 14, hue = 0, tool = mode === 'color' ? 'fill' : 'brush', drawing = false, last = null, undo = [], lineImg = null;
-  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' ? 'none' : 'auto'; };
+  const markTool = () => { $$('.tool[data-t]').forEach(b => b.classList.toggle('sel', b.dataset.t === tool && (tool !== 'brush' || +b.dataset.s === size))); cB.style.pointerEvents = mode === 'color' && tool === 'fill' && !RASTER ? 'none' : 'auto'; };
   markTool();
   function drawLines() {
     xL.clearRect(0, 0, cL.width, cL.height);
@@ -6196,9 +6204,10 @@ function screenPaint(opts = {}) {
     drawLines(); undo = [];
   }
   fit(); resizeFn = fit;
+  if (RASTER) { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => { if (t !== tok) return; lineImg = im; drawLines(); }; im.src = colorImgSrc(page.slice(4)); }
   const pt = e => { const r = cB.getBoundingClientRect(); return { x: (e.clientX - r.left) * dpr, y: (e.clientY - r.top) * dpr }; };
   const pushUndo = () => { try { undo.push(xB.getImageData(0, 0, cB.width, cB.height)); if (undo.length > 12) undo.shift(); } catch (e) {} };
-  if (mode === 'color') {
+  if (mode === 'color' && !RASTER) {
     const pg = $('#svgPage'), dark = el => { const m = getComputedStyle(el).fill.match(/\d+/g); return !m || (m[0] * .3 + m[1] * .59 + m[2] * .11) < 80; };
     pg.addEventListener('pointerdown', e => {
       if (tool !== 'fill') return;
@@ -6290,7 +6299,7 @@ function screenPaint(opts = {}) {
     if (mode !== 'write') {
       try {
         const tw = 480, th = Math.round(tw * cB.height / cB.width), c = document.createElement('canvas'), x = c.getContext('2d');
-        c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color') { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
+        c.width = tw; c.height = th; x.fillStyle = mode === 'magic' ? '#1B1838' : '#FFFFFF'; x.fillRect(0, 0, tw, th); if (mode === 'color' && !RASTER) { const img = await svgImage(new XMLSerializer().serializeToString($('#svgPage svg'))); if (img) { const r = $('#svgPage svg').getBoundingClientRect(), pr = paper.getBoundingClientRect(), k = tw / pr.width; x.drawImage(img, (r.left - pr.left) * k, (r.top - pr.top) * k, r.width * k, r.height * k); } } x.drawImage(cB, 0, 0, tw, th); x.drawImage(cL, 0, 0, tw, th);
         artPic = c.toDataURL('image/jpeg', .75); saveArt(artPic, TK ? TK.w : '');
       } catch (err) {}
     }
@@ -16103,6 +16112,46 @@ const WHEELS_CP = {
 Object.assign(CPAGES, FOOTBALL_CP, WHEELS_CP);
 const FOOTBALL_PAGES = Object.keys(FOOTBALL_CP).map(k => 'svg:' + k), WHEELS_PAGES = Object.keys(WHEELS_CP).map(k => 'svg:' + k);
 PAGES.push(...FOOTBALL_PAGES, ...WHEELS_PAGES);
+// downloaded colouring pages (Openclipart, all CC0; no Pixabay-derived ones): only their black lines, as a transparent
+// PNG in img/color/; the bucket fills the paper under the lines (canvas flood fill). key: [theme, author, Openclipart id]
+const COLOR_IMG = {
+  'cat': ['animals', 'GDJ', 312543],
+  'owl': ['animals', 'gammillian', 75271],
+  'turtle': ['sea', 'horse50', 74233],
+  'lion': ['animals', 'horse50', 74749],
+  'horse': ['animals', 'Superolli', 284788],
+  'giraffe': ['animals', 'frankes', 214355],
+  'savanna': ['animals', 'frankes', 220149],
+  'bunny': ['animals', 'frankes', 213606],
+  'bear': ['animals', 'johnny_automatic', 603],
+  'husky': ['animals', 'pianoBrad', 187790],
+  'panda': ['animals', 'pianoBrad', 187797],
+  'triceratops': ['dino', 'Mystharia', 316177],
+  'dino-happy': ['dino', 'Firkin', 281169],
+  'dino-rawr': ['dino', 'Tavin', 234370],
+  'unicorn': ['fairy', 'GDJ', 312536],
+  'mermaid': ['fairy', 'GDJ', 312542],
+  'fish': ['sea', 'redglove', 275734],
+  'octopus-baby': ['sea', 'Deadly44', 245072],
+  'octopus': ['sea', 'FunDraw_dot_com', 5515],
+  'dolphin': ['sea', 'frankes', 170167],
+  'rocket': ['space', 'mvolz', 272531],
+  'saturn': ['space', 'spacefem', 195161],
+  'retro-car': ['cars', 'liftarn', 321462],
+  'antique-car': ['cars', 'GDJ', 338146],
+  'emergency': ['cars', 'mvolz', 273681],
+  'soccer': ['football', 'buggywindows', 306433],
+  'butterfly': ['nature', 'teck5', 352671],
+  'butterfly-meadow': ['nature', 'j4p4n', 195905],
+  'flower': ['nature', 'teck5', 352740],
+  'mandala-floral': ['mandala', 'GDJ', 312268],
+  'mandala-lotus': ['mandala', 'GDJ', 305191]
+};
+const IMG_PAGES = Object.keys(COLOR_IMG).map(k => 'img:' + k), imgOf = t => IMG_PAGES.filter(p => COLOR_IMG[p.slice(4)][0] === t);
+const colorImgSrc = k => `${EMBEDDED ? 'https://govorilki.com/play/' : SITE_ROOT}img/color/${k}.png`;
+// every friend is a colouring page too («Мои друзья»), and they take part in the colour-by-code games
+const FRIEND_PAGES = () => Object.keys(FRIENDS).filter(k => !k.startsWith('toy:'));
+PAGES.push(...FRIEND_PAGES().filter(k => !PAGES.includes(k)));
 
 // every colour of the palette by name, with the letter it starts with (one per PALETTE colour, in its order); the
 // dark one and white never go into a code

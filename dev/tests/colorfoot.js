@@ -18,7 +18,7 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
     await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
     await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
     await c.addInitScript(s => { window.__said = []; try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 1500); }; } catch (e) {} if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, seed);
-    const p = await c.newPage(), errs = [], fail = [], R = s => p.evaluate(s => window.__T.run(s), s);
+    const p = await c.newPage(), errs = [], fail = [], few = [], R = s => p.evaluate(s => window.__T.run(s), s);
     p.on('pageerror', e => errs.push(e.message));
     await p.goto(BASE + sub); await p.waitForTimeout(1500);
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
@@ -54,17 +54,34 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
     await p.evaluate(() => document.querySelector('.friend[data-id="lilu"]').scrollIntoView({ block: 'center' }));
     await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-pets.png` });
     await p.waitForTimeout(1600);
-    // colouring: the ballet group first for a ballet lover, every page fills
+    // colouring: «Мои друзья» first, then the ballet group for a ballet lover; every page fills
     await R(`(() => { P.settings.likes = ['ballet']; screenColorMenu(); })()`); await p.waitForTimeout(600);
-    const cm = await p.evaluate(() => ({ h: [...document.querySelectorAll('.sec-h')].map(x => x.textContent), n: document.querySelector('.cards').querySelectorAll('.page').length }));
-    if (cm.n !== 7) fail.push('ballet group first has ' + cm.n);
+    const nFr = await R('FRIEND_PAGES().length');
+    const cm = await p.evaluate(() => ({ h: [...document.querySelectorAll('.sec-h')].map(x => x.textContent), n: [...document.querySelectorAll('.cards')].slice(0, 2).map(c => c.querySelectorAll('.page').length) }));
+    if (cm.n[0] !== nFr || nFr < 20 || cm.n[1] !== 7) fail.push('friends then ballet: ' + cm.n + ' of ' + nFr);
     await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-colormenu.png` });
     // football and cars/bikes lovers: those two groups first
     await R(`(() => { P.settings.likes = ['football', 'moto']; screenColorMenu(); })()`); await p.waitForTimeout(600);
-    const cm2 = await p.evaluate(() => [...document.querySelectorAll('.cards')].slice(0, 2).map(c => c.querySelectorAll('.page').length));
-    if (cm2[0] !== 8 || cm2[1] !== 10) fail.push('football/cars groups first: ' + cm2);
+    const cm2 = await p.evaluate(() => [...document.querySelectorAll('.cards')].slice(1, 3).map(c => c.querySelectorAll('.page').length));
+    if (cm2[0] !== 9 || cm2[1] !== 13) fail.push('football/cars groups after friends: ' + cm2);
+    // every downloaded page loads and its parts fill on the canvas under the lines
+    const imgs = await R('IMG_PAGES');
+    for (const pg of imgs) {
+      await R(`screenPaint({ mode: 'color', page: '${pg}' })`);
+      await p.waitForFunction(() => { const c = document.querySelector('#cvL'); if (!c) return false; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; for (let i = 3; i < d.length; i += 4000) if (d[i] > 110) return true; return false; }, null, { timeout: 8000 }).catch(() => fail.push(pg + ': lines did not load'));
+      if (!(await p.$('.img-credit'))) fail.push(pg + ': no credit');
+      // points well inside empty parts: no line within 6 px around
+      const pts = await p.evaluate(() => { const c = document.querySelector('#cvL'), x = c.getContext('2d'), w = c.width, h = c.height, d = x.getImageData(0, 0, w, h).data, r = c.getBoundingClientRect(), k = r.width / w, out = [];
+        const free = (px, py) => { for (let dy = -3; dy <= 3; dy += 3) for (let dx = -3; dx <= 3; dx += 3) { const q = ((py + dy) * w + px + dx) * 4 + 3; if (d[q] > 40) return false; } return true; };
+        for (let j = 1; j < 25 && out.length < 5; j += 2) for (let i = 1; i < 25 && out.length < 5; i += 3) { const px = Math.round(w * (.2 + .6 * i / 25)), py = Math.round(h * (.2 + .6 * j / 25)); if (free(px, py)) out.push([r.left + px * k, r.top + py * k, px, py]); }
+        return out; });
+      let ok = 0;
+      for (const [x, y, px, py] of pts) { await p.mouse.click(x, y); ok += await p.evaluate(([px, py]) => document.querySelector('#cvB').getContext('2d').getImageData(px, py, 1, 1).data[3] > 200 ? 1 : 0, [px, py]); }
+      if (pts.length < 3 || ok < pts.length) fail.push(`${pg}: canvas fill ${ok}/${pts.length}`);
+      if (['img:cat', 'img:castle', 'img:mandala-lotus'].includes(pg)) await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-${pg.slice(4)}.png` });
+    }
     await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-colormenu2.png`, fullPage: DEV === 'laptop' });
-    const pages = await R('[...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES]');
+    const pages = await R('[...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES, ...FRIEND_PAGES()]');
     for (const pg of pages) {
       await R(`screenPaint({ mode: 'color', page: '${pg}' })`); await p.waitForTimeout(500);
       await p.click('.tool[data-t="fill"]').catch(() => fail.push('no fill tool'));
@@ -76,13 +93,14 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
       for (let i = 0; i < pts.length; i++) { await p.click(`.swc[data-c="${cols[i % 4]}"]`); await p.mouse.click(pts[i][0], pts[i][1]); }
       const filled = await p.evaluate(() => document.querySelectorAll('#svgPage [style*="fill"]').length);
       if (pts.length < 6 || filled < pts.length * .9) fail.push(`${pg}: ${filled}/${pts.length} filled`);
-      if (['svg:bl-arabesque', 'svg:bl-nutcracker', 'svg:fb-kick', 'svg:vh-super', 'svg:vh-sportbike'].includes(pg)) await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-${pg.slice(7)}.png` });
+      if (['svg:bl-arabesque', 'svg:bl-nutcracker', 'svg:fb-kick', 'svg:vh-super', 'svg:vh-sportbike', 'lilu', 'messi'].includes(pg)) await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-${pg.replace(/^svg:..-/, '')}.png` });
       // colouring by letters finds enough parts on this page (no fallback to another picture)
-      await R(`screenCodeColor('abc', '${pg}')`); await p.waitForTimeout(700);
-      const cc = await R(`[(CC_FEW.abc || []).includes('${pg}'), document.querySelectorAll('.cc-t').length]`);
-      if (cc[0] || cc[1] < 4) fail.push(`${pg}: code-colour labels ${cc[1]}`);
+      // (tries = 10: this very picture, no swap to another one when it has too few parts)
+      await R(`screenCodeColor('abc', '${pg}', 10)`); await p.waitForTimeout(700);
+      const cc = await R(`document.querySelectorAll('.cc-t').length`);
+      if (cc < 4) (pg.startsWith('svg:') ? fail : few).push(`${pg}: code-colour labels ${cc}`);
     }
-    console.log(`${lang} ${DEV}: friends ${fr.h.join(' | ')} [${fr.names.slice(0, 3).join('; ')}…] mouth ${maxRy.toFixed(1)} | said «${said}» | colour ${cm.h.join(' | ')} | fails ${JSON.stringify(fail)} | errors ${JSON.stringify(errs)}`);
+    console.log(`${lang} ${DEV}: friends ${fr.h.join(' | ')} [${fr.names.slice(0, 3).join('; ')}…] mouth ${maxRy.toFixed(1)} | said «${said}» | colour ${cm.h.slice(0, 4).join(' | ')} | friends with few code-colour parts (the game swaps the picture) ${few.length} | fails ${JSON.stringify(fail)} | errors ${JSON.stringify(errs)}`);
     if (errs.length || fail.length) bad++;
     await c.close();
   }
