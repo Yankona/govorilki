@@ -739,6 +739,7 @@ b.r{color:var(--berry)}
 .lab{display:flex;flex-direction:column;gap:10px;width:100%;max-width:660px;margin:0 auto;padding-bottom:20px}
 .big.now{background:var(--leaf);box-shadow:0 7px 0 #1E8A4F,0 0 0 6px rgba(47,168,101,.35)}
 .lab-tabs,.lab-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.lab-tabs .chip{min-height:46px}
 .lab-tabs .chip.sel,.lab-row .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
 .lab-box{position:relative;width:100%;height:min(52vh,380px);border-radius:24px;overflow:hidden;box-shadow:0 5px 0 var(--line-strong)}
 .lab-box canvas{width:100%;height:100%;display:block}
@@ -1033,7 +1034,7 @@ b.r{color:var(--berry)}
 .lf-o.right{opacity:1;background:var(--t-green);box-shadow:0 4px 0 var(--leaf),inset 0 0 0 3px var(--leaf)}
 .lf-o.hint{animation:bdBlink .7s ease-in-out infinite}
 .lf-crown{width:54px;height:54px}
-.pl-hub .card small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.pl-hub{max-width:680px;margin-inline:auto}.pl-hub .card small{font:700 13px var(--f-body);color:var(--ink-soft)}
 .pl-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .pl-btns .big{flex:1 1 90px;font-size:17px;padding:12px 8px}
 .pl-btns .big.want{box-shadow:0 5px 0 #D39A00,inset 0 0 0 3px var(--sun)}
@@ -2688,6 +2689,39 @@ body.pv-on #app{padding-top:52px}
 .tv-o.yes{background:var(--t-mint);box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}.tv-o.no{opacity:.5}
 .tv-ans{padding:12px 14px;border-radius:18px;background:var(--t-yellow);color:var(--ink)}.tv-ans p{margin:0 0 8px;font:700 17px/1.45 var(--f-body)}
 /* TRAVEL-CSS-END */
+/* DISCOVER-FUN-CSS: «А знаешь ли ты?», the story list's progress and next story, the picture while listening, stamps, a line of time */
+.lr-prog{display:flex;align-items:center;gap:10px;width:100%;max-width:680px;margin:0 auto 10px}
+.lr-pb{flex:1;height:12px;border-radius:8px;background:var(--line);overflow:hidden}.lr-pb i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#FFC83A,#FF8A2A);transition:width .6s}
+.lr-prog b{display:flex;align-items:center;gap:4px;font:800 16px var(--f-body);color:var(--ink);white-space:nowrap}.lr-prog .star-i{width:22px;height:22px}
+.lr-hook{display:flex;align-items:center;gap:12px;width:100%;max-width:680px;margin:4px auto 12px;padding:12px 14px;border:0;border-radius:22px;background:var(--bg,var(--t-yellow));color:var(--ink);text-align:left;cursor:pointer;box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px rgba(255,255,255,.55);font:inherit}
+.lr-hook:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line-strong)}
+.lr-he{flex:none;display:grid;place-items:center;width:62px;height:62px;border-radius:50%;background:rgba(255,255,255,.7)}.lr-he .pic{font-size:40px;animation:hkWob 2.6s ease-in-out infinite}
+.lr-ht{display:flex;flex-direction:column;gap:2px;min-width:0}.lr-ht small{font:800 14px var(--f-body);color:var(--tiger-deep,#C2561A)}
+.lr-ht b{font:800 18px/1.25 var(--f-body)}.lr-ht i{font:700 13px/1.3 var(--f-body);font-style:normal;color:var(--ink-soft)}
+.home-t .lr-hook{margin:0 0 10px}
+@keyframes hkWob{0%,100%{transform:rotate(0)}20%{transform:rotate(-9deg) scale(1.06)}40%{transform:rotate(7deg)}60%{transform:rotate(0)}}
+.story-c.nx{box-shadow:0 0 0 4px #FFC83A,0 6px 0 var(--line-strong)}
+.nx-b{position:absolute;z-index:2;top:-8px;left:-6px;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--tiger,#FF8A2A);color:#fff;font:900 16px/1 var(--f-body);font-style:normal;box-shadow:0 3px 0 rgba(0,0,0,.18);animation:pulse 1.4s ease-in-out infinite}
+.si-w{display:block;overflow:hidden;border-radius:20px;box-shadow:0 4px 0 var(--line)}.si-w img{display:block;box-shadow:none;border-radius:0;transform-origin:50% 45%}
+.story.reading .si-w img{animation:kenB 18s ease-in-out infinite alternate}
+.story.reading .story-e .pic{display:inline-block;animation:bob 1.6s ease-in-out infinite}
+@keyframes kenB{from{transform:scale(1)}to{transform:scale(1.12) translate(-2%,-2%)}}
+.st-next{display:flex;align-items:center;gap:12px;width:100%;padding:10px;border:0;border-radius:20px;background:var(--sky,#E6F4FF);color:var(--ink);text-align:left;cursor:pointer;box-shadow:inset 0 0 0 3px var(--line);font:inherit}
+.st-nt{flex:none;display:grid;place-items:center;width:72px;height:72px;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.6)}.st-nt img{width:100%;height:100%;object-fit:cover}.st-nt .pic{font-size:44px}
+.st-nx{display:flex;flex-direction:column;gap:2px;min-width:0}.st-nx small{font:800 13px var(--f-body);color:var(--ink-soft)}.st-nx b{font:800 17px/1.2 var(--f-body)}.st-nx i{font:700 14px/1.3 var(--f-body);font-style:normal;color:var(--ink-soft)}
+.tv-s{border:0;padding:0;cursor:pointer}
+.tv-s.on{background:#FFF8E6;box-shadow:inset 0 0 0 2.5px #C8553D,0 0 0 2px #FFF8E6,0 0 0 3.5px rgba(200,85,61,.45);transform:rotate(var(--r,-8deg))}
+.tv-s.new{animation:stamp .7s cubic-bezier(.3,1.6,.5,1) both,glow 1.6s .7s ease-in-out 2}
+.tv-stbox{width:min(100%,420px);background:var(--paper);border-radius:32px;padding:22px 20px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;animation:popin .4s}
+.tv-stt{margin:0;font:800 22px/1.25 var(--f-body);color:var(--ink)}.tv-stn{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+.tv-stamp{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:200px;height:200px;border-radius:50%;background:#FFF8E6;color:#B5432F;box-shadow:inset 0 0 0 7px #FFF8E6,inset 0 0 0 10px #C8553D,inset 0 0 0 16px #FFF8E6,inset 0 0 0 18px #C8553D;animation:stamp .6s .25s cubic-bezier(.3,1.6,.5,1) both}
+.tv-stf{font:400 70px/1 var(--f-emoji)}.tv-stamp b{max-width:150px;font:900 17px/1.15 var(--f-body);text-transform:uppercase;letter-spacing:.04em}.tv-stamp small{font:800 13px var(--f-body);opacity:.8}
+.tl-line{position:relative;height:74px;margin:0 6px 8px}
+.tl-line>i{position:absolute;left:0;right:0;top:30px;height:6px;border-radius:4px;background:linear-gradient(90deg,#B38B5D,#FFC83A 70%,#3D8BFD)}
+.tl-line>span{position:absolute;top:8px;transform:translateX(-50%);display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--paper);font:400 28px/1 var(--f-emoji);box-shadow:0 3px 0 var(--line-strong);animation:popin .45s both}
+.tl-line>span.old{box-shadow:0 0 0 4px #2FA865,0 3px 0 var(--line-strong)}
+.tl-line small{position:absolute;bottom:0;font:800 13px var(--f-body);color:var(--ink-soft)}.tl-a{left:0}.tl-b{right:0}
+@media (prefers-reduced-motion:reduce){.story.reading .si-w img,.story.reading .story-e .pic,.nx-b,.lr-he .pic,.tv-s.new{animation:none}}
 /* GLOBE-CSS */
 .gl{max-width:1040px;width:100%;margin:0 auto;display:grid;gap:12px;align-items:start}
 @media (min-width:860px){.gl{grid-template-columns:minmax(0,1fr) 340px}}
@@ -2707,6 +2741,7 @@ body.pv-on #app{padding-top:52px}
 .gl-info>.gl-t{min-height:46px}.gl-t .gl-ai{width:36px;height:36px;flex:none}.gl-ac>span{font:400 26px/1 var(--f-emoji)}.gl-ac .gl-ai{width:28px;height:28px}
 .gl-modes .chip.sel{background:var(--t-yellow)}
 .tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,var(--t-blue),var(--t-mint));color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
+.tv-mem{position:relative;background:linear-gradient(135deg,var(--t-lilac),var(--t-pink))}.tv-memst{position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:2px;font:800 15px var(--f-body);font-style:normal;color:var(--ink)}.tv-memst .star-i{width:20px;height:20px}
 .tv-globe>span:first-child{font:400 46px/1 var(--f-emoji)}.tv-globe>span+span{display:flex;flex-direction:column;gap:2px}.tv-globe b{font:800 20px/1.2 var(--f-body)}.tv-globe small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
 /* GLOBE-CSS-END */
 /* SAID-CSS */
@@ -4256,7 +4291,7 @@ function bindHold(btn, on, off) {
 }
 const nameBit = () => P.settings.name ? ', ' + P.settings.name : '';
 
-function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
+function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra = '', nextLabel = '' }) {
   const fair = fairStars(key, stars); stars = fair.s;
   const before = stickerCount(), xp0 = P.stars;
   P.stars += stars; P.best[key] = Math.max(P.best[key] || 0, stars); P.plays[key] = (P.plays[key] || 0) + 1;
@@ -4292,10 +4327,10 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
     ${fair.note ? `<p class="fair-note">${fair.note}</p>` : ''}
     ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Новая наклейка!</div>` : ''}
-    ${ns ? lessonTrailHTML(key) : ''}
+    ${ns ? lessonTrailHTML(key) : extra}
     <div class="win-btns win-main">
       ${again ? `<button class="big ${next ? 'ghost' : ''}" data-a="again">↻ Ещё раз</button>` : ''}
-      ${next ? '<button class="big" data-a="next">Дальше</button>' : ''}
+      ${next ? `<button class="big" data-a="next">${ns || !nextLabel ? 'Дальше' : esc(nextLabel)}</button>` : ''}
     </div>
     <div class="win-btns"><button class="big ghost" data-a="menu">${menu ? 'К списку' : 'Домой'}</button></div></div>`;
   $('.screen').append(ov);
@@ -4522,7 +4557,7 @@ function goHome() {
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
-  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
+  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !x.inside && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
   const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
@@ -4576,7 +4611,7 @@ function goHome() {
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
     body = `<div class="tab-head">${tabIco(T.e)}<h1>${nm(T.n)}</h1><div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div></div>
-      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Где живёт наша семья?</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div>` : tab === 'speak' ? `<button class="surp" id="surpBtn"><span class="surp-g">🎁</span><b>Игра-сюрприз</b><span class="surp-q">?</span></button>` : ''}
+      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Где живёт наша семья?</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div>${hookHTML(learnHook(discHookKs()))}` : tab === 'speak' ? `<button class="surp" id="surpBtn"><span class="surp-g">🎁</span><b>Игра-сюрприз</b><span class="surp-q">?</span></button>` : ''}
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || '<p class="lead">Здесь пока пусто. Игры включаются в «Для взрослых» → «Интересы и игры».</p>'}`;
   }
@@ -4606,6 +4641,7 @@ function goHome() {
   on('#invChip', () => { sfx.pop(); screenInviteWho(); });
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
+  hookBind(app, homeLeave);
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
   // «Говорим»: a surprise game of this tab for a child who does not know what to pick (not the grown-ups' pages)
   on('#surpBtn', () => { const T = HOME_TABS.find(x => x.id === tab), gs = tabGames(T).filter(g => !g.info && !['swab', 'speech-check', 'kpop-pick', 'kpop-color'].includes(g.id)), last = (P.recent || [])[0];
@@ -8445,21 +8481,38 @@ const learnItems = k => LEARN[k].items.filter(x => !x.big || Q());
 const learnDone = id => !!(P.learn && P.learn[id]);
 const learnProg = k => { const it = learnItems(k), n = it.filter(x => learnDone(x.id)).length; return n ? `${n} из ${it.length}` : `${it.length} историй`; };
 const sentences = s => s.match(/[^.!?…]+[.!?…]+[»"]?\s*|[^.!?…]+$/g) || [s];
+// «А знаешь ли ты?»: the question of a story not heard yet, as a door into that story (lists, hubs, the «Узнаём» tab)
+function learnHook(ks) {
+  const pool = [];
+  ks.forEach(k => { if (!LEARN[k]) return; let its = []; try { its = learnItems(k); } catch (e) {} its.forEach((it, i) => { if (it.q && it.t && !learnDone(it.id)) pool.push({ k, i, it }); }); });
+  return pool.length ? pickOne(pool) : null;
+}
+const hookHTML = h => h ? `<button class="lr-hook" data-hk="${h.k}" data-hi="${h.i}" style="--bg:${LEARN[h.k].bg}"><span class="lr-he">${pic(h.it.e)}</span><span class="lr-ht"><small>🤔 А знаешь ли ты?</small><b>${esc(h.it.q)}</b><i>${esc(h.it.t)} · послушай историю ▶</i></span></button>` : '';
+// the stories behind the tiles of «Узнаём» that are on for this family
+const discHookKs = () => ['space', 'water', 'plants', 'phys', 'old', ...PLACES().filter(placeOn)].filter(k => LEARN[k] && !gameOff(k === 'phys' ? 'phys-lab' : k === 'old' ? 'learn-old' : k === 'space' ? 'space' : k));
+function hookBind(root, before) {
+  root.querySelectorAll('.lr-hook').forEach(b => b.onclick = e => { e.stopPropagation(); sfx.magic(); if (before) before(); screenStory(b.dataset.hk, +b.dataset.hi); });
+}
 function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
-  const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
+  const nx = items.findIndex(x => !learnDone(x.id)), nDone = items.filter(x => learnDone(x.id)).length;
+  const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''} ${i === nx && nDone ? 'nx' : ''}" data-i="${i}" style="--bg:${T.bg}">${i === nx && nDone ? '<i class="nx-b">▶</i>' : ''}${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
+  const hook = learnHook([k]);
   const st = shell(T.name, `<p class="lead">${Q() ? 'Читай вслух, а потом ответь на вопрос.' : 'Послушай историю и ответь на вопрос.'}</p>
+    <div class="lr-prog"><span class="lr-pb"><i style="width:${Math.round(100 * nDone / Math.max(1, items.length))}%"></i></span><b>${ICON.star}${nDone} из ${items.length}</b></div>
+    ${hookHTML(hook)}
     ${k === 'old' ? `<div class="prow-btns"><button class="big" id="oldQuiz">⏳ Что было раньше?</button></div>` : ''}
-    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : null });
-  talk(Q() ? 'Выбери историю. Прочитай её вслух и ответь на вопрос.' : 'Выбери историю. Я расскажу, а ты ответишь на вопрос.');
+    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : k === 'water' ? () => OCEAN.hub() : k === 'space' ? () => SPACE.screen() : null });
+  hookBind(st);
+  talk((Q() ? 'Выбери историю. Прочитай её вслух и ответь на вопрос.' : 'Выбери историю. Я расскажу, а ты ответишь на вопрос.') + (hook && !Q() ? ' ' + 'А знаешь ли ты?' + ' ' + hook.it.q : ''));
   st.onclick = e => { if (e.target.closest('#oldQuiz')) { sfx.pop(); screenTimeline(); return; } const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
 function screenStory(k, i, o = {}) {
   const t = newScreen(), T = LEARN[k], items = learnItems(k), it = items[i], parts = sentences(it.s), back = o.back || (() => screenLearn(k));
   let miss = 0, rd = 0, reading = 0;
   shell(T.name, `<article class="story">
-      ${learnImg(it.id) ? `<figure class="story-img"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.parentNode.outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">источник</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
+      ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">источник</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
       <p class="story-t" id="stT">${parts.map((p, j) => `<span class="ss" data-j="${j}">${esc(p)}</span>`).join('')}</p>
       ${it.try ? `<p class="story-try"><b>🧪 Попробуй сам</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
@@ -8473,6 +8526,7 @@ function screenStory(k, i, o = {}) {
   async function readAloud() {
     const my = ++rd; reading++; hush();
     const bb = $('#bubble'); if (bb) bb.textContent = 'Слушай историю!';
+    const ar = $('.story'); if (ar) ar.classList.add('reading');
     try {
       for (let j = 0; j < parts.length; j++) {
         spans.forEach(s => s.classList.toggle('on', +s.dataset.j === j));
@@ -8480,7 +8534,7 @@ function screenStory(k, i, o = {}) {
         await wait(250);
       }
       spans.forEach(s => s.classList.remove('on'));
-    } finally { reading--; }
+    } finally { reading--; if (!reading && ar) ar.classList.remove('reading'); }
   }
   $('#stListen').onclick = () => { sfx.pop(); readAloud(); };
   function ask() {
@@ -8498,9 +8552,16 @@ function screenStory(k, i, o = {}) {
         return;
       }
       sfx.good(); b.classList.add('right'); hopEl(b);
+      { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); }
+      const stamp0 = T.place && TRAVEL.stamped(k);
       P.learn = { ...(P.learn || {}), [it.id]: 1 }; save(); if (o.done) o.done();
-      later(() => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Теперь ты знаешь ещё одну историю.`,
-        next: o.back ? null : i + 1 < items.length ? () => screenStory(k, i + 1) : null, menu: back }), 700);
+      // the next story: the next one not heard yet (after this one, then from the top), shown with its picture and its question
+      const order = items.map((x, j) => (i + 1 + j) % items.length).filter(j => j !== i), nj = o.back ? -1 : (order.find(j => !learnDone(items[j].id)) ?? (i + 1 < items.length ? i + 1 : -1));
+      const nIt = nj >= 0 ? items[nj] : null;
+      const nextCard = nIt ? `<button class="st-next" data-a="next"><span class="st-nt">${learnImg(nIt.id) ? `<img src="${esc(learnImg(nIt.id)[4] || `${SITE_ROOT}img/learn/${nIt.id}-s.webp`)}" alt="" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(nIt.e))}">` : pic(nIt.e)}</span><span class="st-nx"><small>Следующая история</small><b>${esc(nIt.t)}</b>${nIt.q ? `<i>🤔 ${esc(nIt.q)}</i>` : ''}</span></button>` : '';
+      const done = () => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Теперь ты знаешь ещё одну историю.`, extra: nextCard, nextLabel: nIt ? (Q() ? '▶ Читать дальше' : '▶ Слушать дальше') : '',
+        next: nIt ? () => screenStory(k, nj) : null, menu: back });
+      later(() => { if (T.place && !stamp0 && TRAVEL.stamped(k)) TRAVEL.stampShow(k, done); else done(); }, 700);
     };
   }
   (async () => {
@@ -8609,8 +8670,11 @@ function screenTimeline() {
       $$('.tv-o').forEach(x => { x.disabled = true; x.classList.toggle('yes', +x.dataset.j === first); x.classList.toggle('no', x === b && !ok); });
       const line = `${pr[first].t} — около ${ago(pr[first].y)} лет назад. ${pr[1 - first].t} — около ${ago(pr[1 - first].y)} лет назад.`;
       $('#tvAns').hidden = false;
-      $('#tvAns').innerHTML = `<p><b>${ok ? 'Да!' : 'Нет.'}</b> ${esc(line)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < pairs.length ? 'Дальше →' : 'Готово'}</button></div>`;
-      if (ok) { sfx.good(); talk(`Да! ${line}`); } else { sfx.oops(); talk(`Нет. ${line}`); }
+      // both events on a line of time: long ago on the left, today on the right (a log scale, so a mammoth and a phone both fit)
+      const pos = y => Math.max(4, Math.min(92, 100 - 100 * Math.log10(Math.max(2, 2026 - y)) / Math.log10(60000)));
+      $('#tvAns').innerHTML = `<div class="tl-line"><i></i>${pr.map(x => `<span class="${x === pr[first] ? 'old' : ''}" style="left:${pos(x.y)}%">${x.e}</span>`).join('')}<small class="tl-a">⏳ давно</small><small class="tl-b">сейчас</small></div>
+        <p><b>${ok ? 'Да!' : 'Нет.'}</b> ${esc(line)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < pairs.length ? 'Дальше →' : 'Готово'}</button></div>`;
+      if (ok) { sfx.good(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); talk(`Да! ${line}`); } else { sfx.oops(); wiggle(b); talk(`Нет. ${line}`); }
       $('#tvNext').onclick = () => { sfx.pop(); n++; if (n < pairs.length) show(); else finish({ key: 'old-quiz', stars: right >= 6 ? 3 : right >= 4 ? 2 : 1, line: `Угадано ${right} из ${pairs.length}`, again: screenTimeline, menu: () => screenLearn('old') }); };
     };
   };
@@ -12269,12 +12333,13 @@ const OCEAN = (() => {
   // one water tile: the ocean, the water cycle and (Russian only) the stories about seas and rivers
   function hub() {
     newScreen();
-    const parts = [['deep', '🐋', 'Океан в глубину', 'ныряем до самого дна: кто где живёт', P.best['ocean-deep'] ? '⭐' : ''],
-      ['cycle', '💧', 'Как вода путешествует', 'круговорот воды: море, облака, дождь, река', P.best['water-order'] ? '⭐' : ''],
-      ...(LEARN.water ? [['stories', '📖', 'Истории про моря и реки', 'волны, приливы, Волга, Байкал, Амазонка', learnProg('water')]] : [])];
-    const st = shell('Океан и вода', `<div class="wh">${parts.map(([k, e, n, s, pr]) => `<button class="wh-b" data-k="${k}"><span class="wh-e">${pic(e)}</span><span class="wh-t"><b>${n}</b><small>${s}</small>${pr ? `<i>${pr}</i>` : ''}</span></button>`).join('')}</div>`);
+    const parts = [['deep', '🐋', 'Океан в глубину', 'var(--t-blue)', 'до самого дна', P.best['ocean-deep'] ? '⭐' : ''],
+      ['cycle', '💧', 'Как вода путешествует', 'var(--t-mint)', 'море, облака, дождь', P.best['water-order'] ? '⭐' : ''],
+      ...(LEARN.water ? [['stories', '📖', 'Истории про моря и реки', 'var(--t-yellow)', learnProg('water'), '']] : [])];
+    const st = shell('Океан и вода', `<p class="lead">Выбери, во что поиграть.</p><div class="cards pl-hub">${parts.map(([k, e, n, bg, sub, pr]) => `<button class="card oc-t" data-k="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small>${pr ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>${hookHTML(learnHook(['water']))}`);
+    hookBind(st);
     talk(LEARN.water ? 'Океан и вода! Можно нырнуть в океан до самого дна, узнать, как вода путешествует по кругу, или послушать истории про моря и реки.' : 'Океан и вода! Можно нырнуть в океан до самого дна или узнать, как вода путешествует по кругу.');
-    st.onclick = e => { const b = e.target.closest('.wh-b'); if (!b) return; sfx.pop(); const k = b.dataset.k; if (k === 'deep') deep(); else if (k === 'cycle') cycle(); else screenLearn('water'); };
+    st.onclick = e => { const b = e.target.closest('.oc-t'); if (!b) return; sfx.pop(); const k = b.dataset.k; if (k === 'deep') deep(); else if (k === 'cycle') cycle(); else screenLearn('water'); };
   }
   return { deep, cycle, hub };
 })();
@@ -12610,7 +12675,8 @@ const PLANTS = (() => {
     const st = LEARN.plants.items.length;
     const cards = [['grow', '🌱', 'Вырасти дерево', 'var(--t-green)', 'семечко → яблоки'], ['parts', '🌿', 'Части растения', 'var(--t-mint)', 'корень, стебель, лист…'], ['leaves', '🍃', 'Угадай дерево', 'var(--t-yellow)', 'по листочку'],
       ...(st ? [['stories', '🌳', 'Удивительные растения', 'var(--t-peach)', learnProg('plants')]] : [])];
-    const s = shell('Растения', `<p class="lead">Выбери, во что поиграть.</p><div class="cards pl-hub">${cards.map(([k, e, n, bg, sub]) => `<button class="card" data-a="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small></button>`).join('')}</div>`);
+    const s = shell('Растения', `<p class="lead">Выбери, во что поиграть.</p><div class="cards pl-hub">${cards.map(([k, e, n, bg, sub]) => `<button class="card" data-a="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small></button>`).join('')}</div>${hookHTML(learnHook(['plants']))}`);
+    hookBind(s);
     talk('Давай узнаем про растения! Выбери, во что поиграть.');
     s.onclick = e => {
       const c = e.target.closest('[data-a]'); if (!c) return; sfx.pop();
@@ -13882,7 +13948,7 @@ function screenFlagMemory(size) {
   const t = newScreen();
   const wins = (P.flagMem && P.flagMem.w) || 0;
   size = size || (wins >= 6 ? 8 : wins >= 4 ? 6 : wins >= 2 ? 4 : 3);
-  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => goHome();
+  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => TRAVEL.screen();
   document.body.classList.toggle('quest', Q());
   app.innerHTML = `<div class="screen mem"><div class="mem-bar">
       <button class="ibtn" id="memBack" aria-label="Назад">${ICON.back}</button>
@@ -13914,7 +13980,7 @@ function screenFlagMemory(size) {
     } else later(() => { a.classList.remove('up'); c.classList.remove('up'); open = []; busy = false; }, 1100);
   };
 }
-GAMES.push({ id: 'flag-memory', name: 'Мемори: флаги', sub: 'найди пары — и узнай страну', ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, kw: 'флаги страны мемори' });
+GAMES.push({ id: 'flag-memory', name: 'Мемори: флаги', sub: 'найди пары — и узнай страну', ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, inside: 'travel', kw: 'флаги страны мемори путешествие' });
 /* FLAGMEM-END */
 function screenArtQuiz() {
   const t = newScreen();
@@ -19193,12 +19259,13 @@ const TRAVEL = (() => {
     const ps = places(), own = ownPlaces().filter(k => ps.includes(k)), rest = ps.filter(k => !own.includes(k)), got = ps.filter(stamped);
     shell('Путешествие по миру', `<div class="tv">
       <div class="tv-pass"><div class="tv-ph"><b>🛂 Мой паспорт</b><span>штампов: ${got.length} из ${ps.length}</span></div>
-        <div class="tv-stamps">${ps.map(k => `<span class="tv-s ${stamped(k) ? 'on' : ''}" title="${esc(LEARN[k].name)}">${flag(k)}</span>`).join('')}</div>
+        <div class="tv-stamps">${ps.map((k, j) => `<button class="tv-s ${stamped(k) ? 'on' : ''} ${P.tvNew === k ? 'new' : ''}" data-k="${k}" style="--r:${[-10, 6, -4, 9, -7, 3][j % 6]}deg" aria-label="${esc(LEARN[k].name)}">${flag(k)}</button>`).join('')}</div>
         <small>Прочитай ${STAMP} истории о месте — и в паспорте появится штамп.</small></div>
       <div class="prow-btns tv-row"><button class="big" id="tvQuiz">🧭 Угадай, где это</button><button class="chip" id="tvRand">🎲 Полетели наугад</button></div>
       ${own.length ? `<h2 class="tv-h">Наши места</h2><div class="tv-grid">${own.map(card).join('')}</div>` : ''}
       ${rest.length ? `<h2 class="tv-h">${own.length ? 'Весь мир' : 'Куда полетим?'}</h2><div class="tv-grid">${rest.map(card).join('')}</div>` : ''}
     </div>`);
+    if (P.tvNew) { delete P.tvNew; save(); }
     talk(got.length ? `В паспорте уже ${got.length} ${plural(got.length, ['штамп', 'штампа', 'штампов'])}! Куда полетим дальше?` : 'Куда полетим? Выбери город или страну. Или сыграй в «Угадай, где это».');
     $('.tv').onclick = e => { const c = e.target.closest('[data-k]'); if (c) { sfx.pop(); screenLearn(c.dataset.k); } };
     $('#tvRand').onclick = () => { sfx.magic(); const pool = ps.filter(k => !stamped(k)); screenLearn(pickOne(pool.length ? pool : ps)); };
@@ -19206,6 +19273,11 @@ const TRAVEL = (() => {
     // the globe above the games of the journey (its own line, so the passport screen's text stays as it was)
     $('.tv-row').insertAdjacentHTML('beforebegin', `<button class="tv-globe" id="tvGlobe"><span>🌍</span><span><b>Глобус</b><small>покрути Землю и нажми на страну или город</small></span></button>`);
     $('#tvGlobe').onclick = () => { sfx.pop(); GLOBE_SCREEN.screen(); };
+    // «Мемори: флаги» lives here, in the journey (the owner: flags belong to travelling), not as its own tile
+    if (!gameOff('flag-memory')) {
+      $('#tvGlobe').insertAdjacentHTML('afterend', `<button class="tv-globe tv-mem" id="tvMem"><span>🚩</span><span><b>Мемори: флаги</b><small>найди пары — и узнай страну</small></span>${P.best['flag-memory'] ? `<i class="tv-memst">${ICON.star}${P.best['flag-memory']}</i>` : ''}</button>`);
+      $('#tvMem').onclick = () => { sfx.pop(); screenFlagMemory(); };
+    }
   }
 
   // a story whose title names its own place would give the answer away
@@ -19238,7 +19310,7 @@ const TRAVEL = (() => {
         const first = sentences(q.it.s)[0].trim();
         $('#tvAns').hidden = false;
         $('#tvAns').innerHTML = `<p><b>${ok ? 'Да!' : 'Это'} ${esc(LEARN[q.k].name)} ${flag(q.k)}</b> ${esc(first)}</p><div class="prow-btns tv-row"><button class="big" id="tvNext">${n + 1 < qs.length ? 'Дальше →' : 'Готово'}</button></div>`;
-        if (ok) { sfx.good(); talk(`Да! Это ${LEARN[q.k].name}. ${first}`); } else { sfx.oops(); talk(`Это ${LEARN[q.k].name}. ${first}`); }
+        if (ok) { sfx.good(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); hopEl($('.tv-big')); talk(`Да! Это ${LEARN[q.k].name}. ${first}`); } else { sfx.oops(); wiggle(b); talk(`Это ${LEARN[q.k].name}. ${first}`); }
         $('#tvNext').onclick = () => { sfx.pop(); n++; if (n < qs.length) show(); else finish({ key: 'travel-quiz', stars: right >= 4 ? 3 : right >= 2 ? 2 : 1, line: `Угадано ${right} из ${qs.length}`, again: quiz, menu: screen }); };
       };
     };
@@ -19252,7 +19324,22 @@ const TRAVEL = (() => {
     kw: () => places().map(k => LEARN[k].name).join(' '), ico: () => pic('✈️'), bg: 'var(--t-blue)', go: () => screen(), grp: 10 });
   // interests that pointed at a city tile point at the journey now
   LIKES_BASE.forEach(x => { if (!Array.isArray(x.tiles)) return; const t = x.tiles.map(id => /^learn-/.test(id) && LEARN[id.slice(6)] && LEARN[id.slice(6)].place ? 'travel' : id); x.tiles.splice(0, x.tiles.length, ...new Set(t)); });
-  return { screen, quiz };
+  // a new stamp: an ink stamp lands on the screen with the place's flag and name, then the story's reward
+  function stampShow(k, then) {
+    P.tvNew = k; save();
+    const ps = places(), got = ps.filter(stamped).length;
+    const ov = document.createElement('div'); ov.className = 'overlay tv-stov';
+    ov.innerHTML = `<div class="tv-stbox" role="dialog"><p class="tv-stt">🛂 Новый штамп в паспорте!</p>
+      <div class="tv-stamp" style="--bg:${LEARN[k].bg}"><span class="tv-stf">${flag(k)}</span><b>${esc(LEARN[k].name)}</b><small>${(d => `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`)(new Date())}</small></div>
+      <p class="tv-stn">штампов: ${got} из ${ps.length}</p>
+      <button class="big" id="tvStOk">Ура!</button></div>`;
+    $('.screen').append(ov);
+    setTimeout(() => { sfx.magic(); confetti(40); }, 380);
+    talk(`Новый штамп в паспорте: ${LEARN[k].name}!`);
+    let gone = 0; const go = () => { if (gone++) return; ov.remove(); then(); };
+    $('#tvStOk').onclick = () => { sfx.pop(); go(); };
+  }
+  return { screen, quiz, stamped, stampShow };
 })();
 /* TRAVEL-END */
 /* GLOBE-BEGIN */
@@ -21981,7 +22068,7 @@ const LANDX = (() => {
     speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
     learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
     create: ['draw', 'color', 'songs', 'xylo', 'composers', 'ballet', 'museum', 'piano'],
-    discover: ['travel', 'phys-lab', 'body', 'space', 'flag-memory']
+    discover: ['travel', 'phys-lab', 'body', 'space', 'plants']
   };
   // the games of a tab for any child: a little one and an older one, every game switched on
   function tabGames(t) {
@@ -21989,7 +22076,7 @@ const LANDX = (() => {
     for (const s of [{ track: 'r', age: 5 }, { track: 'l', age: 9 }]) {
       P.settings = { ...keep, ...s, allGames: true };
       try {
-        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id))
+        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !g.inside && !(g.hide && g.hide()) && !gameOff(g.id))
           .forEach(g => { if (!seen.has(g.id)) seen.set(g.id, { g, ico: g.ico(), name: nm(g.name) }); }));
       } catch (e) {}
     }

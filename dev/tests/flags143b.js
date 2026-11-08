@@ -1,4 +1,4 @@
-// flags: all cards face up on the biggest board (to look at every drawn flag) + the tile on the home section
+// flags: all cards face up on the biggest board (to look at every drawn flag) + its row in «Путешествие по миру»
 const { chromium, devices } = require('playwright');
 const D = require('path').join(__dirname, 'shots') + '/';
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
@@ -11,9 +11,8 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
   await c.addInitScript(s => { localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, fam);
   const p = await c.newPage(); await p.goto('http://localhost:8781/govorilki/ru/'); await p.waitForTimeout(1500);
   const who = await p.$$('.who-kid'); if (who.length) { await who[0].tap(); await p.waitForTimeout(900); }
-  await p.getByText('Узнаём').last().click(); await p.waitForTimeout(900);
-  console.log('tile in Узнаём:', await p.getByText('Мемори: флаги').count());
-  await p.getByText('Мемори: флаги').first().scrollIntoViewIfNeeded().catch(() => {});
+  await p.evaluate(() => window.__T.run('TRAVEL.screen()')); await p.waitForTimeout(900);
+  console.log('row in the journey:', await p.getByText('Мемори: флаги').count());
   await p.screenshot({ path: D + 'f143-home.png' });
   await p.evaluate(() => window.__T.run('screenFlagMemory(8)')); await p.waitForTimeout(700);
   await p.evaluate(() => document.querySelectorAll('.mc').forEach(e => e.classList.add('up')));

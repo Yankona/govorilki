@@ -14,7 +14,13 @@ const kid = (name, g, tr, age, fr) => ({ stars: 5, plays: {}, learn: {}, book: {
   const p = await c.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(PAGE); await p.waitForTimeout(1500);
   const who = await p.$$('.who-kid'); if (who.length) { await who[0].tap(); await p.waitForTimeout(900); }
-  const info = await p.evaluate(() => { const g = window.__T.run("GAMES.find(x => x.id === 'flag-memory')"), o = window.__T.run("GAMES.find(x => x.id === 'art-memory')"); return { name: g.name, grp: g.grp, old: !!o }; });
+  const info = await p.evaluate(() => { const g = window.__T.run("GAMES.find(x => x.id === 'flag-memory')"), o = window.__T.run("GAMES.find(x => x.id === 'art-memory')"); return { name: g.name, grp: g.grp, inside: g.inside, old: !!o }; });
+  // the game lives in «Путешествие по миру» now: a row under the globe, not a tile in «Узнаём»
+  await p.evaluate(() => { window.__T.run("P.homeTab = 'discover'; goHome()"); }); await p.waitForTimeout(700);
+  log('tile in Узнаём (want 0):', await p.$$eval('.tile[data-id="flag-memory"]', x => x.length));
+  await p.evaluate(() => window.__T.run('TRAVEL.screen()')); await p.waitForTimeout(700);
+  log('journey row:', await p.$eval('#tvMem', e => e.innerText.replace(/\s+/g, ' ')).catch(() => 'MISSING'));
+  await p.screenshot({ path: D + `f143-${TAG}-journey.png` });
   log(TAG, JSON.stringify(info));
   await p.evaluate(() => window.__T.run("GAMES.find(x => x.id === 'flag-memory').go()")); await p.waitForTimeout(800);
   log('cards at start:', await p.$$eval('.mc', x => x.length), 'svg flags:', await p.$$eval('.fm-svg', x => x.length));
@@ -27,6 +33,8 @@ const kid = (name, g, tr, age, fr) => ({ stars: 5, plays: {}, learn: {}, book: {
   const seen = new Set(idx);
   for (let i = 0; i < map.length; i++) { if (seen.has(i)) continue; const j = map.findIndex((m, k) => k > i && m === map[i]); seen.add(i); seen.add(j); await cards[i].click(); await cards[j].click(); await p.waitForTimeout(450); }
   await p.waitForTimeout(2400);
+  await p.click('.winbox [data-a="menu"]').catch(() => {}); await p.waitForTimeout(700);
+  log('back to the journey:', !!await p.$('#tvMem'));
   log('after win:', (await p.evaluate(() => document.body.innerText)).slice(0, 80).replace(/\n/g, ' | '), 'wins:', await p.evaluate(() => window.__T.P.flagMem && window.__T.P.flagMem.w));
   await p.evaluate(() => window.__T.run('screenMuseum()')); await p.waitForTimeout(900);
   log('museum tabs:', await p.$$eval('#artTabs [data-tab]', x => x.map(e => e.dataset.tab).join(',')));
