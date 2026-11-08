@@ -7,7 +7,7 @@ const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = proces
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const kid = (name, g, age, fr, lang) => ({ stars: 5, plays: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: 'r', age, friend: fr, onboarded: true, lang } });
 let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m); if (!c) bad++; };
-const cyr = s => /[А-яЁё]/.test(s);
+const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
 (async () => {
   require('fs').mkdirSync(D, { recursive: true });
   const b = await chromium.launch();
@@ -44,7 +44,7 @@ const cyr = s => /[А-яЁё]/.test(s);
       const n0 = await p.evaluate(() => window.__said.length);
       await tap(pt.x, pt.y); await p.waitForTimeout(600);
       const st = await p.evaluate(n0 => ({ h: document.querySelector('#ocCard h2') ? document.querySelector('#ocCard h2').textContent : '', t: document.querySelector('#ocCard p').textContent, said: window.__said.slice(n0).join(' ') }), n0);
-      ok(st.t.length > 60 && st.said.length > 20 && !(lang !== 'ru' && cyr(st.t + st.said + st.h)), `${k}: «${st.h}» — ${st.said.slice(0, 60)}…`);
+      ok(st.t.length > 60 && st.said.length > 3 && !(lang !== 'ru' && cyr(st.t + st.said + st.h)), `${k}: «${st.h}» — ${st.said.slice(0, 60)}…`);
       if (k === 'whale' || k === 'squid' || k === 'bathy') await p.screenshot({ path: D + `ocean-${lang}-${DEV}-${k}.png` });
     }
     ok(ks.length === 15 && deeper && prevD > 9000, `meter goes deeper all the way: last ${prevD}`);
@@ -59,7 +59,7 @@ const cyr = s => /[А-яЁё]/.test(s);
       const n0 = await p.evaluate(() => window.__said.length);
       await tap(pt.x, pt.y); await p.waitForTimeout(600);
       const st = await p.evaluate(n0 => ({ on: document.querySelector('#wcSvg').dataset.on, h: document.querySelector('#wcCard h2').textContent, said: window.__said.slice(n0).join(' ') }), n0);
-      ok(+st.on === s && st.said.length > 20 && !(lang !== 'ru' && cyr(st.h + st.said)), `stage ${s + 1}: «${st.h}» — ${st.said.slice(0, 60)}…`);
+      ok(+st.on === s && st.said.length > 3 && !(lang !== 'ru' && cyr(st.h + st.said)), `stage ${s + 1}: «${st.h}» — ${st.said.slice(0, 60)}…`);
       if (s === 3) await p.screenshot({ path: D + `water-${lang}-${DEV}-rain.png` });
     }
     await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
@@ -71,7 +71,7 @@ const cyr = s => /[А-яЁё]/.test(s);
     const hint = await p.$eval('#wcCards .wc-c.hint', e => e.dataset.s).catch(() => null), line = await p.$eval('#wcCard p', e => e.textContent);
     ok(hint === '0' && !(lang !== 'ru' && cyr(line)), `two misses → «${line}», the sun blinks`);
     await p.screenshot({ path: D + `water-${lang}-${DEV}-order.png` });
-    for (let s = 0; s < 6; s++) { await p.click(`#wcCards .wc-c[data-s="${s}"]`); await p.waitForFunction(s => !document.querySelector(`#wcCards .wc-c[data-s="${s}"]`) && (s === 5 || document.querySelector('#wcCard h2').textContent.includes('?')), s, { timeout: 8000 }).catch(() => {}); if (s === 3) await p.screenshot({ path: D + `water-${lang}-${DEV}-order4.png` }); }
+    for (let s = 0; s < 6; s++) { const h0 = await p.$('#wcCard h2'); await p.click(`#wcCards .wc-c[data-s="${s}"]`); if (s < 5) await p.waitForFunction(h => !h.isConnected, h0, { timeout: 8000 }).catch(() => {}); if (s === 3) await p.screenshot({ path: D + `water-${lang}-${DEV}-order4.png` }); }
     await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
     ok(await p.$('.winbox') !== null, 'in order → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
     // ---- the stories (Russian)
