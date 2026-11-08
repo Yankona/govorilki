@@ -706,6 +706,79 @@ b.r{color:var(--berry)}
 .lab-meter b{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--leaf),var(--sun),var(--berry))}
 .lab-stat,.lab-task{margin:0;text-align:center;font:800 16px/1.35 var(--f-body)}
 .lab-note{margin:0;padding:10px 14px;border-radius:16px;background:var(--t-green);color:var(--ink);font:700 15px/1.4 var(--f-body);text-align:center}
+/* OCEAN-CSS */
+.oc{position:relative;width:100%;max-width:560px;margin:0 auto}
+.oc-hud{position:sticky;top:0;z-index:6;height:0}
+.oc-meter{position:absolute;left:8px;top:6px;display:flex;flex-direction:column;align-items:flex-start;padding:6px 12px;border-radius:16px;background:rgba(255,255,255,.92);box-shadow:0 3px 0 rgba(0,0,0,.18);color:#173A5E;font:900 20px/1.1 var(--f-body);min-width:116px}
+.oc-meter span{position:absolute;right:8px;top:6px;font-size:18px}
+.oc-meter small{font:800 12px/1.2 var(--f-body);color:#3A6C96}
+.oc-dn{position:absolute;right:8px;top:6px;width:54px;height:54px;border-radius:50%;border:0;background:var(--t-yellow);box-shadow:0 4px 0 #D39A00;font-size:26px;cursor:pointer}
+.oc-sea{position:relative;width:100%;border-radius:24px;overflow:hidden;box-shadow:0 5px 0 var(--line-strong)}
+.oc-sun{position:absolute;right:18%;top:26px;width:56px;height:56px;border-radius:50%;background:#FFD43B;box-shadow:0 0 0 10px rgba(255,212,59,.3)}
+.oc-boat{position:absolute;left:48%;top:120px;font-size:40px;animation:ocRock 3s ease-in-out infinite}
+.oc-waves{position:absolute;left:0;right:0;top:158px;height:24px;background:radial-gradient(circle at 12px -4px,transparent 13px,#5CC8F5 14px) 0 0/24px 24px repeat-x;animation:ocWave 4s linear infinite}
+@keyframes ocWave{to{background-position:24px 0}}
+@keyframes ocRock{50%{transform:rotate(6deg) translateY(3px)}}
+.oc-ray{position:absolute;top:170px;width:34px;height:760px;background:linear-gradient(rgba(255,255,255,.28),rgba(255,255,255,0));transform:skewX(-12deg);transform-origin:top;animation:ocRay 5s ease-in-out infinite;pointer-events:none}
+@keyframes ocRay{50%{opacity:.4}}
+.oc-floor{position:absolute;left:0;width:100%;pointer-events:none}
+.oc-mark{position:absolute;left:0;right:0;border-top:2px dashed rgba(255,255,255,.35);pointer-events:none}
+.oc-mark span{position:absolute;left:10px;top:4px;padding:2px 10px;border-radius:10px;background:rgba(0,0,0,.25);color:#E6F4FF;font:800 13px/1.3 var(--f-body)}
+.oc-tick{position:absolute;right:6px;transform:translateY(-50%);color:rgba(255,255,255,.75);font:800 12px var(--f-body);pointer-events:none}
+.oc-tick::before{content:'';position:absolute;right:calc(100% + 4px);top:50%;width:10px;border-top:2px solid rgba(255,255,255,.5)}
+.oc-bub{position:absolute;width:8px;height:8px;border-radius:50%;border:2px solid rgba(255,255,255,.5);animation:ocBub 4s ease-in infinite;pointer-events:none}
+@keyframes ocBub{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-90px);opacity:0}}
+.oc-a{position:absolute;transform:translate(-50%,-50%);padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:filter .2s}
+.oc-a svg{display:block;width:100%;height:auto;overflow:visible}
+.oc-a.dark svg{filter:drop-shadow(0 0 6px rgba(150,220,255,.45))}
+.oc-a:not(.seen)::after{content:'';position:absolute;right:4px;top:0;width:14px;height:14px;border-radius:50%;background:#FFD43B;box-shadow:0 0 0 3px rgba(255,212,59,.35);animation:ocPing 1.6s ease-in-out infinite}
+@keyframes ocPing{50%{transform:scale(1.35)}}
+.oc-a.on svg{filter:drop-shadow(0 0 10px #FFE066) drop-shadow(0 0 3px #fff)}
+.oc-a.on{animation:ocSwim 1.6s ease-in-out infinite}
+@keyframes ocSwim{50%{transform:translate(-50%,-50%) translateX(8px) rotate(-3deg)}}
+.oc-bob{animation:ocBob 3s ease-in-out infinite}
+@keyframes ocBob{50%{transform:translateY(-5px)}}
+.oc-glow{animation:ocGlow 1.4s ease-in-out infinite}
+@keyframes ocGlow{50%{opacity:.35}}
+.oc-card{position:sticky;bottom:6px;z-index:6;margin-top:10px;padding:10px 14px;border-radius:20px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);color:var(--ink)}
+.oc-card h2{margin:0 0 2px;font:900 20px/1.2 var(--f-body)}
+.oc-card h2 small{font:800 14px var(--f-body);color:var(--ink-soft,#5a6b80)}
+.oc-card p{margin:0;font:700 15px/1.4 var(--f-body)}
+.oc-prog{margin-top:4px;font:800 13px var(--f-body);color:var(--leaf)}
+.wc{display:flex;flex-direction:column;gap:10px;width:100%;max-width:960px;margin:0 auto;padding-bottom:20px}
+.wc-main{display:flex;flex-direction:column;align-items:center;gap:12px}
+.wc-fig{width:100%;max-width:560px;border-radius:24px;overflow:hidden;box-shadow:0 5px 0 var(--line-strong);line-height:0}
+.wc-fig svg{width:100%;height:auto;display:block;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.wc-side{display:flex;flex-direction:column;gap:10px;width:100%;max-width:420px}
+@media (min-width:860px){.wc-main{flex-direction:row;align-items:flex-start;justify-content:center}}
+.wc-g{cursor:pointer;transition:opacity .25s}
+.wc svg[data-on] .wc-g:not(.on){opacity:.45}
+.wc-g.on{filter:drop-shadow(0 0 5px #FFC400)}
+.wc-b{cursor:pointer}
+.wc-fig.ord .wc-b:not(.got){display:none}
+.wc-rays{transform-origin:62px 52px;animation:wcSpin 14s linear infinite}
+@keyframes wcSpin{to{transform:rotate(360deg)}}
+.wc-wave{animation:wcWave 3s linear infinite}
+@keyframes wcWave{to{transform:translateX(40px)}}
+.wc-steam path{animation:wcRise 2.4s ease-in infinite;opacity:0}
+@keyframes wcRise{0%{transform:translateY(10px);opacity:0}30%{opacity:.9}100%{transform:translateY(-26px);opacity:0}}
+.wc-cloud{animation:wcDrift 5s ease-in-out infinite alternate}
+@keyframes wcDrift{to{transform:translateX(18px)}}
+.wc-drop,.wc-flake{animation:wcFall 1.1s linear infinite}
+.wc-flake{animation-duration:2.4s}
+@keyframes wcFall{0%{transform:translateY(-6px);opacity:0}20%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+.wc-flow{stroke-dasharray:6 10;animation:wcFlow 1.1s linear infinite}
+@keyframes wcFlow{from{stroke-dashoffset:16}to{stroke-dashoffset:0}}
+.wc-g.on .wc-rays{animation-duration:4s}
+.wc-g.on .wc-flow{animation-duration:.5s}
+.wc-slots{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.wc-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:56px;border-radius:14px;border:2px dashed var(--line-strong);font:900 14px var(--f-body);color:var(--ink)}
+.wc-slot span{font-size:24px;line-height:1.1}
+.wc-slot.ok{border-style:solid;border-color:var(--leaf);background:var(--t-green)}
+.wc-cards{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.wc-c{font-size:16px}
+.wc-c.hint{animation:bdBlink .7s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.oc *,.wc svg *{animation:none!important}}
 .bd{display:flex;flex-direction:column;gap:10px;width:100%;max-width:880px;margin:0 auto;padding-bottom:20px}
 .bd-main{display:flex;flex-direction:column;align-items:center;gap:12px}
 .bd-fig{position:relative;border-radius:24px;background:linear-gradient(#EAF6FF,#F7FBFF);box-shadow:0 5px 0 var(--line-strong);padding:6px 10px;line-height:0}
@@ -7708,6 +7781,11 @@ const MORE_STORIES = LX('MORE_STORIES', { "cascais": [ { "id": "cas-paula-rego",
   Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });
 })();
 /* STORIES-END */
+/* WATER-BEGIN */
+/* ---------- «Моря, реки и озёра»: knowledge stories about water (Russian only; generated by build/gen_water.py from stories/water/water.json) ---------- */
+const WATER_STORIES = LX('WATER_STORIES', {"name": "Моря, реки и озёра", "sub": "волны, приливы, Волга, Байкал, Амазонка", "items": [{"id": "w-salty", "e": "🧂", "t": "Почему море солёное", "s": "Попробуй морскую воду — она солёная! А вода в реке пресная. Откуда же соль? Реки бегут по камням и понемногу растворяют в них соль, а потом несут её в море. Солнце греет море, вода испаряется и улетает в облака, а соль остаётся. Так за миллионы лет море стало солёным. А дождь из облаков снова пресный.", "q": "Куда девается соль, когда морская вода испаряется?", "a": ["Остаётся в море", "Улетает в облака", "Падает с дождём"]}, {"id": "w-waves", "e": "🌊", "t": "Откуда берутся волны", "s": "Подуй на чай в чашке — и по нему побегут маленькие волны. В море волны делает ветер. Чем сильнее и дольше дует ветер, тем выше волны. В бурю они бывают выше дома! А сама вода в волне почти не убегает вперёд: она качается вверх-вниз, как мячик на воде. Вперёд бежит только волна.", "q": "Кто делает волны на море?", "a": ["Ветер", "Рыбы", "Корабли"]}, {"id": "w-tides", "e": "🌙", "t": "Прилив и отлив", "s": "Если долго сидеть на берегу океана, можно заметить: вода то подходит к самым ногам, то отступает далеко-далеко. Это прилив и отлив. Их делает Луна! Она притягивает к себе воду океана, и вода поднимается горбом. Земля крутится, и прилив приходит на берег примерно два раза в сутки. В заливе Фанди в Канаде вода во время прилива поднимается выше трёхэтажного дома.", "q": "Кто делает приливы и отливы?", "a": ["Луна", "Ветер", "Киты"]}, {"id": "w-oceans", "e": "🗺️", "t": "Пять океанов", "s": "На Земле пять океанов: Тихий, Атлантический, Индийский, Северный Ледовитый и Южный. Самый большой — Тихий: он больше, чем вся суша Земли вместе взятая. Самый маленький и холодный — Северный Ледовитый, большую часть года он покрыт льдом. А если посмотреть на Землю из космоса, она голубая, потому что воды на ней гораздо больше, чем суши.", "q": "Какой океан самый большой?", "a": ["Тихий", "Индийский", "Северный Ледовитый"]}, {"id": "w-mouth", "e": "🏞️", "t": "Как река впадает в море", "s": "Каждая река где-то начинается и где-то заканчивается. Начало реки называется исток, а конец — устье. В устье река впадает в море, в озеро или в другую реку. Иногда у устья река разбегается на много рукавов, и получается дельта — похожая на веточки дерева. Самая большая дельта в Европе у Волги: там сотни проток, а летом цветут розовые лотосы.", "q": "Как называется место, где река впадает в море?", "a": ["Устье", "Исток", "Берег"]}, {"id": "w-source", "e": "⛲", "t": "Где начинается река", "s": "Большая река начинается с маленького ручейка. Ручей может бить из родника под землёй, вытекать из озера или из тающего ледника в горах. Великая Волга начинается на Валдайской возвышенности с крошечного родника — его можно перешагнуть! Над ним построили маленькую часовню. А потом в Волгу впадают сотни рек, и она становится огромной.", "q": "С чего начинается Волга?", "a": ["С маленького родника", "С большого озера", "С моря"]}, {"id": "w-volga", "e": "🚢", "t": "Волга — главная река России", "s": "Волга — самая длинная река Европы: больше трёх с половиной тысяч километров. Она течёт через много городов: Тверь, Нижний Новгород, Казань, Самару, Волгоград. По Волге ходят теплоходы и баржи. А впадает Волга не в океан, а в Каспийское море. Люди с любовью называют её Волгой-матушкой.", "q": "Куда впадает Волга?", "a": ["В Каспийское море", "В Тихий океан", "В Чёрное море"]}, {"id": "w-amazon", "e": "🐊", "t": "Амазонка — река-великан", "s": "В Южной Америке течёт Амазонка — самая полноводная река на Земле: воды в ней больше, чем в любой другой реке. Она течёт через джунгли, где живут ягуары, обезьяны и попугаи. В Амазонке водятся розовые речные дельфины и огромные рыбы. Мостов через неё почти нет — люди переплывают её на лодках.", "q": "Какие дельфины живут в Амазонке?", "a": ["Розовые", "Синие", "Полосатые"]}, {"id": "w-nile", "e": "🐪", "t": "Нил — река в пустыне", "s": "Нил — одна из самых длинных рек на свете. Он течёт по Африке через жаркую пустыню и впадает в Средиземное море. Без Нила в Египте не было бы жизни. Раньше каждый год он разливался и оставлял на полях жирный ил, и на нём росли пшеница и лён. Поэтому древние египтяне строили свои города и пирамиды недалеко от Нила.", "q": "Почему египтяне жили у Нила?", "a": ["Река давала воду и хорошую землю", "Там было холодно", "Там не было пустыни"]}, {"id": "w-baikal", "e": "🦭", "t": "Байкал — самое глубокое озеро", "s": "В Сибири есть озеро Байкал. Оно самое глубокое на Земле — больше полутора километров в глубину — и одно из самых древних. В Байкале очень много чистой пресной воды: примерно пятая часть всей пресной воды в озёрах и реках планеты. Вода такая прозрачная, что видно камни глубоко на дне. Здесь живёт байкальская нерпа — тюлень, который не живёт больше нигде.", "q": "Какой зверь живёт только на Байкале?", "a": ["Нерпа", "Кенгуру", "Белый медведь"]}, {"id": "w-caspian", "e": "🐟", "t": "Море, которое на самом деле озеро", "s": "Каспийское море называют морем, но на самом деле это самое большое озеро на Земле. Оно со всех сторон окружено сушей и не соединяется с океаном. Вода в нём солоноватая. В Каспии живут осетры — древние рыбы, которые плавали ещё при динозаврах, и маленький каспийский тюлень. В Каспий впадают Волга и Урал.", "q": "Почему Каспийское море на самом деле озеро?", "a": ["Оно не соединяется с океаном", "В нём живут рыбы", "Оно очень маленькое"]}, {"id": "w-dead", "e": "🏊", "t": "Море, где нельзя утонуть", "s": "Мёртвое море — очень солёное озеро. Соли в нём так много, что вода сама держит человека: можно лечь на спину и читать газету, как на диване! Рыбы в таком солёном море жить не могут, поэтому его и назвали Мёртвым. Но купаться осторожно: если солёная вода попадёт в глаза, будет сильно щипать.", "q": "Почему в Мёртвом море не тонут?", "a": ["Очень солёная вода держит человека", "Там мелко", "Там живут добрые рыбы"]}, {"id": "w-colours", "e": "🎨", "t": "Почему море синее", "s": "Набери морскую воду в стакан — она прозрачная. Почему же море синее? Солнечный свет состоит из разных цветов: красного, жёлтого, зелёного, синего. Толстый слой воды поглощает красный и жёлтый свет, а синий отражается и долетает до наших глаз. А ещё в море отражается небо. Поэтому в пасмурный день море серое.", "q": "Почему в пасмурный день море серое?", "a": ["В нём отражается серое небо", "Его красят рыбы", "Вода становится грязной"]}, {"id": "w-yellow", "e": "🟡", "t": "Моря с цветными именами", "s": "На карте есть моря с цветными названиями: Белое, Чёрное, Красное и Жёлтое. Жёлтое море у берегов Китая получило имя честно: в него впадает Хуанхэ, что значит «Жёлтая река». Она несёт много жёлтого ила и красит воду у берега. А вот Чёрное море совсем не чёрное, оно синее. Почему его так назвали, учёные спорят до сих пор.", "q": "Что красит Жёлтое море?", "a": ["Жёлтый ил из реки", "Жёлтые рыбы", "Солнце"]}, {"id": "w-iceberg", "e": "🧊", "t": "Айсберг — ледяная гора", "s": "Айсберг — это огромная глыба льда, которая отломилась от ледника и плавает в море. Лёд в нём из пресной воды: когда-то это был снег. Самое удивительное, что над водой видна лишь маленькая верхушка, а почти весь айсберг прячется под водой. Поэтому капитаны кораблей обходят айсберги стороной.", "q": "Где прячется большая часть айсберга?", "a": ["Под водой", "В облаках", "На берегу"]}, {"id": "w-current", "e": "🧭", "t": "Реки внутри океана", "s": "В океане тоже есть реки, только без берегов. Это течения: огромные потоки воды, которые всё время движутся в одну сторону. Одни несут тёплую воду, другие — холодную. Тёплое течение Гольфстрим идёт от жарких стран на север и согревает берега Европы. Течения разносят по океану бутылки с записками, ракушки и даже семена кокосов.", "q": "Что делает тёплое течение Гольфстрим?", "a": ["Согревает берега Европы", "Замораживает море", "Делает волны"]}, {"id": "w-fresh", "e": "💧", "t": "Сколько воды можно пить", "s": "На Земле очень много воды, но почти вся она солёная, морская. Пресной воды, которую можно пить, совсем мало — примерно три капли из каждой сотни. И большая часть этой пресной воды заморожена во льдах Антарктиды, Гренландии и в ледниках. Поэтому воду нужно беречь: закрывать кран, пока чистишь зубы.", "q": "Где больше всего пресной воды?", "a": ["Во льдах и ледниках", "В морях", "В облаках"]}, {"id": "w-falls", "e": "🏔️", "t": "Самый высокий водопад", "s": "Водопад получается там, где река падает с обрыва. Самый высокий водопад на Земле — Анхель в Венесуэле. Вода летит вниз почти километр, и пока долетит, часть её превращается в туман. А один из самых больших и шумных — водопад Виктория в Африке. Местные жители зовут его «дым, который гремит»: брызги от него поднимаются в небо, как дым.", "q": "Как называют водопад Виктория местные жители?", "a": ["Дым, который гремит", "Тихая вода", "Синяя лента"]}, {"id": "w-reef", "e": "🐠", "t": "Большой Барьерный риф", "s": "У берегов Австралии тянется Большой Барьерный риф — самый большой коралловый риф на Земле. Он длиной больше двух тысяч километров, и его видно даже из космоса. Риф построили крошечные животные — коралловые полипы. Здесь живут тысячи видов рыб, черепахи, скаты и дельфины. Это настоящий подводный сад.", "q": "Кто построил Большой Барьерный риф?", "a": ["Коралловые полипы", "Люди", "Киты"]}, {"id": "w-tsunami", "e": "🌋", "t": "Цунами — волна от землетрясения", "s": "Иногда волну делает не ветер, а землетрясение под дном океана. Дно вздрагивает и толкает всю толщу воды. Так рождается цунами. В открытом океане оно почти незаметно, корабли его даже не чувствуют. Но у берега волна вырастает и становится очень высокой. Учёные следят за океаном и вовремя предупреждают людей, чтобы они ушли подальше от берега, на высокое место.", "q": "Что делает цунами?", "a": ["Землетрясение под дном океана", "Сильный дождь", "Большой корабль"]}]});
+if (WATER_STORIES.items) LEARN.water = { name: WATER_STORIES.name, e: '🌊', bg: 'var(--t-blue)', sub: WATER_STORIES.sub, items: WATER_STORIES.items };
+/* WATER-END */
 const PLACES = () => Object.keys(LEARN).filter(k => LEARN[k].place && LEARN[k].items.length);
 // the family's choice, or the places of the countries where its people live (ours: Petersburg and Portugal)
 // the places of the countries where the family's people live (ours: Petersburg and Portugal)
@@ -11040,6 +11118,213 @@ const HOW = (() => {
 GAMES.push({ id: 'how', name: 'Как это устроено', sub: 'лампочка, поезд, самолёт, холодильник', ico: () => pic('⚙️'), bg: 'var(--t-yellow)', go: () => HOW.menu(), grp: 10, kw: 'техника машины электричество транспорт' });
 INTEREST_CAT.forEach(c => (c.items || []).forEach(it => { if (['build', 'trains', 'planes'].includes(it.id) && it.tiles && !it.tiles.includes('how')) it.tiles.push('how'); }));
 /* HOW-END */
+/* OCEAN-BEGIN */
+/* ---------- Water for children 5–8 (own drawings, offline). «Океан в глубину»: a tall ocean the child scrolls down from
+   the surface to the bottom of the deepest trench; a depth meter shows the metres; every animal at its depth — a tap
+   tells its name and two sentences. «Как вода путешествует»: an animated scene of the water cycle (the sun warms the sea,
+   steam rises, clouds, rain and snow on the mountains, a stream becomes a river, the river flows into the sea), a tap on
+   each stage tells it; then «По порядку»: tap the stages in order. Texts are translated by the build. ---------- */
+const OCEAN = (() => {
+  const UM = 'м';
+  // depth (m) → px from the surface: the shallow sea gets more room, the trench less
+  const PTS = [[0, 0], [200, 900], [1000, 1550], [4000, 2250], [11000, 3100]], SKY = 170, H = SKY + 3100 + 170;
+  const Y = d => { for (let i = 1; i < PTS.length; i++) { const [d0, y0] = PTS[i - 1], [d1, y1] = PTS[i]; if (d <= d1) return SKY + y0 + (d - d0) / (d1 - d0) * (y1 - y0); } return SKY + 3100; };
+  const D = y => { y -= SKY; if (y <= 0) return 0; for (let i = 1; i < PTS.length; i++) { const [d0, y0] = PTS[i - 1], [d1, y1] = PTS[i]; if (y <= y1) return d0 + (y - y0) / (y1 - y0) * (d1 - d0); } return 11000; };
+  const num = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  const round = d => d < 100 ? Math.round(d) : d < 1000 ? Math.round(d / 10) * 10 : Math.round(d / 100) * 100;
+  const zone = d => d < 1 ? 'поверхность' : d < 200 ? 'солнечная зона' : d < 1000 ? 'сумерки' : d < 4000 ? 'вечная темнота' : d < 6000 ? 'дно океана' : 'глубоководная впадина';
+
+  // own drawings, viewBox 0 0 120 80 (w: the width on screen)
+  const eye = (x, y, r = 3.2) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#1E2340"/><circle cx="${x + r * .35}" cy="${y - r * .35}" r="${r * .35}" fill="#fff"/>`;
+  const DRAW = {
+    dolphin: `<path d="M10,46 L1,33 L7,46 L1,59Z" fill="#6E95BA"/><path d="M58,28 L67,11 L75,29Z" fill="#6E95BA"/><path d="M8,46 Q30,22 70,25 Q92,25 100,36 Q110,38 119,41 Q110,46 98,47 Q80,57 50,57 Q28,57 8,46Z" fill="#8FB8DA"/><path d="M36,53 Q70,58 99,46 Q82,55 52,57Z" fill="#E6F1FA"/><path d="M57,51 L49,65 L66,53Z" fill="#6E95BA"/><path d="M101,43 Q110,44 118,42" stroke="#4E6F8F" stroke-width="1.6" fill="none" stroke-linecap="round"/>${eye(90, 35, 2.8)}`,
+    reef: `<path d="M14,80 Q12,58 20,50 M20,66 Q28,58 26,46 M14,64 Q4,58 6,48" stroke="#FF7FA8" stroke-width="6" stroke-linecap="round" fill="none"/><path d="M92,80 Q94,60 104,54 M98,66 Q88,58 90,48 M100,62 Q112,60 114,50" stroke="#B48CFF" stroke-width="6" stroke-linecap="round" fill="none"/>${[40, 47, 54, 61, 68].map((x, i) => `<path d="M${x},80 Q${x - 3 + i % 2 * 6},66 ${x + (i % 2 ? 4 : -4)},56" stroke="#67D3B8" stroke-width="4" stroke-linecap="round" fill="none"/>`).join('')}<g transform="translate(46 22)"><path d="M4,18 L-6,8 L-6,28Z" fill="#FF8A2B" stroke="#1E2340" stroke-width="1.4"/><ellipse cx="22" cy="18" rx="20" ry="12" fill="#FF8A2B" stroke="#1E2340" stroke-width="1.4"/><path d="M14,7 Q11,18 14,29 M27,7 Q24,18 27,30" stroke="#fff" stroke-width="5" fill="none"/>${eye(34, 15, 2.6)}</g>`,
+    turtle: `<ellipse cx="22" cy="30" rx="14" ry="6" fill="#86C26A" transform="rotate(-25 22 30)"/><ellipse cx="22" cy="54" rx="14" ry="6" fill="#86C26A" transform="rotate(25 22 54)"/><ellipse cx="90" cy="28" rx="17" ry="7" fill="#86C26A" transform="rotate(-30 90 28)"/><ellipse cx="90" cy="56" rx="17" ry="7" fill="#86C26A" transform="rotate(30 90 56)"/><circle cx="104" cy="42" r="10" fill="#9AD27E"/>${eye(108, 39, 2.4)}<ellipse cx="58" cy="42" rx="36" ry="24" fill="#4E8F3A"/><path d="M58,20 L58,64 M30,34 L86,34 M30,50 L86,50 M42,22 L42,62 M74,22 L74,62" stroke="#7DBB5F" stroke-width="2.4"/>`,
+    octopus: `${[0, 1, 2, 3, 4, 5, 6, 7].map(i => { const x = 34 + i * 7.5, s = i % 2 ? 1 : -1; return `<path d="M${x},44 q${s * 6},14 0,22 q${-s * 5},8 ${s * 4},12" stroke="#E2596E" stroke-width="6" stroke-linecap="round" fill="none"/>`; }).join('')}<ellipse cx="60" cy="30" rx="26" ry="24" fill="#F06A80"/><circle cx="50" cy="20" r="4" fill="#FFB0BE" opacity=".7"/>${eye(50, 36, 3.6)}${eye(70, 36, 3.6)}<path d="M54,46 Q60,50 66,46" stroke="#9E2D42" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+    jelly: `<g class="oc-bob">${[30, 44, 58, 72, 86].map((x, i) => `<path d="M${x},40 q${i % 2 ? 6 : -6},10 0,20 q${i % 2 ? -6 : 6},10 0,18" stroke="#E79BE6" stroke-width="2.6" fill="none" stroke-linecap="round"/>`).join('')}<path d="M44,40 q4,14 -2,26 M60,40 q-4,16 2,30 M76,40 q4,14 -2,26" stroke="#F7C6F2" stroke-width="5" fill="none" stroke-linecap="round" opacity=".8"/><path d="M24,42 Q24,6 60,6 Q96,6 96,42 Q90,38 84,42 Q78,38 72,42 Q66,38 60,42 Q54,38 48,42 Q42,38 36,42 Q30,38 24,42Z" fill="#F1A7EE" opacity=".9"/><path d="M38,22 Q48,12 62,12" stroke="#fff" stroke-width="3" fill="none" opacity=".7" stroke-linecap="round"/>${eye(50, 30, 2.4)}${eye(70, 30, 2.4)}</g>`,
+    shark: `<path d="M18,40 L2,18 L10,40 L2,62Z" fill="#7C8C9C"/><path d="M58,26 L64,4 L78,27Z" fill="#7C8C9C"/><path d="M14,40 Q40,20 82,24 Q108,28 118,42 Q104,52 82,54 Q44,58 14,40Z" fill="#8FA0B0"/><path d="M40,48 Q80,58 116,44 Q100,54 76,55 Q54,56 40,48Z" fill="#EEF3F7"/><path d="M62,50 L50,70 L74,52Z" fill="#7C8C9C"/>${[86, 90, 94].map(x => `<path d="M${x},36 q-2,6 0,12" stroke="#5E6E7E" stroke-width="1.6" fill="none"/>`).join('')}<path d="M104,46 l2,3 l2,-3 l2,3 l2,-3" stroke="#fff" stroke-width="1.4" fill="none"/>${eye(104, 35, 2.6)}`,
+    whale: `<path d="M14,40 Q4,24 0,22 Q10,32 12,40 Q10,48 0,58 Q4,56 14,40Z" fill="#5B7FA8"/><path d="M12,40 Q40,22 90,22 Q116,24 120,42 Q118,56 94,58 Q50,60 12,40Z" fill="#6D93BE"/><path d="M60,52 Q90,60 118,48 Q112,56 94,58 Q74,60 60,52Z" fill="#BFD4EA"/>${[66, 74, 82, 90, 98, 106].map(x => `<path d="M${x},52 l6,4" stroke="#9AB6D4" stroke-width="1.2"/>`).join('')}<path d="M44,25 L50,17 L54,25Z" fill="#5B7FA8"/><path d="M80,52 L70,66 L88,55Z" fill="#5B7FA8"/>${eye(104, 38, 2.4)}<circle cx="18" cy="34" r="1.4" fill="#fff" opacity=".6"/><circle cx="30" cy="30" r="1.6" fill="#fff" opacity=".6"/>`,
+    lantern: `${[[14, 22], [64, 52]].map(([x, y]) => `<g transform="translate(${x} ${y}) scale(.9)"><path d="M6,14 L-4,4 L-4,24Z" fill="#3E5878"/><ellipse cx="22" cy="14" rx="18" ry="9" fill="#4F6C8F"/>${[10, 16, 22, 28].map(cx => `<circle class="oc-glow" cx="${cx}" cy="19" r="1.8" fill="#9FF7FF"/>`).join('')}<circle class="oc-glow" cx="36" cy="12" r="2.2" fill="#9FF7FF"/>${eye(31, 11, 3.4)}</g>`).join('')}`,
+    squid: `${[0, 1, 2, 3, 4, 5].map(i => `<path d="M30,${32 + i * 3} Q${16 - i},${30 + i * 4} ${4 + i * 2},${24 + i * 8}" stroke="#C9473E" stroke-width="3" fill="none" stroke-linecap="round"/>`).join('')}<path d="M30,38 Q14,40 2,72 M30,42 Q18,52 10,78" stroke="#B53A33" stroke-width="2" fill="none"/><path d="M30,30 Q70,22 104,34 L118,40 L104,46 Q70,58 30,50Z" fill="#E0574C"/><path d="M100,32 L118,22 L114,40 L118,58 L100,48Z" fill="#C9473E"/>${eye(40, 40, 6.5)}<circle cx="60" cy="38" r="2" fill="#F58C80"/><circle cx="76" cy="44" r="2" fill="#F58C80"/>`,
+    sperm: `<path d="M12,42 Q4,30 0,28 Q8,38 10,42 Q8,48 0,56 Q4,54 12,42Z" fill="#59606E"/><path d="M10,42 Q30,30 60,28 L104,24 Q120,26 120,40 Q120,58 100,58 L60,56 Q30,54 10,42Z" fill="#6A7282"/><path d="M84,56 Q100,60 116,54" stroke="#4A505C" stroke-width="2" fill="none"/><path d="M72,52 L62,64 L80,55Z" fill="#59606E"/><path d="M46,30 Q50,24 56,29" fill="#59606E"/>${eye(92, 36, 2.2)}<path d="M106,22 q2,-8 -2,-14 M110,22 q4,-6 6,-12" stroke="#BFE6FF" stroke-width="2" fill="none" opacity=".7" stroke-linecap="round"/>`,
+    angler: `<path d="M70,22 Q74,4 92,6 Q100,8 100,16" stroke="#3B3550" stroke-width="2.6" fill="none"/><circle class="oc-glow" cx="100" cy="18" r="5" fill="#FFF48A"/><path d="M26,42 L8,28 L12,42 L8,58Z" fill="#3B3550"/><path d="M24,42 Q24,16 58,16 Q92,18 100,40 Q96,66 60,68 Q26,66 24,42Z" fill="#4A4363"/><path d="M68,48 Q86,40 100,42 Q96,64 72,62Z" fill="#1A1626"/>${[72, 78, 84, 90, 96].map(x => `<path d="M${x},${46 - (x - 70) / 8} l2,6 l2,-6" fill="#F4F4F4"/>`).join('')}${[76, 82, 88, 94].map(x => `<path d="M${x},62 l2,-5 l2,5" fill="#F4F4F4"/>`).join('')}${eye(70, 32, 4)}`,
+    dumbo: `<g class="oc-bob"><path d="M36,40 Q22,22 30,14 Q40,18 44,32Z" fill="#F4A6B4"/><path d="M84,40 Q98,22 90,14 Q80,18 76,32Z" fill="#F4A6B4"/><path d="M34,46 Q34,10 60,10 Q86,10 86,46 L90,62 Q82,58 78,66 Q72,58 66,68 Q60,60 54,68 Q48,58 42,66 Q38,58 30,62Z" fill="#F7BAC6"/>${eye(50, 38, 3.4)}${eye(70, 38, 3.4)}<circle cx="44" cy="46" r="3" fill="#F08AA0" opacity=".7"/><circle cx="76" cy="46" r="3" fill="#F08AA0" opacity=".7"/></g>`,
+    cucumber: `<path d="M8,66 Q10,44 40,42 Q80,40 104,48 Q118,54 112,64 Q100,72 60,72 Q20,72 8,66Z" fill="#A86A4E"/>${[22, 36, 50, 64, 78, 92].map((x, i) => `<circle cx="${x}" cy="${48 + i % 2 * 3}" r="3.4" fill="#C88C6E"/>`).join('')}<path d="M110,56 l7,-6 M112,60 l8,-2 M110,64 l7,4" stroke="#C88C6E" stroke-width="2.2" stroke-linecap="round"/><path d="M0,74 L120,74" stroke="#2B3550" stroke-width="3"/>`,
+    snail: `<path d="M18,40 Q20,22 44,22 Q70,24 82,34 Q100,40 118,38 Q104,48 84,48 Q66,58 42,58 Q18,58 18,40Z" fill="#F2D5DC" opacity=".95"/><path d="M60,26 Q80,30 96,40" stroke="#E7B7C4" stroke-width="2" fill="none"/><path d="M30,54 Q36,64 46,60" stroke="#E7B7C4" stroke-width="3" fill="none" stroke-linecap="round"/>${eye(30, 36, 3.2)}`,
+    bathy: `<path class="oc-beam" d="M70,58 L30,80 L110,80Z" fill="#FFF7B0" opacity=".35"/><rect x="18" y="6" width="84" height="26" rx="13" fill="#F2C230" stroke="#B48A10" stroke-width="2"/><path d="M50,32 L50,40 M70,32 L70,40" stroke="#6B7280" stroke-width="3"/><circle cx="60" cy="52" r="15" fill="#B9C2CE" stroke="#6B7280" stroke-width="2"/><circle cx="60" cy="52" r="6" fill="#7FD0FF" stroke="#334" stroke-width="1.6"/><path d="M36,14 L84,14" stroke="#fff" stroke-width="2" opacity=".6" stroke-linecap="round"/>`
+  };
+  // k, depth, left %, width px, name, two sentences
+  const A = [
+    { k: 'dolphin', d: 6, x: 30, w: 132, n: 'Дельфин', t: 'Дельфины — не рыбы, а звери: они дышат воздухом и поднимаются к поверхности, чтобы вдохнуть. Дельфины зовут друг друга свистом, и у каждого есть свой свист, как имя.' },
+    { k: 'reef', d: 25, x: 70, w: 132, n: 'Коралловый риф', t: 'Коралловый риф — это подводный город. Его строят крошечные животные — коралловые полипы, а рыбка-клоун прячется в жгучих щупальцах актинии, и они её не трогают.' },
+    { k: 'turtle', d: 45, x: 30, w: 120, n: 'Морская черепаха', t: 'Морская черепаха плавает, будто летает: её лапы похожи на крылья. Чтобы отложить яйца, она возвращается к берегу, где когда-то вылупилась сама.' },
+    { k: 'octopus', d: 75, x: 70, w: 110, n: 'Осьминог', t: 'У осьминога восемь рук с присосками, три сердца и голубая кровь. Он умеет менять цвет, а если испугается — выпускает облако чернил и уплывает.' },
+    { k: 'jelly', d: 105, x: 28, w: 100, n: 'Медуза', t: 'Медуза почти вся из воды: у неё нет ни костей, ни сердца, ни мозга. Она плывёт, сжимая свой купол, как зонтик, а трогать её нельзя — многие медузы больно жгутся.' },
+    { k: 'shark', d: 135, x: 68, w: 140, n: 'Акула', t: 'Акулы появились на Земле раньше динозавров. Зубы у акулы растут рядами: выпадет один — на его место встанет новый.' },
+    { k: 'whale', d: 178, x: 38, w: 200, n: 'Синий кит', t: 'Синий кит — самое большое животное, которое когда-либо жило на Земле, больше любого динозавра. А ест этот великан крошечных рачков — криль.' },
+    { k: 'lantern', d: 450, x: 68, w: 110, n: 'Рыба-фонарь', t: 'На теле у рыб-фонарей горят маленькие огоньки. Днём они прячутся в глубине, а ночью поднимаются повыше, чтобы поесть.' },
+    { k: 'squid', d: 750, x: 34, w: 170, n: 'Гигантский кальмар', t: 'Гигантский кальмар бывает длиной с автобус, а глаза у него — размером с тарелку. Он живёт так глубоко, что в родной глубине его впервые сняли на видео только в 2012 году.' },
+    { k: 'sperm', d: 1050, x: 64, w: 170, n: 'Кашалот', t: 'Кашалот — кит с огромной головой. Он ныряет больше чем на километр в глубину и может не дышать целый час, пока охотится на кальмаров.' },
+    { k: 'angler', d: 2000, x: 34, w: 120, n: 'Рыба-удильщик', t: 'У рыбы-удильщика на голове растёт удочка со светящимся фонариком. Рыбки плывут на свет — прямо к её зубастому рту.' },
+    { k: 'dumbo', d: 3200, x: 66, w: 110, n: 'Осьминог Дамбо', t: 'Этого осьминога назвали в честь слонёнка Дамбо: его плавники похожи на большие уши. Он машет ими и медленно парит над самым дном.' },
+    { k: 'cucumber', d: 4000, x: 18, w: 110, n: 'Морской огурец', t: 'На дне океана холодно и совсем темно, а по дну ползают морские огурцы. Это не овощи, а животные: они собирают со дна крошки еды, как пылесос.' },
+    { k: 'snail', d: 8000, x: 50, w: 100, n: 'Рыба-липарис', t: 'Эта маленькая рыбка — рекордсменка: её видели на глубине больше восьми тысяч метров. Вода там давит в сотни раз сильнее, чем у поверхности, а тело у липариса мягкое, как желе.' },
+    { k: 'bathy', d: 10900, x: 50, w: 120, n: 'Марианская впадина', t: 'Это самое глубокое место на Земле: почти одиннадцать километров. Даже самая высокая гора, Эверест, поместилась бы здесь целиком, а люди впервые опустились сюда в 1960 году на батискафе «Триест».' }
+  ];
+  const MARKS = [[200, 'Здесь кончается солнечный свет'], [1000, 'Дальше — полная темнота'], [4000, 'Дно океана'], [6000, 'Глубоководная впадина']];
+  const TICKS = [0, 50, 100, 200, 500, 1000, 2000, 3000, 4000, 6000, 8000, 10000];
+  const floor = () => { const t = Y(3800), b = H, h = b - t, y = d => (Y(d) - t).toFixed(0);
+    return `<svg class="oc-floor" style="top:${t}px;height:${h}px" viewBox="0 0 100 ${h}" preserveAspectRatio="none"><path d="M0,${+y(4000) + 26} Q14,${+y(4000) + 14} 28,${+y(4000) + 24} Q34,${+y(4000) + 28} 38,${y(6000)} L45,${y(10000)} Q50,${+y(11000) + 30} 55,${y(10000)} L62,${y(6000)} Q66,${+y(4000) + 28} 72,${+y(4000) + 22} Q86,${+y(4000) + 12} 100,${+y(4000) + 26} L100,${h} L0,${h}Z" fill="#1B2238"/></svg>`; };
+
+  function deep() {
+    const t = newScreen();
+    const sea = `<div class="oc-sea" id="ocSea" style="height:${H}px;background:linear-gradient(#A9DEFF 0,#E9F8FF ${SKY - 2}px,#5CC8F5 ${SKY}px,#2391D2 ${Y(120)}px,#11538C ${Y(700)}px,#082646 ${Y(1600)}px,#040E22 ${Y(4000)}px,#02060F 100%)">
+      <div class="oc-sun"></div><div class="oc-boat">⛵</div><div class="oc-waves"></div>
+      ${[0, 1, 2, 3].map(i => `<i class="oc-ray" style="left:${10 + i * 24}%;animation-delay:${i * .7}s"></i>`).join('')}
+      ${floor()}
+      ${MARKS.map(([d, s]) => `<div class="oc-mark" style="top:${Y(d)}px"><span>${s}</span></div>`).join('')}
+      ${TICKS.map(d => `<div class="oc-tick" style="top:${Y(d)}px">${num(d)} ${UM}</div>`).join('')}
+      ${[...Array(14)].map((_, i) => `<i class="oc-bub" style="left:${(i * 37) % 92 + 4}%;top:${SKY + 60 + (i * 211) % (H - SKY - 300)}px;animation-delay:${(i % 5) * .8}s"></i>`).join('')}
+      ${A.map(a => `<button class="oc-a ${a.d >= 1000 ? 'dark' : ''}" data-k="${a.k}" style="top:${Y(a.d)}px;left:${a.x}%;width:${a.w}px" aria-label="${esc(a.n)}"><svg viewBox="0 0 120 80">${DRAW[a.k]}</svg></button>`).join('')}
+    </div>`;
+    shell('Океан в глубину', `<div class="oc">
+      <div class="oc-hud"><div class="oc-meter"><span>🤿</span><b id="ocD">0 ${UM}</b><small id="ocZ">${zone(0)}</small></div><button class="oc-dn" id="ocDn" aria-label="Глубже">⬇</button></div>
+      ${sea}
+      <div class="oc-card" id="ocCard"><p>Листай вниз и ныряй! Нажимай на жителей океана.</p></div>
+    </div>`);
+    const st = $('#stage'), seaEl = $('#ocSea'), card = $('#ocCard'), seen = new Set();
+    let done = false;
+    const top0 = () => seaEl.offsetTop;
+    const centre = () => st.scrollTop + st.clientHeight * .45 - top0();
+    const meter = () => {
+      const d = round(D(centre()));
+      $('#ocD').textContent = `${num(d)} ${UM}`; $('#ocZ').textContent = zone(d);
+      const end = st.scrollTop + st.clientHeight >= st.scrollHeight - 30;
+      $('#ocDn').textContent = end ? '⬆' : '⬇';
+    };
+    st.addEventListener('scroll', () => { if (t === tok) meter(); }, { passive: true });
+    const go = y => st.scrollTo({ top: Math.max(0, y + top0() - st.clientHeight * .45), behavior: 'smooth' });
+    $('#ocDn').onclick = () => {
+      sfx.pop();
+      if ($('#ocDn').textContent === '⬆') { go(0); return; }
+      const c = centre(), nx = A.find(a => Y(a.d) > c + 30);
+      go(nx ? Y(nx.d) : H);
+    };
+    const show = async k => {
+      const a = A.find(x => x.k === k); if (!a) return;
+      seen.add(k);
+      $$('#ocSea .oc-a').forEach(b => { b.classList.toggle('on', b.dataset.k === k); b.classList.toggle('seen', seen.has(b.dataset.k)); });
+      tone(520, .08, 'sine', .06); tone(780, .1, 'sine', .05, .08);
+      card.innerHTML = `<h2>${a.n} <small>${num(a.d)} ${UM}</small></h2><p class="no-said">${a.t}</p><div class="oc-prog">${seen.size} / ${A.length}</div>`;
+      await talk(`${a.n}. ${a.t}`);
+      if (t === tok && seen.size === A.length && !done) {
+        done = true;
+        finish({ key: 'ocean-deep', stars: 3, line: G('Ты нырнула до самого дна Марианской впадины и узнала всех жителей океана!', 'Ты нырнул до самого дна Марианской впадины и узнал всех жителей океана!'), again: () => deep(), next: () => cycle() });
+      }
+    };
+    seaEl.addEventListener('click', e => { const b = e.target.closest('.oc-a'); if (b) show(b.dataset.k); });
+    meter();
+    talk('Ныряем в океан! Листай вниз: чем глубже, тем темнее. Нажимай на тех, кто там живёт.');
+  }
+
+  // the water cycle: stage, emoji, short name, what happens, a hint for the order game
+  const S = [
+    { e: '☀️', n: 'Солнце греет море', t: 'Солнце греет море. Вода нагревается и понемногу превращается в невидимый пар — она испаряется.', h: 'Всё начинается с солнца.' },
+    { e: '💨', n: 'Пар поднимается', t: 'Тёплый пар поднимается высоко-высоко. Наверху холодно, и пар превращается в крошечные капельки.', h: 'Солнце нагрело воду. Куда она девается?' },
+    { e: '☁️', n: 'Облака', t: 'Из миллионов крошечных капелек получаются облака. Ветер несёт их над землёй к горам.', h: 'Пар поднялся высоко. Что из него получается?' },
+    { e: '🌨️', n: 'Дождь и снег', t: 'Капельки сливаются, становятся тяжёлыми и падают дождём. А высоко в горах, где холодно, падает снег.', h: 'Облака стали тяжёлыми. Что из них падает?' },
+    { e: '🏞️', n: 'Ручей и река', t: 'Снег в горах тает, дождевая вода собирается в ручейки. Ручьи бегут вниз, сливаются и становятся рекой.', h: 'На горах дождь и снег. Куда бежит вода?' },
+    { e: '🌊', n: 'Река впадает в море', t: 'Река всегда течёт вниз — к морю. Там, где она впадает в море, её вода снова становится морской. И всё начинается сначала!', h: 'Река бежит вниз. Куда она впадает?' }
+  ];
+  const BADGE = [[100, 84], [164, 140], [210, 36], [356, 30], [322, 176], [166, 268]];
+  const scene = () => `<svg viewBox="0 0 400 300" id="wcSvg" role="img" aria-label="${esc('Круговорот воды')}">
+    <defs><linearGradient id="wcSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE8FF"/><stop offset="1" stop-color="#F4FBFF"/></linearGradient>
+      <linearGradient id="wcSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#49B2F0"/><stop offset="1" stop-color="#1F6FB8"/></linearGradient></defs>
+    <rect width="400" height="300" fill="url(#wcSky)"/>
+    <path d="M168,232 Q200,222 232,226 L400,214 L400,300 L190,300Z" fill="#8BD17C"/>
+    <path d="M226,230 L300,94 L364,230Z" fill="#9AA7B8"/><path d="M312,230 L366,118 L400,172 L400,230Z" fill="#8593A6"/>
+    <path class="wc-snow" d="M300,94 L284,124 L293,120 L301,128 L309,119 L318,126Z" fill="#fff"/><path class="wc-snow" d="M366,118 L354,141 L362,137 L368,145 L377,139Z" fill="#fff"/>
+    <g class="wc-g" data-s="0"><circle cx="62" cy="52" r="40" fill="#000" fill-opacity="0"/><g class="wc-rays">${[...Array(8)].map((_, i) => `<path d="M62,52 m0,-32 l0,-10" transform="rotate(${i * 45} 62 52)" stroke="#FFC21A" stroke-width="5" stroke-linecap="round"/>`).join('')}</g><circle cx="62" cy="52" r="22" fill="#FFD43B" stroke="#F5B400" stroke-width="3"/><circle cx="55" cy="49" r="2.4" fill="#7A4A00"/><circle cx="69" cy="49" r="2.4" fill="#7A4A00"/><path d="M55,58 Q62,64 69,58" stroke="#7A4A00" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M0,214 Q20,208 40,214 T80,214 T120,214 T160,214 L176,214 L196,300 L0,300Z" fill="url(#wcSea)"/><path class="wc-wave" d="M-40,222 q10,-5 20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0" stroke="#BFE8FF" stroke-width="2" fill="none" opacity=".8"/></g>
+    <g class="wc-g" data-s="1"><rect x="56" y="108" width="104" height="100" fill="#000" fill-opacity="0"/><g class="wc-steam">${[74, 108, 142].map((x, i) => `<path d="M${x},204 q-8,-12 0,-24 q8,-12 0,-24 q-8,-12 0,-24" stroke="#9FC6E6" stroke-width="5" fill="none" stroke-linecap="round" style="animation-delay:${i * .8}s"/>`).join('')}</g></g>
+    <g class="wc-g" data-s="2"><g class="wc-cloud"><rect x="150" y="40" width="90" height="50" fill="#000" fill-opacity="0"/><ellipse cx="195" cy="70" rx="40" ry="16" fill="#fff"/><circle cx="178" cy="60" r="16" fill="#fff"/><circle cx="202" cy="54" r="20" fill="#fff"/><circle cx="222" cy="64" r="13" fill="#fff"/><circle cx="188" cy="66" r="2" fill="#5A6B80"/><circle cx="206" cy="66" r="2" fill="#5A6B80"/></g></g>
+    <g class="wc-g" data-s="3"><rect x="250" y="20" width="110" height="104" fill="#000" fill-opacity="0"/>
+      ${[[266, 0], [278, .3], [290, .6], [272, .45], [284, .15], [296, .75], [260, .9]].map(([x, d]) => `<path class="wc-drop" d="M${x},${74 + (x % 3) * 6} l-3,11" stroke="#2F7FD0" stroke-width="3.4" stroke-linecap="round" style="animation-delay:${d}s"/>`).join('')}
+      ${[[318, .2], [332, .9], [344, .5]].map(([x, d]) => `<text class="wc-flake" x="${x}" y="80" font-size="15" fill="#5FA8E8" style="animation-delay:${d}s">❄</text>`).join('')}
+      <ellipse cx="310" cy="56" rx="46" ry="16" fill="#C9D3E0"/><circle cx="290" cy="46" r="16" fill="#C9D3E0"/><circle cx="316" cy="40" r="20" fill="#C9D3E0"/><circle cx="338" cy="50" r="13" fill="#C9D3E0"/></g>
+    <g class="wc-g" data-s="4"><path d="M300,128 Q290,152 280,172 Q268,196 256,210" stroke="#000" stroke-opacity="0" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M300,128 Q290,152 280,172 Q268,196 256,210" stroke="#3DA2E8" stroke-width="6" fill="none" stroke-linecap="round"/><path class="wc-flow" d="M300,128 Q290,152 280,172 Q268,196 256,210" stroke="#E6F6FF" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M344,170 Q326,190 286,184" stroke="#4FB3F0" stroke-width="3" fill="none" stroke-linecap="round"/><path class="wc-flow" d="M344,170 Q326,190 286,184" stroke="#E6F6FF" stroke-width="1.6" fill="none"/></g>
+    <g class="wc-g" data-s="5"><path d="M256,210 Q234,224 212,232 Q196,238 180,240" stroke="#000" stroke-opacity="0" stroke-width="32" fill="none" stroke-linecap="round"/><path d="M256,210 Q234,224 212,232 Q196,238 180,240" stroke="#3DA2E8" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M192,238 L178,232 M192,238 L180,250" stroke="#3DA2E8" stroke-width="4" stroke-linecap="round"/><path class="wc-flow" d="M256,210 Q234,224 212,232 Q196,238 180,240" stroke="#E6F6FF" stroke-width="2.4" fill="none" stroke-linecap="round"/></g>
+    ${BADGE.map(([x, y], i) => `<g class="wc-b" data-b="${i}" transform="translate(${x} ${y})"><circle r="11" fill="#FF7A59" stroke="#fff" stroke-width="2.5"/><text y="4.5" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">${i + 1}</text></g>`).join('')}
+  </svg>`;
+
+  function cycle(mode = 'learn') {
+    const t = newScreen(), learn = mode === 'learn';
+    shell('Как вода путешествует', `<div class="wc">
+      <div class="lab-tabs"><button class="chip ${learn ? 'sel' : ''}" data-m="learn">🔍 Узнать</button><button class="chip ${learn ? '' : 'sel'}" data-m="order">🔢 По порядку</button></div>
+      <div class="wc-main"><div class="wc-fig ${learn ? '' : 'ord'}">${scene()}</div>
+        <div class="wc-side"><div class="bd-card" id="wcCard"></div>${learn ? `<div class="bd-chips" id="wcChips">${S.map((s, i) => `<button class="chip" data-s="${i}">${s.e} ${s.n}</button>`).join('')}</div>` : `<div class="wc-slots" id="wcSlots">${S.map((_, i) => `<div class="wc-slot" data-i="${i}"><b>${i + 1}</b></div>`).join('')}</div><div class="wc-cards" id="wcCards"></div>`}</div></div>
+    </div>`);
+    $('.wc .lab-tabs').onclick = e => { const b = e.target.closest('[data-m]'); if (b && b.dataset.m !== mode) { sfx.pop(); cycle(b.dataset.m); } };
+    const sv = $('#wcSvg'), card = $('#wcCard');
+    const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
+    const light = i => { if (i == null) delete sv.dataset.on; else sv.dataset.on = i; $$('#wcSvg .wc-g').forEach(g => g.classList.toggle('on', +g.dataset.s === i)); };
+    const sound = i => { if (i === 3) [0, .12, .24, .36].forEach(w => tone(1200 - w * 400, .05, 'sine', .05, w)); else if (i === 1) whoosh(1, .05); else if (i >= 4) [0, .15, .3].forEach(w => tone(600 + w * 300, .08, 'sine', .05, w)); else sfx.pop(); };
+    if (learn) {
+      const seen = new Set(); let done = false;
+      fill(`<h2>👆 Нажми на солнце, облако или реку</h2><p>Вода всё время путешествует по кругу: из моря в небо, с неба на землю и снова в море.</p>`);
+      talk('Вода всё время путешествует по кругу: из моря в небо, с неба на землю и снова в море. Нажимай по порядку: один, два, три…');
+      const show = async i => {
+        const s = S[i]; light(i); sound(i); seen.add(i);
+        $$('#wcChips .chip').forEach(b => { b.classList.toggle('sel', +b.dataset.s === i); b.classList.toggle('seen', seen.has(+b.dataset.s)); });
+        fill(`<h2>${s.e} ${i + 1}. ${s.n}</h2><p>${s.t}</p>`);
+        await talk(s.t);
+        if (t === tok && seen.size === S.length && !done && +sv.dataset.on === i) {
+          done = true;
+          finish({ key: 'water-learn', stars: 3, line: G('Ты узнала весь путь воды: море, пар, облака, дождь и снег, ручей, река и снова море! Теперь поставь всё по порядку.', 'Ты узнал весь путь воды: море, пар, облака, дождь и снег, ручей, река и снова море! Теперь поставь всё по порядку.'), again: () => cycle('learn'), next: () => cycle('order') });
+        }
+      };
+      sv.addEventListener('click', e => { const g = e.target.closest('.wc-g, .wc-b'); if (g) show(+(g.dataset.s ?? g.dataset.b)); });
+      $('#wcChips').onclick = e => { const b = e.target.closest('[data-s]'); if (b) show(+b.dataset.s); };
+      return;
+    }
+    // «По порядку»: tap the stages in the order the water goes
+    let i = 0, miss = 0, busy = false;
+    const order = shuffle(S.map((_, j) => j));
+    $('#wcCards').innerHTML = order.map(j => `<button class="chip wc-c" data-s="${j}">${S[j].e} ${S[j].n}</button>`).join('');
+    const ask = () => { miss = 0; busy = false; fill(`<h2>🔢 ${i ? 'Что дальше?' : 'Что бывает сначала?'}</h2><p>Нажми на карточку: куда вода отправится ${i ? 'потом' : 'в самом начале'}?</p>`); talk(i ? 'Что дальше?' : 'С чего начинается путешествие воды?'); };
+    $('#wcCards').onclick = async e => {
+      const b = e.target.closest('.wc-c'); if (!b || busy) return;
+      const j = +b.dataset.s;
+      if (j === i) {
+        busy = true; sfx.good(); burst(e.clientX, e.clientY); sound(j);
+        const slot = $(`#wcSlots .wc-slot[data-i="${i}"]`); slot.classList.add('ok'); slot.innerHTML = `<b>${i + 1}</b><span>${S[j].e}</span>`;
+        b.remove(); $$(`#wcSvg .wc-b[data-b="${j}"]`).forEach(x => x.classList.add('got')); light(j);
+        const line = `${pickOne(['Правильно!', 'Да!', 'Верно!'])} ${S[j].n}.`;
+        card.querySelector('p').textContent = S[j].t;
+        await talk(line);
+        if (t !== tok) return;
+        i++;
+        if (i >= S.length) {
+          const fin = 'Солнце, пар, облака, дождь и снег, ручей и река — и снова море. Так вода путешествует по кругу!';
+          fill(`<h2>🎉 Круг готов!</h2><p>${fin}</p>`); await talk(fin); if (t !== tok) return;
+          finish({ key: 'water-order', stars: 3, line: G('Ты поставила всё по порядку! Вода снова в море — и всё начинается сначала.', 'Ты поставил всё по порядку! Вода снова в море — и всё начинается сначала.'), again: () => cycle('order'), next: () => deep() });
+        } else ask();
+        return;
+      }
+      miss++; tone(330, .15, 'sine', .08);
+      let line = `Не сейчас. ${S[i].h}`;
+      if (miss >= 2) { $$(`#wcCards .wc-c[data-s="${i}"]`).forEach(x => x.classList.add('hint')); line += ' Смотри, что мигает!'; }
+      card.querySelector('p').textContent = line; talk(line);
+    };
+    ask();
+  }
+  return { deep, cycle };
+})();
+GAMES.push(
+  { id: 'ocean-deep', name: 'Океан в глубину', sub: 'ныряем до самого дна: кто где живёт', ico: () => pic('🐋'), bg: 'var(--t-blue)', go: () => OCEAN.deep(), grp: 10, kw: 'море рыбы кит акула осьминог глубина дно впадина' },
+  { id: 'water-cycle', name: 'Как вода путешествует', sub: 'круговорот воды: море, облака, дождь, река', ico: () => pic('💧'), bg: 'var(--t-mint)', go: () => OCEAN.cycle(), grp: 10, kw: 'круговорот дождь снег облака пар река море' }
+);
+/* OCEAN-END */
 /* ---------- «Что значит слово?»: a dictionary for the book. The child types or says the word; the meaning comes from
    Wiktionary (the free Russian dictionary, even for a word in another form: «колыбели» finds «колыбель»), a person or a
    place from Wikipedia; links open Ozhegov, Ushakov, Efremova and Dahl on dictionary sites. Words looked up go into the
