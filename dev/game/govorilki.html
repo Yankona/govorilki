@@ -2282,7 +2282,7 @@ body.pv-on #app{padding-top:52px}
 .gl-zoom{position:absolute;right:4px;bottom:4px;display:flex;flex-direction:column;gap:6px}
 .gl-zoom .ibtn{font:900 24px/1 var(--f-body);background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
 .gl-info{position:relative;padding:14px 16px;border-radius:22px;background:var(--paper);box-shadow:inset 0 0 0 3px var(--line),0 5px 0 var(--line-strong);min-height:90px}
-.gl-hint{margin:0;font:800 17px/1.4 var(--f-body);color:var(--ink-soft);padding-right:44px}
+.gl-hint{margin:0;font:800 17px/1.4 var(--f-body);color:var(--ink-soft);padding-right:60px}
 .gl-t{display:flex;align-items:center;gap:8px;margin:0 44px 4px 0;font:800 23px/1.2 var(--f-body);color:var(--ink)}.gl-t span{font:400 30px/1 var(--f-emoji)}
 .gl-cap{margin:0 0 6px;font:800 15px var(--f-body);color:var(--ink-soft)}
 .gl-s{margin:0;font:700 17px/1.45 var(--f-body);color:var(--ink)}
@@ -2291,7 +2291,7 @@ body.pv-on #app{padding-top:52px}
 .gl-side{display:grid;gap:10px;align-content:start;min-width:0}.gl-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.gl-modes .chip{flex-direction:column;justify-content:center;gap:2px;padding:6px 4px;font-size:15px;white-space:normal;text-align:center;line-height:1.15}.gl-modes .emo{font-size:24px}
 .gl-info>.gl-t{min-height:46px}.gl-t .gl-ai{width:36px;height:36px;flex:none}.gl-ac>span{font:400 26px/1 var(--f-emoji)}.gl-ac .gl-ai{width:28px;height:28px}
 .gl-modes .chip.sel{background:var(--t-yellow)}
-.tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,#DCEDFF,#D4F3E8);color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
+.tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,var(--t-blue),var(--t-mint));color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
 .tv-globe>span:first-child{font:400 46px/1 var(--f-emoji)}.tv-globe>span+span{display:flex;flex-direction:column;gap:2px}.tv-globe b{font:800 20px/1.2 var(--f-body)}.tv-globe small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
 /* GLOBE-CSS-END */
 /* SAID-CSS */
@@ -17297,6 +17297,8 @@ const GLOBE_SCREEN = (() => {
     function links(ks) { return ks.length ? `<div class="gl-go">${ks.map(k => `<button class="chip" data-k="${k}">📖 ${esc(LEARN[k].name)}</button>`).join('')}</div>` : ''; }
     function info(html) {
       const el = $('#glInfo'); el.innerHTML = html + `<button class="ibtn gl-say" id="glSay" aria-label="Послушать ещё раз">${ICON.speaker}</button>`;
+      // the hint stays in the panel even while the voice says the same: otherwise the panel stands empty under the globe
+      el.querySelectorAll('.gl-hint').forEach(p => p.classList.add('no-said'));
       $('#glSay').onclick = () => talk(lastLine);
       el.onclick = e => { const c = e.target.closest('[data-k]'); if (c) { sfx.pop(); screenLearn(c.dataset.k); } };
     }
