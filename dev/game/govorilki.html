@@ -16470,7 +16470,8 @@ function sayForm(t, f) {
   let out = '', j = 0; const cs = [...f];
   for (let i = 0; i < cs.length; i++) {
     const c = cs[i];
-    if (c === ACC) { if (!'еёюя'.includes(cs[i + 1] || '')) out += ACC; continue; }
+    // the mark of a word stressed on its last vowel stays too («лису́»): includes('') is true, so «no next letter» is checked apart
+    if (c === ACC) { if (cs[i + 1] === undefined || !'еёюя'.includes(cs[i + 1])) out += ACC; continue; }
     const o = t[j++];
     if (o === undefined || sayKey(o) !== sayKey(c)) return t;
     out += o === o.toLowerCase() ? c : c.toUpperCase();
