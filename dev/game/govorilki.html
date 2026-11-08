@@ -3245,6 +3245,82 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .aq .pick-b.no,.aq .aq-th.no{opacity:.4}
 #aqLv{color:var(--tiger-deep);letter-spacing:.02em}
 /* FUN-CSS-END */
+/* CALM-CSS: the calm look (testers: «перегружено, радужная палитра отвлекает»). One design system on top of the
+   older rules: a soft neutral background, ONE accent (the friend's orange), one success green, one warning yellow;
+   the pastel tints come from a small muted set, and the home tiles take one tint per tab instead of a rainbow;
+   flat cards with a soft shadow instead of chunky 3D slabs; one type scale. The night theme of the older child
+   (body.quest) gets the same rules with its own values. */
+:root{
+  --bg:#F6F3EE; --surface:#FFFFFF; --accent:var(--tiger); --accent-deep:var(--tiger-deep); --ok:#2FA865; --warn:#F2B630;
+  --sky:#F6F3EE; --ink-soft:#6B6585;
+  --t-blue:#E6EDF8; --t-green:#E6F1E2; --t-peach:#FBECE0; --t-lilac:#EEE9F7; --t-pink:#F8E8EC; --t-yellow:#FAF1D9; --t-mint:#E1F1EA;
+  --tint:var(--surface); --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
+  --sh-1:0 1px 2px rgba(42,35,70,.06),0 3px 10px rgba(42,35,70,.06); --sh-2:0 2px 4px rgba(42,35,70,.07),0 8px 22px rgba(42,35,70,.08);
+  --r-card:22px; --r-chip:999px;
+  --fs-h1:26px; --fs-h2:22px; --fs-title:18px; --fs-body:16px; --fs-small:13px;
+  --line-strong:rgba(42,35,70,.11);
+}
+.pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
+body.quest{--bg:#141A31;--surface:#20284A;--sky:#141A31;--ink-soft:#A8B0D8;
+  --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
+  --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
+  --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
+/* the background: calm and plain (no clouds by day; the night sky keeps its few stars) */
+body{background-color:var(--bg);background-image:none}
+body.quest{background-color:var(--bg)}
+.logo .lt:nth-child(n){color:var(--ink);transform:none}
+/* one tint per tab on the home tiles */
+.home-t[data-tab="speak"]{--tint:var(--tint-speak)}.home-t[data-tab="learn"]{--tint:var(--tint-learn)}
+.home-t[data-tab="create"]{--tint:var(--tint-create)}.home-t[data-tab="discover"]{--tint:var(--tint-discover)}
+.home-t .tile,.home-t .mini{background:var(--tint)}
+/* tiles: a clear picture and a short name; the second line small and on one line */
+.tile{min-height:156px;border-radius:var(--r-card);padding:14px;gap:6px;box-shadow:var(--sh-1)}
+.tile:active,.mini:active,.card:active,.chip:active,.ibtn:active,.disc:active,.at-card:active{transform:scale(.97);box-shadow:var(--sh-1)}
+.tile b{font:700 var(--fs-title)/1.15 var(--f-display)}
+.tile small{font:700 var(--fs-small)/1.3 var(--f-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+.tile .prog{font-size:var(--fs-small)}
+body.quest .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
+.tile.tl-armed{box-shadow:0 0 0 4px var(--warn),var(--sh-1)}
+.mini,.card{box-shadow:var(--sh-1)}
+/* cards, chips and round buttons: flat, a soft shadow */
+.chip,.kid,.ibtn,.starpill,.disc,.at-card,.hol-card,.hol-card.soon,.hm-more,.qcard,.rank,.ld-tab,.ld-pts li,.ld-steps li,.af-house,.today,.today.is-done{box-shadow:var(--sh-1)}
+.chip,.kid{background:var(--surface)}
+.kid.sel{background:var(--t-peach);box-shadow:0 0 0 2px var(--accent),var(--sh-1)}
+.bubble{box-shadow:var(--sh-1)}
+.sec-nav{background:rgba(246,243,238,.94)}
+.sec-nav .chip{box-shadow:none;background:var(--surface);border:1px solid var(--line)}
+body.quest .sec-nav{background:rgba(20,26,49,.94)}
+.surp{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+.surp .surp-q{background:var(--accent);color:#fff}
+.rf-card,.rf-card.soft{background:var(--surface);border:0;border-left:6px solid var(--warn);box-shadow:var(--sh-1)}
+body.quest .rf-card,body.quest .rf-card.soft{background:var(--surface);border-color:var(--warn)}
+/* one type scale */
+.group-head h2,.today h2{font:700 var(--fs-h2)/1.15 var(--f-display)}
+.group-head p{font:700 14px/1.3 var(--f-body)}
+.young .group-head p{display:none}
+.tab-head h1{font:900 var(--fs-h1)/1.1 var(--f-display,var(--f-body))}
+.bar h1{font:700 clamp(20px,4.2vw,26px)/1.1 var(--f-display)}
+.group{gap:10px}
+.stage.scroll{gap:20px}
+/* the bottom tabs: one quiet selection */
+.tabbar{box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(30,26,46,.06)}
+.tb.sel{background:var(--t-peach);color:var(--ink)}.tb.sel .emo{transform:none}
+body.quest .tb.sel{background:#2E3866}
+@media (min-width:900px){.home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.quest .home-t .tb.sel{background:#2E3866}}
+/* «Сегодня»: the path is the one big thing; the child's own things are small chips under it */
+.pd-lb,.pd-bub{box-shadow:var(--sh-1)}
+.pd-n.now .pd-lb{box-shadow:0 4px 0 var(--accent-deep)}
+.pd-mine{gap:8px}
+.pd-mine .chip{min-height:44px;padding:6px 14px 6px 8px;font-size:15px;box-shadow:none;border:1px solid var(--line)}
+.pd-mine .chip .emo{font-size:22px}
+.pd-card{box-shadow:var(--sh-1)!important}
+/* the game frame: the same header, the friend at the bottom, one main button */
+.big{box-shadow:0 5px 0 var(--accent-deep)}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-deep)}
+.big.ghost,.big.ghost.danger{background:var(--surface);box-shadow:var(--sh-1),inset 0 0 0 2px var(--line)}
+.big.ghost:active{transform:scale(.97)}
+.winbox{border-radius:28px;box-shadow:var(--sh-2)}
+/* CALM-CSS-END */
 </style>
 
 <div id="app"></div>
@@ -4731,7 +4807,7 @@ function goHome() {
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || '<p class="lead">Здесь пока пусто. Игры включаются в «Для взрослых» → «Интересы и игры».</p>'}`;
   }
-  app.innerHTML = `<div class="screen home-t">
+  app.innerHTML = `<div class="screen home-t" data-tab="${tab}">
    <main class="stage scroll" id="stage">
     ${GUEST ? `<button class="g-back" id="guestTop">${GRAND[GUEST.who].e} ← Мой вход: внуки, похвала, шахматы</button>` : ''}
     ${kidsBar()}
