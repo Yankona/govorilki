@@ -498,6 +498,48 @@ b.r{color:var(--berry)}
 .cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,640px)}
 .cmp-g{padding:12px;border:0;border-radius:24px;background:var(--paper);cursor:pointer;box-shadow:0 6px 0 var(--line-strong)}
 .cmp-g .frame{font-size:clamp(22px,5.4vmin,40px);gap:5px}
+/* numbers to 100: a ten is a blue rod of ten cubes, a one is an orange cube */
+.n-rod{display:inline-grid;grid-template-rows:repeat(10,1fr);gap:2px;width:var(--rw,26px);height:calc(var(--rw,26px) * 10 + 22px);padding:2px;border-radius:7px;background:color-mix(in srgb,var(--sea) 30%,transparent);flex:none}
+.n-rod i,.n-one i{display:block;border-radius:4px;background:var(--sea);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.n-one{display:inline-grid;width:var(--rw,26px);height:var(--rw,26px);padding:2px;border-radius:7px;background:color-mix(in srgb,var(--tiger) 30%,transparent);flex:none}
+.n-one i{background:var(--tiger)}
+.n-dt{color:var(--sea)} .n-du{color:var(--tiger)}
+.n-rods{flex:none;display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:clamp(4px,1.4vw,12px);min-height:120px;width:min(100%,640px);padding:12px 8px;background:var(--paper);border-radius:26px;box-shadow:0 5px 0 var(--line)}
+.n-rods .n-tap{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:2px;border:0;background:none;cursor:pointer;--rw:clamp(14px,3.8vmin,26px)}
+.n-rods .n-tap b{min-height:22px;font:900 clamp(15px,3.6vmin,20px)/22px var(--f-body);color:var(--sea)}
+.n-rods .n-tap.on .n-rod{background:var(--t-yellow)}
+.n-goal{display:flex;align-items:center;justify-content:center;gap:14px;min-height:84px;padding:6px 24px;border:0;border-radius:24px;background:var(--paper);color:var(--ink);font:900 clamp(56px,13vmin,84px)/1 var(--f-body);box-shadow:0 5px 0 var(--line);cursor:pointer}
+.n-goal svg{width:34px;height:34px}
+.n-tray{flex:none;display:flex;justify-content:center;align-items:flex-end;gap:18px;width:min(100%,640px);min-height:150px;padding:12px;background:var(--paper);border-radius:26px;box-shadow:0 5px 0 var(--line);--rw:clamp(14px,3.6vmin,22px)}
+.n-tray .n-ts,.n-tray .n-us{display:flex;flex-wrap:wrap;align-items:flex-end;gap:5px}
+.n-tray .n-ts{max-width:70%}
+.n-tray .n-us{display:grid;grid-template-columns:repeat(3,auto);align-content:end}
+.n-tray button{padding:0;border:0;background:none;cursor:pointer}
+.n-sum{font:900 clamp(30px,7vmin,44px)/1 var(--f-body);color:var(--ink)}
+.n-add{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.n-add button{display:flex;align-items:center;gap:10px;padding:12px 20px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);font:800 22px var(--f-body);box-shadow:0 6px 0 var(--line-strong);cursor:pointer;--rw:16px}
+.n-add button .n-rod{height:70px;grid-template-rows:repeat(10,1fr);width:12px;gap:1px;padding:1px}
+.n-grid{flex:none;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px;width:min(100%,560px,max(330px,calc(100dvh - 330px)));padding:8px;background:var(--paper);border-radius:20px;box-shadow:0 5px 0 var(--line)}
+.n-grid button{aspect-ratio:1;padding:0;border:0;border-radius:8px;background:var(--t-blue);color:var(--ink);font:800 clamp(12px,3.4vmin,22px)/1 var(--f-body);cursor:pointer}
+.n-grid button.r5{background:var(--t-lilac)}
+.n-grid button.hint{background:var(--t-yellow)}
+.n-grid button.hid{color:transparent}
+.n-grid button.right{background:var(--leaf);color:#fff}
+.n-grid button.seen{background:var(--t-green);color:var(--ink)}
+.n-pair{flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:min(100%,560px)}
+.n-pair button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px;border:0;border-radius:24px;background:var(--paper);color:var(--ink);font:900 clamp(54px,13vmin,84px)/1 var(--f-body);box-shadow:0 6px 0 var(--line-strong);cursor:pointer}
+.n-pair button.right{background:var(--t-green)}
+.n-mini{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:3px;--rw:9px}
+.n-mini .n-rod{gap:1px;padding:1px;height:112px}
+.n-mini .n-one{padding:1px;border-radius:3px}
+.n-mini .n-one i{border-radius:2px}
+.n-line{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.n-line b{display:flex;align-items:center;justify-content:center;min-width:64px;height:64px;padding:0 8px;border-radius:18px;background:var(--paper);font:900 30px/1 var(--f-body);color:var(--ink-soft);box-shadow:0 4px 0 var(--line)}
+.n-line b.q{background:var(--t-yellow);color:var(--ink)}
+.n-lv{margin:0;color:var(--ink-soft);font:700 16px var(--f-body)}
+.n-ico{display:flex;gap:3px;align-items:flex-end}
+.n-ico .n-rod{width:11px;height:62px;gap:1px;padding:1px;border-radius:4px}
+.n-ico .n-rod i{border-radius:2px;box-shadow:none}
 .cmp-g.right{background:var(--t-green)}
 .cmp-g .cn{display:block;min-height:38px;margin-top:6px;font:900 34px/38px var(--f-body);color:var(--plum)}
 
@@ -3220,7 +3262,9 @@ function lessonPlan(id) {
     if (IS_RU && (P.settings.age || 6) <= 7 && prState().at < PRIMER.length) ['primer', ['read-words', 'abc-first', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
     else ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
-    ['math-count', 'math-digits', 'math-add', 'math-compare'].forEach(g => steps.push(gameStep(g, 'math')));
+    // from 6 a numbers-to-100 game takes the place of «Найди цифру», a different one each time
+    const n100 = ['n100-tens', 'n100-build', 'n100-grid', 'n100-order'][(n + s) % 4];
+    ['math-count', (P.settings.age || 6) >= 6 ? n100 : 'math-digits', 'math-add', 'math-compare'].forEach(g => steps.push(gameStep(g, 'math')));
   }
   return steps;
 }
@@ -5015,6 +5059,222 @@ function screenMathCompare() {
   };
   show();
 }
+
+/* N100-BEGIN ---------- numbers to 100, for a child who counts but has never seen what 60 looks like.
+   A ten is a blue rod of ten cubes, a one is an orange cube; tens digits are blue and ones digits orange everywhere.
+   «Десятки» counts rods by tens, «Собери число» builds a number from rods and cubes (ten cubes snap into a rod),
+   «Сотня» finds a number on the hundred grid, «После и больше» asks what comes next and which is bigger.
+   Numbers go to the voice as digits: the say module puts them in the right case (после 59 → пятидесяти девяти)
+   and the other languages' voices read their own number names. Three levels each, one step up after a round with
+   few mistakes; a mistake only brings a hint. */
+const N_DES = ['десяток', 'десятка', 'десятков'], N_ED = ['единица', 'единицы', 'единиц'];
+const nRod = () => `<span class="n-rod">${'<i></i>'.repeat(10)}</span>`;
+const nOne = () => '<span class="n-one"><i></i></span>';
+const nDig = n => n >= 10 && n < 100 ? `<span class="n-dt">${Math.floor(n / 10)}</span><span class="n-du">${n % 10}</span>` : `${n}`;
+const nMini = n => `<span class="n-mini">${nRod().repeat(Math.floor(n / 10))}${nOne().repeat(n % 10)}</span>`;
+const nTU = n => { const c = x => LANG === 'pt' && x < 3 ? ['', 'uma', 'duas'][x] : LANG === 'de' && x === 1 ? 'ein' : x, a = c(Math.floor(n / 10)), b = c(n % 10), A = Math.floor(n / 10), B = n % 10; return B ? `${a} ${plural(A, N_DES)} и ${b} ${plural(B, N_ED)}` : `${a} ${plural(A, N_DES)}`; };
+const nLv = id => Math.min(2, (P.n100 || {})[id] || 0);
+const nLvTag = id => `<p class="n-lv">Уровень ${nLv(id) + 1} из 3</p>`;
+function nDone(id, miss, line, again) {
+  P.n100 = P.n100 || {};
+  const up = miss <= 3 && nLv(id) < 2;
+  if (up) P.n100[id] = nLv(id) + 1;
+  finish({ key: 'n100-' + id, line: up ? `${line} В следующий раз будет чуть труднее.` : line, again });
+}
+function screenN100Tens() {
+  const t = newScreen(), lv = nLv('tens');
+  const deck = shuffle(lv === 0 ? sample([2, 3, 4, 5, 6, 7, 8], 5).concat([10]) : sample([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 6));
+  let k = 0, busy = false, cnt = 0, miss = 0;
+  shell('Десятки', `${nLvTag('tens')}<div class="n-rods" id="rods"></div><div class="num-opts" id="no"></div>`);
+  const rods = $('#rods'), no = $('#no');
+  function opts(n) {
+    const near = lv === 0 ? [-3, -2, 2, 3, 4, -4] : [-1, 1, -2, 2, 3, -3], s = new Set([n]);
+    for (let i = 0; i < 200 && s.size < (lv === 2 ? 4 : 3); i++) { const x = n + pickOne(near); if (x >= 1 && x <= 10) s.add(x); }
+    return shuffle([...s]).map(x => `<button class="num-b" data-n="${x * 10}" style="font-size:clamp(34px,8vmin,56px)">${x * 10}</button>`).join('');
+  }
+  function show() {
+    busy = false; cnt = 0; const n = deck[k];
+    rods.innerHTML = Array.from({ length: n }, (_, i) => `<button class="n-tap" data-i="${i}">${nRod()}<b></b></button>`).join('');
+    no.innerHTML = opts(n);
+    talk(k === 0 ? 'Это палочки-десятки. В каждой палочке десять кубиков. Трогай палочки по порядку и считай десятками: 10, 20, 30… Сколько всего кубиков?' : 'Сколько здесь кубиков? Трогай палочки и считай десятками.');
+  }
+  rods.onclick = e => {
+    const b = e.target.closest('.n-tap'); if (!b || busy || b.classList.contains('on')) return;
+    cnt++; b.classList.add('on'); $('b', b).textContent = cnt * 10; tone(380 + cnt * 50, .12, 'triangle', .1); say(`${cnt * 10}`);
+  };
+  no.onclick = async e => {
+    const b = e.target.closest('.num-b'); if (!b || busy) return;
+    const n = deck[k], x = +b.dataset.n;
+    if (x !== n * 10) {
+      wiggle(b); sfx.oops(); miss++; cnt = 0;
+      $$('.n-tap', rods).forEach(r => { r.classList.remove('on'); $('b', r).textContent = ''; });
+      talk(`Это ${x}. Давай посчитаем вместе: трогай каждую палочку.`); return;
+    }
+    busy = true; b.classList.add('right'); sfx.good();
+    $$('.n-tap', rods).forEach((r, i) => { r.classList.add('on'); $('b', r).textContent = (i + 1) * 10; });
+    await talk(n === 10 ? 'Десять десятков — это 100! Сто кубиков.' : `${n * 10}! Это ${nTU(n * 10)}.`); if (t !== tok) return;
+    k++;
+    if (k >= deck.length) nDone('tens', miss, 'Ты считаешь десятками!', screenN100Tens);
+    else later(show, 400);
+  };
+  show();
+}
+function screenN100Build() {
+  const t = newScreen(), lv = nLv('build'), deck = [];
+  while (deck.length < 5) {
+    const a = ri(lv === 0 ? 2 : 1, 9), b = lv === 0 && deck.length < 2 ? 0 : ri(lv === 0 ? 1 : 1, lv === 0 ? 5 : 9), n = a * 10 + b;
+    if (!deck.includes(n)) deck.push(n);
+  }
+  let k = 0, busy = false, tn = 0, un = 0, miss = 0;
+  shell('Собери число', `${nLvTag('build')}<button class="n-goal" id="goal"></button>
+    <div class="n-tray" id="tray"></div><div class="n-sum" id="sum"></div>
+    <div class="n-add"><button id="addT">${nRod()}<span>+ 10</span></button><button id="addU">${nOne()}<span>+ 1</span></button></div>`);
+  const goal = $('#goal'), tray = $('#tray'), sum = $('#sum');
+  const line = () => `Собери число ${deck[k]}.`;
+  function draw() {
+    tray.innerHTML = `<div class="n-ts">${Array.from({ length: tn }, () => `<button data-r="t">${nRod()}</button>`).join('')}</div><div class="n-us">${Array.from({ length: un }, () => `<button data-r="u">${nOne()}</button>`).join('')}</div>`;
+    sum.innerHTML = tn || un ? nDig(tn * 10 + un) : '0';
+  }
+  function show() {
+    busy = false; tn = 0; un = 0; const n = deck[k]; goal.dataset.n = n;
+    goal.innerHTML = lv === 2 ? `${ICON.speaker}<span>?</span>` : `${ICON.speaker}<span>${nDig(n)}</span>`;
+    draw();
+    talk(k === 0 ? `Синяя палочка — это десять, оранжевый кубик — это один. ${line()} Нажимай «+ 10» и «+ 1». Лишнее можно убрать: нажми на него.` : line());
+  }
+  async function check() {
+    const n = deck[k], v = tn * 10 + un;
+    if (v !== n) return;
+    busy = true; sfx.good(); goal.innerHTML = `<span>${nDig(n)}</span>`;
+    await talk(`${nTU(n)} — это ${n}!`); if (t !== tok) return;
+    k++;
+    if (k >= deck.length) nDone('build', miss, 'Ты умеешь собирать числа!', screenN100Build);
+    else later(show, 500);
+  }
+  goal.onclick = () => { if (!busy) talk(line()); };
+  $('#addT').onclick = () => {
+    if (busy) return;
+    if (tn >= 9 && un > 0 || tn >= 10) { wiggle($('#addT')); return; }
+    tn++; sfx.pop(); draw();
+    if (tn > Math.floor(deck[k] / 10)) { miss++; talk(`Уже ${tn * 10 + un}. Десятков многовато — нажми на палочку, чтобы убрать.`); return; }
+    say(`${tn * 10 + un}`); check();
+  };
+  $('#addU').onclick = async () => {
+    if (busy) return;
+    un++; sfx.pop();
+    if (un === 10) { un = 0; tn++; draw(); busy = true; await talk(`Десять кубиков — это одна палочка-десяток! Уже ${tn * 10}.`); busy = false; if (t !== tok) return; check(); return; }
+    draw();
+    if (tn * 10 + un > deck[k]) { miss++; talk(`Уже ${tn * 10 + un}. Это больше, чем нужно. Нажми на кубик, чтобы убрать.`); return; }
+    say(`${tn * 10 + un}`); check();
+  };
+  tray.onclick = e => {
+    const b = e.target.closest('button'); if (!b || busy) return;
+    if (b.dataset.r === 't') tn--; else un--;
+    tone(300, .08, 'sine', .1); draw(); say(`${tn * 10 + un}`); check();
+  };
+  show();
+}
+function screenN100Grid() {
+  const t = newScreen(), lv = nLv('grid');
+  const deck = lv === 0 ? [ri(1, 3) * 10 + ri(1, 9), ri(4, 6) * 10 + ri(1, 9), ri(7, 9) * 10 + ri(1, 9), ri(2, 9) * 10, ri(1, 9) * 10 + ri(1, 9)].sort(() => Math.random() - .5) : sample(Array.from({ length: 99 }, (_, i) => i + 2), 6);
+  let k = 0, busy = false, miss = 0, wrong = 0, hid = new Set();
+  shell('Сотня', `${nLvTag('grid')}<button class="lt-ask" id="ask"></button><div class="n-grid" id="grid"></div>`);
+  const ask = $('#ask'), grid = $('#grid');
+  const line = () => `Найди число ${deck[k]}.`;
+  function show() {
+    busy = false; wrong = 0; const n = deck[k]; ask.dataset.n = n;
+    hid = new Set(lv === 2 ? sample(Array.from({ length: 100 }, (_, i) => i + 1).filter(x => x % 10 !== 1), 55).concat([n]) : []);
+    grid.innerHTML = Array.from({ length: 100 }, (_, i) => { const x = i + 1, row = Math.ceil(x / 10); return `<button data-n="${x}" class="${row % 2 ? '' : 'r5'}${hid.has(x) ? ' hid' : ''}">${x}</button>`; }).join('');
+    ask.innerHTML = `${ICON.speaker}<span>${lv === 2 ? '?' : n}</span>`;
+    if (lv === 0) hint(n);
+    talk(k === 0 ? `Это сотня: сто чисел. В каждом ряду — новый десяток. ${line()}` : line());
+  }
+  function hint(n) { const r = Math.ceil(n / 10); $$('button', grid).forEach(b => b.classList.toggle('hint', Math.ceil(+b.dataset.n / 10) === r)); }
+  ask.onclick = () => { if (!busy) talk(line()); };
+  grid.onclick = async e => {
+    const b = e.target.closest('button'); if (!b || busy) return;
+    const n = deck[k], x = +b.dataset.n;
+    if (x !== n) {
+      wiggle(b); sfx.oops(); miss++; wrong++; b.classList.remove('hid');
+      if (wrong >= 1) hint(n);
+      const tip = Math.floor(x / 10) === Math.floor(n / 10) || x % 10 === 0 ? '' : x > n ? ' Ищи повыше.' : ' Ищи пониже.';
+      talk(`Это ${x}.${tip} ${line()}`); return;
+    }
+    busy = true; b.classList.remove('hid'); b.classList.add('right'); sfx.good(); ask.innerHTML = `<span>${nDig(n)}</span>`;
+    await talk(`${n}! ${cap(nTU(n))}.`); if (t !== tok) return;
+    k++;
+    if (k >= deck.length) nDone('grid', miss, 'Ты знаешь, где живут числа!', screenN100Grid);
+    else later(show, 500);
+  };
+  show();
+}
+function screenN100Order() {
+  const t = newScreen(), lv = nLv('order'), deck = [];
+  for (let i = 0; i < 6; i++) {
+    if (i % 2 === 0) {
+      let a, b;
+      do {
+        if (lv === 0) { a = ri(1, 9) * 10 + ri(0, 9); b = ri(1, 9) * 10 + ri(0, 9); if (Math.floor(a / 10) === Math.floor(b / 10)) b = a; }
+        else if (lv === 1 && Math.random() < .5) { const x = ri(1, 9), y = ri(1, 9); a = x * 10 + y; b = y * 10 + x; }
+        else { a = ri(11, 99); b = a + pickOne([-3, -2, -1, 1, 2, 3, 10, -10]); }
+      } while (!a || !b || a === b || b < 1 || b > 100);
+      deck.push({ c: 1, a, b, more: Math.random() < .5 });
+    } else {
+      const before = lv === 2 && Math.random() < .5;
+      let n = lv === 0 ? ri(1, 3) * 10 + ri(1, 7) : Math.random() < .6 ? ri(1, 9) * 10 + (before ? 0 : 9) : ri(11, 98);
+      deck.push({ c: 0, n, before });
+    }
+  }
+  let k = 0, busy = false, miss = 0;
+  shell('После и больше', `${nLvTag('order')}<p class="cmp-q" id="cq"></p><div id="box"></div><div class="num-opts" id="no"></div>`);
+  const cq = $('#cq'), box = $('#box'), no = $('#no');
+  const q = d => d.c ? (d.more ? 'Какое число больше?' : 'Какое число меньше?') : d.before ? `Что идёт перед ${d.n}?` : `Что идёт после ${d.n}?`;
+  function show() {
+    busy = false; const d = deck[k];
+    cq.textContent = q(d); no.innerHTML = ''; box.dataset.ans = d.c ? (d.more ? Math.max(d.a, d.b) : Math.min(d.a, d.b)) : d.before ? d.n - 1 : d.n + 1;
+    if (d.c) {
+      box.innerHTML = `<div class="n-pair">${[d.a, d.b].map(x => `<button data-n="${x}"><span>${nDig(x)}</span>${lv === 0 ? nMini(x) : ''}</button>`).join('')}</div>`;
+      talk(k === 0 ? `${q(d)} Посмотри сначала на десятки — на синие цифры.` : q(d));
+    } else {
+      const ans = d.before ? d.n - 1 : d.n + 1;
+      const seq = d.before ? ['?', d.n, d.n + 1] : [d.n - 2, d.n - 1, d.n, '?'];
+      box.innerHTML = `<div class="n-line">${seq.map(x => x === '?' ? '<b class="q">?</b>' : `<b>${nDig(x)}</b>`).join('')}</div>`;
+      const s = new Set([ans]); [d.before ? d.n + 1 : d.n - 1, ans + 10, ans - 10, ans + 2, ans - 2, Math.floor(d.n / 10) * 10].forEach(x => { if (s.size < 3 && x > 0 && x <= 100 && x !== d.n) s.add(x); });
+      no.innerHTML = shuffle([...s]).map(x => `<button class="num-b" data-n="${x}" style="font-size:clamp(34px,8vmin,56px)">${nDig(x)}</button>`).join('');
+      talk(k === 1 ? `${q(d)} Считай по порядку.` : q(d));
+    }
+  }
+  async function good(el, text) {
+    busy = true; el.classList.add('right'); sfx.good();
+    await talk(text); if (t !== tok) return;
+    k++;
+    if (k >= deck.length) nDone('order', miss, 'Ты хорошо знаешь числа!', screenN100Order);
+    else later(show, 400);
+  }
+  box.onclick = e => {
+    const b = e.target.closest('.n-pair button'); if (!b || busy) return;
+    const d = deck[k], x = +b.dataset.n, y = x === d.a ? d.b : d.a, big = Math.max(x, y), small = Math.min(x, y);
+    if (d.more ? x < y : x > y) {
+      wiggle(b); sfx.oops(); miss++;
+      talk(Math.floor(x / 10) !== Math.floor(y / 10) ? 'Посмотри на десятки — на синие цифры. Где десятков больше?' : 'Десятков поровну. Тогда смотри на единицы — на оранжевые цифры.'); return;
+    }
+    good(b, d.more ? `Да! ${big} больше, чем ${small}.` : `Да! ${small} меньше, чем ${big}.`);
+  };
+  no.onclick = e => {
+    const b = e.target.closest('.num-b'); if (!b || busy) return;
+    const d = deck[k], x = +b.dataset.n, ans = d.before ? d.n - 1 : d.n + 1;
+    if (x !== ans) { wiggle(b); sfx.oops(); miss++; talk(d.before ? `Считай назад: ${d.n + 1}, ${d.n}… А что перед ${d.n}?` : `Считай дальше: ${d.n - 1}, ${d.n}… А потом?`); return; }
+    const q2 = $('.n-line .q', box); if (q2) { q2.classList.remove('q'); q2.innerHTML = nDig(ans); }
+    good(b, d.before ? `Да! Перед ${d.n} идёт ${ans}.` : ans % 10 === 0 ? `Да! После ${d.n} идёт ${ans}: начинается новый десяток.` : `Да! После ${d.n} идёт ${ans}.`);
+  };
+  show();
+}
+GAMES.push(
+  { id: 'n100-tens', name: 'Десятки', sub: '10, 20, 30… 100', ico: () => `<span class="n-ico">${nRod().repeat(3)}</span>`, bg: 'var(--t-blue)', go: () => screenN100Tens(), grp: 3, also: [17] },
+  { id: 'n100-build', name: 'Собери число', sub: '6 десятков и 3 — это 63', ico: () => '<span class="ico-num"><span class="n-dt">6</span><span class="n-du">3</span></span>', bg: 'var(--t-peach)', go: () => screenN100Build(), grp: 3, also: [17] },
+  { id: 'n100-grid', name: 'Сотня', sub: 'найди число от 1 до 100', ico: () => '<span class="ico-num">100</span>', bg: 'var(--t-mint)', go: () => screenN100Grid(), grp: 3, also: [17] },
+  { id: 'n100-order', name: 'После и больше', sub: 'что идёт после 59?', ico: () => '<span class="ico-num">59→</span>', bg: 'var(--t-lilac)', go: () => screenN100Order(), grp: 3, also: [17] }
+);
+/* N100-END */
 
 /* ---------- songs: folk nursery rhymes and our own Р song, melodies written for this game ---------- */
 const SONGS = LX('SONGS', [
