@@ -18,7 +18,10 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
     console.log(`== track ${track}, age ${age}`);
     const where = {};
     L.forEach(t => { console.log(`[${t.tab}]`); t.secs.forEach(s => { console.log(`  ${s.g} ${s.h || '-'}: ${s.ids.join(' ')}`); s.ids.forEach(id => (where[id] = where[id] || new Set()).add(t.tab)); }); });
-    const d = Object.entries(where).filter(([, v]) => v.size > 1);
+    // deliberate doubles (the owner asked): the colouring by letters and syllables is in «Учимся» and in «Творим»
+    const ALLOWED = ['code-abc', 'code-syl'];
+    Object.entries(where).filter(([id, v]) => v.size > 1 && ALLOWED.includes(id)).forEach(([id, v]) => console.log(`  also ${id}: ${[...v].join(', ')} (allowed)`));
+    const d = Object.entries(where).filter(([id, v]) => v.size > 1 && !ALLOWED.includes(id));
     d.forEach(([id, v]) => console.log(`  DUP ${id}: ${[...v].join(', ')}`)); dups += d.length;
     await c.close();
   }

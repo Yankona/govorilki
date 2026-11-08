@@ -8597,7 +8597,7 @@ GAMES.push(
     prog: () => { const n = Object.keys(gamesAll()).length; return n ? `партий: ${n}` : ''; } },
   ...Object.keys(LEARN).map(k => ({ id: 'learn-' + k, place: LEARN[k].place ? k : null, name: LEARN[k].name, sub: LEARN_SUB[k] || LEARN[k].sub || '', ico: () => pic(LEARN[k].e), bg: LEARN[k].bg, go: () => screenLearn(k), grp: 10, prog: () => k === 'old' && !LEARN[k].items.length ? '' : learnProg(k) }))
 );
-SECTIONS.splice(SECTIONS.findIndex(x => x.g === 7), 0, { g: 10, h: 'Узнавай', p: () => Q() ? 'читай вслух истории о городах, музыке, картинах и давних временах' : 'истории о городах, музыке, картинах и давних временах' });
+SECTIONS.splice(SECTIONS.findIndex(x => x.g === 7), 0, { g: 10, h: 'Узнавай', p: () => Q() ? 'читай вслух истории о городах и странах, космосе, природе и давних временах' : 'истории о городах и странах, космосе, природе и давних временах' });
 /* ---------- «Л-трасса»: Sava's own motorbike run along a seaside road through traffic.
    Road signs carry words with Л: reading one aloud fires the nitro. Stars unlock bikes in the garage. ---------- */
 const BIKES = [
@@ -21215,7 +21215,9 @@ const MUSIC = (() => {
 (() => {
   const set = (id, grp, also = []) => { const x = GAMES.find(y => y.id === id); if (x) { x.grp = grp; x.also = also; } };
   set('tales', 2, [6]); set('bookshelf', 6, [2]);
-  ['code-abc', 'code-syl', 'dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  ['dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  // the colouring by letters and by syllables: in «Учимся» and also in «Творим» next to the other colouring (the owner asked)
+  ['code-abc', 'code-syl'].forEach(id => set(id, 2, [4]));
   set('code-math', 3, [17]);
 })();
 /* LAYOUT-END */
