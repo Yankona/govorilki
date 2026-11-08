@@ -10793,10 +10793,10 @@ const PLANTS = (() => {
       sv.classList.add('pop'); setTimeout(() => sv.classList.remove('pop'), 900);
       const s = ST[stage], last = stage >= NEED.length, ask = last ? '' : ASK[NEED[stage]];
       fill(`${s.e} ${s.n}`, s.t, ask);
-      await talk(s.t + (ask ? ' ' + ask : '')); if (t !== tok) return;
       busy = false;
+      const sp = talk(s.t + (ask ? ' ' + ask : ''));
       if (last) {
-        await wait(600); if (t !== tok) return;
+        await sp; if (t !== tok) return; await wait(600); if (t !== tok) return;
         finish({ key: 'plants-grow', stars: 3, line: G('Ты вырастила дерево из семечка: корни, ствол, листья, цветы и яблоки!', 'Ты вырастил дерево из семечка: корни, ствол, листья, цветы и яблоки!'), again: () => grow(), menu: goHome });
       }
     };
@@ -10841,7 +10841,7 @@ const PLANTS = (() => {
     <g class="bd-o" data-o="flower">${hitC(94, 140, 30)}
       <g class="bd-fl" style="transform-origin:94px 140px">${[0, 1, 2, 3, 4, 5].map(i => { const a = i * 1.0472; return `<circle class="bd-s" cx="${(94 + Math.cos(a) * 15).toFixed(1)}" cy="${(140 + Math.sin(a) * 15).toFixed(1)}" r="12" fill="#FF8FBF" stroke="#D9578F" stroke-width="2.2"/>`; }).join('')}<circle class="bd-s" cx="94" cy="140" r="9" fill="#FFD43B" stroke="#D99A00" stroke-width="2.2"/></g></g>
     <g class="bd-o" data-o="fruit">${hitC(208, 196, 30)}
-      <g class="bd-fr" style="transform-origin:208px 196px"><path class="bd-s" d="M208,172 q-2,-10 4,-14" stroke="#6B4A22" stroke-width="3" fill="none" stroke-linecap="round"/><circle class="bd-s" cx="208" cy="196" r="24" fill="#E5484D" stroke="#B8323A" stroke-width="2.4"/>
+      <g class="bd-fr" style="transform-origin:208px 196px"><path d="M208,172 q-2,-10 4,-14" stroke="#6B4A22" stroke-width="3" fill="none" stroke-linecap="round"/><circle class="bd-s" cx="208" cy="196" r="24" fill="#E5484D" stroke="#B8323A" stroke-width="2.4"/>
         <path d="M196,176 q12,-6 24,0 q-8,8 -12,2 q-4,6 -12,-2Z" fill="#4FAE3F" stroke="#2F7D2A" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="200" cy="189" rx="5" ry="3" fill="#fff" opacity=".6"/></g></g>
     <g class="pl-bee"><ellipse cx="0" cy="0" rx="7" ry="5" fill="#FFD43B" stroke="#7A4A00" stroke-width="1.6"/><path d="M-2,-5 v10 M2,-5 v10" stroke="#3B2A4A" stroke-width="1.8"/><ellipse cx="-2" cy="-7" rx="5" ry="3" fill="#fff" opacity=".8"/></g>
     ${[0, .5, 1].map(d => `<circle class="bd-fx pl-wd" cx="150" cy="420" r="3.6" fill="#5BB8FF" style="animation-delay:${d}s"/>`).join('')}
