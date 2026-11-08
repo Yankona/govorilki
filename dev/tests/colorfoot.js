@@ -43,6 +43,17 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
     // a child who does not like football: footballers come last
     const order2 = await R(`(() => { P.settings.likes = []; screenFriends(); return [...document.querySelectorAll('.friends')].map(x => x.querySelector('.friend')).filter(Boolean).map(x => x.dataset.id).join(','); })()`);
     if (order2.split(',').pop() !== 'messi') fail.push('order without football: ' + order2);
+    // the two pets near the start of the animals, chosen and talking
+    const animals = await p.evaluate(() => [...[...document.querySelectorAll('.friends')].filter(x => x.querySelector('.friend'))[0].querySelectorAll('.friend')].map(x => x.dataset.id));
+    if (animals[1] !== 'lilu' || animals[2] !== 'omik') fail.push('pets: ' + animals.join(','));
+    for (const id of ['lilu', 'omik']) {
+      await p.click(`.friend[data-id="${id}"]`); let ry = 0;
+      for (let i = 0; i < 10; i++) { ry = Math.max(ry, await p.evaluate(() => { const o = document.querySelector('#ryzBtn svg .lv-o'); return o ? +o.getAttribute('ry') : 0; })); await p.waitForTimeout(90); }
+      if (ry < 2 || (await R('P.settings.friend')) !== id) fail.push(id + ' mouth ' + ry);
+    }
+    await p.evaluate(() => document.querySelector('.friend[data-id="lilu"]').scrollIntoView({ block: 'center' }));
+    await p.screenshot({ path: `${SHOTS}/cf-${lang}-${DEV}-pets.png` });
+    await p.waitForTimeout(1600);
     // colouring: the ballet group first for a ballet lover, every page fills
     await R(`(() => { P.settings.likes = ['ballet']; screenColorMenu(); })()`); await p.waitForTimeout(600);
     const cm = await p.evaluate(() => ({ h: [...document.querySelectorAll('.sec-h')].map(x => x.textContent), n: document.querySelector('.cards').querySelectorAll('.page').length }));
