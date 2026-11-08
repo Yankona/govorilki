@@ -25,6 +25,8 @@ self.addEventListener('fetch', e => {
   }
   const font = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if (url.origin !== location.origin && !font) return;
+  // the actors' recordings of the audio tales (some MB each, played with Range requests): straight from the network / the browser's own cache
+  if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html')) {
     e.respondWith((async () => {
       const c = await caches.open(CACHE), page = url.pathname.replace(/index\.html$/, '');
