@@ -41,8 +41,9 @@ const cyr = s => /[А-яЁё]/.test(s);
       const pt = await p.evaluate(k => { const el = document.querySelector(`#ocSea .oc-a[data-k="${k}"]`), r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, e = document.elementFromPoint(x, y), g = e && e.closest('.oc-a'); return { x, y, hit: g ? g.dataset.k : (e ? String(e.className.baseVal ?? e.className) : null), meter: document.querySelector('#ocD').textContent }; }, k);
       const d = +pt.meter.replace(/\D/g, ''); if (d < prevD) deeper = false; prevD = d;
       ok(pt.hit === k, `${k}: tappable at ${pt.meter} (${pt.hit})`);
-      await tap(pt.x, pt.y); await p.waitForTimeout(300);
-      const st = await p.evaluate(() => ({ h: document.querySelector('#ocCard h2') ? document.querySelector('#ocCard h2').textContent : '', t: document.querySelector('#ocCard p').textContent, said: window.__said.slice(-1)[0] || '' }));
+      const n0 = await p.evaluate(() => window.__said.length);
+      await tap(pt.x, pt.y); await p.waitForTimeout(600);
+      const st = await p.evaluate(n0 => ({ h: document.querySelector('#ocCard h2') ? document.querySelector('#ocCard h2').textContent : '', t: document.querySelector('#ocCard p').textContent, said: window.__said.slice(n0).join(' ') }), n0);
       ok(st.t.length > 60 && st.said.length > 20 && !(lang !== 'ru' && cyr(st.t + st.said + st.h)), `${k}: «${st.h}» — ${st.said.slice(0, 60)}…`);
       if (k === 'whale' || k === 'squid' || k === 'bathy') await p.screenshot({ path: D + `ocean-${lang}-${DEV}-${k}.png` });
     }
@@ -55,8 +56,9 @@ const cyr = s => /[А-яЁё]/.test(s);
     for (let s = 0; s < 6; s++) {
       const pt = await p.evaluate(s => { const g = document.querySelector(`#wcSvg .wc-g[data-s="${s}"]`), h = g.querySelector('circle,rect,path'), r = h.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, e = document.elementFromPoint(x, y), w = e && e.closest('.wc-g'); return { x, y, hit: w ? +w.dataset.s : null }; }, s);
       ok(pt.hit === s, `stage ${s + 1}: tappable (${pt.hit})`);
-      await tap(pt.x, pt.y); await p.waitForTimeout(300);
-      const st = await p.evaluate(() => ({ on: document.querySelector('#wcSvg').dataset.on, h: document.querySelector('#wcCard h2').textContent, said: window.__said.slice(-1)[0] || '' }));
+      const n0 = await p.evaluate(() => window.__said.length);
+      await tap(pt.x, pt.y); await p.waitForTimeout(600);
+      const st = await p.evaluate(n0 => ({ on: document.querySelector('#wcSvg').dataset.on, h: document.querySelector('#wcCard h2').textContent, said: window.__said.slice(n0).join(' ') }), n0);
       ok(+st.on === s && st.said.length > 20 && !(lang !== 'ru' && cyr(st.h + st.said)), `stage ${s + 1}: «${st.h}» — ${st.said.slice(0, 60)}…`);
       if (s === 3) await p.screenshot({ path: D + `water-${lang}-${DEV}-rain.png` });
     }
@@ -69,7 +71,7 @@ const cyr = s => /[А-яЁё]/.test(s);
     const hint = await p.$eval('#wcCards .wc-c.hint', e => e.dataset.s).catch(() => null), line = await p.$eval('#wcCard p', e => e.textContent);
     ok(hint === '0' && !(lang !== 'ru' && cyr(line)), `two misses → «${line}», the sun blinks`);
     await p.screenshot({ path: D + `water-${lang}-${DEV}-order.png` });
-    for (let s = 0; s < 6; s++) { await p.click(`#wcCards .wc-c[data-s="${s}"]`); await p.waitForTimeout(300); if (s === 3) await p.screenshot({ path: D + `water-${lang}-${DEV}-order4.png` }); }
+    for (let s = 0; s < 6; s++) { await p.click(`#wcCards .wc-c[data-s="${s}"]`); await p.waitForFunction(s => !document.querySelector(`#wcCards .wc-c[data-s="${s}"]`) && (s === 5 || document.querySelector('#wcCard h2').textContent.includes('?')), s, { timeout: 8000 }).catch(() => {}); if (s === 3) await p.screenshot({ path: D + `water-${lang}-${DEV}-order4.png` }); }
     await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
     ok(await p.$('.winbox') !== null, 'in order → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
     // ---- the stories (Russian)
