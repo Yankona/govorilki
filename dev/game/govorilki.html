@@ -21136,6 +21136,9 @@ const THEMES = (() => {
   const ma = MODS.find(m => m.id === 'art'); if (ma) ma.g.push(20, 21);
   const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 19);
   const tc = HOME_TABS.find(t => t.id === 'create'); if (tc) tc.g.push(20, 21, 22, 23);
+  // «Книги и сказки»: its own section at the top of «Учимся», in no module — the shelf and the tales are always there
+  SECTIONS.unshift({ g: 30, h: 'Книги и сказки', p: 'книжная полка и аудиосказки' });
+  if (tl) tl.g.unshift(30);
   // the cube: every child on the older track, and anyone 9 or older
   const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => !(P.settings.track === 'l' || (P.settings.age || 0) >= 9);
   // «Правда или выдумка?» about paintings: who painted it, where it lives, when it was painted
@@ -21216,7 +21219,9 @@ const MUSIC = (() => {
    Links between screens stay; search finds every game wherever it lives. ---------- */
 (() => {
   const set = (id, grp, also = []) => { const x = GAMES.find(y => y.id === id); if (x) { x.grp = grp; x.also = also; } };
-  set('tales', 2, [6]); set('bookshelf', 6, [2]);
+  // «Книги и сказки» (section 30 of «Учимся») is in no module: the shelf and the tales show for every child
+  set('tales', 30); set('bookshelf', 30);
+  GAMES.find(y => y.id === 'tales').ord = () => 0; GAMES.find(y => y.id === 'bookshelf').ord = () => 1;
   ['dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
   // the colouring by letters and by syllables: in «Учимся» and also in «Творим» next to the other colouring (the owner asked)
   ['code-abc', 'code-syl'].forEach(id => set(id, 2, [4]));
