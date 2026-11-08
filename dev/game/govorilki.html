@@ -2996,8 +2996,50 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 .pd-chest.ready .pd-lb{background:var(--sun);box-shadow:0 5px 0 #D99A00}.pd-chest.ready .pd-lb small{color:var(--ink)}
 @keyframes pdWob{0%,60%,100%{transform:rotate(0)}15%{transform:rotate(-7deg)}30%{transform:rotate(7deg)}45%{transform:rotate(-4deg)}}
 .pd-mine{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+/* a lesson begun today: a golden arc round its step shows how much of it is done */
+.pd-c.pd-part:before{content:'';position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(var(--sun) var(--p),transparent 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));mask:radial-gradient(farthest-side,transparent calc(100% - 7px),#000 calc(100% - 6px));pointer-events:none}
 .pd-win .pd-box{font-size:84px;line-height:1;display:grid;place-items:center;animation:pdWob 1s ease-in-out 2}.pd-win .pd-box svg{width:120px;height:120px}
 .pd-main{display:flex;flex-direction:column;gap:22px;min-width:0}
+/* FUNSPEAK: the lesson's trail of stones and a round's pips under a game's header; stars and hearts from the friend */
+.gstrip{display:flex;flex-direction:column;align-items:center;gap:5px;padding-bottom:2px}
+.gstrip:empty{display:none}
+.ls-trail{display:flex;align-items:center;width:100%;max-width:560px;padding:4px 2px 6px}
+.ls-st{flex:0 1 30px;min-width:20px;aspect-ratio:1;position:relative;border-radius:50%;display:grid;place-items:center;background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
+.ls-st .star-i{width:20px;height:20px}
+.ls-st.done{background:#2FA865;box-shadow:0 3px 0 #1F7F48}
+.ls-st.done .star-i{width:18px;height:18px}
+.ls-i{display:grid;place-items:center;font-size:18px;line-height:1;opacity:.85;max-width:24px;max-height:24px;overflow:hidden}
+.ls-i svg,.ls-i .pic{max-width:22px;max-height:22px}
+.ls-i .ico-letters,.ls-i .syl-ico,.ls-i .ico-num,.ls-i .ico-prof,.ls-i .mini-crate{font-size:7px;max-width:22px;overflow:hidden}
+.ls-st.now{flex:0 0 40px;background:var(--tiger);box-shadow:0 3px 0 var(--tiger-deep)}
+.ls-fr{position:absolute;left:-4px;right:-4px;bottom:4px;height:44px;animation:lsHop 1.8s ease-in-out infinite}
+.ls-fr svg{width:100%;height:100%;display:block}
+.ls-st.goal{background:none;box-shadow:none;font-size:20px}
+.ls-d{flex:1;min-width:3px;height:4px;margin:0 2px;border-radius:2px;background:repeating-linear-gradient(90deg,var(--line-strong) 0 4px,transparent 4px 8px)}
+.ls-st.done+.ls-d{background:#2FA865}
+@keyframes lsHop{0%,70%,100%{transform:translateY(0)}80%{transform:translateY(-7px)}90%{transform:translateY(0)}}
+/* on the result card: bigger, the step just done pops, the friend lands on the next stone */
+.winbox .ls-trail{max-width:100%;padding:18px 0 8px}
+.winbox .ls-st{flex-basis:34px}.winbox .ls-st.now{flex-basis:44px}.winbox .ls-i{font-size:21px}
+.ls-win .ls-st.just{animation:popin .6s .2s both}
+.ls-win .ls-st.now .ls-fr{animation:lsLand .7s .5s both,lsHop 1.8s 1.3s ease-in-out infinite}
+@keyframes lsLand{0%{transform:translate(-34px,-26px) scale(.8);opacity:.2}60%{transform:translate(0,-10px) scale(1.05);opacity:1}100%{transform:translate(0,0)}}
+.surp{display:flex;align-items:center;gap:12px;width:100%;border:0;cursor:pointer;margin:0 0 10px;padding:10px 16px;min-height:64px;border-radius:22px;background:linear-gradient(100deg,#FFE7A3,#FFC6DA 55%,#D9CCFF);color:#2A2346;box-shadow:0 5px 0 rgba(0,0,0,.12);font:inherit;text-align:left}
+.surp b{flex:1;font:900 20px/1.15 var(--f-body)}
+.surp-g{font-size:38px;line-height:1;animation:pdWob 2.4s ease-in-out infinite}
+.surp-q{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;font:900 24px/1 var(--f-body);color:var(--plum,#8C6CF2)}
+.surp:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.12)}
+@media (prefers-reduced-motion:reduce){.surp-g{animation:none}}
+.rd{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;max-width:100%}
+.rd i{width:11px;height:11px;border-radius:50%;background:var(--line-strong);transition:background .3s}
+.rd i.on{background:var(--sun);box-shadow:0 0 0 2px #E59A00 inset}
+.rd i.cur{background:var(--paper);box-shadow:0 0 0 3px var(--tiger) inset}
+.rd i.pop{animation:popin .45s}
+.fsp{position:fixed;width:0;height:0;pointer-events:none;z-index:62}
+.fsp span{position:absolute;left:-12px;top:-12px;font-size:22px;line-height:1;opacity:0;animation:fspUp 1.1s ease-out forwards}
+@keyframes fspUp{0%{transform:translate(0,0) scale(.4);opacity:0}25%{opacity:1}100%{transform:translate(var(--x),var(--y)) scale(1);opacity:0}}
+@media (max-height:700px){.ls-trail{padding:2px 2px 3px}.ls-st{flex-basis:24px}.ls-st.now{flex-basis:34px}.ls-fr{height:38px}}
+@media (prefers-reduced-motion:reduce){.ls-fr,.ls-win .ls-st.just,.ls-win .ls-st.now .ls-fr,.rd i.pop{animation:none!important}}
 .pd-side,.rail-logo{display:none}
 @media (prefers-reduced-motion:reduce){.pd-n.now .pd-c:after,.pd-chest.ready .pd-c,.pd-win .pd-box{animation:none}}
 @media (max-width:360px){.pd{--pd-c:72px}.pd-lb b{font-size:16px}.pd-say{font-size:16px}.pd-hero .pd-fr.guide-ryz{width:68px;height:68px}}
@@ -3340,7 +3382,7 @@ function lessonPlan(id) {
 }
 const nextStepOf = id => { const t = todayState(); return lessonPlan(id).find(s => !t.done[id].includes(s.key)) || null; };
 let ACTIVE = null;
-function startLesson(id) { ACTIVE = id; const s = nextStepOf(id); if (s) s.run(); }
+function startLesson(id) { ACTIVE = id; const s = nextStepOf(id); if (!s) return; if (lessonIntroWanted(id)) lessonIntro(id, () => s.run()); else s.run(); }
 
 
 /* ---------- voice ---------- */
@@ -4046,6 +4088,7 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
       <h1>${title}</h1>
       <div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div>
     </header>
+    <div class="gstrip" id="gstrip">${lessonTrailHTML()}</div>
     <main class="stage" id="stage">${raw ? body : gx(body)}</main>
     ${guide ? `<div class="guide"><button class="guide-ryz" id="ryzBtn" aria-label="Послушать ещё раз">${friendSVG()}</button><p class="bubble" id="bubble"></p><button class="ibtn" id="replay" aria-label="Повторить">${ICON.speaker}</button></div>` : ''}
   </div>`;
@@ -4238,7 +4281,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
   const ns = ACTIVE ? nextStepOf(ACTIVE) : null;
   if (ns) { next = () => ns.run(); menu = null; }
   const plan = ACTIVE ? lessonPlan(ACTIVE) : [], doneN = ACTIVE ? td.done[ACTIVE].length : 0;
-  const title = pickOne(Q() ? ['Чётко!', 'Мощно!', 'Есть!', 'Отлично!'] : ['Молодец!', 'Ура!', 'Супер!', 'Здорово!']), bv = battleVerdict(key, ev);
+  const title = pickOne(Q() ? ['Чётко!', 'Мощно!', 'Есть!', 'Отлично!', 'Красиво!', 'Огонь!'] : ['Молодец!', 'Ура!', 'Супер!', 'Здорово!', 'Браво!', 'Чудесно!', 'Ты звезда!']), bv = battleVerdict(key, ev);
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="${title}">
     <div class="ryz-w">${friendSVG()}</div>
@@ -4247,7 +4290,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {} }) {
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
     ${fair.note ? `<p class="fair-note">${fair.note}</p>` : ''}
     ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Новая наклейка!</div>` : ''}
-    ${ns ? `<p class="day-prog">${LS()[ACTIVE].name}: ${doneN} из ${plan.length}</p>` : ''}
+    ${ns ? lessonTrailHTML(key) : ''}
     <div class="win-btns win-main">
       ${again ? `<button class="big ${next ? 'ghost' : ''}" data-a="again">↻ Ещё раз</button>` : ''}
       ${next ? '<button class="big" data-a="next">Дальше</button>' : ''}
@@ -4531,7 +4574,7 @@ function goHome() {
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
     body = `<div class="tab-head">${tabIco(T.e)}<h1>${nm(T.n)}</h1><div class="starpill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div></div>
-      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Где живёт наша семья?</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div>` : ''}
+      ${tab === 'discover' ? `<div class="disc-cards"><button class="disc" id="dWorld"><span class="emo">🌍</span><b>Где живёт наша семья?</b></button><button class="disc" id="dCal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div>` : tab === 'speak' ? `<button class="surp" id="surpBtn"><span class="surp-g">🎁</span><b>Игра-сюрприз</b><span class="surp-q">?</span></button>` : ''}
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || '<p class="lead">Здесь пока пусто. Игры включаются в «Для взрослых» → «Интересы и игры».</p>'}`;
   }
@@ -4562,6 +4605,10 @@ function goHome() {
   on('#dWorld', () => { sfx.pop(); homeLeave(); screenWorld(); });
   on('#dCal', () => { sfx.pop(); homeLeave(); screenCalendar(); });
   on('#homeSearch', () => { sfx.pop(); homeSearch(); });
+  // «Говорим»: a surprise game of this tab for a child who does not know what to pick (not the grown-ups' pages)
+  on('#surpBtn', () => { const T = HOME_TABS.find(x => x.id === tab), gs = tabGames(T).filter(g => !g.info && !['swab', 'speech-check', 'kpop-pick', 'kpop-color'].includes(g.id)), last = (P.recent || [])[0];
+    const pool = gs.filter(g => !last || g.id !== last[3]), g = pickOne(pool.length ? pool : gs); if (!g) return;
+    sfx.magic(); const b = $('#surpBtn'); if (b) hopEl(b); homeLeave(); later(() => g.go(), 350); });
   on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
   on('#whoChip', () => { sfx.pop(); homeLeave(); screenWho(); });
@@ -4909,6 +4956,7 @@ function screenMagic() {
   const diffIdx = (a, b) => [...a].findIndex((ch, i) => ch !== b[i]);
   const letters = (w, di) => `<span class="word">${[...w].map((ch, i) => `<span class="${i === di ? 'diff' : ''}">${ch.toUpperCase()}</span>`).join('')}</span>`;
   function show() {
+    roundProg(k, rounds.length);
     busy = false;
     const [a, ae, bw] = rounds[k];
     src.innerHTML = `${pic(ae)}${letters(a, -1)}`; dst.innerHTML = '<span class="q">?</span>'; dst.classList.remove('poof');
@@ -4944,6 +4992,7 @@ function screenBooks() {
     <div class="books" id="books">${sy.map((s, i) => `<button class="book" data-s="${s}" style="--c:${BOOKC[i]}" aria-label="Книжка ${s}"><span class="pages"></span><b>${s}</b><span class="got"></span></button>`).join('')}</div></div>`);
   const cslot = $('#cslot'), books = $('#books');
   function show() {
+    roundProg(k, deck.length);
     busy = false; miss = 0; $$('.book').forEach(b => b.classList.remove('glow'));
     const [, w, e] = deck[k];
     cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-7, 7).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
@@ -5022,6 +5071,7 @@ function screenHouse(S0 = RU('Р')) {
     <p class="house-word" id="hword"></p>`);
   const attic = $('#attic'), wnds = $('#wnds'), hword = $('#hword');
   function show() {
+    roundProg(k, deck.length);
     busy = false; miss = 0;
     const [w, e] = deck[k];
     attic.innerHTML = pic(e); hword.textContent = '';
@@ -6931,6 +6981,7 @@ function screenSort() {
   const cslot = $('#cslot'), bins = $('#bins');
   const intro = pair.map(L => `${SH_BINS[L][1]} — звук ${L}`).join('. ');
   function show() {
+    roundProg(k, deck.length);
     busy = false; const [, w, e] = deck[k];
     cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
     talk(k === 0 ? `${intro}. Послушай слово и нажми на нужный звук. ${cap(w)}.` : `${cap(w)}. Какой звук?`);
@@ -16805,10 +16856,12 @@ const LOGO = (() => {
     const t = newScreen(), pair = pickOne([['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
     const deck = shuffle(pair.flatMap(L => sample(SZ_ITEMS.filter(x => x[0] === L), 3)));
     let k = 0, busy = false;
-    shell('Водичка или комарик?', `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
+    // the title names the two sounds of this round: «Водичка или тише?» when С meets Ц
+    shell({ 'С,З': 'Водичка или комарик?', 'С,Ц': 'Водичка или тише?', 'З,Ц': 'Комарик или тише?' }[pair.join()], `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
       <div class="bins" id="bins">${pair.map(L => `<button class="bin" data-l="${L}"><span class="emo">${SZ_BINS[L][0]}</span><b class="L c">${L}</b><small>${SZ_BINS[L][1]}</small></button>`).join('')}</div></div>`);
     const cslot = $('#cslot'), bins = $('#bins');
     function show() {
+      roundProg(k, deck.length);
       busy = false; const [, w, e] = deck[k];
       cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
       talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${pair.map(L => SZ_BINS[L][1].split(':')[0]).join(' или ')}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
@@ -16844,6 +16897,7 @@ const LOGO = (() => {
       <button class="chip" id="lgAgain">🔊 Ещё раз</button></div>`);
     $('#lgAgain').onclick = () => { if (target) say(cap(target[0]) + '.', { rate: .8 }); };
     const show = () => {
+      roundProg(k, deck.length);
       busy = false; const set = shuffle([...deck[k]]); target = pickOne(set);
       $('#lgP').innerHTML = tiles(set);
       (k === 0 ? talk('Слова похожи, но звучат по-разному. Я скажу одно — найди его.') : wait(250)).then(() => { if (t === tok) say(cap(target[0]) + '.'); });
@@ -16879,6 +16933,7 @@ const LOGO = (() => {
     $('#lgAgain').onclick = () => say(cap(word()) + '.');
     const dots = () => { $('#lgDots').innerHTML = '<i></i>'.repeat(n); };
     const show = () => {
+      roundProg(k, deck.length);
       busy = false; n = 0; tries = 0; dots(); $('#lgAns').textContent = '';
       $('#lgW').innerHTML = pic(deck[k][1]);
       (k === 0 ? talk('Я скажу слово. Хлопни по барабану на каждый слог: ма-ши-на — три хлопка. Потом нажми «Готово».') : wait(200)).then(() => { if (t === tok) say(cap(word()) + '.'); });
@@ -16911,6 +16966,7 @@ const LOGO = (() => {
     let syls = [], miss = -1, at = 0, build = false;
     const slots = () => { $('#lgSl').innerHTML = syls.map((s, i) => `<span class="lg-slot ${(build ? i < at : i !== miss) ? 'full' : ''}">${(build ? i < at : i !== miss) ? esc(prc(s)) : ''}</span>`).join('<i>-</i>'); };
     const show = () => {
+      roundProg(k, deck.length);
       busy = false; const [w, e] = deck[k]; syls = w.toLowerCase().split('-'); build = k % 2 === 1; at = 0;
       $('#lgW').innerHTML = pic(e);
       let opts;
@@ -16937,6 +16993,7 @@ const LOGO = (() => {
     const t = newScreen(); let k = 0, busy = true, opts = [], wrongs = 0;
     shell(title, `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
     const show = async () => {
+      roundProg(k, deck.length);
       busy = true; const it = deck[k]; opts = shuffle([it.right, ...it.wrong]);
       $('#lgC').innerHTML = card(it); $('#lgO').innerHTML = '';
       await talk(`${ask(it, k)} ${opts.slice(0, -1).join(', ')} или ${opts[opts.length - 1]}?`); if (t !== tok) return;
@@ -16964,11 +17021,13 @@ const LOGO = (() => {
     ['пчела', 'пчёл', '🐝', 'пчелов', 'пчёлы'], ['мышь', 'мышей', '🐭', 'мышов', 'мыши'], ['гусь', 'гусей', '🪿', 'гусов', 'гуси'], ['чашка', 'чашек', '☕', 'чашков', 'чашки'],
     ['карандаш', 'карандашей', '✏️', 'карандашов', 'карандаши'], ['помидор', 'помидоров', '🍅', 'помидор', 'помидоры'], ['апельсин', 'апельсинов', '🍊', 'апельсин', 'апельсины'],
     ['шар', 'шаров', '🎈', 'шарей', 'шары'], ['платье', 'платьев', '👗', 'платей', 'платья'], ['дом', 'домов', '🏠', 'домей', 'дома']];
+  // «одно яблоко», «одна ложка», «один кот»: the friend's model is always right
+  const ONE = w => /[оеё]$/.test(w) ? 'одно' : /[ая]$/.test(w) || w === 'мышь' ? 'одна' : 'один';
   const gramMany = () => quiz({
     key: 'gram-many', title: 'Один — много', line: 'Ты знаешь, как сказать «много»!', again: gramMany,
     deck: sample(MANY, 6).map(([one, many, e, w1, w2]) => ({ one, e, right: 'много ' + many, wrong: ['много ' + w1, 'много ' + w2] })),
     card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.one))}</b></div><span class="lg-arrow">→</span><div class="lg-many">${pic(it.e).repeat(5)}</div>`,
-    ask: (it, k) => `${k === 0 ? 'Один и много. ' : ''}Один ${it.one}. А если их много? Как сказать:`,
+    ask: (it, k) => `${k === 0 ? 'Один и много. ' : ''}${cap(ONE(it.one))} ${it.one}. А если их много? Как сказать:`,
     phrase: it => it.right
   });
   // [big, small said kindly, picture, two wrong ways]
@@ -16996,7 +17055,7 @@ const LOGO = (() => {
   const OF = { 'лиса': 'лисы', 'волк': 'волка', 'заяц': 'зайца', 'медведь': 'медведя', 'кошка': 'кошки', 'собака': 'собаки', 'корова': 'коровы', 'коза': 'козы', 'птица': 'птицы', 'лошадь': 'лошади', 'утка': 'утки', 'курица': 'курицы', 'рыба': 'рыбы', 'лев': 'льва' };
   const WHOSE_Q = { 'хвост': 'Чей это хвост', 'уши': 'Чьи это уши', 'лапа': 'Чья это лапа', 'молоко': 'Чьё это молоко', 'перо': 'Чьё это перо', 'грива': 'Чья это грива', 'яйцо': 'Чьё это яйцо' };
   const gramWhose = () => quiz({
-    key: 'gram-whose', title: 'Чей хвост?', line: 'Ты знаешь, чей хвост и чья лапа!', again: gramWhose,
+    key: 'gram-whose', title: 'Чей, чья, чьё?', line: 'Ты знаешь, чей хвост и чья лапа!', again: gramWhose,
     deck: sample(WHOSE, 6).map(([who, e, part, right, w1, w2]) => ({ who, e, part, right, wrong: [w1, w2] })),
     card: it => `<div class="lg-one"><span class="lg-big">${pic(it.e)}</span><b>${esc(cap(it.part))} ${esc(OF[it.who])}</b></div>`,
     ask: it => `${cap(it.part)} ${OF[it.who]}. ${WHOSE_Q[it.part]}?`,
@@ -17259,7 +17318,7 @@ const LOGO = (() => {
   // one of these in the daily speech lesson, in turn
   const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
   const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
-  return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID };
+  return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
 })();
 
 /* ---------- «Грамматика: страница в день»: a grammar course for 4–6 year olds in the order of a speech therapist's
@@ -17403,9 +17462,9 @@ const GRAM = (() => {
   const JAM_E = { 'малина': '🫐', 'клубника': '🍓', 'вишня': '🍒', 'яблоко': '🍎', 'груша': '🍐', 'абрикос': '🍑', 'слива': '🟣' };
   const OF_JAM = { 'малина': 'малины', 'клубника': 'клубники', 'вишня': 'вишни', 'яблоко': 'яблок', 'груша': 'груш', 'абрикос': 'абрикосов', 'слива': 'слив' };
   const jamPage = () => [pick(sample(JAM, 5).map(([f, r, w1, w2]) => ({ card: `${look(JAM_E[f])}${look('🍯')}`, q: `Варенье из ${OF_JAM[f]}. Какое?`, right: r, wrong: [w1, w2], ph: `${cap(r)} варенье` })), 'Бабушка варит варенье. Скажи, какое получилось.')];
-  const whosePage = () => [pick(sample(LOGO.WHOSE, 5).map(([who, e, part, r, w1, w2]) => ({ card: `${look(e)}<b>${esc(cap(part))} ${esc(LOGO.OF[who])}</b>`, q: `${cap(part)} ${LOGO.OF[who]}. Чей?`, right: r, wrong: [w1, w2], ph: cap(r) })), 'Чей хвост, чья лапа, чьё яйцо?')];
+  const whosePage = () => [pick(sample(LOGO.WHOSE, 5).map(([who, e, part, r, w1, w2]) => ({ card: `${look(e)}<b>${esc(cap(part))} ${esc(LOGO.OF[who])}</b>`, q: `${cap(part)} ${LOGO.OF[who]}. ${LOGO.WHOSE_Q[part]}?`, right: r, wrong: [w1, w2], ph: cap(r) })), 'Чей хвост, чья лапа, чьё яйцо?')];
   // cases
-  const manyPage = () => [pick(sample(LOGO.MANY, 5).map(([one, many, e, w1, w2]) => ({ card: `<span class="gr-many">${pic(e).repeat(5)}</span>`, q: `Один ${one}. А много?`, right: `много ${many}`, wrong: [`много ${w1}`, `много ${w2}`], ph: `Много ${many}` })), 'Один и много.')];
+  const manyPage = () => [pick(sample(LOGO.MANY, 5).map(([one, many, e, w1, w2]) => ({ card: `<span class="gr-many">${pic(e).repeat(5)}</span>`, q: `${cap(LOGO.ONE(one))} ${one}. А много?`, right: `много ${many}`, wrong: [`много ${w1}`, `много ${w2}`], ph: `Много ${many}` })), 'Один и много.')];
   const NUMS = [[5, 'пять'], [6, 'шесть'], [7, 'семь'], [8, 'восемь'], [9, 'девять']];
   const countPage = () => [pick(sample(LOGO.MANY.filter(x => x[0] !== 'глаз' && x[0] !== 'сапог'), 5).map(([one, many, e, w1, w2]) => { const [n, nw] = pickOne(NUMS); return { card: `<span class="gr-many">${pic(e).repeat(n)}</span>`, q: `Сколько? Посчитай.`, right: `${nw} ${many}`, wrong: [`${nw} ${w1}`, `${nw} ${w2}`], ph: `${cap(nw)} ${many}` }; }), 'Считаем и говорим, сколько.')];
   // [who picture, у кого, the thing, the thing after «нет», two wrong ways after «у», two wrong ways after «нет»]
@@ -18115,7 +18174,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && !L
   const s0 = say; say = function (text, opts) { LIVE_TXT = String(text || '').toLowerCase(); return s0(text, opts); };
   const s1 = sayIn; sayIn = function (c, text, rate) { LIVE_TXT = String(text || '').toLowerCase(); return s1(c, text, rate); };
   const g0 = sfx.good, b0 = sfx.oops;
-  sfx.good = (...a) => { liveMood('happy'); return g0(...a); };
+  sfx.good = (...a) => { liveMood('happy'); funSpark(); return g0(...a); };
   sfx.oops = (...a) => { liveMood('oops'); return b0(...a); };
   LIVE_RAF = requestAnimationFrame(liveTick);
 }
@@ -21707,7 +21766,7 @@ const PATH = (() => {
       : st === 'now' ? `<span class="pd-cta">${ICON.play}${go}</span>`
       : dn ? `<small>${dn} из ${plan.length}</small>` : '';
     return `<button class="pd-n ${st}" data-l="${id}" aria-label="${esc(L.name)}: ${st === 'done' ? 'готово' : go}">
-      <span class="pd-c"><span class="pd-i">${ico(id)}</span>${st === 'done' ? '<span class="pd-ck">✓</span>' : ''}</span>
+      <span class="pd-c${dn && st !== 'done' ? ' pd-part' : ''}"${dn && st !== 'done' ? ` style="--p:${Math.round(dn / plan.length * 100)}%"` : ''}><span class="pd-i">${ico(id)}</span>${st === 'done' ? '<span class="pd-ck">✓</span>' : ''}</span>
       <span class="pd-lb"><b>${L.name}</b>${sub}</span></button>`;
   }
   function chest(s) {
@@ -21814,6 +21873,67 @@ const PATH = (() => {
   return { today, side, rail, lay, fresh };
 })();
 /* PATH-END */
+/* FUNSPEAK-BEGIN */
+/* ---------- The speech games feel like a walk with the friend, not a drill:
+   - during a lesson of «Сегодня» a trail of stones under a game's header shows every step of it: a done step is a star,
+     the friend stands on the step being played, the rest show their pictures, a flag at the end; the result card shows
+     the same trail with the friend stepping on (a child who cannot read sees how far it is to the end);
+   - a game's round shows pips under the header that fill up, one for each card (roundProg(k, n) from the game);
+   - a right answer sends a few stars and hearts out of the friend (only on «Сегодня» and «Говорим», calm, and not with
+     «reduce motion»). Function declarations only: shell, finish and the LIVE hook call them from earlier code. ---------- */
+function lessonStepIco(s) {
+  const k = (s && s.key) || '';
+  if (k.startsWith('breath:')) { const b = BREATH.find(x => 'breath:' + x.id === k); return pic(b ? b.icon : '💨'); }
+  if (k.startsWith('artic:')) return pic('👅');
+  // a game's own tile picture when it is a plain picture; letters and crates would be a blur on a small stone
+  const g = GAMES.find(x => x.id === k), h = g ? g.ico() : ''; return h && !/ico-|syl-ico|mini-crate/.test(h) ? h : pic('🎮');
+}
+// just: the step that was finished a moment ago (the result card makes it pop and the friend hop onto the next one)
+function lessonTrailHTML(just) {
+  if (!ACTIVE || !LS()[ACTIVE]) return '';
+  const plan = lessonPlan(ACTIVE), done = todayState().done[ACTIVE] || [], cur = plan.findIndex(x => !done.includes(x.key));
+  if (plan.length < 2) return '';
+  return `<div class="ls-trail${just ? ' ls-win' : ''}" role="img" aria-label="${esc(LS()[ACTIVE].name)}: ${done.length} из ${plan.length}">${plan.map((x, i) => {
+    const st = done.includes(x.key) ? 'done' : i === cur ? 'now' : 'next';
+    return `<span class="ls-st ${st}${x.key === just ? ' just' : ''}">${st === 'now' ? `<span class="ls-fr">${friendSVG()}</span>` : st === 'done' ? ICON.star : `<span class="ls-i">${lessonStepIco(x)}</span>`}</span>`;
+  }).join('<i class="ls-d"></i>')}<i class="ls-d"></i><span class="ls-st goal">${pic('🏁')}</span></div>`;
+}
+function roundProg(k, n) {
+  const el = document.getElementById('gstrip'); if (!el || !(n > 1)) return;
+  let r = el.querySelector('.rd'); if (!r) { r = document.createElement('div'); r.className = 'rd'; r.setAttribute('aria-hidden', 'true'); el.append(r); }
+  r.innerHTML = Array.from({ length: n }, (_, i) => `<i class="${i < k ? 'on' : i === k ? 'cur' : ''}${i === k - 1 ? ' pop' : ''}"></i>`).join('');
+}
+function funSpark() {
+  try {
+    if (LIVE_STILL || !(P.homeTab === 'speak' || P.homeTab === 'today' || ACTIVE)) return;
+    const f = document.querySelector('.screen .guide-ryz'); if (!f || document.querySelector('.overlay')) return;
+    const r = f.getBoundingClientRect(); if (!r.width) return;
+    const L = document.createElement('div'); L.className = 'fsp'; L.setAttribute('aria-hidden', 'true');
+    L.style.left = r.left + r.width / 2 + 'px'; L.style.top = r.top + r.height * .3 + 'px';
+    const E = ['⭐', '💛', '✨', '⭐', '💖'];
+    L.innerHTML = E.map((e, i) => `<span style="--x:${Math.round((i - 2) * 26 + rnd(-8, 8))}px;--y:${Math.round(-70 - rnd(0, 50))}px;animation-delay:${i * 50}ms">${e}</span>`).join('');
+    document.body.append(L); setTimeout(() => L.remove(), 1300);
+  } catch (e) {}
+}
+// the speech lesson starts like a little trip: the friend shows the whole trail and says where we go today
+function lessonIntroWanted(id) { return id === 'speech' && !(todayState().done[id] || []).length && lessonPlan(id).length > 2 && !!document.querySelector('.screen'); }
+function lessonIntro(id, go) {
+  const N = lessonPlan(id).length, k = (dayNo() + (dayCounts(dayKey())[id] || 0)) % 3;
+  const line = Q() ? [`Миссия начинается! ${N} ${plural(N, ['шаг', 'шага', 'шагов'])} до флага. Погнали!`, `Тренировка${nameBit()}! Разогрев, язык, арена — и флаг. Готов${G('а', '')}?`, `Новый маршрут! Каждый камень — одно задание. Вперёд!`][k]
+    : [`Отправляемся в путь${nameBit()}! Подуем, разомнём язычок и поиграем. А в конце — флажок!`, `Сегодня идём в гости к Домику Язычка. По дороге нас ждут игры!`, `Поехали${nameBit()}! Каждый камушек — одна игра. Дойдём до флажка?`][k];
+  const ov = document.createElement('div'); ov.className = 'overlay';
+  ov.innerHTML = `<div class="winbox ls-intro" role="dialog" aria-label="${esc(LS()[id].name)}">
+    <div class="ryz-w">${friendSVG()}</div>
+    <h2>${Q() ? 'Миссия!' : 'В путь!'}</h2>
+    ${lessonTrailHTML()}
+    <div class="win-btns"><button class="big" data-a="go">Поехали!</button></div></div>`;
+  $('.screen').append(ov);
+  let gone = false;
+  ov.onclick = e => { if (gone || !e.target.closest('[data-a]')) return; gone = true; sfx.pop(); hush(); go(); };
+  sfx.magic(); say(line);
+  ov.querySelector('[data-a]').focus({ preventScroll: true });
+}
+/* FUNSPEAK-END */
 /* LANDX-BEGIN */
 /* ---------- the first page for new guests shows what awaits them (the redesign):
    - «Каждый день — дорожка»: a live example of the day's path (the friend, three lessons, the chest) and what it gives;
