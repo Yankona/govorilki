@@ -38,7 +38,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
         const a = await p.$eval('#mkBox', e => e.dataset.a), opt = await p.$('.mk-o');
         if (opt) {
           const sel = right ? `.mk-o[data-v="${a}"]` : `.mk-o:not([data-v="${a}"])`;
-          await p.click(sel);
+          await p.click(sel, { force: true });
         } else {
           const v = right ? a : String(+a + 1);
           for (const ch of v) await p.click(`#mkKp [data-k="${ch}"]`);
