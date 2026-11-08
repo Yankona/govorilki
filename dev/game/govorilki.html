@@ -10299,9 +10299,9 @@ const MODS = [
   { id: 'abc', e: '🔤', n: 'Буквы и первое чтение', g: [2] },
   { id: 'read', e: '📖', n: 'Чтение на скорость и книга', g: [6] },
   { id: 'math', e: '➕', n: 'Счёт до десяти', g: [3] },
-  { id: 'brain', e: '♟️', n: 'Шахматы, олимпиада, ментальный счёт, пианино', g: [8] },
-  { id: 'learn', e: '🏰', n: 'Узнавай: Петербург, Португалия, музыка, картины', g: [10] },
-  { id: 'art', e: '🎨', n: 'Песенки, ксилофон, рисование', g: [4] },
+  { id: 'brain', e: '♟️', n: 'Шахматы, олимпиада, ментальный счёт', g: [8] },
+  { id: 'learn', e: '🏰', n: 'Узнавай: города и страны, космос, тело, опыты', g: [10] },
+  { id: 'art', e: '🎨', n: 'Рисование, музыка, балет, картины', g: [4] },
   { id: 'duo', e: '🤝', n: 'Вместе: скороговорки с братом или сестрой', g: [7] }
 ];
 const defMods = track => track === 'l' ? ['warm', 'l', 'read', 'brain', 'learn', 'duo'] : ['warm', 'r', 'sh', 'sz', 'hear', 'kpop', 'abc', 'math', 'brain', 'learn', 'art', 'duo'];
@@ -20639,6 +20639,19 @@ const MUSIC = (() => {
   return { full, composer, stop, has: t => !!REC[t] };
 })();
 /* THEMES-END */
+/* LAYOUT-BEGIN */
+/* ---------- the home tabs split by meaning (the owner: «Короче говоря, сделай логические разделения»): each tile in one
+   tab. Books, audio tales and every game whose aim is letters and reading (the colourings that teach letters too) —
+   «Учимся»; the colouring by sums — maths; drawing, colouring, music with the piano and the composers, ballet and the
+   museum — «Творим»; knowledge topics (space, ocean, body, plants, how things work, old times, the journey) — «Узнаём».
+   Links between screens stay; search finds every game wherever it lives. ---------- */
+(() => {
+  const set = (id, grp, also = []) => { const x = GAMES.find(y => y.id === id); if (x) { x.grp = grp; x.also = also; } };
+  set('tales', 2, [6]); set('bookshelf', 6, [2]);
+  ['code-abc', 'code-syl', 'dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  set('code-math', 3, [17]);
+})();
+/* LAYOUT-END */
 /* BALLET-BEGIN */
 /* ---------- «Балет» (the owner: «Балет очень важен для детей тоже»): one tile in «Творим → Музыка» and in «Узнаём».
    «Балетный класс»: a drawn dancer (our own jointed figure in SVG — a ballerina in a tutu or a boy dancer, the child
