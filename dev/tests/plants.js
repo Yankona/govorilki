@@ -24,8 +24,16 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     const openTile = async (id, sel = '#plSvg, #plPSvg') => { const tile = await p.$(`.tile[data-id="${id}"]`); if (tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(500); if (!await p.$(sel)) { await tile.click().catch(() => {}); await p.waitForTimeout(500); } } return !!tile; };
     const tap = async (x, y) => { if (DEV === 'phone') await p.touchscreen.tap(x, y); else await p.mouse.click(x, y); };
     await discover();
+    // ---- one tile «Растения» with a hub; the old separate tiles are gone
+    const hubGo = async a => { await p.evaluate(() => window.__T.run('goHome()')); await p.waitForTimeout(400); await discover(); if (!await openTile('plants', '.pl-hub')) return false; await p.click(`.pl-hub [data-a="${a}"]`); await p.waitForTimeout(600); return true; };
+    ok(await p.$('.tile[data-id="plant-grow"], .tile[data-id="plant-parts"], .tile[data-id="learn-plants"]') === null, 'no separate plant tiles');
+    ok(await openTile('plants', '.pl-hub'), 'one tile «plants» on the discover tab');
+    const cards = await p.$$eval('.pl-hub [data-a]', e => e.map(x => x.dataset.a));
+    ok(cards.join() === (lang === 'ru' ? 'grow,parts,leaves,stories' : 'grow,parts,leaves'), 'hub cards: ' + cards.join());
+    await p.screenshot({ path: D + `plants-${lang}-${DEV}-hub.png` });
+    ok(!cyr(await p.$eval('.stage', e => e.textContent)), 'hub has no Russian in ' + lang);
     // ---- grow
-    ok(await openTile('plant-grow'), 'tile «grow» on the discover tab');
+    await p.click('.pl-hub [data-a="grow"]'); await p.waitForTimeout(500);
     await p.waitForTimeout(600); await p.screenshot({ path: D + `plants-${lang}-${DEV}-grow0.png` });
     ok(await p.$('#plSvg') !== null, 'grow opened: ' + await p.$eval('.bar h1', e => e.textContent).catch(() => '-'));
     if (await p.$('#plSvg')) {
@@ -42,9 +50,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       ok(await p.$('.winbox') !== null, 'grown → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
     }
     // ---- parts
-    await p.evaluate(() => window.__T.run('goHome()')); await p.waitForTimeout(500); await discover();
-    ok(await openTile('plant-parts'), 'tile «parts»');
-    await p.waitForTimeout(600);
+    ok(await hubGo('parts'), 'hub → parts');
     ok(await p.$('#plPSvg') !== null, 'parts opened: ' + await p.$eval('.bar h1', e => e.textContent).catch(() => '-'));
     const pt = k => p.evaluate(k => { const s = document.querySelector(`#plPSvg .bd-o[data-o="${k}"] .bd-s`), r = s.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, e = document.elementFromPoint(x, y), g = e && e.closest('.bd-o'); return { x, y, hit: g ? g.dataset.o : null }; }, k);
     if (await p.$('#plPSvg')) {
@@ -75,17 +81,31 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       await p.waitForTimeout(600);
       ok(rounds === 5 && await p.$('.winbox') !== null, 'find: 5 parts found → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
     }
-    // ---- stories
-    await p.evaluate(() => window.__T.run('goHome()')); await p.waitForTimeout(500); await discover();
-    const has = await p.$('.tile[data-id="learn-plants"]');
+    // ---- guess the tree by its leaf
+    ok(await hubGo('leaves'), 'hub → leaves');
+    ok(await p.$('#lfFig .lf-svg') !== null && (await p.$$('.lf-o')).length === 3, 'leaf shown with 3 trees: ' + (await p.$$eval('.lf-o b', e => e.map(x => x.textContent))).join(', '));
+    await p.screenshot({ path: D + `plants-${lang}-${DEV}-leaves.png` });
+    for (let r = 0; r < 6; r++) {
+      // round 1: two wrong taps first (the second one makes the right button blink); then press the blinking one
+      if (r === 0) { const w = await p.$$('.lf-o'); await w[0].click(); await p.waitForTimeout(200); const w2 = await p.$$('.lf-o:not([disabled])'); if (w2.length && !await p.$('#lfNext')) { await w2[0].click(); await p.waitForTimeout(300); } }
+      const hint = await p.$('.lf-o.hint');
+      if (await p.$('#lfNext')) { /* the first tap was right */ } else if (hint) await hint.click();
+      else for (const bt of await p.$$('.lf-o:not([disabled])')) { await bt.click(); await p.waitForTimeout(250); if (await p.$('#lfNext')) break; }
+      await p.waitForTimeout(300);
+      ok(await p.$('#lfNext') !== null, `leaf round ${r + 1}: right answer → «${await p.$eval('#lfCard h2', e => e.textContent).catch(() => '-')}»`);
+      if (r === 0) { ok(!cyr(await p.$eval('#lfCard', e => e.textContent)), 'leaf card text in ' + lang); await p.screenshot({ path: D + `plants-${lang}-${DEV}-leaves-ok.png` }); }
+      await p.click('#lfNext'); await p.waitForTimeout(500);
+    }
+    await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
+    ok(await p.$('.winbox') !== null, 'leaves done → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
+    // ---- stories (Russian only)
     if (lang === 'ru') {
-      ok(!!has, 'stories tile (ru)');
-      if (has) {
-        await openTile('learn-plants', '.story-c'); await p.waitForTimeout(400);
-        const n = (await p.$$('.story-c')).length; ok(n === 20, 'stories: ' + n); await p.screenshot({ path: D + `plants-${lang}-${DEV}-stories.png` });
-        await (await p.$('.story-c')).click(); await p.waitForTimeout(800); ok(await p.$('#stT') !== null, 'a story opens');
-      }
-    } else ok(!has, 'stories tile hidden (Russian-only)');
+      ok(await hubGo('stories'), 'hub → stories');
+      const n = (await p.$$('.story-c')).length; ok(n === 20, 'stories: ' + n); await p.screenshot({ path: D + `plants-${lang}-${DEV}-stories.png` });
+      await (await p.$('.story-c')).click(); await p.waitForTimeout(800); ok(await p.$('#stT') !== null, 'a story opens');
+      await p.click('#backBtn'); await p.waitForTimeout(500); await p.click('#backBtn'); await p.waitForTimeout(500);
+      ok(await p.$('.pl-hub') !== null, 'back from the stories goes to the hub');
+    }
     ok(!errs.length, 'page errors: ' + JSON.stringify(errs));
     await c.close();
   }
