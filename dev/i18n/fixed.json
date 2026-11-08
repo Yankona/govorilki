@@ -4032,6 +4032,10 @@
   "качели, горка, мяч, батут — почему так": [
    "swing, slide, ball, trampoline: how do they work?",
    "baloiço, escorrega, bola, trampolim: porque é assim"
+  ],
+  "пирамиды, рыцари, викинги — и что было раньше": [
+   "pyramids, knights, Vikings — and what came first",
+   "pirâmides, cavaleiros, vikings — e o que veio primeiro"
   ]
  },
  "SECTIONS.splice": {
@@ -4046,6 +4050,14 @@
   "один звук в разных языках: почувствуй разницу": [
    "one sound in different languages: feel the difference",
    "um som em várias línguas: sente a diferença"
+  ],
+  "читай вслух истории о городах, музыке, картинах и давних временах": [
+   "read aloud stories about cities, music, paintings and long ago",
+   "lê em voz alta histórias sobre cidades, música, quadros e tempos antigos"
+  ],
+  "истории о городах, музыке, картинах и давних временах": [
+   "stories about cities, music, paintings and long ago",
+   "histórias sobre cidades, música, quadros e tempos antigos"
   ]
  },
  "BIKES": {
@@ -13052,6 +13064,198 @@
   "<div class=\"gl\">\n      <div class=\"gl-box\"><div class=\"gl-ball\"><canvas id=\"glC\" aria-label=\"Глобус\"></canvas>\n        <div class=\"gl-zoom\"><button class=\"ibtn\" id=\"glIn\" aria-label=\"Ближе\">+</button><button class=\"ibtn\" id=\"glOut\" aria-label=\"Дальше\">−</button></div></div></div>\n      <div class=\"gl-info\" id=\"glInfo\"><p class=\"gl-hint\">👆 Покрути глобус пальцем и нажми на страну или на город.</p></div>\n    </div>": [
    "<div class=\"gl\">\n      <div class=\"gl-box\"><div class=\"gl-ball\"><canvas id=\"glC\" aria-label=\"Globe\"></canvas>\n        <div class=\"gl-zoom\"><button class=\"ibtn\" id=\"glIn\" aria-label=\"Closer\">+</button><button class=\"ibtn\" id=\"glOut\" aria-label=\"Further away\">−</button></div></div></div>\n      <div class=\"gl-info\" id=\"glInfo\"><p class=\"gl-hint\">👆 Spin the globe with your finger and tap a country or a city.</p></div>\n    </div>",
    "<div class=\"gl\">\n      <div class=\"gl-box\"><div class=\"gl-ball\"><canvas id=\"glC\" aria-label=\"Globo\"></canvas>\n        <div class=\"gl-zoom\"><button class=\"ibtn\" id=\"glIn\" aria-label=\"Mais perto\">+</button><button class=\"ibtn\" id=\"glOut\" aria-label=\"Mais longe\">−</button></div></div></div>\n      <div class=\"gl-info\" id=\"glInfo\"><p class=\"gl-hint\">👆 Roda o globo com o dedo e toca num país ou numa cidade.</p></div>\n    </div>"
+  ]
+ },
+ "screenLearn": {
+  "<div class=\"prow-btns\"><button class=\"big\" id=\"oldQuiz\">⏳ Что было раньше?</button></div>": [
+   "<div class=\"prow-btns\"><button class=\"big\" id=\"oldQuiz\">⏳ What came first?</button></div>",
+   "<div class=\"prow-btns\"><button class=\"big\" id=\"oldQuiz\">⏳ O que veio primeiro?</button></div>"
+  ]
+ },
+ "() => {\n  const OLD_SECS = [['first', 'Первые люди', '🦣'], ['egypt', 'Древний Египет', '🔺'], ['china', 'Древний Китай', '🐉'], ['greece', 'Древняя Греция', '🏛️'], ['rome', 'Древний Рим', '🏟️'], ['vikings', 'Викинги', '⚓'], ['rus', 'Древняя Русь', '🛶'], ['knights', 'Рыцари и замки', '🏰']];\n  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], old: ['Давние времена', '🏺', 'var(--t-peach)'] };\n  const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],\n    lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],\n    porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };\n  const SUB = { old: 'пирамиды, рыцари, викинги — и что было раньше', cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна' };\n  Object.entries(NEW).forEach(([k, [name, e, bg]]) => {\n    if (LEARN[k]) return;\n    const items = [];\n    (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });\n    LEARN[k] = { name, e, bg, place: k === 'old' ? null : k === 'russia' ? 'RU' : 'PT', sub: SUB[k], items };\n    if (k === 'old') LEARN.old.secs = OLD_SECS;\n  });\n  LEARN.pt.name = 'Португалия';\n  Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });\n}": {
+  "Первые люди": [
+   "The first people",
+   "Os primeiros humanos"
+  ],
+  "Древний Египет": [
+   "Ancient Egypt",
+   "O Antigo Egito"
+  ],
+  "Древний Китай": [
+   "Ancient China",
+   "A China Antiga"
+  ],
+  "Древняя Греция": [
+   "Ancient Greece",
+   "A Grécia Antiga"
+  ],
+  "Древний Рим": [
+   "Ancient Rome",
+   "A Roma Antiga"
+  ],
+  "Викинги": [
+   "Vikings",
+   "Vikings"
+  ],
+  "Древняя Русь": [
+   "Old Rus",
+   "A Antiga Rus"
+  ],
+  "Рыцари и замки": [
+   "Knights and castles",
+   "Cavaleiros e castelos"
+  ],
+  "Кашкайш": [
+   "Cascais",
+   "Cascais"
+  ],
+  "Лиссабон": [
+   "Lisbon",
+   "Lisboa"
+  ],
+  "Порту и север": [
+   "Porto and the north",
+   "Porto e o Norte"
+  ],
+  "Россия": [
+   "Russia",
+   "Rússia"
+  ],
+  "Давние времена": [
+   "Long ago",
+   "Há muito tempo"
+  ],
+  "пирамиды, рыцари, викинги — и что было раньше": [
+   "pyramids, knights, Vikings — and what came first",
+   "pirâmides, cavaleiros, vikings — e o que veio primeiro"
+  ],
+  "город у океана рядом с Лиссабоном": [
+   "a town by the ocean near Lisbon",
+   "vila junto ao oceano perto de Lisboa"
+  ],
+  "трамваи, холмы и мосты": [
+   "trams, hills and bridges",
+   "elétricos, colinas e pontes"
+  ],
+  "Порту, Дору, Брага, Гимарайнш": [
+   "Porto, the Douro, Braga, Guimarães",
+   "Porto, Douro, Braga, Guimarães"
+  ],
+  "Байкал, Камчатка, Казань и вся страна": [
+   "Baikal, Kamchatka, Kazan and the whole country",
+   "Baikal, Kamchatka, Kazan e o país inteiro"
+  ],
+  "Португалия": [
+   "Portugal",
+   "Portugal"
+  ]
+ },
+ "OLD_EVENTS": {
+  "Люди рисуют зверей в пещере Ласко": [
+   "People paint animals in the Lascaux cave",
+   "Pessoas pintam animais na gruta de Lascaux"
+  ],
+  "Строят Стоунхендж": [
+   "Stonehenge is built",
+   "Constroem Stonehenge"
+  ],
+  "Строят Великую пирамиду": [
+   "The Great Pyramid is built",
+   "Constroem a Grande Pirâmide"
+  ],
+  "Первые Олимпийские игры": [
+   "The first Olympic Games",
+   "Os primeiros Jogos Olímpicos"
+  ],
+  "Начинают строить Великую Китайскую стену": [
+   "People start building the Great Wall of China",
+   "Começam a construir a Grande Muralha da China"
+  ],
+  "Живёт царица Клеопатра": [
+   "Queen Cleopatra is alive",
+   "Vive a rainha Cleópatra"
+  ],
+  "Открывают Колизей": [
+   "The Colosseum opens",
+   "Abre o Coliseu"
+  ],
+  "В Китае делают бумагу": [
+   "Paper is made in China",
+   "Fazem papel na China"
+  ],
+  "Викинги плывут в Америку": [
+   "Vikings sail to America",
+   "Os vikings navegam até à América"
+  ],
+  "Мальчик Онфим пишет на бересте": [
+   "The boy Onfim writes on birch bark",
+   "O menino Onfim escreve em casca de bétula"
+  ],
+  "Гутенберг печатает книги": [
+   "Gutenberg prints books",
+   "Gutenberg imprime livros"
+  ],
+  "Колумб плывёт в Америку": [
+   "Columbus sails to America",
+   "Colombo navega até à América"
+  ],
+  "Основан Санкт-Петербург": [
+   "Saint Petersburg is founded",
+   "Fundam São Petersburgo"
+  ],
+  "Гагарин летит в космос": [
+   "Gagarin flies into space",
+   "Gagarin voa para o espaço"
+  ],
+  "Человек ступает на Луну": [
+   "A person steps on the Moon",
+   "Uma pessoa pisa a Lua"
+  ]
+ },
+ "screenTimeline": {
+  "Что было раньше?": [
+   "What came first?",
+   "O que veio primeiro?"
+  ],
+  "<p class=\"tv-n\">{0} из {1}</p><p class=\"tv-ask\">Что было раньше?</p>\n      <div class=\"tv-opts\">{2}</div>\n      <div class=\"tv-ans\" id=\"tvAns\" hidden></div>": [
+   "<p class=\"tv-n\">{0} of {1}</p><p class=\"tv-ask\">What came first?</p>\n      <div class=\"tv-opts\">{2}</div>\n      <div class=\"tv-ans\" id=\"tvAns\" hidden></div>",
+   "<p class=\"tv-n\">{0} de {1}</p><p class=\"tv-ask\">O que veio primeiro?</p>\n      <div class=\"tv-opts\">{2}</div>\n      <div class=\"tv-ans\" id=\"tvAns\" hidden></div>"
+  ],
+  "Что было раньше? {0}? Или {1}?": [
+   "What came first? {0}? Or {1}?",
+   "O que veio primeiro? {0}? Ou {1}?"
+  ],
+  "{0} — около {1} лет назад. {2} — около {3} лет назад.": [
+   "{0} — about {1} years ago. {2} — about {3} years ago.",
+   "{0} — há cerca de {1} anos. {2} — há cerca de {3} anos."
+  ],
+  "Да!": [
+   "Yes!",
+   "Sim!"
+  ],
+  "Нет.": [
+   "No.",
+   "Não."
+  ],
+  "Дальше →": [
+   "Next →",
+   "Seguinte →"
+  ],
+  "Готово": [
+   "Done",
+   "Pronto"
+  ],
+  "Да! {0}": [
+   "Yes! {0}",
+   "Sim! {0}"
+  ],
+  "Нет. {0}": [
+   "No. {0}",
+   "Não. {0}"
+  ],
+  "Угадано {0} из {1}": [
+   "{0} out of {1} right",
+   "{0} certas em {1}"
   ]
  }
 }
