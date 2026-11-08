@@ -2585,13 +2585,16 @@ body.pv-on #app{padding-top:52px}
 .gl-zoom{position:absolute;right:4px;bottom:4px;display:flex;flex-direction:column;gap:6px}
 .gl-zoom .ibtn{font:900 24px/1 var(--f-body);background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
 .gl-info{position:relative;padding:14px 16px;border-radius:22px;background:var(--paper);box-shadow:inset 0 0 0 3px var(--line),0 5px 0 var(--line-strong);min-height:90px}
-.gl-hint{margin:0;font:800 17px/1.4 var(--f-body);color:var(--ink-soft);padding-right:44px}
+.gl-hint{margin:0;font:800 17px/1.4 var(--f-body);color:var(--ink-soft);padding-right:60px}
 .gl-t{display:flex;align-items:center;gap:8px;margin:0 44px 4px 0;font:800 23px/1.2 var(--f-body);color:var(--ink)}.gl-t span{font:400 30px/1 var(--f-emoji)}
 .gl-cap{margin:0 0 6px;font:800 15px var(--f-body);color:var(--ink-soft)}
 .gl-s{margin:0;font:700 17px/1.45 var(--f-body);color:var(--ink)}
 .gl-go{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .gl-say{position:absolute;top:10px;right:10px}
-.tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,#DCEDFF,#D4F3E8);color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
+.gl-side{display:grid;gap:10px;align-content:start;min-width:0}.gl-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.gl-modes .chip{flex-direction:column;justify-content:center;gap:2px;padding:6px 4px;font-size:15px;white-space:normal;text-align:center;line-height:1.15}.gl-modes .emo{font-size:24px}
+.gl-info>.gl-t{min-height:46px}.gl-t .gl-ai{width:36px;height:36px;flex:none}.gl-ac>span{font:400 26px/1 var(--f-emoji)}.gl-ac .gl-ai{width:28px;height:28px}
+.gl-modes .chip.sel{background:var(--t-yellow)}
+.tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,var(--t-blue),var(--t-mint));color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
 .tv-globe>span:first-child{font:400 46px/1 var(--f-emoji)}.tv-globe>span+span{display:flex;flex-direction:column;gap:2px}.tv-globe b{font:800 20px/1.2 var(--f-body)}.tv-globe small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
 /* GLOBE-CSS-END */
 /* SAID-CSS */
@@ -18359,10 +18362,67 @@ const GLOBE_CITIES = [
   { cc: 'US', c: 'Нью-Йорк', ll: [-74.01, 40.71], k: 'nyc', cs: 'В Нью-Йорке очень высокие дома — небоскрёбы. А у входа в город с моря стоит статуя Свободы с факелом в руке.' },
   { cc: 'CA', c: 'Торонто', ll: [-79.38, 43.65], k: 'can', cs: 'Торонто — самый большой город Канады. Над ним поднимается высоченная телебашня.' },
 ];
+// the animals of the globe: where the marker stands (ll), the countries they live in (cc) and, for the game, places
+// around a point that also count (z: [lon, lat, radius°]; sea — any water). e — an emoji, or pic — a little own drawing
+// (no emoji exists for a stork). n — the name, q — the question of the game, s — 2–3 sentences.
+const GLOBE_ANIMALS = [
+  { id: 'penguin', e: '🐧', ll: [20, -76], cc: ['AQ'], z: [[0, -90, 26]], n: 'Императорский пингвин', q: 'Где живёт императорский пингвин?', s: 'Императорский пингвин живёт в Антарктиде, где лёд и снег лежат круглый год. Он ест рыбу и кальмаров и ныряет за ними глубоко в океан. Папа-пингвин два месяца держит яйцо на лапах и греет его тёплой складкой живота.' },
+  { id: 'polar', e: '🐻‍❄️', ll: [35, 80], cc: ['GL'], z: [[0, 90, 25]], n: 'Белый медведь', q: 'Где живёт белый медведь?', s: 'Белый медведь живёт в Арктике, на льдинах вокруг Северного полюса. Он охотится на тюленей и отлично плавает. А под белой шерстью кожа у него чёрная!' },
+  { id: 'owl', e: '🦉', ll: [-100, 67], cc: ['CA', 'GL', 'RU', 'NO', 'SE', 'FI'], z: [[0, 90, 28]], n: 'Полярная сова', q: 'Где живёт полярная сова?', s: 'Полярная сова живёт в тундре, на далёком холодном севере. Она охотится на леммингов — маленьких пушистых зверьков. Летом там солнце не заходит, и сова охотится даже днём.' },
+  { id: 'reindeer', e: '🦌', ll: [26, 68], cc: ['FI', 'NO', 'SE', 'RU', 'CA', 'GL'], n: 'Северный олень', q: 'Где живёт северный олень?', s: 'Северный олень живёт на холодном севере, в тундре и в лесах. Зимой он разгребает копытами снег и достаёт мох ягель. Рога у северных оленей растут и у пап, и у мам.' },
+  { id: 'bear', e: '🐻', ll: [48, 62], cc: ['RU', 'FI', 'SE', 'NO', 'RO', 'CA', 'US'], n: 'Бурый медведь', q: 'Где живёт бурый медведь?', s: 'Бурый медведь живёт в лесах России. Он ест ягоды, орехи, корешки и рыбу. Зимой медведица спит в берлоге, и прямо там, среди зимы, у неё рождаются медвежата.' },
+  { id: 'amur', e: '🐅', ll: [136, 47], cc: [], z: [[134, 46, 9]], n: 'Амурский тигр', q: 'Где живёт амурский тигр?', s: 'Амурский тигр живёт на Дальнем Востоке России, где зимой лежит глубокий снег. Это одна из самых больших кошек на свете. Шерсть у него густая, а под кожей слой жира — так ему не страшен мороз.' },
+  { id: 'panda', e: '🐼', ll: [103, 31], cc: ['CN'], n: 'Большая панда', q: 'Где живёт панда?', s: 'Большая панда живёт в горных лесах Китая. Почти весь день она жуёт бамбук — по двенадцать часов в сутки. Новорождённая панда весит примерно как яблоко!' },
+  { id: 'macaque', e: '🐒', ll: [138, 37], cc: ['JP'], n: 'Японский макак', q: 'Где живёт японский макак?', s: 'Японские макаки живут в горах Японии, где зимой много снега. Они едят фрукты, листья и кору. В мороз эти обезьяны греются в горячих источниках, как в тёплой ванне.' },
+  { id: 'tiger', e: '🐯', ll: [80, 23], cc: ['IN', 'BD', 'NP', 'BT'], n: 'Бенгальский тигр', q: 'Где живёт бенгальский тигр?', s: 'Бенгальский тигр живёт в лесах Индии. Он охотится на оленей и диких кабанов. Полоски у каждого тигра свои, как узор на пальцах у человека.' },
+  { id: 'peacock', e: '🦚', ll: [76, 13], cc: ['IN', 'LK', 'PK', 'NP', 'BD'], n: 'Павлин', q: 'Где живёт павлин?', s: 'Павлин — главная птица Индии. Он ест семена, насекомых и даже маленьких змей. Павлин раскрывает огромный хвост-веер с узором из «глазков», чтобы покрасоваться перед павой.' },
+  { id: 'orangutan', e: '🦧', ll: [114, 0], cc: ['ID', 'MY'], n: 'Орангутан', q: 'Где живёт орангутан?', s: 'Орангутан живёт на островах Борнео и Суматра. Он ест фрукты, листья и кору. В дождь орангутан может накрыться большим листом, как зонтиком.' },
+  { id: 'komodo', e: '🦎', ll: [120, -9], cc: ['ID'], n: 'Комодский варан', q: 'Где живёт комодский варан?', s: 'Комодский варан — самая большая ящерица на свете, длиной до трёх метров. Он живёт на нескольких островах Индонезии и охотится на оленей и кабанов. Запах добычи варан чует своим раздвоенным языком.' },
+  { id: 'kangaroo', e: '🦘', ll: [133, -25], cc: ['AU'], n: 'Кенгуру', q: 'Где живёт кенгуру?', s: 'Кенгуру живёт в Австралии. Он ест траву и листья. Кенгурёнок растёт в сумке на мамином животе, а большой кенгуру одним прыжком пролетает дальше, чем длина машины.' },
+  { id: 'koala', e: '🐨', ll: [147, -31], cc: ['AU'], n: 'Коала', q: 'Где живёт коала?', s: 'Коала живёт на востоке Австралии, на эвкалиптовых деревьях. Она ест только листья эвкалипта. Коала спит почти весь день — до двадцати часов в сутки!' },
+  { id: 'clown', e: '🐠', ll: [153, -18], cc: ['AU'], z: [[150, -18, 12]], n: 'Рыба-клоун', q: 'Где живёт рыба-клоун?', s: 'Рыба-клоун живёт в тёплом море среди кораллов, например у Большого Барьерного рифа в Австралии. Она прячется в щупальцах актинии: те жалят других рыб, а её — нет. Ест она крошечных рачков и водоросли.' },
+  { id: 'camel', e: '🐪', ll: [28, 26], cc: ['EG', 'LY', 'SD', 'TD', 'NE', 'ML', 'MR', 'DZ', 'MA', 'SA', 'OM', 'YE', 'AE', 'SO', 'ET'], n: 'Верблюд', q: 'Где живёт верблюд?', s: 'Одногорбый верблюд живёт в жарких пустынях Африки и Аравии. Он ест колючки и сухую траву. В горбе у верблюда не вода, а жир — запас еды на трудные дни.' },
+  { id: 'fennec', e: '🦊', ll: [3, 27], cc: ['DZ', 'LY', 'TN', 'MA', 'EG', 'NE', 'ML', 'TD', 'SD', 'MR'], n: 'Фенек', q: 'Где живёт фенек?', s: 'Фенек — самая маленькая лисичка на свете. Он живёт в пустыне Сахара и ест насекомых, ящериц и коренья. Огромные уши помогают ему слышать добычу под песком и не перегреваться в жару.' },
+  { id: 'croc', e: '🐊', ll: [31, 9], cc: ['SS', 'SD', 'EG', 'UG', 'ET', 'KE', 'TZ', 'ZM', 'ZW', 'MZ', 'BW', 'ZA', 'CD', 'CF'], n: 'Нильский крокодил', q: 'Где живёт нильский крокодил?', s: 'Нильский крокодил живёт в реках Африки. Он ест рыбу и подстерегает зверей, которые пришли на водопой. Мама-крокодил переносит малышей к воде прямо в пасти.' },
+  { id: 'gorilla', e: '🦍', ll: [15, 0], cc: ['CD', 'CG', 'GA', 'CM', 'CF', 'GQ', 'UG', 'RW', 'NG'], n: 'Горилла', q: 'Где живёт горилла?', s: 'Горилла живёт в тропических лесах Африки. Она ест листья, стебли и фрукты. Горилла — самая большая обезьяна на свете, и каждый вечер она строит себе гнездо для сна из веток и листьев.' },
+  { id: 'giraffe', e: '🦒', ll: [38, 3], cc: ['KE', 'TZ', 'UG', 'ET', 'SO', 'NA', 'BW', 'ZA', 'ZM', 'ZW', 'AO', 'NE', 'CD', 'SS', 'CF', 'TD', 'MZ'], n: 'Жираф', q: 'Где живёт жираф?', s: 'Жираф живёт в африканской саванне. Он ест листья акации с самых верхушек деревьев. Язык у жирафа тёмный и длинный — почти полметра!' },
+  { id: 'lion', e: '🦁', ll: [34, -7], cc: ['TZ', 'KE', 'UG', 'ZA', 'BW', 'ZM', 'ZW', 'NA', 'MZ', 'AO', 'ET', 'SS', 'CF', 'TD', 'NE', 'NG', 'CM', 'SN', 'IN', 'CD', 'MW', 'BJ', 'BF'], n: 'Лев', q: 'Где живёт лев?', s: 'Лев живёт в африканской саванне, где много травы и мало деревьев. Львы охотятся на зебр и антилоп, и чаще всего охотятся львицы. Рык льва слышно за восемь километров.' },
+  { id: 'hippo', e: '🦛', ll: [27, -13], cc: ['ZM', 'TZ', 'MZ', 'UG', 'KE', 'CD', 'MW', 'ZW', 'BW', 'ZA', 'SS', 'ET', 'AO', 'NA', 'CF', 'TD', 'NG', 'CM', 'RW', 'BI'], n: 'Бегемот', q: 'Где живёт бегемот?', s: 'Бегемот живёт в реках и озёрах Африки. Днём он лежит в воде, а ночью выходит на берег есть траву. Плавать бегемоты не умеют — они бегают по дну!' },
+  { id: 'elephant', e: '🐘', ll: [24, -20], cc: ['BW', 'ZW', 'ZA', 'TZ', 'KE', 'ZM', 'NA', 'AO', 'MZ', 'UG', 'CD', 'CG', 'GA', 'CM', 'CF', 'ET', 'SS', 'MW', 'TD'], n: 'Африканский слон', q: 'Где живёт африканский слон?', s: 'Африканский слон — самое большое животное на суше. Он съедает больше ста килограммов травы, веток и фруктов в день. Хоботом слон набирает воду, нюхает, поднимает брёвна и гладит слонят.' },
+  { id: 'zebra', e: '🦓', ll: [16, -21], cc: ['NA', 'BW', 'ZA', 'ZW', 'ZM', 'TZ', 'KE', 'AO', 'MZ', 'ET', 'UG', 'MW'], n: 'Зебра', q: 'Где живёт зебра?', s: 'Зебра живёт в африканской саванне и ест траву. Полоски у каждой зебры свои, двух одинаковых не бывает. Учёные думают, что полоски помогают отгонять кусачих мух.' },
+  { id: 'rhino', e: '🦏', ll: [31, -27], cc: ['ZA', 'NA', 'ZW', 'KE', 'BW', 'TZ', 'SZ', 'IN', 'NP'], n: 'Носорог', q: 'Где живёт носорог?', s: 'Носорог живёт в саваннах Африки и ест траву и ветки. Его рог сделан из того же вещества, что и наши ногти. Видит носорог плохо, зато отлично слышит и чует запахи.' },
+  { id: 'lynx', e: '🐈', ll: [-5, 38], cc: ['ES', 'PT'], n: 'Пиренейская рысь', q: 'Где живёт пиренейская рысь?', s: 'Пиренейская рысь живёт только в Испании и Португалии. Она охотится почти только на кроликов. На кончиках ушей у неё чёрные кисточки, а на щеках — пушистые бакенбарды.' },
+  { id: 'dolphin', e: '🐬', ll: [-13, 37], cc: ['PT'], sea: true, n: 'Дельфин-афалина', q: 'Где живёт дельфин?', s: 'Дельфины живут в морях и океанах, а в устье реки Саду в Португалии живёт целая семья дельфинов-афалин. Они едят рыбу и переговариваются свистом. Дельфин спит половинкой мозга: одна отдыхает, а другая следит, чтобы он вовремя выплыл подышать.' },
+  { id: 'flamingo', e: '🦩', ll: [4.5, 43.5], cc: ['ES', 'PT', 'FR', 'KE', 'TZ', 'IN', 'TR', 'MA', 'TN', 'NA', 'BO', 'CL', 'PE', 'AR', 'MX'], n: 'Фламинго', q: 'Где живёт фламинго?', s: 'Фламинго живут у солёных озёр и лагун — в Африке, в Южной Америке и даже во Франции, Испании и Португалии. Они едят крошечных рачков, и от этой еды их перья становятся розовыми. Спят фламинго часто стоя на одной ноге.' },
+  { id: 'hedgehog', e: '🦔', ll: [-1.5, 52.5], cc: ['GB', 'IE', 'FR', 'DE', 'PT', 'ES', 'IT', 'BE', 'NL', 'DK', 'SE', 'NO', 'FI', 'PL', 'CZ', 'AT', 'CH', 'RU', 'BY', 'UA'], n: 'Ёж', q: 'Где живёт ёж?', s: 'Ёж живёт в Европе — в садах, парках и лесах. Он ест жуков, червяков и улиток. На спине у ежа тысячи иголок, а когда ему страшно, он сворачивается колючим шариком.' },
+  { id: 'stork', pic: 'stork', ll: [11, 52], cc: ['DE', 'PL', 'PT', 'ES', 'BY', 'LT', 'LV', 'UA', 'FR', 'NL', 'DK', 'CZ', 'AT', 'HU', 'RO', 'TR', 'MA'], n: 'Белый аист', q: 'Где живёт белый аист?', s: 'Белый аист весной прилетает в Германию из Африки. Он ест лягушек, мышей и кузнечиков. Аисты строят огромные гнёзда на крышах и столбах и каждый год возвращаются в своё гнездо.' },
+  { id: 'whale', e: '🐋', ll: [-30, -40], cc: [], sea: true, n: 'Синий кит', q: 'Где живёт синий кит?', s: 'Синий кит живёт в океанах. Это самое большое животное на свете — больше любого динозавра. Ест он крошечных рачков, а сердце у него размером с маленькую машину.' },
+  { id: 'sloth', e: '🦥', ll: [-62, -4], cc: ['BR', 'CO', 'PE', 'EC', 'VE', 'BO', 'GY', 'SR', 'PA', 'CR', 'NI', 'HN'], n: 'Ленивец', q: 'Где живёт ленивец?', s: 'Ленивец живёт в тропических лесах Бразилии и висит на деревьях вниз головой. Он ест листья. Ленивец такой медленный, что в его шерсти растут крошечные зелёные водоросли.' },
+  { id: 'macaw', e: '🦜', ll: [-73, 5], cc: ['CO', 'VE', 'BR', 'PE', 'EC', 'BO', 'GY', 'SR', 'PA', 'CR', 'HN', 'MX', 'PY'], n: 'Попугай ара', q: 'Где живёт попугай ара?', s: 'Ара — большой яркий попугай из лесов Южной Америки. Он ест орехи и семена и раскалывает их крепким клювом. Живут ары очень долго — бывает, больше пятидесяти лет.' },
+  { id: 'jaguar', e: '🐆', ll: [-56, -18], cc: ['BR', 'BO', 'PY', 'AR', 'PE', 'CO', 'VE', 'EC', 'GY', 'SR', 'MX', 'GT', 'BZ', 'HN', 'NI', 'CR', 'PA'], n: 'Ягуар', q: 'Где живёт ягуар?', s: 'Ягуар живёт в лесах и на болотах Южной Америки. Он охотится на капибар, черепах и рыбу. В отличие от многих кошек, ягуар любит воду и отлично плавает.' },
+  { id: 'llama', e: '🦙', ll: [-69, -16], cc: ['PE', 'BO', 'CL', 'AR', 'EC'], n: 'Лама', q: 'Где живёт лама?', s: 'Лама живёт высоко в горах Анды — в Перу, Боливии и Чили. Она ест траву. Если ламу рассердить, она может плюнуть!' },
+  { id: 'monarch', e: '🦋', ll: [-101, 20], cc: ['MX', 'US', 'CA'], n: 'Бабочка-монарх', q: 'Где зимуют бабочки-монархи?', s: 'Каждую осень бабочки-монархи летят из Канады и США в горы Мексики — за тысячи километров. Там они зимуют, облепив деревья так густо, что ветки становятся оранжевыми. Гусеницы монарха едят листья растения ваточника.' },
+  { id: 'bison', e: '🦬', ll: [-104, 44], cc: ['US', 'CA'], n: 'Бизон', q: 'Где живёт бизон?', s: 'Бизон живёт в прериях Северной Америки и ест траву. Это самый тяжёлый зверь Северной Америки. Зимой бизон разгребает снег огромной головой, чтобы добраться до травы.' },
+  { id: 'raccoon', e: '🦝', ll: [-86, 37], cc: ['US', 'CA', 'MX', 'DE'], n: 'Енот', q: 'Где живёт енот?', s: 'Енот живёт в лесах и даже в городах Северной Америки, а ещё в Германии — туда его когда-то привезли. Он ест всё подряд: лягушек, ягоды, орехи. Еду енот ощупывает лапками, будто руками, особенно в воде.' },
+  { id: 'beaver', e: '🦫', ll: [-76, 51], cc: ['CA', 'US', 'RU', 'FI', 'SE', 'NO', 'DE', 'PL', 'BY'], n: 'Бобр', q: 'Где живёт бобр?', s: 'Бобр — символ Канады. Он грызёт деревья крепкими оранжевыми зубами и строит на реках плотины и домики-хатки из веток и ила. Ест бобр кору, листья и водяные растения.' },
+  { id: 'eagle', e: '🦅', ll: [-128, 57], cc: ['US', 'CA'], n: 'Белоголовый орлан', q: 'Где живёт белоголовый орлан?', s: 'Белоголовый орлан живёт в Северной Америке, у рек, озёр и моря. Он ловит рыбу острыми когтями. Орланы год за годом достраивают одно гнездо, и оно может стать тяжелее легковой машины.' },
+];
+// the stork, drawn by hand (an emoji for it does not exist)
+const GLOBE_PICS = { stork: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g stroke="#2A2346" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M29 43 L26 61 M35 43 L37 61" stroke="#E8452C" stroke-width="3"/><path d="M8 33 Q18 22 38 26 Q46 29 45 36 Q40 45 26 43 Q14 41 8 33Z" fill="#fff"/><path d="M8 33 Q16 36 32 35 Q26 42 14 39Z" fill="#2A2346"/><path d="M40 29 Q43 18 44 11" fill="none" stroke-width="7"/><path d="M40 29 Q43 18 44 11" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="45" cy="10" r="5" fill="#fff"/><circle cx="46.5" cy="9" r="1" fill="#2A2346" stroke="none"/><path d="M49 8.5 L62 13 L49 11.5Z" fill="#E8452C"/></g></svg>') };
 const GLOBE_SCREEN = (() => {
   const RAD = Math.PI / 180, PAL = ['#FFB86B', '#8FD694', '#FF9AA8', '#9DC8FF', '#FFD86B', '#C3A6FF', '#7FDCC5', '#F7A1D9'];
   let polys = null, rot = { lon: 20, lat: 30 }, zoom = 1, sel = null, redraw = () => {};
+  // mode: c — countries and cities, a — animals, g — the game «Где живёт…?»; aim — where the globe turns by itself
+  let mode = 'c', game = null, aim = null, setMode = () => {};
   const byCC = {}; GLOBE.forEach((g, i) => { byCC[g.cc] = g; g.col = PAL[i % PAL.length]; });
+  const byA = {}; GLOBE_ANIMALS.forEach(a => { byA[a.id] = a; });
+  const picImg = {}; let picsReady = () => {};
+  Object.keys(GLOBE_PICS).forEach(k => { const im = new Image(); im.onload = () => picsReady(); im.src = GLOBE_PICS[k]; picImg[k] = im; });
+  const aIco = a => a.pic ? `<img class="gl-ai" src="${GLOBE_PICS[a.pic]}" alt="">` : `<span>${a.e}</span>`;
+  // the angle between two places on the globe, in degrees
+  const angle = (lo1, la1, lo2, la2) => { const a = vec(lo1, la1), b = vec(lo2, la2); return Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]))) / RAD; };
+  // does a tap at (lo, la) on the country cc (or on water, cc null) find where the animal lives
+  const livesAt = (a, lo, la, cc) => (cc && a.cc.includes(cc)) || (a.sea && !cc && la > -62) || angle(lo, la, a.ll[0], a.ll[1]) <= 6 || (a.z || []).some(z => angle(lo, la, z[0], z[1]) <= z[2]);
   // capitals always; the other big cities once the globe is brought closer (Europe would be all dots)
   const cities = () => [...GLOBE.map(g => ({ cc: g.cc, c: g.c, ll: g.ll, k: g.k, cs: g.cs, cap: true })), ...(zoom >= 2.5 ? GLOBE_CITIES : [])];
   // the rings once as points on the unit sphere, with their box in degrees for the tap test
@@ -18381,6 +18441,13 @@ const GLOBE_SCREEN = (() => {
       }
       polys.push({ cc, xyz, ll, box: [x0, x1, y0, y1] });
     }));
+    // Antarctica is not in the map: a cap of ice around the South Pole, its peninsula reaching towards South America
+    const pts = [];
+    for (let lo = -180; lo <= 180; lo += 3) pts.push([lo, -70.5 + 2.5 * Math.sin(lo * 3 * RAD) + 7 * Math.exp(-(((lo + 62) / 7) ** 2))]);
+    pts.push([180, -90], [-180, -90]);
+    const n = pts.length, xyz = new Float32Array(n * 3), ll = new Float32Array(n * 2);
+    pts.forEach(([lo, la], i) => { const v = vec(lo, la); xyz.set(v, 3 * i); ll[2 * i] = lo; ll[2 * i + 1] = la; });
+    polys.push({ cc: 'AQ', xyz, ll, box: [-180, 180, -90, -60] });
   }
   const vec = (lo, la) => { const cl = Math.cos(la * RAD); return [cl * Math.sin(lo * RAD), Math.sin(la * RAD), cl * Math.cos(lo * RAD)]; };
   // the turn of the globe: first around the axis (lon), then tilt (lat); the viewer looks along +z
@@ -18421,9 +18488,11 @@ const GLOBE_SCREEN = (() => {
     shell('Глобус', `<div class="gl">
       <div class="gl-box"><div class="gl-ball"><canvas id="glC" aria-label="Глобус"></canvas>
         <div class="gl-zoom"><button class="ibtn" id="glIn" aria-label="Ближе">+</button><button class="ibtn" id="glOut" aria-label="Дальше">−</button></div></div></div>
-      <div class="gl-info" id="glInfo"><p class="gl-hint">👆 Покрути глобус пальцем и нажми на страну или на город.</p></div>
+      <div class="gl-side"><div class="gl-modes" id="glModes"><button class="chip" data-m="c"><span class="emo">🗺️</span>Страны</button><button class="chip" data-m="a"><span class="emo">🐾</span>Животные</button><button class="chip" data-m="g"><span class="emo">🎯</span>Где живёт?</button></div>
+      <div class="gl-info" id="glInfo"><p class="gl-hint">👆 Покрути глобус пальцем и нажми на страну или на город.</p></div></div>
     </div>`, { back: () => TRAVEL.screen() });
-    talk('Покрути глобус пальцем и нажми на любую страну или на точку-город.');
+    const marks = () => document.querySelectorAll('#glModes [data-m]').forEach(b => b.classList.toggle('sel', b.dataset.m === mode));
+    $('#glModes').onclick = e => { const b = e.target.closest('[data-m]'); if (b) { sfx.pop(); setMode(b.dataset.m); } };
     const cv = $('#glC'), ctx = cv.getContext('2d');
     let W = 0, R = 0, dpr = 1, dirty = true, spin = !sel, vx = 0, vy = 0;
     const fit = () => {
@@ -18431,7 +18500,7 @@ const GLOBE_SCREEN = (() => {
       W = Math.round(Math.min(w, h, 640)); dpr = Math.min(2, window.devicePixelRatio || 1);
       cv.width = cv.height = Math.round(W * dpr); cv.style.width = cv.style.height = W + 'px'; dirty = true;
     };
-    fit(); resizeFn = fit; redraw = () => { spin = false; vx = vy = 0; dirty = true; };
+    fit(); resizeFn = fit; redraw = () => { spin = false; vx = vy = 0; aim = null; dirty = true; }; picsReady = () => { dirty = true; };
 
     function draw() {
       const s = W * dpr, c = s / 2; R = W / 2 * .94 * zoom;
@@ -18457,8 +18526,8 @@ const GLOBE_SCREEN = (() => {
         if (!front) continue;
         ctx.closePath();
         const k = byCC[p.cc];
-        ctx.fillStyle = sel && sel.cc === p.cc ? '#FF6B3D' : k ? k.col : '#F3EAD3';
-        ctx.fill(); ctx.strokeStyle = 'rgba(70,60,40,.55)'; ctx.lineWidth = dpr * .7; ctx.stroke();
+        ctx.fillStyle = sel && sel.cc === p.cc ? '#FF6B3D' : p.cc === 'AQ' ? '#FFFFFF' : k && mode === 'c' ? k.col : '#F3EAD3';
+        ctx.fill(); if (p.cc === 'AQ') continue; ctx.strokeStyle = 'rgba(70,60,40,.55)'; ctx.lineWidth = dpr * .7; ctx.stroke();
       }
       // the shine of a ball
       const h = ctx.createRadialGradient(c - r * .4, c - r * .45, 0, c - r * .4, c - r * .45, r * 1.2);
@@ -18467,7 +18536,7 @@ const GLOBE_SCREEN = (() => {
       // cities: a dot, the capital with a flag
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       // names only up close, the chosen one first, and never one over another
-      const boxes = [], ord = cities().map(ct => ({ ct, on: !!(sel && sel.c === ct.c && sel.city) })).sort((a, b) => b.on - a.on);
+      const boxes = [], ord = (mode === 'c' ? cities() : []).map(ct => ({ ct, on: !!(sel && sel.c === ct.c && sel.city) })).sort((a, b) => b.on - a.on);
       ctx.font = `800 ${13 * dpr}px Nunito, sans-serif`;
       ord.forEach(({ ct, on }) => {
         const [x, y, z] = f(...vec(ct.ll[0], ct.ll[1])); if (z < .15) return;
@@ -18479,11 +18548,29 @@ const GLOBE_SCREEN = (() => {
         if (boxes.some(o => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1])) return;
         boxes.push(bx); ctx.lineWidth = 3 * dpr; ctx.strokeStyle = '#fff'; ctx.strokeText(t, px, py - 14 * dpr); ctx.fillStyle = '#2A2346'; ctx.fillText(t, px, py - 14 * dpr);
       });
+      // animals: a picture in a white coin; the chosen one bigger, with an orange ring; in the game only the answer
+      if (mode !== 'c') {
+        const list = GLOBE_ANIMALS.map(a => ({ a, p: f(...vec(a.ll[0], a.ll[1])) })).filter(o => o.p[2] > .12 && (mode === 'a' || (sel && sel.a === o.a.id)))
+          .sort((x, y) => (sel && x.a.id === sel.a) - (sel && y.a.id === sel.a) || x.p[2] - y.p[2]);
+        list.forEach(({ a, p }) => {
+          const on = sel && sel.a === a.id, m = (on ? 22 : 15) * dpr * Math.min(1.6, Math.pow(zoom, .25)), px = c + p[0] * r, py = c - p[1] * r;
+          ctx.beginPath(); ctx.arc(px, py, m, 0, 7); ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fill();
+          ctx.lineWidth = (on ? 4 : 2) * dpr; ctx.strokeStyle = on ? '#FF6B3D' : 'rgba(42,35,70,.6)'; ctx.stroke();
+          if (a.pic) { const im = picImg[a.pic]; if (im.complete && im.naturalWidth) ctx.drawImage(im, px - m * .8, py - m * .8, m * 1.6, m * 1.6); }
+          else { ctx.font = `${Math.round(m * 1.2)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`; ctx.fillStyle = '#000'; ctx.fillText(a.e, px, py + m * .06); }
+        });
+      }
       ctx.restore();
       ctx.beginPath(); ctx.arc(c, c, Math.min(r, c * 1.5), 0, 7); ctx.lineWidth = 3 * dpr; ctx.strokeStyle = 'rgba(42,35,70,.35)'; ctx.stroke();
     }
     loop(t, dt => {
-      if (spin) { rot.lon += dt * 6; dirty = true; }
+      if (aim) {
+        // turn by itself to a place (an animal from a list, a hint in the game), the short way round
+        const dl = ((aim.lon - rot.lon + 540) % 360) - 180, db = aim.lat - rot.lat, k = Math.min(1, dt * 4);
+        if (Math.abs(dl) < .3 && Math.abs(db) < .3) { rot.lon = aim.lon; rot.lat = aim.lat; aim = null; }
+        else { rot.lon = ((rot.lon + dl * k + 540) % 360) - 180; rot.lat += db * k; }
+        dirty = true;
+      } else if (spin) { rot.lon += dt * 6; dirty = true; }
       else if (!drag && (Math.abs(vx) > .01 || Math.abs(vy) > .01)) { turn(vx * dt * 60, vy * dt * 60); vx *= Math.pow(.05, dt); vy *= Math.pow(.05, dt); }
       if (dirty) { dirty = false; draw(); }
     });
@@ -18501,7 +18588,7 @@ const GLOBE_SCREEN = (() => {
     const pts = new Map(); let drag = false, moved = 0, last = null, pinch0 = 0, zoom0 = 1, tLast = 0;
     cv.addEventListener('pointerdown', e => {
       cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]);
-      spin = false; vx = vy = 0;
+      spin = false; vx = vy = 0; aim = null;
       if (pts.size === 1) { drag = true; moved = 0; last = [e.clientX, e.clientY]; tLast = performance.now(); }
       if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a[0] - b[0], a[1] - b[1]); zoom0 = zoom; moved = 99; }
     });
@@ -18523,9 +18610,12 @@ const GLOBE_SCREEN = (() => {
       if (moved < 8 && e.type === 'pointerup') { vx = vy = 0; tap(e); }
     };
     cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    // no click after a touch: when the panel below changes size, it would land on a button that slid under the finger
+    cv.addEventListener('touchend', e => { if (e.cancelable) e.preventDefault(); }, { passive: false });
 
     function tap(e) {
       const b = cv.getBoundingClientRect(), px = e.clientX - b.left - W / 2, py = -(e.clientY - b.top - W / 2), f = rotor();
+      if (mode !== 'c') return tapAnimals(px, py, f);
       // a city within a finger's reach first
       let best = null, bd = 16;
       cities().forEach(ct => { const [x, y, z] = f(...vec(ct.ll[0], ct.ll[1])); if (z < .15) return; const d = Math.hypot(x * R - px, y * R - py); if (d < bd) { bd = d; best = ct; } });
@@ -18537,11 +18627,17 @@ const GLOBE_SCREEN = (() => {
     function links(ks) { return ks.length ? `<div class="gl-go">${ks.map(k => `<button class="chip" data-k="${k}">📖 ${esc(LEARN[k].name)}</button>`).join('')}</div>` : ''; }
     function info(html) {
       const el = $('#glInfo'); el.innerHTML = html + `<button class="ibtn gl-say" id="glSay" aria-label="Послушать ещё раз">${ICON.speaker}</button>`;
+      // the hint stays in the panel even while the voice says the same: otherwise the panel stands empty under the globe
+      el.querySelectorAll('.gl-hint').forEach(p => p.classList.add('no-said'));
       $('#glSay').onclick = () => talk(lastLine);
       el.onclick = e => { const c = e.target.closest('[data-k]'); if (c) { sfx.pop(); screenLearn(c.dataset.k); } };
     }
     function showCountry(cc) {
       sfx.pop(); const g = byCC[cc]; sel = { cc }; dirty = true;
+      if (cc === 'AQ') {
+        const s = 'Антарктида — ледяной материк вокруг Южного полюса. Людей здесь почти нет, только учёные на станциях, зато живут пингвины и тюлени.';
+        info(`<h2 class="gl-t"><span>🧊</span> Антарктида</h2><p class="gl-s no-said">${s}</p>`); talk(s); return;
+      }
       if (!g) {
         const nm = regionName(cc);
         info(`<h2 class="gl-t"><span>${FLAG(cc)}</span> ${esc(nm)}</h2><p class="gl-s">Об этой стране я расскажу в другой раз. Найди страну, раскрашенную яркой краской!</p>${links(storiesOf(cc))}`);
@@ -18556,11 +18652,94 @@ const GLOBE_SCREEN = (() => {
       info(`<h2 class="gl-t"><span>📍</span> ${ct.c}</h2><p class="gl-cap">${FLAG(ct.cc)} ${g ? g.n : esc(regionName(ct.cc))}${ct.cap ? ' · столица' : ''}</p><p class="gl-s no-said">${ct.cs}</p>${links(ks.length ? ks : storiesOf(ct.cc))}`);
       talk(`${ct.c}. ${ct.cs}`);
     }
-    if (sel) { if (sel.city) { const ct = cities().find(x => x.c === sel.c); if (ct) showCity(ct); } else showCountry(sel.cc); }
+
+    // ---------- the animals: tap a picture — who it is and where it lives; tap a country — who lives there ----------
+    const nameOf = cc => cc === 'AQ' ? 'Антарктида' : byCC[cc] ? byCC[cc].n : regionName(cc);
+    const flags = a => a.cc.filter(cc => cc !== 'AQ').slice(0, 8).map(FLAG).join(' ');
+    function animalAt(px, py, f) {
+      let best = null, bd = 24;
+      GLOBE_ANIMALS.forEach(a => { const [x, y, z] = f(...vec(a.ll[0], a.ll[1])); if (z < .12) return; const d = Math.hypot(x * R - px, y * R - py); if (d < bd) { bd = d; best = a; } });
+      return best;
+    }
+    function tapAnimals(px, py, f) {
+      if (mode === 'g') return tapGame(px, py, f);
+      const a = animalAt(px, py, f); if (a) return showAnimal(a);
+      const at = unproject(px, py, R); if (!at) return;
+      const cc = countryAt(at[0], at[1]);
+      sfx.pop(); sel = cc ? { cc } : null; dirty = true;
+      const list = cc ? GLOBE_ANIMALS.filter(x => x.cc.includes(cc)) : GLOBE_ANIMALS.filter(x => x.sea);
+      const nm = cc ? nameOf(cc) : ocean(at[0], at[1]), head = cc ? `<span>${cc === 'AQ' ? '🧊' : FLAG(cc)}</span> ${esc(nm)}` : `🌊 ${nm}`;
+      if (!list.length) {
+        info(`<h2 class="gl-t">${head}</h2><p class="gl-s">Про зверей этой страны я расскажу в другой раз. Нажми на картинку-зверя на глобусе!</p>`);
+        talk(`${nm}. Про зверей этой страны я расскажу в другой раз.`); return;
+      }
+      info(`<h2 class="gl-t">${head}</h2><p class="gl-cap">Здесь живут:</p><div class="gl-go">${list.map(x => `<button class="chip gl-ac" data-a="${x.id}">${aIco(x)} ${x.n}</button>`).join('')}</div>`);
+      talk(`${nm}. Здесь живут: ${list.map(x => x.n).join(', ')}.`);
+    }
+    function showAnimal(a, turn) {
+      sfx.pop(); sel = { a: a.id }; dirty = true;
+      if (turn) aim = { lon: a.ll[0], lat: Math.max(-80, Math.min(80, a.ll[1])) };
+      info(`<h2 class="gl-t">${aIco(a)} ${a.n}</h2>${flags(a) ? `<p class="gl-cap">🏠 ${flags(a)}</p>` : ''}<p class="gl-s no-said">${a.s}</p>`);
+      talk(`${a.n}. ${a.s}`);
+    }
+    // ---------- the game «Где живёт…?»: an animal is asked, the child finds the place; two misses — the globe shows it ----------
+    function nextQuestion() {
+      // every animal once before any comes again, never the same twice in a row
+      const prev = game && game.a; let seen = game ? game.seen : [], pool = GLOBE_ANIMALS.filter(a => a !== prev && !seen.includes(a.id));
+      if (!pool.length) { seen = []; pool = GLOBE_ANIMALS.filter(a => a !== prev); }
+      const a = pool[Math.floor(Math.random() * pool.length)];
+      game = { a, miss: 0, done: false, hint: false, score: game ? game.score : 0, seen: [...seen, a.id] };
+      sel = null; dirty = true;
+      info(`<h2 class="gl-t">${aIco(a)} ${a.q}</h2><p class="gl-s">Покрути глобус и нажми туда, где живёт этот зверь.</p><p class="gl-cap">⭐ ${game.score}</p>`);
+      talk(a.q);
+    }
+    function tapGame(px, py, f) {
+      if (!game) return nextQuestion();
+      const a = game.a;
+      if (game.done) { if (animalAt(px, py, f) === a) showAnimal(a); return; }
+      const at = unproject(px, py, R); if (!at) return;
+      const cc = countryAt(at[0], at[1]);
+      if ((game.hint && animalAt(px, py, f) === a) || livesAt(a, at[0], at[1], cc)) {
+        game.done = true; if (!game.hint) game.score++;
+        sel = { a: a.id }; dirty = true; sfx.good(); confetti(24);
+        info(`<h2 class="gl-t">${aIco(a)} Правильно!</h2><p class="gl-s no-said">${a.s}</p><p class="gl-cap">⭐ ${game.score}</p><div class="gl-go"><button class="chip" id="glNext"><span class="emo">▶️</span>Дальше</button></div>`);
+        $('#glNext').onclick = e => { e.stopPropagation(); sfx.pop(); nextQuestion(); };
+        talk(`Правильно! ${a.s}`); return;
+      }
+      game.miss++; sfx.oops();
+      // a capital letter: the name starts the sentence («os EUA» in Portuguese)
+      const nm0 = cc ? nameOf(cc) : ocean(at[0], at[1]), nm = nm0.charAt(0).toUpperCase() + nm0.slice(1);
+      if (game.miss < 2) {
+        info(`<h2 class="gl-t">${aIco(a)} ${a.q}</h2><p class="gl-s">Это ${esc(nm)}. Не здесь — попробуй ещё!</p><p class="gl-cap">⭐ ${game.score}</p>`);
+        talk(`Это ${nm}. Не здесь — попробуй ещё!`); return;
+      }
+      game.hint = true; sel = { a: a.id }; dirty = true;
+      aim = { lon: a.ll[0], lat: Math.max(-80, Math.min(80, a.ll[1])) };
+      info(`<h2 class="gl-t">${aIco(a)} ${a.q}</h2><p class="gl-s">Это ${esc(nm)}. Подсказка: смотри, куда повернётся глобус, и нажми на зверя!</p><p class="gl-cap">⭐ ${game.score}</p>`);
+      talk(`Это ${nm}. Подсказка: смотри, куда повернётся глобус, и нажми на зверя!`);
+    }
+    $('#glInfo').addEventListener('click', e => { const c = e.target.closest('[data-a]'); if (c) showAnimal(byA[c.dataset.a], true); });
+    setMode = m => {
+      mode = m; sel = null; aim = null; marks(); dirty = true;
+      if (m === 'g') { game = game ? { ...game, a: null, seen: game.seen } : null; nextQuestion(); return; }
+      game = null;
+      if (m === 'a') {
+        info('<p class="gl-hint">🐾 Нажми на зверя — я расскажу, где он живёт. А если нажать на страну, узнаешь, кто там живёт.</p>');
+        talk('Нажми на зверя на глобусе, и я расскажу, где он живёт. А если нажать на страну, узнаешь, кто там живёт.');
+      } else {
+        info('<p class="gl-hint">👆 Покрути глобус пальцем и нажми на страну или на город.</p>');
+        talk('Покрути глобус пальцем и нажми на любую страну или на точку-город.');
+      }
+    };
+    marks();
+    if (mode === 'g') nextQuestion();
+    else if (sel && sel.a) showAnimal(byA[sel.a]);
+    else if (sel && mode === 'c') { if (sel.city) { const ct = cities().find(x => x.c === sel.c); if (ct) showCity(ct); } else showCountry(sel.cc); }
+    else setMode(mode);
   }
   // for tests: turn the globe to a place, read how it stands
   const look = (lon, lat, z = 1) => { rot = { lon, lat }; zoom = z; redraw(); };
-  return { screen, look, state: () => ({ ...rot, zoom, sel }), countryAt: (lo, la) => { build(); return countryAt(lo, la); } };
+  return { screen, look, mode: m => setMode(m), state: () => ({ ...rot, zoom, sel, mode, game: game && game.a ? { id: game.a.id, done: game.done, miss: game.miss, score: game.score } : null }), countryAt: (lo, la) => { build(); return countryAt(lo, la); } };
 })();
 /* GLOBE-END */
 /* HIKE-BEGIN */
