@@ -1062,6 +1062,18 @@ b.r{color:var(--berry)}
 .hw-fridge .hw-dial{transform-origin:276px 103px;transition:transform .5s}
 .hw-fridge svg.run .hw-dial{transform:rotate(70deg)}
 /* PLANTS-CSS */
+.lf{align-items:center}
+.lf-fig{display:flex;justify-content:center;align-items:center;width:min(100%,260px);margin:0 auto;border-radius:24px;background:linear-gradient(#EAF6FF,#F7FBFF);box-shadow:0 5px 0 var(--line-strong);padding:8px}
+.lf-svg{width:min(34vh,220px);height:min(34vh,220px);display:block}
+.lf-swing{transform-origin:50px 96px;animation:lfSwing 3.6s ease-in-out infinite}
+@keyframes lfSwing{50%{transform:rotate(5deg)}}
+.lf-opts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}
+.lf-o{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1 1 90px;max-width:150px;padding:8px 6px;border:0;border-radius:22px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);font:800 17px var(--f-body);color:var(--ink);cursor:pointer}
+.lf-o:disabled{opacity:.55;cursor:default}
+.lf-o.right{opacity:1;background:var(--t-green);box-shadow:0 4px 0 var(--leaf),inset 0 0 0 3px var(--leaf)}
+.lf-o.hint{animation:bdBlink .7s ease-in-out infinite}
+.lf-crown{width:54px;height:54px}
+.pl-hub .card small{font:700 13px var(--f-body);color:var(--ink-soft)}
 .pl-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .pl-btns .big{flex:1 1 90px;font-size:17px;padding:12px 8px}
 .pl-btns .big.want{box-shadow:0 5px 0 #D39A00,inset 0 0 0 3px var(--sun)}
@@ -8426,7 +8438,7 @@ function screenLearn(k) {
   const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
   const st = shell(T.name, `<p class="lead">${Q() ? "Read aloud, and then answer the question." : "Listen to the story and answer the question."}</p>
     ${k === 'old' ? `<div class="prow-btns"><button class="big" id="oldQuiz">⏳ What came first?</button></div>` : ''}
-    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : null });
+    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : null });
   talk(Q() ? "Choose a story. Read it aloud and answer the question." : "Choose a story. I will tell it, and you will answer the question.");
   st.onclick = e => { if (e.target.closest('#oldQuiz')) { sfx.pop(); screenTimeline(); return; } const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
@@ -12304,7 +12316,7 @@ const PLANTS = (() => {
         <div class="bd-side"><div class="bd-card" id="plCard"></div>
           <div class="pl-btns" id="plBtns"><button class="big" data-a="plant">🌰 Plant</button><button class="big" data-a="water">💧 Water</button><button class="big" data-a="sun">☀️ Sun</button></div>
           <div class="pl-steps" id="plSteps">${ST.slice(1).map((s, i) => `<span data-i="${i + 1}" title="${esc(s.n)}">${s.e}</span>`).join('')}</div></div></div>
-    </div>`);
+    </div>`, { back: hub });
     const sv = $('#plSvg'), card = $('#plCard'), btns = $('#plBtns');
     const fill = (h, text, ask) => { card.innerHTML = `<h2>${h}</h2><p class="no-said">${text}</p>${ask ? `<p class="pl-ask no-said">${ask}</p>` : ''}<button class="link-btn" id="plAgain">🔊 Listen again</button>`; $('#plAgain').onclick = () => talk(text + (ask ? ' ' + ask : '')); };
     const paint = () => {
@@ -12342,7 +12354,7 @@ const PLANTS = (() => {
       const sp = talk(s.t + (ask ? ' ' + ask : ''));
       if (last) {
         await sp; if (t !== tok) return; await wait(600); if (t !== tok) return;
-        finish({ key: 'plants-grow', stars: 3, line: G("You grew a tree from a seed: roots, trunk, leaves, flowers and apples!", "You grew a tree from a seed: roots, trunk, leaves, flowers and apples!"), again: () => grow(), menu: goHome });
+        finish({ key: 'plants-grow', stars: 3, line: G("You grew a tree from a seed: roots, trunk, leaves, flowers and apples!", "You grew a tree from a seed: roots, trunk, leaves, flowers and apples!"), again: () => grow(), menu: hub });
       }
     };
     sv.addEventListener('click', e => {
@@ -12406,7 +12418,7 @@ const PLANTS = (() => {
       <div class="lab-tabs"><button class="chip ${learn ? 'sel' : ''}" data-m="learn">🔍 Learn</button><button class="chip ${learn ? '' : 'sel'}" data-m="find">🎯 Find</button></div>
       <div class="bd-main"><div class="bd-fig">${partsSvg()}</div>
         <div class="bd-side"><div class="bd-card" id="plCard"></div>${learn ? `<div class="bd-chips" id="plChips">${O.map(o => `<button class="chip" data-o="${o.k}"><i class="bd-dot" style="background:${o.c}"></i>${o.n}</button>`).join('')}</div>` : ''}</div></div>
-    </div>`);
+    </div>`, { back: hub });
     $('.pl-parts .lab-tabs').onclick = e => { const b = e.target.closest('[data-m]'); if (b && b.dataset.m !== mode) { sfx.pop(); parts(b.dataset.m); } };
     const sv = $('#plPSvg'), card = $('#plCard');
     const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
@@ -12426,7 +12438,7 @@ const PLANTS = (() => {
         await talk(o.t);
         if (t === tok && seen.size === O.length && !done && sv.dataset.on === k) {
           done = true;
-          finish({ key: 'plants-learn', stars: 3, line: G("You learned about all the parts of a plant: root, stem, leaf, flower and fruit! Now play “Find”.", "You learned about all the parts of a plant: root, stem, leaf, flower and fruit! Now play “Find”."), again: () => parts('learn'), next: () => parts('find'), menu: goHome });
+          finish({ key: 'plants-learn', stars: 3, line: G("You learned about all the parts of a plant: root, stem, leaf, flower and fruit! Now play “Find”.", "You learned about all the parts of a plant: root, stem, leaf, flower and fruit! Now play “Find”."), again: () => parts('learn'), next: () => parts('find'), menu: hub });
         }
       };
       sv.addEventListener('click', e => { const k = tapped(e); if (k) show(k); });
@@ -12454,7 +12466,7 @@ const PLANTS = (() => {
         await talk(line);
         if (t !== tok) return;
         i++;
-        if (i >= order.length) finish({ key: 'plants-find', stars: 3, line: G("You found all the parts of the plant!", "You found all the parts of the plant!"), again: () => parts('find'), menu: goHome });
+        if (i >= order.length) finish({ key: 'plants-find', stars: 3, line: G("You found all the parts of the plant!", "You found all the parts of the plant!"), again: () => parts('find'), menu: hub });
         else ask();
         return;
       }
@@ -12466,13 +12478,119 @@ const PLANTS = (() => {
     });
     ask();
   }
-  return { grow, parts };
+  // ---------- 3. guess the tree by its leaf ----------
+  // k, name, crown (type, colour), leaf colour, what to say after a right answer, a hint about the leaf's shape
+  const TR = [
+    { k: 'oak', n: "Oak", crown: ['wide', '#4E9A3B'], c: '#5FA83F', t: "This is an oak leaf. Its edges are wavy, like a little cloud. An oak tree lives for hundreds of years, and its fruits are acorns.", h: "This leaf has wavy edges." },
+    { k: 'maple', n: "Maple", crown: ['bumpy', '#E0872B'], c: '#8BC34A', t: "This is a maple leaf. It is like a little hand with pointy fingers. In autumn it turns yellow, orange or red. And maple seeds fly down like tiny helicopters.", h: "This leaf looks like a little hand with pointy fingers." },
+    { k: 'birch', n: "Birch", crown: ['oval', '#7ED957'], c: '#7ED957', t: "This is a birch leaf: a little triangle with tiny teeth along the edge. A birch has a white trunk with dark stripes, and you can spot it from far away.", h: "This leaf is a little triangle with tiny teeth." },
+    { k: 'linden', n: "Lime tree", crown: ['round', '#3E9B4F'], c: '#4CAF50', t: "This is a lime tree leaf, shaped like a heart. In summer the lime tree has sweet-smelling flowers, and bees come flying to it.", h: "This leaf looks like a heart." },
+    { k: 'chestnut', n: "Horse chestnut", crown: ['candle', '#4F9A4A'], c: '#5DA35A', t: "This is a horse chestnut leaf. It looks like a hand with seven fingers. In autumn shiny brown conkers fall from the tree, in prickly green cases.", h: "This leaf looks like a hand with lots of fingers." },
+    { k: 'willow', n: "Willow", crown: ['weep', '#9CCB5B'], c: '#9CCB5B', t: "These are willow leaves: narrow and long, like little boats. A willow loves water and grows by rivers and ponds. Its bendy branches hang down to the water.", h: "These leaves are narrow and long, like little boats." },
+    { k: 'spruce', n: "Spruce", crown: ['cone', '#2E7D4F'], c: '#2E7D4F', t: "This is a spruce branch. A spruce has prickly needles instead of leaves, and they stay green all year round. Spruce cones hang down.", h: "This is a prickly twig with needles." },
+    { k: 'rowan', n: "Rowan", crown: ['berry', '#66BB6A'], c: '#66BB6A', t: "This is a rowan leaf: lots of little leaflets sit on one twig. In autumn the rowan's berries turn red, and the birds peck at them.", h: "This twig has lots of little leaflets." }
+  ];
+  const poly = pts => 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L') + ' Z';
+  const lanceL = (L, w) => `M0,0 C${-w},${-L * .3} ${-w},${-L * .75} 0,${-L} C${w},${-L * .75} ${w},${-L * .3} 0,0Z`;
+  const lf = (d, col, extra = '') => `<path d="${d}" fill="${col}" stroke="rgba(0,0,0,.35)" stroke-width="1.8" stroke-linejoin="round" ${extra}/>`;
+  const VEIN = 'stroke="rgba(0,0,0,.28)" stroke-width="1.6" stroke-linecap="round" fill="none"';
+  const leafArt = t => {
+    const c = t.c, stem = (y0, y1) => `<path d="M50,${y0} L50,${y1}" stroke="#7A5A2E" stroke-width="3.4" stroke-linecap="round"/>`;
+    if (t.k === 'oak') {
+      const pts = []; for (let a = 0; a < 6.2832; a += .1) pts.push([50 + 22 * Math.sin(a) * (1 + .2 * Math.sin(8 * a)), 48 - 38 * Math.cos(a) * (1 + .12 * Math.sin(8 * a))]);
+      return stem(84, 98) + lf(poly(pts), c) + `<path d="M50,84 L50,16 M50,64 L34,52 M50,64 L66,52 M50,44 L38,34 M50,44 L62,34" ${VEIN}/>`;
+    }
+    if (t.k === 'maple') return stem(76, 98) + lf('M50,8 L58,28 L72,20 L68,40 L92,38 L76,54 L86,68 L60,66 L54,76 L50,76 L46,76 L40,66 L14,68 L24,54 L8,38 L32,40 L28,20 L42,28 Z', c) + `<path d="M50,76 L50,16 M50,70 L20,66 M50,70 L80,66 M50,52 L16,40 M50,52 L84,40" ${VEIN}/>`;
+    if (t.k === 'birch') {
+      const L = [], R = [];
+      for (let y = 84, i = 0; y >= 8; y -= 3, i++) { const p = (84 - y) / 76, w = 36 * Math.pow(Math.sin(Math.PI * Math.pow(p, .75)), .9) * (i % 2 ? 1.09 : .97); L.push([50 - w, y]); R.unshift([50 + w, y]); }
+      return stem(84, 98) + lf(poly([...L, ...R]), c) + `<path d="M50,84 L50,12 M50,66 L30,56 M50,66 L70,56 M50,46 L36,36 M50,46 L64,36" ${VEIN}/>`;
+    }
+    if (t.k === 'linden') return stem(80, 98) + lf('M50,10 C70,30 90,48 80,70 C72,86 56,88 50,80 C44,88 28,86 20,70 C10,48 30,30 50,10Z', c) + `<path d="M50,80 L50,18 M50,66 L30,54 M50,66 L70,54 M50,44 L38,34 M50,44 L62,34" ${VEIN}/>`;
+    if (t.k === 'chestnut') {
+      const A = [-72, -48, -24, 0, 24, 48, 72], Ls = [30, 36, 40, 44, 40, 36, 30];
+      return stem(74, 98) + A.map((a, i) => `<g transform="translate(50 74) rotate(${a})">${lf(lanceL(Ls[i], 7.5), c)}<path d="M0,-2 L0,${-Ls[i] + 6}" ${VEIN}/></g>`).join('');
+    }
+    if (t.k === 'willow') return [-22, 0, 22].map(a => `<g transform="translate(50 95) rotate(${a})">${lf(lanceL(88, 7), c)}<path d="M0,-4 L0,-78" ${VEIN}/></g>`).join('');
+    if (t.k === 'spruce') {
+      let s = `<path d="M50,98 L50,8" stroke="#7A5A2E" stroke-width="4" stroke-linecap="round"/><g stroke="${c}" stroke-width="3.4" stroke-linecap="round">`;
+      for (let y = 88; y > 14; y -= 6) { const l = 8 + Math.min(18, (y - 12) * .28); s += `<path d="M50,${y} L${50 - l},${y - 9} M50,${y} L${50 + l},${y - 9}"/>`; }
+      return s + '</g>';
+    }
+    // rowan: a twig with pairs of small leaflets
+    return `<path d="M50,98 L50,12" stroke="#7A5A2E" stroke-width="3.4" stroke-linecap="round"/>` + [80, 62, 44, 28].map(y => [-62, 62].map(a => `<g transform="translate(50 ${y}) rotate(${a})">${lf(lanceL(24, 6.5), c)}<path d="M0,-2 L0,-19" ${VEIN}/></g>`).join('')).join('') + `<g transform="translate(50 14)">${lf(lanceL(22, 6.5), c)}</g>`;
+  };
+  const leafSvg = t => `<svg viewBox="0 0 100 100" class="lf-svg" role="img" aria-label="${esc("Leaf")}"><g class="lf-swing">${leafArt(t)}</g></svg>`;
+  const crownSvg = t => {
+    const [ty, c] = t.crown, trunk = t.k === 'birch' ? `<rect x="27" y="36" width="6" height="22" rx="2" fill="#F4F1EA" stroke="#B9B2A3" stroke-width="1"/><path d="M28,42 h3 M29,48 h3 M28,54 h3" stroke="#3B2A4A" stroke-width="1.6"/>` : `<rect x="27" y="36" width="6" height="22" rx="2" fill="#8B5A2B"/>`;
+    let s = '';
+    if (ty === 'wide') s = `<ellipse cx="30" cy="26" rx="25" ry="17" fill="${c}"/><circle cx="14" cy="30" r="9" fill="${c}"/><circle cx="46" cy="30" r="9" fill="${c}"/>`;
+    else if (ty === 'bumpy') s = `<circle cx="30" cy="22" r="14" fill="${c}"/><circle cx="18" cy="32" r="11" fill="${c}"/><circle cx="42" cy="32" r="11" fill="${c}"/>`;
+    else if (ty === 'oval') s = `<ellipse cx="30" cy="24" rx="13" ry="22" fill="${c}"/>`;
+    else if (ty === 'round') s = `<circle cx="30" cy="26" r="21" fill="${c}"/>`;
+    else if (ty === 'candle') s = `<circle cx="30" cy="26" r="21" fill="${c}"/>${[[22, 16], [36, 14], [30, 26], [20, 32], [40, 30]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#FFF"/>`).join('')}`;
+    else if (ty === 'weep') s = `<ellipse cx="30" cy="16" rx="22" ry="11" fill="${c}"/>${[10, 16, 22, 30, 38, 44, 50].map(x => `<path d="M${x},18 q-3,16 0,28" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"/>`).join('')}`;
+    else if (ty === 'cone') return `<svg viewBox="0 0 60 60" class="lf-crown" aria-hidden="true"><rect x="27" y="46" width="6" height="12" rx="2" fill="#8B5A2B"/><path d="M30,2 L44,22 H36 L48,38 H38 L52,52 H8 L22,38 H12 L24,22 H16Z" fill="${c}"/></svg>`;
+    else s = `<circle cx="30" cy="26" r="19" fill="${c}"/>${[[22, 20], [36, 18], [30, 30], [20, 32], [40, 31]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#E5484D"/>`).join('')}`;
+    return `<svg viewBox="0 0 60 60" class="lf-crown" aria-hidden="true">${ty === 'weep' ? '' : trunk}${ty === 'weep' ? trunk : ''}${s}</svg>`;
+  };
+  function leaves() {
+    const t = newScreen(), N = 6, order = shuffle(TR).slice(0, N);
+    let i = 0, miss = 0, busy = false, first = 0;
+    shell("Guess the tree", `<div class="bd lf"><div class="lf-fig" id="lfFig"></div><div class="bd-card" id="lfCard"></div><div class="lf-opts" id="lfOpts"></div></div>`, { back: hub });
+    const fig = $('#lfFig'), card = $('#lfCard'), opts = $('#lfOpts');
+    const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
+    const ask = () => {
+      const tr = order[i]; miss = 0; busy = false;
+      fig.innerHTML = leafSvg(tr);
+      opts.innerHTML = shuffle([tr, ...shuffle(TR.filter(x => x !== tr)).slice(0, 2)]).map(o => `<button class="lf-o" data-k="${o.k}">${crownSvg(o)}<b>${o.n}</b></button>`).join('');
+      fill(`<h2>🍃 Which tree is it?</h2><p>Look at the leaf and pick the tree.</p><div class="bd-prog">${order.map((_, j) => `<i class="${j < i ? 'ok' : ''}"></i>`).join('')}</div>`);
+      talk("Which tree is it? Look at the leaf.");
+    };
+    opts.onclick = async e => {
+      const b = e.target.closest('.lf-o'); if (!b || busy || b.disabled) return;
+      const tr = order[i];
+      if (b.dataset.k !== tr.k) {
+        miss++; b.disabled = true; wiggle(b); tone(330, .15, 'sine', .08);
+        if (miss >= 2) { const r = $(`.lf-o[data-k="${tr.k}"]`, opts); if (r) r.classList.add('hint'); }
+        const line = miss >= 2 ? tr.h + " Look where it blinks!" : "Not that one. Look at the leaf again!";
+        card.querySelector('p').textContent = line; talk(line); return;
+      }
+      busy = true; if (!miss) first++;
+      sfx.good(); b.classList.add('right'); hopEl(b); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top);
+      $$('.lf-o', opts).forEach(x => { x.disabled = true; });
+      const line = `${pickOne(["Right!", "Yes, that’s right!", "Exactly!"])} ${tr.t}`;
+      fill(`<h2>${tr.n}</h2><p>${line}</p><div class="prow-btns"><button class="big" id="lfNext">${i + 1 < N ? "Next →" : "Done"}</button></div>`);
+      $('#lfNext').onclick = () => { sfx.pop(); next(); };
+      await talk(line);
+    };
+    const next = () => {
+      i++;
+      if (i >= N) finish({ key: 'plants-leaves', stars: first >= 5 ? 3 : first >= 3 ? 2 : 1, line: G("You knew the trees by their leaves!", "You knew the trees by their leaves!"), again: () => leaves(), menu: hub });
+      else ask();
+    };
+    ask();
+  }
+
+  // ---------- the one tile: «Растения» ----------
+  function hub() {
+    newScreen();
+    const st = LEARN.plants.items.length;
+    const cards = [['grow', '🌱', "Grow a tree", 'var(--t-green)', "seed → apples"], ['parts', '🌿', "Parts of a plant", 'var(--t-mint)', "root, stem, leaf…"], ['leaves', '🍃', "Guess the tree", 'var(--t-yellow)', "by its leaf"],
+      ...(st ? [['stories', '🌳', "Amazing plants", 'var(--t-peach)', learnProg('plants')]] : [])];
+    const s = shell("Plants", `<p class="lead">Pick what to play.</p><div class="cards pl-hub">${cards.map(([k, e, n, bg, sub]) => `<button class="card" data-a="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small></button>`).join('')}</div>`);
+    talk("Let's learn about plants! Pick what to play.");
+    s.onclick = e => {
+      const c = e.target.closest('[data-a]'); if (!c) return; sfx.pop();
+      ({ grow, parts: () => parts(), leaves, stories: () => screenLearn('plants') })[c.dataset.a]();
+    };
+  }
+  return { grow, parts, leaves, hub, art: { TR, leafSvg, crownSvg } };
 })();
-GAMES.push(
-  { id: 'plant-grow', name: "Grow a tree", sub: "seed → roots → leaves → apples", ico: () => pic('🌱'), bg: 'var(--t-green)', go: () => PLANTS.grow(), grp: 10, kw: "plants tree seed grow apple leaves root nature" },
-  { id: 'plant-parts', name: "Parts of a plant", sub: "root, stem, leaf, flower, fruit", ico: () => pic('🌿'), bg: 'var(--t-mint)', go: () => PLANTS.parts(), grp: 10, kw: "plants root stem leaf flower fruit botany nature" });
-{ const g = GAMES.find(x => x.id === 'learn-plants'); if (g) g.hide = () => !LEARN.plants.items.length; }
-{ const nc = INTEREST_CAT.find(c => c.id === 'nature-cat'), pl = nc && (nc.items || []).find(it => it.id === 'plants'); if (pl && pl.tiles) ['plant-grow', 'plant-parts', 'learn-plants'].forEach(x => { if (!pl.tiles.includes(x)) pl.tiles.push(x); }); }
+GAMES.push({ id: 'plants', name: "Plants", sub: "grow a tree, parts of a plant, leaves, stories", ico: () => pic('🌱'), bg: 'var(--t-green)', go: () => PLANTS.hub(), grp: 10, prog: () => LEARN.plants.items.length ? learnProg('plants') : '',
+  kw: "plants tree seed grow apple tree leaves leaf root stem flower fruit botany nature oak maple birch spruce" });
+{ const g = GAMES.find(x => x.id === 'learn-plants'); if (g) g.hide = () => true; }  // the stories live inside the «Растения» tile
+{ const nc = INTEREST_CAT.find(c => c.id === 'nature-cat'), pl = nc && (nc.items || []).find(it => it.id === 'plants'); if (pl && pl.tiles) ['plants'].forEach(x => { if (!pl.tiles.includes(x)) pl.tiles.push(x); }); }
 /* PLANTS-END */
 /* SPACE-BEGIN */
 /* ---------- «Космос»: the Sun and eight planets drawn in SVG (original drawing, not to scale: the order and which is
@@ -14314,6 +14432,9 @@ INTEREST_CAT.forEach(cat => (cat.items || []).forEach(i => { if (Array.isArray(i
 // children: their numbers and their game; adults (grandparents, mum, dad…): when they last opened their link, their link,
 // and their screen exactly as they see it, in a preview that sends nothing and does not tie this phone to them
 var PREVIEW = null, PG_KEY = null;
+// a grown-up opened a child's game from the panel: games open with one tap (no «name first» for little ones)
+// until the phone is handed over through «Кто играет?» (v146)
+var ADULT_HOME = false;
 const PV_KEYS = [GPROG_KEY, GOUT_KEY, HG_KEY, 'govorilki-guest-here'];
 const pinHash = s => { let h = 5381; for (const c of 'govorilki-pult:' + s) h = (h * 33 + c.charCodeAt(0)) >>> 0; return h.toString(36); };
 function pultOpen() { if (ROOT.parentPhone) return true; try { return !!ROOT.pultPin && sessionStorage.getItem('govorilki-pult') === ROOT.pultPin; } catch (e) { return false; } }
@@ -14402,7 +14523,7 @@ function screenPult() {
     if (sl) { sfx.pop(); semShare(ROOT.families[sl.dataset.semlink], document.getElementById('pvsem-' + sl.dataset.semlink)); return; }
     if (sa) { sfx.tick(); ROOT.startAt = sa.dataset.start; save(); $$('[data-start]').forEach(x => { x.classList.toggle('sel', x === sa); x.setAttribute('aria-pressed', x === sa); }); return; }
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents(); return; }
-    if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
+    if (k) { sfx.pop(); ADULT_HOME = true; useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
     const po = e.target.closest('[data-por]'); if (po) { sfx.pop(); screenPortrait(po.dataset.fam, po.dataset.por, screenPult); return; }
     if (a) { sfx.pop(); useFamily(a.dataset.add); P = ROOT.profiles[ROOT.cur] || P; famPeople(); save(); screenFamilyEdit(a.dataset.add); return; }
@@ -14421,7 +14542,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '146';
+const APP_VER = '147';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -20925,7 +21046,7 @@ const POLISH = (() => {
     st.addEventListener('click', e => {
       if (!document.body.classList.contains('young') || !$('#tabBar')) return;
       // a grandparent playing the child's games reads: one tap opens the game (v146)
-      if (GPLAY || (GUEST && GUEST_OFF && ROOT.curFam === 'gk')) return;
+      if (GPLAY || ADULT_HOME || (GUEST && GUEST_OFF && ROOT.curFam === 'gk')) return;
       const t = e.target.closest('.tile'); if (!t || !st.contains(t) || !t.closest('.tiles')) return;
       if (ARM && ARM.el === t && Date.now() - ARM.at < 10000) { ARM = null; t.classList.remove('tl-armed'); return; }
       e.preventDefault(); e.stopImmediatePropagation();
@@ -22377,7 +22498,7 @@ function whoEnter(fid, kid, here) {
 }
 const whoKid = (f, id) => { const st = ROOT.profiles[id].settings; return `<button class="who-kid" data-who="${id}" data-fam="${f.id}"><span class="who-face">${kidFace(id)}</span><b>${esc(st.label || st.name || '…')}</b><small>⭐ ${ROOT.profiles[id].stars || 0}</small></button>`; };
 function screenWho(fid) {
-  newScreen(); document.body.classList.remove('quest');
+  ADULT_HOME = false; newScreen(); document.body.classList.remove('quest');
   const fams = whoFams();
   if (!fams.length) { goHome(); return; }
   whoLangs();
