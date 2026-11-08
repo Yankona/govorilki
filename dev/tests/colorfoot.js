@@ -35,7 +35,7 @@ const kid = (name, g, age, fr, lang, likes) => ({ stars: 5, plays: {}, learn: {}
     for (let i = 0; i < 12; i++) { const ry = await p.evaluate(() => { const o = document.querySelector('#ryzBtn svg .lv-o'); return o ? +o.getAttribute('ry') : 0; }); maxRy = Math.max(maxRy, ry); await p.waitForTimeout(90); }
     if (maxRy < 2) fail.push('mouth still ' + maxRy);
     await p.waitForTimeout(1600); const said = await p.evaluate(() => window.__said.slice(-3).join(' '));
-    if (!/Месси|Мэсси|Messi/.test(said)) fail.push('said: ' + said);
+    if (!/Месси|Мэсси|Messi/.test(said.replace(/\u0301/g, ''))) fail.push('said: ' + said);
     if ((await R('P.settings.friend')) !== 'messi') fail.push('not chosen');
     await p.click('#friendOk'); await p.waitForTimeout(900);
     if (!(await p.evaluate(() => document.querySelector('.screen').innerHTML.includes('#74ACDF')))) fail.push('no Messi on home');
