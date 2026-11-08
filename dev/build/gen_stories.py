@@ -32,6 +32,7 @@ def acc_k(w):
 conflicts = []
 # stress the story writers proposed that is wrong for the word as it stands (checked by ear and in the dictionary)
 REJECT = {'соломенным', 'исаакиевского', 'третьяков', 'третьяковская', 'ярославля', 'ярославле', 'салехард', 'салехарде', 'соловках', 'палехская', 'ростральные', 'ростральными', 'александровская', 'исаакиевской', 'рафаэля', 'бурлаки', 'ладожского', 'конюшенной', 'садовой', 'котлин', 'вильгельм', 'измайлове', 'екатерина', 'екатерины', 'агриппины', 'менделеева', 'мелихово', 'боголюбский'}
+REJECT |= {'сингапурский', 'сингапурском', 'колокол', 'сямисэн'}  # Asia 1: writers' stress is wrong (dictionary right)
 for w, f in stress.items():
     if ' ' in w or not re.fullmatch(r'[а-яё+-]+', f) or f.replace('+', '') != w or f.count('+') < 1: continue
     for part, pf in zip(w.split('-'), f.split('-')):
