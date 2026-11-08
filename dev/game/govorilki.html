@@ -762,6 +762,82 @@ b.r{color:var(--berry)}
 .bd svg[data-on=lungs] .bd-air{animation:bdAir 3.4s ease-in-out infinite}
 @keyframes bdAir{0%,100%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(26px);opacity:0}}
 .bd svg[data-on=heart] .bd-blood{stroke-dasharray:6 10;animation:bdFlow .9s linear infinite}
+.hw-menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;max-width:560px;margin:0 auto;padding:4px 0 20px}
+.hw-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;border:0;border-radius:26px;padding:18px 10px;box-shadow:0 6px 0 var(--line-strong);cursor:pointer;color:var(--ink)}
+.hw-card .pic{font-size:64px;line-height:1}
+.hw-card b{font:900 20px/1.15 var(--f-body)}
+.hw-ok{position:absolute;top:8px;right:10px;width:26px;height:26px}
+.hw{display:flex;flex-direction:column;gap:10px;width:100%;max-width:900px;margin:0 auto;padding-bottom:20px}
+.hw-main{display:flex;flex-direction:column;align-items:center;gap:12px}
+.hw-col{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:520px}
+.hw-fig{width:100%;border-radius:24px;background:linear-gradient(#DDF0FF,#F7FBFF);box-shadow:0 5px 0 var(--line-strong);overflow:hidden;line-height:0}
+.hw-fig svg{width:100%;height:auto;max-height:48vh;display:block;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.hw-side{display:flex;flex-direction:column;gap:10px;width:100%;max-width:420px}
+.hw-pow{min-height:54px;font-size:21px}
+.hw-q .hw-fig svg{max-height:26vh}
+.hw-ans{display:flex;flex-direction:column;gap:10px}
+.hw-a{border:0;border-radius:18px;background:var(--paper);padding:12px 16px;font:800 18px/1.25 var(--f-body);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);cursor:pointer;text-align:left}
+.hw-a.yes{background:#CFF3DC;box-shadow:0 5px 0 #2FA865}
+.hw-a.no{opacity:.4;cursor:default}
+.lab-tabs .chip.hw-call{background:var(--t-yellow);animation:hwCall 1s ease-in-out infinite}
+@keyframes hwCall{50%{transform:scale(1.1)}}
+@media (min-width:720px){.hw-main{flex-direction:row;align-items:flex-start;justify-content:center}.hw-fig svg{max-height:60vh}}
+.hw-p{cursor:pointer;transition:opacity .25s}
+.hw svg[data-on] .hw-p:not(.on){opacity:.45}
+.hw-p.on{filter:drop-shadow(0 0 3px #FFB000) drop-shadow(0 0 3px #FFB000)}
+.hw-fx{pointer-events:none;opacity:0;transition:opacity .3s}
+.hw svg.run .hw-fx{opacity:1}
+.hw svg.run .hw-cur,.hw svg.run .hw-hot,.hw svg.run .hw-cold{animation:hwFlow .7s linear infinite}
+@keyframes hwFlow{to{stroke-dashoffset:-30}}
+.hw svg.run .hw-spark{animation:hwSpark .8s ease-in-out infinite}
+@keyframes hwSpark{0%,100%{opacity:0}50%{opacity:1}}
+.hw-lamp .hw-glow{opacity:0;transition:opacity .3s;pointer-events:none}
+.hw-lamp svg.run .hw-glow{opacity:1;animation:hwPulse 2s ease-in-out infinite}
+@keyframes hwPulse{50%{opacity:.8}}
+.hw-lamp .hw-bulb{transition:fill .3s}
+.hw-lamp svg.run .hw-bulb{fill:#FFF6C2}
+.hw-lamp svg.run .hw-fil{stroke:#FFB000;filter:drop-shadow(0 0 3px #FFE45C)}
+.hw-lamp svg.run .hw-rays path{animation:hwSpark 1.2s ease-in-out infinite}
+.hw-lamp .hw-lever{transform-origin:250px 227px;transform:rotate(-32deg);transition:transform .25s}
+.hw-lamp svg.run .hw-lever{transform:rotate(0)}
+.hw-lamp svg.idle .hw-lever{animation:hwNudge 1.6s ease-in-out infinite}
+@keyframes hwNudge{0%,100%{transform:rotate(-32deg)}50%{transform:rotate(-22deg)}}
+.hw-train .hw-rot,.hw-train .hw-spin,.hw-plane .hw-fan{transform-box:fill-box;transform-origin:center}
+.hw-train svg.run .hw-rot,.hw-train svg.run .hw-spin{animation:hwSpin .5s linear infinite}
+@keyframes hwSpin{to{transform:rotate(360deg)}}
+.hw-train svg.run .hw-sleep{animation:hwSlide40 .3s linear infinite}
+@keyframes hwSlide40{to{transform:translateX(-40px)}}
+.hw-train svg.run .hw-poles{animation:hwSlide200 1.5s linear infinite}
+@keyframes hwSlide200{to{transform:translateX(-200px)}}
+.hw-train svg.run .hw-loco{animation:hwBounce .3s ease-in-out infinite}
+@keyframes hwBounce{50%{transform:translateY(1.5px)}}
+.hw-train svg.run .hw-head{fill:#FFF6A0;filter:drop-shadow(0 0 4px #FFE45C)}
+.hw-plane .hw-up{transition:transform 3s ease-in-out;transform-origin:200px 160px}
+.hw-plane svg.run .hw-up{transform:translateY(-34px) rotate(-6deg)}
+.hw-plane svg.run .hw-bob{animation:hwBob 2.4s ease-in-out 3s infinite}
+@keyframes hwBob{50%{transform:translateY(5px)}}
+.hw-plane .hw-ground{transition:transform 3s ease-in}
+.hw-plane svg.run .hw-ground{transform:translateY(90px)}
+.hw-plane svg.run .hw-dash{animation:hwSlide60 .35s linear infinite}
+@keyframes hwSlide60{to{transform:translateX(-60px)}}
+.hw-plane svg.run .hw-clouds{animation:hwSlide440 7s linear infinite}
+@keyframes hwSlide440{to{transform:translateX(-440px)}}
+.hw-plane .hw-gear{transition:transform 1s ease-in 1.6s,opacity 1s ease-in 1.6s}
+.hw-plane svg.run .hw-gear{transform:translateY(-30px);opacity:0}
+.hw-plane svg.run .hw-fan{animation:hwFanX .15s linear infinite}
+@keyframes hwFanX{50%{transform:scaleY(-1)}}
+.hw-plane svg.run .hw-jet path{animation:hwJet .5s linear infinite}
+@keyframes hwJet{0%{transform:translateX(0);opacity:1}100%{transform:translateX(-24px);opacity:0}}
+.hw-plane svg.run .hw-air{animation:hwFlow .6s linear infinite reverse}
+.hw-plane svg.run .hw-lift{animation:hwLift 1.4s ease-in-out infinite}
+@keyframes hwLift{50%{transform:translateY(-6px)}}
+.hw-fridge .hw-vib{transform-box:fill-box;transform-origin:center}
+.hw-fridge svg.run .hw-vib{animation:hwVib .12s linear infinite}
+@keyframes hwVib{25%{transform:translate(1px,0)}75%{transform:translate(-1px,0)}}
+.hw-fridge svg.run .hw-heat path{animation:hwHeat 1.5s ease-in-out infinite}
+@keyframes hwHeat{0%{transform:translateY(10px);opacity:0}40%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
+.hw-fridge .hw-dial{transform-origin:276px 103px;transition:transform .5s}
+.hw-fridge svg.run .hw-dial{transform:rotate(70deg)}
 .lab-sl{display:flex;align-items:center;gap:10px;font:800 16px var(--f-body)}
 .lab-sl input{width:180px}
 .hol-card{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:26px;padding:14px 16px;background:linear-gradient(120deg,var(--t-pink),var(--t-yellow));color:var(--ink);box-shadow:0 6px 0 var(--line-strong),inset 0 0 0 3px var(--berry);text-align:left;font:inherit;cursor:pointer}
@@ -10639,6 +10715,281 @@ const BODY = (() => {
 GAMES.push({ id: 'body', name: 'Как устроено тело', sub: 'сердце, лёгкие, печень: где что и как работает', ico: () => pic('🫀'), bg: 'var(--t-pink)', go: () => BODY.screen(), grp: 10, kw: 'организм органы человек анатомия' });
 { const sc = INTEREST_CAT.find(c => c.id === 'science-cat'), ch = sc && (sc.items || []).find(it => it.id === 'chem'); if (ch && ch.tiles && !ch.tiles.includes('body')) ch.tiles.push('body'); }
 /* BODY-END */
+/* HOW-BEGIN */
+/* ---------- «Как это устроено»: four machines drawn in SVG (original drawings, no words in them). The child switches the
+   machine on (the lamp lights up, the train goes, the plane takes off, the fridge hums) and taps its parts; the friend
+   explains each in 2–3 sentences. Then «Вопросы»: three questions per machine, a miss gets a hint, no failing.
+   A new machine = one entry in M: its parts, its drawing, its questions (and its CSS under .hw-<k>). ---------- */
+const HOW = (() => {
+  const box = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#000" fill-opacity="0"/>`;
+  const part = (k, inner) => `<g class="hw-p" data-p="${k}">${inner}</g>`;
+  const star = (x, y, r, c, d = 0) => `<path class="hw-fx hw-spark" style="animation-delay:${d}s" d="M${x},${y - r} L${x + r * .3},${y - r * .3} L${x + r},${y} L${x + r * .3},${y + r * .3} L${x},${y + r} L${x - r * .3},${y + r * .3} L${x - r},${y} L${x - r * .3},${y - r * .3}Z" fill="${c}"/>`;
+  const M = [
+    { k: 'lamp', e: '💡', bg: 'var(--t-yellow)', n: 'Лампочка', on: 'Включить', off: 'Выключить', sw: 'switch',
+      intro: 'Это лампочка с батарейкой. Нажми на выключатель и посмотри, что будет. А потом нажимай на разные части.',
+      lineOn: 'Щёлк! Ток побежал по проводам, и лампочка засветилась.', lineOff: 'Дорожка разорвалась, ток остановился, и лампочка погасла.',
+      parts: [
+        { k: 'battery', n: 'Батарейка', t: 'Это батарейка. В ней спрятано электричество. Оно бежит по проводам, только если дорожка замкнута в колечко.' },
+        { k: 'switch', n: 'Выключатель', t: 'Это выключатель. Когда он включён, дорожка для тока замыкается, и ток бежит по кругу. Выключаешь — дорожка разрывается, и лампочка гаснет.' },
+        { k: 'wire', n: 'Провода', t: 'Это провода. Внутри у них металл, и ток бежит по нему, как вода по трубе. Снаружи провод покрыт пластиком, чтобы током не ударило.' },
+        { k: 'filament', n: 'Ниточка внутри', t: 'Это тоненькая металлическая ниточка. Ток бежит через неё, и она так сильно нагревается, что начинает светиться. А в светодиодной лампе светится крошечный кристаллик, и он почти не греется.' },
+        { k: 'glass', n: 'Стеклянная колба', t: 'Это стеклянная колба. Из неё убрали воздух, поэтому горячая ниточка не сгорает. Стекло прозрачное, и свет выходит наружу.' }
+      ],
+      quiz: [
+        { q: 'Что заставляет лампочку светиться?', a: ['Ток нагревает ниточку', 'Внутри сидит светлячок', 'Стекло светится само'], h: 'Вспомни ниточку внутри колбы.', s: 'Да! Ток бежит через ниточку, она раскаляется и светится.' },
+        { q: 'Где спрятано электричество?', a: ['В батарейке', 'В стеклянной колбе', 'В деревянной подставке'], h: 'Оно лежит внизу, и у него есть плюс и минус.', s: 'Правильно! Электричество спрятано в батарейке.' },
+        { q: 'Что делает выключатель?', a: ['Замыкает дорожку для тока', 'Делает свет цветным', 'Охлаждает лампочку'], h: 'Вспомни, когда ток бежит по кругу.', s: 'Верно! Выключатель замыкает и разрывает дорожку для тока.' }
+      ],
+      sound: on => on ? (tone(1800, .03, 'square', .06), tone(220, .5, 'sine', .04, .05, 260)) : tone(900, .03, 'square', .05),
+      svg: () => `
+      <defs><radialGradient id="hwGlow"><stop offset="0" stop-color="#FFF3A0" stop-opacity="1"/><stop offset=".45" stop-color="#FFD43B" stop-opacity=".5"/><stop offset="1" stop-color="#FFD43B" stop-opacity="0"/></radialGradient></defs>
+      <rect x="0" y="262" width="400" height="38" fill="#E9D3B0"/><path d="M0,262 H400" stroke="#C9AE86" stroke-width="3"/>
+      <circle class="hw-glow" cx="200" cy="80" r="120" fill="url(#hwGlow)"/>
+      <g class="hw-fx hw-rays" stroke="#FFC83A" stroke-width="5" stroke-linecap="round">${[[-90, 0], [-50, .2], [-130, .4], [-10, .6], [-170, .8]].map(([a, d]) => { const r = Math.PI * a / 180, c = Math.cos(r), s = Math.sin(r); return `<path style="animation-delay:${d}s" d="M${200 + c * 60},${76 + s * 60} L${200 + c * 80},${76 + s * 80}"/>`; }).join('')}</g>
+      ${part('wire', `<path d="M40,227 H24 V140 H184 M216,140 H376 V227 H310 M157,227 H250" stroke="#000" stroke-opacity="0" stroke-width="24" fill="none"/>
+        <path d="M40,227 H24 V140 H184" stroke="#3B82F6" stroke-width="7" fill="none" stroke-linejoin="round"/>
+        <path d="M216,140 H376 V227 H310 M157,227 H250" stroke="#E5484D" stroke-width="7" fill="none" stroke-linejoin="round"/>`)}
+      <path class="hw-fx hw-cur" d="M157,227 H376 V140 H216 M184,140 H24 V227 H40" stroke="#FFE45C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="3 12"/>
+      ${part('battery', `<rect x="40" y="205" width="110" height="44" rx="8" fill="#3D4466" stroke="#262B45" stroke-width="2.5"/>
+        <rect x="112" y="205" width="38" height="44" rx="8" fill="#F2A93B" stroke="#C9821E" stroke-width="2.5"/><rect x="150" y="218" width="8" height="18" rx="2" fill="#B9BED0" stroke="#80869A" stroke-width="1.5"/>
+        <path d="M131,219 V235 M123,227 H139" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><path d="M54,227 H68" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M92,212 L82,229 H92 L86,243 L102,223 H92 L98,212Z" fill="#FFD43B"/>`)}
+      ${part('switch', `${box(228, 190, 104, 66)}<rect x="234" y="232" width="92" height="20" rx="6" fill="#B07A4F" stroke="#8B5E3C" stroke-width="2.5"/>
+        <circle cx="250" cy="227" r="6" fill="#9AA3B5" stroke="#6B7385" stroke-width="2"/><circle cx="310" cy="227" r="6" fill="#9AA3B5" stroke="#6B7385" stroke-width="2"/>
+        <g class="hw-lever"><path d="M250,227 L313,224" stroke="#C9CED9" stroke-width="7" stroke-linecap="round"/><circle cx="316" cy="223" r="8" fill="#E5484D" stroke="#B8323A" stroke-width="2"/></g>`)}
+      ${part('glass', `<path class="hw-bulb" d="M184,124 C184,110 152,102 152,76 A48,48 0 1 1 248,76 C248,102 216,110 216,124 Z" fill="#EAF6FF" fill-opacity=".75" stroke="#9CC3E0" stroke-width="3"/>
+        <path d="M168,60 Q174,42 192,36" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>`)}
+      <g pointer-events="none"><rect x="184" y="122" width="32" height="30" rx="4" fill="#B8BCC6" stroke="#80869A" stroke-width="2.5"/><path d="M184,131 H216 M184,139 H216 M184,147 H216" stroke="#80869A" stroke-width="2"/><path d="M191,152 H209 L205,160 H195Z" fill="#3D4466"/></g>
+      ${part('filament', `<circle cx="200" cy="96" r="18" fill="#000" fill-opacity="0"/><path d="M192,124 L190,92 M208,124 L210,92" stroke="#8C8C8C" stroke-width="2.5" fill="none"/>
+        <path class="hw-fil" d="M190,92 l2.5,-8 l2.5,8 l2.5,-8 l2.5,8 l2.5,-8 l2.5,8 l2.5,-8 l2.5,8" stroke="#7A6A55" stroke-width="2.5" fill="none" stroke-linejoin="round"/>`)}` },
+
+    { k: 'train', e: '🚆', bg: 'var(--t-blue)', n: 'Поезд', on: 'Поехали!', off: 'Стоп',
+      intro: 'Это электричка. Нажми «Поехали!» и посмотри, как она едет. Потом нажимай на её части.',
+      lineOn: 'Токоприёмник взял ток из провода, двигатель закрутил колёса, и поезд поехал!', lineOff: 'Машинист затормозил, и поезд остановился.',
+      parts: [
+        { k: 'wire', n: 'Провод наверху', t: 'Это провод над железной дорогой. По нему бежит электрический ток. Провод висит на высоких столбах вдоль всего пути.' },
+        { k: 'panto', n: 'Токоприёмник', t: 'Это токоприёмник на крыше. Он скользит по проводу и забирает из него ток. Иногда при этом проскакивают искорки.' },
+        { k: 'motor', n: 'Электродвигатель', t: 'Это электродвигатель. Ток заставляет его крутиться, а он крутит колёса. Поэтому электричке не нужен бензин.' },
+        { k: 'wheels', n: 'Колёса', t: 'Это колёса из крепкой стали. У каждого колеса с внутренней стороны есть бортик. Он не даёт поезду соскочить с рельсов.' },
+        { k: 'rails', n: 'Рельсы', t: 'Это рельсы — две длинные стальные полоски. Они гладкие, поэтому колёса катятся легко, и поезд может везти очень много вагонов.' },
+        { k: 'cabin', n: 'Кабина машиниста', t: 'Это кабина машиниста. Машинист смотрит вперёд, следит за светофорами и управляет поездом: разгоняет его и тормозит.' }
+      ],
+      quiz: [
+        { q: 'Откуда электричка берёт ток?', a: ['Из провода наверху', 'Из бака с бензином', 'Из колёс'], h: 'Посмотри, что у неё на крыше.', s: 'Да! Токоприёмник забирает ток из провода.' },
+        { q: 'Что крутит колёса?', a: ['Электродвигатель', 'Машинист руками', 'Ветер'], h: 'Он крутится, когда к нему приходит ток.', s: 'Верно! Колёса крутит электродвигатель.' },
+        { q: 'Почему поезд не соскакивает с рельсов?', a: ['У колёс есть бортики', 'Рельсы липкие', 'Его держит провод'], h: 'Вспомни, что есть у каждого колеса.', s: 'Правильно! Бортики колёс держат поезд на рельсах.' }
+      ],
+      sound: on => { if (on) { tone(330, .35, 'triangle', .07); tone(440, .45, 'triangle', .07, .38); whoosh(1.2, .06); } else whoosh(.6, .05); },
+      svg: () => `
+      <rect x="0" y="262" width="400" height="38" fill="#B7D98B"/>
+      <g class="hw-poles">${[40, 240, 440].map(x => `<path d="M${x},262 V26 M${x - 2},38 H${x + 34}" stroke="#7D8597" stroke-width="6" fill="none"/>`).join('')}</g>
+      ${part('wire', `${box(0, 22, 400, 30)}<path d="M0,32 Q100,38 200,32 Q300,26 400,32" stroke="#7D8597" stroke-width="1.5" fill="none"/><path d="M0,44 H400" stroke="#3D4466" stroke-width="3.5"/>`)}
+      ${part('rails', `${box(0, 250, 400, 30)}<g class="hw-sleep">${Array.from({ length: 12 }, (_, i) => `<rect x="${i * 40 - 30}" y="262" width="22" height="10" rx="2" fill="#8B5E3C"/>`).join('')}</g>
+        <rect x="-4" y="254" width="408" height="8" fill="#9AA3B5" stroke="#6B7385" stroke-width="2"/>`)}
+      <g class="hw-loco">
+        <path d="M70,120 H300 Q350,120 362,180 L366,232 H70 Z" fill="#E5484D" stroke="#B8323A" stroke-width="3" stroke-linejoin="round"/>
+        <rect x="70" y="200" width="295" height="9" fill="#fff"/>
+        ${[86, 128].map(x => `<rect x="${x}" y="138" width="34" height="30" rx="6" fill="#CFE8FF" stroke="#B8323A" stroke-width="2.5"/>`).join('')}
+        ${part('cabin', `<path d="M300,132 Q338,134 350,180 H300 Z" fill="#CFE8FF" stroke="#B8323A" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M306,180 Q316,162 328,180Z" fill="#3D6DCC"/><circle cx="317" cy="158" r="8" fill="#FFD9B8"/><path d="M308,154 Q317,142 326,154Z" fill="#3D4466"/>
+          <circle class="hw-head" cx="359" cy="216" r="6" fill="#FFE45C" stroke="#D9A400" stroke-width="2"/>`)}
+        ${part('motor', `<rect x="166" y="138" width="84" height="54" rx="10" fill="#3D4466" stroke="#262B45" stroke-width="3"/>
+          <circle cx="208" cy="165" r="19" fill="#F2A93B" stroke="#C9821E" stroke-width="3"/>
+          <g class="hw-rot"><path d="M208,150 V180 M193,165 H223" stroke="#8C5A14" stroke-width="5" stroke-linecap="round"/></g><circle cx="208" cy="165" r="4" fill="#262B45"/>`)}
+        ${part('panto', `${box(160, 40, 96, 82)}<rect x="186" y="114" width="44" height="7" rx="2" fill="#3D4466"/>
+          <path d="M194,116 L208,82 L194,48 M222,116 L208,82 L222,48" stroke="#3D4466" stroke-width="4" fill="none" stroke-linejoin="round"/><rect x="186" y="44" width="44" height="5" rx="2" fill="#262B45"/>`)}
+        <path class="hw-fx hw-cur" d="M208,48 V150" stroke="#FFE45C" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="3 10"/>
+        ${star(200, 44, 9, '#FFD43B', 0)}${star(218, 42, 7, '#FFF3A0', .25)}
+        ${part('wheels', `<rect x="88" y="226" width="90" height="10" rx="4" fill="#262B45"/><rect x="226" y="226" width="90" height="10" rx="4" fill="#262B45"/>
+          ${[110, 156, 248, 294].map(x => `<g transform="translate(${x},236)"><circle r="18" fill="#3D4466" stroke="#262B45" stroke-width="3"/><g class="hw-spin"><circle r="12" fill="#9AA3B5"/><path d="M0,-12 V12 M-12,0 H12" stroke="#3D4466" stroke-width="3"/></g><circle r="4" fill="#262B45"/></g>`).join('')}`)}
+      </g>` },
+
+    { k: 'plane', e: '✈️', bg: 'var(--t-mint)', n: 'Самолёт', on: 'Взлетаем!', off: 'Посадка',
+      intro: 'Это самолёт. Нажми «Взлетаем!» и посмотри, как он поднимается в небо. Потом нажимай на его части.',
+      lineOn: 'Двигатели толкают самолёт вперёд, он разгоняется, крыло поднимает его, и вот мы в небе!', lineOff: 'Самолёт мягко приземлился на полосу.',
+      parts: [
+        { k: 'wing', n: 'Крыло', t: 'Это крыло. Когда самолёт быстро мчится, воздух обтекает крыло и толкает его вверх. Чем быстрее самолёт, тем сильнее крыло его поднимает.' },
+        { k: 'engine', n: 'Двигатель', t: 'Это реактивный двигатель. Он засасывает воздух спереди и с огромной силой выбрасывает его назад. От этого самолёт мчится вперёд.' },
+        { k: 'tail', n: 'Хвост', t: 'Это хвост. Он помогает самолёту лететь ровно и не качаться. А ещё на хвосте есть рули: с ними самолёт поворачивает, поднимается и опускается.' },
+        { k: 'cockpit', n: 'Кабина пилотов', t: 'Это кабина пилотов. Здесь много кнопок и экранов. Пилоты следят за приборами и управляют самолётом.' },
+        { k: 'gear', n: 'Шасси', t: 'Это шасси — колёса самолёта. На них он разгоняется по взлётной полосе. После взлёта шасси прячутся внутрь, чтобы не мешать полёту.' }
+      ],
+      quiz: [
+        { q: 'Что поднимает самолёт вверх?', a: ['Крыло', 'Шасси', 'Окошки'], h: 'Воздух обтекает его, когда самолёт быстро мчится.', s: 'Да! Воздух обтекает крыло и толкает его вверх.' },
+        { q: 'Что толкает самолёт вперёд?', a: ['Двигатели', 'Хвост', 'Пассажиры'], h: 'Они выбрасывают воздух назад.', s: 'Верно! Двигатели выбрасывают воздух назад, и самолёт летит вперёд.' },
+        { q: 'Куда прячутся колёса после взлёта?', a: ['Внутрь самолёта', 'На крыло', 'Остаются на земле'], h: 'Посмотри ещё раз, как самолёт взлетает.', s: 'Правильно! Шасси прячутся внутрь самолёта.' }
+      ],
+      sound: on => { if (on) { whoosh(2.6, .09); tone(120, 2.4, 'sawtooth', .025, 0, 260); } else whoosh(1.2, .06); },
+      svg: () => `
+      <g class="hw-clouds">${[[70, 60], [290, 96], [470, 52], [690, 92]].map(([x, y]) => `<g fill="#fff" opacity=".95"><ellipse cx="${x}" cy="${y}" rx="34" ry="13"/><ellipse cx="${x - 14}" cy="${y - 9}" rx="16" ry="12"/><ellipse cx="${x + 10}" cy="${y - 12}" rx="18" ry="14"/></g>`).join('')}</g>
+      <g class="hw-ground"><rect x="-10" y="232" width="420" height="80" fill="#8E96A8"/><rect x="-10" y="232" width="420" height="6" fill="#6B7385"/>
+        <g class="hw-dash">${Array.from({ length: 9 }, (_, i) => `<rect x="${i * 60 - 40}" y="262" width="34" height="6" rx="2" fill="#fff"/>`).join('')}</g></g>
+      <g class="hw-up"><g class="hw-bob">
+        <g class="hw-fx hw-air" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="10 12">
+          <path d="M290,150 Q220,128 140,146"/><path d="M290,164 Q220,150 140,166"/></g>
+        ${part('tail', `<path d="M58,150 L40,70 L76,70 L120,138 Z" fill="#3D6DCC" stroke="#2B4E99" stroke-width="3" stroke-linejoin="round"/><path d="M44,74 L56,132" stroke="#2B4E99" stroke-width="2"/>
+          <path d="M62,150 L26,162 L40,170 L104,160Z" fill="#5B8BE8" stroke="#2B4E99" stroke-width="2.5" stroke-linejoin="round"/>`)}
+        <path d="M50,142 Q60,128 100,126 L320,126 Q364,128 374,152 Q364,176 320,178 L100,178 Q62,176 50,158 Z" fill="#F7F9FC" stroke="#9AA3B5" stroke-width="3" pointer-events="none"/>
+        <path d="M58,160 H364" stroke="#3D6DCC" stroke-width="5" pointer-events="none"/>
+        ${[130, 152, 174, 196, 218, 240, 262, 284].map(x => `<circle cx="${x}" cy="146" r="5" fill="#7FB3F0" pointer-events="none"/>`).join('')}
+        ${part('cockpit', `${box(318, 126, 60, 52)}<path d="M330,136 Q352,137 364,150 H332 Z" fill="#3D4466" stroke="#262B45" stroke-width="2" stroke-linejoin="round"/>`)}
+        ${part('gear', `<g class="hw-gear"><path d="M318,176 V212 M168,176 V212 M190,176 V212" stroke="#6B7385" stroke-width="5"/>
+          ${[318, 168, 190].map(x => `<circle cx="${x}" cy="220" r="10" fill="#3D4466" stroke="#262B45" stroke-width="3"/><circle cx="${x}" cy="220" r="3.5" fill="#9AA3B5"/>`).join('')}</g>`)}
+        ${part('wing', `<path d="M172,158 L240,158 L198,224 L168,224 Q158,222 162,212Z" fill="#C9D3E3" stroke="#7D8597" stroke-width="3" stroke-linejoin="round"/>`)}
+        <g class="hw-fx hw-lift"><path d="M206,118 V78" stroke="#2FA865" stroke-width="7" stroke-linecap="round"/><path d="M192,90 L206,70 L220,90Z" fill="#2FA865"/></g>
+        <g class="hw-fx hw-jet" stroke="#BFD8F2" stroke-width="4" stroke-linecap="round">${[0, .25, .5].map((d, i) => `<path style="animation-delay:${d}s" d="M178,${190 + i * 6} H150"/>`).join('')}</g>
+        ${part('engine', `<rect x="180" y="182" width="62" height="28" rx="14" fill="#9AA3B5" stroke="#5E6577" stroke-width="3"/>
+          <ellipse cx="240" cy="196" rx="7" ry="13" fill="#3D4466"/><g class="hw-fan"><path d="M240,185 V207" stroke="#B9BED0" stroke-width="3"/></g>`)}
+      </g></g>` },
+
+    { k: 'fridge', e: '🧊', bg: 'var(--t-lilac)', n: 'Холодильник', on: 'Включить', off: 'Выключить',
+      intro: 'Это холодильник, только мы видим его насквозь, сбоку. Включи его и посмотри, как он делает холод. Потом нажимай на его части.',
+      lineOn: 'Насос загудел и погнал по трубкам особую жидкость. Внутри она забирает тепло, а сзади отдаёт его в комнату.', lineOff: 'Насос выключился и отдыхает.',
+      parts: [
+        { k: 'pump', n: 'Насос', t: 'Это насос, его ещё называют компрессор. Он стоит внизу сзади и гоняет по трубкам особую жидкость. Когда насос работает, холодильник тихонько гудит.' },
+        { k: 'pipes', n: 'Трубки внутри', t: 'Это трубки внутри холодильника. Особая жидкость бежит по ним и забирает тепло у еды. Поэтому внутри становится холодно.' },
+        { k: 'grid', n: 'Решётка сзади', t: 'Это решётка на задней стенке. Здесь жидкость отдаёт в комнату тепло, которое забрала у еды. Поэтому сзади холодильник тёплый.' },
+        { k: 'thermo', n: 'Термостат', t: 'Это термостат, он следит за холодом. Когда внутри стало холодно, он выключает насос. Потеплело — включает снова.' },
+        { k: 'door', n: 'Дверца', t: 'Это дверца. По краю у неё мягкая резинка с магнитом: она плотно прижимается и не выпускает холод. Поэтому дверцу надо закрывать побыстрее.' }
+      ],
+      quiz: [
+        { q: 'Куда девается тепло из холодильника?', a: ['Выходит сзади в комнату', 'Пропадает навсегда', 'Остаётся на полках'], h: 'Вспомни решётку на задней стенке.', s: 'Да! Тепло выходит через решётку сзади в комнату.' },
+        { q: 'Что гоняет жидкость по трубкам?', a: ['Насос', 'Дверца', 'Термостат'], h: 'Он стоит внизу и тихонько гудит.', s: 'Верно! Жидкость гоняет насос.' },
+        { q: 'Зачем у дверцы резинка?', a: ['Чтобы не выпускать холод', 'Чтобы было красиво', 'Чтобы дверца пищала'], h: 'Подумай, что будет, если остаётся щель.', s: 'Правильно! Резинка плотно закрывает дверцу и держит холод внутри.' }
+      ],
+      sound: on => on ? tone(70, 1.6, 'sawtooth', .03, 0, 60) : tone(60, .3, 'sine', .04),
+      svg: () => {
+        const zz = [];
+        for (let y = 222, i = 0; y >= 42; y -= 18, i++) zz.push(`V${y} H${i % 2 ? 132 : 112}`);
+        const hot = `M150,252 H122 ${zz.join(' ')} V40 H152`, cold = 'M152,40 H290 V54 H164 V68 H290 V80 H158 V234';
+        return `
+      <rect x="0" y="272" width="400" height="28" fill="#E9D3B0"/><path d="M0,272 H400" stroke="#C9AE86" stroke-width="3"/>
+      <rect x="22" y="236" width="26" height="34" rx="5" fill="#fff" stroke="#9AA3B5" stroke-width="2.5"/><circle cx="31" cy="253" r="2.5" fill="#6B7385"/><circle cx="39" cy="253" r="2.5" fill="#6B7385"/>
+      <path d="M150,262 Q110,268 90,262 T48,254" stroke="#3D4466" stroke-width="3" fill="none"/>
+      <g class="hw-fx hw-heat" stroke="#FF8A5B" stroke-width="3.5" fill="none" stroke-linecap="round">${[[96, 0], [78, .5], [60, 1]].map(([x, d]) => `<path style="animation-delay:${d}s" d="M${x},200 q-7,-12 0,-24 q7,-12 0,-24 q-7,-12 0,-24"/>`).join('')}</g>
+      <rect x="140" y="20" width="168" height="252" rx="12" fill="#F7F9FC" stroke="#9AA3B5" stroke-width="3"/>
+      <rect x="152" y="30" width="146" height="194" rx="6" fill="#DDF0FF" stroke="#9CC3E0" stroke-width="2"/>
+      <rect x="146" y="228" width="156" height="40" rx="6" fill="#E3E7EE"/>
+      <path d="M152,122 H298 M152,176 H298" stroke="#9CC3E0" stroke-width="4"/>
+      <g pointer-events="none"><path d="M176,136 L184,126 H196 L204,136 V174 H176Z" fill="#fff" stroke="#7FB3F0" stroke-width="2.5" stroke-linejoin="round"/><path d="M176,150 H204" stroke="#7FB3F0" stroke-width="5"/>
+        <circle cx="232" cy="162" r="12" fill="#E5484D" stroke="#B8323A" stroke-width="2"/><path d="M232,150 q4,-8 10,-8 q-2,7 -10,8" fill="#2FA865"/>
+        <path d="M252,174 L292,174 L292,150Z" fill="#FFD43B" stroke="#D9A400" stroke-width="2" stroke-linejoin="round"/><circle cx="282" cy="166" r="3" fill="#E9B800"/>
+        <rect x="176" y="188" width="28" height="34" rx="5" fill="#F7A8B8" stroke="#D9788F" stroke-width="2"/><rect x="174" y="184" width="32" height="7" rx="3" fill="#D9788F"/>
+        <path d="M232,220 L262,192" stroke="#FF8A2B" stroke-width="10" stroke-linecap="round"/><path d="M262,192 l6,-10 M262,192 l10,-4" stroke="#2FA865" stroke-width="3" stroke-linecap="round"/></g>
+      ${part('grid', `${box(104, 34, 36, 196)}<path d="${hot}" stroke="#3D4466" stroke-width="4" fill="none" stroke-linejoin="round"/>`)}
+      ${part('pipes', `${box(154, 34, 142, 50)}<path d="${cold}" stroke="#7FB3F0" stroke-width="5" fill="none" stroke-linejoin="round"/>`)}
+      <path class="hw-fx hw-hot" d="${hot}" stroke="#FF6A3D" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="4 10"/>
+      <path class="hw-fx hw-cold" d="${cold}" stroke="#2F7BEF" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="4 10"/>
+      ${star(196, 92, 7, '#fff', 0)}${star(236, 96, 6, '#fff', .4)}${star(276, 90, 7, '#fff', .8)}
+      ${part('thermo', `<circle cx="276" cy="103" r="14" fill="#000" fill-opacity="0"/><circle cx="276" cy="103" r="11" fill="#fff" stroke="#6B7385" stroke-width="2.5"/><path class="hw-dial" d="M276,103 L276,95" stroke="#E5484D" stroke-width="3" stroke-linecap="round"/>`)}
+      ${part('pump', `<g class="hw-vib"><rect x="150" y="232" width="56" height="34" rx="10" fill="#3D4466" stroke="#262B45" stroke-width="3"/><circle cx="178" cy="249" r="7" fill="#6B7385"/></g>`)}
+      ${part('door', `${box(298, 22, 34, 248)}<rect x="300" y="30" width="6" height="234" rx="2" fill="#5E6577"/><rect x="304" y="22" width="16" height="250" rx="6" fill="#E3E7EE" stroke="#9AA3B5" stroke-width="3"/><rect x="321" y="112" width="8" height="58" rx="4" fill="#9AA3B5"/>`)}`;
+      } }
+  ];
+  const by = k => M.find(m => m.k === k);
+  const seenKey = k => 'how-seen-' + k;
+
+  function menu() {
+    newScreen();
+    shell('Как это устроено', `<div class="hw-menu">${M.map(m => `<button class="hw-card" data-k="${m.k}" style="background:${m.bg}">${pic(m.e)}<b>${m.n}</b>${P.best['how-' + m.k] ? `<i class="hw-ok">${ICON.star}</i>` : ''}</button>`).join('')}</div>`);
+    talk('Как это устроено? Выбери, что посмотрим: лампочку, поезд, самолёт или холодильник.');
+    $('.hw-menu').onclick = e => { const b = e.target.closest('[data-k]'); if (b) { sfx.pop(); screen(b.dataset.k); } };
+  }
+
+  function screen(k, mode = 'learn') {
+    const m = by(k); if (!m) return menu();
+    const t = newScreen(), learn = mode === 'learn';
+    shell(m.n, `<div class="hw hw-${m.k} ${learn ? '' : 'hw-q'}">
+      <div class="lab-tabs"><button class="chip ${learn ? 'sel' : ''}" data-m="learn">🔍 Узнать</button><button class="chip ${learn ? '' : 'sel'}" data-m="quiz">❓ Вопросы</button></div>
+      <div class="hw-main"><div class="hw-col"><div class="hw-fig"><svg viewBox="0 0 400 300" id="hwSvg" role="img" aria-label="${esc(m.n)}">${m.svg()}</svg></div>
+        ${learn ? `<button class="big hw-pow" id="hwPow">⚡ ${m.on}</button>` : ''}</div>
+        <div class="hw-side"><div class="bd-card" id="hwCard"></div>${learn ? `<div class="bd-chips" id="hwChips">${m.parts.map(p => `<button class="chip" data-p="${p.k}">${p.n}</button>`).join('')}</div>` : '<div class="hw-ans" id="hwAns"></div>'}</div></div>
+    </div>`, { back: menu });
+    $('.hw .lab-tabs').onclick = e => { const b = e.target.closest('[data-m]'); if (b && b.dataset.m !== mode) { sfx.pop(); screen(k, b.dataset.m); } };
+    const sv = $('#hwSvg'), card = $('#hwCard');
+    const fill = html => { card.innerHTML = html; card.querySelectorAll('p,h2').forEach(p => p.classList.add('no-said')); };
+    if (!learn) return quiz(m, t, sv, fill);
+    sv.classList.add('idle');
+    const seen = new Set(); let ran = false, told = false;
+    const groups = () => $$('#hwSvg .hw-p');
+    const light = pk => { if (pk) sv.dataset.on = pk; else delete sv.dataset.on; groups().forEach(g => g.classList.toggle('on', g.dataset.p === pk)); };
+    const check = async () => {
+      if (told || seen.size < m.parts.length || !ran) return;
+      told = true; P.best[seenKey(k)] = 1; save();
+      const q = $('.hw .lab-tabs [data-m="quiz"]'); if (q) q.classList.add('hw-call');
+      await talk(G('Ты всё узнала! Теперь нажми «Вопросы» и проверь себя.', 'Ты всё узнал! Теперь нажми «Вопросы» и проверь себя.'));
+    };
+    const flip = () => {
+      const on = !sv.classList.contains('run');
+      sv.classList.toggle('run', on); sv.classList.remove('idle');
+      const b = $('#hwPow'); if (b) b.innerHTML = `⚡ ${on ? m.off : m.on}`;
+      try { m.sound(on); } catch (e) {}
+      if (on) ran = true;
+      return on;
+    };
+    const power = async () => {
+      const on = flip();
+      light(null); $$('#hwChips .chip').forEach(c => c.classList.remove('sel'));
+      const line = on ? m.lineOn : m.lineOff;
+      fill(`<h2>${on ? '⚡' : '💤'} ${m.n}</h2><p>${line}</p>`);
+      await talk(line);
+      if (t === tok) check();
+    };
+    const show = async pk => {
+      const p = m.parts.find(x => x.k === pk); if (!p) return;
+      light(pk); sfx.pop(); seen.add(pk);
+      $$('#hwChips .chip').forEach(c => { c.classList.toggle('sel', c.dataset.p === pk); c.classList.toggle('seen', seen.has(c.dataset.p)); });
+      fill(`<h2>${p.n}</h2><p>${p.t}</p><button class="link-btn" id="hwAgain">🔊 Послушать ещё раз</button>`);
+      $('#hwAgain').onclick = () => talk(p.t);
+      await talk(p.t);
+      if (t === tok && sv.dataset.on === pk) check();
+    };
+    fill(`<h2>${m.e} ${m.n}</h2><p>${m.intro}</p>`);
+    talk(m.intro);
+    $('#hwPow').onclick = () => power();
+    sv.addEventListener('click', e => {
+      const g = e.target.closest('.hw-p'); if (!g) return;
+      if (g.dataset.p === m.sw) flip();
+      show(g.dataset.p);
+    });
+    $('#hwChips').onclick = e => { const b = e.target.closest('[data-p]'); if (b) show(b.dataset.p); };
+  }
+
+  // three questions, the answers shuffled; a miss greys the answer and gives a hint
+  function quiz(m, t, sv, fill) {
+    sv.classList.add('run');
+    let i = 0, busy = false;
+    const ans = $('#hwAns');
+    const ask = () => {
+      const q = m.quiz[i]; busy = false;
+      fill(`<h2>❓ ${q.q}</h2><p>Выбери ответ.</p><div class="bd-prog">${m.quiz.map((_, j) => `<i class="${j < i ? 'ok' : ''}"></i>`).join('')}</div>`);
+      ans.innerHTML = shuffle(q.a.map((a, j) => ({ a, j }))).map(x => `<button class="hw-a" data-j="${x.j}">${x.a}</button>`).join('');
+      talk(q.q);
+    };
+    ans.onclick = async e => {
+      const b = e.target.closest('.hw-a'); if (!b || busy || b.disabled) return;
+      const q = m.quiz[i];
+      if (b.dataset.j === '0') {
+        busy = true; sfx.good(); burst(e.clientX, e.clientY); b.classList.add('yes');
+        card().textContent = q.s;
+        await talk(q.s);
+        if (t !== tok) return;
+        i++;
+        if (i >= m.quiz.length) finish({ key: 'how-' + m.k, stars: 3, line: G('Умница! Ты ответила на все вопросы.', 'Молодец! Ты ответил на все вопросы.'), again: () => screen(m.k, 'quiz'), next: () => menu() });
+        else ask();
+        return;
+      }
+      tone(330, .15, 'sine', .08); b.disabled = true; b.classList.add('no');
+      card().textContent = q.h; talk(q.h);
+    };
+    const card = () => $('#hwCard p');
+    ask();
+  }
+  return { menu, screen, M };
+})();
+GAMES.push({ id: 'how', name: 'Как это устроено', sub: 'лампочка, поезд, самолёт, холодильник', ico: () => pic('⚙️'), bg: 'var(--t-yellow)', go: () => HOW.menu(), grp: 10, kw: 'техника машины электричество транспорт' });
+INTEREST_CAT.forEach(c => (c.items || []).forEach(it => { if (['build', 'trains', 'planes'].includes(it.id) && it.tiles && !it.tiles.includes('how')) it.tiles.push('how'); }));
+/* HOW-END */
 /* ---------- «Что значит слово?»: a dictionary for the book. The child types or says the word; the meaning comes from
    Wiktionary (the free Russian dictionary, even for a word in another form: «колыбели» finds «колыбель»), a person or a
    place from Wikipedia; links open Ozhegov, Ushakov, Efremova and Dahl on dictionary sites. Words looked up go into the
