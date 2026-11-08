@@ -29,11 +29,11 @@ const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     // ---- the water menu: three parts in Russian, two in the other languages
     const tile = await p.$('.tile[data-id="water"]');
     if (tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(600); }
-    if (!await p.$('.wh')) await p.evaluate(() => window.__T.run('OCEAN.hub()'));
+    if (!await p.$('.oc-t')) await p.evaluate(() => window.__T.run('OCEAN.hub()'));
     await p.waitForTimeout(500); await p.screenshot({ path: D + `water-${lang}-${DEV}-hub.png` });
-    const parts = await p.$$eval('.wh-b', b => b.map(x => x.dataset.k + ':' + x.innerText.replace(/\s+/g, ' ')));
+    const parts = await p.$$eval('.oc-t', b => b.map(x => x.dataset.k + ':' + x.innerText.replace(/\s+/g, ' ')));
     ok(parts.length === (lang === 'ru' ? 3 : 2) && !(lang !== 'ru' && cyr(parts.join(''))), 'water menu: ' + parts.join(' | '));
-    await p.click('.wh-b[data-k="deep"]'); await p.waitForTimeout(400);
+    await p.click('.oc-t[data-k="deep"]'); await p.waitForTimeout(400);
     await p.waitForTimeout(800); await p.screenshot({ path: D + `ocean-${lang}-${DEV}-top.png` });
     ok(await p.$('#ocSea') !== null, 'ocean opened: ' + await p.$eval('.bar h1', e => e.textContent).catch(() => '-'));
     const ks = await p.$$eval('#ocSea .oc-a', a => a.map(x => x.dataset.k));
@@ -54,7 +54,7 @@ const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
     ok(await p.$('.winbox') !== null, 'all animals seen → ' + await p.$eval('.win-line', e => e.textContent).catch(() => '-'));
     // ---- the water cycle: learn
-    await p.evaluate(() => window.__T.run('OCEAN.hub()')); await p.waitForTimeout(400); await p.click('.wh-b[data-k="cycle"]'); await p.waitForTimeout(800);
+    await p.evaluate(() => window.__T.run('OCEAN.hub()')); await p.waitForTimeout(400); await p.click('.oc-t[data-k="cycle"]'); await p.waitForTimeout(800);
     await p.screenshot({ path: D + `water-${lang}-${DEV}-open.png` });
     for (let s = 0; s < 6; s++) {
       const pt = await p.evaluate(s => { const g = document.querySelector(`#wcSvg .wc-g[data-s="${s}"]`), h = g.querySelector('circle,rect,path'), r = h.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, e = document.elementFromPoint(x, y), w = e && e.closest('.wc-g'); return { x, y, hit: w ? +w.dataset.s : null }; }, s);
@@ -81,7 +81,7 @@ const cyr = s => /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     if (lang === 'ru') {
       const n = await p.evaluate(() => window.__T.run('LEARN.water.items.length'));
       ok(n === 20, 'water stories: ' + n);
-      await p.evaluate(() => window.__T.run('OCEAN.hub()')); await p.waitForTimeout(400); await p.click('.wh-b[data-k="stories"]'); await p.waitForTimeout(700);
+      await p.evaluate(() => window.__T.run('OCEAN.hub()')); await p.waitForTimeout(400); await p.click('.oc-t[data-k="stories"]'); await p.waitForTimeout(700);
       await p.screenshot({ path: D + `water-stories-${DEV}.png` });
       ok((await p.$eval('#stage', e => e.innerText)).includes('Байкал'), 'stories list shows');
     } else ok(await p.evaluate(() => window.__T.run('!LEARN.water')), 'no water stories section');
