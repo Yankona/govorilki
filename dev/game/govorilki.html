@@ -2741,6 +2741,7 @@ body.pv-on #app{padding-top:52px}
 .gl-info>.gl-t{min-height:46px}.gl-t .gl-ai{width:36px;height:36px;flex:none}.gl-ac>span{font:400 26px/1 var(--f-emoji)}.gl-ac .gl-ai{width:28px;height:28px}
 .gl-modes .chip.sel{background:var(--t-yellow)}
 .tv-globe{display:flex;align-items:center;gap:12px;padding:12px 16px;border:0;border-radius:22px;background:linear-gradient(135deg,var(--t-blue),var(--t-mint));color:var(--ink);cursor:pointer;box-shadow:0 5px 0 var(--line-strong);font:inherit;text-align:left}
+.tv-mem{position:relative;background:linear-gradient(135deg,var(--t-lilac),var(--t-pink))}.tv-memst{position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:2px;font:800 15px var(--f-body);font-style:normal;color:var(--ink)}.tv-memst .star-i{width:20px;height:20px}
 .tv-globe>span:first-child{font:400 46px/1 var(--f-emoji)}.tv-globe>span+span{display:flex;flex-direction:column;gap:2px}.tv-globe b{font:800 20px/1.2 var(--f-body)}.tv-globe small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
 /* GLOBE-CSS-END */
 /* SAID-CSS */
@@ -4511,7 +4512,7 @@ function goHome() {
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
-  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
+  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !x.inside && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
   const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
@@ -13874,7 +13875,7 @@ function screenFlagMemory(size) {
   const t = newScreen();
   const wins = (P.flagMem && P.flagMem.w) || 0;
   size = size || (wins >= 6 ? 8 : wins >= 4 ? 6 : wins >= 2 ? 4 : 3);
-  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => goHome();
+  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => TRAVEL.screen();
   document.body.classList.toggle('quest', Q());
   app.innerHTML = `<div class="screen mem"><div class="mem-bar">
       <button class="ibtn" id="memBack" aria-label="Назад">${ICON.back}</button>
@@ -13906,7 +13907,7 @@ function screenFlagMemory(size) {
     } else later(() => { a.classList.remove('up'); c.classList.remove('up'); open = []; busy = false; }, 1100);
   };
 }
-GAMES.push({ id: 'flag-memory', name: 'Мемори: флаги', sub: 'найди пары — и узнай страну', ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, kw: 'флаги страны мемори' });
+GAMES.push({ id: 'flag-memory', name: 'Мемори: флаги', sub: 'найди пары — и узнай страну', ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, inside: 'travel', kw: 'флаги страны мемори путешествие' });
 /* FLAGMEM-END */
 function screenArtQuiz() {
   const t = newScreen();
@@ -19183,6 +19184,11 @@ const TRAVEL = (() => {
     // the globe above the games of the journey (its own line, so the passport screen's text stays as it was)
     $('.tv-row').insertAdjacentHTML('beforebegin', `<button class="tv-globe" id="tvGlobe"><span>🌍</span><span><b>Глобус</b><small>покрути Землю и нажми на страну или город</small></span></button>`);
     $('#tvGlobe').onclick = () => { sfx.pop(); GLOBE_SCREEN.screen(); };
+    // «Мемори: флаги» lives here, in the journey (the owner: flags belong to travelling), not as its own tile
+    if (!gameOff('flag-memory')) {
+      $('#tvGlobe').insertAdjacentHTML('afterend', `<button class="tv-globe tv-mem" id="tvMem"><span>🚩</span><span><b>Мемори: флаги</b><small>найди пары — и узнай страну</small></span>${P.best['flag-memory'] ? `<i class="tv-memst">${ICON.star}${P.best['flag-memory']}</i>` : ''}</button>`);
+      $('#tvMem').onclick = () => { sfx.pop(); screenFlagMemory(); };
+    }
   }
 
   // a story whose title names its own place would give the answer away
@@ -21906,7 +21912,7 @@ const LANDX = (() => {
     speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
     learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
     create: ['draw', 'color', 'songs', 'xylo', 'composers', 'ballet', 'museum', 'piano'],
-    discover: ['travel', 'phys-lab', 'body', 'space', 'flag-memory']
+    discover: ['travel', 'phys-lab', 'body', 'space', 'plants']
   };
   // the games of a tab for any child: a little one and an older one, every game switched on
   function tabGames(t) {
@@ -21914,7 +21920,7 @@ const LANDX = (() => {
     for (const s of [{ track: 'r', age: 5 }, { track: 'l', age: 9 }]) {
       P.settings = { ...keep, ...s, allGames: true };
       try {
-        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id))
+        SECTIONS.filter(x => t.g.includes(x.g)).forEach(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !g.inside && !(g.hide && g.hide()) && !gameOff(g.id))
           .forEach(g => { if (!seen.has(g.id)) seen.set(g.id, { g, ico: g.ico(), name: nm(g.name) }); }));
       } catch (e) {}
     }
