@@ -5256,7 +5256,8 @@ function screenReadPick() {
 
 /* ---------- math ---------- */
 const MATH_E = ['🐼', '🐨', '🦄', '🦙', '🍎', '🍓', '⭐', '🎈', '🐞', '🌸', '🐟', '🧁'];
-function numOpts(n, lo = 1, hi = 10, cnt = 3) { const s = new Set([n]); while (s.size < cnt) { const x = n + pickOne([-2, -1, 1, 2, 3]); if (x >= lo && x <= hi) s.add(x); } return shuffle([...s]); }
+// near numbers first; at the edge (10 in 0…10 with four buttons) any number of the range, so it never loops forever (v146)
+function numOpts(n, lo = 1, hi = 10, cnt = 3) { const s = new Set([n]); let i = 0; while (s.size < cnt && i < 400) { const x = i++ < 60 ? n + pickOne([-2, -1, 1, 2, 3]) : ri(lo, hi); if (x >= lo && x <= hi) s.add(x); } return shuffle([...s]); }
 const framed = (n, e) => `<div class="frame">${Array.from({ length: n }, (_, i) => `<span class="it" data-i="${i}">${pic(e)}</span>`).join('')}</div>`;
 const numBtns = list => list.map(x => `<button class="num-b" data-n="${x}">${x}</button>`).join('');
 function screenMathCount() {
@@ -8580,7 +8581,7 @@ GAMES.push(
   { id: 'olymp', name: 'Олимпиада', sub: 'хитрые задачи: логика, числа, шахматы', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, prog: () => P.olymp ? `решено ${P.olymp.solved.length}/${OLYMP.length}` : '' },
   { id: 'flash', name: 'Флеш-счёт', sub: 'ментальная арифметика', ico: () => pic('⚡'), bg: 'var(--t-yellow)', go: () => screenFlash(), grp: 8, prog: () => `уровень ${P.flashLv || 1}` },
   { id: 'dots', name: 'Точки по порядку', sub: 'соедини и узнай, что получится', ico: () => pic('🔢'), bg: 'var(--t-green)', go: () => screenDots(), grp: 4 },
-  { id: 'chess-online', name: 'Шахматы онлайн', sub: 'партия с родными', ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => screenFamChess(), grp: 8, hide: () => ROOT.curFam === 'gk',
+  { id: 'chess-online', name: 'Шахматы онлайн', sub: 'партия с родными', ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => ROOT.curFam === 'gk' && GUEST ? (GUEST_OFF = false, screenGuest()) : screenFamChess(), grp: 8,
     prog: () => { const n = Object.keys(gamesAll()).length; return n ? `партий: ${n}` : ''; } },
   ...Object.keys(LEARN).map(k => ({ id: 'learn-' + k, place: LEARN[k].place ? k : null, name: LEARN[k].name, sub: LEARN_SUB[k] || LEARN[k].sub || '', ico: () => pic(LEARN[k].e), bg: LEARN[k].bg, go: () => screenLearn(k), grp: 10, prog: () => k === 'old' && !LEARN[k].items.length ? '' : learnProg(k) }))
 );
@@ -20878,6 +20879,8 @@ const POLISH = (() => {
     if (!st || st._pol) return; st._pol = 1;
     st.addEventListener('click', e => {
       if (!document.body.classList.contains('young') || !$('#tabBar')) return;
+      // a grandparent playing the child's games reads: one tap opens the game (v146)
+      if (GPLAY || (GUEST && GUEST_OFF && ROOT.curFam === 'gk')) return;
       const t = e.target.closest('.tile'); if (!t || !st.contains(t) || !t.closest('.tiles')) return;
       if (ARM && ARM.el === t && Date.now() - ARM.at < 10000) { ARM = null; t.classList.remove('tl-armed'); return; }
       e.preventDefault(); e.stopImmediatePropagation();
@@ -22606,7 +22609,8 @@ function langRedirect() {
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
   const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';
   if (!want && ROOT.families && ROOT.families.main) want = 'ru';
-  else if (!want && !fams && (GUEST || HASH0.length > 1 || onMain)) {
+  // a link with its language in the address (/ru/#vhod=…, a grandparent's entry) keeps it: v146
+  else if (!want && !fams && onMain) {
     const nav = (navigator.languages || [navigator.language || '']).map(x => String(x).slice(0, 2).toLowerCase());
     want = nav.find(x => LANGS.some(l => l[0] === x)) || '';
   }
