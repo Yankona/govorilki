@@ -8749,6 +8749,35 @@ FOOT_IDS.forEach((id, i) => {
     puff: { c: o.sk, x: [32, 88], y: 80 }, smile: FOOT_SMILE(o.dark ? '#1A1020' : '#2A2346'), art: FOOT_FACE(o) };
 });
 /*FOOT-END*/
+/* PETS-BEGIN: two family pets the owner asked for (names public with the owner's consent; drawings only, no photos) */
+// Лилу: a chocolate (havana) Oriental cat — huge bat-like ears set low and wide, a long wedge head, sleepy amber-olive eyes
+const LILU_EYE = (x, s) => `<path d="M${x - 12 * s} 65Q${x - 2 * s} 49 ${x + 11 * s} 57Q${x + 2 * s} 72 ${x - 12 * s} 65Z" fill="#C9A43A"/><path d="M${x - 8 * s} 63Q${x} 64 ${x + 7 * s} 60" stroke="#8FA13A" stroke-width="3" fill="none" opacity=".5"/><ellipse cx="${x - .5 * s}" cy="61.5" rx="2.4" ry="6" fill="#2A1408"/><circle cx="${x + 2.5 * s}" cy="58" r="1.6" fill="#fff"/><path d="M${x - 12 * s} 65Q${x - 2 * s} 51.5 ${x + 11 * s} 57" stroke="#2A1408" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+// Омик: a chocolate chihuahua girl — huge upright ears (one turned a little), big glossy amber eyes, tan brows, white bib
+const OMIK_EYE = (x) => `<circle cx="${x}" cy="62" r="11" fill="#C8955A"/><circle cx="${x}" cy="62" r="9.5" fill="#7A3E14"/><circle cx="${x}" cy="62.5" r="5.5" fill="#2A1408"/><circle cx="${x + 3.5}" cy="58" r="3" fill="#fff"/><circle cx="${x - 3}" cy="66" r="1.4" fill="#fff" opacity=".7"/>`;
+const PETS = {
+  lilu: { name: 'Лилу', kind: 'кошка', who: 'кошка Лилу', with: 'кошкой Лилу', hello: 'Мур-р! У меня самые большие уши!', pitch: 1.2, pm: 99,
+    puff: { c: '#7A4428', x: [36, 84], y: 90 }, smile: '<path d="M60 95v3M54 99q3 3 6 0 3 3 6 0" stroke="#2A1408" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+    art: `<path d="M42 50 2 4 26 74z" fill="#6B3A22"/><path d="M78 50l40-46-24 70z" fill="#6B3A22"/><path d="M36 50 10 16l16 46z" fill="#C98A7A"/><path d="M84 50l26-34-16 46z" fill="#C98A7A"/>
+      <path d="M60 22Q90 22 92 52Q93 78 72 100Q66 108 60 108T48 100Q27 78 28 52Q30 22 60 22Z" fill="#6B3A22"/>
+      <path d="M60 64Q72 66 74 84Q72 102 60 106Q48 102 46 84Q48 66 60 64Z" fill="#84482A"/>
+      <g class="lv-eyes">${LILU_EYE(45, 1)}${LILU_EYE(75, -1)}</g>
+      <path d="M55 88h10l-5 5z" fill="#3E2014"/>
+      <path d="M44 92l-18-2M44 96l-17 3M76 92l18-2M76 96l17 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
+  omik: { name: 'Омик', kind: 'собачка чихуахуа', who: 'собачка Омик', with: 'собачкой Омиком', hello: 'Гав! Я маленькая, но очень смелая!', pitch: 1.35, pm: 96,
+    puff: { c: '#5A3420', x: [32, 88], y: 86 }, smile: '<path d="M53 94q7 5 14 0" stroke="#1E100A" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
+    art: `<path d="M38 44 8 2 22 60z" fill="#4A2A1A"/><path d="M33 42 14 13l11 38z" fill="#E3B19A"/>
+      <g transform="rotate(14 86 40)"><path d="M82 44l30-42-14 58z" fill="#4A2A1A"/><path d="M87 42l19-29-11 38z" fill="#E3B19A"/></g>
+      <path d="M16 120Q20 98 40 92h40q20 6 24 28z" fill="#4A2A1A"/><path d="M38 96Q42 120 60 120T82 96L76 92H44Z" fill="#FFFFFF" stroke="#E6DCD6" stroke-width="1.5"/>
+      <path d="M60 18Q96 18 96 56Q96 84 76 96Q68 102 60 102T44 96Q24 84 24 56Q24 18 60 18Z" fill="#4A2A1A"/>
+      <path d="M46 99Q60 108 74 99L68 94H52Z" fill="#FFFFFF"/>
+      <ellipse cx="60" cy="86" rx="16" ry="12" fill="#7A4A30"/>
+      <ellipse cx="42" cy="44" rx="5" ry="3.2" fill="#C8955A"/><ellipse cx="78" cy="44" rx="5" ry="3.2" fill="#C8955A"/>
+      <g class="lv-eyes">${OMIK_EYE(42)}${OMIK_EYE(78)}</g>
+      <ellipse cx="60" cy="81" rx="5.5" ry="4" fill="#1E100A"/><circle cx="58" cy="79.6" r="1.4" fill="#fff" opacity=".6"/>
+      ` }
+};
+/*PETS-END*/
+Object.assign(FRIENDS, PETS);
 const DEMON = (c = '#7B4FE0') => `<svg viewBox="0 0 120 120" aria-hidden="true"><path d="M33 38 26 12 46 30z" fill="#C3A8FF"/><path d="M87 38l7-26-20 18z" fill="#C3A8FF"/>
   <path d="M18 70Q18 26 60 26T102 70V100L92 92 82 102 72 92 60 102 48 92 38 102 28 92 18 100Z" fill="${c}"/>
   <ellipse cx="45" cy="62" rx="11" ry="13" fill="#FFFFFF"/><ellipse cx="75" cy="62" rx="11" ry="13" fill="#FFFFFF"/><circle cx="49" cy="65" r="5" fill="#2A2346"/><circle cx="79" cy="65" r="5" fill="#2A2346"/>
@@ -9662,7 +9691,8 @@ const HOWTO_L = `<li>«Логопед»: 2 дыхательных упражне
 function screenFriends() {
   newScreen();
   // Vera's heroines come first; Sava keeps his friends on top
-  const HER = ['rina', 'shani', 'zhasmi'], rest = Object.keys(FRIENDS).filter(id => !HER.includes(id) && !FOOT_IDS.includes(id) && !id.startsWith('toy:'));
+  const HER = ['rina', 'shani', 'zhasmi'], rest = Object.keys(FRIENDS).filter(id => !HER.includes(id) && !FOOT_IDS.includes(id) && !PETS[id] && !id.startsWith('toy:'));
+  rest.splice(1, 0, ...Object.keys(PETS));   // the pets near the start of the animals
   const likes = P.settings.likes, herFirst = likes ? likes.includes('kpop') : !Q();
   const groups = herFirst ? [['Жар-птицы — супер-девочки', HER], [Q() ? 'Друзья' : 'Зверята', rest]] : [[Q() ? 'Друзья' : 'Зверята', rest], ['Жар-птицы', HER]];
   // footballers: on top for a child who likes football, else after the others
