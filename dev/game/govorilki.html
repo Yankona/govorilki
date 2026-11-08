@@ -3401,6 +3401,8 @@ async function sayRun(text, { rate = 1 } = {}) {
       return;
     } catch (e) { if (e && (e.status === 401 || e.status === 402 || e.status === 403)) elBroken = true; if (my !== sayTok) return; }
   }
+  // a voice saved on the phone takes a few seconds to wake up: the line waits for it instead of going to the phone's voice
+  if (P.settings.voice && piperOn() && !PIPER.isReady && PIPER.local && PIPER.ready) { await Promise.race([PIPER.ready, wait(6000)]); if (my !== sayTok) return; }
   // the app's own voice once it has loaded; the next sentence is made while this one plays
   if (P.settings.voice && piperOn() && PIPER.isReady) {
     try {
@@ -9851,12 +9853,14 @@ async function run({ id, voice, text, pairs, need }) {
 }
 self.onmessage = e => { q = q.then(() => run(e.data)); };
 `;
-const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, mem: new Map() };
+const PIPER = { w: null, n: 0, wait: {}, ready: null, readyVoice: null, isReady: false, pct: 0, failed: false, failedAt: 0, local: false, mem: new Map() };
 const piperVoice = () => PIPER_VOICES.some(v => v[0] === ROOT.piperVoice) ? ROOT.piperVoice : (PIPER_VOICES.find(v => v[0] === 'ru_RU-ruslan-medium') || PIPER_VOICES[0])[0];
 const piperName = () => PIPER_VOICES.find(v => v[0] === piperVoice())[1];
-const piperLean = () => { try { const c = navigator.connection; return !!(c && (c.saveData || c.type === 'cellular')); } catch (e) { return false; } };
-const engineNow = () => ROOT.engine || ((GUEST || piperLean()) ? 'device' : 'piper');
-const piperOn = () => !EMBEDDED && engineNow() === 'piper' && !PIPER.failed && typeof Worker === 'function' && typeof WebAssembly === 'object';
+// the app's voice (Руслан for Russian) is the main voice for every family, grandparents and phones on mobile data too;
+// the phone's voice speaks only when the family chose it in the settings, or while the app's voice is not loaded yet
+const engineNow = () => ROOT.engine || 'piper';
+// a voice that failed to load (no internet, a stalled download) is tried again at a touch half a minute later
+const piperOn = () => !EMBEDDED && engineNow() === 'piper' && !(PIPER.failed && performance.now() - PIPER.failedAt < 30000) && typeof Worker === 'function' && typeof WebAssembly === 'object';
 // while the voice downloads (about 60 MB, once): a small note with the percent
 function sayOwnHTML() {
   const own = ROOT.sayOwn || {};
@@ -9890,9 +9894,9 @@ function piperNote() {
 function piperCall(text, fix) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
-    catch (e) { PIPER.failed = true; return Promise.reject(e); }
+    catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
-    PIPER.w.onerror = () => { PIPER.failed = true; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
+    PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
   const voice = piperVoice();
   return new Promise((res, rej) => {
@@ -9907,9 +9911,9 @@ function piperCall(text, fix) {
 function piperWarm() {
   if (!piperOn()) return Promise.resolve(false);
   const v = piperVoice();
-  if (PIPER.ready && PIPER.readyVoice === v) return PIPER.ready;
-  PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0;
-  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { PIPER.failed = true; piperNote(); return false; });
+  if (PIPER.ready && PIPER.readyVoice === v && !PIPER.failed) return PIPER.ready;
+  PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0; PIPER.failed = false;
+  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { PIPER.failed = true; PIPER.failedAt = performance.now(); piperNote(); return false; });
   return PIPER.ready;
 }
 async function piperAudio(text) {
@@ -9929,8 +9933,16 @@ async function piperAudio(text) {
   job.catch(() => PIPER.mem.delete(key));
   return job;
 }
-// the voice starts loading at the first touch, so nobody downloads it by just glancing at the page
-document.addEventListener('pointerdown', () => { if (piperOn()) piperWarm(); }, { once: true, capture: true });
+// the voice starts loading at the first touch, so nobody downloads it by just glancing at the page; a voice already
+// saved on the phone starts at once, so even the first greeting is said by Руслан, not by the phone
+document.addEventListener('pointerdown', () => { if (piperOn() && !PIPER.isReady) piperWarm(); }, { capture: true });
+(async () => {
+  try {
+    if (!piperOn()) return;
+    const dir = await (await navigator.storage.getDirectory()).getDirectoryHandle('piper');
+    if ((await (await dir.getFileHandle(piperVoice() + '.onnx')).getFile()).size > 1e6) { PIPER.local = true; piperWarm(); }
+  } catch (e) {}
+})();
 
 /* ---------- hearing WHAT was said: the browser's speech recognition (Chrome, Safari) checks the word itself.
    A slipped Л (лодка → водка) comes back as a different word, and the child sees what was heard.
@@ -12933,7 +12945,7 @@ async function wiktLookup(word) {
 async function wikiSummary(word) {
   const t = word.charAt(0).toUpperCase() + word.slice(1);
   const d = await wGet(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(t)}`);
-  return d && d.type !== 'disambiguation' && d.extract ? { title: d.title, text: d.extract.split(/(?<=[.!?])\s/).slice(0, 2).join(' '), url: d.content_urls && d.content_urls.mobile && d.content_urls.mobile.page } : null;
+  return d && d.type !== 'disambiguation' && d.extract ? { title: d.title, text: plainText(d.extract).split(/(?<=[.!?])\s/).slice(0, 2).join(' '), url: d.content_urls && d.content_urls.mobile && d.content_urls.mobile.page } : null;
 }
 const dictLinks = w => LANG === 'en' ? [
   ['Cambridge Dictionary', `https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(w)}`],
@@ -15410,7 +15422,7 @@ function artLightText(a) {
 async function artWiki(x, n) {
   if (!x.w) return '';
   if (ART_WIKI[x.q] === undefined) ART_WIKI[x.q] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(x.w)}`)
-    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+    .then(r => r.ok ? r.json() : null).then(d => d && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/\u0301/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
   const s = await ART_WIKI[x.q];
   return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, n).join(' ') : '';
 }
@@ -15659,7 +15671,7 @@ const MONTHS_IN = ['в январе', 'в феврале', 'в марте', 'в 
 async function tripWiki(name) {
   try {
     const d = await fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`).then(r => r.ok ? r.json() : null);
-    const s = d && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
+    const s = d && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '';
     return s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, 4) : [];
   } catch (e) { return []; }
 }
@@ -16057,9 +16069,17 @@ function sayMark(sent) {
     return f ? sayForm(t, f) : t;
   });
 }
+// what no voice should read aloud: Wikipedia's formulas ({\displaystyle …}), HTML tags, backslashes and other markup,
+// which the voices say as «бэкслэш», «слэш», «нижнее подчёркивание»; a slash becomes a pause (и/или → и или)
+function plainText(t) {
+  let s = String(t == null ? '' : t), prev;
+  do { prev = s; s = s.replace(/\{\\displaystyle[^{}]*(?:\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}[^{}]*)*\}/g, ' '); } while (s !== prev);
+  return s.replace(/\[\d+\]/g, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ').replace(/\\[a-zA-Z]+/g, ' ').replace(/[\\{}_^|~\[\]]/g, ' ')
+    .replace(/\s*\/\s*/g, ' ').replace(/\s+([,.;:!?…])/g, '$1').replace(/[ \t]+/g, ' ').trim();
+}
 // the text a voice gets: numbers in words, then sentence by sentence with the stress marks
 function sayParts(text) {
-  const t = IS_RU ? ruNums(text) : String(text);
+  const t = IS_RU ? ruNums(plainText(text)) : plainText(text);
   return (t.match(/[^.!?…]+[.!?…]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => IS_RU ? sayMark(x) : x);
 }
 // for Piper: the corrected phonemes of the marked words; words of the family not yet worked out go to the voice to work out
@@ -20439,7 +20459,7 @@ const ARTISTS = (() => {
   function about(a) {
     const w = ART.data && ART.data.aw && ART.data.aw[a]; if (!w) return Promise.resolve('');
     if (WIKI[a] === undefined) WIKI[a] = fetch(`https://${LANG}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(w.replace(/ /g, '_'))}`)
-      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? d.extract.replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
+      .then(r => r.ok ? r.json() : null).then(d => d && d.type !== 'disambiguation' && d.extract ? plainText(d.extract).replace(/\s*\([^()]*\)/g, '').replace(/́/g, '').replace(/\s+/g, ' ').trim() : '').catch(() => '');
     return WIKI[a].then(s => s ? s.split(/(?<=[.!?])\s+(?=[A-ZА-ЯЁÀ-Ý«"])/).slice(0, Q() ? 3 : 2).join(' ') : '');
   }
   function list(box, P2) {
