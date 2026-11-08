@@ -87,9 +87,9 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     await p.screenshot({ path: D + `plants-${lang}-${DEV}-leaves.png` });
     for (let r = 0; r < 6; r++) {
       // round 1: two wrong taps first (the second one makes the right button blink); then press the blinking one
-      if (r === 0) { const w = await p.$$('.lf-o'); await w[0].click(); await p.waitForTimeout(200); const w2 = await p.$$('.lf-o:not([disabled])'); await w2[0].click(); await p.waitForTimeout(300); }
+      if (r === 0) { const w = await p.$$('.lf-o'); await w[0].click(); await p.waitForTimeout(200); const w2 = await p.$$('.lf-o:not([disabled])'); if (w2.length && !await p.$('#lfNext')) { await w2[0].click(); await p.waitForTimeout(300); } }
       const hint = await p.$('.lf-o.hint');
-      if (hint) await hint.click();
+      if (await p.$('#lfNext')) { /* the first tap was right */ } else if (hint) await hint.click();
       else for (const bt of await p.$$('.lf-o:not([disabled])')) { await bt.click(); await p.waitForTimeout(250); if (await p.$('#lfNext')) break; }
       await p.waitForTimeout(300);
       ok(await p.$('#lfNext') !== null, `leaf round ${r + 1}: right answer → «${await p.$eval('#lfCard h2', e => e.textContent).catch(() => '-')}»`);
