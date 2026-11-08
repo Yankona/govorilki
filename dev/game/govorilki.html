@@ -20048,8 +20048,7 @@ const CBOX = (() => {
 // the stories are inside the museum and the composers now: one place each, not two tiles
 { const MERGED = { 'learn-art': 'museum', 'learn-music': 'composers' };
   Object.keys(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g) g.hide = () => true; });
-  // and where the stories were («Узнаём») the composers are now; the museum lives in «Творим» only (the owner asked)
-  ['composers'].forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !(g.also || []).includes(10)) g.also = [...(g.also || []), 10]; });
+  // the museum and the composers live in «Творим» only, with all the art (the owner asked: «музеи мира… и композиторов»)
   [...INTEREST_CAT.flatMap(c => c.items || []), ...LIKES].forEach(it => { if (Array.isArray(it.tiles)) it.tiles = [...new Set(it.tiles.map(t => MERGED[t] || t))]; }); }
 /* CBOX-END */
 /* BOOKS-BEGIN */
@@ -20551,22 +20550,22 @@ const THEMES = (() => {
   // «Учимся», the older track
   const s8 = sec(8); if (s8) { s8.h = 'Шахматы'; s8.p = 'с компьютером, задачи и партии онлайн'; }
   SECTIONS.splice(at(8) + 1, 0, { g: 17, h: 'Математика', p: 'счёт в уме, флеш-счёт, олимпиада, счёты', only: 'l' },
-    { g: 18, h: 'Пианино', p: 'играй мелодии', only: 'l' }, { g: 19, h: 'Кубик Рубика', p: 'соберём по шагам', only: 'l' });
+    { g: 19, h: 'Кубик Рубика', p: 'соберём по шагам', only: 'l' });
   ['m-sprint', 'olymp', 'flash', 'math-path', 'soroban', 'steps'].forEach(id => move(id, 8, 17));
-  move('piano', 8, 18); move('cube', 8, 19);
+  move('piano', 8, 22); move('cube', 8, 19);
   // «Творим»: the younger track
   const s4 = sec(4); if (s4) { s4.h = 'Рисование и раскраски'; s4.p = 'рисуем, раскрашиваем, соединяем точки'; }
-  SECTIONS.splice(at(4) + 1, 0, { g: 20, h: 'Музыка', p: 'песенки, ксилофон, композиторы', only: 'r' }, { g: 21, h: 'Картины и музей', p: 'музей мира, викторина, правда или выдумка', only: 'r' });
+  SECTIONS.splice(at(4) + 1, 0, { g: 20, h: 'Музыка', p: 'песенки, ксилофон, композиторы, балет', only: 'r' }, { g: 21, h: 'Картины и музей', p: 'музей мира, викторина, правда или выдумка', only: 'r' });
   ['songs', 'xylo', 'composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 4, 20));
   ['museum', 'art-quiz'].forEach(id => move(id, 4, 21));
   // «Творим»: the older track
   const s13 = sec(13); if (s13) { s13.h = 'Картины и музей'; s13.p = 'музей мира, викторина, правда или выдумка'; }
-  SECTIONS.splice(at(13) + 1, 0, { g: 22, h: 'Музыка', p: 'композиторы, дирижёр, угадай мелодию', only: 'l' }, { g: 23, h: 'Рисование', p: 'рисуем и раскрашиваем', only: 'l' });
+  SECTIONS.splice(at(13) + 1, 0, { g: 22, h: 'Музыка', p: 'композиторы, пианино, дирижёр, балет', only: 'l' }, { g: 23, h: 'Рисование', p: 'рисуем и раскрашиваем', only: 'l' });
   ['composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 13, 22));
   ['draw', 'code-math'].forEach(id => move(id, 13, 23));
-  const mb = MODS.find(m => m.id === 'brain'); if (mb) mb.g.push(17, 18, 19);
+  const mb = MODS.find(m => m.id === 'brain'); if (mb) mb.g.push(17, 19);
   const ma = MODS.find(m => m.id === 'art'); if (ma) ma.g.push(20, 21);
-  const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 18, 19);
+  const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 19);
   const tc = HOME_TABS.find(t => t.id === 'create'); if (tc) tc.g.push(20, 21, 22, 23);
   // the cube: every child on the older track, and anyone 9 or older
   const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => !(P.settings.track === 'l' || (P.settings.age || 0) >= 9);
@@ -21002,7 +21001,7 @@ const BALLET = (() => {
     };
     read();
   }
-  GAMES.push({ id: 'ballet', name: 'Балет', sub: 'балетный класс, позиции, сказки балета', kw: 'балет балерина танец танцевать пуанты плие пируэт щелкунчик лебединое озеро', ico: () => pic('🩰'), bg: 'var(--t-pink)', go: () => hub(), grp: 20, also: [22, 10],
+  GAMES.push({ id: 'ballet', name: 'Балет', sub: 'балетный класс, позиции, сказки балета', kw: 'балет балерина танец танцевать пуанты плие пируэт щелкунчик лебединое озеро', ico: () => pic('🩰'), bg: 'var(--t-pink)', go: () => hub(), grp: 20, also: [22],
     prog: () => { const n = Object.keys((P.ballet || {}).tales || {}).length; return n ? `сказок прочитано: ${n}` : ''; } });
   return { hub, screen, tales, tale, quiz, repeat, fig, S, FR };
 })();
@@ -21243,8 +21242,8 @@ const LANDX = (() => {
   const PICKS = {
     speak: ['artic', 'breath', 'l-rap', 'kpop', 'twist-pen', 'magic', 'hear-pairs', 'syll'],
     learn: ['primer', 'read-merge', 'abc', 'steps', 'soroban', 'chess-ai', 'piano', 'cube'],
-    create: ['draw', 'color', 'songs', 'xylo', 'composers', 'conductor', 'museum', 'art-quiz'],
-    discover: ['travel', 'phys-lab', 'body', 'composers', 'ballet']
+    create: ['draw', 'color', 'songs', 'xylo', 'composers', 'ballet', 'museum', 'piano'],
+    discover: ['travel', 'phys-lab', 'body', 'space', 'flag-memory']
   };
   // the games of a tab for any child: a little one and an older one, every game switched on
   function tabGames(t) {
@@ -21731,7 +21730,7 @@ const LAND_CARDS = [
   ['🔢', 'Математика', 'Счёты для малышей, «Ступеньки» от точек до уравнений, олимпиадные задачи для старших.'],
   ['🏍️', 'Игры голосом', 'Л-трасса: прочитай слово вслух — и включится нитро; трюки, гараж, монеты. Микрофон слышит, когда ребёнок говорит.'],
   ['♟️', 'Шахматы', 'Десять уровней с компьютером и тренером, партии с бабушкой и дедушкой прямо в игре.'],
-  ['🎨', 'Творчество', 'Раскраски, рисовалка, песенки, ксилофон, весёлые композиторы с их музыкой, Музей мира — 1000 картин, балет.'],
+  ['🎨', 'Творчество', 'Раскраски, рисовалка, песенки, ксилофон, весёлые композиторы с их музыкой, пианино, балет, Музей мира — 1000 картин.'],
   ['🌍', 'Узнаём', 'Истории о городах и странах, опыты на площадке, праздники, подготовка к поездке, слова на 11 языках.'],
   ['🏆', 'Вместе', 'Звёзды, серии дней и медали, командная серия братьев и сестёр, лига семей и баттлы.']];
 function screenLanding({ liga = '' } = {}) {

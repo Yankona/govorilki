@@ -21,9 +21,16 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       await p.goto(BASE + path); await p.waitForTimeout(1500);
       const kids = await p.$$('.who-kid'); if (kids.length) { await kids[ki === 'k1' ? 0 : 1].click(); await p.waitForTimeout(900); }
       const tab = async t => { await p.evaluate(t => { const x = document.querySelector(`[data-tab="${t}"]`); if (x) x.click(); }, t); await p.waitForTimeout(700); };
+      const ART = ['museum', 'composers', 'ballet', 'piano', 'xylo', 'songs', 'conductor', 'guess-composer', 'cmp-tf'];
+      const ids = () => p.$$eval('.tile[data-id]', x => x.map(e => e.dataset.id));
       await tab('discover');
-      ok(!await p.$('.tile[data-id="museum"]'), '«Узнаём»: no museum tile');
+      const dis = await ids();
+      ok(!ART.some(a => dis.includes(a)), '«Узнаём»: no art or music tiles (' + dis.filter(a => ART.includes(a)).join(' ') + ')');
+      await tab('learn');
+      ok(!(await ids()).includes('piano'), '«Учимся»: no piano');
       await tab('create');
+      const cr = await ids(), want = ki === 'k1' ? ['museum', 'composers', 'ballet', 'xylo', 'songs'] : ['museum', 'composers', 'ballet', 'piano', 'conductor'];
+      ok(want.every(a => cr.includes(a)), '«Творим»: ' + cr.join(' '));
       const tile = await p.$('.tile[data-id="museum"]');
       ok(!!tile, '«Творим»: ' + (tile ? (await tile.innerText()).replace(/\s+/g, ' ') : '-'));
       if (ki === 'k1') await p.screenshot({ path: D + `museums-${lang}-${DEV}-create.png` });
