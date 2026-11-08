@@ -80,7 +80,11 @@ for c in json.load(open(os.path.join(HERE, 'recordings.json'), encoding='utf-8')
     cov = len(hit) / max(len(T), 1)
     if cov < MIN_COVER or not hit:
         rejected.append((c['id'], best, round(cov, 2))); print('REJECTED', c['id'], 'variant', best, 'cover %.2f' % cov); continue
-    t0 = tt[hit[0]]; t1 = te[hit[-1]]; start = [None] * len(S)
+    t0 = tt[hit[0]]; t1 = te[hit[-1]]
+    wps = len(T) / max(t1 - t0, 1)          # a recording of several tales matches one variant: words per second give it away
+    if not 1.0 <= wps <= 3.8:
+        rejected.append((c['id'], best, 'wps %.2f' % wps)); print('REJECTED', c['id'], 'variant', best, 'words per second %.2f' % wps); continue
+    start = [None] * len(S)
     for i in hit:
         if start[sent_of[i]] is None: start[sent_of[i]] = tt[i]
     last = t0

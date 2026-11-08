@@ -37,6 +37,17 @@ let bad = 0; const log = (...a) => console.log(...a), check = (name, ok, more = 
   await p.goto(PAGE); await enter();
   const au = () => T("TALE_AUDIO ? { t: TALE_AUDIO.currentTime, paused: TALE_AUDIO.paused, src: TALE_AUDIO.src.split('/').pop() } : null");
   const lit = () => p.$eval('#tlText .ss.on', e => +e.dataset.j).catch(() => -1);
+  // every recording in the index: its file is served, its sentence times only go forward and match the tale's sentences
+  const dat = await p.evaluate(async () => {
+    const base = location.pathname.replace(/ru\/$/, '') + 'tales/', R = await (await fetch(base + 'audio/index.json')).json(), bad = [];
+    for (const [id, r] of Object.entries(R)) {
+      const h = await fetch(base + 'audio/' + r.f, { method: 'HEAD' }), d = await (await fetch(base + id + '.json')).json();
+      const n = d.p.reduce((k, x) => k + (x.match(/[^.!?…]+[.!?…]+[»"]?\s*|[^.!?…]+$/g) || [x]).length, 0);
+      if (!h.ok || r.ts.length !== n || r.ts.some((x, i) => i && x < r.ts[i - 1]) || !r.who || !r.src || !/Public Domain/.test(r.lic)) bad.push(id + ':' + h.status + ':' + r.ts.length + '/' + n);
+    }
+    return { n: Object.keys(R).length, bad };
+  });
+  check('every recording: file, sentence times, narrator, source, licence', dat.n >= 30 && !dat.bad.length, `${dat.n} recordings; bad: ${dat.bad.join(' ')}`);
   await T("TALES.list(() => {})"); await p.waitForTimeout(1500);
   const rows = await p.$$eval('.tl-i', xs => xs.filter(x => /читает актёр/.test(x.textContent)).map(x => x.dataset.id));
   check('list marks the recorded tales', rows.length >= 4 && rows.includes('kochet-kurica') && rows.includes('tsarevna-lyagushka'), rows.join(','));
@@ -84,7 +95,7 @@ let bad = 0; const log = (...a) => console.log(...a), check = (name, ok, more = 
   await T("TALES.play('kochet-kurica', () => {})"); await p.waitForTimeout(600);
   await p.click('#tlPlay'); await p.waitForTimeout(1200);
   await p.click('#tlNext'); await p.waitForTimeout(1200);
-  { const a6 = await au(); check('jump while playing keeps playing', !a6.paused && /Пауза/.test(await p.$eval('#tlPlay', e => e.textContent)), JSON.stringify(a6)); }
+  { const a6 = await au(); check('jump while playing keeps playing', !a6.paused && /Пауза/.test(await p.$eval('#tlPlay', e => e.textContent)), JSON.stringify(a6) + ' ' + await p.$eval('#tlPlay', e => e.textContent) + ' | ' + await p.$eval('#tlCr', e => e.textContent)); }
   await T("goHome()"); await p.waitForTimeout(300);
   // the stream hangs (an old service worker, a bad line): after ~5 s the whole file is fetched and plays
   const hangRange = async r => { if (r.request().headers().range) return; r.fallback(); };
