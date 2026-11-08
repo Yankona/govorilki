@@ -15,7 +15,7 @@ every point they raised. Screenshots and screen videos from the owner show real 
   no personal details of the owner's family, no secrets, ever.
 - Builds write into the repository root (`$SITE`, default: the folder above `dev/`). Run every command from `dev/`.
 - Plan and status: `dev/BACKLOG.md`. Artifact of the Russian page (the owner's quick look):
-  https://claude.ai/artifact/QGYxZFefN7EH7khLeqiVvt ← `ru/index.html`.
+  https://claude.ai/artifact/QGYxZFefN7EH7khLeqiVvt ← `dev/artifact/ru.html` (the build's one-file copy with every data pack inline).
 
 ## Layout of dev/
 - `game/govorilki.html` — the whole game, Russian source, one 2.3 MB file (~19k lines, some lines are long JSON).
@@ -23,6 +23,9 @@ every point they raised. Screenshots and screen videos from the owner show real 
   `/* LANDX-BEGIN */`…) and read around it. Edit it directly; git history replaces the old patch scripts and backups.
 - `build/build_all.sh` — ru from the source; en/pt/de through `i18n/i18n.js`; all into `$SITE`. `build/build.py` wraps a page
   (meta, the SAYRU dictionary for ru, the version from `$SITE/sw.js`).
+- `build/packs.js` (called by build.py) — data packs: story texts (s, q, a of every LEARN item), holiday texts, the globe map
+  (`let NAME = /*__PACK__*/{…}`) and SAYRU go to `$SITE/data/<lang>/*.json`; Russian LX defaults leave en/pt/de; comments go.
+  The game fetches a pack when a screen needs it (`PACK`, `PACK.story(it)`); the service worker keeps them all after one visit.
 - `build/release_check.sh` and `build/publish.sh` — the release (skill `release`).
 - `i18n/` — translator, done batches, `fixed.json` {group: {ru: [en, pt]}}, `de/fixed_de.json` {group: {ru: de}},
   language content for `LX()` in `phonics/*.json` and `de/langdata_de.json`. `tables/`, `langdata/` are generated (gitignored).
@@ -44,6 +47,8 @@ every point they raised. Screenshots and screen videos from the owner show real 
 - Version: `govorilki-vNNN` in `$SITE/sw.js` (offline cache name, shown in the parent panel). One bump per release.
 - Voices: Piper in the browser, default «Руслан» (`ru_RU-ruslan-medium`), the phone's voice as fallback. Russian text goes
   through the say module (stress from SAYRU, ё, numbers, soft Л) before any voice.
+- Data packs: a new story collection works as is if its items are in LEARN (any `LEARN.x = {…}`, or a name in
+  `STORY_SETS` of `build/packs.js`); code that reads a story's `s`/`q`/`a` outside `screenStory` must `await PACK.story(it)` first.
 - Paid for already: `typeof X` of a later `const` inside an IIFE throws (TDZ) and kills the whole app at load; card CSS on
   `b` also hits icons (use `.ld-g>b`); Wikimedia hot-links fail with 429 (self-host); ruaccent homographs need pinning
   (кому́, not ко́му); a name at the start of a sentence needs a `w` entry; stress proposed by writers for common words is

@@ -45,10 +45,10 @@ SHARE = f'''<title>{META['title']}</title>
 <meta name="twitter:description" content="{META['desc']}">
 <meta name="twitter:image" content="{BASE}img/og-{lang}.png">'''
 script = rest.strip()
-# the Russian page carries its pronunciation dictionary (made by build/say_ru.py)
-if lang == 'ru':
-    _sp = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'site-data', 'say-ru.json')
-    if os.path.exists(_sp): script = script.replace('/*__SAYRU__*/null', open(_sp, encoding='utf8').read().strip())
+# the Russian page's pronunciation dictionary (made by build/say_ru.py): a data pack next to the page, inline in the
+# claude.ai copy
+_sp = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'site-data', 'say-ru.json')
+SAYRU = _sp if lang == 'ru' and os.path.exists(_sp) else None
 # the version the page shows in the control panel: the number of the offline copy in sw.js
 _v = re.search(r"govorilki-v(\d+)", open(os.path.join(SITE, 'sw.js')).read())
 script = script.replace("/*__VER__*/''", repr(_v.group(1) if _v else ''))
@@ -58,7 +58,8 @@ if (hot && typeof hot.ready === 'function') { try { hot.ready(() => goHome()); }
 else goHome();""", "goHome();")
 if META['saved']: script = script.replace('Прогресс хранится только в этом браузере.', META['saved'])
 assert 'goHome();\n})();' in script
-page = f'''<!doctype html>
+def make_page(script):
+  return f'''<!doctype html>
 <html lang="{lang}">
 <head>
 <meta charset="utf-8">
@@ -96,6 +97,19 @@ if ('serviceWorker' in navigator) {{
 </body>
 </html>
 '''
+# the claude.ai copy (Russian): one file with everything inline, since it cannot fetch files next to it
+DEV = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+if lang == 'ru':
+  os.makedirs(os.path.join(DEV, 'artifact'), exist_ok=True)
+  full = script.replace('/*__SAYRU__*/null', open(SAYRU, encoding='utf8').read().strip()) if SAYRU else script
+  open(os.path.join(DEV, 'artifact', 'ru.html'), 'w', encoding='utf8').write(make_page(full))
+# the site's page: big data the first screen does not need goes to data/<lang>/*.json (build/packs.js)
+import subprocess, tempfile
+with tempfile.TemporaryDirectory() as tmp:
+  open(tmp + '/in.html', 'w', encoding='utf8').write(make_page(script))
+  subprocess.run(['node', os.path.join(DEV, 'build', 'packs.js'), tmp + '/in.html', tmp + '/out.html', lang,
+                  os.path.join(SITE, 'data', lang)] + (['sayru=' + SAYRU] if SAYRU else []), check=True)
+  page = open(tmp + '/out.html', encoding='utf8').read()
 open(out + '/index.html', 'w', encoding='utf8').write(page)
 json.dump({
   "name": META['name'],
