@@ -6,7 +6,7 @@ B = os.path.dirname(os.path.abspath(__file__))
 import glob
 FILES = sorted(glob.glob(os.path.join(B, '..', 'stories', '*', '*.json')))
 T = os.path.join(B, '..', 'i18n') + '/'
-ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'old', 'space', 'nyc', 'can']
+ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'old', 'space', 'nyc', 'can', 'sgp', 'jpn']
 more = {k: [] for k in ORDER}; stress = {}; ids = set(); warn = []
 for f in FILES:
     d = json.load(open(f, encoding='utf-8'))
@@ -31,7 +31,8 @@ def acc_k(w):
     f = acc.get(w); return f.index('+') if f and '+' in f else None
 conflicts = []
 # stress the story writers proposed that is wrong for the word as it stands (checked by ear and in the dictionary)
-REJECT = {'соломенным', 'исаакиевского', 'третьяков', 'третьяковская', 'ярославля', 'ярославле', 'салехард', 'салехарде', 'соловках', 'палехская', 'ростральные', 'ростральными', 'александровская', 'исаакиевской', 'рафаэля', 'бурлаки', 'ладожского', 'конюшенной', 'садовой', 'котлин', 'вильгельм', 'измайлове', 'екатерина', 'екатерины', 'агриппины', 'менделеева', 'мелихово', 'боголюбский', 'гудзонов', 'квебеке', 'аполлон', 'ламантин', 'катмай'}
+REJECT = {'агриппины', 'александровская', 'аполлон', 'боголюбский', 'бурлаки', 'вильгельм', 'гудзонов', 'екатерина', 'екатерины', 'измайлове', 'исаакиевского', 'исаакиевской', 'катмай', 'квебеке', 'конюшенной', 'котлин', 'ладожского', 'ламантин', 'мелихово', 'менделеева', 'палехская', 'рафаэля', 'ростральные', 'ростральными', 'садовой', 'салехард', 'салехарде', 'соловках', 'соломенным', 'третьяков', 'третьяковская', 'ярославле', 'ярославля'}
+REJECT |= {'сингапурский', 'сингапурском', 'колокол', 'сямисэн'}  # Asia 1: writers' stress is wrong (dictionary right)
 for w, f in stress.items():
     if ' ' in w or not re.fullmatch(r'[а-яё+-]+', f) or f.replace('+', '') != w or f.count('+') < 1: continue
     for part, pf in zip(w.split('-'), f.split('-')):
@@ -70,6 +71,13 @@ const MORE_STORIES = LX('MORE_STORIES', """ + js + """);
   });
   LEARN.pt.name = 'Португалия';
   Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });
+})();
+// Asia 1: Сингапур and Япония, each its own section; the country code ties it to the stamp, the passport and the globe
+(() => {
+  [['sgp', 'Сингапур', '🦁', 'var(--t-mint)', 'SG', 'город-сад, супердеревья и хокер-центры'], ['jpn', 'Япония', '🗻', 'var(--t-pink)', 'JP', 'Токио, Киото, Фудзи, сакура и синкансэн']].forEach(([k, name, e, bg, place, sub]) => {
+    if (!LEARN[k]) LEARN[k] = { name, e, bg, place, sub, items: [] };
+    ((MORE_STORIES || {})[k] || []).forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); });
+  });
 })();
 """
 open(B + '/part_stories.js', 'w', encoding='utf-8').write(part)
