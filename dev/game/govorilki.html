@@ -4236,6 +4236,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
+  if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
   tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
@@ -7632,6 +7633,8 @@ function guardMiss() {
   if (e.target.closest('#stage')) { e.stopPropagation(); e.preventDefault(); }
 }, true));
 const FREE_KEYS = ['draw', 'magic'];
+// the words of this game said «almost» and left (askSaid); the game's stars count them
+var SAY_MISS = { n: 0, words: [] };
 function fairStars(key, stars) {
   const d = dayKey();
   if (!P.daily || P.daily.d !== d) P.daily = { d, k: {} };
@@ -7640,6 +7643,12 @@ function fairStars(key, stars) {
   if (!GUARD.free && GUARD.miss >= 3) s = Math.max(1, s - (GUARD.miss >= 6 ? 2 : 1));
   if (FREE_KEYS.includes(key)) { if (n > 1) { s = 0; note = 'Звёздочка за свободный рисунок бывает один раз в день. За рисунок по заданию и точки звёзд больше!'; } }
   else if (n > 3) { s = Math.min(s, 1); note = 'В эту игру сегодня уже играли. Выбери другую — за неё больше звёзд!'; }
+  // words the child went on from without saying them right: no star for them, and a word about practising them again
+  if (SAY_MISS.n && !FREE_KEYS.includes(key)) {
+    s = Math.max(1, s - Math.min(2, SAY_MISS.n));
+    if (!note) note = `Потренируем ещё: ${SAY_MISS.words.slice(0, 4).join(', ')}.`;
+  }
+  SAY_MISS.n = 0; SAY_MISS.words = [];
   return { s, note };
 }
 
@@ -7668,9 +7677,13 @@ function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect 
       if (opened || t !== tok || !b.isConnected) return; opened = true;
       b.disabled = false; b.classList.remove('wait'); b.innerHTML = `${ICON.star}<span>${gx(label)}</span>`; sfx.tick();
     };
+    let checking = false, right = false;   // checking: the recogniser listens for this word; right: it heard it said right
     b.onclick = () => {
       if (!opened) return;
-      micRelease(); sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); b.remove(); if (card) card.remove(); res();
+      micRelease(); if (right || !checking) { sfx.star(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); } else sfx.pop();
+      // going on without the word said right: no star for it, and the game may bring it back later
+      if (checking && !right) { SAY_MISS.n++; if (!SAY_MISS.words.includes(expect)) SAY_MISS.words.push(expect); }
+      b.remove(); if (card) card.remove(); res({ ok: right || !checking, again: checking && !right });
     };
     function byLoudness() {
       micOn().then(ok => {
@@ -7698,31 +7711,52 @@ function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect 
       });
     }
     if (!expect || !srOk()) { byLoudness(); return; }
-    /* listening for the word: the microphone pulses with «Я слушаю…». A word said close enough (a sound still being
-       learned) is praised, and the friend says it once more the right way before the button opens. After two tries the
-       button opens anyway — the child tried, and that is the practice; listening goes on behind it a little longer. */
-    tx.textContent = gx('Скажи вслух!');
+    /* listening for the word: the microphone pulses with «Я слушаю…». The word said right opens the button. A learned
+       sound said as another one (рыба → «лыба») is «почти»: the friend says what was heard and how to say it better,
+       says the word slowly, «👄 Как сказать?» shows the mouth for that sound, and the child tries again. After three
+       tries the button opens anyway, but the word is not counted: «Потренируем ещё». */
+    checking = true; tx.textContent = gx('Скажи вслух!');
+    const howAt = L => { const c = IS_RU ? L.toUpperCase() : { r: RU('Р'), l: RU('Л'), s: RU('С') }[L]; return c ? howIdx(c) : -1; };
+    let howShown = false;
+    const showHow = L => {
+      const i = howAt(L); if (howShown || i < 0 || !card) return; howShown = true;
+      const hb = document.createElement('button'); hb.className = 'chip how-b said-how'; hb.innerHTML = '<span class="emo">👄</span>Как сказать?';
+      hb.onclick = e => { e.stopPropagation(); sfx.pop(); hush(); howOpen([i], i); };
+      card.append(hb);
+    };
     (async () => {
       let tries = 0;
       const on = () => t === tok && b.isConnected;
-      while (on() && tries < 6) {
+      while (on() && tries < 6 && !right) {
         while (SAYING && t === tok) await wait(150);
-        if (!on()) return;
+        if (!on() || $('.how-ov')) { await wait(400); continue; }   // the mouth teacher is open: wait for it
         b.classList.add('ear'); if (!opened) tx.textContent = gx('Я слушаю…');
         const r = await hear(expect, { times, loose, onHeard: h => { if (heardEl) heardEl.textContent = `Слышу: «${h}»`; } });
         b.classList.remove('ear');
         if (!on()) return;
         if (r.ok) {
-          bar.style.transform = 'scaleY(1)';
+          right = true; bar.style.transform = 'scaleY(1)';
           if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`;
-          if (r.lvl < 2 && !loose && !opened) { sfx.good(); await talk(`${pickOne(['Молодец!', 'Хорошо!', 'Здорово!'])} Послушай, как я скажу: ${expect}.`); if (!on()) return; }
+          if (opened) { sfx.good(); b.innerHTML = `${ICON.star}<span>${gx(label)}</span>`; }
           open(); return;
         }
-        if (HEAR.off || !srOk()) { if (!opened) { if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
+        if (HEAR.off || !srOk()) { if (!opened) { checking = false; if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
         tries++;
-        if (heardEl) heardEl.textContent = r.heard ? `Слышу «${r.heard}». А нужно «${expect}»${Q() ? ': кончик языка к верхним зубам!' : '!'}` : 'Не слышно. Скажи громче!';
-        if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
-        if (tries >= 2 && !opened) { open(); if (heardEl) heardEl.textContent += ' ' + gx('Попробуй ещё раз — или нажми кнопку.'); }
+        if (r.slip) {
+          const L = r.slip, snd = L === 't' && /th/i.test(expect) ? 'TH' : L.toUpperCase(), how = ASR.HOW[L];
+          if (heardEl) heardEl.textContent = `Почти! Слышу «${r.heard}». Нужен звук ${snd}.`;
+          showHow(L);
+          await talk(how ? `Почти! Я слышу: ${r.heard}. ${how} Послушай: ${expect}.` : `Почти! Я слышу: ${r.heard}. Послушай, как сказать звук ${snd}: ${expect}.`, { rate: .8 });
+          if (!on()) return;
+          if (heardEl) heardEl.textContent = `Скажи ещё раз чётко: «${expect}»`;
+        } else {
+          if (heardEl) heardEl.textContent = r.heard ? `Слышу «${r.heard}». А нужно «${expect}»${Q() ? ': кончик языка к верхним зубам!' : '!'}` : 'Не слышно. Скажи громче!';
+          if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
+        }
+        if (tries >= 3 && !opened) {
+          open(); b.classList.add('later'); b.innerHTML = `<span>${gx('Дальше')} →</span>`;
+          if (heardEl) heardEl.textContent += ' ' + gx('Потренируем ещё — можно идти дальше.');
+        }
       }
       if (on()) open();
     })();
@@ -9408,7 +9442,12 @@ function screenMoto() {
     if (!showing()) return;
     $('#mHeard').textContent = `Слышу: «${txt}»`;
     if (matchSay(txt, sign.word) || alts.some(a => matchSay(a, sign.word))) { $('#mLv').style.width = '100%'; fire(); }
-    else if (final) { $('#mHeard').textContent = `Это «${txt}», а на знаке «${sign.word}»!`; wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210); }
+    else if (final) {
+      // the learned sound said as another one: «почти», with the sound to say
+      const m = ASR.best([txt, ...alts], sign.word);
+      $('#mHeard').textContent = m.lvl && m.slip ? `Почти! Слышу «${m.text}». Скажи чётко звук ${m.slip.toUpperCase()}: «${sign.word}»!` : `Это «${txt}», а на знаке «${sign.word}»!`;
+      wiggle($('#mSign')); tone(300, .2, 'sine', .1, 0, 210);
+    }
   }
   // the phone stopped listening and refused to start again by itself: a tap on the sign starts it
   function lost() { if (t !== tok) return; const h = $('#mHeard'); if (h) h.textContent = '🎤 Нажми на знак, чтобы я снова слушал'; }
@@ -9702,7 +9741,9 @@ function screenKpop() {
       const [w, e] = deck[k];
       C.hidden = false; C.innerHTML = `${pic(e)}<b>${hiS(w.toUpperCase(), RU('рршжчщ'))}</b>`;
       await talk(k === 0 ? `Демончик-шалун утащил слово ${w}! Скажи его громко и чётко, и песня Жар-птиц его прогонит. ${cap(w)}!` : `Демончик утащил слово ${w}! Скажи: ${w}.`); if (t !== tok) return;
-      await askSaid(undefined, { expect: w }); if (t !== tok) return;
+      const said = await askSaid(undefined, { expect: w }); if (t !== tok) return;
+      // a word not said right yet: the demon brings it back once before the boss
+      if (said && said.again && !deck.redo) { deck.redo = 1; deck.push(deck[k]); }
       await attack(false); if (t !== tok) return;
       k++; await talk(pickOne(['Демончик стал звёздочкой!', 'Ура! Ещё одна световая палочка!', 'Песня победила!'])); if (t !== tok) return;
       round(); return;
@@ -10463,12 +10504,13 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 const HEAR = { off: false, netAt: 0 };
 const srOk = () => !!SR && !EMBEDDED && !ROOT.micOff && !ROOT.srOff && !HEAR.off && Date.now() - HEAR.netAt > 60e3;
 /* ASR-BEGIN */
-/* ---------- telling whether the word was said. Children with speech issues say sounds imperfectly and the recogniser
-   writes down its best guess, so the check is kind: every alternative counts, ё = е, case and punctuation go, digits
-   become words, endings may differ (лодку = лодка), a word split or glued by the recogniser still counts, and the sound
-   being trained never makes a word wrong: Р said as Л or Й, Л as В, Ш as С, Ж as З, a voiced sound said voiceless, an
-   unstressed О heard as А, a dropped Р or Л. Such a «close» word is praised and the friend says it right once more.
-   ASR.match: 2 = the word itself, 1 = close enough, 0 = something else. Language data, never translated. ---------- */
+/* ---------- telling whether the word was said. The recogniser writes down its best guess, so the check is tolerant
+   of its slips: every alternative counts, ё = е, case and punctuation go, digits become words, endings may differ
+   (лодку = лодка), a word split or glued still counts, a voiced/voiceless pair or an unstressed vowel is the same to the
+   ear. But a sound the child is learning is not let through: Р said as Л or Й, Л as В, Ш as С, Ж as З, a dropped Р or Л
+   is «almost» — the friend says what was heard and how to say it better, and the child tries again.
+   ASR.match → { lvl: 2 the word itself, 1 close enough, 0 something else; slip: the sound said wrong, '' if none }.
+   Language data, never translated. ---------- */
 const ASR = (() => {
   const NUMS = {
     en: 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty',
@@ -10484,68 +10526,96 @@ const ASR = (() => {
   const PAIRS = IS_RU
     ? [[.25, 'бп вф гк дт жш зс оа еи ея яи иы еэ юу ий кх гх ьъ'], [.35, 'рл рй лв лй рв шс жз щс щш чщ чц цс чт зд рд']]
     : [[.25, 'bp dt gk vf zs ck kq ie yi ou ao ea'], [.35, 'rl rw lw vw lj sz fv fs dz jy tf ts']];
+  const LOST = IS_RU ? 'рл' : 'rl';
   const SUB = new Map(); PAIRS.forEach(([c, s]) => s.split(' ').forEach(p => { SUB.set(p, c); SUB.set(p[1] + p[0], c); }));
   const VOW = IS_RU ? 'аеиоуыэюя' : 'aeiouy';
   const DROP = IS_RU ? { 'ь': .2, 'ъ': .2, 'й': .4, 'р': .4, 'л': .4 } : { 'h': .4, 'r': .4, 'l': .4, 'e': .6 };
   const sub = (a, b) => a === b ? 0 : SUB.get(a + b) || (!IS_RU && VOW.includes(a) && VOW.includes(b) ? .5 : 1);
   const ind = c => DROP[c] || (VOW.includes(c) ? .8 : 1);
-  function dist(a, b) {
-    const d = [0]; for (let j = 1; j <= b.length; j++) d[j] = d[j - 1] + ind(b[j - 1]);
-    for (let i = 1; i <= a.length; i++) {
-      let p = d[0]; d[0] += ind(a[i - 1]);
-      for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(q + ind(a[i - 1]), d[j - 1] + ind(b[j - 1]), p + sub(a[i - 1], b[j - 1])); p = q; }
+  // a learned sound of the wanted word said as another sound (not just voiced/voiceless), or a dropped Р or Л
+  const CHILD = .35, LEARN = IS_RU ? 'рлшжчщсзц' : 'rlst';
+  // the weighted distance and the learned sound the wanted word b lost on the way, if any
+  function dist(a, b, why) {
+    const n = a.length, m = b.length, d = Array.from({ length: n + 1 }, () => new Float64Array(m + 1));
+    for (let i = 1; i <= n; i++) d[i][0] = d[i - 1][0] + ind(a[i - 1]);
+    for (let j = 1; j <= m; j++) d[0][j] = d[0][j - 1] + ind(b[j - 1]);
+    for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) d[i][j] = Math.min(d[i - 1][j] + ind(a[i - 1]), d[i][j - 1] + ind(b[j - 1]), d[i - 1][j - 1] + sub(a[i - 1], b[j - 1]));
+    if (why) {
+      let i = n, j = m; why.slip = '';
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && Math.abs(d[i][j] - d[i - 1][j - 1] - sub(a[i - 1], b[j - 1])) < 1e-9) { if (sub(a[i - 1], b[j - 1]) >= CHILD && LEARN.includes(b[j - 1])) why.slip = b[j - 1]; i--; j--; }
+        else if (j > 0 && Math.abs(d[i][j] - d[i][j - 1] - ind(b[j - 1])) < 1e-9) { if (LOST.includes(b[j - 1])) why.slip = b[j - 1]; j--; }
+        else i--;
+      }
     }
-    return d[b.length];
+    return d[n][m];
   }
   // how much a word of n letters may differ
   const room = n => n <= 2 ? .3 : n <= 3 ? .6 : n <= 5 ? .8 : n <= 7 ? .95 : n <= 8 ? 1.3 : Math.min(3, 1.8 + (n - 9) * .15);
   const END = IS_RU ? ['ами', 'ями', 'ого', 'его', 'ому', 'ему', 'ой', 'ей', 'ом', 'ем', 'ам', 'ям', 'ах', 'ях', 'ов', 'ев', 'ую', 'юю', 'ая', 'яя', 'ое', 'ее', 'ые', 'ие', 'ым', 'им', 'ых', 'их', 'ий', 'ый', 'а', 'я', 'у', 'ю', 'ы', 'и', 'е', 'о', 'ь']
     : ['es', 'en', 'er', 'em', 's', 'e', 'n'];
   const stem = w => { for (const e of END) if (w.length - e.length >= 3 && w.endsWith(e)) return w.slice(0, -e.length); return w; };
-  // one heard word against one wanted word: 2 the same, 1 close, 0 no
+  // one heard word against one wanted word: { v: 2 the same, 1 close, 0 no; slip }
   function word(h, t) {
-    if (h === t) return 2;
-    const a = key(h), b = key(t);
-    if (a === b) return 2;
-    if (dist(a, b) <= room(b.length)) return 1;
+    if (h === t) return { v: 2, slip: '' };
+    const a = key(h), b = key(t), why = {};
+    if (a === b) return { v: 2, slip: '' };
+    if (dist(a, b, why) <= room(b.length)) return { v: 1, slip: why.slip };
     const sa = stem(a), sb = stem(b);
-    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb) <= room(sb.length) * .75) return 1;
-    return 0;
+    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb, why) <= room(sb.length) * .75) return { v: 1, slip: why.slip };
+    return { v: 0, slip: '' };
   }
+  // a clean answer beats a slip, a slip beats nothing
+  const rank = w => w.v ? (w.slip ? 1 : 2 + w.v) : 0;
   // the best of the heard words (or two neighbours glued together) for a wanted word, from position `from`
   function find(hw, t, from = 0) {
-    let best = 0, at = -1, len = 1;
-    for (let i = from; i < hw.length && best < 2; i++) {
-      const v = word(hw[i], t); if (v > best) { best = v; at = i; len = 1; }
-      if (best < 2 && i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (v2 > best) { best = v2; at = i; len = 2; } }
+    let best = { v: 0, slip: '' }, at = -1, len = 1;
+    for (let i = from; i < hw.length && rank(best) < 4; i++) {
+      const v = word(hw[i], t); if (rank(v) > rank(best)) { best = v; at = i; len = 1; }
+      if (i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (rank(v2) > rank(best)) { best = v2; at = i; len = 2; } }
     }
-    return { v: best, at, len };
+    return { ...best, at, len };
   }
+  const NO = { lvl: 0, slip: '' };
   function match(heard, expect, times = 1, loose = false) {
     const hw = norm(heard).split(' ').filter(Boolean), tw = norm(expect).split(' ').filter(Boolean);
-    if (!tw.length || !hw.length) return 0;
+    if (!tw.length || !hw.length) return NO;
     // a syllable or a sound: any voice that came through is the practice (the recogniser cannot write «ар-ар»)
-    if (loose) return word(hw.join(''), tw.join('')) === 2 ? 2 : 1;
+    if (loose) return { lvl: word(hw.join(''), tw.join('')).v === 2 ? 2 : 1, slip: '' };
     if (tw.length === 1) {
-      let n = 0, lvl = 2, from = 0;
-      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); from = f.at + f.len; }
-      if (!n) { const v = word(hw.join(''), tw[0]); return v ? Math.min(v, 1) : 0; }
-      return n >= Math.min(times, 2) || hw.length >= times ? lvl : 0;
+      let n = 0, lvl = 2, slip = '', from = 0;
+      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); slip = slip || f.slip; from = f.at + f.len; }
+      if (!n) { const w = word(hw.join(''), tw[0]); return w.v ? { lvl: 1, slip: w.slip } : NO; }
+      return n >= Math.min(times, 2) || hw.length >= times ? { lvl, slip } : NO;
     }
     // a phrase: most of its words, or the whole of it glued together
-    let got = 0, all = 2;
-    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); } });
-    if (got / tw.length >= .6) return got === tw.length ? all : 1;
-    const a = key(hw.join('')), b = key(tw.join(''));
-    return dist(a, b) <= room(b.length) * 1.2 ? 1 : 0;
+    let got = 0, all = 2, slip = '';
+    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); slip = slip || f.slip; } });
+    if (got / tw.length >= .6) return { lvl: got === tw.length ? all : 1, slip };
+    const why = {}, a = key(hw.join('')), b = key(tw.join(''));
+    return dist(a, b, why) <= room(b.length) * 1.2 ? { lvl: 1, slip: why.slip } : NO;
   }
-  // every phrase the recogniser offers (alternatives, interim, the whole session): the best answer and what it was
+  // every phrase the recogniser offers (alternatives, interim, the whole session): the best answer, a clean one first
   function best(list, expect, times = 1, loose = false) {
-    let lvl = 0, text = '';
-    for (const s of list) { if (!s || !s.trim()) continue; const v = match(s, expect, times, loose); if (v > lvl) { lvl = v; text = s.trim(); if (v === 2) break; } }
-    return { lvl, text };
+    let out = { lvl: 0, slip: '', text: '' }, r0 = 0;
+    for (const s of list) {
+      if (!s || !s.trim()) continue;
+      const m = match(s, expect, times, loose), r = m.lvl ? (m.slip ? 1 : 2 + m.lvl) : 0;
+      if (r > r0) { r0 = r; out = { ...m, text: s.trim() }; if (r === 4) break; }
+    }
+    return out;
   }
-  return { norm, dist, word, match, best };
+  // how the friend explains a learned sound said wrong (Russian; other languages say «the sound R» plainly)
+  const HOW = IS_RU ? {
+    'р': 'Скажи с рычащим звуком Р, как тигрёнок. Кончик языка дрожит за верхними зубками.',
+    'л': 'Скажи с твёрдым звуком Л. Кончик языка прижми к верхним зубкам.',
+    'ш': 'Скажи с шипящим звуком Ш, как змейка. Губки вперёд, язычок чашечкой.',
+    'ж': 'Скажи с жужжащим звуком Ж, как жук. Губки вперёд, язычок чашечкой.',
+    'ч': 'Скажи с коротким звуком Ч, как паровозик.', 'щ': 'Скажи с мягким звуком Щ, как щёточка.',
+    'с': 'Скажи со свистящим звуком С, как насос. Кончик языка за нижними зубками.',
+    'з': 'Скажи со звенящим звуком З, как комарик. Кончик языка за нижними зубками.', 'ц': 'Скажи с коротким звуком Ц, как синичка.'
+  } : {};
+  return { norm, dist, word, match, best, HOW };
 })();
 const normW = ASR.norm;
 function lev(a, b) {
@@ -10553,16 +10623,17 @@ function lev(a, b) {
   for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] !== b[j - 1])); p = q; } }
   return d[b.length];
 }
-const matchSay = (heard, expect, times = 1) => ASR.match(heard, expect, times) > 0;
+// the word said right (a slip in the learned sound is not)
+const matchSay = (heard, expect, times = 1) => { const m = ASR.match(heard, expect, times); return m.lvl > 0 && !m.slip; };
 /* ASR-END */
-// one listening: { ok, heard, lvl } — lvl 2 the word itself, 1 close enough (see ASR), 0 not heard or another word.
-// No internet (Chrome sends the voice to a server) switches word checks off for a minute, so the game listens to the
-// loudness instead of asking again and again.
+// one listening: { ok, heard, lvl, slip } — ok: the word said right; slip: the learned sound said wrong (the word was
+// «almost» right, see ASR); heard: what came through. No internet (Chrome sends the voice to a server) switches word
+// checks off for a minute, so the game listens to the loudness instead of asking again and again.
 function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) {
   return new Promise(res => {
-    let r = null, best = '', done = false, lvl = 0;
-    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: ok && lvl > 0, heard: best, lvl }); };
-    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0 }); return; }
+    let r = null, best = '', done = false, got = { lvl: 0, slip: '' };
+    const end = () => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: got.lvl > 0 && !got.slip, heard: best, lvl: got.lvl, slip: got.slip }); };
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0, slip: '' }); return; }
     audioSession('play-and-record'); SR_ON++;
     r.lang = LOC; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
     r.onresult = e => {
@@ -10570,17 +10641,19 @@ function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) 
       for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (!x || !x[0]) continue; all += ' ' + x[0].transcript; for (let j = 0; j < x.length; j++) alts.push(x[j].transcript); }
       all = all.trim();
       const m = ASR.best([all, ...alts], expect, times, loose);
-      best = m.lvl ? m.text : all || best; if (onHeard && best) onHeard(best);
-      if (m.lvl) { lvl = m.lvl; end(true); }
+      // a clean answer ends at once; an «almost» waits for the phrase to finish, it may still come out right
+      if (m.lvl && (!got.lvl || got.slip)) { got = m; best = m.text; } else if (!got.lvl) best = all || best;
+      if (onHeard && best) onHeard(best);
+      if (got.lvl && !got.slip) end();
     };
     r.onerror = e => {
       if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true;
       if (e.error === 'network') HEAR.netAt = Date.now();
-      end(false);
+      end();
     };
-    r.onend = () => end(false);
-    setTimeout(() => end(false), maxMs);
-    try { r.start(); } catch (e) { end(false); }
+    r.onend = end;
+    setTimeout(end, maxMs);
+    try { r.start(); } catch (e) { end(); }
   });
 }
 /* one recognition session for a whole game. iPhone allows starting it only from a tap and asks for permission at that
@@ -11430,7 +11503,7 @@ function screenMyWords() {
   screenSayWords({ title: 'Мои слова', intro: 'Слова про то, что ты любишь. Скажи каждое слово чётко!', words: all, key: 'my-words', line: n => `${n} слов про то, что ты любишь!`, again: screenMyWords });
 }
 function screenSayWords({ title, intro, words, key, line, again, back, done }) {
-  const t = newScreen(), pool = shuffle(words).slice(0, 6), hl = sndLetters() || 'рлшж';
+  const t = newScreen(), pool = shuffle(words).slice(0, 6), hl = sndLetters() || 'рлшж', redo = new Set();
   let i = 0;
   shell(title, `<div class="mw"><p class="lead">${esc(intro)}</p>
     <div class="mw-card" id="mwCard"></div><div class="mw-dots" id="mwDots">${pool.map(() => '<i></i>').join('')}</div></div>`, { back });
@@ -11442,7 +11515,9 @@ function screenSayWords({ title, intro, words, key, line, again, back, done }) {
     $('#mwCard').innerHTML = `<span class="mw-e">${pic(e)}</span><b class="mw-w">${hiS(w.toUpperCase(), hl)}</b>`;
     hopEl($('#mwCard'));
     await talk(`Скажи: ${w}.`); if (t !== tok) return;
-    await askSaid('Я сказала!', { expect: w }); if (t !== tok) return;
+    const r = await askSaid('Я сказала!', { expect: w }); if (t !== tok) return;
+    // a word not said right yet comes back once at the end
+    if (r && r.again && !redo.has(w)) { redo.add(w); pool.push(pool[i]); }
     i++; step();
   }
   step();
@@ -18627,7 +18702,8 @@ const IDEAS = (() => {
           for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
           box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
-          for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
+          const ws = sample(R_WORDS, 5), redo = new Set();
+          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
         } else {
           box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
           await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;

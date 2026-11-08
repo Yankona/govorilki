@@ -3,7 +3,7 @@
 ## Where the game listens (v150)
 | Place | How | Expects | Before | Now |
 |---|---|---|---|---|
-| `askSaid(…, { expect })` — «Скажи слово» in 13 games: drawing (я нарисовала …), Л-arena (all caught words), word guess ×3, Жар-птицы, sound cards, colouring syllables, grammar phrases (это фрукты…), Р-track vowels and words | `hear()`: one recogniser per try, `lang` = page language, interim on, 5 alternatives, continuous only for phrases/×3, 7 s per try | a word, a phrase or a word ×3 | exact word (short words) or one letter off for ≥5 letters, and **never a change in Л** — «водка» for «лодка» refused; up to 6 tries ≈ 40 s before the button | kind matching (below); a close word is praised and the friend says it right; the button opens after 2 tries (listening goes on behind it); syllables take any voice |
+| `askSaid(…, { expect })` — «Скажи слово» in 13 games: drawing (я нарисовала …), Л-arena (all caught words), word guess ×3, Жар-птицы, sound cards, colouring syllables, grammar phrases (это фрукты…), Р-track vowels and words | `hear()`: one recogniser per try, `lang` = page language, interim on, 5 alternatives, continuous only for phrases/×3, 7 s per try | a word, a phrase or a word ×3 | exact word (short words) or one letter off for ≥5 letters, and **never a change in Л** — «водка» for «лодка» refused; up to 6 tries ≈ 40 s before the button | tolerant of the recogniser's slips; a learned sound said wrong is «почти» with an explanation, 👄 and a retry (below); «Дальше →» after 3 tries, not counted; syllables take any voice |
 | Motorbike ride (`hearLive`) | one continuous session for the ride, restarted when the phone closes it; 3 alternatives per phrase | the sign's word; after a crash the word ×3 | same strict matching; ×3 had to come in one phrase; skip button after 15 s | kind matching; ×3 adds up separate phrases; skip after 8 s |
 | Dictionary 🎤 | one word, no interim, 1 alternative | any word (a search) | the mic could stay «on» if the phone never ended | ends itself after 9 s |
 | «Кому как сказать?» (`listenIn`) | the phrase's language, 3 alternatives, continuous | 75 % of the phrase's words | own fuzzy check (one letter off) | unchanged (many languages; its own check fits) |
@@ -18,11 +18,19 @@ then ✓ or a hint, and after two tries the button «Я сказала!» to go 
 
 ## Matching (`ASR` block in the game, `tests/asr_match.js`)
 Every alternative and the whole session's text; lower case, ё = е, punctuation off, digits → words; a weighted edit
-distance where a voiced/voiceless pair, soft/hard, an unstressed vowel cost 0.25, a sound a child is still learning
-(Р→Л/Й/В, Л→В/Й, Ш→С, Ж→З, Ч→Ц/Т, Щ→С) 0.35, a dropped Р/Л/Й/Ь less than a letter; allowed difference grows with the
-word's length; endings may differ (лодку = лодка); a word split or glued by the recogniser counts. English, Portuguese,
-German: sh/sch/th/ph/ck spellings, r→l/w, th→f/s, vowels close. Test set (70 cases, mispronunciations and other words):
-before 41/70 (correct words taken 20/46, other words refused 21/24), now 70/70 (46/46, 24/24).
+distance where a voiced/voiceless pair, soft/hard, an unstressed vowel cost 0.25 (the recogniser's slips — taken);
+endings may differ (лодку = лодка); a word split or glued by the recogniser counts. A learned sound of the wanted word
+(Р Л Ш Ж Ч Щ С З Ц; R L S TH) said as another sound, or a dropped Р/Л, is **«почти»** (since v152, the owner's
+decision: mistakes are not counted, the child is shown how to say it better): `ASR.match` gives the sound in `slip`.
+
+In «Скажи слово» (askSaid) an «почти» is not taken: the friend says what was heard and how to say the sound
+(«Скажи с рычащим звуком Р…»), says the word slowly, «👄 Как сказать?» opens the mouth teacher for that sound, and the
+child tries again. After three tries «Дальше →» lets the child go on; the word is not counted (`SAY_MISS`: the game's
+stars lose one or two, «Потренируем ещё: …»), and «Мои слова», the Жар-птицы demons and the Р track bring it back once.
+The motorbike ride says «Почти! … Скажи чётко звук Р».
+
+Test set (76 cases): v150 38/76 (strict: correct words taken 16/26), v151 51/76 (took every slip), now 76/76
+(correct 26/26, learned-sound slips caught 25/25, other words refused 25/25).
 
 ## Offline recogniser
 Candidate: Vosk (`vosk-browser` 0.0.8, Apache-2.0; `vosk-model-small-ru-0.22`, Apache-2.0). Size: model 45 MB zip,
