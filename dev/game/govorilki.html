@@ -21268,31 +21268,66 @@ const TALES = (() => {
     const credit = () => { const c = $('#tlCr'); if (!c) return;
       c.textContent = mode === 'actor' ? `🎙 Читает ${R.who}. Запись проекта LibriVox — общественное достояние (Public Domain).` : '🔊 Читает голос игры.';
       $$('#tlMode .chip').forEach(b => b.classList.toggle('sel', b.dataset.m === mode)); };
+    // the recording must really start: on an iPhone the file can hang silently (an old service worker, a slow line, a silent
+    // switch) — 5 s after the tap we check that it is rolling, then try once more as a whole file (no Range requests), then say so
+    let rolling = false, blobTried = false, fetching = false;
+    const note = m => { const c = $('#tlCr'); if (c) c.textContent = m; };
+    function toVoice(force) {
+      if (t !== tok) return;
+      const was = force || playing; try { if (au) au.pause(); } catch (e) {} au = null; TALE_AUDIO = null; mode = 'voice'; blobTried = false; credit(); btn();
+      note('Запись не загрузилась (нужен интернет). Читает голос игры.');
+      if (was) { playing = false; go(); }
+    }
+    function stalled(my) {
+      if (t !== tok || my !== run || !playing || !au || mode !== 'actor' || fetching) return;
+      if (!blobTried) {
+        blobTried = true; fetching = true; note('Запись грузится…');
+        let late = false;
+        const ac = typeof AbortController === 'function' ? new AbortController() : null, to = setTimeout(() => { late = true; if (ac) ac.abort(); }, 25000);
+        fetch(base() + 'audio/' + R.f, ac ? { signal: ac.signal } : {}).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(bl => {
+          clearTimeout(to); fetching = false; if (t !== tok || my !== run || !playing || !au) return;
+          rolling = false; au.src = URL.createObjectURL(bl);
+          au.addEventListener('loadedmetadata', () => { try { au.currentTime = R.ts[at] || 0; } catch (e) {} const pr = au.play(); if (pr && pr.catch) pr.catch(() => stalled(my)); }, { once: true });
+          au.load(); watch(my, 8000);
+        }).catch(() => { clearTimeout(to); fetching = false; if (late) stalled(my); else if (t === tok && my === run) toVoice(true); });   // hung → say so; refused / offline → the game voice
+        return;
+      }
+      blobTried = false; run++; playing = false; try { au.pause(); } catch (e) {} btn();
+      note('Запись не играет — нажми ещё раз. Если не получится, включи «Голос игры».');
+    }
+    function watch(my, ms) {
+      setTimeout(() => { if (t === tok && my === run && playing && au && !(rolling && !au.paused && au.readyState >= 2)) stalled(my); }, ms || 5000);
+    }
     function actorGo() {
-      auRun = ++run; playing = true; btn();
+      const my = ++run; auRun = my; playing = true; btn(); rolling = false;
       if (at >= S.length) at = 0;
-      $('#tlEnd').hidden = true; mark(at);
+      $('#tlEnd').hidden = true; mark(at); credit();
       if (!au) {
-        au = new Audio(base() + 'audio/' + R.f); au.preload = 'auto';
+        au = new Audio(base() + 'audio/' + R.f); au.preload = 'auto'; au.setAttribute('playsinline', '');
+        au.addEventListener('playing', () => { rolling = true; });
         au.addEventListener('timeupdate', () => {
+          if (!au) return;
           if (t !== tok) { au.pause(); return; }
-          if (!playing) return;
+          if (!playing || mode !== 'actor') return;
+          rolling = true;
           let j = 0; for (let k = 0; k < R.ts.length; k++) { if (R.ts[k] <= au.currentTime + 0.12) j = k; else break; }
           if (j !== at) { at = j; mark(j); if (at % 5 === 4) { me.at = at; save(); } }
         });
         au.addEventListener('ended', () => { if (t === tok && playing) { at = S.length; finish(); } });
-        au.addEventListener('pause', () => { if (t === tok && playing && !au.ended) { playing = false; btn(); } });
+        // (not while the whole-file retry is under way) a «pause» event can arrive late, after the file was started again (hush() before a jump): trust the element, not the event
+        au.addEventListener('pause', () => { if (t === tok && playing && au && mode === 'actor' && au.paused && !au.ended && !(blobTried && !rolling)) { playing = false; btn(); } });
         au.addEventListener('error', () => {
           if (t !== tok) return;
-          const was = playing; au = null; TALE_AUDIO = null; mode = 'voice'; credit(); btn();
-          const c = $('#tlCr'); if (c) c.textContent = 'Запись не загрузилась (нужен интернет). Читает голос игры.';
-          if (was) { playing = false; go(); }
+          if (!blobTried && playing && au.src && !/^blob:/.test(au.src)) { stalled(auRun); return; }   // the stream failed: once as a whole file
+          toVoice();
         });
+        au.load();
       }
       TALE_AUDIO = au;
       const to = R.ts[at] || 0, seek = () => { try { au.currentTime = to; } catch (e) {} };
       if (au.readyState >= 1) seek(); else au.addEventListener('loadedmetadata', seek, { once: true });
-      const pr = au.play(); if (pr && pr.catch) pr.catch(() => { playing = false; btn(); });
+      const pr = au.play(); if (pr && pr.catch) pr.catch(e => { if (e && e.name === 'AbortError') return; stalled(my); });
+      watch(my, 5000);
     }
     async function voiceGo() {
       const my = ++run; playing = true; btn();

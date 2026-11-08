@@ -76,8 +76,31 @@ let bad = 0; const log = (...a) => console.log(...a), check = (name, ok, more = 
   // a missing file falls back to the game voice with a message
   await p.route(/tales\/audio\/volk-koza\.mp3/, r => r.abort());
   await T("TALES.play('volk-koza', () => {})"); await p.waitForTimeout(600); await said();
-  await p.click('#tlPlay'); await p.waitForTimeout(2500);
-  check('missing file → game voice and a message', /не загрузилась/.test(await p.$eval('#tlCr', e => e.textContent)) && (await said()).length > 0);
+  await p.click('#tlPlay'); await p.waitForTimeout(6000);
+  { const m = await p.$eval('#tlCr', e => e.textContent), sd = await said(); check('missing file → game voice and a message', /не загрузилась/.test(m) && sd.length > 0, m + ' | said ' + sd.length); }
+  // jumping while the file plays: the late «pause» event of hush() must not stop the button
+  await T("TALES.play('kochet-kurica', () => {})"); await p.waitForTimeout(600);
+  await p.click('#tlPlay'); await p.waitForTimeout(1200);
+  await p.click('#tlNext'); await p.waitForTimeout(1200);
+  { const a6 = await au(); check('jump while playing keeps playing', !a6.paused && /Пауза/.test(await p.$eval('#tlPlay', e => e.textContent)), JSON.stringify(a6)); }
+  await T("goHome()"); await p.waitForTimeout(300);
+  // the stream hangs (an old service worker, a bad line): after ~5 s the whole file is fetched and plays
+  const hangRange = async r => { if (r.request().headers().range) return; r.fallback(); };
+  await p.route(/tales\/audio\/kot-petuh-lisa-2\.mp3/, hangRange);
+  await T("TALES.play('kot-petuh-lisa-2', () => {})"); await p.waitForTimeout(600);
+  await p.click('#tlPlay'); await p.waitForTimeout(3000);
+  check('hung stream: nothing yet', (await au()).paused || (await au()).t < 0.3);
+  await p.waitForTimeout(7500);
+  { const a7 = await au(); check('hung stream → plays as a whole file', a7 && !a7.paused && a7.t > 1 && /^blob:/.test(await T("TALE_AUDIO.src")), JSON.stringify(a7)); }
+  await T("goHome()"); await p.unroute(/tales\/audio\/kot-petuh-lisa-2\.mp3/, hangRange);
+  // it hangs completely: a message and the choice of the game voice, no silence
+  await p.route(/tales\/audio\/kot-petuh-lisa-2\.mp3/, () => {});      // every request stays pending
+
+  await T("TALES.play('kot-petuh-lisa-2', () => {})"); await p.waitForTimeout(600);
+  await p.click('#tlPlay'); await p.waitForTimeout(33000);
+  { const m = await p.$eval('#tlCr', e => e.textContent); check('hang → message, button back to «Слушать»', /Запись не играет/.test(m) && /▶/.test(await p.$eval('#tlPlay', e => e.textContent)), m); }
+  await p.click('#tlMode [data-m="voice"]'); await p.waitForTimeout(800);
+  check('and the game voice is one tap away', (await said()).length > 0 || /игры/.test(await p.$eval('#tlCr', e => e.textContent)));
   check('no page errors', !errs.length, JSON.stringify(errs));
   await b.close();
   log(bad ? `rec ${TAG} ${DEV}: ${bad} failed` : `rec ${TAG} ${DEV}: all ok`);
