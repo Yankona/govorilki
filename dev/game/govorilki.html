@@ -3234,6 +3234,16 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .fun-stamp-fly>b{padding:6px 14px;border-radius:14px;background:var(--paper);font:800 16px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
 @keyframes stampin{0%{transform:translate(-50%,-50%) scale(2.4);opacity:0}14%{transform:translate(-50%,-50%) scale(.92);opacity:1}20%{transform:translate(-50%,-50%) scale(1)}82%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-90%) scale(.6);opacity:0}}
 @media (prefers-reduced-motion:reduce){.xy-con .big,.fun-stamp-fly,.winbox .win-art{animation:none}.fun-stamp-fly{transform:translate(-50%,-50%)}}
+.aq .aq-big{display:block;width:100%;min-height:28vh;border:0;padding:0;background:#2A2346;border-radius:14px;cursor:zoom-in}
+.aq .aq-img{max-height:46vh}
+.aq-t{margin:2px 0 0;font:700 15px var(--f-body);color:var(--ink-soft);text-align:center}
+.aq-sub{margin:0;text-align:center;font:700 15px var(--f-body);color:var(--ink-soft)}
+.aq-s{font-size:21px}
+.aq-four.three{grid-template-columns:repeat(3,1fr)}
+.aq-hint{margin:6px 0 0;padding:8px 12px;border-radius:14px;background:var(--t-yellow);font:700 16px/1.3 var(--f-body);text-align:center}
+.aq .pick-b.hint,.aq .aq-th.hint{animation:bdBlink .7s ease-in-out infinite}
+.aq .pick-b.no,.aq .aq-th.no{opacity:.4}
+#aqLv{color:var(--tiger-deep);letter-spacing:.02em}
 /* FUN-CSS-END */
 </style>
 
@@ -13850,7 +13860,7 @@ function artLoad() {
   // what to look at and what is special, for the most famous paintings (written for children, in each language)
   fetch(SITE_ROOT + 'art/notes-' + LANG + '.json').then(r => r.ok ? r.json() : {}).then(n => { ART.notes = n || {}; }).catch(() => {});
   // a short tour of every painting: what to find, the feeling, a question, the secret
-  fetch(SITE_ROOT + 'art/tours-' + LANG + '.json').then(r => r.ok ? r.json() : {}).then(n => { ART.tours = n || {}; }).catch(() => {});
+  ART.tl = fetch(SITE_ROOT + 'art/tours-' + LANG + '.json').then(r => r.ok ? r.json() : {}).then(n => { ART.tours = n || {}; }).catch(() => {});
   ART.load = fetch(SITE_ROOT + 'art/art-' + LANG + '.json').then(r => r.ok ? r.json() : Promise.reject(r.status)).then(d => {
     ART.data = { m: d.m, aw: d.aw || {}, p: d.p.map(([q, t, a, y, m, f, w, l], i) => ({ q, t, a, y, m, f, w, l, i })) };
     return ART.data;
@@ -14121,50 +14131,132 @@ function screenFlagMemory(size) {
 }
 GAMES.push({ id: 'flag-memory', name: 'Мемори: флаги', sub: 'найди пары — и узнай страну', ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, inside: 'travel', kw: 'флаги страны мемори путешествие' });
 /* FLAGMEM-END */
+// the museum quiz (the owner: «„Правда или выдумка“ про картины добавим в викторину? И там реально сложные вопросы»):
+// one quiz with ordinary questions and true-or-false rounds, by level. Level 1 (4–6): only what you can SEE — find the
+// painting by its name, the mood of the painting. Level 2 (7–9): simple facts — which famous painter, which city, true or
+// false about them. Level 3 (10–12): the harder ones — any painter, the museum, the year, the expert question. The level
+// starts from the child's age (one lower to start easy) and grows after three right answers in a row. A miss never
+// loses: the wrong answer fades, the friend gives a hint, the second miss makes the right one blink. The painting is
+// always large (tap — full screen). Languages without the painting tours (de) skip the tour questions.
 function screenArtQuiz() {
-  const t = newScreen();
-  shell('Викторина: картины', `<div class="art aq"><div class="sp-hud"><span>Вопрос <b id="aqN">1</b>/5</span><span>Верно <b id="aqOk">0</b></span></div><div id="aqBox"><p class="lead">Открываю музей…</p></div></div>`, { back: () => screenMuseum() });
-  artLoad().then(D => {
+  const t = newScreen(), N = 8;
+  shell('Викторина: картины', `<div class="art aq"><div class="sp-hud"><span>Вопрос <b id="aqN">1</b>/${N}</span><span id="aqLv"></span></div><div id="aqBox"><p class="lead">Открываю музей…</p></div></div>`, { back: () => screenMuseum() });
+  Promise.all([artLoad(), ART.tl || Promise.resolve()]).then(([D]) => {
     if (t !== tok) return;
-    const pool = D.p.slice(0, Q() ? 500 : 200).concat((artMy().likes || []).map(q => D.p.find(x => x.q === q)).filter(Boolean));
-    let n = 0, ok = 0, busy = false;
-    const pick = (arr, k, not) => sample(arr.filter(v => v !== not), k);
-    function ask() {
-      busy = false; $('#aqN').textContent = n + 1;
-      const x = pickOne(pool), type = n % 3, box = $('#aqBox');
-      if (type === 0 && x.a) {
-        const opts = sample([x.a, ...pick([...new Set(pool.map(p => p.a).filter(Boolean))], 2, x.a)], 3);
-        box.innerHTML = `<img class="aq-img" src="${artImg(x.f, 500)}" alt=""><p class="aq-q">Кто написал эту картину?</p><div class="picks-g one">${opts.map(o => `<button class="pick-b" data-a="${esc(o)}">${esc(o)}</button>`).join('')}</div>`;
-        talk('Кто написал эту картину?'); box._ok = x.a;
-      } else if (type === 1 && x.m && D.m[x.m]) {
-        const opts = sample([x.m, ...pick([...new Set(pool.map(p => p.m).filter(m => m && D.m[m]))], 2, x.m)], 3);
-        box.innerHTML = `<img class="aq-img" src="${artImg(x.f, 500)}" alt=""><p class="aq-q">В каком музее эта картина?</p><div class="picks-g one">${opts.map(o => `<button class="pick-b" data-a="${esc(o)}">${esc(D.m[o])}</button>`).join('')}</div>`;
-        talk('В каком музее эта картина?'); box._ok = x.m;
-      } else {
-        const opts = sample([x, ...pick(pool, 3, x)], 4);
-        box.innerHTML = `<p class="aq-q">Найди картину «${esc(x.t)}»</p><div class="aq-four">${opts.map(o => `<button class="aq-th" data-a="${o.q}"><img src="${artImg(o.f, 330)}" alt=""></button>`).join('')}</div>`;
-        talk(`Найди картину «${x.t}».`); box._ok = x.q;
+    const my = artMy(), age = P.settings.age || (P.settings.track === 'l' ? 9 : 6);
+    const ageLv = age <= 6 ? 1 : age <= 9 ? 2 : 3;
+    // the little ones (4–6) stay with what they can see; the others may grow one level above their age's
+    const lvMax = ageLv === 1 ? 1 : Math.min(3, ageLv + 1);
+    let lv = Math.max(1, Math.min(ageLv, my.qLvl || ageLv - 1)), n = 0, first = 0, row = 0, miss = 0, busy = false, cur = null;
+    const all = D.p.filter(x => x.f), top = all.slice(0, Q() ? 500 : 200).concat((my.likes || []).map(q => all.find(x => x.q === q)).filter(Boolean));
+    const tour = x => ART.tours[x.q];
+    // famous painters: the ones with the most paintings among the best-known 300
+    const cnt = {}; all.slice(0, 300).forEach(x => { if (x.a) cnt[x.a] = (cnt[x.a] || 0) + 1; });
+    const famous = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).slice(0, 12);
+    const city = x => x.m ? musCity(x.m) : '', usedQ = new Set();
+    // level 1 «find»: famous paintings whose names say what you see (a girl with peaches, irises, hunters in the snow)
+    const EASY = ["Q12418", "Q45585", "Q185372", "Q151047", "Q698487", "Q474338", "Q311243", "Q167605", "Q2282256", "Q634122", "Q500985", "Q604761", "Q1070896", "Q1170315", "Q2200610", "Q175628", "Q1025704", "Q2666439", "Q4156438", "Q4089077", "Q1993685", "Q4396378", "Q4247398", "Q3373691"];
+    const easy = EASY.map(q => all.find(x => x.q === q)).filter(Boolean);
+    // «Утро в сосновом лесу» is Shishkin's with Savitsky's bears: the data names only one of them, so no author questions
+    const NO_AUTHOR = ['Q2666439'];
+    const pickX = f => { const ps = (lv === 1 ? top.slice(0, 120) : lv === 2 ? top.slice(0, 160) : top).filter(x => !usedQ.has(x.q) && f(x)); const x = ps.length ? pickOne(ps) : null; if (x) usedQ.add(x.q); return x; };
+    const others = (list, k, not) => sample([...new Set(list)].filter(v => v && v !== not), k);
+    const PLAN = { 1: ['find', 'mood', 'find', 'mood', 'find', 'mood', 'find', 'mood'], 2: ['author3', 'mood', 'tfAuthor', 'city', 'mood', 'tfCity', 'author3', 'mood'], 3: ['author', 'expert', 'tfYear', 'museum', 'tfMuseum', 'expert', 'tfAuthor', 'author'] };
+    const hasTours = Object.keys(ART.tours || {}).length > 0;
+    const big = x => `<button class="aq-big" data-full="${x.q}" aria-label="Открыть картину целиком"><img class="aq-img" src="${artImg(x.f, 700)}" alt="${esc(x.t)}"></button><p class="aq-t">«${esc(x.t)}»</p>`;
+    const choice = (q, opts) => `<p class="aq-q">${esc(q)}</p><div class="picks-g one">${opts.map(([v, l]) => `<button class="pick-b" data-a="${esc(v)}">${esc(l)}</button>`).join('')}</div>`;
+    const tfBtns = s => `<p class="aq-q aq-s">${esc(s)}</p><p class="aq-sub">Правда или выдумка?</p><div class="og-btns tfq-b"><button class="big" data-a="1">👍 Правда</button><button class="big ghost" data-a="0">🙃 Выдумка</button></div>`;
+    function make(kind) {
+      if ((kind === 'mood' || kind === 'expert') && !hasTours) kind = lv === 3 ? 'author' : lv === 2 ? 'author3' : 'find';
+      if (kind === 'find') {
+        const fr = easy.filter(y => !usedQ.has(y.q)), x = fr.length ? pickOne(fr) : pickX(() => true); usedQ.add(x.q);
+        const opts = sample([x, ...sample(easy.filter(y => y.q !== x.q), 2)], 3);
+        return { x, kind, ok: x.q, html: `<p class="aq-q">Где картина «${esc(x.t)}»?</p><div class="aq-four three">${opts.map(o => `<button class="aq-th" data-a="${o.q}"><img src="${artImg(o.f, 400)}" alt=""></button>`).join('')}</div>`,
+          say: `Найди картину «${x.t}».`, hint: `Посмотри ещё! Что нарисовано на картине «${x.t}»?`, done: `Верно! Это «${x.t}».` };
       }
-      box._x = x;
+      if (kind === 'mood' || kind === 'expert') {
+        const x = pickX(y => tour(y) && tour(y)[kind === 'mood' ? 'm' : 'x']), q = tour(x)[kind === 'mood' ? 'm' : 'x'], f = tour(x).f || [];
+        return { x, kind, ok: String(q.a), html: big(x) + choice(q.q, q.o.map((o, i) => [String(i), o])), say: `${q.q} ${q.o.join(', ')}?`, hint: f[kind === 'mood' ? 0 : 1] || f[0] || 'Посмотри на картину внимательно.', done: q.w };
+      }
+      if (kind === 'author3' || kind === 'author') {
+        const x = pickX(y => y.a && !NO_AUTHOR.includes(y.q) && (kind === 'author' || famous.includes(y.a))), opts = sample([x.a, ...others(kind === 'author' ? top.map(y => y.a) : famous, 2, x.a)], 3);
+        const more = all.find(y => y.a === x.a && y.q !== x.q);
+        return { x, kind, ok: x.a, html: big(x) + choice('Кто написал эту картину?', opts.map(o => [o, o])), say: `Кто написал эту картину? ${opts.join(', ')}?`,
+          hint: more ? `Подсказка: этот художник написал ещё картину «${more.t}».` : `Подсказка: имя начинается на «${x.a[0]}».`, done: `Верно! Её написал ${x.a}.` };
+      }
+      if (kind === 'city') {
+        const x = pickX(y => city(y)), opts = sample([city(x), ...others(top.map(city), 2, city(x))], 3);
+        return { x, kind, ok: city(x), html: big(x) + choice('В каком городе живёт эта картина?', opts.map(o => [o, o])), say: `В каком городе живёт эта картина? ${opts.join(', ')}?`,
+          hint: `Подсказка: в этой стране такой флаг — ${FLAG(musCC(x.m))}`, hs: 'Подсказка: посмотри на флажок.', done: `Верно! Она живёт в городе ${city(x)}, в музее «${artMus(x)}».` };
+      }
+      if (kind === 'museum') {
+        const x = pickX(y => artMus(y)), opts = sample([x.m, ...others(top.map(y => y.m).filter(m => D.m[m]), 2, x.m)], 3);
+        return { x, kind, ok: x.m, html: big(x) + choice('В каком музее эта картина?', opts.map(o => [o, D.m[o]])), say: 'В каком музее эта картина?',
+          hint: city(x) ? `Подсказка: этот музей в городе ${city(x)}.` : 'Посмотри ещё раз!', done: `Верно! Её дом — ${artMus(x)}.` };
+      }
+      // true or false
+      const yes = Math.random() < .5;
+      if (kind === 'tfCity') {
+        const x = pickX(y => city(y)), c = yes ? city(x) : others(top.map(city), 1, city(x))[0];
+        return { x, kind, ok: c === city(x) ? '1' : '0', html: big(x) + tfBtns(`Эта картина живёт в городе ${c}.`), say: `Эта картина живёт в городе ${c}. Правда или выдумка?`, done: `Она живёт в городе ${city(x)}.` };
+      }
+      if (kind === 'tfMuseum') {
+        const x = pickX(y => artMus(y)), m = yes ? x.m : others(top.map(y => y.m).filter(k => D.m[k]), 1, x.m)[0];
+        return { x, kind, ok: m === x.m ? '1' : '0', html: big(x) + tfBtns(`Дом этой картины — ${D.m[m]}.`), say: `Дом этой картины — ${D.m[m]}. Правда или выдумка?`, done: `Её дом — ${artMus(x)}.` };
+      }
+      if (kind === 'tfYear') {
+        const x = pickX(y => y.y > 0), y = yes ? x.y : x.y + pickOne([-150, -100, 100, 150]);
+        return { x, kind, ok: y === x.y ? '1' : '0', html: big(x) + tfBtns(`Эту картину написали в ${y} году.`), say: `Эту картину написали в ${y} году. Правда или выдумка?`, done: `Её написали в ${x.y} году.` };
+      }
+      const x = pickX(y => y.a && !NO_AUTHOR.includes(y.q) && (lv === 3 || famous.includes(y.a))), a = yes ? x.a : others(lv === 3 ? top.map(y => y.a) : famous, 1, x.a)[0];
+      return { x, kind: 'tfAuthor', ok: a === x.a ? '1' : '0', html: big(x) + tfBtns(`Эту картину написал ${a}.`), say: `Эту картину написал ${a}. Правда или выдумка?`, done: `Её написал ${x.a}.` };
+    }
+    const lvHTML = () => `Уровень ${'★'.repeat(lv)}${'☆'.repeat(3 - lv)}`;
+    const makeSafe = k => { try { return make(k); } catch (e) { return make('find'); } };
+    function ask() {
+      busy = false; miss = 0; $('#aqN').textContent = n + 1; $('#aqLv').textContent = lvHTML();
+      cur = makeSafe(PLAN[lv][n % 8]); const box = $('#aqBox');
+      box.innerHTML = cur.html + '<p class="aq-hint" id="aqHint" hidden></p>';
+      box.dataset.kind = cur.kind; box.dataset.lv = lv; box._ok = cur.ok;
+      talk(cur.say);
+    }
+    async function next(right) {
+      if (t !== tok) return;
+      const x = cur.x; if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
+      if (right && !miss) { first++; row++; } else row = 0;
+      // grow with success, one level at a time, up to the hardest
+      if (row >= 3 && lv < lvMax) { lv++; row = 0; $('#aqLv').textContent = lvHTML(); hopEl($('#aqLv')); sfx.star(); talk('Новый уровень! Вопросы чуть труднее.'); }
+      n++;
+      if (n >= N) {
+        my.qLvl = Math.max(my.qLvl || 1, Math.min(lv, ageLv)); save();
+        finish({ key: 'art-quiz', stars: first >= N - 2 ? 3 : 2, line: `С первого раза: ${first} из ${N}! Ты знаешь картины лучших музеев мира.`, again: () => screenArtQuiz(), menu: () => screenMuseum() });
+      } else later(ask, 700);
     }
     $('#aqBox').onclick = async e => {
-      const b = e.target.closest('[data-a]'); if (!b || busy) return; busy = true;
-      const box = $('#aqBox'), right = b.dataset.a === box._ok, x = box._x;
-      b.classList.add(right ? 'ok' : 'no');
-      if (right) { ok++; $('#aqOk').textContent = ok; sfx.good(); FUN.cheer(b); await talk(`Верно! «${x.t}». ${x.a || ''}`); }
-      else { sfx.oops(); box.querySelectorAll('[data-a]').forEach(c => { if (c.dataset.a === box._ok) c.classList.add('ok'); }); await talk(`Это «${x.t}». ${x.a ? 'Автор: ' + x.a + '.' : ''} ${artMus(x) ? 'Музей: ' + artMus(x) + '.' : ''}`); }
-      if (t !== tok) return;
-      const my = artMy(); if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
-      n++;
-      if (n >= 5) finish({ key: 'art-quiz', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: ok >= 3 ? `Верно ${ok} из 5! Ты знаешь картины лучших музеев мира.` : `Верно ${ok} из 5. Каждая картина — новое открытие!`, again: () => screenArtQuiz(), menu: () => screenMuseum() });
-      else later(ask, 600);
+      const fb = e.target.closest('[data-full]'); if (fb) { artFull(cur.x); return; }
+      const b = e.target.closest('[data-a]'); if (!b || busy || b.disabled) return;
+      const box = $('#aqBox'), right = b.dataset.a === cur.ok, tf = cur.kind.startsWith('tf');
+      if (right) {
+        busy = true; b.classList.add('ok'); sfx.good(); FUN.cheer(b);
+        await talk(tf ? `Верно! ${cur.done}` : cur.done); next(true); return;
+      }
+      miss++; b.classList.add('no'); b.disabled = true; wiggle(b); tone(300, .2, 'sine', .13, 0, 210);
+      if (tf) {
+        // true or false: there is no second try, the friend tells how it really is — no loss, a new fact
+        busy = true; box.querySelectorAll('[data-a]').forEach(c => { c.disabled = true; if (c.dataset.a === cur.ok) c.classList.add('ok'); });
+        const h = $('#aqHint'); h.textContent = cur.done; h.hidden = false;
+        await talk(`${cur.ok === '1' ? 'Это правда!' : 'Это выдумка!'} ${cur.done}`); next(false); return;
+      }
+      const h = $('#aqHint'); h.textContent = cur.hint; h.hidden = false;
+      if (miss >= 2) { const r = box.querySelector(`[data-a="${CSS.escape(cur.ok)}"]`); if (r) r.classList.add('hint'); }
+      talk(miss >= 2 ? 'Вот она — нажми!' : cur.hs || cur.hint);
     };
     ask();
   }, () => { if (t === tok) $('#aqBox').innerHTML = '<p class="lead">Чтобы открыть музей, нужен интернет.</p>'; });
 }
 GAMES.push(
   { id: 'museum', name: 'Музей мира', sub: '1000 картин и 200 художников', ico: () => pic('🏛️'), bg: 'var(--t-peach)', go: () => screenMuseum(), grp: 4, also: [13], prog: () => { const n = (P.museum && P.museum.seen || []).length; return n ? `посмотрено: ${n}` : ''; } },
-  { id: 'art-quiz', name: 'Викторина: картины', sub: 'кто написал? где висит?', ico: () => pic('🎯'), bg: 'var(--t-yellow)', go: () => screenArtQuiz(), grp: 4, also: [13] }
+  { id: 'art-quiz', name: 'Викторина: картины', sub: 'смотри, угадывай, правда или выдумка', kw: 'правда выдумка картины вопросы',  ico: () => pic('🎯'), bg: 'var(--t-yellow)', go: () => screenArtQuiz(), grp: 4, also: [13] }
 );
 INTEREST_CAT.forEach(c => (c.items || []).forEach(i => { if (Array.isArray(i.tiles) && (i.tiles.includes('learn-art') || i.id === 'draw' || i.id === 'art') && !i.tiles.includes('museum')) i.tiles.splice(0, 0, 'museum'); }));
 
@@ -21481,7 +21573,7 @@ const POLISH = (() => {
 /* THEMES-BEGIN */
 /* ---------- «Учимся» and «Творим» by themes (the family asked): for the older track chess, maths, the piano and the
    Rubik's cube each have their own section; «Творим» splits into drawing, music, and paintings with the museum.
-   A «true or made up?» about paintings joins the one about composers. The cube shows when a child's age was never
+   The paintings' «true or made up?» is part of the museum quiz. The cube shows when a child's age was never
    written down but the child is on the older track. ---------- */
 const THEMES = (() => {
   const sec = g => SECTIONS.find(x => x.g === g), at = g => SECTIONS.findIndex(x => x.g === g);
@@ -21511,28 +21603,8 @@ const THEMES = (() => {
   if (tl) tl.g.unshift(30);
   // the cube: every child on the older track, and anyone 9 or older
   const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => !(P.settings.track === 'l' || (P.settings.age || 0) >= 9);
-  // «Правда или выдумка?» about paintings: who painted it, where it lives, when it was painted
-  function artTF() {
-    artLoad().then(D => {
-      const pool = D.p.slice(0, Q() ? 400 : 200).filter(x => x.a && x.f), mus = [...new Set(pool.map(x => artMus(x)).filter(Boolean))], pts = [...new Set(pool.map(x => x.a))];
-      const items = sample(pool, 14).map((x, i) => {
-        const kind = i % 3, yes = Math.random() < .5, head = x.t, img = artImg(x.f, 300);
-        if (kind === 1 && artMus(x)) {
-          const m = yes ? artMus(x) : pickOne(mus.filter(v => v !== artMus(x)));
-          return { s: `Дом этой картины — ${m}.`, t: yes, w: `Её дом — ${artMus(x)}.`, head, img };
-        }
-        if (kind === 2 && x.y > 0) {
-          const y = yes ? x.y : x.y + pickOne([-150, -100, -60, 60, 100, 150]);
-          return { s: `Эту картину написали в ${y} году.`, t: yes, w: `Её написали в ${x.y} году.`, head, img };
-        }
-        const a = yes ? x.a : pickOne(pts.filter(v => v !== x.a));
-        return { s: `Автор этой картины — ${a}.`, t: yes, w: `Её автор — ${x.a}.`, head, img };
-      });
-      screenTF({ title: 'Правда или выдумка: картины', key: 'art-tf', items, back: () => screenMuseum(), again: artTF });
-    }, () => { newScreen(); shell('Правда или выдумка: картины', '<p class="lead">Чтобы открыть картины, нужен интернет.</p>', { back: () => screenMuseum() }); });
-  }
-  GAMES.push({ id: 'art-tf', name: 'Правда или выдумка: картины', sub: 'кто написал, где живёт, когда', ico: () => pic('🤔'), bg: 'var(--t-peach)', go: () => artTF(), grp: 21, also: [13] });
-  return { artTF };
+  // «Правда или выдумка?» about paintings now lives inside the museum quiz (screenArtQuiz), graded by age
+  return {};
 })();
 // the app's own voices lose the «й» in ё after a vowel («узнаём» came out as «узнам»): these words get it back
 const PIPER_JO = {"узнаём":"uznaˈɵm|uznajˈɵm","узнаёшь":"uznaˈɵʃ|uznajˈɵʃ","узнаёт":"uznaˈɵt|uznajˈɵt","узнаёте":"uznaˈɵtʲi|uznajˈɵtʲi","даём":"daˈɵm|dajˈɵm","даёшь":"daˈɵʃ|dajˈɵʃ","даёт":"daˈɵt|dajˈɵt","даёте":"daˈɵtʲi|dajˈɵtʲi","сдаём":"zdaˈɵm|zdajˈɵm","продаём":"prʌdaˈɵm|prʌdajˈɵm","отдаём":"ʌddaˈɵm|ʌddajˈɵm","задаём":"zʌdaˈɵm|zʌdajˈɵm","подаём":"pʌdaˈɵm|pʌdajˈɵm","создаём":"sʌzdaˈɵm|sʌzdajˈɵm","поём":"pʌˈɵm|pʌjˈɵm","поёшь":"pʌˈɵʃ|pʌjˈɵʃ","поёт":"pʌˈɵt|pʌjˈɵt","поёте":"pʌˈɵtʲi|pʌjˈɵtʲi","споём":"spʌˈɵm|spʌjˈɵm","споёт":"spʌˈɵt|spʌjˈɵt","встаём":"fstaˈɵm|fstajˈɵm","встаёшь":"fstaˈɵʃ|fstajˈɵʃ","встаёт":"fstaˈɵt|fstajˈɵt","встаёте":"fstaˈɵtʲi|fstajˈɵtʲi","моё":"mʌˈɵ|mʌjˈɵ","твоё":"tvʌˈɵ|tvʌjˈɵ","своё":"svʌˈɵ|svʌjˈɵ","заём":"zaˈɵm|zajˈɵm","наём":"naˈɵm|najˈɵm","боёк":"bʌˈɵk|bʌjˈɵk","раёк":"raˈɵk|rajˈɵk","устаём":"ustaˈɵm|ustajˈɵm","остаёмся":"ʌstaˈɵmsʲʌ|ʌstajˈɵmsʲʌ","остаётся":"ʌstaˈɵtsʌ|ʌstajˈɵtsʌ","узнаётся":"uznaˈɵtsʌ|uznajˈɵtsʌ","достаём":"dʌstaˈɵm|dʌstajˈɵm","достаёт":"dʌstaˈɵt|dʌstajˈɵt","стаёт":"staˈɵt|stajˈɵt"};
