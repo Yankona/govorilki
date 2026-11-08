@@ -21,7 +21,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
     const cyr = s => lang !== 'ru' && /[А-яЁё]/.test(s);
     const discover = async () => { await p.evaluate(() => { const t = document.querySelector('[data-tab="discover"]'); if (t) t.click(); }); await p.waitForTimeout(600); };
-    const openTile = async id => { const tile = await p.$(`.tile[data-id="${id}"]`); if (tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(500); } return !!tile; };
+    const openTile = async (id, sel = '#plSvg, #plPSvg') => { const tile = await p.$(`.tile[data-id="${id}"]`); if (tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(500); if (!await p.$(sel)) { await tile.click().catch(() => {}); await p.waitForTimeout(500); } } return !!tile; };
     const tap = async (x, y) => { if (DEV === 'phone') await p.touchscreen.tap(x, y); else await p.mouse.click(x, y); };
     await discover();
     // ---- grow
@@ -81,7 +81,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     if (lang === 'ru') {
       ok(!!has, 'stories tile (ru)');
       if (has) {
-        await has.scrollIntoViewIfNeeded(); await has.click(); await p.waitForTimeout(600);
+        await openTile('learn-plants', '.story-c'); await p.waitForTimeout(400);
         const n = (await p.$$('.story-c')).length; ok(n === 20, 'stories: ' + n); await p.screenshot({ path: D + `plants-${lang}-${DEV}-stories.png` });
         await (await p.$('.story-c')).click(); await p.waitForTimeout(800); ok(await p.$('#stT') !== null, 'a story opens');
       }
