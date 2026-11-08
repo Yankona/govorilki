@@ -1490,6 +1490,54 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .story-t{margin:0;font:700 21px/1.55 var(--f-body)}
 .ss{border-radius:8px;transition:background .2s}
 .ss.on{background:#FFE58A;box-shadow:0 0 0 3px #FFE58A}
+/* BOOKS-CSS-BEGIN: «Книжная полка» and the audio tales */
+.bk-wrap,.tl-wrap{display:flex;flex-direction:column;gap:14px;width:100%;max-width:880px;margin:0 auto}
+.bk-note{margin:0;font:700 15px/1.35 var(--f-body);color:var(--ink-soft);text-align:center}
+.bk-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.bk-tab{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;max-width:150px;padding:8px 10px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);cursor:pointer;font:inherit}
+.bk-tab .emo{font-size:26px;line-height:1}.bk-tab b{font:700 14px/1.15 var(--f-display);text-align:center}.bk-tab small{font:700 12px var(--f-body);color:var(--ink-soft)}
+.bk-tab.sel{background:var(--sun);color:#2A2346;box-shadow:0 5px 0 #D9A21C}.bk-tab.sel small{color:#5E5683}
+.bk-shelf h2{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:0;font:700 24px var(--f-display)}.bk-shelf h2 small{font:700 15px var(--f-body);color:var(--ink-soft)}
+.bk-cnt{margin:2px 0 10px;font:700 15px var(--f-body);color:var(--ink-soft)}
+.bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:18px 14px;padding-bottom:12px;background:linear-gradient(transparent calc(100% - 10px),#B9824F calc(100% - 10px));border-radius:0 0 6px 6px}
+.bk-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 2px 8px;border:0;background:none;color:var(--ink);cursor:pointer;font:inherit;text-align:center}
+.bk-card:active .bk-cov{transform:translateY(3px)}
+.bk-t{font:700 15px/1.2 var(--f-display);overflow-wrap:anywhere;hyphens:auto}.bk-a{font:700 12px/1.25 var(--f-body);color:var(--ink-soft)}
+.bk-cov{position:relative;display:block;width:100%;max-width:120px;aspect-ratio:3/4;border-radius:5px 12px 12px 5px;background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(0,0,0,.12)),var(--c);box-shadow:inset 9px 0 0 rgba(0,0,0,.2),inset 11px 0 0 rgba(255,255,255,.18),0 6px 10px rgba(42,35,70,.22);transition:transform .15s}
+.bk-cov.big{width:140px;max-width:140px;margin:0 auto}
+.bk-fr{position:absolute;inset:8px 8px 8px 17px;border:2px solid rgba(255,236,170,.65);border-radius:6px}
+.bk-e1,.bk-e2{position:absolute;line-height:1}.bk-e1{left:50%;top:40%;transform:translate(-40%,-50%);font-size:44px}.bk-e2{right:12%;bottom:10%;font-size:24px}
+.bk-cov.big .bk-e1{font-size:56px}.bk-cov.big .bk-e2{font-size:30px}
+.bk-badge{position:absolute;top:0;right:6px;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;font:800 18px var(--f-body);box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.bk-badge.rd{background:var(--leaf);color:#fff}.bk-badge.nw{background:var(--sun)}
+.bk-card.read .bk-cov{filter:saturate(.85)}
+.bk-parent{display:flex;gap:10px;align-items:flex-start;margin:4px 0 0;padding:12px 14px;border-radius:16px;background:var(--t-blue);font:700 15px/1.4 var(--f-body)}.bk-parent .emo{font-size:24px}
+.bk-ov{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:var(--shade)}
+.bk-box{position:relative;display:flex;flex-direction:column;gap:8px;width:min(100%,460px);max-height:calc(100% - 16px);overflow:auto;padding:22px 18px 18px;border-radius:24px;background:var(--paper);color:var(--ink);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.bk-box h2{margin:6px 0 0;font:700 24px/1.15 var(--f-display)}.bk-by{margin:0;color:var(--ink-soft);font:700 16px var(--f-body)}.bk-d{margin:4px 0;font:700 17px/1.45 var(--f-body);text-align:left}
+.bk-x{position:absolute;top:8px;right:8px}
+.bk-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:6px}.bk-act.sel{background:var(--leaf);color:#fff}
+.bk-listen{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:8px;padding-top:10px;border-top:2px dashed var(--line-strong)}.bk-listen>b{width:100%}
+.bk-listen .chip{white-space:normal;text-align:left}
+.bk-stk{align-self:center;margin-top:6px}
+.tl-list{display:flex;flex-direction:column;gap:10px}
+.tl-i{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);text-align:left;cursor:pointer;font:inherit}
+.tl-e{font-size:34px;line-height:1;flex:none}.tl-tx{display:flex;flex-direction:column;min-width:0;flex:1}.tl-tx b{font:700 19px/1.2 var(--f-display)}.tl-tx small{font:700 13px/1.3 var(--f-body);color:var(--ink-soft)}
+.tl-ck{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--leaf);color:#fff}
+.tl-h{margin:10px 0 0;font:700 18px var(--f-display);color:var(--ink-soft)}
+.tl-read{width:100%;max-width:720px;margin:0 auto;padding-bottom:110px}
+.tl-read h2{margin:0;font:700 28px/1.15 var(--f-display);text-align:center}.tl-by{margin:4px 0 14px;text-align:center;color:var(--ink-soft);font:700 15px var(--f-body)}
+.tl-text{font:600 21px/1.6 var(--f-body)}.tl-p{margin:0 0 14px}.tl-p.verse{white-space:pre-line}
+.tl-text .ss{cursor:pointer}
+.tl-end{text-align:center;font:700 24px var(--f-display);color:var(--ink-soft)}
+.tl-ctl{position:sticky;bottom:8px;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;width:max-content;max-width:100%;margin:-96px auto 0;padding:8px 12px;border-radius:999px;background:var(--paper);box-shadow:0 6px 18px rgba(42,35,70,.25)}
+.tl-ctl .big{min-height:52px;min-width:150px;padding:8px 18px;font-size:20px}
+.tl-night{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:32px 24px;background:#05060B;cursor:pointer}
+.tl-nt{max-width:640px;margin:0;color:#6E6A5C;font:600 24px/1.6 var(--f-body);text-align:center;white-space:pre-line}
+.tl-nx{position:absolute;top:max(14px,env(safe-area-inset-top,0px));right:14px;width:48px;height:48px;border:0;border-radius:50%;background:#12141C;font-size:22px;opacity:.35;cursor:pointer}
+@media (max-width:480px){.bk-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:14px 10px}.bk-e1{font-size:36px}.bk-e2{font-size:20px}.tl-text{font-size:19px}.tl-ctl .big{min-width:120px;font-size:18px}.tl-ctl{gap:6px;padding:6px 8px}}
+.bk-wrap>.bk-tales,.bk-wrap>.bk-note{order:2;margin-top:6px}.bk-wrap>.bk-parent{order:3}
+/* BOOKS-CSS-END */
 .story-q{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;padding-top:6px;border-top:3px dashed var(--line)}
 .sq-a{display:flex;flex-direction:column;gap:10px;width:100%;max-width:440px}
 .ans{min-height:58px;border:0;border-radius:20px;padding:10px 16px;background:var(--sky);color:var(--ink);font:800 19px/1.25 var(--f-body);box-shadow:0 5px 0 var(--line-strong);cursor:pointer}
@@ -18055,6 +18103,269 @@ const CBOX = (() => {
   Object.values(MERGED).forEach(id => { const g = GAMES.find(x => x.id === id); if (g && !(g.also || []).includes(10)) g.also = [...(g.also || []), 10]; });
   [...INTEREST_CAT.flatMap(c => c.items || []), ...LIKES].forEach(it => { if (Array.isArray(it.tiles)) it.tiles = [...new Set(it.tiles.map(t => MERGED[t] || t))]; }); }
 /* CBOX-END */
+/* BOOKS-BEGIN */
+/* ---------- «Книжная полка»: good books by age (the owner's reading list), each with a drawn cover and a few words of
+   our own. The family marks «Читаем сейчас» and «Прочитали» for each child (P.shelf); a book read gives a sticker.
+   The shelf opens at the child's age; one more shelf «Когда подрастёшь» lets parents look ahead. Only titles and our
+   own descriptions: no text of these books is inside the game. ---------- */
+const BOOK_SHELVES = [
+  { id: 's1', n: 'Первые сказки', age: '3–5 лет', e: '🧸' },
+  { id: 's2', n: 'Добрые герои', age: '5–6 лет', e: '🎈' },
+  { id: 's3', n: 'Волшебные страны', age: '6–8 лет', e: '🪄' },
+  { id: 's4', n: 'Приключения', age: '8–10 лет', e: '🧭' },
+  { id: 's5', n: 'Мифы, эпос, рыцари', age: '10–12 лет', e: '🛡️' },
+  { id: 's6', n: 'Когда подрастёшь', age: '12 лет и старше', e: '🌱' }
+];
+const BOOKS = [
+  { id: 'perrault', s: 's1', t: 'Сказки матушки Гусыни', by: 'Шарль Перро', e: '🐱 👢', d: 'Красная Шапочка, Кот в сапогах, Золушка и Мальчик-с-пальчик. Этим французским сказкам больше трёхсот лет.' },
+  { id: 'grimm', s: 's1', t: 'Детские и домашние сказки', by: 'Братья Гримм', e: '🐓 🎺', d: 'Бременские музыканты, Белоснежка, Гензель и Гретель. Два брата-учёных записывали эти сказки со слов деревенских рассказчиков.' },
+  { id: 'english', s: 's1', t: 'Английские народные сказки', by: 'Народные сказки', e: '🫘 🏰', d: 'Джек и бобовый стебель, три поросёнка и другие хитрые и смелые герои старой Англии.' },
+  { id: 'italian', s: 's1', t: 'Итальянские сказки', by: 'Народные сказки', e: '🍊 👑', d: 'Весёлые сказки солнечной Италии. Среди них «Три апельсина» — о принце, который ищет невесту в волшебном апельсине.' },
+  { id: 'russian', s: 's1', t: 'Русские народные сказки', by: 'Народные сказки', e: '🐻 🏡', d: 'Колобок, Теремок, Морозко, Царевна-лягушка. Эти сказки веками рассказывали бабушки внукам.' },
+  { id: 'lafontaine', s: 's1', t: 'Басни', by: 'Жан де Лафонтен', e: '🦊 🧀', d: 'Короткие истории о зверях, и в каждой спрятан совет: как поступать умно и честно.' },
+  { id: 'aesop', s: 's1', t: 'Басни', by: 'Эзоп', e: '🐢 🐇', d: 'Самые древние басни на свете: черепаха обгоняет зайца, лиса не может достать виноград. Им больше двух с половиной тысяч лет.' },
+  { id: 'aibolit', s: 's1', t: 'Доктор Айболит', by: 'Корней Чуковский', e: '🩺 🐒', d: 'Добрый доктор спешит в далёкую Африку лечить больных зверят. Стихи, которые легко запомнить наизусть.' },
+  { id: 'pooh', s: 's1', t: 'Винни-Пух и все-все-все', by: 'А. А. Милн', e: '🍯 🐻', d: 'Медвежонок с опилками в голове, его друг Пятачок и мальчик Кристофер Робин. Тёплые и смешные истории о дружбе.' },
+  { id: 'andersen', s: 's1', t: 'Сказки', by: 'Г. Х. Андерсен', e: '🦢 🌹', d: 'Гадкий утёнок, Дюймовочка, Снежная королева. Грустные и светлые сказки датского сказочника.' },
+  { id: 'potter', s: 's2', t: 'Гарри Поттер', by: 'Дж. К. Роулинг', e: '⚡ 🦉', d: 'Мальчик узнаёт, что он волшебник, и едет учиться в школу магии. Первую книгу хорошо читать вслух всей семьёй.' },
+  { id: 'pigeon', s: 's2', t: 'Голубь-бусинка', by: 'Крюгер', e: '🕊️ ☁️', d: 'История о почтовом голубе, его дальних полётах, опасностях в пути и верности родному дому.' },
+  { id: 'stuart', s: 's2', t: 'Стюарт Литл', by: 'Э. Б. Уайт', e: '🐭 ⛵', d: 'Мышонок, который родился в обычной нью-йоркской семье, отправляется в путь искать свою подругу-птичку.' },
+  { id: 'matchbox', s: 's2', t: 'Мальчик из спичечной коробки', by: 'Эрих Кестнер', e: '📦 🎪', d: 'Мальчик ростом с палец спит в спичечной коробке, выступает в цирке и попадает в большие приключения.' },
+  { id: 'matius', s: 's2', t: 'Король Матиуш Первый', by: 'Януш Корчак', e: '👑 🧒', d: 'Мальчик становится королём и пытается сделать свою страну справедливой для детей. Добрая и мудрая книга.' },
+  { id: 'prince', s: 's2', t: 'Принц и нищий', by: 'Марк Твен', e: '👑 🎭', d: 'Принц и бедный мальчик, похожие как две капли воды, меняются местами и узнают жизнь друг друга.' },
+  { id: 'paddington', s: 's2', t: 'Медведь Паддингтон', by: 'Майкл Бонд', e: '🐻 🧳', d: 'Медвежонок из Перу со старым чемоданом поселяется в лондонской семье и всё время попадает в смешные истории.' },
+  { id: 'carlson', s: 's2', t: 'Карлсон, который живёт на крыше', by: 'Астрид Линдгрен', e: '🏠 🍰', d: 'Малыш дружит с маленьким человечком с пропеллером на спине, большим любителем варенья и шалостей.' },
+  { id: 'pippi', s: 's2', t: 'Пеппи Длинныйчулок', by: 'Астрид Линдгрен', e: '🐴 🐒', d: 'Самая сильная девочка на свете живёт одна с лошадью и обезьянкой и всё делает по-своему.' },
+  { id: 'pinocchio', s: 's2', t: 'Приключения Пиноккио', by: 'Карло Коллоди', e: '🪵 👃', d: 'Деревянный мальчик учится быть честным и добрым. По этой сказке потом придумали нашего Буратино.' },
+  { id: 'narnia', s: 's3', t: 'Хроники Нарнии', by: 'К. С. Льюис', e: '🦁 🚪', d: 'Четверо детей проходят через старый шкаф в волшебную страну, где правит мудрый лев Аслан.' },
+  { id: 'oz', s: 's3', t: 'Волшебник страны Оз', by: 'Фрэнк Баум', e: '🌪️ 👠', d: 'Ураган уносит девочку Дороти в волшебную страну, и она идёт по дороге из жёлтого кирпича к великому волшебнику.' },
+  { id: 'emerald', s: 's3', t: 'Волшебник Изумрудного города', by: 'Александр Волков', e: '🏰 💚', d: 'Наш пересказ сказки о стране Оз: Элли, Страшила, Железный Дровосек и Трусливый Лев.' },
+  { id: 'alice', s: 's3', t: 'Алиса в Стране чудес', by: 'Льюис Кэрролл', e: '🐇 🎩', d: 'Алиса прыгает за белым кроликом в нору и попадает в мир, где всё не так. Книга полна игр со словами.' },
+  { id: 'nils', s: 's3', t: 'Чудесное путешествие Нильса с дикими гусями', by: 'Сельма Лагерлёф', e: '🦆 🗺️', d: 'Озорного мальчика превратили в крошечного человечка, и он летит через всю Швецию верхом на гусе.' },
+  { id: 'hottabych', s: 's3', t: 'Старик Хоттабыч', by: 'Лазарь Лагин', e: '🧞 🏺', d: 'Мальчик Волька выпускает из старого кувшина джинна, и тот исполняет желания — иногда совсем не так, как надо.' },
+  { id: 'tomin', s: 's3', t: 'Шёл по городу волшебник', by: 'Юрий Томин', e: '🪄 🏙️', d: 'Мальчику попадают в руки волшебные спички, и каждая исполняет желание. Повесть о том, что чудо — это ответственность.' },
+  { id: 'bazhov', s: 's3', t: 'Малахитовая шкатулка', by: 'Павел Бажов', e: '💎 ⛰️', d: 'Уральские сказы о Хозяйке Медной горы, мастерах-камнерезах и подземных сокровищах.' },
+  { id: 'justso', s: 's3', t: 'Просто сказки', by: 'Редьярд Киплинг', e: '🐘 🐪', d: 'Весёлые истории о том, откуда у слонёнка хобот, у верблюда горб, а у кита узкое горло.' },
+  { id: 'jungle', s: 's3', t: 'Книга джунглей', by: 'Редьярд Киплинг', e: '🐺 🐍', d: 'Мальчика Маугли растит волчья стая, а законам джунглей учат медведь Балу и пантера Багира.' },
+  { id: 'robinson', s: 's4', t: 'Робинзон Крузо', by: 'Даниель Дефо', e: '🏝️ ⛵', d: 'Моряк попадает на необитаемый остров и много лет учится жить сам: строит дом, выращивает хлеб и находит друга.' },
+  { id: 'gulliver', s: 's4', t: 'Путешествия Гулливера', by: 'Джонатан Свифт', e: '🧭 🏰', d: 'Корабельный врач попадает к крошечным лилипутам, потом к великанам и в другие удивительные страны.' },
+  { id: 'munchausen', s: 's4', t: 'Приключения барона Мюнхгаузена', by: 'Рудольф Эрих Распе', e: '🐎 💣', d: 'Барон рассказывает невероятные истории: летает на пушечном ядре и вытаскивает сам себя из болота за волосы.' },
+  { id: 'sawyer', s: 's4', t: 'Приключения Тома Сойера', by: 'Марк Твен', e: '🎣 🛶', d: 'Мальчишка с берегов Миссисипи красит забор, ищет клад и попадает в настоящие приключения.' },
+  { id: 'huck', s: 's4', t: 'Приключения Гекльберри Финна', by: 'Марк Твен', e: '🛶 🌊', d: 'Друг Тома Сойера плывёт на плоту по большой реке и помогает человеку добраться до свободы.' },
+  { id: 'treasure', s: 's4', t: 'Остров сокровищ', by: 'Роберт Льюис Стивенсон', e: '🗺️ 🦜', d: 'Юнга Джим находит карту пиратского клада и уходит в плавание, где одноногий кок оказывается совсем не прост.' },
+  { id: 'holmes', s: 's4', t: 'Записки о Шерлоке Холмсе', by: 'Артур Конан Дойл', e: '🔎 🎩', d: 'Великий сыщик и его друг доктор Ватсон распутывают загадочные дела по самым мелким следам.' },
+  { id: 'island', s: 's4', t: 'Таинственный остров', by: 'Жюль Верн', e: '🎈 🏝️', d: 'Пятеро смельчаков улетают из плена на воздушном шаре и с помощью знаний обустраивают жизнь на необитаемом острове.' },
+  { id: 'invisible', s: 's4', t: 'Человек-невидимка', by: 'Герберт Уэллс', e: '🧪 🕶️', d: 'Учёный делает себя невидимым и понимает, что это скорее беда, чем сила.' },
+  { id: 'fire', s: 's4', t: 'Борьба за огонь', by: 'Жозеф Рони-старший', e: '🔥 🪨', d: 'В древние времена племя теряет огонь, и трое смелых охотников отправляются его добыть.' },
+  { id: 'iliad', s: 's5', t: 'Илиада', by: 'Гомер', e: '🛡️ 🐴', d: 'Древнегреческая поэма о Троянской войне, о героях Ахилле и Гекторе.' },
+  { id: 'odyssey', s: 's5', t: 'Одиссея', by: 'Гомер', e: '⛵ 🌊', d: 'Хитроумный Одиссей десять лет плывёт домой и встречает циклопа, сирен и волшебницу.' },
+  { id: 'nibelung', s: 's5', t: 'Песнь о Нибелунгах', by: 'Германский эпос', e: '🐉 ⚔️', d: 'Старинная поэма о герое Зигфриде, победившем дракона, и о проклятом золоте.' },
+  { id: 'arthur', s: 's5', t: 'Легенды о короле Артуре', by: 'Британские легенды', e: '🗡️ 🪨', d: 'Мальчик вынимает меч из камня и становится королём, а рыцари Круглого стола отправляются за подвигами.' },
+  { id: 'roland', s: 's5', t: 'Песнь о Роланде', by: 'Французский эпос', e: '📯 🛡️', d: 'Старинная поэма о верном рыцаре Роланде и его последней битве в горах.' },
+  { id: 'cid', s: 's5', t: 'Песнь о моём Сиде', by: 'Испанский эпос', e: '🐎 🏰', d: 'Поэма об изгнанном рыцаре, который храбростью и честью возвращает своё доброе имя.' },
+  { id: 'tristan', s: 's5', t: 'Тристан и Изольда', by: 'Средневековая легенда', e: '⛵ 🌹', d: 'Средневековая легенда о рыцаре Тристане и королеве Изольде — о верности и любви сильнее судьбы.' },
+  { id: 'quixote', s: 's5', t: 'Дон Кихот', by: 'Мигель де Сервантес', e: '🐴 🌬️', d: 'Бедный идальго начитался рыцарских романов и едет совершать подвиги, сражаясь даже с ветряными мельницами.' },
+  { id: 'ulenspiegel', s: 's5', t: 'Легенда об Уленшпигеле', by: 'Шарль де Костер', e: '🦉 🪞', d: 'Весёлый бродяга Тиль смеётся над жадными и злыми и сражается за свободу своей страны.' },
+  { id: 'musketeers', s: 's6', t: 'Три мушкетёра', by: 'Александр Дюма', e: '⚔️ 🎩' },
+  { id: 'montecristo', s: 's6', t: 'Граф Монте-Кристо', by: 'Александр Дюма', e: '🏝️ 💰' },
+  { id: 'miserables', s: 's6', t: 'Отверженные', by: 'Виктор Гюго', e: '🕯️ 🧱' },
+  { id: 'notredame', s: 's6', t: 'Собор Парижской Богоматери', by: 'Виктор Гюго', e: '⛪ 🔔' },
+  { id: 'twist', s: 's6', t: 'Оливер Твист', by: 'Чарльз Диккенс', e: '🎩 🏚️' },
+  { id: 'romeo', s: 's6', t: 'Ромео и Джульетта', by: 'Уильям Шекспир', e: '🌹 🗡️' },
+  { id: 'hamlet', s: 's6', t: 'Гамлет', by: 'Уильям Шекспир', e: '💀 👑' },
+  { id: 'daughter', s: 's6', t: 'Капитанская дочка', by: 'А. С. Пушкин', e: '❄️ 🐎' },
+  { id: 'onegin', s: 's6', t: 'Евгений Онегин', by: 'А. С. Пушкин', e: '🪶 🍂' },
+  { id: 'gogol', s: 's6', t: 'Вечера на хуторе близ Диканьки', by: 'Н. В. Гоголь', e: '🌙 🎄' },
+  { id: 'chekhov', s: 's6', t: 'Рассказы', by: 'А. П. Чехов', e: '🐕 🍃' },
+  { id: 'hero', s: 's6', t: 'Герой нашего времени', by: 'М. Ю. Лермонтов', e: '⛰️ 🐎' }
+];
+const BOOKSHELF = (() => {
+  const PAL = ['#E8574F', '#3D7BE0', '#2E9A5E', '#7B5BE0', '#E57A1F', '#D9467A', '#17908F', '#B5542C', '#4C56C9', '#A7791C'];
+  const col = id => PAL[[...id].reduce((a, c) => a + c.charCodeAt(0), 0) % PAL.length];
+  const marks = () => (P.shelf = P.shelf && typeof P.shelf === 'object' ? P.shelf : {});
+  const shelfFor = a => !a ? 's2' : a <= 5 ? 's1' : a === 6 ? 's2' : a <= 8 ? 's3' : a <= 10 ? 's4' : a <= 12 ? 's5' : 's6';
+  const readN = () => Object.values(marks()).filter(v => v === 'read').length;
+  // a drawn cover: the book's colour, a spine, a frame and two pictures of what is inside
+  const cover = (b, big) => { const [e1, e2] = b.e.split(' ');
+    return `<span class="bk-cov ${big ? 'big' : ''}" style="--c:${col(b.id)}" aria-hidden="true"><i class="bk-fr"></i><span class="emo bk-e1">${e1}</span>${e2 ? `<span class="emo bk-e2">${e2}</span>` : ''}</span>`; };
+  const badge = m => m === 'read' ? '<span class="bk-badge rd">✓</span>' : m === 'now' ? '<span class="bk-badge nw">📖</span>' : '';
+  const card = b => { const m = marks()[b.id];
+    return `<button class="bk-card ${m || ''}" data-b="${b.id}">${cover(b)}${badge(m)}<b class="bk-t">${esc(b.t)}</b><small class="bk-a">${esc(b.by)}</small></button>`; };
+  function open(sid) {
+    newScreen(); $$('.bk-ov').forEach(x => x.remove());
+    const S = marks();
+    const sh = BOOK_SHELVES.find(x => x.id === sid) || BOOK_SHELVES.find(x => x.id === shelfFor(P.settings.age)) || BOOK_SHELVES[0];
+    const books = BOOKS.filter(b => b.s === sh.id), n = books.filter(b => S[b.id] === 'read').length;
+    shell('Книжная полка', `<div class="bk-wrap">
+      <p class="lead" id="bkLead">Выбери полку и книгу. Прочитанные книги отмечай — за каждую будет наклейка!</p>
+      ${IS_RU ? TALES.tile() : '<p class="bk-note"><span class="emo">🎧</span> Аудиосказки пока есть только в русской версии игры.</p>'}
+      <div class="bk-tabs" role="tablist">${BOOK_SHELVES.map(x => `<button class="bk-tab ${x.id === sh.id ? 'sel' : ''}" data-s="${x.id}" role="tab" aria-selected="${x.id === sh.id}"><span class="emo">${x.e}</span><b>${x.n}</b><small>${x.age}</small></button>`).join('')}</div>
+      <section class="bk-shelf"><h2><span class="emo">${sh.e}</span> ${sh.n} <small>${sh.age}</small></h2>
+        <p class="bk-cnt">${sh.id === 's6' ? 'Для взрослых: что ждёт впереди.' : `Прочитано ${n} из ${books.length}`}</p>
+        <div class="bk-grid">${books.map(card).join('')}</div></section>
+      <p class="bk-parent"><span class="emo">👨‍👩‍👧</span> <span><b>Для взрослых.</b> Эти книги лучше всего читать вместе и на бумаге: взрослый читает вслух, ребёнок рассматривает картинки и задаёт вопросы. Отмечайте, что уже прочитали — у каждого ребёнка своя полка.</span></p>
+    </div>`, { back: goHome });
+    talk(sh.id === 's6' ? 'Это полка на будущее. Эти книги ждут, когда ты подрастёшь.' : `Полка «${sh.n}». Выбери книгу!`);
+    if (IS_RU) TALES.index().catch(() => {});
+    $('#stage').onclick = e => {
+      const tb = e.target.closest('.bk-tab'); if (tb) { sfx.pop(); P.shelfTab = tb.dataset.s; open(tb.dataset.s); return; }
+      const c = e.target.closest('.bk-card'); if (c) { sfx.pop(); book(BOOKS.find(b => b.id === c.dataset.b), sh.id); return; }
+      if (e.target.closest('#bkTales')) { sfx.pop(); TALES.list(() => open(sh.id)); }
+    };
+  }
+  // one book: what it is about, «Читаем сейчас», «Прочитали» and, for an old fairy-tale book, its tales to listen to
+  function book(b, sid) {
+    if (!b) return;
+    $$('.bk-ov').forEach(x => x.remove());
+    const S = marks(), ov = document.createElement('div'); ov.className = 'bk-ov';
+    const draw = () => { const m = S[b.id];
+      ov.innerHTML = `<div class="bk-box" role="dialog" aria-modal="true" aria-label="${esc(b.t)}"><button class="ibtn bk-x" aria-label="Закрыть">✕</button>
+        ${cover(b, true)}<h2>${esc(b.t)}</h2><p class="bk-by">${esc(b.by)}</p>${b.d ? `<p class="bk-d">${esc(b.d)}</p>` : ''}
+        <div class="bk-acts"><button class="chip bk-act ${m === 'now' ? 'sel' : ''}" data-act="now"><span class="emo">📖</span>Читаем сейчас</button>
+          <button class="chip bk-act ${m === 'read' ? 'sel' : ''}" data-act="read"><span class="emo">✅</span>Прочитали</button></div>
+        ${IS_RU ? TALES.forBook(b.id) : ''}</div>`; };
+    draw(); document.body.append(ov);
+    const close = () => { ov.remove(); open(sid); };
+    talk(`${b.t}. ${b.d || b.by}`);
+    ov.onclick = e => {
+      if (e.target === ov || e.target.closest('.bk-x')) { sfx.pop(); close(); return; }
+      const tl = e.target.closest('[data-tale]'); if (tl) { sfx.pop(); ov.remove(); TALES.play(tl.dataset.tale, () => open(sid)); return; }
+      const a = e.target.closest('.bk-act'); if (!a) return;
+      const act = a.dataset.act;
+      if (S[b.id] === act) { delete S[b.id]; sfx.tick(); save(); draw(); return; }
+      S[b.id] = act;
+      if (act === 'now' && P.book && !(P.book.log && Object.keys(P.book.log).length && P.book.title)) P.book.title = b.t;
+      draw();
+      if (act === 'read') reward(b);
+      else { sfx.pop(); talk('Хорошо! Читайте понемногу каждый день.'); }
+      save();
+    };
+  }
+  // the first «Прочитали» of a book: five stars, and five stars always make a new sticker
+  function reward(b) {
+    const got = P.shelfGot = Array.isArray(P.shelfGot) ? P.shelfGot : [];
+    if (got.includes(b.id)) { sfx.good(); talk('Отлично, ещё одна прочитанная книга!'); return; }
+    got.push(b.id);
+    const before = stickerCount(); P.stars += 5; try { weekAdd(P, 5); } catch (e) {}
+    const after = stickerCount(), stk = after > before ? STK()[after - 1] : null;
+    const sn = $('#starN'); if (sn) sn.textContent = P.stars;
+    sfx.magic();
+    const box = $('.bk-box'); if (box) box.insertAdjacentHTML('beforeend', `<div class="new-sticker bk-stk"><span class="emo">${stk ? stickerHTML(stk) : '⭐'}</span>${stk ? 'Новая наклейка!' : 'Плюс пять звёзд!'}</div>`);
+    talk(`Ура! Книга «${b.t}» прочитана.${stk ? ' Смотри, у тебя новая наклейка!' : ' Плюс пять звёзд!'}`);
+  }
+  return { open, readN, BOOKS: () => BOOKS };
+})();
+// audio fairy tales (Russian only): texts free of copyright, each in its own file under tales/, fetched when opened and
+// kept by the service worker for offline listening. The game's voice reads a tale sentence by sentence with the
+// sentence lit up; pause and go on; a night mode dims the screen and hides the buttons for bedtime.
+const TALES = (() => {
+  let IDX = null, warmOn = false; const TXT = {};
+  const base = () => SITE_ROOT + 'tales/';
+  const pause = ms => new Promise(r => setTimeout(r, ms));
+  async function index() {
+    if (IDX) return IDX;
+    const r = await fetch(base() + 'index.json'); if (!r.ok) throw new Error('no tales');
+    IDX = await r.json(); return IDX;
+  }
+  async function text(id) {
+    if (TXT[id]) return TXT[id];
+    const r = await fetch(base() + id + '.json'); if (!r.ok) throw new Error('no tale');
+    return (TXT[id] = await r.json());
+  }
+  // every tale once in the background, so the whole collection works without the internet afterwards
+  function warm() {
+    if (warmOn) return; warmOn = true;
+    index().then(async xs => { for (const x of xs) { try { await text(x.id); } catch (e) {} await pause(120); } }).catch(() => { warmOn = false; });
+  }
+  const BOOK_OF = { perrault: /Перро/, andersen: /Андерсен/, grimm: /Гримм/, aesop: /Эзоп/, russian: /народн/i };
+  const heard = () => (P.tales = P.tales && typeof P.tales === 'object' ? P.tales : {});
+  const tile = () => `<button class="lg-cta bk-tales" id="bkTales"><span class="emo">🎧</span><span class="lg-t"><b>Аудиосказки</b><small>народные сказки, Пушкин, Крылов, Толстой — послушать перед сном</small></span></button>`;
+  function forBook(bid) {
+    const re = BOOK_OF[bid]; if (!re || !IDX) return '';
+    const xs = IDX.filter(x => re.test(x.by)); if (!xs.length) return '';
+    return `<div class="bk-listen"><b>🎧 Послушать</b>${xs.map(x => `<button class="chip" data-tale="${x.id}"><span class="emo">${x.e}</span>${esc(x.t)}</button>`).join('')}</div>`;
+  }
+  async function list(back) {
+    const t = newScreen();
+    shell('Аудиосказки', `<div class="tl-wrap"><p class="lead" id="tlLead">Выбери сказку — я прочитаю её вслух. Текст будет на экране.</p>
+      <div class="tl-list" id="tlList"><p class="muted">Открываю сказки…</p></div>
+      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
+    talk('Выбери сказку. Я прочитаю её вслух.');
+    let xs;
+    try { xs = await index(); } catch (e) { if (t === tok) $('#tlList').innerHTML = '<p class="muted">Сказки не загрузились. Они откроются, когда появится интернет, а потом будут работать и без него.</p>'; return; }
+    if (t !== tok) return;
+    warm();
+    const H = heard(), age = P.settings.age || 0;
+    const row = x => { const h = H[x.id] || {};
+      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
+    const mine = age ? xs.filter(x => !x.age || age <= x.age[1] + 1) : xs, rest = xs.filter(x => !mine.includes(x));
+    $('#tlList').innerHTML = mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
+    $('#tlList').onclick = e => { const b = e.target.closest('.tl-i'); if (b) { sfx.pop(); play(b.dataset.id, () => list(back)); } };
+  }
+  async function play(id, back) {
+    const t = newScreen();
+    let d;
+    try { await index().catch(() => null); d = await text(id); } catch (e) {
+      shell('Аудиосказки', '<p class="lead">Эта сказка не загрузилась. Проверьте интернет и попробуйте ещё раз.</p>', { back: back || (() => list()) }); return;
+    }
+    if (t !== tok) return;
+    const S = [];
+    const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${sentences(p).map(s => { const j = S.push({ s: s.trim(), pi }) - 1; return `<span class="ss" data-j="${j}">${esc(s)}</span>`; }).join('')}</p>`).join('');
+    shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>
+        <div class="tl-text" id="tlText">${html}</div><p class="tl-end" id="tlEnd" hidden>Конец 🌙</p></article>
+      <div class="tl-ctl"><button class="ibtn" id="tlPrev" aria-label="Фраза назад">⏮</button><button class="big" id="tlPlay"></button>
+        <button class="ibtn" id="tlNext" aria-label="Фраза вперёд">⏭</button><button class="ibtn" id="tlNight" aria-label="Ночной режим">🌙</button></div>`, { back: back || (() => list()), guide: false, raw: true });
+    const H = heard(), me = H[id] = H[id] || {}, spans = $$('#tlText .ss');
+    let at = me.at > 0 && me.at < S.length ? me.at : 0, run = 0, playing = false, night = false;
+    const btn = () => { const b = $('#tlPlay'); if (b) b.textContent = playing ? '⏸ Пауза' : at > 0 && at < S.length ? '▶ Дальше' : '▶ Слушать'; };
+    const mark = j => {
+      spans.forEach(s => s.classList.toggle('on', +s.dataset.j === j));
+      const el = spans[j]; if (el && !night) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      const nt = $('#tlNightT'); if (nt && S[j]) nt.textContent = S[j].s;
+    };
+    async function go() {
+      const my = ++run; playing = true; btn();
+      if (at >= S.length) at = 0;
+      $('#tlEnd').hidden = true;
+      for (; at < S.length; at++) {
+        mark(at);
+        await say(S[at].s); if (t !== tok || my !== run) return;
+        const para = at + 1 < S.length && S[at + 1].pi !== S[at].pi;
+        await pause(para ? 700 : 280); if (t !== tok || my !== run) return;
+        if (at % 5 === 4) { me.at = at + 1; save(); }
+      }
+      playing = false; me.at = 0; me.done = 1; save();
+      spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
+      const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
+    }
+    function stop() { run++; playing = false; hush(); me.at = at < S.length ? at : 0; save(); btn(); }
+    const jump = j => { at = Math.max(0, Math.min(S.length - 1, j)); if (playing) { run++; hush(); go(); } else { mark(at); btn(); } };
+    const toggle = () => playing ? stop() : go();
+    function setNight(on) {
+      night = on; const scr = $('.screen'); if (!scr) return;
+      $$('.tl-night').forEach(x => x.remove());
+      if (!on) { const el = spans[at]; if (el) el.scrollIntoView({ block: 'center' }); return; }
+      scr.insertAdjacentHTML('beforeend', `<div class="tl-night" id="tlNightOv" role="button" aria-label="Пауза или дальше"><p class="tl-nt" id="tlNightT">${esc(S[Math.min(at, S.length - 1)].s)}</p>
+        <button class="tl-nx" id="tlNightX" aria-label="Выйти из ночного режима">☀️</button></div>`);
+      $('#tlNightOv').onclick = e => { if (e.target.closest('#tlNightX')) { setNight(false); return; } toggle(); };
+      if (!playing) go();
+    }
+    $('#tlPlay').onclick = () => { if (!night) sfx.pop(); toggle(); };
+    $('#tlPrev').onclick = () => jump(at - 1);
+    $('#tlNext').onclick = () => jump(at + 1);
+    $('#tlNight').onclick = () => setNight(true);
+    $('#tlText').onclick = e => { const s = e.target.closest('.ss'); if (s) jump(+s.dataset.j); };
+    btn(); if (at) mark(at);
+    warm();
+  }
+  // its own tile in «Узнаём» and beside reading, Russian only
+  GAMES.push({ id: 'tales', name: 'Аудиосказки', sub: 'слушать сказки с текстом на экране', kw: 'сказки слушать перед сном', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => list(goHome), grp: 10, also: [2, 6], hide: () => !IS_RU,
+    prog: () => { const n = Object.values(heard()).filter(x => x && x.done).length; return n ? `дослушано: ${n}` : ''; } });
+  return { index, tile, forBook, list, play };
+})();
+GAMES.push({ id: 'bookshelf', name: 'Книжная полка', sub: 'лучшие книги для твоего возраста', kw: 'книги сказки аудиосказки чтение', ico: () => pic('📚'), bg: 'var(--t-peach)', go: () => BOOKSHELF.open(), grp: 6, also: [2, 10],
+  prog: () => { const n = BOOKSHELF.readN(); return n ? `прочитано книг: ${n}` : ''; } });
+/* BOOKS-END */
 /* LETTERS-BEGIN */
 /* ---------- «Написать автору»: ideas and feedback from any family (⚙️ Для взрослых → «💌 Написать автору»). The
    letter is sealed on the phone with the author's open key and kept on the family server; only her phone can open it.
