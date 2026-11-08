@@ -22,12 +22,12 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     const run = s => p.evaluate(s => window.__T.run(s), s);
     await p.goto(BASE + path); await p.waitForTimeout(1500);
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
-    // the tile: «Творим» (music) and «Узнаём»
-    for (const tab of ['create', 'discover']) {
+    // the tile: in «Творим» (music) only, with all the art
+    for (const tab of ['discover', 'create']) {
       await p.evaluate(t => { const x = document.querySelector(`[data-tab="${t}"]`); if (x) x.click(); }, tab); await p.waitForTimeout(700);
       const tile = await p.$('.tile[data-id="ballet"]');
-      ok(!!tile, `tile on the ${tab} tab: ` + (tile ? (await tile.innerText()).replace(/\s+/g, ' ') : '-'));
-      if (tab === 'discover' && tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(500); if (!await p.$('.bl-hub')) await tile.click().catch(() => {}); }
+      ok(tab === 'create' ? !!tile : !tile, `tile ${tab === 'create' ? 'on' : 'not on'} the ${tab} tab: ` + (tile ? (await tile.innerText()).replace(/\s+/g, ' ') : '-'));
+      if (tab === 'create' && tile) { await tile.scrollIntoViewIfNeeded(); await tile.click(); await p.waitForTimeout(500); if (!await p.$('.bl-hub')) await tile.click().catch(() => {}); }
     }
     if (!await p.$('.bl-hub')) await run('BALLET.hub()');
     await p.waitForTimeout(700); await p.screenshot({ path: D + `ballet-${lang}-${DEV}-hub.png` });

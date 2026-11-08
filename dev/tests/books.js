@@ -21,11 +21,11 @@ let bad = 0; const log = (...a) => console.log(...a), check = (name, ok, more = 
   const said = () => p.evaluate(() => window.__said.splice(0));
   const enter = async () => { await p.waitForTimeout(1500); const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); } };
   await p.goto(PAGE); await enter();
-  // the tile is on the home screen, in «Узнаём»
+  // the tile is on the home screen, in «Учимся» (books and reading live there since the tabs were sorted)
   check('tile in GAMES', await T("GAMES.some(g => g.id === 'bookshelf')"));
-  await T("P.homeTab = 'discover'; goHome()"); await p.waitForTimeout(800);
+  await T("P.homeTab = 'learn'; goHome()"); await p.waitForTimeout(800);
   const tile = await p.$('[data-id="bookshelf"], [data-g="bookshelf"], [data-game="bookshelf"]');
-  check('tile shown in «Узнаём»', !!tile || await T("!!document.body.innerText.match(/" + (TAG === 'ru' ? 'Книжная полка' : '.') + "/)"));
+  check('tile shown in «Учимся»', !!tile || await T("!!document.body.innerText.match(/" + (TAG === 'ru' ? 'Книжная полка' : '.') + "/)"));
   await p.screenshot({ path: D + `books-${TAG}-${DEV}-home.png` });
   // the shelf opens at the child's age: 5 → the first shelf
   await T('BOOKSHELF.open()'); await p.waitForTimeout(800);
