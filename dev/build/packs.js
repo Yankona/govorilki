@@ -2,7 +2,7 @@
 //  1. other languages: LX('NAME', <Russian default>) whose NAME the language's LANGDATA already has → LX('NAME', null)
 //     (the default is never used there, it only weighed on the page);
 //  2. story texts: in the story collections (STORY_SETS) every item { id, e, t, s, q, a, … } keeps id, picture, title and
-//     the rest; its text, question and answers (s, q, a) go to a data file data/<lang>/<pack>.json { id: {s, q, a} },
+//     the rest; its text and answers (s, a) go to a data file data/<lang>/<pack>.json { id: {s, a} },
 //     and the item gets px: '<pack>' — PACK.story(item) brings the words back when the story opens;
 //  3. extra packs given on the command line (the Russian voice dictionary) are written as they are.
 // PACKS in the page becomes { pack: content hash }; the service worker keeps the files after the first visit.
@@ -13,7 +13,7 @@ const walk = require(path.join(__dirname, '..', 'i18n', 'node_modules', 'acorn-w
 const [, , IN, OUT, LANG, DIR, ...EXTRA] = process.argv;
 // the collections whose items are stories read in screenStory (a variable, or the name given to LX)
 const STORY_SETS = ['LEARN', 'PLACE_DATA', 'MORE_STORIES', 'WATER_STORIES', 'PLANT_STORIES', 'BALLET_STORIES'];
-const MOVE = ['s', 'q', 'a'];          // the fields that leave the page
+const MOVE = ['s', 'a'];               // the fields that leave the page (q stays: «А знаешь ли ты?» shows it on the tabs)
 const CHUNK = 60000;                   // bytes of moved text per data file (about 15 KB compressed)
 
 const src = fs.readFileSync(IN, 'utf8');

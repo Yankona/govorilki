@@ -67,6 +67,17 @@ const kid = (name, g, age, fr, lang) => ({ stars: 5, plays: {}, learn: {}, book:
       }
     };
     await holiday('online');
+    // the journey quiz «Угадай, где это» shows the first line of each story
+    const tquiz = async tag => {
+      await run('TRAVEL.screen()'); await p.waitForTimeout(600);
+      const b = await p.$('#tvQuiz'); if (!b) { miss.push(`${tag} no journey quiz button`); return; }
+      await b.click(); const o = await p.waitForSelector('#tvQ .tv-o', { timeout: 8000 }).catch(() => null);
+      if (!o) { miss.push(`${tag} journey quiz did not open`); return; }
+      await o.click(); await p.waitForTimeout(400);
+      const t = await p.$eval('#tvAns', e => e.textContent.trim()).catch(() => '');
+      if (t.length < 15) miss.push(`${tag} journey quiz answer «${t}»`);
+    };
+    await tquiz('online');
     if (lang === 'ru') { await p.waitForTimeout(1500); if (!(await run('!!(SAYRU && SAYRU.w && Object.keys(SAYRU.w).length > 1000)'))) miss.push('voice dictionary online'); }
     // one online visit: the service worker takes over and the background fetch keeps every pack
     await p.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, null, { timeout: 20000 }).catch(() => miss.push('no service worker'));
@@ -78,6 +89,7 @@ const kid = (name, g, age, fr, lang) => ({ stars: 5, plays: {}, learn: {}, book:
     await p.reload(); await start();
     const off = await stories('offline');
     await holiday('offline');
+    await tquiz('offline');
     if (lang === 'ru' && !(await run('!!(SAYRU && SAYRU.w)'))) miss.push('voice dictionary offline');
     await run('goHome()'); await p.waitForTimeout(500);
     await p.screenshot({ path: path.join(__dirname, 'shots', `packs-${lang}-${DEV}-offline-home.png`) });

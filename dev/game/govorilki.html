@@ -3260,7 +3260,7 @@ const LANG = 'ru';
 const LANGDATA = /*__LANGDATA__*/{};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 /* ---------- data packs. Big data the first screen does not need lives in files next to the page, data/<lang>/<pack>.json:
-   the build (build/packs.js) moves the words of the stories there (an item keeps px: '<pack>' instead of s, q, a) and, on
+   the build (build/packs.js) moves the words of the stories there (an item keeps px: '<pack>' instead of s, a) and, on
    the Russian page, the voice's stress dictionary. PACKS is { pack: content hash }, filled by the build; in the source and
    in the claude.ai copy it stays empty and everything is inline. A pack is fetched when a screen needs it; a few seconds
    after the start all packs are fetched once in the background, so the service worker keeps them for offline use. ---------- */
@@ -19486,11 +19486,17 @@ const TRAVEL = (() => {
     for (const q of shuffle(pool)) { if (out.length >= QN) break; if (used.has(q.k) && used.size < ps.length) continue; used.add(q.k); out.push(q); }
     return out.map(q => ({ ...q, opts: shuffle([q.k, ...shuffle(ps.filter(x => x !== q.k && LEARN[x].place !== LEARN[q.k].place)).slice(0, 2)]) }));
   }
-  function quiz() {
+  function quiz(qs0) {
     // one answer per question, then «Дальше»: no lock after a wrong one
+    if (!Array.isArray(qs0)) qs0 = null;
+    if (!qs0 && places().length >= 3) {   // the first line of each story is shown: its words come from the data packs (PACK)
+      const q0 = questions(), t0 = tok;
+      if (q0.some(q => q.it.px && q.it.s == null)) { Promise.all(q0.map(q => PACK.story(q.it))).then(() => { if (tok === t0) quiz(q0); }, () => { if (tok === t0) sfx.oops(); }); return; }
+      qs0 = q0;
+    }
     newScreen(); noGuard();
     if (places().length < 3) { screen(); return; }
-    const qs = questions(); let n = 0, right = 0;
+    const qs = qs0; let n = 0, right = 0;
     shell('Угадай, где это', `<div class="tv"><div class="tv-q" id="tvQ"></div></div>`, { back: screen });
     const show = () => {
       const q = qs[n], img = learnImg(q.it.id), src = img ? img[3] || `${SITE_ROOT}img/learn/${q.it.id}.webp` : '';
