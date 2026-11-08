@@ -652,6 +652,18 @@
   "растения корень стебель лист цветок плод ботаника природа": [
    "plants root stem leaf flower fruit botany nature",
    "plantas raiz caule folha flor fruto botânica natureza"
+  ],
+  "Космос": [
+   "Space",
+   "Espaço"
+  ],
+  "Солнце, планеты, Луна, день и ночь": [
+   "the Sun, the planets, the Moon, day and night",
+   "o Sol, os planetas, a Lua, o dia e a noite"
+  ],
+  "планеты солнце луна звёзды гагарин ракета астроном": [
+   "planets sun moon stars gagarin rocket astronomer",
+   "planetas sol lua estrelas gagarin foguetão astrónomo"
   ]
  },
  "OLYMP": {
@@ -15742,6 +15754,468 @@
   " Смотри, где мигает!": [
    " Look where it blinks!",
    " Olha onde está a piscar!"
+  ]
+ },
+ "() => {\n  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], space: ['Космос', '🚀', 'var(--t-lilac)'] };\n  const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],\n    lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],\n    porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };\n  const SUB = { cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', space: 'Гагарин, Луна, звёзды и телескопы' };\n  Object.entries(NEW).forEach(([k, [name, e, bg]]) => {\n    if (LEARN[k]) return;\n    const items = [];\n    (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });\n    LEARN[k] = { name, e, bg, place: k === 'russia' ? 'RU' : k === 'space' ? null : 'PT', sub: SUB[k], items };\n  });\n  LEARN.pt.name = 'Португалия';\n  Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });\n}": {
+  "Кашкайш": [
+   "Cascais",
+   "Cascais"
+  ],
+  "Лиссабон": [
+   "Lisbon",
+   "Lisboa"
+  ],
+  "Порту и север": [
+   "Porto and the north",
+   "Porto e o Norte"
+  ],
+  "Россия": [
+   "Russia",
+   "Rússia"
+  ],
+  "Космос": [
+   "Space",
+   "Espaço"
+  ],
+  "город у океана рядом с Лиссабоном": [
+   "a town by the ocean near Lisbon",
+   "vila junto ao oceano perto de Lisboa"
+  ],
+  "трамваи, холмы и мосты": [
+   "trams, hills and bridges",
+   "elétricos, colinas e pontes"
+  ],
+  "Порту, Дору, Брага, Гимарайнш": [
+   "Porto, the Douro, Braga, Guimarães",
+   "Porto, Douro, Braga, Guimarães"
+  ],
+  "Байкал, Камчатка, Казань и вся страна": [
+   "Baikal, Kamchatka, Kazan and the whole country",
+   "Baikal, Kamchatka, Kazan e o país inteiro"
+  ],
+  "Гагарин, Луна, звёзды и телескопы": [
+   "Gagarin, the Moon, stars and telescopes",
+   "Gagarin, a Lua, as estrelas e os telescópios"
+  ],
+  "Португалия": [
+   "Portugal",
+   "Portugal"
+  ]
+ },
+ "SPACE": {
+  "Солнце": [
+   "Sun",
+   "Sol"
+  ],
+  "Это Солнце — наша звезда, огромный горячий шар. Оно такое большое, что внутри поместился бы миллион Земель. Свет от Солнца летит до нас около восьми минут.": [
+   "This is the Sun, our star: a huge, hot ball. It is so big that a million Earths could fit inside it. Sunlight takes about eight minutes to reach us.",
+   "Este é o Sol, a nossa estrela: uma bola enorme e quente. É tão grande que lá dentro cabia um milhão de Terras. A luz do Sol demora cerca de oito minutos a chegar até nós."
+  ],
+  "Меркурий": [
+   "Mercury",
+   "Mercúrio"
+  ],
+  "Это Меркурий — самая маленькая планета и самая близкая к Солнцу. Он облетает Солнце быстрее всех: его год длится всего 88 дней. Днём там жарче, чем в печке, а ночью страшный мороз.": [
+   "This is Mercury, the smallest planet and the closest to the Sun. It goes round the Sun faster than all the others: its year lasts only 88 days. In the daytime it is hotter than an oven, and at night it is freezing cold.",
+   "Este é Mercúrio, o planeta mais pequeno e o mais perto do Sol. Dá a volta ao Sol mais depressa do que todos: o seu ano dura só 88 dias. De dia é mais quente do que um forno e à noite faz um frio terrível."
+  ],
+  "Первая — самая маленькая, ближе всех к Солнцу.": [
+   "The first one is the smallest, closest to the Sun.",
+   "O primeiro é o mais pequeno, o mais perto do Sol."
+  ],
+  "Венера": [
+   "Venus",
+   "Vénus"
+  ],
+  "Это Венера — вторая планета от Солнца, почти такая же по размеру, как Земля. Это самая горячая планета: её укрывают толстые облака и держат жару, как одеяло. На нашем небе Венера видна как очень яркая звезда.": [
+   "This is Venus, the second planet from the Sun, almost the same size as the Earth. It is the hottest planet: thick clouds cover it and keep the heat in, like a blanket. In our sky Venus looks like a very bright star.",
+   "Esta é Vénus, o segundo planeta a contar do Sol, quase do tamanho da Terra. É o planeta mais quente: nuvens grossas tapam-no e guardam o calor, como um cobertor. No nosso céu, Vénus parece uma estrela muito brilhante."
+  ],
+  "Вторая — горячая планета в жёлтых облаках.": [
+   "The second one is a hot planet in yellow clouds.",
+   "O segundo é um planeta quente, com nuvens amarelas."
+  ],
+  "Земля": [
+   "Earth",
+   "Terra"
+  ],
+  "Это Земля — наш дом, третья планета от Солнца. Больше двух третей Земли покрыто океанами. Это единственная планета, где мы точно знаем, что есть жизнь.": [
+   "This is the Earth, our home, the third planet from the Sun. More than two thirds of the Earth is covered by oceans. It is the only planet where we know for sure that there is life.",
+   "Esta é a Terra, a nossa casa, o terceiro planeta a contar do Sol. Mais de dois terços da Terra estão cobertos de oceanos. É o único planeta onde sabemos com certeza que há vida."
+  ],
+  "Третья — наш дом, голубая с зелёными материками.": [
+   "The third one is our home, blue with green continents.",
+   "O terceiro é a nossa casa, azul com continentes verdes."
+  ],
+  "Марс": [
+   "Mars",
+   "Marte"
+  ],
+  "Это Марс — четвёртая планета, красная, потому что покрыта рыжей пылью. Он в два раза меньше Земли. На Марсе есть самая высокая гора Солнечной системы, а сейчас по нему ездят марсоходы.": [
+   "This is Mars, the fourth planet. It is red because it is covered in rusty dust. It is half the size of the Earth. Mars has the highest mountain in the Solar System, and robot rovers are driving around on it right now.",
+   "Este é Marte, o quarto planeta. É vermelho porque está coberto de pó cor de ferrugem. É duas vezes mais pequeno do que a Terra. Marte tem a montanha mais alta do Sistema Solar e, neste momento, há robôs a andar por lá."
+  ],
+  "Четвёртая — маленькая и красная.": [
+   "The fourth one is small and red.",
+   "O quarto é pequeno e vermelho."
+  ],
+  "Юпитер": [
+   "Jupiter",
+   "Júpiter"
+  ],
+  "Это Юпитер — пятая планета и самая большая. Внутри него поместилось бы больше тысячи Земель! Красное пятно на Юпитере — это буря, которая больше всей нашей Земли.": [
+   "This is Jupiter, the fifth planet and the biggest of all. More than a thousand Earths could fit inside it! The red spot on Jupiter is a storm that is bigger than our whole Earth.",
+   "Este é Júpiter, o quinto planeta e o maior de todos. Lá dentro cabiam mais de mil Terras! A mancha vermelha de Júpiter é uma tempestade maior do que a Terra inteira."
+  ],
+  "Пятая — самая большая, в полосках.": [
+   "The fifth one is the biggest, with stripes.",
+   "O quinto é o maior, às riscas."
+  ],
+  "Сатурн": [
+   "Saturn",
+   "Saturno"
+  ],
+  "Это Сатурн — шестая планета, с красивыми кольцами. Кольца сделаны из кусочков льда и камней. Сатурн такой лёгкий, что в огромной-огромной ванне он бы плавал.": [
+   "This is Saturn, the sixth planet, with beautiful rings. The rings are made of bits of ice and rock. Saturn is so light that it would float in a huge, huge bath.",
+   "Este é Saturno, o sexto planeta, com uns anéis lindos. Os anéis são feitos de pedacinhos de gelo e de pedra. Saturno é tão leve que flutuaria numa banheira enorme, enorme."
+  ],
+  "Шестая — с кольцами.": [
+   "The sixth one has rings.",
+   "O sexto tem anéis."
+  ],
+  "Уран": [
+   "Uranus",
+   "Úrano"
+  ],
+  "Это Уран — седьмая планета, голубая и очень холодная. Уран лежит на боку и катится вокруг Солнца, как мячик. Один год на Уране длится 84 наших года.": [
+   "This is Uranus, the seventh planet, pale blue and very cold. Uranus lies on its side and rolls round the Sun like a ball. One year on Uranus lasts 84 of our years.",
+   "Este é Úrano, o sétimo planeta, azul-claro e muito frio. Úrano está deitado de lado e rola à volta do Sol como uma bola. Um ano em Úrano dura 84 dos nossos anos."
+  ],
+  "Седьмая — голубая, лежит на боку.": [
+   "The seventh one is pale blue and lies on its side.",
+   "O sétimo é azul-claro e está deitado de lado."
+  ],
+  "Нептун": [
+   "Neptune",
+   "Neptuno"
+  ],
+  "Это Нептун — восьмая планета, дальше всех от Солнца. Он тёмно-синий, и на нём дуют самые сильные ветры. Один оборот вокруг Солнца Нептун делает за 165 наших лет.": [
+   "This is Neptune, the eighth planet, the farthest from the Sun. It is dark blue, and the strongest winds of all blow there. Neptune takes 165 of our years to go once round the Sun.",
+   "Este é Neptuno, o oitavo planeta, o mais longe do Sol. É azul-escuro e lá sopram os ventos mais fortes de todos. Neptuno demora 165 dos nossos anos a dar uma volta ao Sol."
+  ],
+  "Последняя — тёмно-синяя, дальше всех.": [
+   "The last one is dark blue, the farthest away.",
+   "O último é azul-escuro, o mais longe de todos."
+  ],
+  "Солнечная система": [
+   "The Solar System",
+   "O Sistema Solar"
+  ],
+  "🔍 Планеты": [
+   "🔍 Planets",
+   "🔍 Planetas"
+  ],
+  "🌍 День и ночь": [
+   "🌍 Day and night",
+   "🌍 Dia e noite"
+  ],
+  "🌙 Луна": [
+   "🌙 Moon",
+   "🌙 Lua"
+  ],
+  "🔢 По порядку": [
+   "🔢 In order",
+   "🔢 Por ordem"
+  ],
+  "🏆 Самая большая": [
+   "🏆 The biggest",
+   "🏆 O maior"
+  ],
+  "Космос": [
+   "Space",
+   "Espaço"
+  ],
+  "<button class=\"chip\" id=\"spStories\">📖 Истории</button>": [
+   "<button class=\"chip\" id=\"spStories\">📖 Stories</button>",
+   "<button class=\"chip\" id=\"spStories\">📖 Histórias</button>"
+  ],
+  "<h2>👆 Нажми на планету</h2><p>Вокруг Солнца летают восемь планет. Нажми на любую — и узнай, какая она.</p>": [
+   "<h2>👆 Tap a planet</h2><p>Eight planets fly round the Sun. Tap any one to find out what it is like.</p>",
+   "<h2>👆 Toca num planeta</h2><p>Há oito planetas a voar à volta do Sol. Toca em qualquer um e descobre como é.</p>"
+  ],
+  "Вокруг Солнца летают восемь планет. Нажми на любую и узнай, какая она.": [
+   "Eight planets fly round the Sun. Tap any one to find out what it is like.",
+   "Há oito planetas a voar à volta do Sol. Toca em qualquer um e descobre como é."
+  ],
+  "<h2>{0}{1}</h2><p>{2}</p><button class=\"link-btn\" id=\"spAgain\">🔊 Послушать ещё раз</button>": [
+   "<h2>{0}{1}</h2><p>{2}</p><button class=\"link-btn\" id=\"spAgain\">🔊 Listen again</button>",
+   "<h2>{0}{1}</h2><p>{2}</p><button class=\"link-btn\" id=\"spAgain\">🔊 Ouvir outra vez</button>"
+  ],
+  "Ты облетела всю Солнечную систему: Солнце и восемь планет! Теперь поставь планеты по порядку.": [
+   "You have flown round the whole Solar System: the Sun and eight planets! Now put the planets in order.",
+   "Voaste por todo o Sistema Solar: o Sol e oito planetas! Agora põe os planetas por ordem."
+  ],
+  "Ты облетел всю Солнечную систему: Солнце и восемь планет! Теперь поставь планеты по порядку.": [
+   "You have flown round the whole Solar System: the Sun and eight planets! Now put the planets in order.",
+   "Voaste por todo o Sistema Solar: o Sol e oito planetas! Agora põe os planetas por ordem."
+  ],
+  "<div class=\"sp-fig\"><svg viewBox=\"0 0 400 260\" id=\"spDay\" role=\"img\" aria-label=\"{0}\">\n      <rect width=\"400\" height=\"260\" fill=\"#151033\"/>{1}\n      {2}\n      {3}\n      <g id=\"spSpin\" class=\"sp-earth\">{4}\n        <g class=\"sp-house\" transform=\"translate({5},{6}) rotate(-90)\"><path d=\"M-12,8 L-12,-6 L0,-16 L12,-6 L12,8 Z\" fill=\"#FFF3D6\" stroke=\"#7A4A2A\" stroke-width=\"2\"/><path d=\"M-15,-5 L0,-18 L15,-5\" stroke=\"#C0472E\" stroke-width=\"4\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"-4\" y=\"-2\" width=\"8\" height=\"10\" fill=\"#7A4A2A\"/><circle class=\"sp-win\" cx=\"7\" cy=\"-3\" r=\"2.6\" fill=\"#FFD43B\"/></g></g>\n      <path d=\"M{7},{8} A{9},{10} 0 0 1 {11},{12} Z\" fill=\"#070620\" opacity=\".62\" pointer-events=\"none\"/>\n      <circle cx=\"{13}\" cy=\"{14}\" r=\"9\" fill=\"#fff\" stroke=\"#3B2A4A\" stroke-width=\"2\" pointer-events=\"none\"/>\n      <circle cx=\"{15}\" cy=\"{16}\" r=\"{17}\" fill=\"#000\" fill-opacity=\"0\" id=\"spDayHit\"/>\n    </svg></div><div class=\"sp-side\"><div class=\"bd-card sp-card\" id=\"spCard\"></div><div class=\"prow-btns\"><button class=\"big\" id=\"spTurn\">🔄 Покрутить Землю</button></div></div>": [
+   "<div class=\"sp-fig\"><svg viewBox=\"0 0 400 260\" id=\"spDay\" role=\"img\" aria-label=\"{0}\">\n      <rect width=\"400\" height=\"260\" fill=\"#151033\"/>{1}\n      {2}\n      {3}\n      <g id=\"spSpin\" class=\"sp-earth\">{4}\n        <g class=\"sp-house\" transform=\"translate({5},{6}) rotate(-90)\"><path d=\"M-12,8 L-12,-6 L0,-16 L12,-6 L12,8 Z\" fill=\"#FFF3D6\" stroke=\"#7A4A2A\" stroke-width=\"2\"/><path d=\"M-15,-5 L0,-18 L15,-5\" stroke=\"#C0472E\" stroke-width=\"4\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"-4\" y=\"-2\" width=\"8\" height=\"10\" fill=\"#7A4A2A\"/><circle class=\"sp-win\" cx=\"7\" cy=\"-3\" r=\"2.6\" fill=\"#FFD43B\"/></g></g>\n      <path d=\"M{7},{8} A{9},{10} 0 0 1 {11},{12} Z\" fill=\"#070620\" opacity=\".62\" pointer-events=\"none\"/>\n      <circle cx=\"{13}\" cy=\"{14}\" r=\"9\" fill=\"#fff\" stroke=\"#3B2A4A\" stroke-width=\"2\" pointer-events=\"none\"/>\n      <circle cx=\"{15}\" cy=\"{16}\" r=\"{17}\" fill=\"#000\" fill-opacity=\"0\" id=\"spDayHit\"/>\n    </svg></div><div class=\"sp-side\"><div class=\"bd-card sp-card\" id=\"spCard\"></div><div class=\"prow-btns\"><button class=\"big\" id=\"spTurn\">🔄 Spin the Earth</button></div></div>",
+   "<div class=\"sp-fig\"><svg viewBox=\"0 0 400 260\" id=\"spDay\" role=\"img\" aria-label=\"{0}\">\n      <rect width=\"400\" height=\"260\" fill=\"#151033\"/>{1}\n      {2}\n      {3}\n      <g id=\"spSpin\" class=\"sp-earth\">{4}\n        <g class=\"sp-house\" transform=\"translate({5},{6}) rotate(-90)\"><path d=\"M-12,8 L-12,-6 L0,-16 L12,-6 L12,8 Z\" fill=\"#FFF3D6\" stroke=\"#7A4A2A\" stroke-width=\"2\"/><path d=\"M-15,-5 L0,-18 L15,-5\" stroke=\"#C0472E\" stroke-width=\"4\" fill=\"none\" stroke-linecap=\"round\"/><rect x=\"-4\" y=\"-2\" width=\"8\" height=\"10\" fill=\"#7A4A2A\"/><circle class=\"sp-win\" cx=\"7\" cy=\"-3\" r=\"2.6\" fill=\"#FFD43B\"/></g></g>\n      <path d=\"M{7},{8} A{9},{10} 0 0 1 {11},{12} Z\" fill=\"#070620\" opacity=\".62\" pointer-events=\"none\"/>\n      <circle cx=\"{13}\" cy=\"{14}\" r=\"9\" fill=\"#fff\" stroke=\"#3B2A4A\" stroke-width=\"2\" pointer-events=\"none\"/>\n      <circle cx=\"{15}\" cy=\"{16}\" r=\"{17}\" fill=\"#000\" fill-opacity=\"0\" id=\"spDayHit\"/>\n    </svg></div><div class=\"sp-side\"><div class=\"bd-card sp-card\" id=\"spCard\"></div><div class=\"prow-btns\"><button class=\"big\" id=\"spTurn\">🔄 Girar a Terra</button></div></div>"
+  ],
+  "Земля крутится": [
+   "The Earth turns",
+   "A Terra gira"
+  ],
+  "☀️ У домика день": [
+   "☀️ It is day at the little house",
+   "☀️ Na casinha é dia"
+  ],
+  "Домик смотрит на Солнце — там светло и день.": [
+   "The little house faces the Sun, so it is light there: daytime.",
+   "A casinha está virada para o Sol: lá está claro, é dia."
+  ],
+  "🌙 У домика ночь": [
+   "🌙 It is night at the little house",
+   "🌙 Na casinha é noite"
+  ],
+  "Домик отвернулся от Солнца — там темно и ночь.": [
+   "The little house has turned away from the Sun, so it is dark there: night-time.",
+   "A casinha virou-se de costas para o Sol: lá está escuro, é noite."
+  ],
+  "<h2>{0}</h2><p>{1} Земля крутится, как волчок. Один оборот — это сутки, 24 часа.</p>": [
+   "<h2>{0}</h2><p>{1} The Earth spins like a top. One turn is one day: 24 hours.</p>",
+   "<h2>{0}</h2><p>{1} A Terra gira como um pião. Uma volta é um dia inteiro: 24 horas.</p>"
+  ],
+  "Земля всё время крутится. Та сторона, что смотрит на Солнце, — день, а другая — ночь. Следи за домиком!": [
+   "The Earth is always turning. The side that faces the Sun has day, and the other side has night. Watch the little house!",
+   "A Terra está sempre a girar. O lado virado para o Sol tem dia e o outro tem noite. Olha para a casinha!"
+  ],
+  "Новолуние": [
+   "New Moon",
+   "Lua nova"
+  ],
+  "Луна между Землёй и Солнцем, и к нам повёрнута её тёмная сторона. Луну почти не видно.": [
+   "The Moon is between the Earth and the Sun, and its dark side faces us. We can hardly see the Moon.",
+   "A Lua está entre a Terra e o Sol, e o seu lado escuro está virado para nós. Quase não se vê a Lua."
+  ],
+  "Молодой месяц": [
+   "A young crescent",
+   "Lua nova a crescer"
+  ],
+  "Появился тонкий серп. Приставь к нему палочку — получится буква «Р»: Луна растёт.": [
+   "A thin crescent has appeared. Put a little stick in front of it and you get the letter “D”: the Moon is growing.",
+   "Apareceu um fino crescente. Junta-lhe um pauzinho e fica a letra «D»: a Lua está a crescer, mas parece dizer «decrescente». A Lua é mentirosa!"
+  ],
+  "Первая четверть": [
+   "First quarter",
+   "Quarto crescente"
+  ],
+  "Освещена правая половина Луны. С новолуния прошла примерно неделя.": [
+   "The right half of the Moon is lit up. About a week has passed since the New Moon.",
+   "A metade direita da Lua está iluminada. Passou mais ou menos uma semana desde a Lua nova."
+  ],
+  "Луна растёт": [
+   "The Moon is growing",
+   "A Lua está a crescer"
+  ],
+  "Светлая часть становится всё больше. Скоро полнолуние!": [
+   "The bright part is getting bigger and bigger. Soon it will be Full Moon!",
+   "A parte clara está cada vez maior. Em breve é Lua cheia!"
+  ],
+  "Полнолуние": [
+   "Full Moon",
+   "Lua cheia"
+  ],
+  "Земля между Солнцем и Луной, и Луна светит нам вся, как круглый фонарь.": [
+   "The Earth is between the Sun and the Moon, and the whole Moon shines at us like a round lantern.",
+   "A Terra está entre o Sol e a Lua, e a Lua brilha toda para nós, como uma lanterna redonda."
+  ],
+  "Луна убывает": [
+   "The Moon is shrinking",
+   "A Lua está a minguar"
+  ],
+  "Светлая часть становится меньше, тень наползает справа.": [
+   "The bright part is getting smaller, and the shadow creeps in from the right.",
+   "A parte clara fica mais pequena e a sombra avança pela direita."
+  ],
+  "Последняя четверть": [
+   "Last quarter",
+   "Quarto minguante"
+  ],
+  "Освещена левая половина Луны. Ещё неделя — и снова новолуние.": [
+   "The left half of the Moon is lit up. One more week and it will be New Moon again.",
+   "A metade esquerda da Lua está iluminada. Mais uma semana e volta a ser Lua nova."
+  ],
+  "Старый месяц": [
+   "An old crescent",
+   "Lua velha"
+  ],
+  "Серп похож на букву «С» — значит, Луна стареет. Скоро она совсем спрячется.": [
+   "The crescent looks like the letter “C”: the Moon is getting old. Soon it will hide completely.",
+   "O crescente parece a letra «C», mas a Lua está a minguar: a Lua é mentirosa! Em breve vai esconder-se de todo."
+  ],
+  "<div class=\"sp-fig\"><svg viewBox=\"0 0 540 250\" id=\"spMoon\" role=\"img\" aria-label=\"{0}\">\n      <rect width=\"540\" height=\"250\" fill=\"#151033\"/>{1}\n      {2}\n      <circle cx=\"160\" cy=\"125\" r=\"88\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".3\" stroke-dasharray=\"5 6\"/>\n      {3}<path d=\"M160,98 A27,27 0 0 1 160,152 Z\" fill=\"#070620\" opacity=\".55\"/>\n      <g id=\"spMo\"></g>\n      <circle cx=\"420\" cy=\"118\" r=\"78\" fill=\"#3A3858\"/><g id=\"spBig\"></g>\n      <circle cx=\"420\" cy=\"118\" r=\"78\" fill=\"none\" stroke=\"#FFF\" stroke-opacity=\".25\"/>\n    </svg></div><div class=\"sp-side\"><div class=\"bd-card sp-card\" id=\"spCard\"></div>\n      <div class=\"bd-prog sp-prog\" id=\"spProg\"></div>\n      <div class=\"prow-btns\"><button class=\"big ghost\" id=\"spPrev\">◀</button><button class=\"big\" id=\"spNext\">Дальше ▶</button></div></div>": [
+   "<div class=\"sp-fig\"><svg viewBox=\"0 0 540 250\" id=\"spMoon\" role=\"img\" aria-label=\"{0}\">\n      <rect width=\"540\" height=\"250\" fill=\"#151033\"/>{1}\n      {2}\n      <circle cx=\"160\" cy=\"125\" r=\"88\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".3\" stroke-dasharray=\"5 6\"/>\n      {3}<path d=\"M160,98 A27,27 0 0 1 160,152 Z\" fill=\"#070620\" opacity=\".55\"/>\n      <g id=\"spMo\"></g>\n      <circle cx=\"420\" cy=\"118\" r=\"78\" fill=\"#3A3858\"/><g id=\"spBig\"></g>\n      <circle cx=\"420\" cy=\"118\" r=\"78\" fill=\"none\" stroke=\"#FFF\" stroke-opacity=\".25\"/>\n    </svg></div><div class=\"sp-side\"><div class=\"bd-card sp-card\" id=\"spCard\"></div>\n      <div class=\"bd-prog sp-prog\" id=\"spProg\"></div>\n      <div class=\"prow-btns\"><button class=\"big ghost\" id=\"spPrev\">◀</button><button class=\"big\" id=\"spNext\">Next ▶</button></div></div>",
+   "<div class=\"sp-fig\"><svg viewBox=\"0 0 540 250\" id=\"spMoon\" role=\"img\" aria-label=\"{0}\">\n      <rect width=\"540\" height=\"250\" fill=\"#151033\"/>{1}\n      {2}\n      <circle cx=\"160\" cy=\"125\" r=\"88\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\".3\" stroke-dasharray=\"5 6\"/>\n      {3}<path d=\"M160,98 A27,27 0 0 1 160,152 Z\" fill=\"#070620\" opacity=\".55\"/>\n      <g id=\"spMo\"></g>\n      <circle cx=\"420\" cy=\"118\" r=\"78\" fill=\"#3A3858\"/><g id=\"spBig\"></g>\n      <circle cx=\"420\" cy=\"118\" r=\"78\" fill=\"none\" stroke=\"#FFF\" stroke-opacity=\".25\"/>\n    </svg></div><div class=\"sp-side\"><div class=\"bd-card sp-card\" id=\"spCard\"></div>\n      <div class=\"bd-prog sp-prog\" id=\"spProg\"></div>\n      <div class=\"prow-btns\"><button class=\"big ghost\" id=\"spPrev\">◀</button><button class=\"big\" id=\"spNext\">Seguinte ▶</button></div></div>"
+  ],
+  "Луна": [
+   "The Moon",
+   "A Lua"
+  ],
+  "Луна сама не светит: её освещает Солнце. Луна облетает Землю примерно за месяц, и мы видим её по-разному. Нажимай «Дальше».": [
+   "The Moon does not shine by itself: the Sun lights it up. The Moon goes round the Earth in about a month, and we see it differently each night. Tap “Next”.",
+   "A Lua não brilha sozinha: é o Sol que a ilumina. A Lua dá a volta à Terra em cerca de um mês, e vemo-la de maneiras diferentes. Carrega em «Seguinte»."
+  ],
+  "Луна прошла полный круг: от новолуния до полнолуния и обратно. Это около месяца!": [
+   "The Moon has gone all the way round: from New Moon to Full Moon and back again. That takes about a month!",
+   "A Lua deu uma volta completa: da Lua nova à Lua cheia e outra vez de volta. Isso demora cerca de um mês!"
+  ],
+  "<h2>🔢 Какая планета {0}-я от Солнца?</h2><p>{1}</p>": [
+   "<h2>🔢 Which planet is number {0} from the Sun?</h2><p>{1}</p>",
+   "<h2>🔢 Qual é o planeta número {0} a contar do Sol?</h2><p>{1}</p>"
+  ],
+  "Поставь планеты по порядку, начиная от Солнца. Какая планета первая?": [
+   "Put the planets in order, starting from the Sun. Which planet comes first?",
+   "Põe os planetas por ordem, a começar pelo Sol. Qual é o primeiro planeta?"
+  ],
+  "Все восемь планет на месте!": [
+   "All eight planets are in their places!",
+   "Os oito planetas estão no seu lugar!"
+  ],
+  "Меркурий, Венера, Земля, Марс, Юпитер, Сатурн, Уран, Нептун — все планеты на своих местах!": [
+   "Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune: every planet is in its place!",
+   "Mercúrio, Vénus, Terra, Marte, Júpiter, Saturno, Úrano, Neptuno: todos os planetas estão no seu lugar!"
+  ],
+  "{0}! А какая следующая?": [
+   "{0}! And which one comes next?",
+   "{0}! E qual é o seguinte?"
+  ],
+  "Нет, это {0}. {1}": [
+   "No, that is {0}. {1}",
+   "Não, esse é {0}. {1}"
+  ],
+  "Какая из них самая маленькая?": [
+   "Which of them is the smallest?",
+   "Qual deles é o mais pequeno?"
+  ],
+  "Какая из них самая большая?": [
+   "Which of them is the biggest?",
+   "Qual deles é o maior?"
+  ],
+  "<h2>{0} {1}</h2><p>Здесь они нарисованы одинаковыми. Вспомни, какие они на самом деле!</p>": [
+   "<h2>{0} {1}</h2><p>Here they are drawn the same size. Remember what they are really like!</p>",
+   "<h2>{0} {1}</h2><p>Aqui estão desenhados do mesmo tamanho. Lembra-te de como são na realidade!</p>"
+  ],
+  "Посмотри, где мигает!": [
+   "Look where it is blinking!",
+   "Olha onde está a piscar!"
+  ],
+  "Нет, подумай ещё!": [
+   "No, think again!",
+   "Não, pensa outra vez!"
+  ],
+  "Самая маленькая тут — {0}.": [
+   "The smallest one here is {0}.",
+   "O mais pequeno aqui é {0}."
+  ],
+  "Самая большая тут — {0}.": [
+   "The biggest one here is {0}.",
+   "O maior aqui é {0}."
+  ],
+  "Теперь они нарисованы по-настоящему.": [
+   "Now they are drawn at their real sizes.",
+   "Agora estão desenhados com o tamanho verdadeiro."
+  ],
+  "Ты знаешь, какие планеты большие, а какие маленькие! Самый большой — Юпитер, самый маленький — Меркурий.": [
+   "You know which planets are big and which are small! The biggest is Jupiter, the smallest is Mercury.",
+   "Já sabes que planetas são grandes e quais são pequenos! O maior é Júpiter e o mais pequeno é Mercúrio."
+  ]
+ },
+ "() => {\n  const OLD_SECS = [['first', 'Первые люди', '🦣'], ['egypt', 'Древний Египет', '🔺'], ['china', 'Древний Китай', '🐉'], ['greece', 'Древняя Греция', '🏛️'], ['rome', 'Древний Рим', '🏟️'], ['vikings', 'Викинги', '⚓'], ['rus', 'Древняя Русь', '🛶'], ['knights', 'Рыцари и замки', '🏰']];\n  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], old: ['Давние времена', '🏺', 'var(--t-peach)'], space: ['Космос', '🚀', 'var(--t-lilac)'] };\n  const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],\n    lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],\n    porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };\n  const SUB = { old: 'пирамиды, рыцари, викинги — и что было раньше', cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', space: 'Гагарин, Луна, звёзды и телескопы' };\n  Object.entries(NEW).forEach(([k, [name, e, bg]]) => {\n    if (LEARN[k]) return;\n    const items = [];\n    (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });\n    LEARN[k] = { name, e, bg, place: (k === 'old' || k === 'space') ? null : k === 'russia' ? 'RU' : 'PT', sub: SUB[k], items };\n    if (k === 'old') LEARN.old.secs = OLD_SECS;\n  });\n  LEARN.pt.name = 'Португалия';\n  Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });\n}": {
+  "Первые люди": [
+   "The first people",
+   "Os primeiros humanos"
+  ],
+  "Древний Египет": [
+   "Ancient Egypt",
+   "O Antigo Egito"
+  ],
+  "Древний Китай": [
+   "Ancient China",
+   "A China Antiga"
+  ],
+  "Древняя Греция": [
+   "Ancient Greece",
+   "A Grécia Antiga"
+  ],
+  "Древний Рим": [
+   "Ancient Rome",
+   "A Roma Antiga"
+  ],
+  "Викинги": [
+   "Vikings",
+   "Vikings"
+  ],
+  "Древняя Русь": [
+   "Old Rus",
+   "A Antiga Rus"
+  ],
+  "Рыцари и замки": [
+   "Knights and castles",
+   "Cavaleiros e castelos"
+  ],
+  "Кашкайш": [
+   "Cascais",
+   "Cascais"
+  ],
+  "Лиссабон": [
+   "Lisbon",
+   "Lisboa"
+  ],
+  "Порту и север": [
+   "Porto and the north",
+   "Porto e o Norte"
+  ],
+  "Россия": [
+   "Russia",
+   "Rússia"
+  ],
+  "Давние времена": [
+   "Long ago",
+   "Há muito tempo"
+  ],
+  "пирамиды, рыцари, викинги — и что было раньше": [
+   "pyramids, knights, Vikings — and what came first",
+   "pirâmides, cavaleiros, vikings — e o que veio primeiro"
+  ],
+  "город у океана рядом с Лиссабоном": [
+   "a town by the ocean near Lisbon",
+   "vila junto ao oceano perto de Lisboa"
+  ],
+  "трамваи, холмы и мосты": [
+   "trams, hills and bridges",
+   "elétricos, colinas e pontes"
+  ],
+  "Порту, Дору, Брага, Гимарайнш": [
+   "Porto, the Douro, Braga, Guimarães",
+   "Porto, Douro, Braga, Guimarães"
+  ],
+  "Байкал, Камчатка, Казань и вся страна": [
+   "Baikal, Kamchatka, Kazan and the whole country",
+   "Baikal, Kamchatka, Kazan e o país inteiro"
+  ],
+  "Португалия": [
+   "Portugal",
+   "Portugal"
+  ],
+  "Космос": [
+   "Space",
+   "Espaço"
+  ],
+  "Гагарин, Луна, звёзды и телескопы": [
+   "Gagarin, the Moon, stars and telescopes",
+   "Gagarin, a Lua, as estrelas e os telescópios"
   ]
  }
 }

@@ -40,7 +40,10 @@ heavy work itself (no reading the 2 MB game, no long test runs), so its context 
 ## 4. Merge and release
 - When the reports of a batch are in:
   `git fetch origin task/<slug> && git merge --no-ff origin/task/<slug>` for each, in a sensible order.
-- Conflicts: in `game/govorilki.html` merge by hand (both sides usually add); in `i18n/fixed.json`, `say_manual.json`
+- Conflicts: in `game/govorilki.html` merge by hand (both sides usually add) — never `git checkout --ours` the whole game
+  file: it silently drops the branch's other changes (v145: the «Что было раньше?» quiz was lost that way). A conflict
+  inside the STORIES block: take either side there only, then rerun `build/gen_stories.py`; the anonymous `() => {…}`
+  group in `fixed.json` is keyed by that block's code, so after a change copy its translations to the new key; in `i18n/fixed.json`, `say_manual.json`
   keep both entries; generated files are not in git — rerun the generator. Children never commit built pages, so the site
   files do not conflict.
 - Then the skill `release` (one version for the whole batch; the README note is made of the children's notes).
