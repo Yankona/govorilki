@@ -1287,6 +1287,25 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .sq .rk{top:2px;left:3px}
 .sq .fl{bottom:1px;right:3px}
 .ch-note{margin:0;min-height:1.4em;text-align:center;font:700 17px/1.4 var(--f-body)}
+/* chess by skill: the question, the school's list, stars and move dots */
+.cs-ask,.cs-home{display:flex;flex-direction:column;gap:12px;width:100%;max-width:520px;margin:0 auto}
+.cs-ask .lead{text-align:center;font-size:22px;font-weight:800}
+.cs-lv,.cs-me{display:flex;align-items:center;gap:14px;width:100%;border:0;border-radius:24px;padding:12px 16px;background:var(--paper);color:var(--ink);box-shadow:0 6px 0 var(--line-strong);text-align:left;font:inherit;cursor:pointer}
+.cs-lv.sel{box-shadow:0 0 0 4px #FFC83A,0 6px 0 var(--line-strong)}
+.cs-t{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.cs-t b{font:800 19px/1.2 var(--f-body)}.cs-t small{font:600 14px/1.3 var(--f-body);color:var(--ink-soft)}
+.cs-mini{display:grid;grid-template-columns:repeat(3,1fr);width:66px;height:66px;flex:none;border-radius:8px;overflow:hidden;box-shadow:0 0 0 3px #6E4A2E}
+.cs-mini>i{display:grid;place-items:center;font-style:normal;font-size:15px}.cs-mini>i.l{background:#F0D9B5}.cs-mini>i.d{background:#B58863}
+.cs-mini .pc{font-size:20px}.cs-mini .pc.w{-webkit-text-stroke:.8px #1E1A2E}
+.cs-me{padding:8px 14px}.cs-me .cs-mini{width:44px;height:44px}.cs-me .cs-mini .pc{font-size:13px}.cs-me .cs-mini>i{font-size:10px}
+.cs-ch{font:800 14px var(--f-body);color:var(--ink-soft);text-decoration:underline}
+.cs-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.cs-ls{display:flex;align-items:center;gap:8px;border:0;border-radius:18px;padding:12px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);font:800 16px/1.2 var(--f-body);text-align:left;cursor:pointer}
+.cs-ls b{flex:1}.cs-e{font-size:26px;line-height:1}.cs-st{font-size:18px;color:#2FA865}
+.cs-ls.ok{background:#E3F6EA;color:#1E1A2E}.cs-ls.now{background:var(--t-yellow);color:#1E1A2E;box-shadow:0 5px 0 #D39A00;animation:pulse 1.6s ease-in-out infinite}
+.cs-go{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.cs-star{font-size:clamp(20px,6.5vw,34px);line-height:1;pointer-events:none;animation:pulse 1.4s ease-in-out infinite}
+.sq.dot::after{content:'';position:absolute;width:30%;height:30%;border-radius:50%;background:rgba(47,168,101,.55);pointer-events:none}
 .ch-note b{color:var(--tiger-deep)}
 body.quest .ch-note b{color:var(--sun)}
 #impTxt{width:100%;font:600 14px var(--f-body);padding:10px;border-radius:12px;border:3px solid var(--line-strong);background:#fff;color:#2A2346}
@@ -4006,7 +4025,7 @@ function goHome() {
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
-  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b));
+  const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
   const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
@@ -5790,7 +5809,7 @@ const SECTIONS = [
   { g: 9, h: 'Шипящие: Ш Ж Ч Щ', p: 'змейка, жук, паровоз и щёточка', only: 'r' },
   { g: 5, h: 'Арена Л', p: 'бит, аркада, босс и скороговорки', only: 'l' },
   { g: 6, h: 'Чтение', p: 'каждый день понемногу', only: 'l' },
-  { g: 8, h: 'Шахматы, математика и пианино', p: 'олимпиада, флеш-счёт, задачи на мат и партии онлайн', only: 'l' },
+  { g: 8, h: 'Шахматы, математика и пианино', p: 'олимпиада, флеш-счёт, задачи на мат и партии онлайн' },
   { g: 2, h: 'Буквы и чтение', p: 'гласные красные, согласные синие', only: 'r' },
   { g: 3, h: 'Математика', p: 'считаем, складываем, сравниваем', only: 'r' },
   { g: 7, h: 'Вместе', p: 'играем вдвоём' },
@@ -9323,7 +9342,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -9854,7 +9873,7 @@ const MODS = [
   { id: 'art', e: '🎨', n: 'Песенки, ксилофон, рисование', g: [4] },
   { id: 'duo', e: '🤝', n: 'Вместе: скороговорки с братом или сестрой', g: [7] }
 ];
-const defMods = track => track === 'l' ? ['warm', 'l', 'read', 'brain', 'learn', 'duo'] : ['warm', 'r', 'sh', 'sz', 'hear', 'kpop', 'abc', 'math', 'learn', 'art', 'duo'];
+const defMods = track => track === 'l' ? ['warm', 'l', 'read', 'brain', 'learn', 'duo'] : ['warm', 'r', 'sh', 'sz', 'hear', 'kpop', 'abc', 'math', 'brain', 'learn', 'art', 'duo'];
 const modsOf = pr => pr.settings.mods || defMods(pr.settings.track);
 const modOnG = g => { const m = MODS.find(x => x.g.includes(g)); return !m || modsOf(P).includes(m.id); };
 const gameOff = id => (P.settings.off || []).includes(id);
@@ -18301,6 +18320,195 @@ const CHESSMM = (() => {
   return { screen, cta, settingsRow, on };
 })();
 GAMES.push({ id: 'chess-mm', name: 'Соперник онлайн', sub: 'шахматы с ребёнком, который сейчас в игре', ico: () => pic('🌍'), bg: 'var(--t-blue)', go: () => CHESSMM.screen(), grp: 8, hide: () => !CHESSMM.on() });
+/* CHESS-SCHOOL-BEGIN */
+/* ---------- chess by skill, not by age (the owner: «есть дети, вне зависимости от возраста, которые вообще не умеют
+   играть»). On the first entry to chess each child says how well they play, with pictures; a beginner of any age starts
+   from zero in «Шахматная школа»: the board, the pieces, each piece with tiny tasks (the rook collects stars, the knight
+   jumps), then capture, check, escaping a check and mate in one. «Знаю, как ходят» starts the school at capture;
+   «Играю хорошо» goes straight to the puzzles and games. The choice lives on the child (P.chessLv: new | mid | pro),
+   changes in the school and in the parents' panel. P.chessSchool.done: { lessonId: 1 }. ---------- */
+const CHS = (() => {
+  const LV = [
+    { id: 'new', n: 'Совсем новичок', s: 'начнём с самого начала: доска и фигуры', b: '.*..P....' },
+    { id: 'mid', n: 'Знаю, как ходят фигуры', s: 'дальше: взятие, шах и мат', b: '.*.*...N.' },
+    { id: 'pro', n: 'Играю хорошо', s: 'сразу задачи на мат и партии', b: 'k.K.Q....' }
+  ];
+  const E8 = '8/8/8/8/8/8/8/8', START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+  // every task was checked by a script: the stars can be collected, the captures made, the check, escape and mate exist
+  const LESSONS = [
+    { id: 'board', e: '🏁', n: 'Доска', intro: 'Шахматная доска — это 64 клетки, светлые и тёмные. У каждой клетки есть имя: буква снизу и цифра сбоку.', tasks: [
+      { k: 'tap', fen: E8, st: ['a1', 'h1', 'a8', 'h8'], hid: 1, t: 'Нажми на все четыре угла доски.' },
+      { k: 'tap', fen: E8, st: ['e4'], hid: 1, t: 'Найди клетку e4: буква e снизу, цифра 4 сбоку.' },
+      { k: 'tap', fen: E8, st: ['c6'], hid: 1, t: 'А теперь найди клетку c6.' }] },
+    { id: 'army', e: '♟️', n: 'Фигуры', intro: 'У каждого игрока 16 фигур: 8 пешек, 2 ладьи, 2 коня, 2 слона, ферзь и король. Белые всегда ходят первыми.', tasks: [
+      { k: 'tap', fen: START, st: ['e1'], hid: 1, t: 'Найди белого короля: у него на короне крестик.' },
+      { k: 'tap', fen: START, st: ['d1'], hid: 1, t: 'Найди белого ферзя: он стоит рядом с королём, у него корона с зубчиками.' },
+      { k: 'tap', fen: START, st: ['b1', 'g1'], hid: 1, t: 'Найди двух белых коней: они похожи на лошадку.' },
+      { k: 'tap', fen: START, st: ['a1', 'h1'], hid: 1, t: 'Найди белые ладьи: они похожи на башенки и стоят в углах.' }] },
+    { id: 'rook', e: '🏰', n: 'Ладья', intro: 'Ладья ходит по прямой: вперёд, назад, вправо и влево — на сколько угодно клеток.', tasks: [
+      { k: 'go', fen: '8/8/8/8/3R4/8/8/8', st: ['d8'], t: 'Ладья собирает звёздочки! Нажми на ладью, а потом на звёздочку.' },
+      { k: 'go', fen: '8/8/8/8/8/8/8/R7', st: ['a8', 'h8', 'h1'], t: 'Собери ладьёй три звёздочки.' },
+      { k: 'go', fen: '8/8/8/8/8/8/2R5/8', st: ['c7', 'f7', 'f2'], t: 'Ещё три звёздочки. Ладья ходит только по прямой!' }] },
+    { id: 'bishop', e: '⛪', n: 'Слон', intro: 'Слон ходит наискосок, по диагонали, на сколько угодно клеток. Он всегда остаётся на клетках своего цвета.', tasks: [
+      { k: 'go', fen: '8/8/8/8/8/8/8/2B5', st: ['e3', 'g5'], t: 'Слон собирает звёздочки. Ходи наискосок!' },
+      { k: 'go', fen: '8/8/8/8/8/8/8/5B2', st: ['b5', 'e8'], t: 'Собери слоном две звёздочки.' },
+      { k: 'go', fen: '8/8/8/8/8/8/8/2B5', st: ['a3', 'f8', 'h6'], t: 'Все звёздочки на тёмных клетках — как и слон.' }] },
+    { id: 'queen', e: '👑', n: 'Ферзь', intro: 'Ферзь — самая сильная фигура: он ходит и как ладья, и как слон.', tasks: [
+      { k: 'go', fen: '8/8/8/8/8/8/8/3Q4', st: ['d7', 'h3'], t: 'Ферзь собирает звёздочки: по прямой и наискосок.' },
+      { k: 'go', fen: '8/8/8/8/8/8/8/Q7', st: ['h8', 'h1', 'a8'], t: 'Собери ферзём три звёздочки.' },
+      { k: 'go', fen: '8/8/8/8/3Q4/8/8/8', st: ['a7', 'g7', 'g1'], t: 'Ещё три звёздочки для ферзя.' }] },
+    { id: 'king', e: '🤴', n: 'Король', intro: 'Король — самая важная фигура. Он ходит в любую сторону, но только на одну клетку.', tasks: [
+      { k: 'go', fen: '8/8/8/8/8/8/8/4K3', st: ['e2', 'f3'], t: 'Король шагает на одну клетку. Собери звёздочки!' },
+      { k: 'go', fen: '8/8/8/8/8/8/8/K7', st: ['c3', 'a3'], t: 'Доведи короля до звёздочек — шаг за шагом.' }] },
+    { id: 'knight', e: '🐴', n: 'Конь', intro: 'Конь ходит буквой Г: две клетки прямо и одна вбок. Конь — единственный, кто умеет перепрыгивать через фигуры.', tasks: [
+      { k: 'go', fen: '8/8/8/8/8/8/8/6N1', st: ['f3'], t: 'Конь прыгает буквой Г. Допрыгни до звёздочки!' },
+      { k: 'go', fen: '8/8/8/8/8/8/8/1N6', st: ['c3', 'd5', 'e7'], t: 'Собери конём три звёздочки.' },
+      { k: 'go', fen: '8/8/8/8/8/8/5PPP/6N1', st: ['f3', 'e5'], t: 'Конь перепрыгивает через пешки! Собери две звёздочки.' }] },
+    { id: 'pawn', e: '♙', n: 'Пешка', intro: 'Пешка ходит только вперёд, на одну клетку. С первого хода она может шагнуть на две. А бьёт пешка наискосок.', tasks: [
+      { k: 'go', fen: '8/8/8/8/8/8/4P3/8', st: ['e4', 'e6'], t: 'С первого хода пешка может шагнуть на две клетки. Собери звёздочки!' },
+      { k: 'eat', fen: '8/8/8/3p4/4P3/8/8/8', t: 'Чёрная пешка стоит наискосок: съешь её!' },
+      { k: 'go', fen: '8/6P1/8/8/8/8/8/8', st: ['g8'], t: 'Дойди пешкой до последнего ряда — и она превратится в ферзя!' }] },
+    { id: 'capture', e: '⚔️', n: 'Взятие', intro: 'Фигуры бьют так же, как ходят: встают на клетку чужой фигуры и забирают её.', tasks: [
+      { k: 'eat', fen: '8/8/p4p2/8/8/8/8/R7', t: 'Ладья съедает чёрные пешки. Съешь обе!' },
+      { k: 'eat', fen: '3r4/8/8/6n1/8/4p3/8/2B5', t: 'Слон съедает чёрные фигуры одну за другой.' },
+      { k: 'eat', fen: '8/8/5p2/8/4p3/2p5/8/1N6', t: 'Конь съедает три пешки. Прыгай буквой Г!' }] },
+    { id: 'check', e: '⚡', n: 'Шах', intro: 'Шах — это когда фигура нападает на короля. Королю надо сразу спасаться.', tasks: [
+      { k: 'check', fen: '4k3/8/8/8/8/8/8/R7', t: 'Объяви шах чёрному королю ладьёй.' },
+      { k: 'check', fen: '4k3/8/8/8/8/8/8/5B2', t: 'Объяви шах слоном.' },
+      { k: 'check', fen: '4k3/8/8/8/4N3/8/8/8', t: 'Объяви шах конём.' }] },
+    { id: 'escape', e: '🏃', n: 'Спасаем короля', intro: 'Если твоему королю шах, уведи его на клетку, где на него никто не нападает.', tasks: [
+      { k: 'escape', fen: '4r3/8/8/8/8/8/8/4K3', t: 'Белому королю шах от ладьи. Уведи короля!' },
+      { k: 'escape', fen: '8/8/8/8/1b6/8/8/4K3', t: 'Шах от слона. Куда спрятаться королю?' },
+      { k: 'escape', fen: '8/8/8/8/7q/8/8/4K3', t: 'Шах от ферзя. Спаси короля!' }] },
+    { id: 'mate', e: '🏆', n: 'Мат в один ход', intro: 'Мат — это шах, от которого нельзя спастись. Кто поставил мат, тот победил!', tasks: [
+      { k: 'mate', fen: '6k1/8/6K1/8/8/8/8/R7', t: 'Поставь мат ладьёй в один ход.' },
+      { k: 'mate', fen: '4k3/Q7/4K3/8/8/8/8/8', t: 'Поставь мат ферзём. Король поможет!' },
+      { k: 'mate', fen: '6k1/5ppp/8/8/8/8/8/4R1K1', t: 'Чёрного короля заперли свои пешки. Поставь мат!' }] }
+  ];
+  const MID = LESSONS.findIndex(x => x.id === 'capture');
+  const WRONG = { r: 'Ладья ходит только по прямой и не перепрыгивает.', b: 'Слон ходит только наискосок и не перепрыгивает.', q: 'Ферзь ходит по прямой и наискосок, но не перепрыгивает.', k: 'Король шагает только на одну клетку.', n: 'Конь ходит буквой Г: две клетки прямо и одна вбок.', p: 'Пешка ходит вперёд, а бьёт наискосок.' };
+  // a soft «not there»: a wrong square is how a beginner learns, so it does not lock the screen like a guessed answer
+  const oops = () => tone(300, .18, 'sine', .1, 0, 210);
+  const lv = () => LV.find(x => x.id === P.chessLv);
+  const done = () => (P.chessSchool = P.chessSchool || { done: {} }).done;
+  const nextIdx = () => { const d = done(), from = P.chessLv === 'mid' ? MID : 0; const i = LESSONS.findIndex((x, j) => j >= from && !d[x.id]); return i; };
+  const mini = s => `<span class="cs-mini" aria-hidden="true">${[...s].map((c, i) => `<i class="${(Math.floor(i / 3) + i % 3) % 2 ? 'd' : 'l'}">${c === '*' ? '⭐' : c === '.' ? '' : `<span class="pc ${isW(c) ? 'w' : 'b'}">${GLYPH[c.toLowerCase()]}︎</span>`}</i>`).join('')}</span>`;
+  // the question on the first entry; then the child goes on: a beginner to the school, a strong player where they tapped
+  function ask(then, opt = {}) {
+    newScreen();
+    shell('Шахматы', `<div class="cs-ask">
+      <p class="lead">Ты уже умеешь играть в шахматы?</p>
+      ${LV.map(x => `<button class="cs-lv${P.chessLv === x.id ? ' sel' : ''}" data-lv="${x.id}">${mini(x.b)}<span class="cs-t"><b>${x.n}</b><small>${x.s}</small></span></button>`).join('')}
+    </div>`, { back: opt.back || goHome });
+    talk('Ты уже умеешь играть в шахматы? Выбери: совсем новичок, знаю, как ходят фигуры, или играю хорошо.');
+    $('.cs-ask').onclick = e => {
+      const b = e.target.closest('[data-lv]'); if (!b) return;
+      sfx.good(); P.chessLv = b.dataset.lv; save();
+      if (P.chessLv === 'pro') { P.chessAI = P.chessAI || { top: 1, wins: {} }; if ((P.chessAI.top || 1) < 3) P.chessAI.top = 3; save(); }
+      if (opt.change) return school();
+      if (P.chessLv === 'pro') return (then || (() => screenChess(1)))();
+      school();
+    };
+  }
+  const gate = go => () => P.chessLv ? go() : ask(go);
+  function school() {
+    newScreen();
+    const d = done(), nx = nextIdx(), L = lv();
+    shell('Шахматная школа', `<div class="cs-home">
+      <button class="cs-me" id="csMe">${L ? mini(L.b) : ''}<span class="cs-t"><small>Мой уровень</small><b>${L ? L.n : 'не выбран'}</b></span><span class="cs-ch">изменить</span></button>
+      ${P.chessLv === 'pro' ? `<div class="cs-go"><button class="big" id="csPz">🧩 Задачи на мат</button><button class="big ghost" id="csAI">🤖 Играть с компьютером</button></div>` : ''}
+      <div class="cs-list">${LESSONS.map((x, i) => `<button class="cs-ls${d[x.id] ? ' ok' : ''}${i === nx ? ' now' : ''}" data-i="${i}"><span class="cs-e">${x.e}</span><b>${x.n}</b><span class="cs-st">${d[x.id] ? '✓' : i === nx ? '▶' : ''}</span></button>`).join('')}</div>
+      ${P.chessLv !== 'pro' ? `<div class="cs-go"><button class="big ghost" id="csPz">🧩 Задачи на мат</button><button class="big ghost" id="csAI">🤖 Играть с компьютером</button></div>` : ''}
+    </div>`);
+    $('#csMe').onclick = () => { sfx.pop(); ask(null, { change: 1, back: school }); };
+    $('#csPz').onclick = () => { sfx.pop(); screenChess(1); };
+    $('#csAI').onclick = () => { sfx.pop(); screenChessAI(); };
+    $('.cs-list').onclick = e => { const b = e.target.closest('[data-i]'); if (b) { sfx.pop(); lesson(+b.dataset.i); } };
+    talk(nx < 0 ? 'Школа пройдена! Теперь задачи на мат и партии с компьютером.' : P.chessLv === 'pro' ? 'Задачи на мат, партия с компьютером или урок — выбирай!' : `Следующий урок: ${LESSONS[nx].n}. Нажми на него!`);
+  }
+  function lesson(li, k = 0) {
+    const t = newScreen(), Ls = LESSONS[li], z = Ls.tasks[k];
+    shell(Ls.n, `<div class="chess">
+      <p class="ch-task" id="chT"></p>
+      <div class="ch-wrap"><div class="ch-board" id="chB"></div></div>
+      <p class="ch-note" id="chN"></p>
+    </div>`, { back: school });
+    const B = $('#chB'), note = s => { $('#chN').textContent = s; };
+    let pos = fenBoard(z.fen), sel = -1, busy = false;
+    const stars = new Set((z.st || []).map(sqIdx)), got = new Set();
+    const st = () => ({ b: pos, w: true, c: '', ep: -1 });
+    const legal = ['escape', 'mate'].includes(z.k);
+    const moves = a => (legal ? chLegal(st()) : chPseudo(st())).filter(m => m.a === a && (!m.pr || m.pr === 'q'));
+    const anyMoves = a => chPseudo(st()).filter(m => m.a === a);
+    function draw(last = []) {
+      const dots = sel >= 0 ? moves(sel).map(m => m.t) : [];
+      B.innerHTML = pos.map((p, i) => {
+        const r = i >> 3, f = i & 7, light = (r + f) % 2 === 0, star = stars.has(i) && !got.has(i) && !z.hid, hit = z.hid && got.has(i);
+        const lab = (f === 0 ? `<em class="rk">${8 - r}</em>` : '') + (r === 7 ? `<em class="fl">${'abcdefgh'[f]}</em>` : '');
+        return `<button class="sq ${light ? 'l' : 'd'}${i === sel ? ' sel' : ''}${last.includes(i) ? ' last' : ''}${dots.includes(i) ? ' dot' : ''}${hit ? ' hint' : ''}" data-i="${i}" aria-label="${sqName(i)}">${p ? `<span class="pc ${isW(p) ? 'w' : 'b'}">${GLYPH[p.toLowerCase()]}︎</span>` : star ? '<span class="cs-star">⭐</span>' : ''}${lab}</button>`;
+      }).join('');
+    }
+    $('#chT').textContent = `${k + 1}/${Ls.tasks.length} · ${z.t}`;
+    draw();
+    talk(`${k === 0 ? Ls.intro + ' ' : ''}${z.t}`);
+    async function win() {
+      busy = true; sfx.good();
+      if (k + 1 < Ls.tasks.length) { await talk(pickOne(['Отлично!', 'Здорово!', 'Получилось!', 'Молодец!'])); if (t !== tok) return; later(() => lesson(li, k + 1), 300); return; }
+      done()[Ls.id] = 1; save(); confetti();
+      const nx = nextIdx();
+      finish({ key: 'chess-school', line: `Урок «${Ls.n}» пройден!${nx >= 0 ? ` Дальше: ${LESSONS[nx].n}.` : ' Вся школа пройдена — теперь задачи на мат!'}`, again: () => lesson(li), next: nx >= 0 ? () => lesson(nx) : () => screenChess(1), menu: school });
+    }
+    B.onclick = e => {
+      const c = e.target.closest('.sq'); if (!c || busy) return;
+      const i = +c.dataset.i, p = pos[i];
+      if (z.k === 'tap') {
+        if (stars.has(i) && !got.has(i)) { got.add(i); sfx.star(); draw(); if (got.size === stars.size) win(); else note(`${sqName(i)} — да! Ещё ${stars.size - got.size}.`); }
+        else if (!got.has(i)) { oops(); note(`Это клетка ${sqName(i)}${p ? ` — тут ${PIECE_RU[p.toUpperCase()]}` : ''}. Попробуй ещё!`); }
+        return;
+      }
+      if (p && isW(p)) { sel = i; sfx.tick(); note(''); draw(); return; }
+      if (sel < 0) { note('Сначала нажми на белую фигуру.'); return; }
+      const m = moves(sel).find(x => x.t === i);
+      if (!m) {
+        oops();
+        note(legal && anyMoves(sel).some(x => x.t === i) ? 'Там короля всё ещё бьют. Выбери другую клетку!' : WRONG[pos[sel].toLowerCase()] || 'Так нельзя.');
+        return;
+      }
+      const before = pos.slice(), was = pos[m.t], promo = pos[m.a] === 'P' && (m.t >> 3) === 0;
+      pos = chApply(st(), m).b; sel = -1;
+      const last = [m.a, m.t];
+      if (z.k === 'go' || z.k === 'eat') {
+        if (stars.has(m.t) && !got.has(m.t)) { got.add(m.t); sfx.star(); }
+        else if (was) sfx.pop(); else sfx.tick();
+        draw(last);
+        if (promo) note('Пешка стала ферзём!');
+        const left = z.k === 'go' ? stars.size - got.size : pos.filter(q => q && !isW(q)).length;
+        if (!left) win(); else if (!promo) note(z.k === 'go' ? `Ещё звёздочек: ${left}.` : `Осталось съесть: ${left}.`);
+        return;
+      }
+      const after = { b: pos, w: false, c: '', ep: -1 };
+      const ok = z.k === 'check' ? chInCheck(after) : z.k === 'escape' ? true : chStatus(after).mate;
+      draw(last);
+      if (ok) { note(z.k === 'check' ? 'Шах!' : z.k === 'mate' ? 'Мат!' : 'Король спасён!'); win(); return; }
+      oops(); busy = true;
+      note(z.k === 'check' ? 'Это не шах: фигура не нападает на короля.' : chInCheck(after) ? 'Это шах, но не мат: король может убежать.' : 'Это не мат. Попробуй ещё!');
+      later(() => { pos = before; busy = false; draw(); }, 1100);
+    };
+  }
+  // the grown-ups' panel: the chess level of this child, right under the chess switch
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="csLvIn">♟️ Шахматы: уровень <select id="csLvIn"><option value="">спросить при входе</option>${LV.map(x => `<option value="${x.id}" ${P.chessLv === x.id ? 'selected' : ''}>${x.n}</option>`).join('')}</select></label>`);
+    $('#csLvIn').onchange = e => { if (e.target.value) P.chessLv = e.target.value; else delete P.chessLv; save(); sfx.tick(); };
+  }
+  return { gate, ask, school, lesson, settingsRow, LESSONS, MID, nextIdx };
+})();
+GAMES.splice(GAMES.findIndex(x => x.id === 'chess'), 0, { id: 'chess-school', name: 'Шахматная школа', sub: () => P.chessLv === 'pro' ? 'повторить правила' : P.chessLv ? 'с нуля: доска, фигуры, шах и мат' : 'с самого начала или сразу задачи', ico: () => pic('🏫'), bg: 'var(--t-green)', go: () => P.chessLv ? CHS.school() : CHS.ask(), grp: 8,
+  prog: () => { const d = (P.chessSchool && P.chessSchool.done) || {}, n = CHS.LESSONS.filter(x => d[x.id]).length; return n ? `уроков: ${n} из ${CHS.LESSONS.length}` : ''; },
+  ord: () => P.chessLv === 'pro' ? 2 : 0 });
+// the first entry to any chess game asks the level once; the puzzles and the games come first for a strong player
+['chess', 'chess-ai', 'chess-online', 'chess-mm'].forEach(id => { const g = GAMES.find(x => x.id === id); if (!g) return; g.go = CHS.gate(g.go); if (id === 'chess' || id === 'chess-ai') g.ord = () => P.chessLv === 'pro' ? 0 : 1; });
+/* CHESS-SCHOOL-END */
 /* MM-END */
 /* SETUI-BEGIN */
 /* ---------- «Для взрослых» as a short menu, like the phone's own settings: the family's faces on top, then one row per
