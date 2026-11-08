@@ -969,8 +969,8 @@ b.r{color:var(--berry)}
 .bd-o.on .bd-bi{animation:bdBulge 2.4s ease-in-out infinite}
 @keyframes bdBulge{0%,15%,85%,100%{transform:scale(1)}40%,60%{transform:scale(1.35,1.05)}}
 .bd svg[data-on=muscles] .bd-fa{transform-box:view-box;animation:bdFlex 2.4s ease-in-out infinite}
-.bd svg[data-on=muscles] .bd-fa-l{transform-origin:76px 256px;--a:120deg}
-.bd svg[data-on=muscles] .bd-fa-r{transform-origin:224px 256px;--a:-120deg}
+.bd svg[data-on=muscles] .bd-fa-l{transform-origin:78px 252px;--a:120deg}
+.bd svg[data-on=muscles] .bd-fa-r{transform-origin:222px 252px;--a:-120deg}
 @keyframes bdFlex{0%,15%,85%,100%{transform:rotate(0)}40%,60%{transform:rotate(var(--a))}}
 .bd svg[data-on=bones] .bd-rib{opacity:1}
 .bd svg[data-on=stomach] .bd-food,.bd svg[data-on=kidneys] .bd-drop,.bd svg[data-on=brain] .bd-spark,.bd svg[data-on=lungs] .bd-air,.bd svg[data-on=heart] .bd-blood{opacity:1}
@@ -8637,7 +8637,7 @@ GAMES.push(
     prog: () => { const n = Object.keys(gamesAll()).length; return n ? `games: ${n}` : ''; } },
   ...Object.keys(LEARN).map(k => ({ id: 'learn-' + k, place: LEARN[k].place ? k : null, name: LEARN[k].name, sub: LEARN_SUB[k] || LEARN[k].sub || '', ico: () => pic(LEARN[k].e), bg: LEARN[k].bg, go: () => screenLearn(k), grp: 10, prog: () => k === 'old' && !LEARN[k].items.length ? '' : learnProg(k) }))
 );
-SECTIONS.splice(SECTIONS.findIndex(x => x.g === 7), 0, { g: 10, h: "Discover", p: () => Q() ? "read aloud stories about cities, music, paintings and long ago" : "stories about cities, music, paintings and long ago" });
+SECTIONS.splice(SECTIONS.findIndex(x => x.g === 7), 0, { g: 10, h: "Discover", p: () => Q() ? "read stories aloud about cities and countries, space, nature and long ago" : "stories about cities and countries, space, nature and long ago" });
 /* ---------- «Л-трасса»: Sava's own motorbike run along a seaside road through traffic.
    Road signs carry words with Л: reading one aloud fires the nitro. Stars unlock bikes in the garage. ---------- */
 const BIKES = [
@@ -9143,19 +9143,21 @@ FOOT_IDS.forEach((id, i) => {
 });
 /*FOOT-END*/
 /* PETS-BEGIN: two family pets the owner asked for (names public with the owner's consent; drawings only, no photos) */
-// Лилу: a chocolate (havana) Oriental cat — huge bat-like ears set low and wide, a long wedge head, sleepy amber-olive eyes
-const LILU_EYE = (x, s) => `<path d="M${x - 12 * s} 65Q${x - 2 * s} 49 ${x + 11 * s} 57Q${x + 2 * s} 72 ${x - 12 * s} 65Z" fill="#C9A43A"/><path d="M${x - 8 * s} 63Q${x} 64 ${x + 7 * s} 60" stroke="#8FA13A" stroke-width="3" fill="none" opacity=".5"/><ellipse cx="${x - .5 * s}" cy="61.5" rx="2.4" ry="6" fill="#2A1408"/><circle cx="${x + 2.5 * s}" cy="58" r="1.6" fill="#fff"/><path d="M${x - 12 * s} 65Q${x - 2 * s} 51.5 ${x + 11 * s} 57" stroke="#2A1408" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+// Лилу: a chocolate (havana) Oriental cat, soft and round like the other animals — very big wide ears with rounded tips,
+// big round golden-amber eyes, a slightly narrow lighter muzzle
+const LILU_EYE = x => `<ellipse cx="${x}" cy="62" rx="7" ry="8.5" fill="#D9A93A"/><ellipse cx="${x}" cy="63" rx="4.6" ry="6.6" fill="#2A1408"/><circle cx="${x + 2.2}" cy="58.6" r="2.4" fill="#fff"/>`;
 // Омик: a chocolate chihuahua girl — huge upright ears (one turned a little), big glossy amber eyes, tan brows, white bib
 const OMIK_EYE = (x) => `<circle cx="${x}" cy="62" r="11" fill="#C8955A"/><circle cx="${x}" cy="62" r="9.5" fill="#7A3E14"/><circle cx="${x}" cy="62.5" r="5.5" fill="#2A1408"/><circle cx="${x + 3.5}" cy="58" r="3" fill="#fff"/><circle cx="${x - 3}" cy="66" r="1.4" fill="#fff" opacity=".7"/>`;
 const PETS = {
-  lilu: { name: "Leeloo", kind: "cat", who: "Leeloo the cat", with: "Leeloo the cat", hello: "Purr! I have the biggest ears!", pitch: 1.2, pm: 99,
-    puff: { c: '#7A4428', x: [36, 84], y: 90 }, smile: '<path d="M60 95v3M54 99q3 3 6 0 3 3 6 0" stroke="#2A1408" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
-    art: `<path d="M42 50 2 4 26 74z" fill="#6B3A22"/><path d="M78 50l40-46-24 70z" fill="#6B3A22"/><path d="M36 50 10 16l16 46z" fill="#C98A7A"/><path d="M84 50l26-34-16 46z" fill="#C98A7A"/>
-      <path d="M60 22Q90 22 92 52Q93 78 72 100Q66 108 60 108T48 100Q27 78 28 52Q30 22 60 22Z" fill="#6B3A22"/>
-      <path d="M60 64Q72 66 74 84Q72 102 60 106Q48 102 46 84Q48 66 60 64Z" fill="#84482A"/>
-      <g class="lv-eyes">${LILU_EYE(45, 1)}${LILU_EYE(75, -1)}</g>
-      <path d="M55 88h10l-5 5z" fill="#3E2014"/>
-      <path d="M44 92l-18-2M44 96l-17 3M76 92l18-2M76 96l17 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
+  lilu: { name: "Leeloo", kind: "cat", who: "Leeloo the cat", with: "Leeloo the cat", hello: "Purr! I have the biggest ears!", pitch: 1.2, pm: 92,
+    puff: { c: '#7A4428', x: [24, 96], y: 86 }, smile: '<path d="M60 86v3M53 90q3.5 4 7 0 3.5 4 7 0" stroke="#2A1408" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+    art: `<path d="M36 46Q8 44 6 12Q6 4 14 7Q40 18 54 34z" fill="#7A4428"/><path d="M84 46Q112 44 114 12Q114 4 106 7Q80 18 66 34z" fill="#7A4428"/>
+      <path d="M34 40Q16 36 14 16Q22 18 42 30z" fill="#E6A9A0"/><path d="M86 40Q104 36 106 16Q98 18 78 30z" fill="#E6A9A0"/>
+      <ellipse cx="60" cy="68" rx="42" ry="38" fill="#7A4428"/>
+      <ellipse cx="50" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="70" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="60" cy="97" rx="9" ry="6" fill="#9A5C3A"/>
+      <g class="lv-eyes">${LILU_EYE(44)}${LILU_EYE(76)}</g>${BLUSH(80, 28)}
+      <path d="M55.5 80h9q0 4-4.5 5.5Q55.5 84 55.5 80z" fill="#C97A78"/>
+      <path d="M38 86l-16-2M38 91l-15 3M82 86l16-2M82 91l15 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
   omik: { name: "Omik", kind: "chihuahua", who: "Omik the chihuahua", with: "Omik the chihuahua", hello: "Woof! I'm small, but very brave!", pitch: 1.35, pm: 96,
     puff: { c: '#5A3420', x: [32, 88], y: 86 }, smile: '<path d="M53 94q7 5 14 0" stroke="#1E100A" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
     art: `<path d="M38 44 8 2 22 60z" fill="#4A2A1A"/><path d="M33 42 14 13l11 38z" fill="#E3B19A"/>
@@ -11610,71 +11612,79 @@ GAMES.push({ id: 'phys-lab', name: "Science on the playground", sub: "experiment
 const BODY = (() => {
   // k, colour, name, what it does, short fact (after a find), the question, a hint where it is, «this is …»
   const O = [
-    { k: 'brain', c: '#F7B6C8', n: "Brain", t: "This is the brain. It lives in your head and is the boss of the whole body: it thinks, remembers, sees with your eyes and hears with your ears. Even at night, when you're asleep, your brain keeps working.", s: "The brain thinks and tells the body what to do.", q: "Show me the brain.", h: "It's in the head.", is: "That's the brain." },
-    { k: 'heart', c: '#E5484D', n: "Heart", t: "This is the heart. It's about as big as your fist, and it pumps blood all the time: ba-dum, ba-dum. The blood runs all round your body and brings it air and food.", s: "The heart pumps blood.", q: "Show me the heart.", h: "It's in the chest, between the lungs.", is: "That's the heart." },
-    { k: 'lungs', c: '#F7A8B8', n: "Lungs", t: "These are the lungs. When you breathe in, they fill up like two balloons and take oxygen from the air. When you breathe out, they go down again.", s: "We breathe with our lungs.", q: "Show me the lungs.", h: "There are two of them, in the chest.", is: "Those are the lungs." },
-    { k: 'stomach', c: '#F5B48A', n: "Stomach", t: "This is the stomach, a little bag for food. Food comes down to it from your mouth through a long tube. The stomach squeezes and mixes the food until it becomes a soft mush.", s: "The stomach digests food.", q: "Show me the stomach.", h: "It's high up in the tummy. Food drops into it through a tube.", is: "That's the stomach." },
-    { k: 'liver', c: '#B0563F', n: "Liver", t: "This is the liver, the biggest organ inside the body. It's on the right, under the lungs. The liver cleans everything bad out of the blood and helps to digest food.", s: "The liver cleans the blood.", q: "Show me the liver.", h: "It's big, under the lungs, next to the stomach.", is: "That's the liver." },
-    { k: 'kidneys', c: '#B4514C', n: "Kidneys", t: "These are the kidneys. There are two of them, they look like big beans, and they hide at the back, near your waist. The kidneys clean the blood and send the extra water to the bladder. That is why we go to the toilet.", s: "The kidneys clean the blood.", q: "Show me the kidneys.", h: "There are two, one on each side, near the waist.", is: "Those are the kidneys." },
-    { k: 'intest', c: '#F6C29A', n: "Intestines", t: "These are the intestines, a long, twisty tube in your tummy. If you stretched them out, they would be several times longer than you are tall! Here the body takes all the good things out of food.", s: "The intestines take all the good things out of food.", q: "Show me the intestines.", h: "They're low down in the tummy, all in loops.", is: "Those are the intestines." },
+    { k: 'brain', c: '#FFC4D8', n: "Brain", t: "This is the brain. It lives in your head and is the boss of the whole body: it thinks, remembers, sees with your eyes and hears with your ears. Even at night, when you're asleep, your brain keeps working.", s: "The brain thinks and tells the body what to do.", q: "Show me the brain.", h: "It's in the head.", is: "That's the brain." },
+    { k: 'heart', c: '#FF5A76', n: "Heart", t: "This is the heart. It's about as big as your fist, and it pumps blood all the time: ba-dum, ba-dum. The blood runs all round your body and brings it air and food.", s: "The heart pumps blood.", q: "Show me the heart.", h: "It's in the chest, between the lungs.", is: "That's the heart." },
+    { k: 'lungs', c: '#FFB3C7', n: "Lungs", t: "These are the lungs. When you breathe in, they fill up like two balloons and take oxygen from the air. When you breathe out, they go down again.", s: "We breathe with our lungs.", q: "Show me the lungs.", h: "There are two of them, in the chest.", is: "Those are the lungs." },
+    { k: 'stomach', c: '#FFC48C', n: "Stomach", t: "This is the stomach, a little bag for food. Food comes down to it from your mouth through a long tube. The stomach squeezes and mixes the food until it becomes a soft mush.", s: "The stomach digests food.", q: "Show me the stomach.", h: "It's high up in the tummy. Food drops into it through a tube.", is: "That's the stomach." },
+    { k: 'liver', c: '#D07A5E', n: "Liver", t: "This is the liver, the biggest organ inside the body. It's on the right, under the lungs. The liver cleans everything bad out of the blood and helps to digest food.", s: "The liver cleans the blood.", q: "Show me the liver.", h: "It's big, under the lungs, next to the stomach.", is: "That's the liver." },
+    { k: 'kidneys', c: '#E07B72', n: "Kidneys", t: "These are the kidneys. There are two of them, they look like big beans, and they hide at the back, near your waist. The kidneys clean the blood and send the extra water to the bladder. That is why we go to the toilet.", s: "The kidneys clean the blood.", q: "Show me the kidneys.", h: "There are two, one on each side, near the waist.", is: "Those are the kidneys." },
+    { k: 'intest', c: '#FFD2A8', n: "Intestines", t: "These are the intestines, a long, twisty tube in your tummy. If you stretched them out, they would be several times longer than you are tall! Here the body takes all the good things out of food.", s: "The intestines take all the good things out of food.", q: "Show me the intestines.", h: "They're low down in the tummy, all in loops.", is: "Those are the intestines." },
     { k: 'bones', c: '#F3EBD8', n: "Skeleton", t: "This is the skeleton. Bones are strong and hold the body up, like a frame holds up a house. The skull protects the brain, and the ribs protect the heart and lungs.", s: "Bones hold the body up.", q: "Show me the bones.", h: "Look at the legs: you can see the bones there.", is: "Those are the bones." },
-    { k: 'muscles', c: '#E8807A', n: "Muscles", t: "These are the muscles. They pull on the bones, and that is how we move: we run, jump and even smile. Bend your arm and feel it: the muscle has gone hard!", s: "Muscles move the body.", q: "Show me the muscles.", h: "Look at the arms.", is: "Those are the muscles." }
+    { k: 'muscles', c: '#FF8F86', n: "Muscles", t: "These are the muscles. They pull on the bones, and that is how we move: we run, jump and even smile. Bend your arm and feel it: the muscle has gone hard!", s: "Muscles move the body.", q: "Show me the muscles.", h: "Look at the arms.", is: "Those are the muscles." }
   ];
   const by = k => O.find(o => o.k === k);
   const SK = '#FFD9B8', SL = '#E8B48F';
   const limb = (d, w) => `<path d="${d}" stroke="${SL}" stroke-width="${w + 5}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${SK}" stroke-width="${w}" stroke-linecap="round" fill="none"/>`;
   const hit = (d, w) => `<path d="${d}" stroke="#000" stroke-opacity="0" stroke-width="${w}" stroke-linecap="round" fill="none"/>`;
   const bone = d => `<path d="${d}" stroke="#CFC3A6" stroke-width="10" stroke-linecap="round" fill="none"/><path class="bd-s" d="${d}" stroke="#FFFDF5" stroke-width="6.5" stroke-linecap="round" fill="none"/>`;
+  // a tiny friendly face for an organ (eyes with a highlight and a smile)
+  const face = (x, y, s = 1) => `<g pointer-events="none"><circle cx="${x - 4.5 * s}" cy="${y}" r="${2.2 * s}" fill="#4A2A3A"/><circle cx="${x + 4.5 * s}" cy="${y}" r="${2.2 * s}" fill="#4A2A3A"/>
+    <circle cx="${x - 3.8 * s}" cy="${y - .8 * s}" r="${.8 * s}" fill="#fff"/><circle cx="${x + 5.2 * s}" cy="${y - .8 * s}" r="${.8 * s}" fill="#fff"/>
+    <path d="M${x - 3 * s},${y + 3.5 * s} Q${x},${y + 6.5 * s} ${x + 3 * s},${y + 3.5 * s}" stroke="#4A2A3A" stroke-width="${1.4 * s}" fill="none" stroke-linecap="round"/></g>`;
   const svg = () => `<svg viewBox="0 0 300 560" id="bdSvg" role="img" aria-label="${esc("The human body")}">
     <g class="bd-body">
-      ${limb('M100,166 L76,256', 29)}<g class="bd-fa bd-fa-l">${limb('M76,256 L66,338', 26)}<circle cx="66" cy="346" r="14" fill="${SK}" stroke="${SL}" stroke-width="2.5"/></g>
-      ${limb('M200,166 L224,256', 29)}<g class="bd-fa bd-fa-r">${limb('M224,256 L234,338', 26)}<circle cx="234" cy="346" r="14" fill="${SK}" stroke="${SL}" stroke-width="2.5"/></g>
-      ${limb('M126,384 L122,532', 39)}${limb('M174,384 L178,532', 39)}
-      <ellipse cx="114" cy="544" rx="24" ry="11" fill="#FF8A5B" stroke="#D9673C" stroke-width="2.5"/><ellipse cx="186" cy="544" rx="24" ry="11" fill="#FF8A5B" stroke="#D9673C" stroke-width="2.5"/>
-      <rect x="137" y="128" width="26" height="30" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
-      <path d="M92,172 Q92,150 116,150 L184,150 Q208,150 208,172 L200,370 Q198,392 175,392 L125,392 Q102,392 100,370 Z" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
-      <path d="M98,378 L202,378 L206,440 L158,440 L150,412 L142,440 L94,440 Z" fill="#6C9BF2" stroke="#4C78CF" stroke-width="2.5" stroke-linejoin="round"/>
-      <circle cx="90" cy="86" r="11" fill="${SK}" stroke="${SL}" stroke-width="2.5"/><circle cx="210" cy="86" r="11" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
-      <circle cx="150" cy="78" r="60" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>
-      <path d="M90,72 Q94,16 150,16 Q206,16 210,72 Q198,40 150,40 Q102,40 90,72Z" fill="#9A6440"/>
-      <circle cx="128" cy="102" r="6.5" fill="#3B2A4A"/><circle cx="172" cy="102" r="6.5" fill="#3B2A4A"/><circle cx="130" cy="100" r="2" fill="#fff"/><circle cx="174" cy="100" r="2" fill="#fff"/>
-      <ellipse cx="114" cy="117" rx="9" ry="5" fill="#FFB0A8" opacity=".7"/><ellipse cx="186" cy="117" rx="9" ry="5" fill="#FFB0A8" opacity=".7"/>
-      <path d="M136,118 Q150,131 164,118" stroke="#B4505A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      ${limb('M100,168 L78,252', 33)}<g class="bd-fa bd-fa-l">${limb('M78,252 L70,322', 30)}<circle cx="70" cy="334" r="17" fill="${SK}" stroke="${SL}" stroke-width="3"/></g>
+      ${limb('M200,168 L222,252', 33)}<g class="bd-fa bd-fa-r">${limb('M222,252 L230,322', 30)}<circle cx="230" cy="334" r="17" fill="${SK}" stroke="${SL}" stroke-width="3"/></g>
+      ${limb('M128,388 L124,516', 46)}${limb('M172,388 L176,516', 46)}
+      <path d="M92,528 Q92,510 116,510 Q142,510 142,528 Q142,540 116,540 Q92,540 92,528Z" fill="#FF8C7A" stroke="#E0634F" stroke-width="3"/><path d="M208,528 Q208,510 184,510 Q158,510 158,528 Q158,540 184,540 Q208,540 208,528Z" fill="#FF8C7A" stroke="#E0634F" stroke-width="3"/>
+      <circle cx="116" cy="516" r="3.5" fill="#fff" opacity=".8"/><circle cx="184" cy="516" r="3.5" fill="#fff" opacity=".8"/>
+      <rect x="136" y="130" width="28" height="28" rx="8" fill="${SK}" stroke="${SL}" stroke-width="3"/>
+      <path d="M96,178 Q94,150 124,148 L176,148 Q206,150 204,178 Q210,280 203,360 Q199,396 160,396 L140,396 Q101,396 97,360 Q90,280 96,178Z" fill="${SK}" stroke="${SL}" stroke-width="3"/>
+      <path d="M95,380 L205,380 L209,440 Q209,446 203,446 L160,446 Q154,446 152,440 L150,420 L148,440 Q146,446 140,446 L97,446 Q91,446 91,440 Z" fill="#7FB2FF" stroke="#5A8FE0" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="85" cy="92" r="14" fill="${SK}" stroke="${SL}" stroke-width="3"/><circle cx="215" cy="92" r="14" fill="${SK}" stroke="${SL}" stroke-width="3"/>
+      <circle cx="150" cy="80" r="66" fill="${SK}" stroke="${SL}" stroke-width="3"/>
+      <path d="M85,80 Q84,12 150,12 Q216,12 215,80 Q206,46 178,40 Q164,52 150,40 Q136,54 118,42 Q94,48 85,80Z" fill="#A86B42"/>
+      <path d="M144,14 Q146,0 160,4 Q152,8 152,16Z" fill="#A86B42"/>
+      <ellipse cx="126" cy="106" rx="9.5" ry="11" fill="#3B2A4A"/><ellipse cx="174" cy="106" rx="9.5" ry="11" fill="#3B2A4A"/>
+      <circle cx="129.5" cy="101.5" r="3.6" fill="#fff"/><circle cx="177.5" cy="101.5" r="3.6" fill="#fff"/><circle cx="123" cy="110.5" r="1.7" fill="#fff"/><circle cx="171" cy="110.5" r="1.7" fill="#fff"/>
+      <ellipse cx="106" cy="125" rx="12" ry="7" fill="#FF9EAE" opacity=".65"/><ellipse cx="194" cy="125" rx="12" ry="7" fill="#FF9EAE" opacity=".65"/>
+      <path d="M138,123 Q150,138 162,123 Q150,129 138,123Z" fill="#D9566E" stroke="#B4405A" stroke-width="2" stroke-linejoin="round"/>
     </g>
-    <path class="bd-eso" d="M150,126 L150,206 Q151,232 170,244" stroke="#F0A58C" stroke-width="6" fill="none" stroke-linecap="round" pointer-events="none"/>
-    <path class="bd-fx bd-blood" d="M156,202 Q140,172 150,140 M152,214 Q112,196 84,250 L70,330 M168,214 Q190,196 216,250 L230,330 M164,232 Q178,300 176,372 L178,520 M156,232 Q122,300 124,372 L122,520" stroke="#E5484D" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <g class="bd-o" data-o="bones">${hit('M123,446 L121,536', 40)}${hit('M178,446 L179,536', 40)}${hit('M150,158 Q125,152 104,162 M150,158 Q175,152 196,162', 14)}
+    <path class="bd-eso" d="M150,128 L150,206 Q151,232 170,244" stroke="#F4AE96" stroke-width="6" fill="none" stroke-linecap="round" pointer-events="none"/>
+    <path class="bd-fx bd-blood" d="M156,202 Q140,172 150,140 M152,214 Q112,196 86,250 L74,322 M168,214 Q190,196 214,250 L226,322 M164,232 Q178,300 176,372 L178,506 M156,232 Q122,300 124,372 L122,506" stroke="#FF5A76" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <g class="bd-o" data-o="bones">${hit('M123,450 L122,520', 44)}${hit('M177,450 L178,520', 44)}${hit('M150,158 Q125,152 104,162 M150,158 Q175,152 196,162', 14)}
       ${bone('M150,157 Q125,151 106,161')}${bone('M150,157 Q175,151 194,161')}
-      ${bone('M123,448 L122,478')}${bone('M122,492 L121,526')}${bone('M177,448 L178,478')}${bone('M178,492 L179,526')}
-      <circle class="bd-s" cx="122" cy="485" r="6" fill="#FFFDF5" stroke="#CFC3A6" stroke-width="2"/><circle class="bd-s" cx="178" cy="485" r="6" fill="#FFFDF5" stroke="#CFC3A6" stroke-width="2"/></g>
-    <g class="bd-o" data-o="muscles">${hit('M100,166 L76,256', 34)}${hit('M200,166 L224,256', 34)}
-      <g transform="rotate(15 88 210)"><ellipse class="bd-s bd-bi" cx="88" cy="210" rx="10" ry="30" fill="#E8807A" stroke="#C85F59" stroke-width="2"/></g>
-      <g transform="rotate(-15 212 210)"><ellipse class="bd-s bd-bi" cx="212" cy="210" rx="10" ry="30" fill="#E8807A" stroke="#C85F59" stroke-width="2"/></g></g>
+      ${bone('M124,452 L123,474')}${bone('M123,488 L122,504')}${bone('M176,452 L177,474')}${bone('M177,488 L178,504')}
+      <circle class="bd-s" cx="123" cy="481" r="7" fill="#FFFDF5" stroke="#CFC3A6" stroke-width="2"/><circle class="bd-s" cx="177" cy="481" r="7" fill="#FFFDF5" stroke="#CFC3A6" stroke-width="2"/></g>
+    <g class="bd-o" data-o="muscles">${hit('M100,168 L78,252', 36)}${hit('M200,168 L222,252', 36)}
+      <g transform="rotate(15 89 210)"><ellipse class="bd-s bd-bi" cx="89" cy="210" rx="11" ry="29" fill="#FF8F86" stroke="#D9645C" stroke-width="2.5"/></g>
+      <g transform="rotate(-15 211 210)"><ellipse class="bd-s bd-bi" cx="211" cy="210" rx="11" ry="29" fill="#FF8F86" stroke="#D9645C" stroke-width="2.5"/></g></g>
     <g class="bd-o" data-o="intest"><rect x="122" y="300" width="56" height="70" fill="#000" fill-opacity="0"/>
-      <path class="bd-s" d="M126,362 L126,312 Q126,304 134,304 L166,304 Q174,304 174,312 L174,356 Q174,364 166,364 L156,364" stroke="#E39A63" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <path class="bd-in" d="M136,318 C142,310 150,322 156,314 C162,308 168,318 162,324 C156,330 146,322 140,328 C134,334 140,342 148,338 C156,334 164,340 162,346 C160,352 148,350 142,352" stroke="#F6C29A" stroke-width="7" fill="none" stroke-linecap="round"/>
-      <path d="M136,318 C142,310 150,322 156,314 C162,308 168,318 162,324 C156,330 146,322 140,328 C134,334 140,342 148,338 C156,334 164,340 162,346 C160,352 148,350 142,352" stroke="#D9965F" stroke-width="1" fill="none" opacity=".5"/></g>
+      <path class="bd-s" d="M126,362 L126,312 Q126,304 134,304 L166,304 Q174,304 174,312 L174,356 Q174,364 166,364 L156,364" stroke="#F2A56E" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="bd-in" d="M136,318 C142,310 150,322 156,314 C162,308 168,318 162,324 C156,330 146,322 140,328 C134,334 140,342 148,338 C156,334 164,340 162,346 C160,352 148,350 142,352" stroke="#FFD2A8" stroke-width="8" fill="none" stroke-linecap="round"/></g>
     <g class="bd-o" data-o="kidneys"><circle cx="110" cy="311" r="17" fill="#000" fill-opacity="0"/><circle cx="190" cy="311" r="17" fill="#000" fill-opacity="0"/>
-      <path d="M118,318 Q128,350 146,366 M182,318 Q172,350 154,366" stroke="#E6B85C" stroke-width="3" fill="none"/>
-      <path class="bd-s" d="M112,294 C100,294 98,310 101,318 C104,328 118,328 120,318 C121,312 116,310 117,305 C118,299 118,294 112,294Z" fill="#B4514C" stroke="#8E3A36" stroke-width="2"/>
-      <path class="bd-s" d="M188,294 C200,294 202,310 199,318 C196,328 182,328 180,318 C179,312 184,310 183,305 C182,299 182,294 188,294Z" fill="#B4514C" stroke="#8E3A36" stroke-width="2"/>
-      <ellipse class="bd-s" cx="150" cy="370" rx="10" ry="7" fill="#F4D27A" stroke="#C9A445" stroke-width="2"/></g>
-    <g class="bd-o" data-o="liver"><path class="bd-s bd-li" d="M104,254 Q130,246 168,252 Q170,262 160,272 Q132,292 110,290 Q102,276 104,254Z" fill="#B0563F" stroke="#8A3F2D" stroke-width="2"/></g>
-    <g class="bd-o" data-o="lungs"><path d="M150,140 L150,168 M150,168 Q146,172 140,180 M150,168 Q154,172 160,180" stroke="#E9A0B0" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path class="bd-s bd-lu" d="M146,172 Q120,166 110,196 Q104,228 108,250 Q126,256 146,246 Z" fill="#F7A8B8" stroke="#D9788F" stroke-width="2"/>
-      <path class="bd-s bd-lu" d="M154,172 Q180,166 190,196 Q196,228 192,250 Q176,256 162,248 Q172,234 158,226 Z" fill="#F7A8B8" stroke="#D9788F" stroke-width="2"/></g>
+      <path d="M118,318 Q128,350 146,366 M182,318 Q172,350 154,366" stroke="#F0C46A" stroke-width="3" fill="none"/>
+      <path class="bd-s" d="M112,294 C99,294 97,310 100,318 C103,329 118,329 120,318 C121,312 116,310 117,305 C118,299 118,294 112,294Z" fill="#E07B72" stroke="#B4524C" stroke-width="2.5"/>
+      <path class="bd-s" d="M188,294 C201,294 203,310 200,318 C197,329 182,329 180,318 C179,312 184,310 183,305 C182,299 182,294 188,294Z" fill="#E07B72" stroke="#B4524C" stroke-width="2.5"/>
+      ${face(108, 311, .55)}${face(192, 311, .55)}
+      <ellipse class="bd-s" cx="150" cy="370" rx="11" ry="8" fill="#FFE08A" stroke="#D9B04A" stroke-width="2.5"/></g>
+    <g class="bd-o" data-o="liver"><g class="bd-li"><path class="bd-s" d="M104,256 Q104,246 132,247 Q164,247 168,253 Q172,264 160,274 Q136,292 114,291 Q102,286 104,256Z" fill="#D07A5E" stroke="#A9563F" stroke-width="2.5"/>${face(126, 266, .9)}</g></g>
+    <g class="bd-o" data-o="lungs"><path d="M150,140 L150,168 M150,168 Q146,172 140,180 M150,168 Q154,172 160,180" stroke="#F0A6BA" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <g class="bd-lu"><path class="bd-s" d="M146,174 Q146,166 132,167 Q112,170 108,200 Q104,232 110,248 Q126,256 142,250 Q147,246 146,236 Z" fill="#FFB3C7" stroke="#E07F9C" stroke-width="2.5"/>${face(127, 214, .95)}</g>
+      <g class="bd-lu"><path class="bd-s" d="M154,174 Q154,166 168,167 Q188,170 192,200 Q196,232 190,248 Q176,256 164,250 Q172,236 158,226 Z" fill="#FFB3C7" stroke="#E07F9C" stroke-width="2.5"/>${face(175, 190, .8)}</g></g>
     <g class="bd-o" data-o="heart"><circle cx="160" cy="218" r="22" fill="#000" fill-opacity="0"/>
-      <g class="bd-hb"><path d="M156,204 Q156,192 168,192" stroke="#C93B40" stroke-width="5" fill="none" stroke-linecap="round"/>
-      <path class="bd-s" d="M160,236 C140,222 140,204 150,202 C156,201 159,205 160,209 C161,205 164,201 170,202 C180,204 180,222 160,236 Z" fill="#E5484D" stroke="#B8323A" stroke-width="2"/></g></g>
-    <g class="bd-o" data-o="stomach"><path class="bd-s bd-st" d="M168,240 Q176,238 178,248 Q196,252 196,272 Q194,298 172,298 Q156,296 160,284 Q172,282 172,268 Q168,256 168,240Z" fill="#F5B48A" stroke="#D88A5A" stroke-width="2"/></g>
-    <g class="bd-o" data-o="brain"><path class="bd-s" d="M112,70 Q104,46 124,38 Q134,24 152,28 Q170,22 180,36 Q198,42 192,64 Q196,82 176,84 L124,84 Q106,84 112,70Z" fill="#F7B6C8" stroke="#D9849C" stroke-width="2"/>
-      <path d="M130,44 q8,8 0,16 M150,34 q-6,12 4,22 q6,8 -2,18 M172,44 q-8,10 2,20 M120,70 q10,-4 18,2 M162,72 q10,-6 20,0" stroke="#D9849C" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+      <g class="bd-hb"><path d="M155,203 Q155,190 168,190" stroke="#D63A58" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path class="bd-s" d="M160,240 C133,226 134,204 147,200 C154,198 159,203 160,207 C161,203 166,198 173,200 C186,204 187,226 160,240 Z" fill="#FF5A76" stroke="#D63A58" stroke-width="2.5"/>
+      <ellipse cx="148" cy="208" rx="3.5" ry="2.2" fill="#fff" opacity=".7"/>${face(160, 219, 1.05)}</g></g>
+    <g class="bd-o" data-o="stomach"><g class="bd-st"><path class="bd-s" d="M168,240 Q177,237 179,247 Q197,251 197,272 Q195,299 172,299 Q155,297 159,284 Q171,282 172,268 Q168,256 168,240Z" fill="#FFC48C" stroke="#E0965A" stroke-width="2.5"/>${face(185, 272, .85)}</g></g>
+    <g class="bd-o" data-o="brain"><path class="bd-s" d="M112,70 Q104,46 124,38 Q134,24 152,28 Q170,22 180,36 Q198,42 192,64 Q196,82 176,84 L124,84 Q106,84 112,70Z" fill="#FFC4D8" stroke="#E08AA8" stroke-width="2.5"/>
+      <path d="M130,44 q8,8 0,16 M150,34 q-6,12 4,22 q6,8 -2,18 M172,44 q-8,10 2,20 M120,70 q10,-4 18,2 M162,72 q10,-6 20,0" stroke="#E08AA8" stroke-width="2.2" fill="none" stroke-linecap="round"/></g>
     <g class="bd-rib" stroke="#FFFDF5" stroke-width="4" fill="none" stroke-linecap="round" opacity=".9">${[0, 1, 2, 3, 4].map(i => `<path d="M${108 + i},${174 + i * 17} Q150,${190 + i * 17} ${192 - i},${174 + i * 17}"/>`).join('')}<path d="M150,166 L150,236" stroke-width="6"/>
-      <circle cx="150" cy="70" r="54" stroke-dasharray="7 6"/></g>
+      <circle cx="150" cy="72" r="60" stroke-dasharray="7 6"/></g>
     <circle class="bd-fx bd-food" r="6" fill="#FFC83A" stroke="#D99A00" stroke-width="1.5"/>
     <circle class="bd-fx bd-drop" r="3.5" fill="#7FC8FF"/><circle class="bd-fx bd-drop r" r="3.5" fill="#7FC8FF"/>
     ${[[106, 34, 0], [196, 40, .3], [98, 66, .6], [202, 70, .9], [150, 14, .45]].map(([x, y, d]) => `<path class="bd-fx bd-spark" d="M${x},${y - 6} L${x + 2},${y - 1} L${x + 6},${y} L${x + 2},${y + 1} L${x},${y + 6} L${x - 2},${y + 1} L${x - 6},${y} L${x - 2},${y - 1}Z" fill="#FFD43B" style="animation-delay:${d}s"/>`).join('')}
-    ${[0, .4, .8].map(d => `<circle class="bd-fx bd-air" cx="150" cy="122" r="3.5" fill="#9ED8FF" style="animation-delay:${d}s"/>`).join('')}
+    ${[0, .4, .8].map(d => `<circle class="bd-fx bd-air" cx="150" cy="124" r="3.5" fill="#9ED8FF" style="animation-delay:${d}s"/>`).join('')}
   </svg>`;
 
   function sound(k) {
@@ -14542,7 +14552,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 // the version this phone runs (the offline copy's name), and fetching the newest: the page reloads itself when it arrives
-const APP_VER = '147';
+const APP_VER = '148';
 // the author of the app opens «Все семьи» with her key: a link, or the key pasted here (an icon on the home screen keeps its own storage)
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 // until the app carries this phone's open key, the author sees what to send
@@ -21179,6 +21189,9 @@ const THEMES = (() => {
   const ma = MODS.find(m => m.id === 'art'); if (ma) ma.g.push(20, 21);
   const tl = HOME_TABS.find(t => t.id === 'learn'); if (tl) tl.g.push(17, 19);
   const tc = HOME_TABS.find(t => t.id === 'create'); if (tc) tc.g.push(20, 21, 22, 23);
+  // «Книги и сказки»: its own section at the top of «Учимся», in no module — the shelf and the tales are always there
+  SECTIONS.unshift({ g: 30, h: "Books and tales", p: "the bookshelf and audio tales" });
+  if (tl) tl.g.unshift(30);
   // the cube: every child on the older track, and anyone 9 or older
   const cube = GAMES.find(x => x.id === 'cube'); if (cube) cube.hide = () => !(P.settings.track === 'l' || (P.settings.age || 0) >= 9);
   // «Правда или выдумка?» about paintings: who painted it, where it lives, when it was painted
@@ -21259,8 +21272,12 @@ const MUSIC = (() => {
    Links between screens stay; search finds every game wherever it lives. ---------- */
 (() => {
   const set = (id, grp, also = []) => { const x = GAMES.find(y => y.id === id); if (x) { x.grp = grp; x.also = also; } };
-  set('tales', 2, [6]); set('bookshelf', 6, [2]);
-  ['code-abc', 'code-syl', 'dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  // «Книги и сказки» (section 30 of «Учимся») is in no module: the shelf and the tales show for every child
+  set('tales', 30); set('bookshelf', 30);
+  GAMES.find(y => y.id === 'tales').ord = () => 0; GAMES.find(y => y.id === 'bookshelf').ord = () => 1;
+  ['dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  // the colouring by letters and by syllables: in «Учимся» and also in «Творим» next to the other colouring (the owner asked)
+  ['code-abc', 'code-syl'].forEach(id => set(id, 2, [4]));
   set('code-math', 3, [17]);
 })();
 /* LAYOUT-END */
@@ -21350,12 +21367,12 @@ const BALLET = (() => {
       const [K, A] = solve(hip, add(hip, tg), LEN.th, LEN.sh, out);
       let pa = Math.atan2(A[1] - K[1], A[0] - K[0]), d = pa - flatA; d = Math.atan2(Math.sin(d), Math.cos(d));
       const a = flatA + d * pt, toe = [A[0] + LEN.ft * Math.cos(a), A[1] + LEN.ft * Math.sin(a)];
-      return line([hip, K, A], 12, C.leg, C.legE) + line([A, toe], 9, C.shoe, C.shoeE)
+      return line([hip, K, A], 14, C.leg, C.legE) + line([A, toe], 11, C.shoe, C.shoeE)
         + (b ? '' : `<path d="M${f(A)} L${f([A[0] + (K[0] - A[0]) * .22, A[1] + (K[1] - A[1]) * .22])}" stroke="#F06C95" stroke-width="2" stroke-linecap="round"/>`);
     };
     const arm = (sh, tg, out) => {
       const [E, H] = solve(sh, add(sh, rot(tg, p.lean)), LEN.ua, LEN.fa, out);
-      return line([sh, E, H], b ? 10 : 8, C.arm, C.armE) + `<circle cx="${H[0].toFixed(1)}" cy="${H[1].toFixed(1)}" r="5" fill="${SK}" stroke="${SL}" stroke-width="2"/>`;
+      return line([sh, E, H], b ? 12 : 11, C.arm, C.armE) + `<circle cx="${H[0].toFixed(1)}" cy="${H[1].toFixed(1)}" r="6.5" fill="${SK}" stroke="${SL}" stroke-width="2"/>`;
     };
     const legs = leg(hipL, p.fl, -1, p.pl, Math.PI) + leg(hipR, p.fr, 1, p.pr, 0);
     const wL = add(pel, rot([-12, -4], p.lean)), wR = add(pel, rot([12, -4], p.lean));
@@ -21363,15 +21380,16 @@ const BALLET = (() => {
         <path d="M${f(add(pel, rot([-14, 0], p.lean)))} L${f(add(pel, rot([14, 0], p.lean)))}" stroke="#4A5BA8" stroke-width="5" stroke-linecap="round"/>`
       : `<path d="M${f(shL)} L${f(shR)} L${f(wR)} L${f(wL)} Z" fill="${C.top}" stroke="${C.topE}" stroke-width="2.5" stroke-linejoin="round"/>`;
     const tc = add(pel, rot([0, -3], p.lean)), ta = p.lean * .6;
-    const tutu = b ? '' : `<g transform="translate(${f(tc)}) rotate(${ta.toFixed(1)})"><ellipse rx="44" ry="10" fill="#FFB8CF" stroke="#EE93B2" stroke-width="2"/><ellipse cy="-2" rx="38" ry="8" fill="#FFDCE8" stroke="#F2A6C0" stroke-width="1.5"/>
-        ${[-28, -14, 0, 14, 28].map(x => `<circle cx="${x}" cy="-2" r="1.6" fill="#fff"/>`).join('')}</g>`;
-    const hc = add(neck, rot([0, -21], p.lean));
-    const hair = b ? `<path d="M-17,-2 Q-18,-20 0,-20 Q18,-20 17,-2 Q12,-12 0,-12 Q-12,-12 -17,-2Z" fill="${C.hair}"/>`
-      : `<circle cy="-21" r="8" fill="${C.hair}"/><path d="M-17,0 Q-18,-19 0,-19 Q18,-19 17,0 Q12,-11 0,-11 Q-12,-11 -17,0Z" fill="${C.hair}"/><path d="M-6,-24 Q0,-30 6,-24" stroke="#F06C95" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
-    const head = `<g transform="translate(${f(hc)}) rotate(${p.lean.toFixed(1)})"><circle r="17" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>${hair}
-        <circle cx="-6" cy="2" r="2.4" fill="#3B2A4A"/><circle cx="6" cy="2" r="2.4" fill="#3B2A4A"/><circle cx="-5.3" cy="1.2" r=".8" fill="#fff"/><circle cx="6.7" cy="1.2" r=".8" fill="#fff"/>
-        <ellipse cx="-11" cy="8" rx="3.5" ry="2" fill="#FFB0A8" opacity=".75"/><ellipse cx="11" cy="8" rx="3.5" ry="2" fill="#FFB0A8" opacity=".75"/>
-        <path d="M-5,9 Q0,13 5,9" stroke="#B4505A" stroke-width="2" fill="none" stroke-linecap="round"/></g>`;
+    const tutu = b ? '' : `<g transform="translate(${f(tc)}) rotate(${ta.toFixed(1)})">${[-40, -30, -20, -10, 0, 10, 20, 30, 40].map(x => `<circle cx="${x}" cy="${(9 * Math.sqrt(1 - (x / 46) ** 2)).toFixed(1)}" r="6" fill="#FFB8CF" stroke="#EE93B2" stroke-width="1.5"/>`).join('')}<ellipse rx="45" ry="10" fill="#FFB8CF" stroke="#EE93B2" stroke-width="2"/><ellipse cy="-2" rx="38" ry="8" fill="#FFDCE8" stroke="#F2A6C0" stroke-width="1.5"/>
+        ${[-28, -14, 0, 14, 28].map(x => `<path transform="translate(${x},-2)" d="M0,-2.6 L.7,-.7 L2.6,0 L.7,.7 L0,2.6 L-.7,.7 L-2.6,0 L-.7,-.7Z" fill="#fff"/>`).join('')}</g>`;
+    const hc = add(neck, rot([0, -29], p.lean));
+    // a big round head with the game's friendly face: big eyes with highlights, rosy cheeks, a smile
+    const hair = b ? `<path d="M-25,-2 Q-27,-30 0,-30 Q27,-30 25,-2 Q20,-17 7,-19 Q0,-13 -7,-19 Q-20,-17 -25,-2Z" fill="${C.hair}"/>`
+      : `<circle cy="-30" r="11" fill="${C.hair}"/><path d="M-25,0 Q-26,-28 0,-28 Q26,-28 25,0 Q18,-16 0,-16 Q-18,-16 -25,0Z" fill="${C.hair}"/><path d="M-9,-38 L-2,-34 L-9,-30Z M9,-38 L2,-34 L9,-30Z" fill="#F06C95" stroke="#F06C95" stroke-width="2" stroke-linejoin="round"/><circle cy="-34" r="2.2" fill="#F06C95"/>`;
+    const head = `<g transform="translate(${f(hc)}) rotate(${p.lean.toFixed(1)})"><circle r="25" fill="${SK}" stroke="${SL}" stroke-width="2.5"/>${hair}
+        <ellipse cx="-8.5" cy="2" rx="4.4" ry="5.2" fill="#3B2A4A"/><ellipse cx="8.5" cy="2" rx="4.4" ry="5.2" fill="#3B2A4A"/><circle cx="-6.9" cy="0" r="1.7" fill="#fff"/><circle cx="10.1" cy="0" r="1.7" fill="#fff"/><circle cx="-9.9" cy="4.2" r=".8" fill="#fff"/><circle cx="7.1" cy="4.2" r=".8" fill="#fff"/>
+        <ellipse cx="-16" cy="11" rx="5" ry="3" fill="#FF9EAE" opacity=".65"/><ellipse cx="16" cy="11" rx="5" ry="3" fill="#FF9EAE" opacity=".65"/>
+        <path d="M-5,11 Q0,17 5,11 Q0,13.5 -5,11Z" fill="#D9566E" stroke="#B4405A" stroke-width="1.4" stroke-linejoin="round"/></g>`;
     const neckL = line([neck, add(neck, rot([0, -8], p.lean))], 7, SK, SL);
     const sc = Math.cos(2 * Math.PI * p.turn), ox = CX + p.x;
     const sh = Math.max(.35, 1 - Math.max(0, -p.y) / 60);
