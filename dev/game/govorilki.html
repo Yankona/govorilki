@@ -9103,19 +9103,21 @@ FOOT_IDS.forEach((id, i) => {
 });
 /*FOOT-END*/
 /* PETS-BEGIN: two family pets the owner asked for (names public with the owner's consent; drawings only, no photos) */
-// Лилу: a chocolate (havana) Oriental cat — huge bat-like ears set low and wide, a long wedge head, sleepy amber-olive eyes
-const LILU_EYE = (x, s) => `<path d="M${x - 12 * s} 65Q${x - 2 * s} 49 ${x + 11 * s} 57Q${x + 2 * s} 72 ${x - 12 * s} 65Z" fill="#C9A43A"/><path d="M${x - 8 * s} 63Q${x} 64 ${x + 7 * s} 60" stroke="#8FA13A" stroke-width="3" fill="none" opacity=".5"/><ellipse cx="${x - .5 * s}" cy="61.5" rx="2.4" ry="6" fill="#2A1408"/><circle cx="${x + 2.5 * s}" cy="58" r="1.6" fill="#fff"/><path d="M${x - 12 * s} 65Q${x - 2 * s} 51.5 ${x + 11 * s} 57" stroke="#2A1408" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+// Лилу: a chocolate (havana) Oriental cat, soft and round like the other animals — very big wide ears with rounded tips,
+// big round golden-amber eyes, a slightly narrow lighter muzzle
+const LILU_EYE = x => `<ellipse cx="${x}" cy="62" rx="7" ry="8.5" fill="#D9A93A"/><ellipse cx="${x}" cy="63" rx="4.6" ry="6.6" fill="#2A1408"/><circle cx="${x + 2.2}" cy="58.6" r="2.4" fill="#fff"/>`;
 // Омик: a chocolate chihuahua girl — huge upright ears (one turned a little), big glossy amber eyes, tan brows, white bib
 const OMIK_EYE = (x) => `<circle cx="${x}" cy="62" r="11" fill="#C8955A"/><circle cx="${x}" cy="62" r="9.5" fill="#7A3E14"/><circle cx="${x}" cy="62.5" r="5.5" fill="#2A1408"/><circle cx="${x + 3.5}" cy="58" r="3" fill="#fff"/><circle cx="${x - 3}" cy="66" r="1.4" fill="#fff" opacity=".7"/>`;
 const PETS = {
-  lilu: { name: 'Лилу', kind: 'кошка', who: 'кошка Лилу', with: 'кошкой Лилу', hello: 'Мур-р! У меня самые большие уши!', pitch: 1.2, pm: 99,
-    puff: { c: '#7A4428', x: [36, 84], y: 90 }, smile: '<path d="M60 95v3M54 99q3 3 6 0 3 3 6 0" stroke="#2A1408" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
-    art: `<path d="M42 50 2 4 26 74z" fill="#6B3A22"/><path d="M78 50l40-46-24 70z" fill="#6B3A22"/><path d="M36 50 10 16l16 46z" fill="#C98A7A"/><path d="M84 50l26-34-16 46z" fill="#C98A7A"/>
-      <path d="M60 22Q90 22 92 52Q93 78 72 100Q66 108 60 108T48 100Q27 78 28 52Q30 22 60 22Z" fill="#6B3A22"/>
-      <path d="M60 64Q72 66 74 84Q72 102 60 106Q48 102 46 84Q48 66 60 64Z" fill="#84482A"/>
-      <g class="lv-eyes">${LILU_EYE(45, 1)}${LILU_EYE(75, -1)}</g>
-      <path d="M55 88h10l-5 5z" fill="#3E2014"/>
-      <path d="M44 92l-18-2M44 96l-17 3M76 92l18-2M76 96l17 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
+  lilu: { name: 'Лилу', kind: 'кошка', who: 'кошка Лилу', with: 'кошкой Лилу', hello: 'Мур-р! У меня самые большие уши!', pitch: 1.2, pm: 92,
+    puff: { c: '#7A4428', x: [24, 96], y: 86 }, smile: '<path d="M60 86v3M53 90q3.5 4 7 0 3.5 4 7 0" stroke="#2A1408" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+    art: `<path d="M36 46Q8 44 6 12Q6 4 14 7Q40 18 54 34z" fill="#7A4428"/><path d="M84 46Q112 44 114 12Q114 4 106 7Q80 18 66 34z" fill="#7A4428"/>
+      <path d="M34 40Q16 36 14 16Q22 18 42 30z" fill="#E6A9A0"/><path d="M86 40Q104 36 106 16Q98 18 78 30z" fill="#E6A9A0"/>
+      <ellipse cx="60" cy="68" rx="42" ry="38" fill="#7A4428"/>
+      <ellipse cx="50" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="70" cy="88" rx="13" ry="11" fill="#9A5C3A"/><ellipse cx="60" cy="97" rx="9" ry="6" fill="#9A5C3A"/>
+      <g class="lv-eyes">${LILU_EYE(44)}${LILU_EYE(76)}</g>${BLUSH(80, 28)}
+      <path d="M55.5 80h9q0 4-4.5 5.5Q55.5 84 55.5 80z" fill="#C97A78"/>
+      <path d="M38 86l-16-2M38 91l-15 3M82 86l16-2M82 91l15 3" stroke="#D8B79A" stroke-width="1.6" stroke-linecap="round"/>` },
   omik: { name: 'Омик', kind: 'собачка чихуахуа', who: 'собачка Омик', with: 'собачкой Омиком', hello: 'Гав! Я маленькая, но очень смелая!', pitch: 1.35, pm: 96,
     puff: { c: '#5A3420', x: [32, 88], y: 86 }, smile: '<path d="M53 94q7 5 14 0" stroke="#1E100A" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
     art: `<path d="M38 44 8 2 22 60z" fill="#4A2A1A"/><path d="M33 42 14 13l11 38z" fill="#E3B19A"/>
