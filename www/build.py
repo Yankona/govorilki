@@ -19,7 +19,7 @@ KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq']
 APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/'}
 # the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
 APP_DIR = os.environ.get('APP_DIR', '')
-APP_FILES = ['index.html', 'ru', 'en', 'pt', 'de', 'art', 'music', 'img', 'trips', 'engine', 'icons', 'sw.js', 'manifest.webmanifest']
+APP_FILES = ['index.html', 'ru', 'en', 'pt', 'de', 'art', 'music', 'img', 'trips', 'engine', 'icons', 'tales', 'sw.js', 'manifest.webmanifest']
 HL = {'ru': 'ru', 'en': 'en', 'pt': 'pt-PT'}
 OG_LOCALE = {'ru': 'ru_RU', 'en': 'en_GB', 'pt': 'pt_PT'}
 SHORT = {'ru': 'RU', 'en': 'EN', 'pt': 'PT'}
