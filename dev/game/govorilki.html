@@ -1792,6 +1792,7 @@ body.quest .ch-note b{color:var(--sun)}
   .confetti,.burst{display:none}
   .hero-ryz svg,.said,.ball.next,.book.glow,.wnd.glow,.winbox .ryz-w svg,.flame{animation:none!important}
   .said{animation:popin .01s both!important}
+  .said.ear .said-mic{animation:none!important}
 }
 /* fair play */
 .stage.locked{filter:saturate(.5) brightness(.96);transition:filter .15s}
@@ -1799,6 +1800,8 @@ body.quest .ch-note b{color:var(--sun)}
 .said-mic{position:relative;flex:none;width:44px;height:44px;border-radius:50%;background:#FFFFFF;overflow:hidden;display:grid;place-items:center;box-shadow:inset 0 0 0 3px #2FA865}
 .said-mic i{position:absolute;inset:0;background:#8FE0A1;transform-origin:50% 100%;transform:scaleY(0);transition:transform .12s linear}
 .said-mic b{position:relative;font-size:24px;line-height:1}
+.said.ear .said-mic{animation:earp 1.1s ease-in-out infinite}
+@keyframes earp{0%,100%{box-shadow:inset 0 0 0 3px #2FA865,0 0 0 0 rgba(47,168,101,.5)}50%{box-shadow:inset 0 0 0 3px #2FA865,0 0 0 10px rgba(47,168,101,0)}}
 .hold.mic{--lv:0;background:#2FA865;box-shadow:0 9px 0 #1E7A47,0 0 0 calc(var(--lv) * 22px) rgba(47,168,101,.28);cursor:default}
 .hold.mic.on{transform:none;background:#3CC077;box-shadow:0 9px 0 #1E7A47,0 0 0 calc(var(--lv) * 22px) rgba(47,168,101,.35)}
 .fair-note{margin:4px 0 0;max-width:24em;text-align:center;font:700 15px/1.35 var(--f-body);color:var(--ink-soft)}
@@ -7469,7 +7472,7 @@ function fairStars(key, stars) {
 // how long the voice must be heard: a word, a phrase said slowly, or three times
 const SAID_SLOW = [new RegExp('три раза|все слова|в ритм', 'i'), new RegExp('медленно', 'i'), new RegExp('прочитал', 'i')];
 const saidNeed = label => SAID_SLOW[0].test(label) ? 1.5 : SAID_SLOW[1].test(label) ? 1.2 : SAID_SLOW[2].test(label) ? .9 : .6;
-function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect = '', times = 1 } = {}) {
+function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect = '', times = 1, loose = false } = {}) {
   if (expect) expect = gx(expect);
   return new Promise(res => {
     const scr = $('.screen'); if (!scr) return;
@@ -7521,20 +7524,33 @@ function askSaid(label = 'Я сказала!', { need = saidNeed(label), expect 
       });
     }
     if (!expect || !srOk()) { byLoudness(); return; }
+    /* listening for the word: the microphone pulses with «Я слушаю…». A word said close enough (a sound still being
+       learned) is praised, and the friend says it once more the right way before the button opens. After two tries the
+       button opens anyway — the child tried, and that is the practice; listening goes on behind it a little longer. */
     tx.textContent = gx('Скажи вслух!');
     (async () => {
       let tries = 0;
-      while (t === tok && b.isConnected && !opened) {
+      const on = () => t === tok && b.isConnected;
+      while (on() && tries < 6) {
         while (SAYING && t === tok) await wait(150);
-        const r = await hear(expect, { times, onHeard: h => { if (heardEl) heardEl.textContent = `Слышу: «${h}»`; } });
-        if (t !== tok || !b.isConnected) return;
-        if (r.ok) { if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`; bar.style.transform = 'scaleY(1)'; open(); return; }
-        if (HEAR.off) { byLoudness(); return; }
+        if (!on()) return;
+        b.classList.add('ear'); if (!opened) tx.textContent = gx('Я слушаю…');
+        const r = await hear(expect, { times, loose, onHeard: h => { if (heardEl) heardEl.textContent = `Слышу: «${h}»`; } });
+        b.classList.remove('ear');
+        if (!on()) return;
+        if (r.ok) {
+          bar.style.transform = 'scaleY(1)';
+          if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`;
+          if (r.lvl < 2 && !loose && !opened) { sfx.good(); await talk(`${pickOne(['Молодец!', 'Хорошо!', 'Здорово!'])} Послушай, как я скажу: ${expect}.`); if (!on()) return; }
+          open(); return;
+        }
+        if (HEAR.off || !srOk()) { if (!opened) { if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
         tries++;
         if (heardEl) heardEl.textContent = r.heard ? `Слышу «${r.heard}». А нужно «${expect}»${Q() ? ': кончик языка к верхним зубам!' : '!'}` : 'Не слышно. Скажи громче!';
         if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
-        if (tries >= 6) { open(); return; }
+        if (tries >= 2 && !opened) { open(); if (heardEl) heardEl.textContent += ' ' + gx('Попробуй ещё раз — или нажми кнопку.'); }
       }
+      if (on()) open();
     })();
   });
 }
@@ -9210,7 +9226,9 @@ function screenMoto() {
     if (need3) {
       if (at < need3.at) return;   // not the friend's own voice asking for it
       $('#mHeard').textContent = `Слышу: «${txt}»`;
-      if (matchSay(txt, need3.w, 3) || alts.some(a => matchSay(a, need3.w, 3))) { const f = need3.done; need3 = null; $('#mLv').style.width = '100%'; f(); }
+      // the phone may write each of the three words as its own phrase: what was heard since the question adds up
+      const acc = (need3.acc || '') + ' ' + txt; if (final) need3.acc = acc;
+      if (matchSay(acc, need3.w, 3) || alts.some(a => matchSay(a, need3.w, 3))) { const f = need3.done; need3 = null; $('#mLv').style.width = '100%'; f(); }
       return;
     }
     if (!showing()) return;
@@ -9246,7 +9264,7 @@ function screenMoto() {
         $('#mHeard').textContent = live.lost ? '🎤 Нажми на знак, чтобы я снова слушал' : '🎤 скажи три раза';
         sg.querySelector('small').textContent = 'Чтобы ехать дальше, скажи три раза:';
         await talk(`Ничего, ты в шлеме! Скажи три раза: ${w}.`); if (t !== tok) return;
-        await new Promise(res => { need3 = { w, done: res, at: performance.now() + 300 }; later(() => { if (need3) $('#mSaid').hidden = false; }, 15000); });
+        await new Promise(res => { need3 = { w, done: res, at: performance.now() + 300 }; later(() => { if (need3) $('#mSaid').hidden = false; }, 8000); });
         if (t !== tok) return;
         sg.hidden = true; sg.querySelector('small').textContent = 'Прочитай вслух — будет нитро!';
       } else {
@@ -10268,37 +10286,124 @@ document.addEventListener('pointerdown', () => { if (piperOn() && !PIPER.isReady
    A slipped Л (лодка → водка) comes back as a different word, and the child sees what was heard.
    Where recognition is missing or refused, the loudness check stays as before. ---------- */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const HEAR = { off: false };
-const srOk = () => !!SR && !EMBEDDED && !ROOT.micOff && !ROOT.srOff && !HEAR.off;
-const normW = s => (IS_RU ? String(s).toLowerCase().replace(/ё/g, 'е').replace(/[^а-яa-z0-9 ]/g, ' ') : String(s).toLowerCase().replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[’']/g, '').replace(/[^a-z0-9 ]/g, ' ')).replace(/\s+/g, ' ').trim();
+const HEAR = { off: false, netAt: 0 };
+const srOk = () => !!SR && !EMBEDDED && !ROOT.micOff && !ROOT.srOff && !HEAR.off && Date.now() - HEAR.netAt > 60e3;
+/* ASR-BEGIN */
+/* ---------- telling whether the word was said. Children with speech issues say sounds imperfectly and the recogniser
+   writes down its best guess, so the check is kind: every alternative counts, ё = е, case and punctuation go, digits
+   become words, endings may differ (лодку = лодка), a word split or glued by the recogniser still counts, and the sound
+   being trained never makes a word wrong: Р said as Л or Й, Л as В, Ш as С, Ж as З, a voiced sound said voiceless, an
+   unstressed О heard as А, a dropped Р or Л. Such a «close» word is praised and the friend says it right once more.
+   ASR.match: 2 = the word itself, 1 = close enough, 0 = something else. Language data, never translated. ---------- */
+const ASR = (() => {
+  const NUMS = {
+    en: 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty',
+    de: 'null eins zwei drei vier funf sechs sieben acht neun zehn elf zwolf dreizehn vierzehn funfzehn sechzehn siebzehn achtzehn neunzehn zwanzig',
+    pt: 'zero um dois tres quatro cinco seis sete oito nove dez onze doze treze catorze quinze dezasseis dezassete dezoito dezanove vinte'
+  };
+  const lat = s => s.toLowerCase().replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[’'`]/g, '');
+  const num = s => { if (!/\d/.test(s)) return s; if (IS_RU) { try { return ruNums(s); } catch (e) { return s; } } const w = (NUMS[LANG] || '').split(' '); return s.replace(/\d+/g, d => w[+d] || d); };
+  const norm = s => (IS_RU ? num(String(s || '')).toLowerCase().replace(/ё/g, 'е').replace(/[^а-яa-z0-9 ]/g, ' ') : lat(num(String(s || ''))).replace(/[^a-z0-9 ]/g, ' ')).replace(/\s+/g, ' ').trim();
+  // spelling that sounds the same in the Latin languages
+  const key = w => IS_RU ? w : w.replace(/sch/g, 's').replace(/[sc]h/g, 's').replace(/th/g, 't').replace(/ph/g, 'f').replace(/ck/g, 'k').replace(/qu/g, 'k').replace(/(.)\1/g, '$1');
+  // how far apart two sounds are: 0.25 — the same sound to the ear, 0.35 — a sound a child is still learning
+  const PAIRS = IS_RU
+    ? [[.25, 'бп вф гк дт жш зс оа еи ея яи иы еэ юу ий кх гх ьъ'], [.35, 'рл рй лв лй рв шс жз щс щш чщ чц цс чт зд рд']]
+    : [[.25, 'bp dt gk vf zs ck kq ie yi ou ao ea'], [.35, 'rl rw lw vw lj sz fv fs dz jy tf ts']];
+  const SUB = new Map(); PAIRS.forEach(([c, s]) => s.split(' ').forEach(p => { SUB.set(p, c); SUB.set(p[1] + p[0], c); }));
+  const VOW = IS_RU ? 'аеиоуыэюя' : 'aeiouy';
+  const DROP = IS_RU ? { 'ь': .2, 'ъ': .2, 'й': .4, 'р': .4, 'л': .4 } : { 'h': .4, 'r': .4, 'l': .4, 'e': .6 };
+  const sub = (a, b) => a === b ? 0 : SUB.get(a + b) || (!IS_RU && VOW.includes(a) && VOW.includes(b) ? .5 : 1);
+  const ind = c => DROP[c] || (VOW.includes(c) ? .8 : 1);
+  function dist(a, b) {
+    const d = [0]; for (let j = 1; j <= b.length; j++) d[j] = d[j - 1] + ind(b[j - 1]);
+    for (let i = 1; i <= a.length; i++) {
+      let p = d[0]; d[0] += ind(a[i - 1]);
+      for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(q + ind(a[i - 1]), d[j - 1] + ind(b[j - 1]), p + sub(a[i - 1], b[j - 1])); p = q; }
+    }
+    return d[b.length];
+  }
+  // how much a word of n letters may differ
+  const room = n => n <= 2 ? .3 : n <= 3 ? .6 : n <= 5 ? .8 : n <= 7 ? .95 : n <= 8 ? 1.3 : Math.min(3, 1.8 + (n - 9) * .15);
+  const END = IS_RU ? ['ами', 'ями', 'ого', 'его', 'ому', 'ему', 'ой', 'ей', 'ом', 'ем', 'ам', 'ям', 'ах', 'ях', 'ов', 'ев', 'ую', 'юю', 'ая', 'яя', 'ое', 'ее', 'ые', 'ие', 'ым', 'им', 'ых', 'их', 'ий', 'ый', 'а', 'я', 'у', 'ю', 'ы', 'и', 'е', 'о', 'ь']
+    : ['es', 'en', 'er', 'em', 's', 'e', 'n'];
+  const stem = w => { for (const e of END) if (w.length - e.length >= 3 && w.endsWith(e)) return w.slice(0, -e.length); return w; };
+  // one heard word against one wanted word: 2 the same, 1 close, 0 no
+  function word(h, t) {
+    if (h === t) return 2;
+    const a = key(h), b = key(t);
+    if (a === b) return 2;
+    if (dist(a, b) <= room(b.length)) return 1;
+    const sa = stem(a), sb = stem(b);
+    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb) <= room(sb.length) * .75) return 1;
+    return 0;
+  }
+  // the best of the heard words (or two neighbours glued together) for a wanted word, from position `from`
+  function find(hw, t, from = 0) {
+    let best = 0, at = -1, len = 1;
+    for (let i = from; i < hw.length && best < 2; i++) {
+      const v = word(hw[i], t); if (v > best) { best = v; at = i; len = 1; }
+      if (best < 2 && i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (v2 > best) { best = v2; at = i; len = 2; } }
+    }
+    return { v: best, at, len };
+  }
+  function match(heard, expect, times = 1, loose = false) {
+    const hw = norm(heard).split(' ').filter(Boolean), tw = norm(expect).split(' ').filter(Boolean);
+    if (!tw.length || !hw.length) return 0;
+    // a syllable or a sound: any voice that came through is the practice (the recogniser cannot write «ар-ар»)
+    if (loose) return word(hw.join(''), tw.join('')) === 2 ? 2 : 1;
+    if (tw.length === 1) {
+      let n = 0, lvl = 2, from = 0;
+      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); from = f.at + f.len; }
+      if (!n) { const v = word(hw.join(''), tw[0]); return v ? Math.min(v, 1) : 0; }
+      return n >= Math.min(times, 2) || hw.length >= times ? lvl : 0;
+    }
+    // a phrase: most of its words, or the whole of it glued together
+    let got = 0, all = 2;
+    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); } });
+    if (got / tw.length >= .6) return got === tw.length ? all : 1;
+    const a = key(hw.join('')), b = key(tw.join(''));
+    return dist(a, b) <= room(b.length) * 1.2 ? 1 : 0;
+  }
+  // every phrase the recogniser offers (alternatives, interim, the whole session): the best answer and what it was
+  function best(list, expect, times = 1, loose = false) {
+    let lvl = 0, text = '';
+    for (const s of list) { if (!s || !s.trim()) continue; const v = match(s, expect, times, loose); if (v > lvl) { lvl = v; text = s.trim(); if (v === 2) break; } }
+    return { lvl, text };
+  }
+  return { norm, dist, word, match, best };
+})();
+const normW = ASR.norm;
 function lev(a, b) {
   const d = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] !== b[j - 1])); p = q; } }
   return d[b.length];
 }
-const cntL = w => (w.match(IS_RU ? /л/g : /l/g) || []).length;
-// a long word may differ by one letter, but never in the Л sounds being trained
-const wordOk = (h, t) => h === t || (t.length >= 5 && lev(h, t) <= 1 && cntL(h) === cntL(t));
-function matchSay(heard, expect, times = 1) {
-  const hw = normW(heard).split(' ').filter(Boolean), tw = normW(expect).split(' ').filter(Boolean);
-  if (!tw.length) return false;
-  if (tw.length === 1) return hw.filter(w => wordOk(w, tw[0])).length >= Math.min(times, 2);
-  return tw.filter(t => hw.some(w => wordOk(w, t))).length / tw.length >= .6;
-}
-function hear(expect, { times = 1, onHeard, maxMs = 7000 } = {}) {
+const matchSay = (heard, expect, times = 1) => ASR.match(heard, expect, times) > 0;
+/* ASR-END */
+// one listening: { ok, heard, lvl } — lvl 2 the word itself, 1 close enough (see ASR), 0 not heard or another word.
+// No internet (Chrome sends the voice to a server) switches word checks off for a minute, so the game listens to the
+// loudness instead of asking again and again.
+function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) {
   return new Promise(res => {
-    let r = null, best = '', done = false;
-    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok, heard: best }); };
-    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '' }); return; }
+    let r = null, best = '', done = false, lvl = 0;
+    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: ok && lvl > 0, heard: best, lvl }); };
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0 }); return; }
     audioSession('play-and-record'); SR_ON++;
     r.lang = LOC; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
     r.onresult = e => {
       let all = ''; const alts = [];
-      for (let i = 0; i < e.results.length; i++) { all += ' ' + e.results[i][0].transcript; for (let j = 0; j < e.results[i].length; j++) alts.push(e.results[i][j].transcript); }
-      best = all.trim(); if (onHeard) onHeard(best);
-      if (matchSay(best, expect, times) || alts.some(a => matchSay(a, expect, times))) end(true);
+      for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (!x || !x[0]) continue; all += ' ' + x[0].transcript; for (let j = 0; j < x.length; j++) alts.push(x[j].transcript); }
+      all = all.trim();
+      const m = ASR.best([all, ...alts], expect, times, loose);
+      best = m.lvl ? m.text : all || best; if (onHeard && best) onHeard(best);
+      if (m.lvl) { lvl = m.lvl; end(true); }
     };
-    r.onerror = e => { if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true; end(false); };
+    r.onerror = e => {
+      if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true;
+      if (e.error === 'network') HEAR.netAt = Date.now();
+      end(false);
+    };
     r.onend = () => end(false);
     setTimeout(() => end(false), maxMs);
     try { r.start(); } catch (e) { end(false); }
@@ -10350,9 +10455,10 @@ function hearLive(onText, { onStart, onFail, onLost } = {}) {
     };
     r.onerror = e => {
       if (me !== r) return;
-      const hard = ['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture'].includes(e.error);
+      const hard = ['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture', 'network'].includes(e.error);
       if (!hard) return;
-      if (!started) { if (e.error !== 'audio-capture') HEAR.off = true; L.stop(); if (onFail) onFail(); }
+      if (e.error === 'network') HEAR.netAt = Date.now();
+      if (!started) { if (e.error !== 'audio-capture' && e.error !== 'network') HEAR.off = true; L.stop(); if (onFail) onFail(); }
       else { L.lost = true; if (onLost) onLost(); }
     };
     r.onend = () => {
@@ -13344,10 +13450,12 @@ function screenDict({ back = null, word = '' } = {}) {
     // one word by voice, started from the tap as iPhone wants
     let r; try { r = new SR(); SRS.add(r); } catch (e) { return; }
     r.lang = LOC; r.interimResults = false; r.maxAlternatives = 1; SR_ON++; audioSession('play-and-record');
-    const done = () => { SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); $('#dMic').classList.remove('on'); };
+    let fin = false;
+    const done = () => { if (fin) return; fin = true; SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); $('#dMic').classList.remove('on'); };
     r.onresult = e => { const w = (e.results[0][0].transcript || '').trim().split(/\s+/).pop() || ''; $('#dW').value = w.toLowerCase(); look(); };
     r.onerror = done; r.onend = done;
-    hush(); $('#dMic').classList.add('on'); try { r.start(); } catch (e) { done(); }
+    // a phone that never says it stopped does not keep the microphone open
+    hush(); $('#dMic').classList.add('on'); try { r.start(); setTimeout(() => { try { r.abort(); } catch (e) {} done(); }, 9000); } catch (e) { done(); }
   };
   if (word) look();
 }
@@ -13626,7 +13734,7 @@ function screenCodeColor(kind = 'abc', page, tries = 0) {
     if (kind === 'syl' && !said.has(i)) {
       $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b)); sel = -1;
       await talk(`Скажи: ${set[i].say}!`); if (t !== tok) return;
-      await askSaid('Я сказала!', { expect: set[i].say }); if (t !== tok) return;
+      await askSaid('Я сказала!', { expect: set[i].say, loose: true }); if (t !== tok) return;
       said.add(i);
     }
     sel = i; $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b));
@@ -18314,7 +18422,7 @@ const IDEAS = (() => {
         const p = plan[k];
         if (p === 'vow') {
           box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">Р после гласной — без «д»</p></div>`;
-          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', '') }); if (t !== tok) return; }
+          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
           box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
           for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
