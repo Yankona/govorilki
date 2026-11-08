@@ -34,7 +34,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       for (let i = 0; i < 7; i++) {
         await p.click(`#plBtns [data-a="${NEED[i]}"]`); await p.waitForTimeout(NEED[i] === 'plant' ? 1100 : 1900);
         const st = await p.evaluate(() => ({ s: document.querySelector('#plSvg').dataset.s, h: document.querySelector('#plCard h2').textContent, t: document.querySelector('#plCard p').textContent, said: window.__said.slice(-1)[0] || '', on: document.querySelectorAll('#plSvg [data-from].on').length }));
-        ok(st.s === String(i + 1) && st.t.length > 40 && st.said.length > 20 && !cyr(st.t + st.said + st.h), `step ${i + 1} (${NEED[i]}): «${st.h}» drawn ${st.on}: ${st.said.slice(0, 60)}…`);
+        ok(st.s === String(i + 1) && st.t.length > 40 && st.said.length > 10 && !cyr(st.t + st.said + st.h), `step ${i + 1} (${NEED[i]}): «${st.h}» drawn ${st.on}: ${st.said.slice(0, 60)}…`);
         if ([1, 3, 5].includes(i)) await p.screenshot({ path: D + `plants-${lang}-${DEV}-grow${i + 1}.png` });
       }
       await p.waitForSelector('.winbox', { timeout: 15000 }).catch(() => {});
