@@ -3616,6 +3616,7 @@ function ac() {
 // iOS mutes page sound with the silent switch unless the page says it plays media: «playback» from the first touch,
 // and back to it whenever the microphone and speech recognition are off (they switch to «play-and-record»)
 let SR_ON = 0;
+const SRS = new Set();   // every running speech recogniser: a new screen aborts them all, so no microphone stays open
 let AC_FAIL = 0;
 document.addEventListener('pointerdown', () => {
   soundOut();
@@ -3638,6 +3639,16 @@ function soundOut(force) {
   if (force && !MIC.stream) SR_ON = 0;
   if (!MIC.stream && !SR_ON) audioSession('playback');
 }
+// before a long sound (a tale, a song, a recording): the loud speaker for sure. When nothing records, «playback» is set anew
+// (through «auto»: on iPhone the route is looked at again only when the category changes), a recognition or microphone that
+// is still alive is let go first.
+function speakerOn() {
+  try { srAbortAll(); } catch (e) {}
+  if (MIC.stream && !MIC.keep) micOff();
+  if (MIC.stream || SR_ON) return;
+  try { const a = navigator.audioSession; if (a) { if (a.type === 'playback') a.type = 'auto'; a.type = 'playback'; } } catch (e) {}
+}
+function srAbortAll() { SRS.forEach(r => { try { r.abort(); } catch (e) {} }); SRS.clear(); }
 function tone(f, d = .15, type = 'sine', v = .12, when = 0, f2 = 0) {
   if (!P.settings.sfx) return; const a = ac(); if (!a) return;
   MIC.quietUntil = Math.max(MIC.quietUntil, performance.now() + (when + d) * 1000 + 200);
@@ -4178,7 +4189,7 @@ const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
   document.querySelectorAll('.srch').forEach(x => x.remove());
-  tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); soundOut(true);
+  tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
@@ -6946,11 +6957,15 @@ function screenRec() {
     if (rec && rec.state === 'recording') { rec.stop(); return; }
     try {
       if (!window.MediaRecorder) throw new Error('no recorder');
+      audioSession('play-and-record');
       micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const chunks = []; rec = new MediaRecorder(micStream);
       rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      const me = tok;
       rec.onstop = () => {
-        micStream.getTracks().forEach(tr => tr.stop()); micStream = null;
+        if (micStream) { micStream.getTracks().forEach(tr => tr.stop()); micStream = null; }
+        if (me !== tok) return;      // the screen was left in the middle of a recording
+        speakerOn();
         if (url) URL.revokeObjectURL(url);
         url = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType || 'audio/mp4' }));
         $('#recBtn').textContent = '🎙 Записать ещё';
@@ -6961,6 +6976,7 @@ function screenRec() {
       hush(); rec.start(); $('#recBtn').textContent = '■ Стоп'; sfx.tick();
       later(() => { if (rec && rec.state === 'recording') rec.stop(); }, 9000);
     } catch (e) {
+      speakerOn();
       $('#recNote').hidden = false;
       $('#recNote').textContent = EMBEDDED ? 'Внутри claude.ai микрофон недоступен. Он работает в приложении govorilki.com/play.' : 'Не получилось включить микрофон. Разрешите доступ к микрофону для этого сайта в настройках браузера.';
     }
@@ -10273,7 +10289,7 @@ function hear(expect, { times = 1, onHeard, maxMs = 7000 } = {}) {
   return new Promise(res => {
     let r = null, best = '', done = false;
     const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok, heard: best }); };
-    try { r = new SR(); } catch (e) { HEAR.off = true; res({ ok: false, heard: '' }); return; }
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '' }); return; }
     audioSession('play-and-record'); SR_ON++;
     r.lang = LOC; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
     r.onresult = e => {
@@ -10319,7 +10335,7 @@ function hearLive(onText, { onStart, onFail, onLost } = {}) {
   };
   function go() {
     if (stopped) return;
-    try { r = new SR(); } catch (e) { HEAR.off = true; L.stop(); if (onFail) onFail(); return; }
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; L.stop(); if (onFail) onFail(); return; }
     r.lang = LOC; r.continuous = true; r.interimResults = true; r.maxAlternatives = 3; sess++;
     const me = r;
     r.onstart = () => { if (me !== r) return; alive = true; if (!started) { started = true; if (onStart) onStart(); } };
@@ -13326,7 +13342,7 @@ function screenDict({ back = null, word = '' } = {}) {
   $('#dForm').onsubmit = e => { e.preventDefault(); $('#dW').blur(); look(); };
   if ($('#dMic')) $('#dMic').onclick = () => {
     // one word by voice, started from the tap as iPhone wants
-    let r; try { r = new SR(); } catch (e) { return; }
+    let r; try { r = new SR(); SRS.add(r); } catch (e) { return; }
     r.lang = LOC; r.interimResults = false; r.maxAlternatives = 1; SR_ON++; audioSession('play-and-record');
     const done = () => { SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); $('#dMic').classList.remove('on'); };
     r.onresult = e => { const w = (e.results[0][0].transcript || '').trim().split(/\s+/).pop() || ''; $('#dW').value = w.toLowerCase(); look(); };
@@ -18738,7 +18754,7 @@ const WORLD = (() => {
     return new Promise(res => {
       let r = null, best = '', done = false, can = true;
       const end = () => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res(can ? best : null); };
-      try { r = new SR(); } catch (e) { res(null); return; }
+      try { r = new SR(); SRS.add(r); } catch (e) { res(null); return; }
       audioSession('play-and-record'); SR_ON++;
       r.lang = mlInfo(c)[3]; r.interimResults = true; r.maxAlternatives = 3; r.continuous = true;
       r.onresult = e => {
@@ -21361,7 +21377,7 @@ const TALES = (() => {
       setTimeout(() => { if (t === tok && my === run && playing && au && !(rolling && !au.paused && au.readyState >= 2)) stalled(my); }, ms || 5000);
     }
     function actorGo() {
-      const my = ++run; auRun = my; playing = true; btn(); rolling = false;
+      speakerOn(); const my = ++run; auRun = my; playing = true; btn(); rolling = false;
       if (at >= S.length) at = 0;
       $('#tlEnd').hidden = true; mark(at); credit();
       if (!au) {
@@ -21392,7 +21408,7 @@ const TALES = (() => {
       watch(my, 5000);
     }
     async function voiceGo() {
-      const my = ++run; playing = true; btn();
+      speakerOn(); const my = ++run; playing = true; btn();
       if (at >= S.length) at = 0;
       $('#tlEnd').hidden = true;
       for (; at < S.length; at++) {
