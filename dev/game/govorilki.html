@@ -2572,6 +2572,29 @@ body.pv-on #app{padding-top:52px}
 .ty-make{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 18px;border:3px dashed var(--line-strong);border-radius:24px;background:var(--paper);color:var(--ink);cursor:pointer}
 .ty-make span{font:400 44px/1 var(--f-emoji)}.ty-make b{font:800 19px var(--f-body)}.ty-make small{font:700 14px var(--f-body);color:var(--ink-soft)}
 .ty-acts{grid-column:auto;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start}
+/* AVA-CSS: drawn portraits of the grown-ups */
+.kface{display:inline-flex;align-items:center;justify-content:center;width:1.6em;height:1.6em;vertical-align:middle;line-height:1}
+.kface .ava{width:100%;height:100%;display:block;border-radius:50%;background:var(--paper)}
+.kface.emo{font-size:1em}
+.pt-who{margin:0;display:flex;align-items:center;justify-content:center;gap:8px;font:800 18px/1.2 var(--f-body);color:var(--ink)}.pt-who .kface{width:44px;height:44px;font-size:30px}
+.pt-draw{position:absolute;inset:0;display:none;background:var(--paper)}.ty-stage.drawn .pt-draw{display:block}.pt-draw .ava{width:100%;height:100%}
+.ty-stage.drawn canvas,.ty-stage.drawn svg#ptOver{visibility:hidden}
+.pt-s{margin:6px 0 0;font:800 16px/1.2 var(--f-body);color:var(--ink-soft);text-align:center}
+.pt-g{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.pt-g .chip.on{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.pt-sw{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.pt-c{width:38px;height:38px;border-radius:50%;border:3px solid var(--line);cursor:pointer;padding:0}.pt-c.on{border-color:var(--ink);box-shadow:0 0 0 3px #FFC83A}
+.ty-stage[data-step="photo"] .pt-draw{display:block}
+.g-hero .kface.g-face{width:84px;height:84px;flex:none}
+.gh-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:4px 0 14px}
+.gh-t{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:104px;border:0;border-radius:22px;background:var(--paper);box-shadow:0 5px 0 var(--line-strong);cursor:pointer;padding:12px;font:800 20px/1.2 var(--f-body);color:var(--ink);text-align:center}
+.gh-t .emo{font-size:40px;line-height:1}.gh-t:last-child:nth-child(odd){grid-column:1/-1}
+.gh-to{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.gh-to .chip.on{background:var(--t-yellow)}
+.gh-st{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+.gh-s{font-size:38px;line-height:1;padding:10px 0;border:0;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);cursor:pointer}.gh-s.on{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.gh-ph{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gh-ph .big{margin:0;width:100%;font-size:19px;padding:14px 8px;white-space:normal}
+.cheer .kface.ch-face{width:46px;height:46px;flex:none}
+.pv-face .kface,.iv-e .kface{width:100%;height:100%;font-size:inherit}
+.who-adult .kface{width:56px;height:56px;font-size:40px}
 .ty-stage[data-step="photo"]{width:min(100%,190px)}.ty-stage[data-step="photo"] .ty-empty{font-size:80px}
 .ty-pick{display:flex;flex-direction:column;align-items:stretch;gap:14px;width:min(100%,360px);margin:2px auto 0}.ty-pick .big{margin:0}
 /* TOY-CSS-END */
@@ -3554,6 +3577,254 @@ function pic(e) {
   if (typeof DRAWN === 'object' && DRAWN && DRAWN[e]) return `<span class="pic drawn">${DRAWN[e]}</span>`;
   return `<span class="pic emo">${e}</span>`;
 }
+
+/* AVA-BEGIN: drawn portraits of the family's grown-ups. A portrait is not a picture but a short description:
+   skin, hair, eye and top colours, hair shape, glasses, moustache or beard, earrings, face shape, smile lines —
+   «e8b896.8a8a8a.s100r12.5a3b2a». It is drawn as a flat cartoon in the friends' style, so it is tiny, travels with the
+   family's data (cloud sign-in, the relative's own link) and holds nothing of a photo. The photo, when the family uses
+   one, only lends its colours and proportions on this phone and is dropped as soon as the drawing is made. */
+const AVA_RE = /^[0-9a-f]{6}\.[0-9a-f]{6}\.[bscolutw][0-2][0-3][01][row][01][0-5]\.[0-9a-f]{6}$/;
+const AVA_TOPS = ['#7BC3E8', '#F39BB5', '#8CD48C', '#FFC857', '#B59CF2', '#FF8C6B'];
+const AVA_SKIN = ['#FCE3D0', '#F5CBA7', '#E8B48C', '#C98E62', '#9C6644', '#6B4430'];
+const AVA_HAIR = ['#F2F0EB', '#BDBDBD', '#8A8A8A', '#E6C27A', '#B5651D', '#7A4A26', '#3B2A20', '#1E1B1A', '#C0392B'];
+const AVA_EYES = ['#5A3B26', '#2A2346', '#4F86C6', '#5E8C4A', '#7F8C8D'];
+function avaOk(a) { return typeof a === 'string' && AVA_RE.test(a); }
+function avaParse(a) {
+  if (!avaOk(a)) return null;
+  const [sk, hr, f, ey] = a.split('.');
+  return { sk: '#' + sk, hr: '#' + hr, hs: f[0], gl: +f[1], fh: +f[2], er: +f[3], fw: f[4], ag: +f[5], tc: +f[6], ey: '#' + ey };
+}
+function avaStr(o) {
+  const h = c => String(c || '#000000').replace('#', '').toLowerCase().slice(0, 6);
+  return `${h(o.sk)}.${h(o.hr)}.${o.hs}${o.gl}${o.fh}${o.er ? 1 : 0}${o.fw}${o.ag ? 1 : 0}${o.tc}.${h(o.ey)}`;
+}
+function avaDefault(role, she) {
+  const old = role === 'gm' || role === 'gf';
+  return { sk: AVA_SKIN[1], hr: old ? AVA_HAIR[1] : AVA_HAIR[5], hs: she ? (old ? 'c' : 'l') : 's', gl: old ? 1 : 0, fh: 0, er: she ? 1 : 0, fw: 'r', ag: old ? 1 : 0, tc: she ? 1 : 0, ey: AVA_EYES[0] };
+}
+function avaShade(c, k) {
+  const n = parseInt(String(c).slice(1), 16), f = v => Math.max(0, Math.min(255, Math.round(k < 0 ? v * (1 + k) : v + (255 - v) * k)));
+  return '#' + [n >> 16, (n >> 8) & 255, n & 255].map(f).map(v => v.toString(16).padStart(2, '0')).join('');
+}
+// the drawing, in the friends' 120 box: flat colours, a soft dark outline, rosy cheeks and a smile
+function avaSVG(a, cls) {
+  const o = typeof a === 'string' ? avaParse(a) : a; if (!o) return '';
+  const L = '#2A2346', S = `stroke="${L}" stroke-width="3" stroke-linejoin="round"`;
+  const [rx, ry] = o.fw === 'w' ? [32, 31] : o.fw === 'o' ? [27, 35] : [29, 33];
+  const cy = 64, top = cy - ry, hr = o.hr, hd = avaShade(hr, -.3), sk = o.sk, skd = avaShade(sk, -.12);
+  const top2 = top + 2;
+  let back = '', front = '';
+  if (o.hs === 'l') back = `<path d="M${60 - rx - 9} ${cy - 4}c0-${ry + 4} 18-${ry + 12} ${rx + 9}-${ry + 12}s${rx + 9} ${8} ${rx + 9} ${ry + 12}v40c0 6-8 8-14 6l-4-24H${60 - rx + 4}l-4 24c-6 2-14 0-14-6z" fill="${hr}" ${S}/>`;
+  if (o.hs === 'o') back = `<path d="M${60 - rx - 7} ${cy}c0-${ry + 2} 16-${ry + 10} ${rx + 7}-${ry + 10}s${rx + 7} 8 ${rx + 7} ${ry + 10}v16c0 5-4 7-9 7H${60 - rx + 2}c-5 0-9-2-9-7z" fill="${hr}" ${S}/>`;
+  if (o.hs === 'u') back = `<circle cx="60" cy="${top - 4}" r="13" fill="${hr}" ${S}/>`;
+  if (o.hs === 'c') back = [-1, -.62, -.25, .25, .62, 1].map(t => { const x = 60 + t * (rx + 3), y = cy - 6 - Math.sqrt(Math.max(0, 1 - t * t)) * (ry + 2); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="11" fill="${hr}" ${S}/>`; }).join('');
+  // the hair over the head: from temple to temple over the top, back along the forehead (F) in the hair's own fringe
+  const Lx = 60 - rx - 1.5, Rx = 60 + rx + 1.5, Ty = Math.round(cy - ry * .28), F = Math.round(top + ry * .42);
+  const cap = `M${Lx} ${Ty}C${Lx} ${top - 9} ${Rx} ${top - 9} ${Rx} ${Ty}`;
+  if (o.hs === 's') front = `<path d="${cap}Q${Rx - 3} ${F - 2} ${60 + rx * .45} ${F}Q60 ${F - 5} ${60 - rx * .45} ${F}Q${Lx + 3} ${F - 2} ${Lx} ${Ty}z" fill="${hr}" ${S}/>`;
+  if (o.hs === 'w') front = `<path d="${cap}Q${Rx - 2} ${F + 4} ${60 + rx * .3} ${F + 2}Q${60 - rx * .2} ${F - 2} ${60 - rx * .5} ${F - 8}Q${Lx + 2} ${F - 2} ${Lx} ${Ty}z" fill="${hr}" ${S}/>`;
+  if (o.hs === 'o' || o.hs === 'l' || o.hs === 'u') front = `<path d="${cap}Q${Rx - 1} ${F + 10} ${60 + rx * .35} ${F + 6}Q${60 - rx * .1} ${F + 2} ${60 - rx * .25} ${F - 6}Q${Lx + 4} ${F + 4} ${Lx} ${Ty + 6}z" fill="${hr}" ${S}/>`;
+  if (o.hs === 'c') front = [-.8, -.45, -.12, .2, .52, .82].map(t => { const x = 60 + t * rx, y = top2 + 4 + Math.abs(t) * 9; return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9" fill="${hr}"/>`; }).join('') + `<path d="M${60 - rx + 1} ${cy - 8}q2-${ry - 4} ${rx - 1}-${ry - 2}q${rx - 2} -2 ${rx - 1} ${ry - 2}" fill="none" stroke="${hd}" stroke-width="2" opacity=".5"/>`;
+  if (o.hs === 't') front = `<path d="M${60 - rx - 2} ${cy - 2}c-2-10 2-17 9-20 2 7 2 14 0 22z" fill="${hr}" ${S}/><path d="M${60 + rx + 2} ${cy - 2}c2-10-2-17-9-20-2 7-2 14 0 22z" fill="${hr}" ${S}/>`;
+  if (o.hs === 'b' || o.hs === 't') front += `<path d="M${60 - 10} ${top + 7}q8-4 16-2" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55"/>`;
+  const ex = 11, eyY = cy - 2;
+  const eye = x => `<ellipse cx="${x}" cy="${eyY}" rx="6.2" ry="6.6" fill="#fff" stroke="${L}" stroke-width="2"/><circle cx="${x + .6}" cy="${eyY + .8}" r="3.6" fill="${o.ey}"/><circle cx="${x + .6}" cy="${eyY + .8}" r="1.7" fill="${L}"/><circle cx="${x + 1.9}" cy="${eyY - .9}" r="1.1" fill="#fff"/>`;
+  const brow = s => `<path d="M${60 + s * ex - 6} ${eyY - 10}q6-${o.ag ? 3 : 4} 12 ${o.ag ? 0 : 1}" transform="${s < 0 ? '' : ''}" fill="none" stroke="${hd}" stroke-width="3.2" stroke-linecap="round"/>`;
+  const lines = o.ag ? `<path d="M${60 - ex - 9} ${eyY - 1}l-4-2M${60 - ex - 9} ${eyY + 3}l-4 1M${60 + ex + 9} ${eyY - 1}l4-2M${60 + ex + 9} ${eyY + 3}l4 1" stroke="${avaShade(sk, -.35)}" stroke-width="1.6" stroke-linecap="round"/>` : '';
+  const my = cy + Math.round(ry * .5);
+  const beard = o.fh >= 2 ? `<path d="M${60 - rx + 1} ${cy + 2}c0 ${ry - 2} 12 ${ry + 6} ${rx - 1} ${ry + 6}s${rx - 1}-8 ${rx - 1}-${ry + 6}c-5 7-9 9-13 9-4-5-10-6-16-6s-12 1-16 6c-4 0-8-2-13-9z" fill="${hr}" ${o.fh === 3 ? 'opacity=".32"' : S}/>` : '';
+  const mous = o.fh === 1 || o.fh === 2 ? `<path d="M${49} ${my - 3}q5-5 11-2q6-3 11 2q-5 4-11 1q-6 3-11-1z" fill="${o.fh === 2 ? hd : hr}" stroke="${L}" stroke-width="1.6" stroke-linejoin="round"/>` : '';
+  const glass = o.gl === 1 ? `<g fill="rgba(255,255,255,.18)" stroke="${L}" stroke-width="2.6"><circle cx="${60 - ex}" cy="${eyY}" r="9.5"/><circle cx="${60 + ex}" cy="${eyY}" r="9.5"/></g><path d="M${60 - 2.4} ${eyY - 1}q2.4-2 4.8 0M${60 - ex - 9.5} ${eyY - 1}L${60 - rx} ${eyY - 3}M${60 + ex + 9.5} ${eyY - 1}L${60 + rx} ${eyY - 3}" fill="none" stroke="${L}" stroke-width="2.4"/>`
+    : o.gl === 2 ? `<g fill="rgba(255,255,255,.18)" stroke="${L}" stroke-width="2.6"><rect x="${60 - ex - 10}" y="${eyY - 8}" width="20" height="15" rx="4"/><rect x="${60 + ex - 10}" y="${eyY - 8}" width="20" height="15" rx="4"/></g><path d="M${60 - 2.4} ${eyY - 2}q2.4-2 4.8 0M${60 - ex - 10} ${eyY - 3}L${60 - rx} ${eyY - 4}M${60 + ex + 10} ${eyY - 3}L${60 + rx} ${eyY - 4}" fill="none" stroke="${L}" stroke-width="2.4"/>` : '';
+  const ear = s => `<circle cx="${60 + s * rx}" cy="${cy + 2}" r="7" fill="${sk}" ${S}/>` + (o.er ? `<circle cx="${60 + s * rx}" cy="${cy + 11}" r="2.8" fill="#FFC83A" stroke="${L}" stroke-width="1.4"/>` : '');
+  return `<svg class="ava${cls ? ' ' + cls : ''}" viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M14 120c2-18 20-27 46-27s44 9 46 27z" fill="${AVA_TOPS[o.tc] || AVA_TOPS[0]}" ${S}/>
+    <path d="M51 ${cy + ry - 6}h18v14c-3 3-15 3-18 0z" fill="${skd}" ${S}/>
+    ${back}${ear(-1)}${ear(1)}
+    <ellipse cx="60" cy="${cy}" rx="${rx}" ry="${ry}" fill="${sk}" ${S}/>
+    ${beard}
+    <circle cx="${60 - ex - 7}" cy="${my - 3}" r="5.5" fill="#FF8FA0" opacity=".42"/><circle cx="${60 + ex + 7}" cy="${my - 3}" r="5.5" fill="#FF8FA0" opacity=".42"/>
+    ${front}${brow(-1)}${brow(1)}${eye(60 - ex)}${eye(60 + ex)}${lines}
+    <path d="M60 ${eyY + 4}q-3 7 1 9" fill="none" stroke="${avaShade(sk, -.4)}" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M51 ${my}q9 8 18 0q-9 3-18 0z" fill="#B8475E" stroke="${L}" stroke-width="2" stroke-linejoin="round"/>
+    ${mous}${glass}</svg>`;
+}
+// a grown-up's face wherever they appear: the drawn portrait, else the role's emoji
+function kinFace(g, cls) {
+  const a = g && (g.av || (g.id && GRAND[g.id] && GRAND[g.id].av));
+  if (avaOk(a)) return `<span class="kface${cls ? ' ' + cls : ''}">${avaSVG(a)}</span>`;
+  return `<span class="kface emo${cls ? ' ' + cls : ''}">${esc(g && (g.e || (g.role || g.name ? roleOf(g)[1] : '')) || '👵')}</span>`;
+}
+
+/* reading a face from a photo, on this phone only: the eyes and the mouth the family tapped give the face's axis; the
+   cheeks give the skin, above the forehead the hair, beside the jaw long hair, the chin a beard, over the lip a moustache,
+   the bridge between the eyes glasses; the eyes' distance against the eyes-to-mouth length gives the face shape */
+function avaRead(cv, eyes, mouth, role, she) {
+  const W = cv.width, k = W / 120, d = cv.getContext('2d').getImageData(0, 0, W, W).data;
+  const [e1, e2] = eyes[0][0] < eyes[1][0] ? eyes : [eyes[1], eyes[0]];
+  const C = [(e1[0] + e2[0]) / 2, (e1[1] + e2[1]) / 2], ed = Math.hypot(e2[0] - e1[0], e2[1] - e1[1]) || 20;
+  const mh = Math.hypot(mouth[0] - C[0], mouth[1] - C[1]) || 20, u = [(mouth[0] - C[0]) / mh, (mouth[1] - C[1]) / mh], v = [-u[1], u[0]];
+  const P = (a, b) => [C[0] + u[0] * a + v[0] * b, C[1] + u[1] * a + v[1] * b];
+  const patch = ([x, y], r) => {
+    const px = [], R = Math.max(1, Math.round(r * k));
+    for (let j = -R; j <= R; j += 1) for (let i = -R; i <= R; i += 1) {
+      const X = Math.round(x * k) + i, Y = Math.round(y * k) + j; if (X < 0 || Y < 0 || X >= W || Y >= W) continue;
+      const o = (Y * W + X) * 4; if (d[o + 3] < 200) continue; px.push([d[o], d[o + 1], d[o + 2]]);
+    }
+    if (!px.length) return null;
+    const med = c => { const s = px.map(p => p[c]).sort((a, b) => a - b); return s[s.length >> 1]; };
+    return [med(0), med(1), med(2)];
+  };
+  const mix = (...cs) => { const ok = cs.filter(Boolean); if (!ok.length) return null; return [0, 1, 2].map(c => ok.map(x => x[c]).sort((a, b) => a - b)[ok.length >> 1]); };
+  const dist = (a, b) => a && b ? Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) : 999;
+  const hex = c => '#' + c.map(x => Math.round(Math.max(0, Math.min(255, x))).toString(16).padStart(2, '0')).join('');
+  const lum = c => c ? .3 * c[0] + .59 * c[1] + .11 * c[2] : 0, sat = c => c ? (Math.max(...c) - Math.min(...c)) / (Math.max(...c) || 1) : 0;
+  const skin = mix(patch(P(mh * .55, -ed * .55), ed * .09), patch(P(mh * .55, ed * .55), ed * .09), patch(P(-ed * .5, 0), ed * .08)) || [245, 203, 167];
+  const hairTop = patch(P(-ed * 1.2, 0), ed * .1), temple = mix(patch(P(-ed * .95, -ed * .8), ed * .08), patch(P(-ed * .95, ed * .8), ed * .08));
+  const bg = mix(patch(P(-ed * 1.9, -ed * 1.9), ed * .12), patch(P(-ed * 1.9, ed * 1.9), ed * .12), patch(P(0, -ed * 2.1), ed * .1), patch(P(0, ed * 2.1), ed * .1));
+  const jaw = mix(patch(P(mh * 1.1, -ed * 1.3), ed * .1), patch(P(mh * 1.1, ed * 1.3), ed * .1));
+  const chin = patch(P(mh + ed * .38, 0), ed * .1), lip = patch(P(mh - ed * .17, 0), ed * .06), bridge = patch(P(-ed * .02, 0), ed * .04);
+  const eyeC = mix(patch(e1, ed * .05), patch(e2, ed * .05));
+  const isHair = c => c && dist(c, skin) > 42 && (!bg || dist(c, bg) > 30);
+  const hairC = isHair(hairTop) ? hairTop : isHair(temple) ? temple : null;
+  let hs = she ? 'c' : 's';
+  if (!hairC) hs = 'b'; else if (!isHair(hairTop)) hs = 't';
+  else if (isHair(jaw) && dist(jaw, hairC) < 60) hs = she ? 'l' : 'o';
+  // the colour itself: a grey or white head stays clean, other hair a little brighter for the drawing
+  const H = hairC || temple || [138, 138, 138];
+  const hrC = sat(H) < .14 ? (lum(H) > 175 ? [242, 240, 235] : lum(H) > 120 ? [189, 189, 189] : lum(H) > 70 ? [138, 138, 138] : [40, 36, 34]) : H.map(x => x + (255 - x) * .08);
+  const beard = chin && dist(chin, skin) > 48 && (hairC && dist(chin, hairC) < 70 || lum(chin) < lum(skin) - 12);
+  const mous = !beard && lip && dist(lip, skin) > 52 && lum(lip) < lum(skin) - 25 && sat(lip) < .5;
+  const glasses = bridge && dist(bridge, skin) > 75 && lum(bridge) < lum(skin) - 50;
+  const r = mh / ed, fw = r < .95 ? 'w' : r > 1.22 ? 'o' : 'r';
+  const near = (c, list) => list.reduce((b, x) => { const n = parseInt(x.slice(1), 16), y = [n >> 16, (n >> 8) & 255, n & 255]; return dist(c, y) < b[0] ? [dist(c, y), x] : b; }, [1e9, list[0]])[1];
+  const old = role === 'gm' || role === 'gf';
+  return { sk: hex(skin.map(x => x + (255 - x) * .12)), hr: hex(hrC), hs, gl: glasses ? 1 : 0, fh: beard ? 2 : mous ? 1 : 0, er: she ? 1 : 0, fw, ag: old ? 1 : 0, tc: she ? 1 : 0, ey: eyeC ? near(eyeC, AVA_EYES) : AVA_EYES[0] };
+}
+
+/* the portrait maker: a photo (or none), the face framed into the circle, the eyes and the mouth tapped, then the
+   drawing with a few parts to choose. The photo is read from the file straight into a canvas on this phone and
+   forgotten — image, file field and canvases emptied — the moment the drawing is made; only the description is saved. */
+function screenPortrait(fid, gid, back) {
+  newScreen();
+  const f = ROOT.families[fid], g = f && f.grands.find(x => x.id === gid); if (!g) { (back || goHome)(); return; }
+  const role = roleOf(g)[0], she = !!g.she, E = 480;
+  const s = { step: EMBEDDED ? 'parts' : 'photo', src: null, url: '', fr: { x: 0, y: 0, z: 1 }, eyes: [], mouth: null, a: avaParse(g.av) || avaDefault(role, she), read: null };
+  const cv = document.createElement('canvas'); cv.width = cv.height = E;
+  shell('Портрет', `<div class="ty pt">
+    <p class="pt-who">${kinFace(g, 'pt-mini')} <b>${esc(g.name)}</b></p>
+    <div class="ty-stage" id="ptStage"><canvas id="ptCv" width="${E}" height="${E}"></canvas><svg id="ptOver" viewBox="0 0 120 120" aria-hidden="true"></svg><div class="pt-draw" id="ptDraw"></div></div>
+    <div class="ty-step" id="ptStep"></div>
+    ${EMBEDDED ? '' : '<input type="file" id="ptCam" accept="image/*" capture="user" hidden><input type="file" id="ptPick" accept="image/*" hidden>'}
+  </div>`, { back: () => { forget(); (back || goHome)(); } });
+  const stage = $('#ptStage'), view = $('#ptCv'), over = $('#ptOver');
+  // everything of the photo goes: the image, its address, the file fields, the pixels in both canvases
+  function forget() {
+    if (s.url) { try { URL.revokeObjectURL(s.url); } catch (e) {} }
+    if (s.src) { s.src.onload = s.src.onerror = null; s.src.src = ''; }
+    s.src = null; s.url = '';
+    $$('#ptCam,#ptPick').forEach(i => { try { i.value = ''; } catch (e) {} });
+    [cv, view].forEach(c => { if (!c) return; try { c.getContext('2d').clearRect(0, 0, c.width, c.height); } catch (e) {} c.width = c.height = 1; });
+  }
+  function frame() {
+    if (!s.src) return; const c = view.getContext('2d'); view.width = view.height = E; c.clearRect(0, 0, E, E);
+    const base = E / Math.min(s.src.width, s.src.height), kk = base * s.fr.z, w = s.src.width * kk, h = s.src.height * kk;
+    c.drawImage(s.src, (E - w) / 2 + s.fr.x * E, (E - h) / 2 + s.fr.y * E, w, h);
+  }
+  function marks() {
+    const guide = s.step === 'frame' ? '<ellipse cx="60" cy="58" rx="30" ry="38" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="5 4"/>' : '';
+    over.innerHTML = guide + s.eyes.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5" fill="none" stroke="#FFC83A" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="1.4" fill="#FFC83A"/>`).join('') +
+      (s.mouth ? `<path d="M${s.mouth[0] - 7} ${s.mouth[1] - 1}q7 6 14 0" fill="none" stroke="#FFC83A" stroke-width="2.6" stroke-linecap="round"/>` : '');
+  }
+  const showDraw = () => { $('#ptDraw').innerHTML = avaSVG(s.a); };
+  const at = e => { const r = stage.getBoundingClientRect(); return [Math.round((e.clientX - r.left) / r.width * 1200) / 10, Math.round((e.clientY - r.top) / r.height * 1200) / 10]; };
+  let drag = null, rq = 0;
+  stage.onpointerdown = e => {
+    if (s.step === 'frame' && s.src) { drag = { x: e.clientX, y: e.clientY, fx: s.fr.x, fy: s.fr.y, w: stage.clientWidth }; try { stage.setPointerCapture(e.pointerId); } catch (er) {} return; }
+    if (s.step === 'eyes') { if (s.eyes.length >= 2) s.eyes = []; s.eyes.push(at(e)); sfx.pop(); marks(); step(); return; }
+    if (s.step === 'mouth') { s.mouth = at(e); sfx.pop(); marks(); step(); }
+  };
+  stage.onpointermove = e => { if (!drag) return; s.fr.x = drag.fx + (e.clientX - drag.x) / drag.w; s.fr.y = drag.fy + (e.clientY - drag.y) / drag.w; if (!rq) rq = requestAnimationFrame(() => { rq = 0; frame(); }); };
+  stage.onpointerup = stage.onpointercancel = () => { drag = null; };
+  const got = file => {
+    if (!file) return; forget(); cv.width = cv.height = E;
+    s.url = URL.createObjectURL(file); const im = new Image();
+    im.onload = () => { s.src = im; s.fr = { x: 0, y: 0, z: 1 }; s.eyes = []; s.mouth = null; s.step = 'frame'; frame(); step(); sfx.good(); };
+    im.onerror = () => { forget(); talk('Не получилось открыть фото. Попробуйте другое.'); };
+    im.src = s.url;
+  };
+  if (!EMBEDDED) { $('#ptCam').onchange = e => got(e.target.files[0]); $('#ptPick').onchange = e => got(e.target.files[0]); }
+  // the drawing is made: colours and shapes read from the framed photo, then the photo is forgotten
+  function makeDrawing() {
+    if (s.src && s.eyes.length === 2 && s.mouth) {
+      const c = cv.getContext('2d'); c.clearRect(0, 0, E, E); c.drawImage(view, 0, 0);
+      try { s.read = avaRead(cv, s.eyes, s.mouth, role, she); s.a = { ...s.read }; } catch (e) {}
+    }
+    forget(); s.eyes = []; s.mouth = null; marks();
+  }
+  const chips = (k, list, lab) => `<div class="pt-g" data-k="${k}">${list.map(([v, t]) => `<button class="chip ${String(s.a[k]) === String(v) ? 'on' : ''}" data-v="${v}">${t}</button>`).join('')}</div>`;
+  const sw = (k, list) => `<div class="pt-sw" data-k="${k}">${[...new Set([...(s.read ? [s.read[k]] : []), ...list].map(c => typeof c === 'string' ? c.toLowerCase() : c))].map(c => `<button class="pt-c ${String(s.a[k]).toLowerCase() === String(c) ? 'on' : ''}" data-v="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')}</div>`;
+  function step() {
+    const box = $('#ptStep'); stage.dataset.step = s.step; stage.classList.toggle('drawn', s.step === 'parts');
+    if (s.step !== 'parts') $('#ptDraw').innerHTML = '';
+    if (s.step === 'photo') {
+      box.innerHTML = `<p class="ty-h">Сделаем рисованный портрет — похожий, но нарисованный.</p>
+        <p class="ty-p">Снимите лицо прямо, при дневном свете. Фото нужно только на минутку: по нему игра возьмёт цвет волос, кожи и глаз и форму лица.</p>
+        <div class="ty-pick"><button class="big" id="ptShoot">📷 Сфотографировать</button><button class="big ghost" id="ptFile">🖼️ Выбрать фото</button><button class="chip" id="ptNo">✏️ Нарисовать без фото</button></div>
+        <p class="ty-small">🔒 Фото не покидает телефон и не сохраняется: как только портрет нарисован, фото стирается. Остаётся только рисунок.</p>`;
+      $('#ptShoot').onclick = () => { sfx.pop(); $('#ptCam').click(); }; $('#ptFile').onclick = () => { sfx.pop(); $('#ptPick').click(); };
+      $('#ptNo').onclick = () => { sfx.pop(); s.step = 'parts'; step(); };
+      $('#ptDraw').innerHTML = avaSVG(s.a); stage.classList.add('drawn');
+    } else if (s.step === 'frame') {
+      marks();
+      box.innerHTML = `<p class="ty-h">Подвиньте фото пальцем, чтобы лицо было в овале.</p>
+        <label class="ty-sl">🔍 Размер <input type="range" id="ptZ" min="1" max="4" step=".05" value="${s.fr.z}"></label>
+        <div class="prow-btns ty-row"><button class="chip" id="ptAgain">📷 Другое фото</button><button class="big" id="ptNext">Дальше →</button></div>`;
+      $('#ptZ').oninput = e => { s.fr.z = +e.target.value; frame(); };
+      $('#ptAgain').onclick = () => { sfx.pop(); forget(); s.step = 'photo'; step(); marks(); };
+      $('#ptNext').onclick = () => { sfx.pop(); s.step = 'eyes'; step(); marks(); talk('Нажмите на глаза: сначала на один, потом на другой.'); };
+    } else if (s.step === 'eyes') {
+      box.innerHTML = `<p class="ty-h">${s.eyes.length < 2 ? `Нажмите, где глаза: ${s.eyes.length ? 'теперь второй' : 'сначала один'}.` : 'Глаза отмечены!'}</p>
+        <div class="prow-btns ty-row">${s.eyes.length ? '<button class="chip" id="ptEyesAgain">↩ Заново</button>' : ''}<button class="big" id="ptNext" ${s.eyes.length === 2 ? '' : 'disabled'}>Дальше →</button></div>`;
+      if ($('#ptEyesAgain')) $('#ptEyesAgain').onclick = () => { sfx.pop(); s.eyes = []; marks(); step(); };
+      $('#ptNext').onclick = () => { sfx.pop(); s.step = 'mouth'; step(); talk('А теперь нажмите, где рот.'); };
+    } else if (s.step === 'mouth') {
+      box.innerHTML = `<p class="ty-h">${s.mouth ? 'Рот отмечен!' : 'Нажмите, где рот.'}</p>
+        <div class="prow-btns ty-row"><button class="big" id="ptNext" ${s.mouth ? '' : 'disabled'}>🎨 Нарисовать</button></div>`;
+      $('#ptNext').onclick = () => { sfx.magic(); makeDrawing(); s.step = 'parts'; step(); talk('Готово! Если нужно, поправьте волосы, очки или цвета — чтобы было похоже.'); };
+    } else if (s.step === 'parts') {
+      showDraw();
+      box.innerHTML = `<p class="ty-h">${s.read ? 'Вот портрет! Поправьте, чтобы было похоже.' : 'Выберите, чтобы было похоже.'}</p>
+        <h3 class="pt-s">Волосы</h3>${chips('hs', [['s', 'Короткие'], ['c', 'Кудри'], ['w', 'Чёлка набок'], ['o', 'Каре'], ['l', 'Длинные'], ['u', 'Пучок'], ['t', 'Лысинка'], ['b', 'Без волос']])}
+        ${sw('hr', AVA_HAIR)}
+        <h3 class="pt-s">Лицо и глаза</h3>${sw('sk', AVA_SKIN)}${sw('ey', AVA_EYES)}
+        ${chips('fw', [['r', 'Круглое'], ['o', 'Вытянутое'], ['w', 'Широкое']])}
+        <h3 class="pt-s">Очки, усы, борода</h3>${chips('gl', [[0, 'Без очков'], [1, '👓 Круглые'], [2, '🕶 Квадратные']])}
+        ${chips('fh', [[0, 'Без усов'], [1, 'Усы'], [2, 'Борода'], [3, 'Щетина']])}
+        ${chips('er', [[0, 'Без серёжек'], [1, 'Серёжки']])}${chips('ag', [[0, 'Без морщинок'], [1, 'Морщинки-лучики']])}
+        <h3 class="pt-s">Кофта</h3>${sw('tc', AVA_TOPS.map((c, i) => i))}
+        <div class="prow-btns ty-row">${EMBEDDED ? '' : '<button class="chip" id="ptPhoto">📷 По фото</button>'}${g.av ? '<button class="chip" id="ptDel">🗑 Убрать портрет</button>' : ''}<button class="big" id="ptSave">✅ Сохранить</button></div>
+        <p class="ty-small">🔒 Сохраняется только рисунок. Фото не сохраняется и никуда не отправляется.</p>`;
+      // the top colours are kept by number: the swatches show the colour
+      $$('.pt-sw[data-k="tc"] .pt-c').forEach(b => { b.style.background = AVA_TOPS[+b.dataset.v]; b.classList.toggle('on', +b.dataset.v === s.a.tc); });
+      box.onclick = e => {
+        const b = e.target.closest('[data-v]'), grp = b && b.closest('[data-k]'); if (!b || !grp) return;
+        const k = grp.dataset.k, v = b.dataset.v; s.a[k] = ['gl', 'fh', 'er', 'ag', 'tc'].includes(k) ? +v : v;
+        sfx.tick(); grp.querySelectorAll('[data-v]').forEach(x => x.classList.toggle('on', x === b)); showDraw();
+      };
+      if ($('#ptPhoto')) $('#ptPhoto').onclick = () => { sfx.pop(); s.step = 'photo'; step(); };
+      if ($('#ptDel')) $('#ptDel').onclick = () => { sfx.pop(); delete g.av; save(); famPeople(); (back || goHome)(); };
+      $('#ptSave').onclick = () => {
+        const a = avaStr(s.a); if (!avaOk(a)) return;
+        g.av = a; save(); famPeople(); sfx.good(); forget();
+        if (typeof postProg === 'function') try { postProg(true); } catch (e) {}
+        talk(`Портрет сохранён! Теперь ${lcFirst(g.name)} видно везде в игре.`); (back || goHome)();
+      };
+    }
+  }
+  step();
+}
+/* AVA-END */
 
 /* ---------- the girl in the mirror (articulation poses) ---------- */
 const FC = { skin: '#FFDDC2', hair: '#E8762A', lip: '#E35D75', inn: '#7A2238', tooth: '#FFFFFF', toothS: '#E3DCE6', tongue: '#FF8FA0', tongueD: '#E0566E', eye: '#2A2346', hi: '#FFC83A' };
@@ -7155,11 +7426,11 @@ const lcFirst = x => (IS_RU ? /^(Бабушк|Дедушк|Мам|Пап|Т[её
 const KIN_IDS = ['gm', 'gf', 'mom', 'dad', 'aunt', 'uncle', 'sis', 'bro', 'kin'];
 // from the name when the link is old: «Бабушка Нина» is a grandmother, «Папа» is a father
 const roleGuess = (name, she) => /^(granny|grandma|gran|nan|avó|vovó)/i.test(name) ? 'gm' : /^(grandpa|grandad|avô|vovô)/i.test(name) ? 'gf' : /^(mum|mom|mãe)/i.test(name) ? 'mom' : /^(dad|pai)/i.test(name) ? 'dad' : /^(aunt|tia)/i.test(name) ? 'aunt' : /^(uncle|tio)/i.test(name) ? 'uncle' : /^бабушк/i.test(name) ? 'gm' : /^дедушк/i.test(name) ? 'gf' : /^мам/i.test(name) ? 'mom' : /^пап/i.test(name) ? 'dad' : /^т[её]т/i.test(name) ? 'aunt' : /^дяд/i.test(name) ? 'uncle' : 'kin';
-function grandOf(id, name, she, e, role) {
+function grandOf(id, name, she, e, role, av) {
   const [n, , dat, acc] = decl(name, she);
   const r = KIN_IDS.includes(role) ? role : roleGuess(n, she);
   const E = { gm: '👵', gf: '👴', mom: '👩', dad: '😎', aunt: '👩‍🦰', uncle: '🧔', sis: '👧', bro: '👦', kin: she ? '👩' : '🧑' };
-  return { id, name: n, to: lcFirst(dat), hi: `Привет, ${lcFirst(n)}!`, call: `Позвать ${lcFirst(acc)}`, e: E[r] || e || (she ? '👵' : '👴'), she: she ? 1 : 0, role: r };
+  return { id, name: n, to: lcFirst(dat), hi: `Привет, ${lcFirst(n)}!`, call: `Позвать ${lcFirst(acc)}`, e: E[r] || e || (she ? '👵' : '👴'), she: she ? 1 : 0, role: r, av: avaOk(av) ? av : '' };
 }
 // what the children are to this relative: grandchildren, children, nephews and nieces, or simply their names
 function kinWords(role, kids) {
@@ -7196,7 +7467,7 @@ try {
   const m = h.match(/vhod=([a-z0-9]{2,12})\.([a-z0-9]{8,40})/);
   if (m) {
     const old = OLD_GRANDS[m[1]] || ['Бабушка', true], kk = (arg('k') || 'sava~Сава~m').split('~');
-    GUEST = { who: m[1], fam: m[2], role: arg('r') || '', name: (arg('n') || old[0]).slice(0, 40), she: arg('n') ? arg('s') === '1' : old[1], kid: kk[0].replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'sava', kidName: (kk[1] || 'Сава').slice(0, 30), kidShe: kk[2] === 'f' };
+    GUEST = { who: m[1], fam: m[2], role: arg('r') || '', name: (arg('n') || old[0]).slice(0, 40), she: arg('n') ? arg('s') === '1' : old[1], kid: kk[0].replace(/[^a-z0-9_]/g, '').slice(0, 16) || 'sava', kidName: (kk[1] || 'Сава').slice(0, 30), kidShe: kk[2] === 'f', av: avaOk(arg('a')) ? arg('a') : '' };
     localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST));
   } else { const g = JSON.parse(localStorage.getItem(GUEST_KEY) || 'null'); if (g && g.who && g.fam) GUEST = { name: (OLD_GRANDS[g.who] || ['Бабушка'])[0], she: (OLD_GRANDS[g.who] || [0, true])[1], kid: 'sava', kidName: 'Сава', kidShe: false, ...g }; }
   const gm = h.match(/[#&]g=([a-z0-9]{6,12})\.(white|black)(?:\.([a-z0-9]{2,12}))?(?:\.([a-z0-9_]{2,16}))?/);
@@ -7205,12 +7476,12 @@ try {
 // the family phone: the grandparents of the current family and the child who is playing now (or the first one who plays chess)
 function famPeople() {
   if (GUEST && !(GUEST_OFF && fam() && !fam().guest)) {
-    GRAND = { [GUEST.who]: grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role) };
+    GRAND = { [GUEST.who]: grandOf(GUEST.who, GUEST.name, GUEST.she, '', GUEST.role, GUEST.av) };
     KID = kidOf(GUEST.kid, GUEST.kidName, GUEST.kidShe);
     return;
   }
   const f = fam();
-  GRAND = Object.fromEntries((f ? f.grands : []).map(g => [g.id, grandOf(g.id, g.name, g.she, g.e, g.role)]));
+  GRAND = Object.fromEntries((f ? f.grands : []).map(g => [g.id, grandOf(g.id, g.name, g.she, g.e, g.role, g.av)]));
   const k = ROOT.cur && ROOT.profiles[ROOT.cur] ? ROOT.cur : KIDS[0];
   if (k) { const st = ROOT.profiles[k].settings; KID = kidOf(k, st.name, st.gender === 'f'); }
 }
@@ -7230,7 +7501,7 @@ function famCode() {
   if (!f.code) { f.code = f.id === 'main' && ROOT.fam ? ROOT.fam : rid(15); save(); }
   return f.code;
 }
-const nameArgs = w => `&n=${encodeURIComponent(GRAND[w].name)}&s=${GRAND[w].she ? 1 : 0}&r=${GRAND[w].role || ''}&k=${KID.id}~${encodeURIComponent(KID.name)}~${KID.she ? 'f' : 'm'}`;
+const nameArgs = w => `&n=${encodeURIComponent(GRAND[w].name)}&s=${GRAND[w].she ? 1 : 0}&r=${GRAND[w].role || ''}${avaOk(GRAND[w].av) ? '&a=' + GRAND[w].av : ''}&k=${KID.id}~${encodeURIComponent(KID.name)}~${KID.she ? 'f' : 'm'}`;
 const entryLink = w => `${SITE}#vhod=${w}.${famCode()}${nameArgs(w)}`;
 const gameLink = (g, forWho) => forWho === KID.id ? `${SITE}#g=${g.id}.${otherColor(g.me)}.${myId()}.${KID.id}` : `${SITE}#vhod=${forWho}.${famCode()}${nameArgs(forWho)}&g=${g.id}.${otherColor(g.me)}`;
 
@@ -7336,17 +7607,17 @@ function screenFamChess() {
   shell('Шахматы онлайн', `<div class="fam">
     <div class="fam-inv" id="famInv"></div>
     <button class="lg-cta" id="famAI"><span class="emo">🤖</span><span class="lg-t"><b>Играть с компьютером</b><small>уровень ${aiTop()}: ${esc(AI_LV[aiTop() - 1].n)}</small></span></button>
-    <div class="fam-card"><h2 class="fam-h">${Object.values(GRAND).map(g => pic(g.e)).join('') || pic('👵')} Партия с родными</h2>
+    <div class="fam-card"><h2 class="fam-h">${Object.values(GRAND).map(g => avaOk(g.av) ? kinFace(g, 'pic') : pic(g.e)).join('') || pic('👵')} Партия с родными</h2>
       ${Object.keys(GRAND).length ? '' : `<p class="lead">В семье пока нет бабушек и дедушек. Добавьте их в «Для родителей» → «Семьи».</p>`}
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
-      <div class="fam-who">${Object.entries(GRAND).map(([k, g]) => `<button class="big" data-who="${k}">${g.e} ${g.call}</button>`).join('')}
+      <div class="fam-who">${Object.entries(GRAND).map(([k, g]) => `<button class="big" data-who="${k}">${kinFace(g)} ${g.call}</button>`).join('')}
         ${KIDS.filter(id => id !== ROOT.cur).map(id => `<button class="big ghost" data-local="${id}"><span class="chip-face">${kidFace(id)}</span> ${esc(ROOT.profiles[id].settings.name)} — на этом телефоне</button>`).join('')}</div>
       <p class="fam-out" id="famOut"></p>
     </div>
     ${gamesHTML()}
     <div class="fam-card"><h3 class="fam-s">Вход для родных</h3>
       <p class="lead">Отправьте один раз. По своей ссылке родные увидят приглашения и смогут сами позвать ${esc(KID.acc)}.</p>
-      <div class="fam-row">${Object.entries(GRAND).map(([k, g]) => `<button class="chip" data-entry="${k}">${g.e} Вход ${g.to}</button>`).join('')}</div>
+      <div class="fam-row">${Object.entries(GRAND).map(([k, g]) => `<button class="chip" data-entry="${k}">${kinFace(g)} Вход ${g.to}</button>`).join('')}</div>
       <div class="fam-out" id="famEntry"></div></div>
     <details class="fam-card fam-lichess"><summary class="fam-s">Lichess: задачи и уроки</summary>
       <p class="lead">В Португалии Lichess работает, а в России часто не открывается, поэтому партии с родными идут на нашей доске.</p>
@@ -7399,12 +7670,24 @@ function screenGuest() {
   const invites = new Map();
   document.body.classList.remove('quest');
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
-    <header class="g-hero">${pic(g.e)}<div><h1>${g.hi}</h1></div></header>
+    <header class="g-hero"><span id="gHeroFace">${avaOk(g.av) ? kinFace(g, 'g-face') : pic(g.e)}</span><div><h1>${g.hi}</h1></div></header>
+    <div class="gh-tiles" id="ghTiles">
+      <button class="gh-t" data-gt="gKidsH"><span class="emo">⭐</span><b id="ghKidsT">Как дела у ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</b></button>
+      <button class="gh-t" data-gt="gHelloH"><span class="emo">💌</span><b>Послать привет</b></button>
+      <button class="gh-t" data-gt="gChessH"><span class="emo">♟</span><b>Шахматы</b></button>
+      <button class="gh-t" data-gt="tale"><span class="emo">📖</span><b>Сказка вместе</b></button>
+      <button class="gh-t" data-gt="gGamesH"><span class="emo">🎮</span><b>Игры внуков</b></button>
+    </div>
     ${hgTop ? `<div id="hgBox">${homeGuide(true)}</div>` : ''}
     <div class="fam-card"><h2 class="fam-h" id="gKidsH">Как дела у ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
-    <div class="fam-card"><h2 class="fam-h">🎮 Игры внуков</h2><p class="lead">Те же игры, что у внуков: играйте сами, а потом обсудите или сыграйте вместе. Внуки увидят, во что вы играли.</p><div class="g-games" id="gGames">${guestGamesBtns(gLoad(GPROG_KEY, null))}</div></div>
+    <div class="fam-card gh-hello"><h2 class="fam-h" id="gHelloH">💌 Послать привет</h2><p class="lead">Выберите картинку и слова. Игра покажет привет с вашим портретом и прочитает его вслух, когда внук откроет игру.</p>
+      <div class="gh-to" id="ghTo"></div>
+      <div class="gh-st" id="ghSt">${HI_STICKERS.map((x, i) => `<button class="gh-s${i ? '' : ' on'}" data-st="${i}">${x}</button>`).join('')}</div>
+      <div class="gh-ph" id="ghPh">${HELLO.map((x, i) => `<button class="big ghost gh-p" data-hp="${i}">${x}</button>`).join('')}</div>
+      <p class="fam-out" id="ghOut"></p></div>
+    <div class="fam-card"><h2 class="fam-h" id="gGamesH">🎮 Игры внуков</h2><p class="lead">Те же игры, что у внуков: играйте сами, а потом обсудите или сыграйте вместе. Внуки увидят, во что вы играли.</p><div class="g-games" id="gGames">${guestGamesBtns(gLoad(GPROG_KEY, null))}</div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Приглашения</h2><div id="gInv" class="g-inv"><p class="lead">Проверяю…</p></div></div>
-    <div class="fam-card"><h2 class="fam-h">♟ Позвать сыграть</h2>
+    <div class="fam-card"><h2 class="fam-h" id="gChessH">♟ Позвать сыграть</h2>
       <h3 class="fam-s">Я играю</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
       <div class="fam-who" id="gWho"></div><p class="fam-out" id="gOut"></p></div>
     ${gamesHTML()}
@@ -7424,6 +7707,25 @@ function screenGuest() {
   bindLang($('#gLang'), () => screenGuest()); whoGuestTop(); whoGuestMoved();
   if ($('#hgDone')) $('#hgDone').onclick = () => { sfx.pop(); gStore(HG_KEY, Date.now()); screenGuest(); };
   $('#gKids').onclick = () => { sfx.pop(); guestGames(GUEST.kid); };
+  // the big tiles: each goes to its card; «Сказка вместе» opens the audio tales (or the bookshelf) as the grandchild sees them
+  $('#ghTiles').onclick = e => {
+    const b = e.target.closest('[data-gt]'); if (!b) return; sfx.pop();
+    if (b.dataset.gt === 'tale') { const tg = GAMES.find(x => x.id === 'tales') || GAMES.find(x => x.id === 'bookshelf'); if (tg) guestGames(GUEST.kid, () => tg.go()); return; }
+    const h = document.getElementById(b.dataset.gt); if (h) h.closest('.fam-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  // a hello: sticker and words for one grandchild, sent like praise (again for three days until the children's phone has it)
+  let helloTo = '', sticker = 0;
+  const helloKids = () => { const ks = pg && pg.kids && pg.kids.length ? pg.kids.map(k => ({ id: k.id, n: k.n })) : [{ id: KID.id, n: KID.name }]; if (!ks.some(k => k.id === helloTo)) helloTo = ks[0].id; const box = $('#ghTo'); if (box) box.innerHTML = ks.length > 1 ? ks.map(k => `<button class="chip${k.id === helloTo ? ' on' : ''}" data-hto="${esc(k.id)}">${esc(k.n)}</button>`).join('') : ''; };
+  $('#ghTo').onclick = e => { const b = e.target.closest('[data-hto]'); if (!b) return; sfx.tick(); helloTo = b.dataset.hto; helloKids(); };
+  $('#ghSt').onclick = e => { const b = e.target.closest('[data-st]'); if (!b) return; sfx.tick(); sticker = +b.dataset.st; $$('#ghSt .gh-s').forEach(x => x.classList.toggle('on', x === b)); };
+  $('#ghPh').onclick = e => {
+    const b = e.target.closest('[data-hp]'); if (!b) return;
+    const em = HI_STICKERS[sticker], x = HELLO[+b.dataset.hp], c = { i: rid(8), to: helloTo, e: em, x, p: 10 + +b.dataset.hp, at: Date.now(), sent: Date.now() };
+    sfx.magic(); hopEl(b);
+    relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: em, x, p: c.p });
+    const o = gLoad(GOUT_KEY, []); o.push(c); gStore(GOUT_KEY, o.slice(-30));
+    $('#ghOut').textContent = `Отправлено: ${em} ${x}`;
+  };
   // the grandchildren's games: a whole set, or the very game a grandchild played
   $('.fam').addEventListener('click', e => {
     const gp = e.target.closest('[data-gplay]'), tr = e.target.closest('[data-try]');
@@ -7442,18 +7744,21 @@ function screenGuest() {
   // the whole family as the children's phone last described it: the children and the other relatives
   const learnKids = x => {
     (x && x.kids || []).forEach(k => { KNOWN_KIDS[k.id] = kidOf(k.id, k.n, !!k.s); });
-    (x && x.kin || []).forEach(k => { if (k.id !== GUEST.who && /^[a-z0-9]{2,12}$/.test(k.id)) GRAND[k.id] = grandOf(k.id, cleanS(k.n, 30), !!k.s, '', k.r); });
+    (x && x.kin || []).forEach(k => { if (k.id !== GUEST.who && /^[a-z0-9]{2,12}$/.test(k.id)) GRAND[k.id] = grandOf(k.id, cleanS(k.n, 30), !!k.s, '', k.r, k.a); });
+    // the family drew this relative's portrait after the link was sent: it arrives with the progress note
+    const me = (x && x.kin || []).find(k => k.id === GUEST.who);
+    if (me && avaOk(me.a) && me.a !== GUEST.av) { GUEST.av = me.a; GRAND[GUEST.who].av = me.a; try { localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST)); } catch (e) {} const hf = $('#gHeroFace'); if (hf) hf.innerHTML = kinFace(GRAND[GUEST.who], 'g-face'); }
     const w = $('#gWho'); if (!w) return;
     const kids = x && x.kids && x.kids.length ? x.kids.map(k => KNOWN_KIDS[k.id]) : [KID];
     const kin = Object.values(GRAND).filter(r => r.id !== GUEST.who);
-    w.innerHTML = [...kids.map(k => `<button class="big" data-who="${esc(k.id)}">${k.e} ${esc(k.name)}</button>`), ...kin.map(r => `<button class="big ghost" data-who="${esc(r.id)}">${r.e} ${esc(r.name)}</button>`)].join('');
+    w.innerHTML = [...kids.map(k => `<button class="big" data-who="${esc(k.id)}">${k.e} ${esc(k.name)}</button>`), ...kin.map(r => `<button class="big ghost" data-who="${esc(r.id)}">${kinFace(r)} ${esc(r.name)}</button>`)].join('');
   };
   const drawKids = () => {
     const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg);
     const gg = $('#gGames'); if (gg && pg) gg.innerHTML = guestGamesBtns(pg);
-    if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = 'Как дела у ' + w.gen; if (k) k.textContent = 'Открыть игру ' + w.gen; }
+    if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = 'Как дела у ' + w.gen; if (k) k.textContent = 'Открыть игру ' + w.gen; const kt = $('#ghKidsT'); if (kt) kt.textContent = 'Как дела у ' + w.gen; }
   };
-  learnKids(pg); drawKids();
+  learnKids(pg); drawKids(); helloKids();
   const out = gLoad(GOUT_KEY, []).filter(c => Date.now() - c.at < 3 * 864e5 && c.to !== 'all');
   out.forEach(c => { if (Date.now() - (c.sent || 0) > 8 * 3600e3) { relayPost({ k: 'cheer', i: c.i, to: c.to, by: GUEST.who, n: GUEST.name, e: c.e, x: c.x, p: c.p, ...(c.g ? { g: c.g, st: c.st, gn: c.gn } : {}) }); c.sent = Date.now(); } });
   gStore(GOUT_KEY, out);
@@ -7477,8 +7782,8 @@ function screenGuest() {
   relaySub(m => {
     if (t !== tok) return;
     if (m.k === 'prog' && Array.isArray(m.kids) && (!pg || m.at > pg.at)) {
-      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), tr: k.tr === 'l' ? 'l' : 'r', cf: cleanCf(k.cf), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9), /^[a-z]{2,8}$/.test(x && x[2] || '') ? x[2] : '']).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13), /^[a-z0-9:_-]{2,40}$/i.test(x && x[3] || '') ? x[3] : '']).filter(x => x[0]) })) };
-      gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); return;
+      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6), ...(avaOk(k.a) ? { a: k.a } : {}) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), tr: k.tr === 'l' ? 'l' : 'r', cf: cleanCf(k.cf), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9), /^[a-z]{2,8}$/.test(x && x[2] || '') ? x[2] : '']).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13), /^[a-z0-9:_-]{2,40}$/i.test(x && x[3] || '') ? x[3] : '']).filter(x => x[0]) })) };
+      gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); helloKids(); return;
     }
     if (m.k === 'cheer' && m.to === GUEST.who && m.i && !hearts.has(m.i)) {
       hearts.set(m.i, m); $('#gHearts').innerHTML = [...hearts.values()].sort((a, b) => b.at - a.at).slice(0, 4).map(h => `<p>${esc(cleanS(h.e, 8))} <b>${esc(cleanS(h.n, 20))}</b>: ${esc(cheerText(h))}</p>`).join('');
@@ -9973,7 +10278,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
       return kid;
     });
     old.filter(x => !ids.includes(x)).forEach(x => delete ROOT.profiles[x]);
-    const gs = grands.filter(g => g.name).map(g => ({ id: g.id || 'g' + rid6(), name: g.name, she: !!g.she, role: roleOf(g)[0], e: kinE(g), cc: g.cc || 'RU' }));
+    const gs = grands.filter(g => g.name).map(g => ({ id: g.id || 'g' + rid6(), name: g.name, she: !!g.she, role: roleOf(g)[0], e: kinE(g), cc: g.cc || 'RU', ...(avaOk(g.av) ? { av: g.av } : {}) }));
     ROOT.families[id] = { ...(f || {}), id, name: cleanS($('#feName').value, 30) || 'Наша семья', cc: $('#feCc').value, cc2: gs.length ? '' : (f && f.cc2) || '', places: $$('#fePl [data-pl].sel').map(b => b.dataset.pl), kids: ids, grands: gs };
     holYear.c = {};
     useFamily(id); P = ROOT.profiles[ROOT.cur]; famPeople(); save(); sfx.magic();
@@ -10030,7 +10335,7 @@ function importCode(raw) {
     kids.forEach(k => merge(k, prs[k]));
     const lg = f.league && /^[a-z0-9]{8,24}$/.test(f.league.code) ? f.league : undefined;
     ROOT.families[fid] = { id: fid, name: cleanS(f.name, 30) || 'Наша семья', kids,
-      grands: (Array.isArray(f.grands) ? f.grands : []).filter(g => g && ID_RE.test(g.id)).map(g => ({ id: g.id, name: cleanS(g.name, 30) || 'Бабушка', she: !!g.she })),
+      grands: (Array.isArray(f.grands) ? f.grands : []).filter(g => g && ID_RE.test(g.id)).map(g => ({ id: g.id, name: cleanS(g.name, 30) || 'Бабушка', she: !!g.she, ...(avaOk(g.av) ? { av: g.av } : {}) })),
       ...(/^[a-z0-9]{8,40}$/.test(f.code || '') ? { code: f.code } : {}), ...(lg ? { league: lg } : {}) };
   } else {
     // the first format: Vera and Sava
@@ -12458,8 +12763,11 @@ const ROLES = [['gm', '👵', 'Бабушка', 1], ['gf', '👴', 'Дедушк
 const roleOf = g => ROLES.find(r => r[0] === (g.role || roleGuess(g.name || '', g.she))) || (g.she ? ROLES[0] : ROLES[1]);
 const kinE = g => roleOf(g)[1];
 const PRAISE = [['👏', 'Молодец!'], ['❤️', 'Люблю тебя!'], ['🌟', 'Умница!'], ['💪', 'Так держать!']];
+// a grown-up's hello: a sticker and a ready phrase (code 10 and up), said aloud on the child's phone at the next start
+const HELLO = ['Доброе утро!', 'Скучаю по тебе!', 'Горжусь тобой!', 'Обнимаю крепко!', 'Скоро увидимся!', 'Спокойной ночи!'];
+const HI_STICKERS = ['🌻', '🐱', '🦋', '🎈', '🍓', '🐶', '🌈', '🧸'];
 // praise and thanks come as a code, and each phone says them in its own language (a grandmother may use another language)
-const cheerText = m => +m.p === 9 ? 'Спасибо!' : PRAISE[+m.p] && m.p !== undefined && m.p !== null && m.p !== '' ? PRAISE[+m.p][1] : cleanS(m.x, 60);
+const cheerText = m => +m.p === 9 ? 'Спасибо!' : +m.p >= 10 && HELLO[+m.p - 10] ? HELLO[+m.p - 10] : PRAISE[+m.p] && m.p !== undefined && m.p !== null && m.p !== '' ? PRAISE[+m.p][1] : cleanS(m.x, 60);
 // what a finished game was, for the relatives' view
 function recentName(key) {
   if (key.startsWith('learn:')) { const id = key.slice(6); for (const T of Object.values(LEARN)) { const it = (T.items || []).find(x => x.id === id); if (it) return 'История «' + it.t + '»'; } return 'История'; }
@@ -12479,7 +12787,7 @@ const kinOn = () => { const f = fam(); return !!(f && f.grands.length && !guestO
 function postProg(force) {
   if (!kinOn()) return;
   ROOT.progSent = ROOT.progSent || {};
-  const f = fam(), kids = progSnap(), kin = f.grands.map(g => ({ id: g.id, n: g.name, s: g.she ? 1 : 0, r: roleOf(g)[0] }));
+  const f = fam(), kids = progSnap(), kin = f.grands.map(g => ({ id: g.id, n: g.name, s: g.she ? 1 : 0, r: roleOf(g)[0], ...(avaOk(g.av) ? { a: g.av } : {}) }));
   const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n, (k.last[0] || [])[2]]), kin]), ps = ROOT.progSent[f.id] || {};
   if (!force && sig === ps.sig && Date.now() - (ps.at || 0) < 3 * 3600e3) return;
   relayPost({ k: 'prog', by: 'kids', kids, kin }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
@@ -12498,7 +12806,8 @@ function homeRelay() {
     const el = $('#invBanner'); if (!el) return;
     if (m.k === 'cheer' && m.to === ROOT.cur && m.i && !P.cheerSeen.includes(m.i) && Date.now() - m.at < 3 * 864e5) {
       if (el.querySelector(`[data-ch="${CSS.escape(m.i)}"]`)) return;
-      el.insertAdjacentHTML('beforeend', `<div class="cheer" data-ch="${esc(m.i)}"><span class="emo">${esc(cleanS(m.e, 8) || '👏')}</span><span class="ch-tx"><b>${esc(cleanS(m.n, 30))}</b>${esc(cheerText(m))}</span>
+      const gby = f.grands.find(x => x.id === m.by);
+      el.insertAdjacentHTML('beforeend', `<div class="cheer" data-ch="${esc(m.i)}">${gby && avaOk(gby.av) ? kinFace(gby, 'ch-face') : ''}<span class="emo">${esc(cleanS(m.e, 8) || '👏')}</span><span class="ch-tx"><b>${esc(cleanS(m.n, 30))}</b>${esc(cheerText(m))}</span>
         <button class="chip" data-heart="${esc(m.by)}">💛</button><button class="ibtn" data-close aria-label="Закрыть">✕</button></div>`);
       sfx.star(); say(`${cleanS(m.n, 30)} пишет: ${cheerText(m)}`);
       return;
@@ -12523,7 +12832,7 @@ function screenInvite(back) {
   newScreen(); famPeople();
   const f = fam(), kidsNames = KIDS.map(id => ROOT.profiles[id].settings.name).join(' и ');
   shell('Пригласить родных', `<div class="ivs">
-    ${f.grands.length ? f.grands.map(g => `<div class="iv-row"><span class="iv-e">${kinE(g)}</span><span class="iv-t"><b>${esc(g.name)}</b><small>${FLAG(g.cc)} ${seenText((f.seen || {})[g.id])}</small></span>
+    ${f.grands.length ? f.grands.map(g => `<div class="iv-row"><span class="iv-e">${kinFace(g)}</span><span class="iv-t"><b>${esc(g.name)}</b><small>${FLAG(g.cc)} ${seenText((f.seen || {})[g.id])}</small></span>
       <button class="big" data-inv="${esc(g.id)}">📤 Отправить</button></div>`).join('') : '<p class="lead">Добавьте родных, и у каждого будет своя ссылка.</p>'}
     <div class="iv-out" id="ivOut"></div>
     <button class="big ghost" id="ivAdd">＋ Добавить родного</button>
@@ -13840,9 +14149,9 @@ function pultKid(f, id) {
 function pultAdult(f, g) {
   const at = (f.seen || {})[g.id], she = !!g.she, games = Object.values(gamesAll()).filter(x => x.opp === g.id).length;
   const seen = at ? `${she ? 'Заходила' : 'Заходил'}: ${pultAgo(at)}` : she ? 'Ещё не открывала свою ссылку' : 'Ещё не открывал свою ссылку';
-  return `<div class="pv-ad"><div class="pv-row ad"><span class="pv-face e">${kinE(g)}</span>
+  return `<div class="pv-ad"><div class="pv-row ad"><span class="pv-face e">${kinFace(g)}</span>
     <span class="pv-t"><b>${esc(g.name)}</b><small>${esc(roleOf(g)[2])} · ${seen}</small>${games ? `<small>♟ Партий на этом телефоне: ${games}</small>` : ''}</span></div>
-    <div class="pv-acts"><button class="chip" data-view="${esc(g.id)}" data-fam="${f.id}">👀 Экран</button><button class="chip" data-link="${esc(g.id)}" data-fam="${f.id}">🔗 Ссылка</button></div>
+    <div class="pv-acts"><button class="chip" data-por="${esc(g.id)}" data-fam="${f.id}">🎨 Портрет</button><button class="chip" data-view="${esc(g.id)}" data-fam="${f.id}">👀 Экран</button><button class="chip" data-link="${esc(g.id)}" data-fam="${f.id}">🔗 Ссылка</button></div>
     <div class="pv-out" id="pvo-${f.id}-${esc(g.id)}"></div></div>`;
 }
 const pultFam = f => `<section class="psec pf"><h2>${esc(f.name)}${f.id === ROOT.curFam ? ' <i class="fam-now">сейчас</i>' : ''}</h2>
@@ -13905,6 +14214,7 @@ function screenPult() {
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents(); return; }
     if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
+    const po = e.target.closest('[data-por]'); if (po) { sfx.pop(); screenPortrait(po.dataset.fam, po.dataset.por, screenPult); return; }
     if (a) { sfx.pop(); useFamily(a.dataset.add); P = ROOT.profiles[ROOT.cur] || P; famPeople(); save(); screenFamilyEdit(a.dataset.add); return; }
     if (l) {
       sfx.pop();
@@ -14028,7 +14338,7 @@ function pultView(fid, gid) {
   const k = KID, kin = f.grands.map(x => ({ id: x.id, n: x.name, s: x.she ? 1 : 0, r: roleOf(x)[0] }));
   PREVIEW = { keep: Object.fromEntries(PV_KEYS.map(x => { try { return [x, localStorage.getItem(x)]; } catch (e) { return [x, null]; } })) };
   gStore(GPROG_KEY, { at: Date.now(), kids: progSnap(), kin }); gStore(HG_KEY, Date.now()); gStore('govorilki-guest-here', Date.now());
-  GUEST = { who: g.id, fam: famCodeOf(f), role: roleOf(g)[0], name: g.name, she: !!g.she, kid: k.id, kidName: k.name, kidShe: !!k.she };
+  GUEST = { who: g.id, fam: famCodeOf(f), role: roleOf(g)[0], name: g.name, she: !!g.she, kid: k.id, kidName: k.name, kidShe: !!k.she, av: g.av || '' };
   GUEST_OFF = false; famPeople();
   document.getElementById('pvBar')?.remove();
   document.body.insertAdjacentHTML('beforeend', `<div class="pv-bar" id="pvBar"><span>👀 Экран: <b>${esc(g.name)}</b> · просмотр, ничего не отправляется</span><button class="chip" id="pvExit">✕ Выйти</button></div>`);
@@ -19613,7 +19923,7 @@ const SETUI = (() => {
   function faces(page) {
     const f = fam(); if (!f) return '';
     const kids = f.kids.filter(id => ROOT.profiles[id]).map(id => `<span class="set-face"><span class="chip-face">${kidFace(id)}</span><small>${esc(ROOT.profiles[id].settings.name || '')}</small></span>`);
-    const gr = (f.grands || []).map(g => { const x = grandOf(g.id, g.name, g.she, g.e, g.role); return `<span class="set-face"><span class="set-e">${x.e}</span><small>${esc(x.name)}</small></span>`; });
+    const gr = (f.grands || []).map(g => { const x = grandOf(g.id, g.name, g.she, g.e, g.role, g.av); return `<span class="set-face"><span class="set-e">${x.av ? kinFace(x) : x.e}</span><small>${esc(x.name)}</small></span>`; });
     return `<button class="set-faces" ${page ? 'data-page="fam"' : 'disabled'} aria-label="Семья">${[...kids, ...gr].join('')}</button>`;
   }
   function build(focus) {
@@ -20984,7 +21294,7 @@ function cloudStamp() {
 }
 const clProf = p => JSON.parse(JSON.stringify({ ...p, art: [] }, (k, v) => typeof v === 'string' && v.length > 1500 && v.startsWith('data:') ? undefined : v));
 const clMeta = f => ({ id: f.id, name: f.name, cc: f.cc || '', cc2: f.cc2 || '', code: famCodeOf(f), kids: f.kids.filter(id => ROOT.profiles[id]),
-  grands: f.grands.map(g => ({ id: g.id, name: g.name, she: g.she ? 1 : 0, role: g.role || '', e: g.e || '', cc: g.cc || '' })) });
+  grands: f.grands.map(g => ({ id: g.id, name: g.name, she: g.she ? 1 : 0, role: g.role || '', e: g.e || '', cc: g.cc || '', ...(avaOk(g.av) ? { av: g.av } : {}) })) });
 async function cloudApi(method, path, body, token) {
   const ac = window.AbortController ? new AbortController() : null, tm = ac && setTimeout(() => ac.abort(), 9000);
   try {
@@ -21040,7 +21350,7 @@ function cloudMerge(f, d) {
     if (/^[A-Z]{2}$/.test(meta.cc)) f.cc = meta.cc;
     if (/^[A-Z]{2}$/.test(meta.cc2)) f.cc2 = meta.cc2;
     if (/^[a-z0-9]{8,40}$/.test(meta.code || '')) f.code = meta.code;
-    if (Array.isArray(meta.grands)) f.grands = meta.grands.filter(g => g && ID_RE.test(g.id)).slice(0, 12).map(g => ({ id: g.id, name: cleanS(g.name, 30) || 'Бабушка', she: !!g.she, ...(KIN_IDS.includes(g.role) ? { role: g.role } : {}), ...(g.e ? { e: cleanS(g.e, 8) } : {}), ...(/^[A-Z]{2}$/.test(g.cc) ? { cc: g.cc } : {}) }));
+    if (Array.isArray(meta.grands)) f.grands = meta.grands.filter(g => g && ID_RE.test(g.id)).slice(0, 12).map(g => ({ id: g.id, name: cleanS(g.name, 30) || 'Бабушка', she: !!g.she, ...(KIN_IDS.includes(g.role) ? { role: g.role } : {}), ...(g.e ? { e: cleanS(g.e, 8) } : {}), ...(/^[A-Z]{2}$/.test(g.cc) ? { cc: g.cc } : {}), ...(avaOk(g.av) ? { av: g.av } : {}) }));
     if (order) f.kids = [...order.filter(id => f.kids.includes(id) || (d.kids || []).some(k => k.id === id)), ...f.kids.filter(id => !order.includes(id) && c.sent[id] === undefined)];
     c.metaSent = mj; ch = true;
   }
@@ -21521,7 +21831,7 @@ function screenWho(fid) {
   on1('whoGuest', () => { GUEST_OFF = false; screenGuest(); });
   later(() => say(one ? 'Кто играет? Нажми на себя.' : 'Кто играет? Выбери свою семью.'), 400);
 }
-const whoAdultsHTML = f => `<p class="who-sub">Взрослые</p><div class="who-ads">${f.grands.map(g => `<button class="who-adult" data-wad="${esc(g.id)}" data-fam="${f.id}"><span class="emo">${esc(kinE(g))}</span><b>${esc(g.name)}</b></button>`).join('')}</div>`;
+const whoAdultsHTML = f => `<p class="who-sub">Взрослые</p><div class="who-ads">${f.grands.map(g => `<button class="who-adult" data-wad="${esc(g.id)}" data-fam="${f.id}">${kinFace(g, 'emo')}<b>${esc(g.name)}</b></button>`).join('')}</div>`;
 // after the move from yankona.github.io to govorilki.com: once, what happened and the new icon for the home screen
 function whoMovedNote(box) {
   if (!box) return;
@@ -21536,7 +21846,7 @@ function whoMovedNote(box) {
 function whoAdult(fid, gid) {
   const f = ROOT.families[fid], g = f && f.grands.find(x => x.id === gid); if (!g) return;
   const kid = f.kids.find(id => ROOT.profiles[id]), st = kid ? ROOT.profiles[kid].settings : { name: '', gender: 'm' };
-  GUEST = { who: g.id, fam: f.code || (f.id === 'main' && ROOT.fam) || famCodeOf(f), role: g.role || '', name: g.name, she: !!g.she, kid: kid || 'kid', kidName: st.name || '', kidShe: st.gender === 'f' };
+  GUEST = { who: g.id, fam: f.code || (f.id === 'main' && ROOT.fam) || famCodeOf(f), role: g.role || '', name: g.name, she: !!g.she, kid: kid || 'kid', kidName: st.name || '', kidShe: st.gender === 'f', av: g.av || '' };
   try { localStorage.setItem(GUEST_KEY, JSON.stringify(GUEST)); } catch (e) {}
   GUEST_OFF = false; GPLAY = null; famPeople(); screenGuest();
 }
@@ -21630,7 +21940,7 @@ async function semDecode(s) {
 async function semLink(f) {
   const kids = f.kids.filter(id => ROOT.profiles[id]);
   const data = { v: 1, l: LANG, at: Date.now(),
-    fam: { id: f.id, name: f.name, cc: f.cc || '', cc2: f.cc2 || '', code: famCodeOf(f), grands: f.grands.map(g => ({ id: g.id, name: g.name, she: g.she ? 1 : 0, role: g.role || '', e: g.e || '', cc: g.cc || '' })) },
+    fam: { id: f.id, name: f.name, cc: f.cc || '', cc2: f.cc2 || '', code: famCodeOf(f), grands: f.grands.map(g => ({ id: g.id, name: g.name, she: g.she ? 1 : 0, role: g.role || '', e: g.e || '', cc: g.cc || '', ...(avaOk(g.av) ? { av: g.av } : {}) })) },
     kids, prof: Object.fromEntries(kids.map(id => [id, { ...ROOT.profiles[id], art: [] }])) };
   const base = EMBEDDED ? 'https://govorilki.com/play/' + langPath(LANG) : SITE;
   return base + '#sem=' + await semEncode(data);
