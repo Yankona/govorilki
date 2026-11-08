@@ -17037,5 +17037,201 @@
    "Tokyo, Kyoto, Fuji, cherry blossom and the bullet train",
    "Tóquio, Quioto, Fuji, cerejeiras em flor e o comboio-bala"
   ]
+ },
+ "() => {\n  const OLD_SECS = [['first', 'Первые люди', '🦣'], ['egypt', 'Древний Египет', '🔺'], ['china', 'Древний Китай', '🐉'], ['greece', 'Древняя Греция', '🏛️'], ['rome', 'Древний Рим', '🏟️'], ['vikings', 'Викинги', '⚓'], ['rus', 'Древняя Русь', '🛶'], ['knights', 'Рыцари и замки', '🏰']];\n  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], chn: ['Китай', '🐉', 'var(--t-yellow)'], ind: ['Индия', '🐘', 'var(--t-green)'], old: ['Давние времена', '🏺', 'var(--t-peach)'] };\n  const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],\n    lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],\n    porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };\n  const SUB = { old: 'пирамиды, рыцари, викинги — и что было раньше', cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', chn: 'Стена, панды, шёлк, чай и драконы', ind: 'слоны, Тадж-Махал, краски, специи и ноль' };\n  Object.entries(NEW).forEach(([k, [name, e, bg]]) => {\n    if (LEARN[k]) return;\n    const items = [];\n    (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });\n    LEARN[k] = { name, e, bg, place: k === 'old' ? null : k === 'russia' ? 'RU' : k === 'chn' ? 'CN' : k === 'ind' ? 'IN' : 'PT', sub: SUB[k], items };\n    if (k === 'old') LEARN.old.secs = OLD_SECS;\n  });\n  LEARN.pt.name = 'Португалия';\n  Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });\n}": {
+  "Первые люди": [
+   "The first people",
+   "Os primeiros humanos"
+  ],
+  "Древний Египет": [
+   "Ancient Egypt",
+   "O Antigo Egito"
+  ],
+  "Древний Китай": [
+   "Ancient China",
+   "A China Antiga"
+  ],
+  "Древняя Греция": [
+   "Ancient Greece",
+   "A Grécia Antiga"
+  ],
+  "Древний Рим": [
+   "Ancient Rome",
+   "A Roma Antiga"
+  ],
+  "Викинги": [
+   "Vikings",
+   "Vikings"
+  ],
+  "Древняя Русь": [
+   "Old Rus",
+   "A Antiga Rus"
+  ],
+  "Рыцари и замки": [
+   "Knights and castles",
+   "Cavaleiros e castelos"
+  ],
+  "Кашкайш": [
+   "Cascais",
+   "Cascais"
+  ],
+  "Лиссабон": [
+   "Lisbon",
+   "Lisboa"
+  ],
+  "Порту и север": [
+   "Porto and the north",
+   "Porto e o Norte"
+  ],
+  "Россия": [
+   "Russia",
+   "Rússia"
+  ],
+  "Давние времена": [
+   "Long ago",
+   "Há muito tempo"
+  ],
+  "пирамиды, рыцари, викинги — и что было раньше": [
+   "pyramids, knights, Vikings — and what came first",
+   "pirâmides, cavaleiros, vikings — e o que veio primeiro"
+  ],
+  "город у океана рядом с Лиссабоном": [
+   "a town by the ocean near Lisbon",
+   "vila junto ao oceano perto de Lisboa"
+  ],
+  "трамваи, холмы и мосты": [
+   "trams, hills and bridges",
+   "elétricos, colinas e pontes"
+  ],
+  "Порту, Дору, Брага, Гимарайнш": [
+   "Porto, the Douro, Braga, Guimarães",
+   "Porto, Douro, Braga, Guimarães"
+  ],
+  "Байкал, Камчатка, Казань и вся страна": [
+   "Baikal, Kamchatka, Kazan and the whole country",
+   "Baikal, Kamchatka, Kazan e o país inteiro"
+  ],
+  "Португалия": [
+   "Portugal",
+   "Portugal"
+  ],
+  "Китай": [
+   "China",
+   "China"
+  ],
+  "Индия": [
+   "India",
+   "Índia"
+  ],
+  "Стена, панды, шёлк, чай и драконы": [
+   "the Wall, pandas, silk, tea and dragons",
+   "a Muralha, os pandas, a seda, o chá e os dragões"
+  ],
+  "слоны, Тадж-Махал, краски, специи и ноль": [
+   "elephants, the Taj Mahal, colours, spices and zero",
+   "elefantes, o Taj Mahal, cores, especiarias e o zero"
+  ]
+ },
+ "() => {\n  const OLD_SECS = [['first', 'Первые люди', '🦣'], ['egypt', 'Древний Египет', '🔺'], ['china', 'Древний Китай', '🐉'], ['greece', 'Древняя Греция', '🏛️'], ['rome', 'Древний Рим', '🏟️'], ['vikings', 'Викинги', '⚓'], ['rus', 'Древняя Русь', '🛶'], ['knights', 'Рыцари и замки', '🏰']];\n  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], old: ['Давние времена', '🏺', 'var(--t-peach)'], space: ['Космос', '🚀', 'var(--t-lilac)'], chn: ['Китай', '🐉', 'var(--t-yellow)'], ind: ['Индия', '🐘', 'var(--t-green)'] };\n  const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],\n    lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],\n    porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };\n  const SUB = { old: 'пирамиды, рыцари, викинги — и что было раньше', cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', space: 'Гагарин, Луна, звёзды и телескопы', chn: 'Стена, панды, шёлк, чай и драконы', ind: 'слоны, Тадж-Махал, краски, специи и ноль' };\n  Object.entries(NEW).forEach(([k, [name, e, bg]]) => {\n    if (LEARN[k]) return;\n    const items = [];\n    (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });\n    LEARN[k] = { name, e, bg, place: (k === 'old' || k === 'space') ? null : k === 'russia' ? 'RU' : k === 'chn' ? 'CN' : k === 'ind' ? 'IN' : 'PT', sub: SUB[k], items };\n    if (k === 'old') LEARN.old.secs = OLD_SECS;\n  });\n  LEARN.pt.name = 'Португалия';\n  Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });\n}": {
+  "Первые люди": [
+   "The first people",
+   "Os primeiros humanos"
+  ],
+  "Древний Египет": [
+   "Ancient Egypt",
+   "O Antigo Egito"
+  ],
+  "Древний Китай": [
+   "Ancient China",
+   "A China Antiga"
+  ],
+  "Древняя Греция": [
+   "Ancient Greece",
+   "A Grécia Antiga"
+  ],
+  "Древний Рим": [
+   "Ancient Rome",
+   "A Roma Antiga"
+  ],
+  "Викинги": [
+   "Vikings",
+   "Vikings"
+  ],
+  "Древняя Русь": [
+   "Old Rus",
+   "A Antiga Rus"
+  ],
+  "Рыцари и замки": [
+   "Knights and castles",
+   "Cavaleiros e castelos"
+  ],
+  "Кашкайш": [
+   "Cascais",
+   "Cascais"
+  ],
+  "Лиссабон": [
+   "Lisbon",
+   "Lisboa"
+  ],
+  "Порту и север": [
+   "Porto and the north",
+   "Porto e o Norte"
+  ],
+  "Россия": [
+   "Russia",
+   "Rússia"
+  ],
+  "Давние времена": [
+   "Long ago",
+   "Há muito tempo"
+  ],
+  "Космос": [
+   "Space",
+   "Espaço"
+  ],
+  "Китай": [
+   "China",
+   "China"
+  ],
+  "Индия": [
+   "India",
+   "Índia"
+  ],
+  "пирамиды, рыцари, викинги — и что было раньше": [
+   "pyramids, knights, Vikings — and what came first",
+   "pirâmides, cavaleiros, vikings — e o que veio primeiro"
+  ],
+  "город у океана рядом с Лиссабоном": [
+   "a town by the ocean near Lisbon",
+   "vila junto ao oceano perto de Lisboa"
+  ],
+  "трамваи, холмы и мосты": [
+   "trams, hills and bridges",
+   "elétricos, colinas e pontes"
+  ],
+  "Порту, Дору, Брага, Гимарайнш": [
+   "Porto, the Douro, Braga, Guimarães",
+   "Porto, Douro, Braga, Guimarães"
+  ],
+  "Байкал, Камчатка, Казань и вся страна": [
+   "Baikal, Kamchatka, Kazan and the whole country",
+   "Baikal, Kamchatka, Kazan e o país inteiro"
+  ],
+  "Гагарин, Луна, звёзды и телескопы": [
+   "Gagarin, the Moon, stars and telescopes",
+   "Gagarin, a Lua, as estrelas e os telescópios"
+  ],
+  "Стена, панды, шёлк, чай и драконы": [
+   "the Wall, pandas, silk, tea and dragons",
+   "a Muralha, os pandas, a seda, o chá e os dragões"
+  ],
+  "слоны, Тадж-Махал, краски, специи и ноль": [
+   "elephants, the Taj Mahal, colours, spices and zero",
+   "elefantes, o Taj Mahal, cores, especiarias e o zero"
+  ],
+  "Португалия": [
+   "Portugal",
+   "Portugal"
+  ]
  }
 }

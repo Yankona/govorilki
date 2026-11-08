@@ -6,7 +6,7 @@ B = os.path.dirname(os.path.abspath(__file__))
 import glob
 FILES = sorted(glob.glob(os.path.join(B, '..', 'stories', '*', '*.json')))
 T = os.path.join(B, '..', 'i18n') + '/'
-ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'old', 'space', 'nyc', 'can', 'sgp', 'jpn']
+ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'old', 'space', 'nyc', 'can', 'sgp', 'jpn', 'chn', 'ind']
 more = {k: [] for k in ORDER}; stress = {}; ids = set(); warn = []
 for f in FILES:
     d = json.load(open(f, encoding='utf-8'))
@@ -33,6 +33,8 @@ conflicts = []
 # stress the story writers proposed that is wrong for the word as it stands (checked by ear and in the dictionary)
 REJECT = {'агриппины', 'александровская', 'аполлон', 'боголюбский', 'бурлаки', 'вильгельм', 'гудзонов', 'екатерина', 'екатерины', 'измайлове', 'исаакиевского', 'исаакиевской', 'катмай', 'квебеке', 'конюшенной', 'котлин', 'ладожского', 'ламантин', 'мелихово', 'менделеева', 'палехская', 'рафаэля', 'ростральные', 'ростральными', 'садовой', 'салехард', 'салехарде', 'соловках', 'соломенным', 'третьяков', 'третьяковская', 'ярославле', 'ярославля'}
 REJECT |= {'сингапурский', 'сингапурском', 'колокол', 'сямисэн'}  # Asia 1: writers' stress is wrong (dictionary right)
+# Китай и Индия: the writers' stress was wrong for these (dictionary: иеро́глиф, Кри́шна, Ке́рала, Дарджи́линг, Пу́шкар, курку́ма, ру́пия); сари́ is set by hand
+REJECT |= {'иероглиф', 'иероглифы', 'кришна', 'кришны', 'керала', 'керале', 'дарджилинг', 'дарджилинга', 'пушкар', 'куркума', 'рупия', 'сари'}
 for w, f in stress.items():
     if ' ' in w or not re.fullmatch(r'[а-яё+-]+', f) or f.replace('+', '') != w or f.count('+') < 1: continue
     for part, pf in zip(w.split('-'), f.split('-')):
@@ -57,16 +59,16 @@ part = """/* ---------- more city and country stories (Russian only: the other l
 const MORE_STORIES = LX('MORE_STORIES', """ + js + """);
 (() => {
   const OLD_SECS = [['first', 'Первые люди', '🦣'], ['egypt', 'Древний Египет', '🔺'], ['china', 'Древний Китай', '🐉'], ['greece', 'Древняя Греция', '🏛️'], ['rome', 'Древний Рим', '🏟️'], ['vikings', 'Викинги', '⚓'], ['rus', 'Древняя Русь', '🛶'], ['knights', 'Рыцари и замки', '🏰']];
-  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], old: ['Давние времена', '🏺', 'var(--t-peach)'], space: ['Космос', '🚀', 'var(--t-lilac)'] };
+  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], old: ['Давние времена', '🏺', 'var(--t-peach)'], space: ['Космос', '🚀', 'var(--t-lilac)'], chn: ['Китай', '🐉', 'var(--t-yellow)'], ind: ['Индия', '🐘', 'var(--t-green)'] };
   const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],
     lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],
     porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };
-  const SUB = { old: 'пирамиды, рыцари, викинги — и что было раньше', cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', space: 'Гагарин, Луна, звёзды и телескопы' };
+  const SUB = { old: 'пирамиды, рыцари, викинги — и что было раньше', cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', space: 'Гагарин, Луна, звёзды и телескопы', chn: 'Стена, панды, шёлк, чай и драконы', ind: 'слоны, Тадж-Махал, краски, специи и ноль' };
   Object.entries(NEW).forEach(([k, [name, e, bg]]) => {
     if (LEARN[k]) return;
     const items = [];
     (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });
-    LEARN[k] = { name, e, bg, place: (k === 'old' || k === 'space') ? null : k === 'russia' ? 'RU' : 'PT', sub: SUB[k], items };
+    LEARN[k] = { name, e, bg, place: (k === 'old' || k === 'space') ? null : k === 'russia' ? 'RU' : k === 'chn' ? 'CN' : k === 'ind' ? 'IN' : 'PT', sub: SUB[k], items };
     if (k === 'old') LEARN.old.secs = OLD_SECS;
   });
   LEARN.pt.name = 'Португалия';
