@@ -1832,6 +1832,7 @@ body.quest .ch-note b{color:var(--sun)}
   .confetti,.burst{display:none}
   .hero-ryz svg,.said,.ball.next,.book.glow,.wnd.glow,.winbox .ryz-w svg,.flame{animation:none!important}
   .said{animation:popin .01s both!important}
+  .said.ear .said-mic{animation:none!important}
 }
 /* fair play */
 .stage.locked{filter:saturate(.5) brightness(.96);transition:filter .15s}
@@ -1839,6 +1840,8 @@ body.quest .ch-note b{color:var(--sun)}
 .said-mic{position:relative;flex:none;width:44px;height:44px;border-radius:50%;background:#FFFFFF;overflow:hidden;display:grid;place-items:center;box-shadow:inset 0 0 0 3px #2FA865}
 .said-mic i{position:absolute;inset:0;background:#8FE0A1;transform-origin:50% 100%;transform:scaleY(0);transition:transform .12s linear}
 .said-mic b{position:relative;font-size:24px;line-height:1}
+.said.ear .said-mic{animation:earp 1.1s ease-in-out infinite}
+@keyframes earp{0%,100%{box-shadow:inset 0 0 0 3px #2FA865,0 0 0 0 rgba(47,168,101,.5)}50%{box-shadow:inset 0 0 0 3px #2FA865,0 0 0 10px rgba(47,168,101,0)}}
 .hold.mic{--lv:0;background:#2FA865;box-shadow:0 9px 0 #1E7A47,0 0 0 calc(var(--lv) * 22px) rgba(47,168,101,.28);cursor:default}
 .hold.mic.on{transform:none;background:#3CC077;box-shadow:0 9px 0 #1E7A47,0 0 0 calc(var(--lv) * 22px) rgba(47,168,101,.35)}
 .fair-note{margin:4px 0 0;max-width:24em;text-align:center;font:700 15px/1.35 var(--f-body);color:var(--ink-soft)}
@@ -1931,6 +1934,26 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .tl-text .ss{cursor:pointer}
 .tl-mode{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 6px}.tl-cr{margin:0 0 14px;text-align:center;color:var(--ink-soft);font:600 14px/1.4 var(--f-body)}
 .tl-end{text-align:center;font:700 24px var(--f-display);color:var(--ink-soft)}
+.tl-i.fam{box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px var(--leaf)}
+.tl-fam{display:flex;align-items:center;gap:6px;margin:2px 0;font:800 14px/1.2 var(--f-body);color:var(--leaf)}
+.tl-ff{width:28px;height:28px;font-size:20px;flex:none}.fr-chip{display:inline-flex;align-items:center;gap:6px}
+.fr-cta{display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto 18px;padding:14px 16px;max-width:520px;border-radius:20px;background:var(--paper);box-shadow:0 5px 0 var(--line-strong);text-align:center}
+.fr-cta small{font:600 14px/1.4 var(--f-body);color:var(--ink-soft)}.fr-small{margin:0 0 12px;text-align:center}
+.fr-wrap{max-width:640px;margin:0 auto;text-align:center}.fr-h{margin:0 0 4px;font:700 26px/1.2 var(--f-display)}
+.fr-who{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin:14px 0}
+.fr-r{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);cursor:pointer;font:inherit}
+.fr-r b{font:800 17px/1.2 var(--f-body)}.fr-r small{font:700 12px/1.3 var(--f-body);color:var(--leaf)}.fr-face{width:72px;height:72px}.kface.emo.fr-face{font-size:52px}.kface.emo.tl-ff{font-size:22px}
+.fr-priv{margin:8px 0 0;font:700 13px/1.35 var(--f-body);color:var(--ink-soft);text-align:center}
+.fr-rec .pt-who{margin-bottom:6px}.fr-tip{margin:6px 0 14px;text-align:center;color:var(--ink-soft);font:600 15px/1.4 var(--f-body)}
+.fr-text{font-size:26px;line-height:1.65}.fr-text .ss{border-radius:8px;transition:background .2s}
+.fr-text .ss.done{text-decoration:underline 3px var(--leaf);text-underline-offset:6px}
+.fr-text .ss.on{background:#FFE58A;box-shadow:0 0 0 4px #FFE58A}
+.fr-info{text-align:center;font:800 15px var(--f-body);color:var(--ink-soft)}.fr-delw{text-align:center;margin:4px 0 0}
+.fr-ctl{position:sticky;bottom:8px;z-index:5;width:max-content;max-width:calc(100% - 16px);margin:-110px auto 0;padding:8px 14px;border-radius:24px;background:var(--paper);box-shadow:0 6px 18px rgba(42,35,70,.25)}
+.fr-btns{display:flex;align-items:center;justify-content:center;gap:10px}.fr-btns .big{min-height:56px;min-width:140px;padding:8px 18px;font-size:21px}
+.fr-go{background:#E2445C;color:#fff}.fr-btns .ok{background:var(--leaf);color:#fff}.fr-ctl .fr-priv{margin-top:4px;font-size:12px}
+.fr-dot{width:16px;height:16px;border-radius:50%;background:#E2445C;animation:frp 1s ease-in-out infinite}@keyframes frp{50%{opacity:.25}}
+@media (max-width:480px){.fr-text{font-size:22px}.fr-btns .big{min-width:110px;font-size:18px}.fr-face{width:60px;height:60px}}
 .tl-ctl{position:sticky;bottom:8px;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;width:max-content;max-width:100%;margin:-96px auto 0;padding:8px 12px;border-radius:999px;background:var(--paper);box-shadow:0 6px 18px rgba(42,35,70,.25)}
 .tl-ctl .big{min-height:52px;min-width:150px;padding:8px 18px;font-size:20px}
 .tl-night{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:32px 24px;background:#05060B;cursor:pointer}
@@ -2926,6 +2949,30 @@ body.pv-on #app{padding-top:52px}
 #scheme{transition:opacity .18s ease}
 @media (prefers-reduced-motion:reduce){.face.f-in .mth,.face.hold .mth{animation:none}}
 /* ARTIC-CSS-END */
+/* HOWSAY-CSS */
+.how{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:720px;margin:0 auto}
+.how-tabs{gap:8px}.how-tabs .snd-tab{width:58px;height:58px;font-size:30px;border-radius:18px}
+.how-page .how-line{display:none}
+.how-pair{display:flex;align-items:center;justify-content:center;gap:12px;width:100%}
+.how-face{flex:0 0 auto;width:min(36%,210px);aspect-ratio:200/220;border-radius:50%/48%;background:radial-gradient(circle at 30% 18%,var(--paper),var(--t-blue) 70%);box-shadow:inset 0 0 0 6px var(--line)}
+.how-face svg,.how-prof svg{display:block;width:100%;height:auto}
+.how-prof{flex:1 1 0;max-width:380px;min-width:0;padding:6px;background:var(--paper);border-radius:20px;box-shadow:0 4px 0 var(--line)}
+.how-cap{display:flex;justify-content:space-around;width:100%;margin:-4px 0 0;font:700 13px var(--f-body);color:var(--ink-soft)}
+.how-line{margin:0;padding:10px 14px;background:var(--paper);border-radius:18px;box-shadow:inset 0 0 0 2px var(--line);font:700 17px/1.4 var(--f-body);text-align:left}
+.how-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.how-btns .big{min-width:0;padding:10px 18px;font-size:19px;flex:0 1 auto}
+.how .cam{width:min(60vw,240px)}
+.how-par{width:100%;padding:8px 14px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);text-align:left;font:600 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.how-par summary{cursor:pointer;font-weight:800;color:var(--ink)}
+.how-par ol{margin:6px 0;padding-left:20px}.how-par p{margin:6px 0 2px}
+.how-ov{place-items:start center;overflow-y:auto;padding:12px}
+.how-box{position:relative;width:min(100%,760px);margin:auto;padding:14px 14px 18px;background:var(--sky);border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.how-box h2{margin:2px 44px 8px;text-align:center;font:800 24px/1.15 var(--f-display)}
+.how-x{position:absolute;top:10px;right:10px}
+.how-b{flex:none;padding:6px 10px;min-height:0}
+.how-sec{margin-top:6px;align-self:flex-start}
+@media (max-width:520px){.how-tabs .snd-tab{width:48px;height:48px;font-size:24px;border-radius:14px;box-shadow:0 3px 0 var(--line-strong)}.how-bt{display:none}.how-b .emo{margin:0}.how-line{font-size:16px}.how-face{width:38%}}
+/* HOWSAY-CSS-END */
 /* WORLD2-CSS */
 .wr-heard{padding:12px 14px;border-radius:18px;background:var(--paper);box-shadow:0 4px 0 var(--line);text-align:center}
 .wr-heard.good{box-shadow:0 4px 0 var(--line),inset 0 0 0 3px var(--leaf)}
@@ -3306,7 +3353,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 
 const LANG = 'en';
-const LANGDATA =  {"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"], "PAL_WORDS": [["r", "red"], ["o", "orange"], ["y", "yellow"], ["g", "green"], ["t", "turquoise"], ["s", "sky blue"], ["b", "blue"], ["p", "purple"], ["p", "pink"], ["b", "brown"], ["b", "black"], ["w", "white"]], "MORE_STORIES": {}, "WATER_STORIES": {}, "PLANT_STORIES": [], "BALLET_STORIES": {}};
+const LANGDATA =  {"ABC": [["A", "apple", "🍎"], ["B", "ball", "⚽"], ["C", "cat", "🐈"], ["D", "dog", "🐕"], ["E", "egg", "🥚"], ["F", "fish", "🐟"], ["G", "goat", "🐐"], ["H", "house", "🏠"], ["I", "insect", "🐞"], ["J", "juice", "🧃"], ["K", "kite", "🪁"], ["L", "lion", "🦁"], ["M", "monkey", "🐒"], ["N", "nose", "👃"], ["O", "octopus", "🐙"], ["P", "panda", "🐼"], ["Q", "queen", "👸"], ["R", "rabbit", "🐇"], ["S", "sun", "☀️"], ["T", "tiger", "🐯"], ["U", "umbrella", "☂️"], ["V", "violin", "🎻"], ["W", "watermelon", "🍉"], ["X", "fox", "🦊"], ["Y", "yo-yo", "🪀"], ["Z", "zebra", "🦓"]], "VOWELS": "AEIOU", "LNAME": {}, "ABC_LINE": ["{L} is for {w}.", "{L}, as in {w}."], "ABC_NOT_FIRST": "X", "ABC_ORDER": "ABCDEFGHIJKLMNOPQ", "M_LIST": ["cat", "hat", "mat", "rat", "bat", "fan", "man", "van", "pan", "map", "cap", "tap", "lap", "bag", "hen", "pen", "ten", "bed", "red", "leg", "peg", "net", "jet", "wet", "pig", "wig", "dig", "pin", "bin", "fin", "lip", "zip", "sit", "dog", "log", "fog", "hop", "mop", "top", "pot", "hot", "dot", "sun", "run", "bun", "bug", "rug", "mug", "hug", "cup", "pup", "bus"], "M_CONS": ["b", "c", "d", "f", "h", "m", "p", "r", "s", "t"], "M_VOW": ["at", "en", "ig", "og", "un"], "M_BAD": [], "M_INTRO": "{0} and {1} make a word! Tap the blue letter.", "SYL_TTS": null, "RWORDS": [["cat", "🐈"], ["dog", "🐕"], ["sun", "☀️"], ["pig", "🐖"], ["bus", "🚌"], ["bed", "🛏️"], ["hen", "🐔"], ["fox", "🦊"], ["hat", "🎩"], ["rat", "🐀"], ["box", "📦"], ["egg", "🥚"], ["leg", "🦵"], ["web", "🕸️"], ["sun-set", "🌅"], ["hot-dog", "🌭"], ["pop-corn", "🍿"], ["cup-cake", "🧁"], ["rab-bit", "🐇"], ["lem-on", "🍋"], ["mag-net", "🧲"], ["tea-pot", "🫖"], ["pump-kin", "🎃"], ["drag-on", "🐉"], ["car-rot", "🥕"], ["snow-man", "⛄"], ["lip-stick", "💄"], ["pan-da", "🐼"], ["ba-na-na", "🍌"], ["kan-ga-roo", "🦘"]], "SYL": [["croc", "croc", "crocodile", "🐊"], ["drag", "drag", "dragon", "🐉"], ["cray", "cray", "crayon", "🖍️"], ["prin", "prin", "princess", "👸"], ["trum", "trum", "trumpet", "🎺"], ["track", "trac", "tractor", "🚜"], ["straw", "straw", "strawberry", "🍓"], ["brock", "broc", "broccoli", "🥦"], ["grass", "grass", "grasshopper", "🦗"], ["try", "tri", "triangle", "📐"]], "BOOK_SY": ["RA", "RI", "RO", "RU"], "BOOK_TITLE": "RA RI RO RU books", "BOOK_ITEMS": [["RA", "rabbit", "🐇", "rab"], ["RA", "raccoon", "🦝", "rack"], ["RA", "racket", "🏸", "rack"], ["RI", "ribbon", "🎀", "rib"], ["RI", "ring", "💍", "ring"], ["RO", "rocket", "🚀", "rock"], ["RO", "rock", "🪨", "rock"], ["RU", "rucksack", "🎒", "ruck"], ["RU", "rugby ball", "🏉", "rug"], ["RU", "runner", "🏃", "run"]], "MAGIC": [["cat", "🐈", "hat", "🎩"], ["mouse", "🐭", "house", "🏠"], ["goat", "🐐", "boat", "⛵"], ["pear", "🍐", "bear", "🐻"], ["nose", "👃", "rose", "🌹"], ["bell", "🔔", "ball", "⚽"]], "LROWS": [["la", "lee", "lie", "low", "loo"], ["all", "eel", "ill", "owl", "oil"], ["halo", "kilo", "polo", "solo", "oily"], ["blue", "clap", "flag", "glue", "play"], ["milk", "belt", "gold", "wolf", "help"]], "WORDS5": [["LEMON", "🍋"], ["LLAMA", "🦙"], ["CLOUD", "☁️"], ["APPLE", "🍎"], ["SMILE", "😊"], ["PLANE", "✈️"], ["CLOCK", "⏰"], ["SNAIL", "🐌"], ["WHALE", "🐋"], ["CAMEL", "🐫"], ["EAGLE", "🦅"], ["KOALA", "🐨"], ["SLOTH", "🦥"], ["SALAD", "🥗"], ["GLOBE", "🌍"], ["CLOWN", "🤡"]], "WORDS5_PUSH": [["MEDAL", "🏅"], ["SHELL", "🐚"], ["OLIVE", "🫒"]], "KB": ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"], "DOT_W": {"crown": "crown", "boat": "sailing boat", "star": "star", "ball": "balloon", "mushroom": "mushroom", "fish": "fish", "heart": "heart", "rocket": "rocket", "pear": "pear"}, "PIECE_RU": {"K": "king", "Q": "queen", "R": "rook", "B": "bishop", "N": "knight", "P": "pawn"}, "RU_PC": {"k": "K", "q": "Q", "r": "R", "b": "B", "n": "N"}, "CODE_ABC": {"hard": ["b", "d", "p", "q", "g", "j", "y", "w", "v", "z", "x", "k"], "base": ["a", "e", "i", "o", "u"], "r": ["r"], "sh": ["j"], "l": ["l"]}, "CODE_SYL": {"v": [], "r": ["rat", "red", "rug", "rip", "rod", "run"], "l": ["lip", "log", "leg", "lap", "lid", "let"], "sh": ["ship", "shop", "chip", "chop", "jam", "jet"], "sz": ["sun", "sit", "zip", "zap", "sad", "six"], "def": ["cat", "dog", "pig", "hen", "map", "bus"]}, "GX": {}, "HI_RE": {"shf": "sh|t?ch|dge|j|g(?=[eiy])", "shcj": "sh|t?ch|dge|j|g(?=[eiy])", "sh": "sh", "ch": "t?ch", "j": "dge|j|g(?=[eiy])", "r": "r+(?=[aeiouy])", "l": "l+", "sz": "ss|s|zz|z|c(?=[eiy])"}, "W": {"korona": ["a crown", "👑"], "goroh": ["green peas", "svg:peas"], "pirog": ["a cherry pie", "🥧"], "kraski": ["a paintbrush", "🎨"], "gitara": ["a red guitar", "🎸"], "pero": ["a bright feather", "🪶"], "perchatki": ["red gloves", "🧤"], "tort": ["a strawberry cake", "🎂"], "piramidka": ["a pyramid", "svg:pyramid"], "kukuruza": ["crunchy corn", "🌽"], "fartuk": ["an apron", "svg:apron"], "vinograd": ["grapes", "🍇"], "baraban": ["a drum", "🥁"], "morkovka": ["a carrot", "🥕"]}, "CNT": [{"id": "rabbit", "e": "🐰", "f": ["rabbit", "rabbits", "rabbits"], "g": "m", "find": "Find all the rabbits!"}, {"id": "robot", "e": "🤖", "f": ["robot", "robots", "robots"], "g": "m", "find": "Find all the robots!"}, {"id": "rocket", "e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f", "find": "Find all the rockets!"}, {"id": "rainbow", "e": "🌈", "f": ["rainbow", "rainbows", "rainbows"], "g": "f", "find": "Find all the rainbows!"}, {"id": "ring", "e": "💍", "f": ["ring", "rings", "rings"], "g": "m", "find": "Find all the rings!"}, {"id": "rose", "e": "🌹", "f": ["rose", "roses", "roses"], "g": "f", "find": "Find all the roses!"}], "HOUSE": [["rabbit", "🐰", 0], ["rocket", "🚀", 0], ["rainbow", "🌈", 0], ["ring", "💍", 0], ["robot", "🤖", 0], ["rose", "🌹", 0], ["carrot", "🥕", 1], ["parrot", "🦜", 1], ["giraffe", "🦒", 1], ["zebra", "🦓", 1], ["cherries", "🍒", 1], ["arrow", "🏹", 1]], "BOXI": [{"e": "🚂", "f": ["train", "trains", "trains"], "g": "m"}, {"e": "🥁", "f": ["drum", "drums", "drums"], "g": "m"}, {"e": "🚚", "f": ["lorry", "lorries", "lorries"], "g": "m"}, {"e": "🏗️", "f": ["crane", "cranes", "cranes"], "g": "m"}, {"e": "🤖", "f": ["robot", "robots", "robots"], "g": "m"}, {"e": "svg:pyramid", "f": ["pyramid", "pyramids", "pyramids"], "g": "f"}, {"e": "🥕", "f": ["carrot", "carrots", "carrots"], "g": "f"}, {"e": "🚀", "f": ["rocket", "rockets", "rockets"], "g": "f"}, {"e": "🍓", "f": ["strawberry", "strawberries", "strawberries"], "g": "f"}, {"e": "🐸", "f": ["frog", "frogs", "frogs"], "g": "f"}, {"e": "🦜", "f": ["parrot", "parrots", "parrots"], "g": "m"}, {"e": "🌹", "f": ["rose", "roses", "roses"], "g": "f"}, {"e": "🦀", "f": ["crab", "crabs", "crabs"], "g": "m"}, {"e": "🖍️", "f": ["crayon", "crayons", "crayons"], "g": "m"}], "SONGS": [{"id": "rrr", "title": "The R Song", "e": "🐯", "by": "a friends' song", "lines": [["The ti|ger cub roars: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The mo|tor goes brrm: r-|r-|r!", "C4 E4 G4 G4 A4 G4 G4 G4:2"], ["The frog sings: rib|bit, rib|bit, rib|bit!", "A4 A4 G4 E4 G4 E4 G4 D4 C4:2"], ["And now you roar: r-|r-|r!", "C4 E4 G4 A4 E4 D4 C4:2"]]}, {"id": "robin", "title": "Robin Redbreast", "e": "🐦", "by": "a bird rhyme", "lines": [["Ro|bin, ro|bin red|breast,", "G4 E4 G4 E4 A4 G4:2"], ["ruf|fle up your fea|thers,", "G4 G4 E4 G4 A4 G4:2"], ["sing a mer|ry mor|ning song", "A4 A4 G4 E4 G4 E4 D4:2"], ["in all kinds of wea|thers!", "E4 G4 E4 D4 D4 C4:2"]]}, {"id": "porridge", "title": "The Porridge Pot", "e": "🥣", "by": "a finger rhyme", "lines": [["Round and round the por|ridge pot,", "E4 G4 E4 G4 A4 G4 E4:2"], ["stir it, stir it, nice and hot,", "G4 G4 G4 G4 E4 D4 C4:2"], ["one for you and one for me,", "E4 E4 G4 G4 A4 A4 G4:2"], ["one for Gran|ny, one, two, three!", "A4 G4 E4 D4 E4 D4 C4:2"]]}, {"id": "rooster", "title": "Little Rooster", "e": "🐓", "by": "a morning rhyme", "lines": [["Lit|tle roo|ster, red and bright,", "C4 E4 G4 G4 A4 G4 E4:2"], ["gol|den comb and fea|thers light,", "A4 A4 G4 E4 E4 D4 E4:2"], ["why do you crow so ear|ly, why?", "G4 G4 E4 G4 A4 G4 E4 D4:2"], ["Cock-|a-|doo|dle, sun is high!", "E4 E4 D4 E4 D4 D4 C4:2"]]}, {"id": "clap", "title": "Clappy Hands", "e": "👏", "by": "a clapping rhyme", "lines": [["Clap|py, clap|py, clap|py hands!", "G4 E4 G4 E4 G4 E4 E4:2"], ["Where have you been? At Gran|ny's!", "G4 G4 E4 G4 A4 G4 E4:2"], ["What did you eat? Some por|ridge!", "G4 G4 E4 D4 E4 D4 C4:2"], ["What did you drink? Some le|mo|nade!", "G4 G4 E4 D4 D4 E4 D4 C4:2"]]}, {"id": "sunshine", "title": "Sunshine, Come Out", "e": "☀️", "by": "a weather rhyme", "lines": [["Sun|shine, sun|shine, come and play,", "C4 E4 G4 G4 A4 G4 E4:2"], ["shine on us this rai|ny day!", "A4 A4 G4 E4 G4 E4 D4:2"], ["All the chil|dren wait for you,", "E4 E4 G4 G4 E4 D4 E4:2"], ["jum|ping in the pud|dles too!", "D4 E4 F4 E4 D4 D4 C4:2"]]}], "SOUNDS": [{"L": "S", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [30, 120, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove. Cool air runs along it — you can feel it on your hand.", "Your throat stays quiet: your hand on your throat does not buzz."], "line": "The S sound. Smile so I can see your teeth. Tuck the tip of your tongue behind your bottom teeth. Blow along the middle of your tongue. You get a long hiss, like a snake: sss!"}, {"L": "Z", "pose": "frog", "prof": {"j": 2, "lips": "smile", "tip": [165, 104], "hump": [126, 66], "air": "M60 74Q110 56 150 72Q170 80 216 86", "voice": 1, "marks": [[212, 72, 1], [174, 104, 2], [150, 120, 3], [112, 80, 4], [34, 114, 5]]}, "steps": ["Smile so your teeth show.", "Your teeth are almost together — just a tiny gap.", "The wide tip of your tongue rests behind your bottom teeth.", "The middle of your tongue makes a little groove, and the air runs along it.", "Your voice is on: put your hand on your throat — it buzzes like a bee."], "line": "The Z sound is like S, but with your voice switched on. Smile. Tuck the tip of your tongue behind your bottom teeth. Put your hand on your throat. It buzzes, like a bee: zzz!"}, {"L": "R", "pose": "swingUp", "prof": {"j": 12, "lips": "round", "tip": [150, 74], "hump": [116, 72], "air": "M60 80Q112 54 150 62Q176 70 216 98", "voice": 1, "marks": [[214, 96, 1], [144, 44, 2], [104, 100, 3], [188, 40, 4], [34, 114, 5]]}, "steps": ["Your lips are a little rounded, pushed forward a bit.", "Lift the tip of your tongue towards the bumpy ridge behind your top teeth — close, but not touching.", "The sides of your tongue press against your top back teeth.", "The air flows gently over your tongue. Nothing taps and nothing shakes.", "Your voice is on: rrr, like a growling tiger cub."], "line": "The R sound. Round your lips a little. Lift the tip of your tongue towards the bumps behind your top teeth, but do not touch them. Press the sides of your tongue against your back teeth. Now switch on your voice: rrr, like a tiger cub. If it is tricky, do your tongue exercises and it will come!"}], "SOUND_L": {"L": "L", "pose": "swingUp", "prof": {"j": 8, "lips": "neutral", "tip": [168, 64], "hump": [96, 72], "dip": 104, "air": "M58 100Q110 112 150 104Q174 98 216 100", "voice": 1, "marks": [[212, 90, 1], [182, 52, 2], [128, 116, 3], [196, 114, 4], [34, 114, 5]]}, "steps": ["Your mouth is a little open, lips in a soft smile.", "The wide tip of your tongue presses on the bumpy ridge just behind your top teeth.", "The middle of your tongue stays low.", "The air flows out along both sides of your tongue.", "Your voice is on: lll, like a little song."], "line": "The L sound. Open your mouth a little. Press the tip of your tongue on the bumps just behind your top teeth. Let the air flow round the sides and switch on your voice: la-la-la!"}, "SOUNDS_SH": [{"L": "SH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, like a trumpet.", "Your teeth are almost together.", "Your wide tongue lifts up towards the bumps behind your top teeth, like a little cup.", "Warm air runs along the middle of your tongue: shhh, like hushing a sleeping baby.", "Your throat stays quiet."], "line": "The SH sound. Push your lips forward like a trumpet. Lift your wide tongue like a cup, up towards the bumps behind your top teeth. Blow warm air: shhh, the baby is sleeping!"}, {"L": "CH", "pose": "horn", "prof": {"j": 3, "lips": "round", "tip": [152, 58], "hump": [112, 80], "air": "M60 78Q118 64 150 66Q172 74 218 80", "marks": [[214, 70, 1], [178, 96, 2], [146, 46, 3], [110, 70, 4], [30, 120, 5]]}, "steps": ["Your lips are rounded and pushed forward, just like for SH.", "Your teeth are almost together.", "The tip of your tongue touches the bumps behind your top teeth for a moment, like for T.", "Then let go: the air bursts out — t-sh, ch!", "Your throat stays quiet: ch-ch-ch, like a little train."], "line": "The CH sound is a quick T and SH together. Round your lips. Touch the bumps behind your top teeth with your tongue, then let go with a puff: ch! Like a little train: ch-ch-ch!"}], "CHIST_L": ["La-la-la — little Lola laughs, ha-ha!", "Lo-lo-lo — hello, hello, hello!", "Loo-loo-loo — the lake is lovely blue.", "Lee-lee-lee — a lily just for me!", "Al-al-al — Sava's dog is called Sal.", "Ol-ol-ol — Lola's little doll.", "Ool-ool-ool — Sava's on a stool.", "Eel-eel-eel — look, a little eel!", "Ela-ela — a yellow umbrella!", "Lo-lo-lo — let's float nice and slow.", "Loo-loo-loo — the bluebird sings for you.", "La-lo-loo — the squirrel's hiding, peek-a-boo!"], "CHIST_L2": ["La-la-la — my surfboard glides so far!", "Loo-loo-loo — the bishop slides on through.", "Lee-lee-lee — Liza the lizard sits by me.", "Al-al-al — Sava plays chess with a pal.", "Ool-ool-ool — the coach is here, so cool!", "Ul-ul-ul — Sava's legs pull, pull, pull!", "Il-il-il — Sava plays the piano with skill."], "TWIST_L": ["Lily licks a lemon lolly, lovely lolly, jolly Lily.", "Little Lola lost her ladle, looked below the lilac table.", "Eleven little ladybirds landed on the lily leaves.", "A lazy lion lies in the light, lolling left and lolling right.", "Larry's lorry left at eleven, loaded with lollies for Lily and Kevin.", "Lots of lovely lilies float on the little blue lake.", "Lucy likes yellow, Lola likes lilac, Liza likes lime.", "A loud little lamb leaps along the long lane.", "Lulu laughed and laughed until all the lollies fell."], "TWIST_L2": ["The bishop glides along the line, the castle rolls level, the king feels fine.", "Liza the lizard lies on a log, lapping up sunlight and looking at a frog.", "Wave after wave, Sava glides along, balancing lightly, steady and strong.", "Black keys, white keys, lovely and loud, lively little melodies please the crowd.", "The bicycle rolls and the wheels whirl along, the pedals turn lightly, my legs are strong.", "Sava on the skateboard sailed so low, and landed a slick little trick — hello!"], "CHIST_R": ["Ra-ra-ra — a rocket flies so far!", "Ro-ro-ro — row the boat, here we go!", "Roo-roo-roo — the rabbit's ready too!", "Ree-ree-ree — Vera's running to the tree!", "Ara-ara — Sarah has a red tiara!", "Erry-erry — a very merry cherry!", "Orry-orry — a lorry, don't you worry!", "Urry-urry — the bunny's in a hurry!"], "HOUSE_L": [["lion", "🦁", 0], ["lemon", "🍋", 0], ["leaf", "🍃", 0], ["lamp", "💡", 0], ["ladder", "🪜", 0], ["lollipop", "🍭", 0], ["balloon", "🎈", 1], ["melon", "🍈", 1], ["koala", "🐨", 1], ["dolphin", "🐬", 1], ["tulip", "🌷", 1], ["helicopter", "🚁", 1], ["umbrella", "☂️", 1], ["football", "⚽", 2], ["bell", "🔔", 2], ["owl", "🦉", 2], ["snail", "🐌", 2], ["whale", "🐳", 2], ["camel", "🐫", 2]], "RAP": [{"bpm": 80, "words": ["LA", "LO", "LOO", "LEE", "LA", "LO", "LOO", "LEE"]}, {"bpm": 88, "words": ["AL", "OL", "OOL", "EEL", "AL", "OL", "OOL", "EEL"]}, {"bpm": 94, "words": ["ALA", "ELE", "OLO", "ULU", "PLA", "CLO", "GLU", "BLI"]}, {"bpm": 100, "words": ["Lily", "licks", "a", "lemon", "lolly,", "jolly", "Lily!", "Yo!"]}], "CATCH_L": [["lion", "🦁"], ["lemon", "🍋"], ["lamp", "💡"], ["leaf", "🍃"], ["ladder", "🪜"], ["lollipop", "🍭"], ["balloon", "🎈"], ["owl", "🦉"], ["football", "⚽"], ["koala", "🐨"], ["dolphin", "🐬"], ["snail", "🐌"], ["bell", "🔔"], ["apple", "🍎"], ["camel", "🐫"], ["clown", "🤡"], ["plane", "✈️"], ["whale", "🐳"], ["umbrella", "☂️"], ["tulip", "🌷"]], "CATCH_X": [["fish", "🐟"], ["cat", "🐈"], ["house", "🏠"], ["car", "🚗"], ["rocket", "🚀"], ["cake", "🎂"], ["mushroom", "🍄"], ["cheese", "🧀"], ["watch", "⌚"], ["dog", "🐕"], ["banana", "🍌"], ["tiger", "🐯"], ["bee", "🐝"], ["hedgehog", "🦔"], ["duck", "🦆"], ["rose", "🌹"], ["pizza", "🍕"], ["train", "🚂"], ["moon", "🌙"], ["star", "⭐"]], "CATCH_L2": [["bicycle", "🚲"], ["helmet", "⛑️"], ["lizard", "🦎"], ["melody", "🎵"], ["wheel", "🛞"], ["castle", "♜"], ["roller skates", "🛼"], ["black belt", "🥋"]], "CATCH_X2": [["skateboard", "🛹"], ["scooter", "🛴"], ["surfer", "🏄"], ["tortoise", "🐢"], ["pawn", "♟️"], ["piano", "🎹"]], "BOSS_1": ["LA — LO — LOO — LEE", "Say clearly: la, lo, loo, lee."], "BOSS_2": ["AL — OL — OOL — EEL", "Say: al, ol, ool, eel."], "BOSS_F": ["LION · LEMON · LAMP · LADDER", "Fast and clear: lion, lemon, lamp, ladder."], "MOVES": [["🛹", "Stand like you're on a skateboard and do five squats. On each one, say: LA!", "LA × 5"], ["🥋", "Taekwondo stance! Five front kicks. With every kick: LO!", "LO × 5"], ["🚲", "Lie on your back and pedal your legs like a bike ten times: loo-loo-loo!", "LOO × 10"], ["🏄", "Surfer pose: balance and hold a long l-l-l-l while you count to ten.", "L-l-l-l…"], ["🛴", "Ten jumps on the spot, like on a scooter. With every jump: LEE!", "LEE × 10"], ["♟️", "Move like a chess knight: two steps forward and one to the side. And say: the knight leaps left!", "the knight leaps left"], ["🦎", "Crawl like a lizard for five steps and say: Liza the lizard is lively!", "Liza the lizard is lively"], ["🎹", "Play the table with your fingers like a piano and sing: la-la-la-la-la!", "la-la-la-la-la"], ["🥋", "Block up and down five times. Up — AL, down — OL!", "AL — OL × 5"]], "SYL_SH": [["sha", "SHA", "shark", "🦈"], ["shoo", "SHOO", "shooting star", "🌠"], ["shee", "SHEE", "sheep", "🐑"], ["shor", "SHOR", "shorts", "🩳"], ["chee", "CHEE", "cheese", "🧀"], ["choc", "CHOC", "chocolate", "🍫"], ["chip", "CHIP", "chips", "🍟"], ["jack", "JACK", "jacket", "🧥"], ["jee", "JEE", "jeep", "🚙"], ["jag", "JAG", "jaguar", "🐆"], ["jig", "JIG", "jigsaw", "🧩"]], "SYL_REND": [["rot", "ROT", "carrot", "🥕"], ["rot", "ROT", "parrot", "🦜"], ["row", "ROW", "arrow", "🏹"], ["bra", "BRA", "zebra", "🦓"], ["raff", "RAFF", "giraffe", "🦒"], ["rel", "REL", "squirrel", "🐿️"], ["ror", "ROR", "mirror", "🪞"], ["ro", "RO", "hero", "🦸"], ["ro", "RO", "zero", "0️⃣"]], "HOUSE_SH": [["ship", "🚢", 0], ["shoe", "👟", 0], ["sheep", "🐑", 0], ["shark", "🦈", 0], ["shorts", "🩳", 0], ["mushroom", "🍄", 1], ["T-shirt", "👕", 1], ["seashell", "🐚", 1], ["sunshine", "🌞", 1], ["fishing rod", "🎣", 1], ["fish", "🐟", 2], ["toothbrush", "🪥", 2], ["paintbrush", "🖌️", 2], ["splash", "💦", 2]], "SH_ITEMS": [["SH", "ship", "🚢"], ["SH", "shoe", "👟"], ["SH", "sheep", "🐑"], ["SH", "shark", "🦈"], ["SH", "fish", "🐟"], ["SH", "mushroom", "🍄"], ["CH", "chair", "🪑"], ["CH", "cheese", "🧀"], ["CH", "chick", "🐤"], ["CH", "cherries", "🍒"], ["CH", "watch", "⌚"], ["CH", "peach", "🍑"], ["J", "giraffe", "🦒"], ["J", "jacket", "🧥"], ["J", "juice", "🧃"], ["J", "jeans", "👖"], ["J", "jigsaw", "🧩"], ["J", "orange", "🍊"]], "SH_BINS": {"SH": ["🤫", "shh, be quiet"], "CH": ["🚂", "choo-choo train"], "J": ["🦘", "jumping kangaroo"]}, "SH_PAIRS": [["SH", "CH"], ["CH", "J"], ["SH", "J"], ["J", "SH"]], "BEAUTY": [{"id": "blush", "name": "blusher", "e": "🌸", "line": "Say: rosy blusher."}, {"id": "lips", "name": "lipstick", "e": "💄", "colors": [["red", "#E0234E"], ["rose", "#FF6FA3"], ["cherry", "#9E1A4A"]], "line": "Say: {c} lipstick."}, {"id": "shadow", "name": "eyeshadow", "e": "🎨", "colors": [["grape", "#B79CFF"], ["green", "#3FBF92"], ["shiny", "#E3D3F5"]], "line": "Say: {c} eyeshadow."}, {"id": "lashes", "name": "mascara", "e": "🖌️", "line": "Say: brush on the mascara."}, {"id": "powder", "name": "shimmer", "e": "✨", "line": "Say: sparkly shimmer powder."}, {"id": "hair", "name": "hairbrush", "e": "svg:comb", "line": "Say: hairbrush. Let's brush your hair!"}, {"id": "earrings", "name": "earrings", "e": "💎", "line": "Say: sparkly earrings."}, {"id": "necklace", "name": "jewels", "e": "📿", "line": "Say: a string of shiny jewels."}, {"id": "crown", "name": "crown", "e": "👑", "line": "Say: a royal crown!"}], "MOTO_WORDS": ["handlebars", "helmet", "wheel", "wheelie", "leader", "fuel", "level", "lane", "slalom", "finish line"], "MOTO_R": ["race", "track", "road", "rocket", "robot", "record", "brake", "driver", "garage", "tractor", "truck", "radar", "roundabout", "trophy", "traffic", "bridge", "racer", "ramp", "grip", "arrow"], "MOTO_SH": ["shift", "crash", "dash", "flash", "rush", "shield", "chase", "champion", "cheer", "check", "jump", "jet", "engine", "bridge", "gadget", "shortcut", "finish", "push"], "MOTO_SZ": ["speed", "stop", "sign", "scooter", "skateboard", "zebra", "zoom", "zigzag", "bus", "pass", "boost", "signal", "seatbelt", "start", "slow", "sports car"], "KP_R": [["rabbit", "🐰"], ["rocket", "🚀"], ["rainbow", "🌈"], ["rose", "🌹"], ["crown", "👑"], ["robot", "🤖"], ["drum", "🥁"], ["microphone", "🎤"], ["parrot", "🦜"], ["strawberry", "🍓"], ["carrot", "🥕"], ["frog", "🐸"]], "KP_CHANTS": ["Ra-ra-ra — ready, rockstars, roar!", "Sha-sha-sha — shine and sing some more!", "Ja-ja-ja — jump and join the song!", "Ree-ree-ree — run away, little monster! One, two, three!"], "MC_NAMES": ["MC Lava", "Lil Leo", "L-Boy", "Lion Flow", "Lord Beat", "Lucky L", "Lightning L", "Lolly Rap"], "VERSES": [["Listen to my flow, it's light as a leaf,", "Lizard Liza and me, we climb up the cliff,", "Left on the ledge, then all the way to the top,", "My L is loud and my flow will never stop!"], ["Hands on the handlebars, I'm feeling the thrill,", "I'm leading the race as I roll down the hill,", "A lorry on the left, a cliff on the right,", "A slick little turn — and the finish line's in sight!"], ["Yellow belt, blue belt, I'm climbing the scale,", "A kick and a block, and I never fail,", "The bishop slides slowly, the castle's in line,", "Checkmate in two — all the glory is mine!"], ["Ride the blue wave, hold the balance tight,", "Sunlight and wind, and it all feels right,", "The board's gliding low through the bubbles and foam,", "Light as a seagull — I'm sailing back home!"]], "HOOK": ["L-L-L — that's my flow,", "La-la-lay — feel how light I go!"], "HYPE": ["CLEAN!", "FLOW!", "BRILLIANT!", "LEGEND!", "BLAZING!"], "PAL_WORDS": [["r", "red"], ["o", "orange"], ["y", "yellow"], ["g", "green"], ["t", "turquoise"], ["s", "sky blue"], ["b", "blue"], ["p", "purple"], ["p", "pink"], ["b", "brown"], ["b", "black"], ["w", "white"]], "MORE_STORIES": {}, "WATER_STORIES": {}, "PLANT_STORIES": [], "BALLET_STORIES": {}, "SOUNDS_RU2": [], "HOW_PAR": {}};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
@@ -4132,6 +4179,7 @@ function mouth(p) {
     case 'lickUp': { const h = 24, yT = -.75 * h - .75; return mOpen({ w: 38, h, c: 3, upper: false, over: `<g class="tg"><path d="M-22 12Q-28 ${yT - 2} 0 ${yT - 12}Q28 ${yT - 2} 22 12Z" fill="${T}"/><path d="M0 ${yT - 6}V6" stroke="${TD}" stroke-width="2" stroke-linecap="round"/></g>` }); }
     case 'paintBack': return mouth('swingUp');
     case 'cup': { const h = 22, yB = .9375 * h - 1; return mOpen({ w: 40, h, c: 4, lower: false, tongue: `<ellipse cx="0" cy="${yB}" rx="24" ry="9" fill="${T}"/>`, over: `<path d="M-30 ${yB + 2}Q-32 ${yB + 26} 0 ${yB + 26}Q32 ${yB + 26} 30 ${yB + 2}Q20 ${yB + 12} 0 ${yB + 12}Q-20 ${yB + 12} -30 ${yB + 2}Z" fill="${T}"/><path d="M-30 ${yB + 2}Q0 ${yB - 8} 30 ${yB + 2}" fill="none" stroke="${TD}" stroke-width="2.5"/>` }); }
+    case 'clockL': case 'clockR': { const s = p === 'clockL' ? -1 : 1, h = 18, yB = .9375 * h - .75; return mOpen({ w: 40, h, c: 3, lower: false, over: `<path d="M${s * 2} ${yB - 7}Q${s * 30} ${yB - 7} ${s * 52} ${yB - 4}Q${s * 30} ${yB + 7} ${-s * 4} ${yB + 4}Z" fill="${T}"/>` }); }
     case 'horn': return `<ellipse cx="0" cy="2" rx="24" ry="19" fill="${FC.lip}"/><ellipse cx="0" cy="2" rx="14" ry="11" fill="${FC.inn}"/><rect x="-8" y="-6" width="16" height="6" rx="2" fill="${FC.tooth}"/><rect x="-7" y="4" width="14" height="6" rx="2" fill="${FC.tooth}"/>`;
     case 'ship': return mOpen({ w: 34, h: 22, c: 3, tongue: `<ellipse cx="0" cy="16" rx="20" ry="7" fill="${T}"/>` });
     default:
@@ -4153,7 +4201,7 @@ function faceSVG(pose, cls = '') {
   <circle cx="74.5" cy="99.5" r="2.6" fill="#fff"/><circle cx="130.5" cy="99.5" r="2.6" fill="#fff"/>
   <circle cx="54" cy="138" r="12" fill="#FF8FA3" opacity=".45"/><circle cx="146" cy="138" r="12" fill="#FF8FA3" opacity=".45"/>
   <path d="M95 125q5 5 10 0" stroke="#D99A7A" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <g transform="translate(100 156)"><g class="mth">${mouth(pose)}</g></g></svg>`;
+  <g transform="translate(100 156)"><g class="mth">${typeof pose === 'string' ? mouth(pose) : pose.html}</g></g></svg>`;
 }
 
  
@@ -4248,6 +4296,8 @@ function shell(title, body, { back = null, guide = true, raw = false } = {}) {
   </div>`;
   $('#backBtn').onclick = () => { sfx.pop(); (back || goHome)(); };
   if ($('#homeBtn2')) $('#homeBtn2').onclick = () => { sfx.pop(); goHome(); };
+  if (HOW_CUR && HOW_CUR.length) $('.bar h1').insertAdjacentHTML('afterend', howBtnHTML());
+  if ($('#howBtn')) $('#howBtn').onclick = () => { sfx.pop(); howOpen(); };
   navEnter(back || goHome);
   stageFollow($('#stage'));
   if (!guide) guideWatch();
@@ -4664,7 +4714,7 @@ function goHome() {
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
-  newScreen(); ACTIVE = null; BATTLE = null;
+  newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
   const RF = readFineCheck();
@@ -4680,7 +4730,7 @@ function goHome() {
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
   const tiles = g => vis(g).map(tileHTML).join('');
   const secs = gs => SECTIONS.filter(x => gs.includes(x.g) && (x.g === 13 || modOnG(x.g)) && (!x.only || x.only === P.settings.track || P.settings.allGames) && vis(x.g).length);
-  const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p></div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
+  const secHTML = x => `<section class="group" id="sec${x.g}"><div class="group-head"><h2>${nm(x.h)}</h2><p>${nm(x.p)}</p>${howList(x.g).length ? `<button class="chip how-sec" data-how="${x.g}"><span class="emo">👄</span>How to say it</button>` : ''}</div><div class="tiles ${x.g === 0 ? 'warm' : ''}">${tiles(x.g)}</div></section>`;
   const fy = forYou(), likeEm = (P.settings.likes || []).map(l => (LIKES.find(x => x.id === l) || {}).e || '').filter(Boolean), likesE = likeEm.slice(0, 6).join(' ') + (likeEm.length > 6 ? ` +${likeEm.length - 6}` : '');  
   const sc = stickerCount(), inboxN = inbox(P).length;
   
@@ -4774,6 +4824,7 @@ function goHome() {
   on('#tripCard', () => { sfx.pop(); homeLeave(); screenTrip(); });
   on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   $$('.tile, .mini').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); GAMES.find(g => g.id === b.dataset.id).go(); });
+  $$('.how-sec').forEach(b => b.onclick = e => { e.stopPropagation(); sfx.pop(); howOpen(howList(+b.dataset.how)); });
   $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   if (GUEST) on('#guestTop', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
@@ -4982,13 +5033,15 @@ function screenArtic(i, auto = false, then = null) {
   const setFace = (pose, fx) => {
     const faces = mirror.querySelectorAll('svg.face'), old = faces[faces.length - 1];
     if (pose === cur && !fx) { old.classList.remove('hold', 'f-in'); void old.getBoundingClientRect(); old.classList.add('hold'); return; }
-    cur = pose; const my = ++swap, dur = 360;
+    const prev = cur; cur = pose; const my = ++swap, dur = 360;
     old.insertAdjacentHTML('afterend', faceSVG(pose, `${fx || ''} f-new f-in`));
     const nw = old.nextElementSibling;
     nw.style.transition = old.style.transition = `opacity ${dur}ms ease`;
     requestAnimationFrame(() => requestAnimationFrame(() => { nw.style.opacity = 1; old.style.opacity = 0; }));
     setTimeout(() => { if (my !== swap) return; mirror.querySelectorAll('svg.face').forEach(f => { if (f !== nw) f.remove(); }); nw.classList.remove('f-new'); nw.removeAttribute('style'); }, dur + 60);
-    const sc = $('#scheme'); sc.style.opacity = 0; setTimeout(() => { if (my !== swap) return; sc.innerHTML = profileSVG(profOf(pose)); sc.style.opacity = 1; }, dur / 2);
+    
+    const sc = $('#scheme'), pb = profOf(pose);
+    if (howCalm()) sc.innerHTML = profileSVG(pb); else { sc.innerHTML = profileMove([[profOf(prev), 0, 0], [pb, 1, 1]], { dur: dur + 160, loop: false }); try { sc.firstElementChild.setCurrentTime(0); } catch (e) {} }
   };
   const start = async () => {
     if (started || t !== tok) return; started = true;
@@ -6039,9 +6092,11 @@ function screenColorMenu() {
   newScreen();
   const card = p => `<button class="card page" data-p="${p}" style="--bg:#FFFFFF" aria-label="Colouring page"><span class="page-thumb">${outlineSVG(pageSVG(p))}</span></button>`;
   
-  const bal = PAGES.filter(p => BALLET_PAGES.includes(p)), rest = PAGES.filter(p => !BALLET_PAGES.includes(p));
-  const likes = P.settings.likes || [], groups = [["Ballet", bal], ["More colouring pages", rest]];
-  if (!likes.some(l => l === 'ballet' || l === 'dance')) { groups.reverse(); groups[0][0] = "Animals and toys"; }
+  
+  const likes = P.settings.likes || [], themed = [...BALLET_PAGES, ...FOOTBALL_PAGES, ...WHEELS_PAGES];
+  const themes = [["Ballet", BALLET_PAGES, ['ballet', 'dance']], ["Football", FOOTBALL_PAGES, ['football']], ["Cool cars and bikes", WHEELS_PAGES, ['race', 'moto', 'trucks']]];
+  const liked = t => t[2].some(l => likes.includes(l));
+  const groups = [...themes.filter(liked), ["Animals and toys", PAGES.filter(p => !themed.includes(p))], ...themes.filter(t => !liked(t))];
   const st = shell("Colouring pages", groups.map(([h, ps]) => `<h2 class="sec-h">${h}</h2><div class="cards">${ps.map(card).join('')}</div>`).join(''), { back: screenDrawMenu });
   talk("Choose a picture to colour in.");
   st.onclick = e => { const c = e.target.closest('.page'); if (c) { sfx.pop(); screenPaint({ mode: 'color', page: c.dataset.p }); } };
@@ -6227,29 +6282,32 @@ const PROF = {
   swingUp: { j: 14, lips: 'smile', tip: [166, 68], hump: [128, 82] },
   swingDown: { j: 14, lips: 'smile', tip: [165, 120], hump: [116, 100] },
   catHill: { j: 12, lips: 'smile', tip: [165, 116], hump: [124, 60] },
-  tube: { j: 10, lips: 'neutral', tip: [202, 100], hump: [126, 88], out: 1, roll: 1, air: 'M128 78Q176 86 216 100' }
+  tube: { j: 10, lips: 'neutral', tip: [202, 100], hump: [126, 88], out: 1, roll: 1, air: 'M128 78Q176 86 216 100' },
+  cup: { j: 10, lips: 'smile', tip: [205, 94], hump: [122, 94], out: 1 },
+  horn: { j: 3, lips: 'round', tip: [160, 100], hump: [112, 90] }
 };
-const profOf = pose => PROF[pose] || PROF[{ brushL: 'low', brushR: 'low', catFlat: 'swingDown' }[pose]] || (pose.startsWith('count') ? PROF.low : PROF.rest);
-function profileSVG(c) {
+const profOf = pose => PROF[pose] || PROF[{ brushL: 'low', brushR: 'low', catFlat: 'swingDown', clockL: 'needle', clockR: 'needle' }[pose]] || (pose.startsWith('count') ? PROF.low : PROF.rest);
+function profileSVG(c, o = {}) {
   const j = c.j, sx = c.lips === 'smile' ? -5 : c.lips === 'round' ? 9 : 0, [tx, ty] = c.tip, [hx, hy] = c.hump, fl = 132 + j, ah = 'ah' + (++fid);
-  const tongue = `<path d="M50 150L51 108C58 ${hy + 8} ${hx - 32} ${hy} ${hx} ${hy}${c.dip ? `C${hx + 30} ${c.dip} ${tx - 30} ${c.dip} ${tx} ${ty}` : `C${hx + 18} ${hy} ${tx - 14} ${ty - 6} ${tx} ${ty}`}Q${tx + 6} ${ty + 4} ${tx - 1} ${ty + 9}C${tx - 22} ${ty + 15} 132 ${fl} 110 ${fl + 2}L50 150Z" fill="#FF8FA0" stroke="#D9485F" stroke-width="2" stroke-linejoin="round"/>${c.roll ? `<ellipse cx="${tx - 6}" cy="${ty + 3}" rx="4" ry="5" fill="#D9485F"/>` : ''}`;
-  return `<svg viewBox="0 0 220 170" role="img" aria-label="Diagram: lips, teeth and tongue from the side">
+  const tongue = `<path data-k="tg" d="M50 150L51 108C58 ${hy + 8} ${hx - 32} ${hy} ${hx} ${hy}${c.dip ? `C${hx + 30} ${c.dip} ${tx - 30} ${c.dip} ${tx} ${ty}` : `C${hx + 18} ${hy} ${tx - 14} ${ty - 6} ${tx} ${ty}`}Q${tx + 6} ${ty + 4} ${tx - 1} ${ty + 9}C${tx - 22} ${ty + 15} 132 ${fl} 110 ${fl + 2}L50 150Z" fill="#FF8FA0" stroke="#D9485F" stroke-width="2" stroke-linejoin="round"/>${c.roll ? `<ellipse cx="${tx - 6}" cy="${ty + 3}" rx="4" ry="5" fill="#D9485F"/>` : ''}`;
+  const lab = "Diagram: lips, teeth and tongue from the side";
+  return `<svg viewBox="0 0 220 170" role="img" aria-label="${lab}">
     <defs><marker id="${ah}" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#3D8BFD"/></marker></defs>
-    <path d="M0 0H150C176 0 183 18 187 28L208 46Q211 53 202 55Q193 57 192 61L188 80L188 ${92 + j}C195 ${112 + j} 193 ${132 + j} 178 ${140 + j}Q160 ${147 + j} 152 170H0Z" fill="#FFE3D0" stroke="#E8B79A" stroke-width="2"/>
-    <path d="M171 62C163 58 159 55 151 55C136 41 106 37 86 43C71 47 63 55 59 65Q57 71 52 77L47 92V150L120 ${136 + j}Q160 ${133 + j} 170 ${121 + j}Z" fill="#FCE9EC"/>
-    <path d="M171 62H190V${105 + j}L170 ${121 + j}Z" fill="#FCE9EC"/>
+    <path data-k="jw" d="M0 0H150C176 0 183 18 187 28L208 46Q211 53 202 55Q193 57 192 61L188 80L188 ${92 + j}C195 ${112 + j} 193 ${132 + j} 178 ${140 + j}Q160 ${147 + j} 152 170H0Z" fill="#FFE3D0" stroke="#E8B79A" stroke-width="2"/>
+    <path data-k="c1" d="M171 62C163 58 159 55 151 55C136 41 106 37 86 43C71 47 63 55 59 65Q57 71 52 77L47 92V150L120 ${136 + j}Q160 ${133 + j} 170 ${121 + j}Z" fill="#FCE9EC"/>
+    <path data-k="c2" d="M171 62H190V${105 + j}L170 ${121 + j}Z" fill="#FCE9EC"/>
     <path d="M171 62C163 58 159 55 151 55C136 41 106 37 86 43C71 47 63 55 59 65Q57 71 52 77L47 92V150" fill="none" stroke="#C98A93" stroke-width="3" stroke-linecap="round"/>
     ${c.out ? '' : tongue}
-    <path d="M167 ${120 + j}L176 ${119 + j}L177 ${91 + j}Q173 ${85 + j} 168 ${89 + j}Z" fill="#FFFFFF" stroke="#B8B0C8" stroke-width="1.5"/>
+    <path data-k="lt" d="M167 ${120 + j}L176 ${119 + j}L177 ${91 + j}Q173 ${85 + j} 168 ${89 + j}Z" fill="#FFFFFF" stroke="#B8B0C8" stroke-width="1.5"/>
     <path d="M167 58L177 57L181 81Q177 86 171 82Z" fill="#FFFFFF" stroke="#B8B0C8" stroke-width="1.5"/>
-    <path d="M181 ${85 + j}L${187 + sx} ${85 + j}Q${200 + sx} ${87 + j} ${200 + sx} ${97 + j}Q${198 + sx} ${107 + j} ${187 + sx} ${107 + j}L181 ${105 + j}Z" fill="#E3707F"/>
+    <path data-k="ll" d="M181 ${85 + j}L${187 + sx} ${85 + j}Q${200 + sx} ${87 + j} ${200 + sx} ${97 + j}Q${198 + sx} ${107 + j} ${187 + sx} ${107 + j}L181 ${105 + j}Z" fill="#E3707F"/>
     ${c.out && !c.over ? tongue : ''}
-    <path d="M${186 + sx} 57Q${200 + sx} 61 ${200 + sx} 72Q${198 + sx} 80 ${187 + sx} 80L181 80V60Z" fill="#E3707F"/>
+    <path data-k="ul" d="M${186 + sx} 57Q${200 + sx} 61 ${200 + sx} 72Q${198 + sx} 80 ${187 + sx} 80L181 80V60Z" fill="#E3707F"/>
     ${c.over ? tongue : ''}
-    ${c.air ? `<path d="${c.air}" fill="none" stroke="#3D8BFD" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#${ah})"/>` : ''}
+    <g data-ov="1">${c.air ? `<path d="${c.air}" fill="none" stroke="#3D8BFD" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#${ah})">${o.flow ? '<animate attributeName="stroke-dashoffset" from="18" to="0" dur=".7s" repeatCount="indefinite"/>' : ''}</path>` : ''}
     ${c.vib ? `<path d="M${c.vib[0] + 2} ${c.vib[1] - 8}l4-4 4 4 4-4M${c.vib[0] + 6} ${c.vib[1] - 2}l4-4 4 4 4-4" stroke="#EF4F7E" stroke-width="2" fill="none" stroke-linecap="round"/>` : ''}
-    ${c.voice ? "<path d=\"M18 132q4-6 8 0t8 0 8 0M18 142q4-6 8 0t8 0 8 0\" stroke=\"#8C6CF2\" stroke-width=\"2.2\" fill=\"none\"/><text x=\"14\" y=\"160\" font-size=\"11\" font-weight=\"800\" fill=\"#8C6CF2\" font-family=\"Nunito, sans-serif\">voice</text>" : ''}
-    ${(c.marks || []).map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="7.5" fill="#FFC83A" stroke="#2A2346" stroke-width="1.5"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#2A2346" font-family="Nunito, sans-serif">${n}</text>`).join('')}
+    ${c.voice ? "<path d=\"M18 132q4-6 8 0t8 0 8 0M18 142q4-6 8 0t8 0 8 0\" stroke=\"#8C6CF2\" stroke-width=\"2.2\" fill=\"none\"/><text x=\"14\" y=\"160\" font-size=\"11\" font-weight=\"800\" fill=\"#8C6CF2\" font-family=\"Nunito, sans-serif\">voice</text>" : ''}</g>
+    ${o.marks === false ? '' : (c.marks || []).map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="7.5" fill="#FFC83A" stroke="#2A2346" stroke-width="1.5"/><text x="${x}" y="${y + 3.6}" text-anchor="middle" font-size="10" font-weight="900" fill="#2A2346" font-family="Nunito, sans-serif">${n}</text>`).join('')}
   </svg>`;
 }
 const SOUNDS = LX('SOUNDS', null);
@@ -6287,24 +6345,10 @@ function bindCam(stage) {
   };
 }
 function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {
-  newScreen();
-  const S = SOUNDS[si];
-  const st = shell("Where to put your tongue", `<div class="snd-tabs" id="sndTabs">${SOUNDS.map((x, i) => `<button class="snd-tab ${i === si ? 'sel' : ''}" data-i="${i}" aria-label="Sound ${x.L}">${Lspan(x.L)}</button>`).join('')}</div>
-    <div class="artic-stage" id="sndStage">
-      <div class="mirror">${faceSVG(S.pose)}</div>
-      ${camHTML}
-      <div class="artic-side">
-        <figure class="scheme">${profileSVG(S.prof)}<figcaption>Sound ${S.L}: side view. The numbers match the list.</figcaption></figure>
-        <ol class="snd-steps">${S.steps.map(x => `<li>${x}</li>`).join('')}</ol>
-        <div class="prow-btns"><button class="big" id="sndSay">${ICON.speaker}Listen</button><button class="big ghost" id="camBtn"></button></div>
-        <p class="muted" id="camNote" hidden></p>
-      </div>
-    </div>`);
-  talk(S.line);
-  bindCam($('#sndStage'));
-  $('#sndTabs').onclick = e => { const b = e.target.closest('.snd-tab'); if (b) { sfx.pop(); screenSounds(+b.dataset.i); } };
-  $('#sndSay').onclick = () => talk(S.line);
-  void st;
+  newScreen(); HOW_CUR = null;
+  const list = IS_RU ? HOW_ORDER.map(howIdx).filter(i => i >= 0) : SOUNDS.map((_, i) => i);
+  shell("Where to put your tongue", '<div class="how how-page" id="howBox"></div>');
+  howBind($('#howBox'), list, si, i => screenSounds(i));
 }
 
  
@@ -6344,6 +6388,7 @@ const ARTIC_L = [
   { id: 'l-painter', name: "Painter", thumb: 'swingUp', text: "Smile and open your mouth. “Paint” the roof of your mouth with the tip of your tongue. Go from your top teeth back, then forward again.", tip: "Keep your chin still.", intro: "Your tongue is a paintbrush. Paint the roof of your mouth. Go from your teeth back, then forward again.", steps: rep(4, [['swingUp', "Forward", 1200], ['paintBack', "Back", 1200]]) },
   { id: 'l-turkey', name: "Turkey", thumb: 'lickUp', text: "Move the wide tip of your tongue quickly back and forth on your top lip. Keep it on your lip: “bl-bl-bl”.", intro: "The turkey talks: bl-bl-bl! Slide your tongue along your top lip very fast.", steps: rep(4, [['lickUp', "Bl-bl-bl!", 1700, 'turkey']]) },
   { id: 'l-swing', name: "Swing", thumb: 'swingUp', text: "Open your mouth. The tip of your tongue goes to the top teeth, then to the bottom teeth.", tip: "Keep your chin still.", intro: "I'll say: up. Tongue to the top teeth. I'll say: down. Tongue to the bottom teeth.", steps: rep(4, [['swingUp', "Up", 1200], ['swingDown', "Down", 1200]]) },
+  { id: 'l-clock', name: "Tick-tock clock", thumb: 'clockL', text: "Smile and open your mouth a little. Reach with the narrow tip of your tongue to the right corner of your mouth, then to the left.", tip: "Your lips and lower jaw stay still.", intro: "The clock goes tick-tock. The tip of your tongue goes left, then right.", steps: rep(5, [['clockL', "Tick", 900, 'tick'], ['clockR', "Tock", 900, 'tick']]) },
   { id: 'l-horse', name: "Little horse", thumb: 'swingUp', text: "Suck your tongue up to the roof of your mouth and click: “clip-clop”.", tip: "Keep your chin still. Only your tongue clicks.", intro: "Let's ride the little horse! Suck your tongue up to the roof of your mouth and click: clip-clop!", steps: rep(5, [['swingUp', "Clop!", 900], ['swingDown', '', 700]]) },
   { id: 'l-ship', name: "The steamboat toots", thumb: 'ship', text: "Open your mouth a little and say a long “oo-oo-oo”. Keep the tip of your tongue down. Lift the back of your tongue.", intro: "The steamboat toots: oo-oo-oo! Hold it for a long, long time.", steps: [['ship', "Oo-oo-oo!", 2300], ['ship', '', 1600], ['ship', "Oo-oo-oo!", 2300], ['ship', '', 1400]] }
 ];
@@ -7092,6 +7137,101 @@ Object.assign(PROF, {
 });
 const sndIdx = L => { const i = SOUNDS.findIndex(x => x.L === L); return Math.max(0, i >= 0 ? i : RU('СЗРЛШЖ').indexOf(L)); };
 SOUNDS.push(...LX('SOUNDS_SH', null));
+
+
+SOUNDS.push(...LX('SOUNDS_RU2', null));
+
+const HOW_PAR = LX('HOW_PAR', null);
+
+const PK_RE = /<path data-k="(\w+)" d="([^"]*)"([^>]*)\/>/g;
+function profileMove(frames, { dur = 3200, loop = true } = {}) {
+  const kt = frames.map(f => +f[1].toFixed(3)).join(';'), sp = frames.slice(1).map(() => '.45 0 .55 1').join(';');
+  const rc = loop ? 'repeatCount="indefinite"' : 'repeatCount="1" fill="freeze"';
+  const ds = frames.map(([c]) => { const m = {}; profileSVG(c).replace(PK_RE, (_, k, d) => { m[k] = d; }); return m; });
+  const main = (frames.find(f => f[2]) || frames[frames.length - 1])[0];
+  let svg = profileSVG(main, { flow: 1, marks: false }).replace(PK_RE, (all, k, d, rest) => {
+    const vs = ds.map(m => m[k] || d);
+    if (vs.every(v => v === vs[0])) return all;
+    return `<path data-k="${k}" d="${vs[0]}"${rest}><animate attributeName="d" values="${vs.join(';')}" keyTimes="${kt}" calcMode="spline" keySplines="${sp}" dur="${dur}ms" ${rc}/></path>`;
+  });
+  if (frames.some(f => f[2]) && frames.some(f => !f[2])) svg = svg.replace('<g data-ov="1">', `<g data-ov="1" opacity="${frames[0][2] ? 1 : 0}"><animate attributeName="opacity" values="${frames.map(f => f[2] ? 1 : 0).join(';')}" keyTimes="${kt}" dur="${dur}ms" ${rc}/>`);
+  return svg;
+}
+
+function faceMove(frames, { dur = 3200, loop = true } = {}) {
+  const kt = frames.map(f => +f[1].toFixed(3)).join(';'), rc = loop ? 'repeatCount="indefinite"' : 'repeatCount="1" fill="freeze"';
+  const poses = [...new Set(frames.map(f => f[3]))];
+  const html = poses.map(p => { const vs = frames.map(f => f[3] === p ? 1 : 0); return `<g opacity="${vs[0]}"><animate attributeName="opacity" values="${vs.join(';')}" keyTimes="${kt}" dur="${dur}ms" ${rc}/>${mouth(p)}</g>`; }).join('');
+  return faceSVG({ html });
+}
+
+function howFrames(S) {
+  const R = PROF.rest, P0 = S.prof, f = [[R, 0, 0, 'rest'], [R, .1, 0, 'rest']];
+  if (S.pre) f.push([S.pre, .3, 0, S.pose], [S.pre, .44, 0, S.pose], [P0, .52, 1, S.pose]);
+  else f.push([P0, .38, 1, S.pose]);
+  if (P0.vib) { const P1 = { ...P0, tip: [P0.tip[0] - 1, P0.tip[1] + 6] }, t0 = f[f.length - 1][1], n = 12; for (let i = 1; i <= n; i++) f.push([i % 2 ? P1 : P0, t0 + (.84 - t0) * i / n, 1, S.pose]); }
+  else f.push([P0, .84, 1, S.pose]);
+  f.push([R, 1, 0, 'rest']);
+  return f;
+}
+const HOW_ORDER = [RU('С'), RU('З'), RU('Ц'), RU('Ш'), RU('Ж'), RU('Ч'), RU('Щ'), RU('Л'), RU('Ль'), RU('Р'), RU('Рь')];
+
+const HOW_GRP = { 1: [RU('Р'), RU('Рь')], 5: [RU('Л'), RU('Ль')], 9: [RU('Ш'), RU('Ж'), RU('Ч'), RU('Щ')], 15: [RU('С'), RU('З'), RU('Ц')] };
+const howIdx = L => { const i = SOUNDS.findIndex(x => x.L === L); if (i >= 0) return i; const j = RU('СЗРЛШЖ').indexOf(L); return !IS_RU && L.length === 1 && j >= 0 && SOUNDS[j] ? j : -1; };
+const howList = g => [...new Set((HOW_GRP[g] || []).map(howIdx).filter(i => i >= 0))];
+var HOW_CUR = null;  
+const howCalm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+function howPairHTML(S, slow) {
+  if (howCalm()) return `<div class="how-face">${faceSVG(S.pose)}</div><div class="how-prof">${profileSVG(S.prof, { marks: false })}</div>`;
+  const fr = howFrames(S), o = { dur: slow ? 6400 : 3200 };
+  return `<div class="how-face">${faceMove(fr, o)}</div><div class="how-prof">${profileMove(fr, o)}</div>`;
+}
+function howHTML(list, si) {
+  const S = SOUNDS[si], par = HOW_PAR[S.L];
+  return `${list.length > 1 ? `<div class="snd-tabs how-tabs">${list.map(i => `<button class="snd-tab ${i === si ? 'sel' : ''}" data-i="${i}" aria-label="Sound ${SOUNDS[i].L}">${Lspan(SOUNDS[i].L)}</button>`).join('')}</div>` : ''}
+    <div class="how-pair" id="howPair">${howPairHTML(S)}</div>
+    <p class="how-cap"><span>From the front</span><span>From the side: lips, teeth, tongue</span></p>
+    <p class="how-line">${esc(S.line)}</p>
+    <div class="how-btns"><button class="big" id="howAgain">↻ Again</button><button class="big ghost" id="howSlow">🐢 Slowly</button><button class="big ghost" id="camBtn"></button></div>
+    ${camHTML}<p class="muted" id="camNote" hidden></p>
+    <details class="how-par"><summary>For grown-ups: how to teach the sound ${esc(S.L)}</summary><ol>${S.steps.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${par ? `<p>${esc(par)}</p>` : ''}</details>`;
+}
+
+function howBind(box, list, si, onPick) {
+  const S = SOUNDS[si];
+  box.innerHTML = howHTML(list, si);
+  const play = slow => {
+    const pr = $('#howPair', box); pr.innerHTML = howPairHTML(S, slow);
+    pr.querySelectorAll('svg').forEach(s => { try { s.setCurrentTime(0); } catch (e) {} });
+    talk(S.say || S.line, slow ? { rate: .8 } : undefined);  
+  };
+  play(false);
+  $('#howAgain', box).onclick = () => { sfx.pop(); play(false); };
+  $('#howSlow', box).onclick = () => { sfx.pop(); play(true); };
+  bindCam(box);
+  const tabs = box.querySelector('.how-tabs');
+  if (tabs) tabs.onclick = e => { const b = e.target.closest('.snd-tab'); if (b) { sfx.pop(); (onPick || (i => howBind(box, list, i, onPick)))(+b.dataset.i); } };
+}
+function howOpen(list = HOW_CUR, si) {
+  if (!list || !list.length) return;
+  const ov = document.createElement('div'); ov.className = 'overlay how-ov';
+  ov.innerHTML = `<div class="how-box" role="dialog" aria-label="How to say it"><button class="ibtn how-x" aria-label="Close">✕</button><h2>How to say it</h2><div class="how" id="howBox"></div></div>`;
+  $('.screen').append(ov);
+  const close = () => { stopCam(); ov.remove(); };
+  ov.querySelector('.how-x').onclick = () => { sfx.pop(); close(); };
+  ov.onclick = e => { if (e.target === ov) close(); };
+  howBind($('#howBox', ov), list, si == null ? list[0] : si);
+}
+const howBtnHTML = () => HOW_CUR && HOW_CUR.length ? `<button class="chip how-b" id="howBtn" aria-label="How to say it"><span class="emo">👄</span><span class="how-bt">How to say it</span></button>` : '';
+
+function howWrap() {
+  GAMES.forEach(g => {
+    if (g.howW) return; g.howW = 1;
+    const go = g.go, gs = [g.grp, ...(g.also || [])].filter(x => HOW_GRP[x]);
+    g.go = (...a) => { HOW_CUR = !g.info && gs.length ? howList(gs[0]) : null; return go(...a); };
+  });
+}
+ 
 const ARTIC_SH = [
   { id: 'sh-cup', name: "Little cup", thumb: 'cup', text: "Smile and open your mouth. Stick out your wide tongue and lift its edges — it makes a little cup. Hold it while we count to five.", tip: "Do not use your lips. Keep your tongue wide.", intro: "Let's make a little cup with your tongue! Stick out your wide tongue and lift the edges. We hold it to five.", steps: count5('cup') },
   { id: 'sh-mushroom', name: "Little mushroom", thumb: 'swingUp', text: "Smile and open your mouth. Suck your wide tongue up to the roof of your mouth: the tongue is the mushroom cap, and the little string under it is the stalk. Hold it to five.", intro: "Stick your tongue to the roof of your mouth like a mushroom cap. We hold it to five.", steps: count5('swingUp') },
@@ -7352,7 +7492,7 @@ function fairStars(key, stars) {
 
 const SAID_SLOW = [new RegExp("three times|all the words|to the beat|in rhythm", 'i'), new RegExp("slowly", 'i'), new RegExp("I read|read it", 'i')];
 const saidNeed = label => SAID_SLOW[0].test(label) ? 1.5 : SAID_SLOW[1].test(label) ? 1.2 : SAID_SLOW[2].test(label) ? .9 : .6;
-function askSaid(label = "I said it!", { need = saidNeed(label), expect = '', times = 1 } = {}) {
+function askSaid(label = "I said it!", { need = saidNeed(label), expect = '', times = 1, loose = false } = {}) {
   if (expect) expect = gx(expect);
   return new Promise(res => {
     const scr = $('.screen'); if (!scr) return;
@@ -7404,20 +7544,32 @@ function askSaid(label = "I said it!", { need = saidNeed(label), expect = '', ti
       });
     }
     if (!expect || !srOk()) { byLoudness(); return; }
+    
+
     tx.textContent = gx("Say it out loud!");
     (async () => {
       let tries = 0;
-      while (t === tok && b.isConnected && !opened) {
+      const on = () => t === tok && b.isConnected;
+      while (on() && tries < 6) {
         while (SAYING && t === tok) await wait(150);
-        const r = await hear(expect, { times, onHeard: h => { if (heardEl) heardEl.textContent = `I hear: “${h}”`; } });
-        if (t !== tok || !b.isConnected) return;
-        if (r.ok) { if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`; bar.style.transform = 'scaleY(1)'; open(); return; }
-        if (HEAR.off) { byLoudness(); return; }
+        if (!on()) return;
+        b.classList.add('ear'); if (!opened) tx.textContent = gx("I’m listening…");
+        const r = await hear(expect, { times, loose, onHeard: h => { if (heardEl) heardEl.textContent = `I hear: “${h}”`; } });
+        b.classList.remove('ear');
+        if (!on()) return;
+        if (r.ok) {
+          bar.style.transform = 'scaleY(1)';
+          if (heardEl) heardEl.textContent = `✓ «${r.heard || expect}»`;
+          if (r.lvl < 2 && !loose && !opened) { sfx.good(); await talk(`${pickOne(["Well done!", "Good!", "Great!"])} Listen to how I say it: ${expect}.`); if (!on()) return; }
+          open(); return;
+        }
+        if (HEAR.off || !srOk()) { if (!opened) { if (heardEl) heardEl.textContent = ''; byLoudness(); } return; }
         tries++;
         if (heardEl) heardEl.textContent = r.heard ? `I hear “${r.heard}”. But we need “${expect}”${Q() ? ": tip of your tongue to the top teeth!" : '!'}` : "I cannot hear you. Say it louder!";
         if (r.heard) tone(300, .2, 'sine', .1, 0, 210);
-        if (tries >= 6) { open(); return; }
+        if (tries >= 2 && !opened) { open(); if (heardEl) heardEl.textContent += ' ' + gx("Try again — or press the button."); }
       }
+      if (on()) open();
     })();
   });
 }
@@ -8940,7 +9092,9 @@ function screenMoto() {
     if (need3) {
       if (at < need3.at) return;   
       $('#mHeard').textContent = `I hear: “${txt}”`;
-      if (matchSay(txt, need3.w, 3) || alts.some(a => matchSay(a, need3.w, 3))) { const f = need3.done; need3 = null; $('#mLv').style.width = '100%'; f(); }
+      
+      const acc = (need3.acc || '') + ' ' + txt; if (final) need3.acc = acc;
+      if (matchSay(acc, need3.w, 3) || alts.some(a => matchSay(a, need3.w, 3))) { const f = need3.done; need3 = null; $('#mLv').style.width = '100%'; f(); }
       return;
     }
     if (!showing()) return;
@@ -8976,7 +9130,7 @@ function screenMoto() {
         $('#mHeard').textContent = live.lost ? "🎤 Tap the sign so I can listen again" : "🎤 say it three times";
         sg.querySelector('small').textContent = "To keep going, say it three times:";
         await talk(`It's okay, you've got your helmet on! Say it three times: ${w}.`); if (t !== tok) return;
-        await new Promise(res => { need3 = { w, done: res, at: performance.now() + 300 }; later(() => { if (need3) $('#mSaid').hidden = false; }, 15000); });
+        await new Promise(res => { need3 = { w, done: res, at: performance.now() + 300 }; later(() => { if (need3) $('#mSaid').hidden = false; }, 8000); });
         if (t !== tok) return;
         sg.hidden = true; sg.querySelector('small').textContent = "Read it out loud to get nitro!";
       } else {
@@ -9990,37 +10144,120 @@ document.addEventListener('pointerdown', () => { if (piperOn() && !PIPER.isReady
 
 
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const HEAR = { off: false };
-const srOk = () => !!SR && !EMBEDDED && !ROOT.micOff && !ROOT.srOff && !HEAR.off;
-const normW = s => (IS_RU ? String(s).toLowerCase().replace(/ё/g, 'е').replace(/[^а-яa-z0-9 ]/g, ' ') : String(s).toLowerCase().replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[’']/g, '').replace(/[^a-z0-9 ]/g, ' ')).replace(/\s+/g, ' ').trim();
+const HEAR = { off: false, netAt: 0 };
+const srOk = () => !!SR && !EMBEDDED && !ROOT.micOff && !ROOT.srOff && !HEAR.off && Date.now() - HEAR.netAt > 60e3;
+ 
+
+
+const ASR = (() => {
+  const NUMS = {
+    en: 'zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty',
+    de: 'null eins zwei drei vier funf sechs sieben acht neun zehn elf zwolf dreizehn vierzehn funfzehn sechzehn siebzehn achtzehn neunzehn zwanzig',
+    pt: 'zero um dois tres quatro cinco seis sete oito nove dez onze doze treze catorze quinze dezasseis dezassete dezoito dezanove vinte'
+  };
+  const lat = s => s.toLowerCase().replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[’'`]/g, '');
+  const num = s => { if (!/\d/.test(s)) return s; if (IS_RU) { try { return ruNums(s); } catch (e) { return s; } } const w = (NUMS[LANG] || '').split(' '); return s.replace(/\d+/g, d => w[+d] || d); };
+  const norm = s => (IS_RU ? num(String(s || '')).toLowerCase().replace(/ё/g, 'е').replace(/[^а-яa-z0-9 ]/g, ' ') : lat(num(String(s || ''))).replace(/[^a-z0-9 ]/g, ' ')).replace(/\s+/g, ' ').trim();
+  
+  const key = w => IS_RU ? w : w.replace(/sch/g, 's').replace(/[sc]h/g, 's').replace(/th/g, 't').replace(/ph/g, 'f').replace(/ck/g, 'k').replace(/qu/g, 'k').replace(/(.)\1/g, '$1');
+  
+  const PAIRS = IS_RU
+    ? [[.25, 'бп вф гк дт жш зс оа еи ея яи иы еэ юу ий кх гх ьъ'], [.35, 'рл рй лв лй рв шс жз щс щш чщ чц цс чт зд рд']]
+    : [[.25, 'bp dt gk vf zs ck kq ie yi ou ao ea'], [.35, 'rl rw lw vw lj sz fv fs dz jy tf ts']];
+  const SUB = new Map(); PAIRS.forEach(([c, s]) => s.split(' ').forEach(p => { SUB.set(p, c); SUB.set(p[1] + p[0], c); }));
+  const VOW = IS_RU ? 'аеиоуыэюя' : 'aeiouy';
+  const DROP = IS_RU ? { 'ь': .2, 'ъ': .2, 'й': .4, 'р': .4, 'л': .4 } : { 'h': .4, 'r': .4, 'l': .4, 'e': .6 };
+  const sub = (a, b) => a === b ? 0 : SUB.get(a + b) || (!IS_RU && VOW.includes(a) && VOW.includes(b) ? .5 : 1);
+  const ind = c => DROP[c] || (VOW.includes(c) ? .8 : 1);
+  function dist(a, b) {
+    const d = [0]; for (let j = 1; j <= b.length; j++) d[j] = d[j - 1] + ind(b[j - 1]);
+    for (let i = 1; i <= a.length; i++) {
+      let p = d[0]; d[0] += ind(a[i - 1]);
+      for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(q + ind(a[i - 1]), d[j - 1] + ind(b[j - 1]), p + sub(a[i - 1], b[j - 1])); p = q; }
+    }
+    return d[b.length];
+  }
+  
+  const room = n => n <= 2 ? .3 : n <= 3 ? .6 : n <= 5 ? .8 : n <= 7 ? .95 : n <= 8 ? 1.3 : Math.min(3, 1.8 + (n - 9) * .15);
+  const END = IS_RU ? ['ами', 'ями', 'ого', 'его', 'ому', 'ему', 'ой', 'ей', 'ом', 'ем', 'ам', 'ям', 'ах', 'ях', 'ов', 'ев', 'ую', 'юю', 'ая', 'яя', 'ое', 'ее', 'ые', 'ие', 'ым', 'им', 'ых', 'их', 'ий', 'ый', 'а', 'я', 'у', 'ю', 'ы', 'и', 'е', 'о', 'ь']
+    : ['es', 'en', 'er', 'em', 's', 'e', 'n'];
+  const stem = w => { for (const e of END) if (w.length - e.length >= 3 && w.endsWith(e)) return w.slice(0, -e.length); return w; };
+  
+  function word(h, t) {
+    if (h === t) return 2;
+    const a = key(h), b = key(t);
+    if (a === b) return 2;
+    if (dist(a, b) <= room(b.length)) return 1;
+    const sa = stem(a), sb = stem(b);
+    if (sb.length >= 3 && (sa !== a || sb !== b) && dist(sa, sb) <= room(sb.length) * .75) return 1;
+    return 0;
+  }
+  
+  function find(hw, t, from = 0) {
+    let best = 0, at = -1, len = 1;
+    for (let i = from; i < hw.length && best < 2; i++) {
+      const v = word(hw[i], t); if (v > best) { best = v; at = i; len = 1; }
+      if (best < 2 && i + 1 < hw.length) { const v2 = word(hw[i] + hw[i + 1], t); if (v2 > best) { best = v2; at = i; len = 2; } }
+    }
+    return { v: best, at, len };
+  }
+  function match(heard, expect, times = 1, loose = false) {
+    const hw = norm(heard).split(' ').filter(Boolean), tw = norm(expect).split(' ').filter(Boolean);
+    if (!tw.length || !hw.length) return 0;
+    
+    if (loose) return word(hw.join(''), tw.join('')) === 2 ? 2 : 1;
+    if (tw.length === 1) {
+      let n = 0, lvl = 2, from = 0;
+      while (from < hw.length) { const f = find(hw, tw[0], from); if (!f.v) break; n++; lvl = Math.min(lvl, f.v); from = f.at + f.len; }
+      if (!n) { const v = word(hw.join(''), tw[0]); return v ? Math.min(v, 1) : 0; }
+      return n >= Math.min(times, 2) || hw.length >= times ? lvl : 0;
+    }
+    
+    let got = 0, all = 2;
+    tw.forEach(t => { const f = find(hw, t); if (f.v) { got++; all = Math.min(all, f.v); } });
+    if (got / tw.length >= .6) return got === tw.length ? all : 1;
+    const a = key(hw.join('')), b = key(tw.join(''));
+    return dist(a, b) <= room(b.length) * 1.2 ? 1 : 0;
+  }
+  
+  function best(list, expect, times = 1, loose = false) {
+    let lvl = 0, text = '';
+    for (const s of list) { if (!s || !s.trim()) continue; const v = match(s, expect, times, loose); if (v > lvl) { lvl = v; text = s.trim(); if (v === 2) break; } }
+    return { lvl, text };
+  }
+  return { norm, dist, word, match, best };
+})();
+const normW = ASR.norm;
 function lev(a, b) {
   const d = Array.from({ length: b.length + 1 }, (_, j) => j);
   for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const q = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] !== b[j - 1])); p = q; } }
   return d[b.length];
 }
-const cntL = w => (w.match(IS_RU ? /л/g : /l/g) || []).length;
+const matchSay = (heard, expect, times = 1) => ASR.match(heard, expect, times) > 0;
+ 
 
-const wordOk = (h, t) => h === t || (t.length >= 5 && lev(h, t) <= 1 && cntL(h) === cntL(t));
-function matchSay(heard, expect, times = 1) {
-  const hw = normW(heard).split(' ').filter(Boolean), tw = normW(expect).split(' ').filter(Boolean);
-  if (!tw.length) return false;
-  if (tw.length === 1) return hw.filter(w => wordOk(w, tw[0])).length >= Math.min(times, 2);
-  return tw.filter(t => hw.some(w => wordOk(w, t))).length / tw.length >= .6;
-}
-function hear(expect, { times = 1, onHeard, maxMs = 7000 } = {}) {
+
+
+function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) {
   return new Promise(res => {
-    let r = null, best = '', done = false;
-    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok, heard: best }); };
-    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '' }); return; }
+    let r = null, best = '', done = false, lvl = 0;
+    const end = ok => { if (done) return; done = true; SR_ON = Math.max(0, SR_ON - 1); try { r && r.abort(); } catch (e) {} if (!MIC.stream && !SR_ON) audioSession('playback'); res({ ok: ok && lvl > 0, heard: best, lvl }); };
+    try { r = new SR(); SRS.add(r); } catch (e) { HEAR.off = true; res({ ok: false, heard: '', lvl: 0 }); return; }
     audioSession('play-and-record'); SR_ON++;
     r.lang = LOC; r.interimResults = true; r.maxAlternatives = 5; r.continuous = times > 1 || normW(expect).includes(' ');
     r.onresult = e => {
       let all = ''; const alts = [];
-      for (let i = 0; i < e.results.length; i++) { all += ' ' + e.results[i][0].transcript; for (let j = 0; j < e.results[i].length; j++) alts.push(e.results[i][j].transcript); }
-      best = all.trim(); if (onHeard) onHeard(best);
-      if (matchSay(best, expect, times) || alts.some(a => matchSay(a, expect, times))) end(true);
+      for (let i = 0; i < e.results.length; i++) { const x = e.results[i]; if (!x || !x[0]) continue; all += ' ' + x[0].transcript; for (let j = 0; j < x.length; j++) alts.push(x[j].transcript); }
+      all = all.trim();
+      const m = ASR.best([all, ...alts], expect, times, loose);
+      best = m.lvl ? m.text : all || best; if (onHeard && best) onHeard(best);
+      if (m.lvl) { lvl = m.lvl; end(true); }
     };
-    r.onerror = e => { if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true; end(false); };
+    r.onerror = e => {
+      if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true;
+      if (e.error === 'network') HEAR.netAt = Date.now();
+      end(false);
+    };
     r.onend = () => end(false);
     setTimeout(() => end(false), maxMs);
     try { r.start(); } catch (e) { end(false); }
@@ -10071,9 +10308,10 @@ function hearLive(onText, { onStart, onFail, onLost } = {}) {
     };
     r.onerror = e => {
       if (me !== r) return;
-      const hard = ['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture'].includes(e.error);
+      const hard = ['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture', 'network'].includes(e.error);
       if (!hard) return;
-      if (!started) { if (e.error !== 'audio-capture') HEAR.off = true; L.stop(); if (onFail) onFail(); }
+      if (e.error === 'network') HEAR.netAt = Date.now();
+      if (!started) { if (e.error !== 'audio-capture' && e.error !== 'network') HEAR.off = true; L.stop(); if (onFail) onFail(); }
       else { L.lost = true; if (onLost) onLost(); }
     };
     r.onend = () => {
@@ -13044,10 +13282,12 @@ function screenDict({ back = null, word = '' } = {}) {
     
     let r; try { r = new SR(); SRS.add(r); } catch (e) { return; }
     r.lang = LOC; r.interimResults = false; r.maxAlternatives = 1; SR_ON++; audioSession('play-and-record');
-    const done = () => { SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); $('#dMic').classList.remove('on'); };
+    let fin = false;
+    const done = () => { if (fin) return; fin = true; SR_ON = Math.max(0, SR_ON - 1); if (!MIC.stream && !SR_ON) audioSession('playback'); $('#dMic').classList.remove('on'); };
     r.onresult = e => { const w = (e.results[0][0].transcript || '').trim().split(/\s+/).pop() || ''; $('#dW').value = w.toLowerCase(); look(); };
     r.onerror = done; r.onend = done;
-    hush(); $('#dMic').classList.add('on'); try { r.start(); } catch (e) { done(); }
+    
+    hush(); $('#dMic').classList.add('on'); try { r.start(); setTimeout(() => { try { r.abort(); } catch (e) {} done(); }, 9000); } catch (e) { done(); }
   };
   if (word) look();
 }
@@ -13327,7 +13567,7 @@ function screenCodeColor(kind = 'abc', page, tries = 0) {
     if (kind === 'syl' && !said.has(i)) {
       $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b)); sel = -1;
       await talk(`Say: ${set[i].say}!`); if (t !== tok) return;
-      await askSaid("I said it!", { expect: set[i].say }); if (t !== tok) return;
+      await askSaid("I said it!", { expect: set[i].say, loose: true }); if (t !== tok) return;
       said.add(i);
     }
     sel = i; $$('.cc-sw').forEach(x => x.classList.toggle('sel', x === b));
@@ -14628,7 +14868,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '150';
+const APP_VER = '151';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 
@@ -15292,6 +15532,34 @@ const BALLET_CP = {
 Object.assign(CPAGES, BALLET_CP);
 const BALLET_PAGES = Object.keys(BALLET_CP).map(k => 'svg:' + k);
 PAGES.push(...BALLET_PAGES);
+
+
+
+const FOOTBALL_CP = {
+  'fb-kick': '<svg viewBox="0 0 100 100"><rect width="100" height="70" fill="#BFE6FF"/><circle cx="12" cy="12" r="8" fill="#FFF3C4"/><path d="M58 18q0-9.1 10.4-7.8 3.9-7.8 13.0-5.2 9.1 0 10.4 6.5 7.8 1.3 6.5 6.5z" fill="#FFFFFF"/><rect x="1" y="61" width="23" height="9" rx="1.5" fill="#FF77B7"/><rect x="26" y="61" width="23" height="9" rx="1.5" fill="#4DB8FF"/><rect x="51" y="61" width="23" height="9" rx="1.5" fill="#FFD93D"/><rect x="76" y="61" width="23" height="9" rx="1.5" fill="#9B5DE5"/><rect y="70" width="100" height="30" fill="#7BC74D"/><path d="M0 84h100M0 94h100" stroke="#4CC261" stroke-width="1.5"/><path d="M66 70V40h30v30" fill="none" stroke="#FFFFFF" stroke-width="3"/><path d="M68 42h26v28H68z" fill="#E8EEF6"/><path d="M72 42v28M77 42v28M82 42v28M87 42v28M92 42v28M68 48h26M68 54h26M68 60h26M68 66h26" stroke="#C7CEDA" stroke-width=".8"/><rect x="33.0" y="57.0" width="32.7" height="6" rx="3.0" transform="rotate(103 36 60)" fill="#3D6BFF"/><rect x="37.0" y="57.0" width="28.8" height="6" rx="3.0" transform="rotate(38 40 60)" fill="#3D6BFF"/><path d="M24 86h10l1 4H22z" fill="#FF4D4D"/><path d="M57 70l7 4-2 3-7-3z" fill="#FF4D4D"/><rect x="29.7" y="35.7" width="21.8" height="4.6" rx="2.3" transform="rotate(144 32 38)" fill="#FFDDC2"/><rect x="41.7" y="35.7" width="18.7" height="4.6" rx="2.3" transform="rotate(-45 44 38)" fill="#FFDDC2"/><path d="M30 34q8-4 16 0l2 26H28z" fill="#FFD93D"/><rect x="28" y="56" width="20" height="6" rx="2" fill="#FFFFFF"/><circle cx="38" cy="45" r="6" fill="#FFFFFF"/><text x="38" y="47.5" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="7" font-weight="900" fill="#2A2346" stroke="none">10</text><rect x="36.2" y="29.2" width="7.6" height="3.6" rx="1.8" transform="rotate(-90 38 31)" fill="#FFDDC2"/><circle cx="38" cy="21" r="7" fill="#FFDDC2"/><path d="M31 20q0-9 7 -8q7 0 7 8q-3.5-3.5-7 -2.8q-4.2 0-7 2.8z" fill="#A0522D"/><circle cx="36.5" cy="22" r=".9" fill="#2A2346"/><circle cx="41.5" cy="22" r=".9" fill="#2A2346"/><path d="M37.4 24.4q1.6 1.4 3.2 0" fill="none" stroke="#2A2346" stroke-width="1" stroke-linecap="round"/><circle cx="70" cy="78" r="7" fill="#FFFFFF"/><path d="M70.0 75.3 72.5 77.2 71.6 80.2 68.4 80.2 67.5 77.2z" fill="#4A4A5A"/><path d="M74.0 72.5 74.5 74.0 73.2 75.0 71.9 74.0 72.4 72.5z" fill="#4A4A5A"/><path d="M76.5 80.1 75.2 81.1 73.9 80.1 74.4 78.6 76.0 78.6z" fill="#4A4A5A"/><path d="M70.0 84.9 68.7 83.9 69.2 82.3 70.8 82.3 71.3 83.9z" fill="#4A4A5A"/><path d="M63.5 80.1 64.0 78.6 65.6 78.6 66.1 80.1 64.8 81.1z" fill="#4A4A5A"/><path d="M66.0 72.5 67.6 72.5 68.1 74.0 66.8 75.0 65.5 74.0z" fill="#4A4A5A"/><path d="M70.0 75.3L70.0 73.7" stroke="#2A2346" stroke-width="1"/><path d="M72.5 77.2L74.1 76.7" stroke="#2A2346" stroke-width="1"/><path d="M71.6 80.2L72.6 81.5" stroke="#2A2346" stroke-width="1"/><path d="M68.4 80.2L67.4 81.5" stroke="#2A2346" stroke-width="1"/><path d="M67.5 77.2L65.9 76.7" stroke="#2A2346" stroke-width="1"/><path d="M58 80q-4 0-6 2M60 76q-5-1-8 0" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  'fb-keeper': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#BFE6FF"/><rect y="78" width="100" height="22" fill="#7BC74D"/><rect x="1" y="88" width="23" height="9" rx="1.5" fill="#FF77B7"/><rect x="26" y="88" width="23" height="9" rx="1.5" fill="#4DB8FF"/><rect x="51" y="88" width="23" height="9" rx="1.5" fill="#FFD93D"/><rect x="76" y="88" width="23" height="9" rx="1.5" fill="#9B5DE5"/><path d="M6 80V18h88v62" fill="none" stroke="#FFFFFF" stroke-width="4"/><path d="M8 20h84v60H8z" fill="#E8EEF6"/><path d="M16 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M24 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M32 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M40 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M48 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M56 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M64 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M72 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M80 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M88 20v60" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 28h84" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 36h84" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 44h84" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 52h84" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 60h84" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 68h84" stroke="#C7CEDA" stroke-width=".8"/><path d="M8 76h84" stroke="#C7CEDA" stroke-width=".8"/><rect x="52.8" y="48.8" width="32.5" height="6.5" rx="3.25" transform="rotate(23 56 52)" fill="#4CC261"/><rect x="52.8" y="46.8" width="34.6" height="6.5" rx="3.25" transform="rotate(4 56 50)" fill="#4CC261"/><path d="M82 58l8 2 0 5-8-1zM86 48l8 1 0 5-8 0z" fill="#FFFFFF"/><path d="M34 40q12-4 24 4l-2 12q-12 2-24-6z" fill="#9B5DE5"/><circle cx="46" cy="46" r="5" fill="#FFFFFF"/><text x="46" y="48.5" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="7" font-weight="900" fill="#2A2346" stroke="none">1</text><rect x="33.7" y="39.7" width="24.3" height="4.6" rx="2.3" transform="rotate(-156 36 42)" fill="#9B5DE5"/><rect x="35.7" y="45.7" width="22.7" height="4.6" rx="2.3" transform="rotate(-174 38 48)" fill="#9B5DE5"/><circle cx="14" cy="32" r="4.5" fill="#FFD93D"/><circle cx="16" cy="46" r="4.5" fill="#FFD93D"/><circle cx="28" cy="48" r="6.5" fill="#FFDDC2"/><path d="M21.5 47q0-8.5 6.5 -7.5q6.5 0 6.5 7.5q-3.2-3.2-6.5 -2.6q-3.9 0-6.5 2.6z" fill="#5A3A20"/><circle cx="26.7" cy="49" r=".9" fill="#2A2346"/><circle cx="31.3" cy="49" r=".9" fill="#2A2346"/><path d="M27.4 51.4q1.6 1.4 3.2 0" fill="none" stroke="#2A2346" stroke-width="1" stroke-linecap="round"/><circle cx="10" cy="22" r="7" fill="#FFFFFF"/><path d="M10.0 19.3 12.5 21.2 11.6 24.2 8.4 24.2 7.5 21.2z" fill="#4A4A5A"/><path d="M14.0 16.5 14.5 18.0 13.2 19.0 11.9 18.0 12.4 16.5z" fill="#4A4A5A"/><path d="M16.5 24.1 15.2 25.1 13.9 24.1 14.4 22.6 16.0 22.6z" fill="#4A4A5A"/><path d="M10.0 28.9 8.7 27.9 9.2 26.3 10.8 26.3 11.3 27.9z" fill="#4A4A5A"/><path d="M3.5 24.1 4.0 22.6 5.6 22.6 6.1 24.1 4.8 25.1z" fill="#4A4A5A"/><path d="M6.0 16.5 7.6 16.5 8.1 18.0 6.8 19.0 5.5 18.0z" fill="#4A4A5A"/><path d="M10.0 19.3L10.0 17.7" stroke="#2A2346" stroke-width="1"/><path d="M12.5 21.2L14.1 20.7" stroke="#2A2346" stroke-width="1"/><path d="M11.6 24.2L12.6 25.5" stroke="#2A2346" stroke-width="1"/><path d="M8.4 24.2L7.4 25.5" stroke="#2A2346" stroke-width="1"/><path d="M7.5 21.2L5.9 20.7" stroke="#2A2346" stroke-width="1"/><path d="M22 14l-4 2M24 22l-5 1M22 30l-4-1" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  'fb-header': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#BFE6FF"/><circle cx="84" cy="16" r="8" fill="#FFF3C4"/><path d="M8 26q0-6 6-6 2-5 8-3 5 0 6 4 4 1 3 5H10z" fill="#FFFFFF"/><path d="M0 84V64q20-12 40 0v20z" fill="#9DE0B0"/><path d="M60 84V60q22-14 40 0v24z" fill="#9DE0B0"/><rect y="84" width="100" height="16" fill="#7BC74D"/><ellipse cx="50" cy="91" rx="16" ry="3" fill="#4CC261"/><path d="M66 42q0-8.4 9.6-7.2 3.6-7.2 12.0-4.8 8.4 0 9.6 6.0 7.2 1.2 6.0 6.0z" fill="#FFFFFF"/><rect x="43.0" y="59.0" width="25.0" height="6" rx="3.0" transform="rotate(108 46 62)" fill="#FFFFFF"/><rect x="51.0" y="59.0" width="23.9" height="6" rx="3.0" transform="rotate(63 54 62)" fill="#FFFFFF"/><path d="M35 80h8l1 4H33zM58 78l7 1-1 4-7-1z" fill="#2A2346"/><rect x="39.7" y="37.7" width="21.6" height="4.6" rx="2.3" transform="rotate(-135 42 40)" fill="#FFDDC2"/><rect x="55.7" y="37.7" width="20.2" height="4.6" rx="2.3" transform="rotate(-40 58 40)" fill="#FFDDC2"/><path d="M40 36q10-4 20 0l2 26H38z" fill="#FF4D4D"/><path d="M47 36h6v26h-6z" fill="#FFFFFF"/><rect x="38" y="58" width="24" height="6" rx="2" fill="#2A2346"/><rect x="48.2" y="31.2" width="7.6" height="3.6" rx="1.8" transform="rotate(-90 50 33)" fill="#FFDDC2"/><circle cx="50" cy="23" r="7" fill="#FFDDC2"/><path d="M43 22q0-9 7 -8q7 0 7 8q-3.5-3.5-7 -2.8q-4.2 0-7 2.8z" fill="#2A2346"/><circle cx="48.5" cy="24" r=".9" fill="#2A2346"/><circle cx="53.5" cy="24" r=".9" fill="#2A2346"/><path d="M49.4 26.4q1.6 1.4 3.2 0" fill="none" stroke="#2A2346" stroke-width="1" stroke-linecap="round"/><circle cx="50" cy="8" r="6.5" fill="#FFFFFF"/><path d="M50.0 5.5 52.3 7.2 51.5 10.0 48.5 10.0 47.7 7.2z" fill="#4A4A5A"/><path d="M53.7 2.8 54.2 4.3 53.0 5.2 51.7 4.3 52.2 2.8z" fill="#4A4A5A"/><path d="M56.1 10.0 54.8 10.9 53.6 10.0 54.1 8.5 55.6 8.5z" fill="#4A4A5A"/><path d="M50.0 14.4 48.8 13.5 49.2 12.0 50.8 12.0 51.2 13.5z" fill="#4A4A5A"/><path d="M43.9 10.0 44.4 8.5 45.9 8.5 46.4 10.0 45.2 10.9z" fill="#4A4A5A"/><path d="M46.3 2.8 47.8 2.8 48.3 4.3 47.0 5.2 45.8 4.3z" fill="#4A4A5A"/><path d="M50.0 5.5L50.0 4.0" stroke="#2A2346" stroke-width="1"/><path d="M52.3 7.2L53.8 6.8" stroke="#2A2346" stroke-width="1"/><path d="M51.5 10.0L52.4 11.3" stroke="#2A2346" stroke-width="1"/><path d="M48.5 10.0L47.6 11.3" stroke="#2A2346" stroke-width="1"/><path d="M47.7 7.2L46.2 6.8" stroke="#2A2346" stroke-width="1"/><path d="M42 10q-3-3-2-7M58 10q3-3 2-7" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  'fb-cup': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFE3EC"/><rect y="86" width="100" height="14" fill="#7BC74D"/><rect x="4" y="74" width="26" height="14" fill="#C7CEDA"/><rect x="70" y="78" width="26" height="10" fill="#E8B26A"/><path d="M12 9l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#FFD93D"/><path d="M88 17l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#4DB8FF"/><path d="M14 56l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2z" fill="#FF77B7"/><path d="M86 60l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2z" fill="#FFD93D"/><rect x="20" y="30" width="4" height="7" rx="1" transform="rotate(30 22 33)" fill="#4CC261"/><rect x="76" y="40" width="4" height="7" rx="1" transform="rotate(-30 78 43)" fill="#FF4D4D"/><rect x="72" y="8" width="4" height="7" rx="1" transform="rotate(20 74 11)" fill="#9B5DE5"/><rect x="42.0" y="61.0" width="28.2" height="6" rx="3.0" transform="rotate(98 45 64)" fill="#3D6BFF"/><rect x="52.0" y="61.0" width="28.2" height="6" rx="3.0" transform="rotate(82 55 64)" fill="#3D6BFF"/><path d="M36 85h9v3H35zM56 85h9l1 3H56z" fill="#FF4D4D"/><rect x="39.7" y="39.7" width="23.6" height="4.6" rx="2.3" transform="rotate(-108 42 42)" fill="#FFDDC2"/><rect x="55.7" y="39.7" width="23.6" height="4.6" rx="2.3" transform="rotate(-72 58 42)" fill="#FFDDC2"/><path d="M40 38q10-4 20 0l2 28H38z" fill="#4DB8FF"/><circle cx="50" cy="50" r="5.5" fill="#FFFFFF"/><text x="50" y="52.6" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="7" font-weight="900" fill="#2A2346" stroke="none">7</text><rect x="38" y="62" width="24" height="6" rx="2" fill="#FFFFFF"/><rect x="48.2" y="33.2" width="7.6" height="3.6" rx="1.8" transform="rotate(-90 50 35)" fill="#FFDDC2"/><circle cx="50" cy="25" r="7" fill="#FFDDC2"/><path d="M43 24q0-9 7 -8q7 0 7 8q-3.5-3.5-7 -2.8q-4.2 0-7 2.8z" fill="#C0702F"/><circle cx="48.5" cy="26" r=".9" fill="#2A2346"/><circle cx="53.5" cy="26" r=".9" fill="#2A2346"/><path d="M49.4 28.4q1.6 1.4 3.2 0" fill="none" stroke="#2A2346" stroke-width="1" stroke-linecap="round"/><path d="M38 6h24q0 14-12 16Q38 20 38 6z" fill="#FFD93D"/><path d="M38 9q-7 0-6 6 1 4 7 3M62 9q7 0 6 6-1 4-7 3" fill="none" stroke="#FFD93D" stroke-width="2.5"/><rect x="47" y="21" width="6" height="4" fill="#FFD93D"/><rect x="43" y="24" width="14" height="4" rx="1" fill="#E8B26A"/><path d="M50 8.5l1.1 2.4 2.4 1.1-2.4 1.1-1.1 2.4-1.1-2.4-2.4-1.1 2.4-1.1z" fill="#FF4D4D"/></svg>',
+  'fb-stadium': '<svg viewBox="0 0 100 100"><rect width="100" height="40" fill="#BFE6FF"/><path d="M0 40V22q50-16 100 0v18z" fill="#9B5DE5"/><path d="M0 40V30q50-12 100 0v10z" fill="#FF77B7"/><circle cx="8" cy="26" r="2" fill="#FFD9A0"/><circle cx="18" cy="22" r="2" fill="#FFD9A0"/><circle cx="30" cy="19" r="2" fill="#FFD9A0"/><circle cx="42" cy="18" r="2" fill="#FFD9A0"/><circle cx="58" cy="18" r="2" fill="#FFD9A0"/><circle cx="70" cy="19" r="2" fill="#FFD9A0"/><circle cx="82" cy="22" r="2" fill="#FFD9A0"/><circle cx="92" cy="26" r="2" fill="#FFD9A0"/><circle cx="12" cy="34" r="2" fill="#FFD9A0"/><circle cx="26" cy="31" r="2" fill="#FFD9A0"/><circle cx="40" cy="30" r="2" fill="#FFD9A0"/><circle cx="60" cy="30" r="2" fill="#FFD9A0"/><circle cx="74" cy="31" r="2" fill="#FFD9A0"/><circle cx="88" cy="34" r="2" fill="#FFD9A0"/><rect x="4" y="2" width="3" height="20" fill="#C7CEDA"/><rect x="0" y="0" width="11" height="6" rx="1" fill="#FFF3C4"/><rect x="93" y="2" width="3" height="20" fill="#C7CEDA"/><rect x="89" y="0" width="11" height="6" rx="1" fill="#FFF3C4"/><path d="M0 40h100v60H0z" fill="#7BC74D"/><rect y="49" width="100" height="6" fill="#9DE0B0"/><rect y="81" width="100" height="6" fill="#9DE0B0"/><path d="M50 40v60" stroke="#FFFFFF" stroke-width="1.5"/><ellipse cx="50" cy="70" rx="14" ry="8" fill="none" stroke="#FFFFFF" stroke-width="1.5"/><path d="M84 46v28h12V46" fill="none" stroke="#FFFFFF" stroke-width="2.5"/><path d="M85 47h10v27H85z" fill="#E8EEF6"/><path d="M14 48l0-10" stroke="#5A3A20" stroke-width="1.2"/><path d="M14 38l7 3-7 3z" fill="#FFD93D"/><circle cx="50" cy="70" r="5" fill="#FFFFFF"/><path d="M50.0 68.1 51.8 69.4 51.1 71.5 48.9 71.5 48.2 69.4z" fill="#4A4A5A"/><path d="M52.9 66.0 53.2 67.2 52.3 67.8 51.3 67.2 51.7 66.0z" fill="#4A4A5A"/><path d="M54.7 71.5 53.7 72.2 52.8 71.5 53.1 70.4 54.3 70.4z" fill="#4A4A5A"/><path d="M50.0 74.9 49.0 74.2 49.4 73.1 50.6 73.1 51.0 74.2z" fill="#4A4A5A"/><path d="M45.3 71.5 45.7 70.4 46.9 70.4 47.2 71.5 46.3 72.2z" fill="#4A4A5A"/><path d="M47.1 66.0 48.3 66.0 48.7 67.2 47.7 67.8 46.8 67.2z" fill="#4A4A5A"/><path d="M50.0 68.1L50.0 66.9" stroke="#2A2346" stroke-width="1"/><path d="M51.8 69.4L52.9 69.0" stroke="#2A2346" stroke-width="1"/><path d="M51.1 71.5L51.8 72.5" stroke="#2A2346" stroke-width="1"/><path d="M48.9 71.5L48.2 72.5" stroke="#2A2346" stroke-width="1"/><path d="M48.2 69.4L47.1 69.0" stroke="#2A2346" stroke-width="1"/><rect x="1" y="91" width="23" height="9" rx="1.5" fill="#FF77B7"/><rect x="26" y="91" width="23" height="9" rx="1.5" fill="#4DB8FF"/><rect x="51" y="91" width="23" height="9" rx="1.5" fill="#FFD93D"/><rect x="76" y="91" width="23" height="9" rx="1.5" fill="#9B5DE5"/></svg>',
+  'fb-boots': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#E8EEF6"/><path d="M6 24q0-9.8 11.2-8.4 4.2-8.4 14.0-5.6 9.8 0 11.2 7.0 8.4 1.4 7.0 7.0z" fill="#FFFFFF"/><rect x="1" y="84" width="23" height="10" rx="1.5" fill="#FF77B7"/><rect x="26" y="84" width="23" height="10" rx="1.5" fill="#4DB8FF"/><rect x="51" y="84" width="23" height="10" rx="1.5" fill="#FFD93D"/><rect x="76" y="84" width="23" height="10" rx="1.5" fill="#9B5DE5"/><rect y="80" width="100" height="20" fill="#7BC74D"/><path d="M8 44q0-8 8-8h14l2 14q20 4 30 10 6 4 2 10H10q-4 0-3-6z" fill="#FF4D4D"/><path d="M16 36h14l2 14q-12 0-16-6z" fill="#FFD93D"/><path d="M34 52q16 4 26 10" fill="none" stroke="#2A2346" stroke-width="1.2"/><path d="M8 66h58v5H8z" fill="#4A4A5A"/><rect x="12" y="71" width="4" height="4" rx="1" fill="#FFFFFF"/><rect x="22" y="71" width="4" height="4" rx="1" fill="#FFFFFF"/><rect x="40" y="71" width="4" height="4" rx="1" fill="#FFFFFF"/><rect x="54" y="71" width="4" height="4" rx="1" fill="#FFFFFF"/><path d="M22 40l4 8M26 38l4 8" stroke="#2A2346" stroke-width="1.2"/><path d="M40 58l18 6-1 3-19-5z" fill="#FFFFFF"/><circle cx="78" cy="62" r="15" fill="#FFFFFF"/><path d="M78.0 56.3 83.4 60.2 81.4 66.6 74.6 66.6 72.6 60.2z" fill="#4A4A5A"/><path d="M86.6 50.1 87.7 53.5 84.9 55.5 82.0 53.5 83.1 50.1z" fill="#4A4A5A"/><path d="M92.0 66.5 89.1 68.6 86.3 66.5 87.4 63.2 90.9 63.2z" fill="#4A4A5A"/><path d="M78.0 76.7 75.1 74.6 76.2 71.3 79.8 71.3 80.9 74.6z" fill="#4A4A5A"/><path d="M64.0 66.5 65.1 63.2 68.6 63.2 69.7 66.5 66.9 68.6z" fill="#4A4A5A"/><path d="M69.4 50.1 72.9 50.1 74.0 53.5 71.1 55.5 68.3 53.5z" fill="#4A4A5A"/><path d="M78.0 56.3L78.0 52.7" stroke="#2A2346" stroke-width="1"/><path d="M83.4 60.2L86.8 59.1" stroke="#2A2346" stroke-width="1"/><path d="M81.4 66.6L83.5 69.5" stroke="#2A2346" stroke-width="1"/><path d="M74.6 66.6L72.5 69.5" stroke="#2A2346" stroke-width="1"/><path d="M72.6 60.2L69.2 59.1" stroke="#2A2346" stroke-width="1"/><path d="M80 14l1.8 4.2 4.2 1.8-4.2 1.8-1.8 4.2-1.8-4.2-4.2-1.8 4.2-1.8z" fill="#FFD93D"/><path d="M60 8l1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2z" fill="#4DB8FF"/></svg>',
+  'fb-ball': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFF3C4"/><path d="M50 50L120 50L116 74z" fill="#FFD93D"/><path d="M50 50L104 95L85 111z" fill="#FFD93D"/><path d="M50 50L62 119L38 119z" fill="#FFD93D"/><path d="M50 50L15 111L-4 95z" fill="#FFD93D"/><path d="M50 50L-16 74L-20 50z" fill="#FFD93D"/><path d="M50 50L-16 26L-4 5z" fill="#FFD93D"/><path d="M50 50L15 -11L38 -19z" fill="#FFD93D"/><path d="M50 50L62 -19L85 -11z" fill="#FFD93D"/><path d="M50 50L104 5L116 26z" fill="#FFD93D"/><circle cx="46" cy="46" r="28" fill="#FFFFFF"/><path d="M46.0 35.4 56.1 42.7 52.3 54.6 39.7 54.6 35.9 42.7z" fill="#4A4A5A"/><path d="M62.1 23.8 64.2 30.1 58.8 33.9 53.5 30.1 55.5 23.8z" fill="#4A4A5A"/><path d="M72.1 54.5 66.8 58.3 61.4 54.5 63.5 48.2 70.1 48.2z" fill="#4A4A5A"/><path d="M46.0 73.4 40.7 69.6 42.7 63.3 49.3 63.3 51.3 69.6z" fill="#4A4A5A"/><path d="M19.9 54.5 21.9 48.2 28.5 48.2 30.6 54.5 25.2 58.3z" fill="#4A4A5A"/><path d="M29.9 23.8 36.5 23.8 38.5 30.1 33.2 33.9 27.8 30.1z" fill="#4A4A5A"/><path d="M46.0 35.4L46.0 28.6" stroke="#2A2346" stroke-width="1"/><path d="M56.1 42.7L62.5 40.6" stroke="#2A2346" stroke-width="1"/><path d="M52.3 54.6L56.2 60.0" stroke="#2A2346" stroke-width="1"/><path d="M39.7 54.6L35.8 60.0" stroke="#2A2346" stroke-width="1"/><path d="M35.9 42.7L29.5 40.6" stroke="#2A2346" stroke-width="1"/><path d="M6 82h88l-6 8 6 8H6l6-8z" fill="#FF4D4D"/><path d="M12 6l1.8 4.2 4.2 1.8-4.2 1.8-1.8 4.2-1.8-4.2-4.2-1.8 4.2-1.8z" fill="#FFD93D"/><path d="M88 82l1.8 4.2 4.2 1.8-4.2 1.8-1.8 4.2-1.8-4.2-4.2-1.8 4.2-1.8z" fill="#FF77B7"/></svg>',
+  'fb-goal': '<svg viewBox="0 0 100 100"><rect width="100" height="60" fill="#BFE6FF"/><rect y="60" width="100" height="40" fill="#7BC74D"/><rect y="72" width="100" height="5" fill="#9DE0B0"/><rect y="86" width="100" height="5" fill="#9DE0B0"/><path d="M14 66V22h72v44" fill="none" stroke="#FFFFFF" stroke-width="4"/><path d="M16 24h68l6 6v38H10V30z" fill="#E8EEF6"/><path d="M22 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M29 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M36 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M43 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M50 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M57 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M64 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M71 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M78 24v44" stroke="#C7CEDA" stroke-width=".8"/><path d="M10 31h80" stroke="#C7CEDA" stroke-width=".8"/><path d="M10 38h80" stroke="#C7CEDA" stroke-width=".8"/><path d="M10 45h80" stroke="#C7CEDA" stroke-width=".8"/><path d="M10 52h80" stroke="#C7CEDA" stroke-width=".8"/><path d="M10 59h80" stroke="#C7CEDA" stroke-width=".8"/><path d="M10 66h80" stroke="#C7CEDA" stroke-width=".8"/><circle cx="62" cy="46" r="9" fill="#FFFFFF"/><path d="M62.0 42.6 65.3 44.9 64.0 48.8 60.0 48.8 58.7 44.9z" fill="#4A4A5A"/><path d="M67.2 38.9 67.8 40.9 66.1 42.1 64.4 40.9 65.1 38.9z" fill="#4A4A5A"/><path d="M70.4 48.7 68.7 50.0 67.0 48.7 67.6 46.7 69.7 46.7z" fill="#4A4A5A"/><path d="M62.0 54.8 60.3 53.6 60.9 51.6 63.1 51.6 63.7 53.6z" fill="#4A4A5A"/><path d="M53.6 48.7 54.3 46.7 56.4 46.7 57.0 48.7 55.3 50.0z" fill="#4A4A5A"/><path d="M56.8 38.9 58.9 38.9 59.6 40.9 57.9 42.1 56.2 40.9z" fill="#4A4A5A"/><path d="M62.0 42.6L62.0 40.4" stroke="#2A2346" stroke-width="1"/><path d="M65.3 44.9L67.3 44.3" stroke="#2A2346" stroke-width="1"/><path d="M64.0 48.8L65.3 50.5" stroke="#2A2346" stroke-width="1"/><path d="M60.0 48.8L58.7 50.5" stroke="#2A2346" stroke-width="1"/><path d="M58.7 44.9L56.7 44.3" stroke="#2A2346" stroke-width="1"/><path d="M44 66q6-10 12-14M38 72q8-10 16-16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="3 3" stroke-linecap="round"/><rect x="1" y="90" width="23" height="9" rx="1.5" fill="#FF77B7"/><rect x="26" y="90" width="23" height="9" rx="1.5" fill="#4DB8FF"/><rect x="51" y="90" width="23" height="9" rx="1.5" fill="#FFD93D"/><rect x="76" y="90" width="23" height="9" rx="1.5" fill="#9B5DE5"/><path d="M2 16q0-7.0 8.0-6.0 3.0-6.0 10.0-4.0 7.0 0 8.0 5.0 6.0 1.0 5.0 5.0z" fill="#FFFFFF"/><path d="M94 88V60" stroke="#5A3A20" stroke-width="1.5"/><path d="M94 60l-8 4 8 4z" fill="#FF4D4D"/><text x="50" y="14" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="11" font-weight="900" fill="#FF77B7" stroke="#2A2346" stroke-width="1">1 : 0</text></svg>'
+};
+const WHEELS_CP = {
+  'vh-super': '<svg viewBox="0 0 100 100"><rect width="100" height="70" fill="#FFE3EC"/><circle cx="82" cy="20" r="10" fill="#FFD93D"/><path d="M0 52l20-18 14 12 18-20 22 22 26-16v38H0z" fill="#9B5DE5"/><rect y="70" width="100" height="30" fill="#C7CEDA"/><path d="M6 86h14M34 86h14M62 86h14M90 86h10" stroke="#FFFFFF" stroke-width="3"/><path d="M6 70q-2-8 4-10l22-4 16-10q8-4 18-4h8q10 2 18 10l6 2q4 2 2 8v8H6z" fill="#FF4D4D"/><path d="M38 52l12-8q6-3 14-3h6q6 1 10 6l2 5z" fill="#4DB8FF"/><path d="M64 41v11" stroke="#2A2346" stroke-width="1.2"/><path d="M34 60h18l-4 6H36z" fill="#2A2346"/><path d="M84 62h10v4h-10z" fill="#FFF3C4"/><path d="M6 64h6v4H6z" fill="#FF9F1C"/><path d="M14 58l26 0" stroke="#2A2346" stroke-width="1"/><path d="M6 72q-6.4 -2 -12.8 2q3.2 -6 -1.6 -8q6.4 0 9.600000000000001 -4q0 3.2 4.800000000000001 4.0z" fill="#FF9F1C"/><path d="M6 71q-4.0 -1 -7.2 1q1.6 -3 -0.8 -4q4.0 0 5.6000000000000005 -2z" fill="#FFD93D"/><circle cx="24" cy="72" r="9" fill="#5A5A6A"/><circle cx="24" cy="72" r="5.4" fill="#C7CEDA"/><path d="M24 72L28.9 72.0" stroke="#2A2346" stroke-width="1.2"/><path d="M24 72L25.5 76.7" stroke="#2A2346" stroke-width="1.2"/><path d="M24 72L20.0 74.9" stroke="#2A2346" stroke-width="1.2"/><path d="M24 72L20.0 69.1" stroke="#2A2346" stroke-width="1.2"/><path d="M24 72L25.5 67.3" stroke="#2A2346" stroke-width="1.2"/><circle cx="24" cy="72" r="1.6" fill="#FFD93D"/><circle cx="76" cy="72" r="9" fill="#5A5A6A"/><circle cx="76" cy="72" r="5.4" fill="#C7CEDA"/><path d="M76 72L81.0 72.0" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L77.5 76.7" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L72.0 74.9" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L72.0 69.1" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L77.5 67.3" stroke="#2A2346" stroke-width="1.2"/><circle cx="76" cy="72" r="1.6" fill="#FFD93D"/></svg>',
+  'vh-race': '<svg viewBox="0 0 100 100"><rect width="100" height="64" fill="#BFE6FF"/><path d="M0 64V54h8v-4h6v4h10v-6h8v6h12v-4h8v4h10v-6h8v6h10v-4h8v4h12v10z" fill="#E8EEF6"/><rect y="64" width="100" height="36" fill="#C7CEDA"/><rect x="0" y="92" width="10" height="5" fill="#FFFFFF"/><rect x="10" y="92" width="10" height="5" fill="#FF4D4D"/><rect x="20" y="92" width="10" height="5" fill="#FFFFFF"/><rect x="30" y="92" width="10" height="5" fill="#FF4D4D"/><rect x="40" y="92" width="10" height="5" fill="#FFFFFF"/><rect x="50" y="92" width="10" height="5" fill="#FF4D4D"/><rect x="60" y="92" width="10" height="5" fill="#FFFFFF"/><rect x="70" y="92" width="10" height="5" fill="#FF4D4D"/><rect x="80" y="92" width="10" height="5" fill="#FFFFFF"/><rect x="90" y="92" width="10" height="5" fill="#FF4D4D"/><path d="M6 78l4-8h16l8-6h30l10 6h18l4 8z" fill="#3D6BFF"/><path d="M4 66h4v14H4z" fill="#FFD93D"/><path d="M2 62h12v5H2z" fill="#FFD93D"/><path d="M88 74h10v6H88z" fill="#FFD93D"/><circle cx="46" cy="70" r="5" fill="#FFFFFF"/><text x="46" y="72.6" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="7" font-weight="900" fill="#2A2346" stroke="none">5</text><circle cx="58" cy="62" r="5.5" fill="#FF4D4D"/><path d="M58.5 60.1h4.7q1.4 2.2 0 4.1h-4.7z" fill="#9DD6F2"/><path d="M53.0 61.5q2.8 -3.8 6.1 -4.4" fill="none" stroke="#2A2346" stroke-width="1.2"/><path d="M66 72h14" stroke="#2A2346" stroke-width="1.2"/><circle cx="20" cy="80" r="8" fill="#5A5A6A"/><circle cx="20" cy="80" r="4.8" fill="#FFD93D"/><path d="M20 80L24.4 80.0" stroke="#2A2346" stroke-width="1.2"/><path d="M20 80L21.4 84.2" stroke="#2A2346" stroke-width="1.2"/><path d="M20 80L16.4 82.6" stroke="#2A2346" stroke-width="1.2"/><path d="M20 80L16.4 77.4" stroke="#2A2346" stroke-width="1.2"/><path d="M20 80L21.4 75.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="20" cy="80" r="1.4" fill="#FFD93D"/><circle cx="80" cy="80" r="8" fill="#5A5A6A"/><circle cx="80" cy="80" r="4.8" fill="#FFD93D"/><path d="M80 80L84.4 80.0" stroke="#2A2346" stroke-width="1.2"/><path d="M80 80L81.4 84.2" stroke="#2A2346" stroke-width="1.2"/><path d="M80 80L76.4 82.6" stroke="#2A2346" stroke-width="1.2"/><path d="M80 80L76.4 77.4" stroke="#2A2346" stroke-width="1.2"/><path d="M80 80L81.4 75.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="80" cy="80" r="1.4" fill="#FFD93D"/></svg>',
+  'vh-monster': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFF3C4"/><path d="M0 70l22-30 20 22 18-30 22 24 18-14v40H0z" fill="#9DE0B0"/><path d="M62 20q0-9.8 11.2-8.4 4.2-8.4 14.0-5.6 9.8 0 11.2 7.0 8.4 1.4 7.0 7.0z" fill="#FFFFFF"/><path d="M0 100V82q14-8 28-2 12-10 26-2 14-8 22 0 12-6 24 2v20z" fill="#C0702F"/><path d="M14 54l6-16h30l8 12h22q6 0 6 6v8H14z" fill="#4CC261"/><path d="M24 40h12v10H22z" fill="#BFE6FF"/><path d="M40 40h8l6 10H40z" fill="#BFE6FF"/><path d="M14 50h4v6h-4zM82 54h4v4h-4z" fill="#FFD93D"/><path d="M70 60q-5.6 -2 -11.2 2q2.8 -6 -1.4 -8q5.6 0 8.399999999999999 -4q0 2.8 4.199999999999999 3.5z" fill="#FF4D4D"/><path d="M56 57q-3.5 -1 -6.3 1q1.4 -3 -0.7 -4q3.5 0 4.8999999999999995 -2z" fill="#FFD93D"/><rect x="30" y="64" width="40" height="5" fill="#9B5DE5"/><path d="M34 69v6M66 69v6" stroke="#2A2346" stroke-width="2"/><circle cx="24" cy="76" r="16" fill="#5A5A6A"/><circle cx="24" cy="76" r="9.6" fill="#C7CEDA"/><path d="M24 76L32.8 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L26.7 84.4" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L16.9 81.2" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L16.9 70.8" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L26.7 67.6" stroke="#2A2346" stroke-width="1.2"/><circle cx="24" cy="76" r="2.9" fill="#FFD93D"/><circle cx="76" cy="76" r="16" fill="#5A5A6A"/><circle cx="76" cy="76" r="9.6" fill="#C7CEDA"/><path d="M76 76L84.8 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L78.7 84.4" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L68.9 81.2" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L68.9 70.8" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L78.7 67.6" stroke="#2A2346" stroke-width="1.2"/><circle cx="76" cy="76" r="2.9" fill="#FFD93D"/><path d="M10 9l1.5 3.5 3.5 1.5-3.5 1.5-1.5 3.5-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#FFD93D"/></svg>',
+  'vh-rally': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#BFE6FF"/><path d="M0 60l18-26 14 16 16-22 22 28 30-18v62H0z" fill="#9DE0B0"/><path d="M0 100V78q20-4 30 0l14-12h56v34z" fill="#E8B26A"/><g transform="rotate(-12 50 50)"><path d="M18 56q0-8 8-8l10-10h26l10 10q12 0 12 8v6H18z" fill="#FF9F1C"/><path d="M38 40h10v8H32zM52 40h8l8 8H52z" fill="#BFE6FF"/><circle cx="50" cy="54" r="5" fill="#FFFFFF"/><text x="50" y="56.6" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="7" font-weight="900" fill="#2A2346" stroke="none">3</text><path d="M18 52h4v4h-4zM80 52h4v4h-4z" fill="#FFF3C4"/><rect x="44" y="34" width="12" height="3" fill="#2A2346"/><circle cx="30" cy="64" r="8" fill="#5A5A6A"/><circle cx="30" cy="64" r="4.8" fill="#C7CEDA"/><path d="M30 64L34.4 64.0" stroke="#2A2346" stroke-width="1.2"/><path d="M30 64L31.4 68.2" stroke="#2A2346" stroke-width="1.2"/><path d="M30 64L26.4 66.6" stroke="#2A2346" stroke-width="1.2"/><path d="M30 64L26.4 61.4" stroke="#2A2346" stroke-width="1.2"/><path d="M30 64L31.4 59.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="30" cy="64" r="1.4" fill="#FFD93D"/><circle cx="72" cy="64" r="8" fill="#5A5A6A"/><circle cx="72" cy="64" r="4.8" fill="#C7CEDA"/><path d="M72 64L76.4 64.0" stroke="#2A2346" stroke-width="1.2"/><path d="M72 64L73.4 68.2" stroke="#2A2346" stroke-width="1.2"/><path d="M72 64L68.4 66.6" stroke="#2A2346" stroke-width="1.2"/><path d="M72 64L68.4 61.4" stroke="#2A2346" stroke-width="1.2"/><path d="M72 64L73.4 59.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="72" cy="64" r="1.4" fill="#FFD93D"/></g><path d="M8 88q4-8 12-6 4-6 10-2 6 0 6 6H8z" fill="#FFF3C4"/><path d="M60 92q2-6 8-4 4-4 8 0 4 0 4 4z" fill="#FFF3C4"/></svg>',
+  'vh-jeep': '<svg viewBox="0 0 100 100"><rect width="100" height="70" fill="#BFE6FF"/><path d="M0 70l16-20 12 10 18-24 20 24 16-14 18 24z" fill="#4CC261"/><path d="M0 100V72q50-8 100 0v28z" fill="#A86B3C"/><ellipse cx="30" cy="86" rx="12" ry="3" fill="#7A4A2A"/><path d="M10 70V52l4-2 8-14h36v14h26q6 0 6 6v14z" fill="#FFD93D"/><path d="M26 38h12v12H20zM42 38h12v12H42z" fill="#BFE6FF"/><rect x="22" y="30" width="34" height="4" rx="1" fill="#4A4A5A"/><circle cx="28" cy="28" r="2.2" fill="#FFF3C4"/><circle cx="36" cy="28" r="2.2" fill="#FFF3C4"/><circle cx="44" cy="28" r="2.2" fill="#FFF3C4"/><circle cx="52" cy="28" r="2.2" fill="#FFF3C4"/><path d="M84 56h6v6h-6z" fill="#FFF3C4"/><path d="M60 58h20" stroke="#2A2346" stroke-width="1.2"/><circle cx="12" cy="60" r="7" fill="#5A5A6A"/><circle cx="12" cy="60" r="4.2" fill="#C7CEDA"/><path d="M12 60L15.9 60.0" stroke="#2A2346" stroke-width="1.2"/><path d="M12 60L13.2 63.7" stroke="#2A2346" stroke-width="1.2"/><path d="M12 60L8.9 62.3" stroke="#2A2346" stroke-width="1.2"/><path d="M12 60L8.9 57.7" stroke="#2A2346" stroke-width="1.2"/><path d="M12 60L13.2 56.3" stroke="#2A2346" stroke-width="1.2"/><circle cx="12" cy="60" r="1.3" fill="#FFD93D"/><circle cx="26" cy="72" r="11" fill="#5A5A6A"/><circle cx="26" cy="72" r="6.6" fill="#C7CEDA"/><path d="M26 72L32.0 72.0" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L27.9 77.8" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L21.1 75.6" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L21.1 68.4" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L27.9 66.2" stroke="#2A2346" stroke-width="1.2"/><circle cx="26" cy="72" r="2.0" fill="#FFD93D"/><circle cx="74" cy="72" r="11" fill="#5A5A6A"/><circle cx="74" cy="72" r="6.6" fill="#C7CEDA"/><path d="M74 72L80.0 72.0" stroke="#2A2346" stroke-width="1.2"/><path d="M74 72L75.9 77.8" stroke="#2A2346" stroke-width="1.2"/><path d="M74 72L69.1 75.6" stroke="#2A2346" stroke-width="1.2"/><path d="M74 72L69.1 68.4" stroke="#2A2346" stroke-width="1.2"/><path d="M74 72L75.9 66.2" stroke="#2A2346" stroke-width="1.2"/><circle cx="74" cy="72" r="2.0" fill="#FFD93D"/></svg>',
+  'vh-muscle': '<svg viewBox="0 0 100 100"><rect width="100" height="70" fill="#FF9F1C"/><circle cx="50" cy="56" r="26" fill="#FFD93D"/><path d="M0 60h100v10H0z" fill="#E86A5A"/><rect y="70" width="100" height="30" fill="#C7CEDA"/><path d="M4 76V64q0-4 6-4l12-2 10-10h30l10 10 16 2q8 1 8 6v10z" fill="#3D6BFF"/><path d="M36 50h12v8H30zM52 50h8l8 8H52z" fill="#BFE6FF"/><path d="M4 64h92v4H4z" fill="#FFFFFF"/><path d="M4 70h92v2H4z" fill="#FFFFFF"/><path d="M30 74q6-8 14-4-4-6 4-8-2 6 6 6-6 2-4 6z" fill="#FF4D4D"/><path d="M90 62h6v5h-6zM4 62h4v5H4z" fill="#FFF3C4"/><rect x="40" y="46" width="16" height="3" rx="1" fill="#4A4A5A"/><circle cx="24" cy="76" r="9" fill="#5A5A6A"/><circle cx="24" cy="76" r="5.4" fill="#C7CEDA"/><path d="M24 76L28.9 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L25.5 80.7" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L20.0 78.9" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L20.0 73.1" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L25.5 71.3" stroke="#2A2346" stroke-width="1.2"/><circle cx="24" cy="76" r="1.6" fill="#FFD93D"/><circle cx="78" cy="76" r="9" fill="#5A5A6A"/><circle cx="78" cy="76" r="5.4" fill="#C7CEDA"/><path d="M78 76L83.0 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M78 76L79.5 80.7" stroke="#2A2346" stroke-width="1.2"/><path d="M78 76L74.0 78.9" stroke="#2A2346" stroke-width="1.2"/><path d="M78 76L74.0 73.1" stroke="#2A2346" stroke-width="1.2"/><path d="M78 76L79.5 71.3" stroke="#2A2346" stroke-width="1.2"/><circle cx="78" cy="76" r="1.6" fill="#FFD93D"/></svg>',
+  'vh-sportbike': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFE3EC"/><path d="M60 18q0-10.5 12.0-9.0 4.5-9.0 15.0-6.0 10.5 0 12.0 7.5 9.0 1.5 7.5 7.5z" fill="#FFFFFF"/><rect x="1" y="56" width="23" height="10" rx="1.5" fill="#FF77B7"/><rect x="26" y="56" width="23" height="10" rx="1.5" fill="#4DB8FF"/><rect x="51" y="56" width="23" height="10" rx="1.5" fill="#FFD93D"/><rect x="76" y="56" width="23" height="10" rx="1.5" fill="#9B5DE5"/><path d="M0 100V70q50-20 100 0v30z" fill="#C7CEDA"/><path d="M0 86q50-18 100 0" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="8 6" fill="none"/><g transform="rotate(-24 50 66)"><circle cx="26" cy="72" r="11" fill="#5A5A6A"/><circle cx="26" cy="72" r="6.6" fill="#C7CEDA"/><path d="M26 72L32.0 72.0" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L27.9 77.8" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L21.1 75.6" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L21.1 68.4" stroke="#2A2346" stroke-width="1.2"/><path d="M26 72L27.9 66.2" stroke="#2A2346" stroke-width="1.2"/><circle cx="26" cy="72" r="2.0" fill="#FFD93D"/><circle cx="76" cy="72" r="11" fill="#5A5A6A"/><circle cx="76" cy="72" r="6.6" fill="#C7CEDA"/><path d="M76 72L82.0 72.0" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L77.9 77.8" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L71.1 75.6" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L71.1 68.4" stroke="#2A2346" stroke-width="1.2"/><path d="M76 72L77.9 66.2" stroke="#2A2346" stroke-width="1.2"/><circle cx="76" cy="72" r="2.0" fill="#FFD93D"/><path d="M24 66l14-14h24l18 8 6 10-12 2-10-6H40z" fill="#FF4D4D"/><path d="M62 52l12-6 8 10-6 4z" fill="#4DB8FF"/><circle cx="50" cy="62" r="5" fill="#FFFFFF"/><text x="50" y="64.4" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="6" font-weight="900" fill="#2A2346" stroke="none">9</text><rect x="43.0" y="47.0" width="23.2" height="6" rx="3.0" transform="rotate(36 46 50)" fill="#4A4A5A"/><rect x="57.5" y="57.5" width="15.2" height="5" rx="2.5" transform="rotate(101 60 60)" fill="#4A4A5A"/><path d="M38 36q10-6 20 4l2 12-18-2z" fill="#FFD93D"/><rect x="52.0" y="42.0" width="21.1" height="4" rx="2.0" transform="rotate(21 54 44)" fill="#FFD93D"/><circle cx="48" cy="30" r="7" fill="#9B5DE5"/><path d="M48.7 27.6h6.0q1.8 2.8 0 5.2h-6.0z" fill="#4DB8FF"/><path d="M41.7 29.3q3.5 -4.9 7.7 -5.6" fill="none" stroke="#2A2346" stroke-width="1.2"/></g><path d="M8 40h12M4 48h14M10 56h10" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>',
+  'vh-motocross': '<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#BFE6FF"/><circle cx="16" cy="16" r="8" fill="#FFD93D"/><path d="M0 100V84l30-20 10 36z" fill="#C0702F"/><path d="M60 100l20-24 20 8v16z" fill="#C0702F"/><g transform="rotate(-14 56 48)"><circle cx="36" cy="60" r="10" fill="#5A5A6A"/><circle cx="36" cy="60" r="6.0" fill="#FFD93D"/><path d="M36 60L41.5 60.0" stroke="#2A2346" stroke-width="1.2"/><path d="M36 60L37.7 65.2" stroke="#2A2346" stroke-width="1.2"/><path d="M36 60L31.6 63.2" stroke="#2A2346" stroke-width="1.2"/><path d="M36 60L31.6 56.8" stroke="#2A2346" stroke-width="1.2"/><path d="M36 60L37.7 54.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="36" cy="60" r="1.8" fill="#FFD93D"/><circle cx="80" cy="58" r="10" fill="#5A5A6A"/><circle cx="80" cy="58" r="6.0" fill="#FFD93D"/><path d="M80 58L85.5 58.0" stroke="#2A2346" stroke-width="1.2"/><path d="M80 58L81.7 63.2" stroke="#2A2346" stroke-width="1.2"/><path d="M80 58L75.6 61.2" stroke="#2A2346" stroke-width="1.2"/><path d="M80 58L75.6 54.8" stroke="#2A2346" stroke-width="1.2"/><path d="M80 58L81.7 52.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="80" cy="58" r="1.8" fill="#FFD93D"/><path d="M36 60l12-14h14l18 12" fill="none" stroke="#2A2346" stroke-width="2.5"/><path d="M44 46q8-6 22-2l4 8H48z" fill="#4CC261"/><path d="M68 40l10 2-2 6-10-2z" fill="#4CC261"/><path d="M40 50l-8-4 2-3 9 4z" fill="#FFFFFF"/><rect x="51.5" y="31.5" width="17.6" height="5" rx="2.5" transform="rotate(72 54 34)" fill="#FF9F1C"/><rect x="55.5" y="43.5" width="15.0" height="5" rx="2.5" transform="rotate(127 58 46)" fill="#FF9F1C"/><path d="M48 22q8-4 14 2l2 12-14-2z" fill="#FF77B7"/><rect x="56.0" y="24.0" width="22.4" height="4" rx="2.0" transform="rotate(41 58 26)" fill="#FF77B7"/><circle cx="56" cy="16" r="6.5" fill="#FFFFFF"/><path d="M56.6 13.7h5.5q1.6 2.6 0 4.9h-5.5z" fill="#FF9F1C"/><path d="M50.1 15.3q3.2 -4.5 7.2 -5.2" fill="none" stroke="#2A2346" stroke-width="1.2"/></g><path d="M20 70q-6-2-10 2M24 76q-8 0-12 4" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/></svg>',
+  'vh-chopper': '<svg viewBox="0 0 100 100"><rect width="100" height="70" fill="#FF9F1C"/><circle cx="50" cy="60" r="22" fill="#FFD93D"/><path d="M6 22q0-9.8 11.2-8.4 4.2-8.4 14.0-5.6 9.8 0 11.2 7.0 8.4 1.4 7.0 7.0z" fill="#FFFFFF"/><path d="M66 14q0-9.1 10.4-7.8 3.9-7.8 13.0-5.2 9.1 0 10.4 6.5 7.8 1.3 6.5 6.5z" fill="#FFFFFF"/><path d="M0 70h100v30H0z" fill="#E8B26A"/><rect x="0" y="90" width="100" height="10" fill="#C7CEDA"/><circle cx="18" cy="76" r="12" fill="#5A5A6A"/><circle cx="18" cy="76" r="7.2" fill="#C7CEDA"/><path d="M18 76L24.6 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M18 76L20.0 82.3" stroke="#2A2346" stroke-width="1.2"/><path d="M18 76L12.7 79.9" stroke="#2A2346" stroke-width="1.2"/><path d="M18 76L12.7 72.1" stroke="#2A2346" stroke-width="1.2"/><path d="M18 76L20.0 69.7" stroke="#2A2346" stroke-width="1.2"/><circle cx="18" cy="76" r="2.2" fill="#FFD93D"/><circle cx="84" cy="76" r="10" fill="#5A5A6A"/><circle cx="84" cy="76" r="6.0" fill="#C7CEDA"/><path d="M84 76L89.5 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M84 76L85.7 81.2" stroke="#2A2346" stroke-width="1.2"/><path d="M84 76L79.6 79.2" stroke="#2A2346" stroke-width="1.2"/><path d="M84 76L79.6 72.8" stroke="#2A2346" stroke-width="1.2"/><path d="M84 76L85.7 70.8" stroke="#2A2346" stroke-width="1.2"/><circle cx="84" cy="76" r="1.8" fill="#FFD93D"/><path d="M18 76l18-14h22l10 4" fill="none" stroke="#2A2346" stroke-width="2.5"/><path d="M68 66l16 10" stroke="#C7CEDA" stroke-width="3"/><path d="M60 46l12 18" stroke="#C7CEDA" stroke-width="3"/><path d="M34 56q4-10 16-10t14 8l-2 6H34z" fill="#9B5DE5"/><path d="M38 56q4-6 10-4-2 4 4 4z" fill="#FF4D4D"/><path d="M20 58q4-6 14-4l2 6H20z" fill="#4A4A5A"/><path d="M56 46l4-10 6 2-4 10z" fill="#C7CEDA"/><rect x="40" y="62" width="14" height="8" rx="2" fill="#C7CEDA"/><path d="M8 66h16v3H8z" fill="#C7CEDA"/><circle cx="72" cy="58" r="3" fill="#FFF3C4"/></svg>',
+  'vh-quad': '<svg viewBox="0 0 100 100"><rect width="100" height="60" fill="#BFE6FF"/><path d="M0 60l20-16 16 10 18-18 22 20 24-10v14z" fill="#4CC261"/><rect y="60" width="100" height="40" fill="#C0702F"/><ellipse cx="20" cy="94" rx="10" ry="3" fill="#7A4A2A"/><path d="M16 66q0-10 10-12h40q14 2 18 12v4H16z" fill="#FF4D4D"/><path d="M30 54q10-6 22 0z" fill="#4A4A5A"/><path d="M64 54l6-8 6 2-4 8z" fill="#C7CEDA"/><circle cx="84" cy="62" r="3" fill="#FFF3C4"/><circle cx="46" cy="64" r="4.5" fill="#FFFFFF"/><text x="46" y="66.4" text-anchor="middle" font-family="Nunito, Arial, sans-serif" font-size="6" font-weight="900" fill="#2A2346" stroke="none">1</text><circle cx="24" cy="76" r="11" fill="#5A5A6A"/><circle cx="24" cy="76" r="6.6" fill="#FFD93D"/><path d="M24 76L30.1 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L25.9 81.8" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L19.1 79.6" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L19.1 72.4" stroke="#2A2346" stroke-width="1.2"/><path d="M24 76L25.9 70.2" stroke="#2A2346" stroke-width="1.2"/><circle cx="24" cy="76" r="2.0" fill="#FFD93D"/><circle cx="76" cy="76" r="11" fill="#5A5A6A"/><circle cx="76" cy="76" r="6.6" fill="#FFD93D"/><path d="M76 76L82.0 76.0" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L77.9 81.8" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L71.1 79.6" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L71.1 72.4" stroke="#2A2346" stroke-width="1.2"/><path d="M76 76L77.9 70.2" stroke="#2A2346" stroke-width="1.2"/><circle cx="76" cy="76" r="2.0" fill="#FFD93D"/></svg>'
+};
+Object.assign(CPAGES, FOOTBALL_CP, WHEELS_CP);
+const FOOTBALL_PAGES = Object.keys(FOOTBALL_CP).map(k => 'svg:' + k), WHEELS_PAGES = Object.keys(WHEELS_CP).map(k => 'svg:' + k);
+PAGES.push(...FOOTBALL_PAGES, ...WHEELS_PAGES);
 
 
 
@@ -17973,7 +18241,7 @@ const IDEAS = (() => {
         const p = plan[k];
         if (p === 'vow') {
           box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">Р после гласной — без «д»</p></div>`;
-          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', '') }); if (t !== tok) return; }
+          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
           box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
           for (const [w, e] of sample(R_WORDS, 5)) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; await askSaid(SAID(), { expect: w }); if (t !== tok) return; }
@@ -20876,6 +21144,153 @@ const TALES = (() => {
   let IDX = null, warmOn = false; const TXT = {};
   const base = () => SITE_ROOT + 'tales/';
   const pause = ms => new Promise(r => setTimeout(r, ms));
+  
+
+  const FREC = (() => {
+    const DB = 'govorilki-voices', ST = 'tales';
+    let dbp = null;
+    const db = () => dbp || (dbp = new Promise((res, rej) => {
+      const r = indexedDB.open(DB, 1);
+      r.onupgradeneeded = () => { if (!r.result.objectStoreNames.contains(ST)) r.result.createObjectStore(ST, { keyPath: 'k' }); };
+      r.onsuccess = () => res(r.result); r.onerror = () => { dbp = null; rej(r.error); };
+    }));
+    const tx = async (mode, fn) => { const d = await db(); return new Promise((res, rej) => { const x = d.transaction(ST, mode), q = fn(x.objectStore(ST)); x.oncomplete = () => res(q ? q.result : undefined); x.onerror = x.onabort = () => rej(x.error); }); };
+    const all = () => tx('readonly', s => s.getAll()).catch(() => []);
+    const get = k => tx('readonly', s => s.get(k)).catch(() => null);
+    const put = r => tx('readwrite', s => s.put(r));
+    const del = k => tx('readwrite', s => s.delete(k));
+    const ok = () => { try { return !EMBEDDED && !!window.indexedDB && !(GUEST && !GUEST_OFF) && !PREVIEW && !(fam() && fam().guest); } catch (e) { return false; } };
+    const canRec = () => ok() && !!window.MediaRecorder && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    const famId = () => ROOT.curFam || '';
+    const cnt = r => { let n = 0; for (let i = 0; i < r.n; i++) if (r.parts[i]) n++; return n; };
+    const bytes = r => (r.parts || []).reduce((a, x) => a + (x ? x.byteLength || 0 : 0), 0);
+    const size = b => b < 1e6 ? Math.max(1, Math.round(b / 1024)) + ' КБ' : (b / 1048576).toFixed(1).replace('.', ',') + ' МБ';
+    const LOW = /^(Бабушк|Дедушк|Мам|Пап|Тёт|Тет|Дяд|Сестр|Брат)/;
+    const label = r => 'Читает ' + (LOW.test(r.name) ? r.name[0].toLowerCase() + r.name.slice(1) : r.name);
+    const face = (r, cls) => kinFace({ av: r.av, role: r.role, name: r.name, she: r.she }, cls || 'fr-face');
+    const PRIV = 'Запись остаётся только на этом телефоне и никуда не отправляется.';
+    
+    async function byTale() {
+      const m = {}; if (!ok()) return m;
+      (await all()).filter(r => r.fam === famId() && cnt(r)).sort((a, b) => b.at - a.at).forEach(r => (m[r.tid] = m[r.tid] || []).push(r));
+      return m;
+    }
+    
+    function readers() {
+      const f = fam(), gs = (f && f.grands || []).filter(g => g && g.id).map(g => ({ who: g.id, name: g.name || 'Бабушка', she: !!g.she, role: roleOf(g)[0], av: avaOk(g.av) ? g.av : '' }));
+      for (const [r, n, she] of [['mom', 'Мама', true], ['dad', 'Папа', false]]) if (!gs.some(g => g.role === r)) gs.push({ who: '_' + r, name: n, she, role: r, av: '' });
+      return gs;
+    }
+    function mime() {
+      if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return '';
+      return ['audio/webm;codecs=opus', 'audio/mp4;codecs=mp4a.40.2', 'audio/mp4', 'audio/ogg;codecs=opus', 'audio/webm'].find(m => { try { return MediaRecorder.isTypeSupported(m); } catch (e) { return false; } }) || '';
+    }
+    
+    function playPart(r, j) {
+      return new Promise(res => {
+        const b = r.parts[j]; if (!b) { res(false); return; }
+        const url = URL.createObjectURL(new Blob([b], { type: r.mime || 'audio/webm' })), au = new Audio(url);
+        au.setAttribute('playsinline', ''); TALE_AUDIO = au;
+        let done = false; const end = v => { if (done) return; done = true; if (TALE_AUDIO === au) TALE_AUDIO = null; setTimeout(() => URL.revokeObjectURL(url), 500); res(v); };
+        au.onended = () => end(true); au.onerror = () => end(false); au.onpause = () => { if (!au.ended) end(false); };
+        const pr = au.play(); if (pr && pr.catch) pr.catch(() => end(false));
+      });
+    }
+    
+    async function record(tid, d, back, done, pick) {
+      const t = newScreen(), fid = famId();
+      const S = []; d.p.forEach((p, pi) => sentences(p).forEach(s => S.push({ s: s.trim(), pi })));
+      if (!pick) {
+        const have = (await all()).filter(r => r.fam === fid && r.tid === tid); if (t !== tok) return;
+        const rs = readers(); have.forEach(h => { if (!rs.some(r => r.who === h.who)) rs.push({ who: h.who, name: h.name, she: h.she, role: h.role, av: h.av }); });
+        shell('Прочитать своим голосом', `<div class="fr-wrap"><h2 class="fr-h">${esc(d.t)}</h2><p class="lead">Кто читает сказку?</p>
+          <div class="fr-who" id="frWho">${rs.map(r => { const h = have.find(x => x.who === r.who);
+            return `<button class="fr-r" data-w="${esc(r.who)}">${face(r)}<b>${esc(r.name)}</b>${h && cnt(h) ? `<small>записано ${cnt(h)} из ${S.length} · ${size(bytes(h))}</small>` : ''}</button>`; }).join('')}</div>
+          <p class="fr-priv">🔒 ${PRIV}</p></div>`, { back, guide: false });
+        $('#frWho').onclick = e => { const b = e.target.closest('[data-w]'); if (!b) return; sfx.pop(); record(tid, d, back, done, rs.find(r => r.who === b.dataset.w)); };
+        return;
+      }
+      const k = fid + '|' + tid + '|' + pick.who;
+      let R = await get(k); if (t !== tok) return;
+      if (!R) R = { k, fam: fid, tid, who: pick.who, mime: '', parts: [], dur: [], at: Date.now() };
+      Object.assign(R, { name: pick.name, she: pick.she, role: pick.role, av: pick.av, n: S.length });
+      let cur = 0; while (cur < S.length && R.parts[cur]) cur++; if (cur >= S.length) cur = 0;
+      const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${S.map((x, j) => x.pi === pi ? `<span class="ss" data-j="${j}">${esc(x.s)} </span>` : '').join('')}</p>`).join('');
+      shell('Прочитать своим голосом', `<article class="tl-read fr-rec"><p class="pt-who">${face(pick, 'pt-mini')} <b>${esc(label(pick))}</b></p><h2>${esc(d.t)}</h2>
+          <p class="fr-tip">Нажмите «● Запись» и читайте выделенную фразу, потом «Дальше». Ошиблись — нажмите на фразу и запишите её ещё раз.</p>
+          <div class="tl-text fr-text" id="frText">${html}</div>
+          <p class="fr-info" id="frInfo"></p><p class="fr-delw"><button class="chip" id="frDel">🗑 Удалить эту запись</button></p></article>
+        <div class="fr-ctl"><div class="fr-btns" id="frBtns"></div><p class="fr-priv">🔒 ${PRIV}</p></div>`, { back: () => leave(back), guide: false, raw: true });
+      const spans = $$('#frText .ss'), MT = mime();
+      let on = false, mr = null, busy = false, delArm = false;
+      const info = m => { $('#frInfo').textContent = m || `Записано ${cnt(R)} из ${S.length} фраз · ${size(bytes(R))}`; };
+      function paint(scroll) {
+        if (t !== tok) return;
+        spans.forEach(s => { const j = +s.dataset.j; s.classList.toggle('on', j === cur); s.classList.toggle('done', !!R.parts[j]); });
+        if (scroll !== false && spans[cur]) spans[cur].scrollIntoView({ block: 'center', behavior: 'smooth' });
+        $('#frBtns').innerHTML = on
+          ? `<span class="fr-dot" aria-hidden="true"></span><button class="chip" id="frPause">❚❚ Пауза</button><button class="big" id="frNext">${cur >= S.length - 1 ? '✓ Последняя' : 'Дальше ▶'}</button>`
+          : `<button class="big fr-go" id="frGo">● Запись</button>${R.parts[cur] ? '<button class="ibtn" id="frHear" aria-label="Послушать фразу">▶</button>' : ''}${cnt(R) ? '<button class="big ok" id="frDone">✓ Готово</button>' : ''}`;
+        info(); $('#frDel').hidden = !cnt(R);
+      }
+      
+      function take(j) {
+        const ch = [], st = performance.now();
+        let m; try { m = new MediaRecorder(micStream, { ...(MT ? { mimeType: MT } : {}), audioBitsPerSecond: 32000 }); } catch (e) { m = new MediaRecorder(micStream); }
+        m.ondataavailable = e => { if (e.data && e.data.size) ch.push(e.data); };
+        m.done = new Promise(res => { m.onstop = async () => {
+          const sec = (performance.now() - st) / 1000;
+          if (t === tok && ch.length && sec > 0.5) {
+            const bl = new Blob(ch, { type: m.mimeType || MT || 'audio/webm' });
+            try { R.parts[j] = await bl.arrayBuffer(); R.dur[j] = Math.round(sec * 10) / 10; R.mime = bl.type; R.at = Date.now(); await put(R); } catch (e) { info('Не получилось сохранить — на телефоне мало места?'); }
+          }
+          res();
+        }; });
+        m.start(); mr = m;
+      }
+      const stopTake = async () => { const m = mr; mr = null; if (m && m.state !== 'inactive') { m.stop(); await m.done; } };
+      const micClose = () => { if (micStream) { micStream.getTracks().forEach(tr => tr.stop()); micStream = null; } speakerOn(); };
+      async function start() {
+        if (busy) return; busy = true; hush();
+        try {
+          audioSession('play-and-record');
+          micStream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+          if (t !== tok) { micClose(); return; }
+          try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+          on = true; take(cur); sfx.tick();
+        } catch (e) { micClose(); info('Не получилось включить микрофон. Разрешите его в настройках браузера и нажмите «Запись» ещё раз.'); busy = false; return; }
+        busy = false; paint();
+      }
+      async function pauseRec() { if (busy) return; busy = true; await stopTake(); micClose(); on = false; busy = false; paint(false); }
+      async function next() {
+        if (busy) return; busy = true; await stopTake(); if (t !== tok) return;
+        if (cur >= S.length - 1) { micClose(); on = false; let j = 0; while (j < S.length && R.parts[j]) j++; cur = j < S.length ? j : cur; busy = false; paint(); if (j >= S.length) info(`Все фразы записаны · ${size(bytes(R))}. Нажмите «Готово».`); return; }
+        cur++; take(cur); busy = false; paint();
+      }
+      async function leave(go) { await stopTake(); micClose(); on = false; go(); }
+      $('#frBtns').onclick = e => {
+        const b = e.target.closest('button'); if (!b) return;
+        if (b.id === 'frGo') start();
+        else if (b.id === 'frPause') pauseRec();
+        else if (b.id === 'frNext') next();
+        else if (b.id === 'frHear') { hush(); speakerOn(); playPart(R, cur); }
+        else if (b.id === 'frDone') { sfx.good(); leave(() => done(pick.who)); }
+      };
+      $('#frText').onclick = e => { const s = e.target.closest('.ss'); if (!s || on || busy) return; cur = +s.dataset.j; hush(); paint(false); };
+      $('#frDel').onclick = async () => {
+        if (on || busy) return;
+        if (!delArm) { delArm = true; $('#frDel').textContent = '🗑 Точно удалить? Нажмите ещё раз'; return; }
+        try { await del(k); } catch (e) {}
+        R = { ...R, parts: [], dur: [] }; cur = 0; delArm = false; $('#frDel').textContent = '🗑 Удалить эту запись'; paint(); info('Запись удалена.');
+      };
+      
+      const vis = () => { if (document.hidden && on && t === tok) pauseRec(); if (t !== tok) document.removeEventListener('visibilitychange', vis); };
+      document.addEventListener('visibilitychange', vis);
+      paint(false); if (cur) spans[cur].scrollIntoView({ block: 'center' });
+    }
+    return { ok, canRec, byTale, label, face, playPart, record, size, bytes, cnt, PRIV };
+  })();
+   
   async function index() {
     if (IDX) return IDX;
     const r = await fetch(base() + 'index.json'); if (!r.ok) throw new Error('no tales');
@@ -20903,25 +21318,28 @@ const TALES = (() => {
   const tile = () => `<button class="lg-cta bk-tales" id="bkTales"><span class="emo">🎧</span><span class="lg-t"><b>Аудиосказки</b><small>народные сказки, Пушкин, Крылов, Толстой — послушать перед сном</small></span></button>`;
   function forBook(bid) {
     const re = BOOK_OF[bid]; if (!re || !IDX) return '';
-    const xs = IDX.filter(x => re.test(x.by)); if (!xs.length) return '';
+    const rc = RECS || {}, xs = IDX.filter(x => re.test(x.by)).sort((a, b) => !!rc[b.id] - !!rc[a.id]).slice(0, 10); if (!xs.length) return '';   
     return `<div class="bk-listen"><b>🎧 Послушать</b>${xs.map(x => `<button class="chip" data-tale="${x.id}"><span class="emo">${x.e}</span>${esc(x.t)}</button>`).join('')}</div>`;
   }
   async function list(back) {
     const t = newScreen();
     shell('Аудиосказки', `<div class="tl-wrap"><p class="lead" id="tlLead">Выбери сказку — я прочитаю её вслух. Текст будет на экране.</p>
       <div class="tl-list" id="tlList"><p class="muted">Открываю сказки…</p></div>
-      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
+      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.${FREC.canRec() ? ' Любую сказку можно прочитать своим голосом: кнопка «🎤 Прочитать своим голосом» в сказке. Запись остаётся только на этом телефоне — в интернет и в облако семьи она не попадает.' : ''}</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
     talk('Выбери сказку. Я прочитаю её вслух.');
     let xs;
-    const RC = await recs().catch(() => ({}));
+    const RC = await recs().catch(() => ({})), FM = await FREC.byTale().catch(() => ({}));
     try { xs = await index(); } catch (e) { if (t === tok) $('#tlList').innerHTML = '<p class="muted">Сказки не загрузились. Они откроются, когда появится интернет, а потом будут работать и без него.</p>'; return; }
     if (t !== tok) return;
     warm();
     const H = heard(), age = P.settings.age || 0;
-    const row = x => { const h = H[x.id] || {};
-      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
-    const mine = age ? xs.filter(x => !x.age || age <= x.age[1] + 1) : xs, rest = xs.filter(x => !mine.includes(x));
-    $('#tlList').innerHTML = mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
+    const row = x => { const h = H[x.id] || {}, fm = FM[x.id];
+      return `<button class="tl-i ${h.done ? 'seen' : ''} ${fm ? 'fam' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b>${fm ? `<span class="tl-fam">${FREC.face(fm[0], 'tl-ff')} ${esc(fm.map(FREC.label).join(', '))}</span>` : ''}<small>${esc(x.by)} · ${x.min} мин${x.age ? ' · ' + x.age[0] + '+' : ''}${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
+    
+    const ours = xs.filter(x => FM[x.id]), others = xs.filter(x => !FM[x.id]);
+    const live = (a, b) => !!RC[b.id] - !!RC[a.id];      
+    const mine = (age ? others.filter(x => !x.age || age >= x.age[0] - 1) : others).slice().sort(live), rest = others.filter(x => !mine.includes(x)).sort(live);
+    $('#tlList').innerHTML = (ours.length ? `<h3 class="tl-h">🏠 Читает наша семья</h3>${ours.map(row).join('')}${mine.length ? '<h3 class="tl-h">Все сказки</h3>' : ''}` : '') + mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
     $('#tlList').onclick = e => { const b = e.target.closest('.tl-i'); if (b) { sfx.pop(); play(b.dataset.id, () => list(back)); } };
   }
   async function play(id, back) {
@@ -20932,11 +21350,16 @@ const TALES = (() => {
     }
     if (t !== tok) return;
     const R = ((await recs().catch(() => ({})))[id]) || null;
+    const FR = (await FREC.byTale().catch(() => ({})))[id] || [];
     if (t !== tok) return;
+    const recIt = () => grownUp(() => FREC.record(id, d, () => play(id, back), who => { heard()[id] = { ...(heard()[id] || {}), mode: 'fam:' + who }; save(); play(id, back); }), 'Прочитать сказку своим голосом — это для взрослых.');
+    const famChips = FR.map(r => `<button class="chip fr-chip" data-m="fam:${esc(r.who)}">${FREC.face(r, 'tl-ff')} ${esc(FREC.label(r))}</button>`).join('');
     const S = [];
     const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${sentences(p).map(s => { const j = S.push({ s: s.trim(), pi }) - 1; return `<span class="ss" data-j="${j}">${esc(s)}</span>`; }).join('')}</p>`).join('');
     shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>
-        ${R ? `<div class="tl-mode" id="tlMode"><button class="chip" data-m="actor">🎙 Слушать актёра</button><button class="chip" data-m="voice">🔊 Голос игры</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
+        ${R || FR.length ? `<div class="tl-mode" id="tlMode">${famChips}${R ? '<button class="chip" data-m="actor">🎙 Слушать актёра</button>' : ''}<button class="chip" data-m="voice">🔊 Голос игры</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
+        ${FREC.canRec() ? (R || FR.length ? `<p class="fr-small"><button class="chip" id="tlRec">🎤 ${FR.length ? 'Записать ещё / изменить запись' : 'Прочитать своим голосом'}</button></p>`
+          : `<div class="fr-cta"><button class="big" id="tlRec">🎤 Прочитать своим голосом</button><small>У этой сказки нет записи актёра. Мама, папа, бабушка или дедушка могут прочитать её сами — ребёнок услышит родной голос. 🔒 Запись остаётся только на этом телефоне.</small></div>`) : ''}
         <div class="tl-text" id="tlText">${html}</div><p class="tl-end" id="tlEnd" hidden>Конец 🌙</p></article>
       <div class="tl-ctl"><button class="ibtn" id="tlPrev" aria-label="Фраза назад">⏮</button><button class="big" id="tlPlay"></button>
         <button class="ibtn" id="tlNext" aria-label="Фраза вперёд">⏭</button><button class="ibtn" id="tlNight" aria-label="Ночной режим">🌙</button></div>`, { back: back || (() => list()), guide: false, raw: true });
@@ -20949,14 +21372,17 @@ const TALES = (() => {
       const nt = $('#tlNightT'); if (nt && S[j]) nt.textContent = S[j].s;
     };
     
-    let mode = R && me.mode !== 'voice' ? 'actor' : 'voice', au = null, auRun = 0;
+    
+    const famOf = m => FR.find(r => 'fam:' + r.who === m);
+    let mode = famOf(me.mode) ? me.mode : me.mode === 'voice' ? 'voice' : me.mode === 'actor' && R ? 'actor' : FR.length ? 'fam:' + FR[0].who : R ? 'actor' : 'voice', au = null, auRun = 0;
     const finish = () => {
       playing = false; me.at = 0; me.done = 1; save();
       spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
       const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
     };
     const credit = () => { const c = $('#tlCr'); if (!c) return;
-      c.textContent = mode === 'actor' ? `🎙 Читает ${R.who}. Запись проекта LibriVox — общественное достояние (Public Domain).` : '🔊 Читает голос игры.';
+      const fr = famOf(mode);
+      c.textContent = fr ? `🏠 ${FREC.label(fr)}. Запись хранится только на этом телефоне.` : mode === 'actor' && R ? `🎙 Читает ${R.who}. Запись проекта LibriVox — общественное достояние (Public Domain).` : '🔊 Читает голос игры.';
       $$('#tlMode .chip').forEach(b => b.classList.toggle('sel', b.dataset.m === mode)); };
     
     
@@ -21032,7 +21458,23 @@ const TALES = (() => {
       }
       finish();
     }
-    function go() { return mode === 'actor' && R ? actorGo() : voiceGo(); }
+    
+    async function famGo() {
+      speakerOn(); const my = ++run; playing = true; btn();
+      if (at >= S.length) at = 0;
+      $('#tlEnd').hidden = true; credit();
+      const r = famOf(mode);
+      for (; at < S.length; at++) {
+        mark(at);
+        if (r.parts[at]) { const okp = await FREC.playPart(r, at); if (t !== tok || my !== run) return; if (!okp && !playing) return; }
+        else { await say(S[at].s); if (t !== tok || my !== run) return; }
+        const para = at + 1 < S.length && S[at + 1].pi !== S[at].pi;
+        await pause(para ? 600 : 160); if (t !== tok || my !== run) return;
+        if (at % 5 === 4) { me.at = at + 1; save(); }
+      }
+      finish();
+    }
+    function go() { return famOf(mode) ? famGo() : mode === 'actor' && R ? actorGo() : voiceGo(); }
     function stop() { run++; playing = false; hush(); me.at = at < S.length ? at : 0; save(); btn(); }
     const jump = j => { at = Math.max(0, Math.min(S.length - 1, j)); if (playing) { run++; hush(); go(); } else { mark(at); btn(); } };
     const toggle = () => playing ? stop() : go();
@@ -21045,7 +21487,8 @@ const TALES = (() => {
       $('#tlNightOv').onclick = e => { if (e.target.closest('#tlNightX')) { setNight(false); return; } toggle(); };
       if (!playing) go();
     }
-    if (R) {
+    const rb = $('#tlRec'); if (rb) rb.onclick = () => { sfx.pop(); stop(); recIt(); };
+    if (R || FR.length) {
       credit();
       $('#tlMode').onclick = e => {
         const b = e.target.closest('[data-m]'); if (!b || b.dataset.m === mode) return; sfx.pop();

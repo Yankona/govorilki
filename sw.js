@@ -1,7 +1,7 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
 // page kept under its own address. Icons and fonts come from the cache and refresh in the background.
-const CACHE = 'govorilki-v150';
+const CACHE = 'govorilki-v151';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './de/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -35,6 +35,8 @@ self.addEventListener('fetch', e => {
   }
   const font = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if (url.origin !== location.origin && !font) return;
+  // the actors' recordings of the audio tales (some MB each, played with Range requests): straight from the network / the browser's own cache
+  if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html')) {
     e.respondWith((async () => {
       const c = await caches.open(CACHE), page = url.pathname.replace(/index\.html$/, '');
