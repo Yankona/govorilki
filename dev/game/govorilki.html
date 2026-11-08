@@ -21215,7 +21215,9 @@ const MUSIC = (() => {
 (() => {
   const set = (id, grp, also = []) => { const x = GAMES.find(y => y.id === id); if (x) { x.grp = grp; x.also = also; } };
   set('tales', 2, [6]); set('bookshelf', 6, [2]);
-  ['code-abc', 'code-syl', 'dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  ['dots-abc', 'code-col', 'code-colw'].forEach(id => set(id, 2));
+  // the colouring by letters and by syllables: in «Учимся» and also in «Творим» next to the other colouring (the owner asked)
+  ['code-abc', 'code-syl'].forEach(id => set(id, 2, [4]));
   set('code-math', 3, [17]);
 })();
 /* LAYOUT-END */
