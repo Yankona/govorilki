@@ -1013,6 +1013,18 @@ b.r{color:var(--berry)}
 .hw-fridge .hw-dial{transform-origin:276px 103px;transition:transform .5s}
 .hw-fridge svg.run .hw-dial{transform:rotate(70deg)}
 /* PLANTS-CSS */
+.lf{align-items:center}
+.lf-fig{display:flex;justify-content:center;align-items:center;width:min(100%,260px);margin:0 auto;border-radius:24px;background:linear-gradient(#EAF6FF,#F7FBFF);box-shadow:0 5px 0 var(--line-strong);padding:8px}
+.lf-svg{width:min(34vh,220px);height:min(34vh,220px);display:block}
+.lf-swing{transform-origin:50px 96px;animation:lfSwing 3.6s ease-in-out infinite}
+@keyframes lfSwing{50%{transform:rotate(5deg)}}
+.lf-opts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}
+.lf-o{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1 1 90px;max-width:150px;padding:8px 6px;border:0;border-radius:22px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);font:800 17px var(--f-body);color:var(--ink);cursor:pointer}
+.lf-o:disabled{opacity:.55;cursor:default}
+.lf-o.right{opacity:1;background:var(--t-green);box-shadow:0 4px 0 var(--leaf),inset 0 0 0 3px var(--leaf)}
+.lf-o.hint{animation:bdBlink .7s ease-in-out infinite}
+.lf-crown{width:54px;height:54px}
+.pl-hub .card small{font:700 13px var(--f-body);color:var(--ink-soft)}
 .pl-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .pl-btns .big{flex:1 1 90px;font-size:17px;padding:12px 8px}
 .pl-btns .big.want{box-shadow:0 5px 0 #D39A00,inset 0 0 0 3px var(--sun)}
@@ -8376,7 +8388,7 @@ function screenLearn(k) {
   const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''}" data-i="${i}" style="--bg:${T.bg}">${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
   const st = shell(T.name, `<p class="lead">${Q() ? 'Читай вслух, а потом ответь на вопрос.' : 'Послушай историю и ответь на вопрос.'}</p>
     ${k === 'old' ? `<div class="prow-btns"><button class="big" id="oldQuiz">⏳ Что было раньше?</button></div>` : ''}
-    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : null });
+    ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : null });
   talk(Q() ? 'Выбери историю. Прочитай её вслух и ответь на вопрос.' : 'Выбери историю. Я расскажу, а ты ответишь на вопрос.');
   st.onclick = e => { if (e.target.closest('#oldQuiz')) { sfx.pop(); screenTimeline(); return; } const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
 }
@@ -12242,7 +12254,7 @@ const PLANTS = (() => {
         <div class="bd-side"><div class="bd-card" id="plCard"></div>
           <div class="pl-btns" id="plBtns"><button class="big" data-a="plant">🌰 Посадить</button><button class="big" data-a="water">💧 Полить</button><button class="big" data-a="sun">☀️ Солнышко</button></div>
           <div class="pl-steps" id="plSteps">${ST.slice(1).map((s, i) => `<span data-i="${i + 1}" title="${esc(s.n)}">${s.e}</span>`).join('')}</div></div></div>
-    </div>`);
+    </div>`, { back: hub });
     const sv = $('#plSvg'), card = $('#plCard'), btns = $('#plBtns');
     const fill = (h, text, ask) => { card.innerHTML = `<h2>${h}</h2><p class="no-said">${text}</p>${ask ? `<p class="pl-ask no-said">${ask}</p>` : ''}<button class="link-btn" id="plAgain">🔊 Послушать ещё раз</button>`; $('#plAgain').onclick = () => talk(text + (ask ? ' ' + ask : '')); };
     const paint = () => {
@@ -12280,7 +12292,7 @@ const PLANTS = (() => {
       const sp = talk(s.t + (ask ? ' ' + ask : ''));
       if (last) {
         await sp; if (t !== tok) return; await wait(600); if (t !== tok) return;
-        finish({ key: 'plants-grow', stars: 3, line: G('Ты вырастила дерево из семечка: корни, ствол, листья, цветы и яблоки!', 'Ты вырастил дерево из семечка: корни, ствол, листья, цветы и яблоки!'), again: () => grow(), menu: goHome });
+        finish({ key: 'plants-grow', stars: 3, line: G('Ты вырастила дерево из семечка: корни, ствол, листья, цветы и яблоки!', 'Ты вырастил дерево из семечка: корни, ствол, листья, цветы и яблоки!'), again: () => grow(), menu: hub });
       }
     };
     sv.addEventListener('click', e => {
@@ -12344,7 +12356,7 @@ const PLANTS = (() => {
       <div class="lab-tabs"><button class="chip ${learn ? 'sel' : ''}" data-m="learn">🔍 Узнать</button><button class="chip ${learn ? '' : 'sel'}" data-m="find">🎯 Найди</button></div>
       <div class="bd-main"><div class="bd-fig">${partsSvg()}</div>
         <div class="bd-side"><div class="bd-card" id="plCard"></div>${learn ? `<div class="bd-chips" id="plChips">${O.map(o => `<button class="chip" data-o="${o.k}"><i class="bd-dot" style="background:${o.c}"></i>${o.n}</button>`).join('')}</div>` : ''}</div></div>
-    </div>`);
+    </div>`, { back: hub });
     $('.pl-parts .lab-tabs').onclick = e => { const b = e.target.closest('[data-m]'); if (b && b.dataset.m !== mode) { sfx.pop(); parts(b.dataset.m); } };
     const sv = $('#plPSvg'), card = $('#plCard');
     const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
@@ -12364,7 +12376,7 @@ const PLANTS = (() => {
         await talk(o.t);
         if (t === tok && seen.size === O.length && !done && sv.dataset.on === k) {
           done = true;
-          finish({ key: 'plants-learn', stars: 3, line: G('Ты узнала про все части растения: корень, стебель, лист, цветок и плод! Теперь поиграй в «Найди».', 'Ты узнал про все части растения: корень, стебель, лист, цветок и плод! Теперь поиграй в «Найди».'), again: () => parts('learn'), next: () => parts('find'), menu: goHome });
+          finish({ key: 'plants-learn', stars: 3, line: G('Ты узнала про все части растения: корень, стебель, лист, цветок и плод! Теперь поиграй в «Найди».', 'Ты узнал про все части растения: корень, стебель, лист, цветок и плод! Теперь поиграй в «Найди».'), again: () => parts('learn'), next: () => parts('find'), menu: hub });
         }
       };
       sv.addEventListener('click', e => { const k = tapped(e); if (k) show(k); });
@@ -12392,7 +12404,7 @@ const PLANTS = (() => {
         await talk(line);
         if (t !== tok) return;
         i++;
-        if (i >= order.length) finish({ key: 'plants-find', stars: 3, line: G('Ты нашла все части растения!', 'Ты нашёл все части растения!'), again: () => parts('find'), menu: goHome });
+        if (i >= order.length) finish({ key: 'plants-find', stars: 3, line: G('Ты нашла все части растения!', 'Ты нашёл все части растения!'), again: () => parts('find'), menu: hub });
         else ask();
         return;
       }
@@ -12404,13 +12416,119 @@ const PLANTS = (() => {
     });
     ask();
   }
-  return { grow, parts };
+  // ---------- 3. guess the tree by its leaf ----------
+  // k, name, crown (type, colour), leaf colour, what to say after a right answer, a hint about the leaf's shape
+  const TR = [
+    { k: 'oak', n: 'Дуб', crown: ['wide', '#4E9A3B'], c: '#5FA83F', t: 'Это лист дуба. Края у него волнистые, как у облачка. Дуб живёт сотни лет, а плоды у него — жёлуди.', h: 'У этого листа волнистые края.' },
+    { k: 'maple', n: 'Клён', crown: ['bumpy', '#E0872B'], c: '#8BC34A', t: 'Это лист клёна — как ладошка с острыми пальцами. Осенью он становится жёлтым, оранжевым или красным. А семена у клёна летят, как маленькие вертолётики.', h: 'Этот лист похож на ладошку с острыми пальцами.' },
+    { k: 'birch', n: 'Берёза', crown: ['oval', '#7ED957'], c: '#7ED957', t: 'Это листок берёзы: треугольничек с зубчиками по краю. У берёзы белый ствол с тёмными чёрточками, его видно издалека.', h: 'Этот листок — треугольничек с зубчиками.' },
+    { k: 'linden', n: 'Липа', crown: ['round', '#3E9B4F'], c: '#4CAF50', t: 'Это листок липы — сердечко. Летом липа цветёт душистыми цветами, и к ней слетаются пчёлы.', h: 'Этот листок похож на сердечко.' },
+    { k: 'chestnut', n: 'Каштан', crown: ['candle', '#4F9A4A'], c: '#5DA35A', t: 'Это лист каштана: он похож на ладонь с семью пальцами. Осенью с каштана падают блестящие коричневые каштаны в колючей зелёной кожуре.', h: 'Этот лист похож на ладонь с несколькими пальцами.' },
+    { k: 'willow', n: 'Ива', crown: ['weep', '#9CCB5B'], c: '#9CCB5B', t: 'Это листья ивы: узкие и длинные, как лодочки. Ива любит воду и растёт у рек и прудов. Её гибкие ветки свисают до самой воды.', h: 'Эти листья узкие и длинные, как лодочки.' },
+    { k: 'spruce', n: 'Ель', crown: ['cone', '#2E7D4F'], c: '#2E7D4F', t: 'Это ветка ели. У ели вместо листьев колючие иголки, и они зелёные круглый год. Шишки у ели висят вниз.', h: 'Это колючая веточка с иголками.' },
+    { k: 'rowan', n: 'Рябина', crown: ['berry', '#66BB6A'], c: '#66BB6A', t: 'Это лист рябины: на одной веточке сидит много маленьких листочков. Осенью на рябине краснеют ягоды, и птицы их клюют.', h: 'На этой веточке много маленьких листочков.' }
+  ];
+  const poly = pts => 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L') + ' Z';
+  const lanceL = (L, w) => `M0,0 C${-w},${-L * .3} ${-w},${-L * .75} 0,${-L} C${w},${-L * .75} ${w},${-L * .3} 0,0Z`;
+  const lf = (d, col, extra = '') => `<path d="${d}" fill="${col}" stroke="rgba(0,0,0,.35)" stroke-width="1.8" stroke-linejoin="round" ${extra}/>`;
+  const VEIN = 'stroke="rgba(0,0,0,.28)" stroke-width="1.6" stroke-linecap="round" fill="none"';
+  const leafArt = t => {
+    const c = t.c, stem = (y0, y1) => `<path d="M50,${y0} L50,${y1}" stroke="#7A5A2E" stroke-width="3.4" stroke-linecap="round"/>`;
+    if (t.k === 'oak') {
+      const pts = []; for (let a = 0; a < 6.2832; a += .1) pts.push([50 + 22 * Math.sin(a) * (1 + .2 * Math.sin(8 * a)), 48 - 38 * Math.cos(a) * (1 + .12 * Math.sin(8 * a))]);
+      return stem(84, 98) + lf(poly(pts), c) + `<path d="M50,84 L50,16 M50,64 L34,52 M50,64 L66,52 M50,44 L38,34 M50,44 L62,34" ${VEIN}/>`;
+    }
+    if (t.k === 'maple') return stem(76, 98) + lf('M50,8 L58,28 L72,20 L68,40 L92,38 L76,54 L86,68 L60,66 L54,76 L50,76 L46,76 L40,66 L14,68 L24,54 L8,38 L32,40 L28,20 L42,28 Z', c) + `<path d="M50,76 L50,16 M50,70 L20,66 M50,70 L80,66 M50,52 L16,40 M50,52 L84,40" ${VEIN}/>`;
+    if (t.k === 'birch') {
+      const L = [], R = [];
+      for (let y = 84, i = 0; y >= 8; y -= 3, i++) { const p = (84 - y) / 76, w = 36 * Math.pow(Math.sin(Math.PI * Math.pow(p, .75)), .9) * (i % 2 ? 1.09 : .97); L.push([50 - w, y]); R.unshift([50 + w, y]); }
+      return stem(84, 98) + lf(poly([...L, ...R]), c) + `<path d="M50,84 L50,12 M50,66 L30,56 M50,66 L70,56 M50,46 L36,36 M50,46 L64,36" ${VEIN}/>`;
+    }
+    if (t.k === 'linden') return stem(80, 98) + lf('M50,10 C70,30 90,48 80,70 C72,86 56,88 50,80 C44,88 28,86 20,70 C10,48 30,30 50,10Z', c) + `<path d="M50,80 L50,18 M50,66 L30,54 M50,66 L70,54 M50,44 L38,34 M50,44 L62,34" ${VEIN}/>`;
+    if (t.k === 'chestnut') {
+      const A = [-72, -48, -24, 0, 24, 48, 72], Ls = [30, 36, 40, 44, 40, 36, 30];
+      return stem(74, 98) + A.map((a, i) => `<g transform="translate(50 74) rotate(${a})">${lf(lanceL(Ls[i], 7.5), c)}<path d="M0,-2 L0,${-Ls[i] + 6}" ${VEIN}/></g>`).join('');
+    }
+    if (t.k === 'willow') return [-22, 0, 22].map(a => `<g transform="translate(50 95) rotate(${a})">${lf(lanceL(88, 7), c)}<path d="M0,-4 L0,-78" ${VEIN}/></g>`).join('');
+    if (t.k === 'spruce') {
+      let s = `<path d="M50,98 L50,8" stroke="#7A5A2E" stroke-width="4" stroke-linecap="round"/><g stroke="${c}" stroke-width="3.4" stroke-linecap="round">`;
+      for (let y = 88; y > 14; y -= 6) { const l = 8 + Math.min(18, (y - 12) * .28); s += `<path d="M50,${y} L${50 - l},${y - 9} M50,${y} L${50 + l},${y - 9}"/>`; }
+      return s + '</g>';
+    }
+    // rowan: a twig with pairs of small leaflets
+    return `<path d="M50,98 L50,12" stroke="#7A5A2E" stroke-width="3.4" stroke-linecap="round"/>` + [80, 62, 44, 28].map(y => [-62, 62].map(a => `<g transform="translate(50 ${y}) rotate(${a})">${lf(lanceL(24, 6.5), c)}<path d="M0,-2 L0,-19" ${VEIN}/></g>`).join('')).join('') + `<g transform="translate(50 14)">${lf(lanceL(22, 6.5), c)}</g>`;
+  };
+  const leafSvg = t => `<svg viewBox="0 0 100 100" class="lf-svg" role="img" aria-label="${esc('Листочек')}"><g class="lf-swing">${leafArt(t)}</g></svg>`;
+  const crownSvg = t => {
+    const [ty, c] = t.crown, trunk = t.k === 'birch' ? `<rect x="27" y="36" width="6" height="22" rx="2" fill="#F4F1EA" stroke="#B9B2A3" stroke-width="1"/><path d="M28,42 h3 M29,48 h3 M28,54 h3" stroke="#3B2A4A" stroke-width="1.6"/>` : `<rect x="27" y="36" width="6" height="22" rx="2" fill="#8B5A2B"/>`;
+    let s = '';
+    if (ty === 'wide') s = `<ellipse cx="30" cy="26" rx="25" ry="17" fill="${c}"/><circle cx="14" cy="30" r="9" fill="${c}"/><circle cx="46" cy="30" r="9" fill="${c}"/>`;
+    else if (ty === 'bumpy') s = `<circle cx="30" cy="22" r="14" fill="${c}"/><circle cx="18" cy="32" r="11" fill="${c}"/><circle cx="42" cy="32" r="11" fill="${c}"/>`;
+    else if (ty === 'oval') s = `<ellipse cx="30" cy="24" rx="13" ry="22" fill="${c}"/>`;
+    else if (ty === 'round') s = `<circle cx="30" cy="26" r="21" fill="${c}"/>`;
+    else if (ty === 'candle') s = `<circle cx="30" cy="26" r="21" fill="${c}"/>${[[22, 16], [36, 14], [30, 26], [20, 32], [40, 30]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#FFF"/>`).join('')}`;
+    else if (ty === 'weep') s = `<ellipse cx="30" cy="16" rx="22" ry="11" fill="${c}"/>${[10, 16, 22, 30, 38, 44, 50].map(x => `<path d="M${x},18 q-3,16 0,28" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round"/>`).join('')}`;
+    else if (ty === 'cone') return `<svg viewBox="0 0 60 60" class="lf-crown" aria-hidden="true"><rect x="27" y="46" width="6" height="12" rx="2" fill="#8B5A2B"/><path d="M30,2 L44,22 H36 L48,38 H38 L52,52 H8 L22,38 H12 L24,22 H16Z" fill="${c}"/></svg>`;
+    else s = `<circle cx="30" cy="26" r="19" fill="${c}"/>${[[22, 20], [36, 18], [30, 30], [20, 32], [40, 31]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#E5484D"/>`).join('')}`;
+    return `<svg viewBox="0 0 60 60" class="lf-crown" aria-hidden="true">${ty === 'weep' ? '' : trunk}${ty === 'weep' ? trunk : ''}${s}</svg>`;
+  };
+  function leaves() {
+    const t = newScreen(), N = 6, order = shuffle(TR).slice(0, N);
+    let i = 0, miss = 0, busy = false, first = 0;
+    shell('Угадай дерево', `<div class="bd lf"><div class="lf-fig" id="lfFig"></div><div class="bd-card" id="lfCard"></div><div class="lf-opts" id="lfOpts"></div></div>`, { back: hub });
+    const fig = $('#lfFig'), card = $('#lfCard'), opts = $('#lfOpts');
+    const fill = html => { card.innerHTML = html; card.querySelectorAll('p').forEach(p => p.classList.add('no-said')); };
+    const ask = () => {
+      const tr = order[i]; miss = 0; busy = false;
+      fig.innerHTML = leafSvg(tr);
+      opts.innerHTML = shuffle([tr, ...shuffle(TR.filter(x => x !== tr)).slice(0, 2)]).map(o => `<button class="lf-o" data-k="${o.k}">${crownSvg(o)}<b>${o.n}</b></button>`).join('');
+      fill(`<h2>🍃 Какое это дерево?</h2><p>Посмотри на листочек и выбери дерево.</p><div class="bd-prog">${order.map((_, j) => `<i class="${j < i ? 'ok' : ''}"></i>`).join('')}</div>`);
+      talk('Какое это дерево? Посмотри на листочек.');
+    };
+    opts.onclick = async e => {
+      const b = e.target.closest('.lf-o'); if (!b || busy || b.disabled) return;
+      const tr = order[i];
+      if (b.dataset.k !== tr.k) {
+        miss++; b.disabled = true; wiggle(b); tone(330, .15, 'sine', .08);
+        if (miss >= 2) { const r = $(`.lf-o[data-k="${tr.k}"]`, opts); if (r) r.classList.add('hint'); }
+        const line = miss >= 2 ? tr.h + ' Смотри, где мигает!' : 'Не он. Посмотри на листочек ещё раз!';
+        card.querySelector('p').textContent = line; talk(line); return;
+      }
+      busy = true; if (!miss) first++;
+      sfx.good(); b.classList.add('right'); hopEl(b); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top);
+      $$('.lf-o', opts).forEach(x => { x.disabled = true; });
+      const line = `${pickOne(['Правильно!', 'Да, верно!', 'Точно!'])} ${tr.t}`;
+      fill(`<h2>${tr.n}</h2><p>${line}</p><div class="prow-btns"><button class="big" id="lfNext">${i + 1 < N ? 'Дальше →' : 'Готово'}</button></div>`);
+      $('#lfNext').onclick = () => { sfx.pop(); next(); };
+      await talk(line);
+    };
+    const next = () => {
+      i++;
+      if (i >= N) finish({ key: 'plants-leaves', stars: first >= 5 ? 3 : first >= 3 ? 2 : 1, line: G('Ты узнала деревья по листочкам!', 'Ты узнал деревья по листочкам!'), again: () => leaves(), menu: hub });
+      else ask();
+    };
+    ask();
+  }
+
+  // ---------- the one tile: «Растения» ----------
+  function hub() {
+    newScreen();
+    const st = LEARN.plants.items.length;
+    const cards = [['grow', '🌱', 'Вырасти дерево', 'var(--t-green)', 'семечко → яблоки'], ['parts', '🌿', 'Части растения', 'var(--t-mint)', 'корень, стебель, лист…'], ['leaves', '🍃', 'Угадай дерево', 'var(--t-yellow)', 'по листочку'],
+      ...(st ? [['stories', '🌳', 'Удивительные растения', 'var(--t-peach)', learnProg('plants')]] : [])];
+    const s = shell('Растения', `<p class="lead">Выбери, во что поиграть.</p><div class="cards pl-hub">${cards.map(([k, e, n, bg, sub]) => `<button class="card" data-a="${k}" style="--bg:${bg}">${pic(e)}<span>${n}</span><small>${sub}</small></button>`).join('')}</div>`);
+    talk('Давай узнаем про растения! Выбери, во что поиграть.');
+    s.onclick = e => {
+      const c = e.target.closest('[data-a]'); if (!c) return; sfx.pop();
+      ({ grow, parts: () => parts(), leaves, stories: () => screenLearn('plants') })[c.dataset.a]();
+    };
+  }
+  return { grow, parts, leaves, hub };
 })();
-GAMES.push(
-  { id: 'plant-grow', name: 'Вырасти дерево', sub: 'семечко → корни → листья → яблоки', ico: () => pic('🌱'), bg: 'var(--t-green)', go: () => PLANTS.grow(), grp: 10, kw: 'растения дерево семечко вырастить яблоня листья корень природа' },
-  { id: 'plant-parts', name: 'Части растения', sub: 'корень, стебель, лист, цветок, плод', ico: () => pic('🌿'), bg: 'var(--t-mint)', go: () => PLANTS.parts(), grp: 10, kw: 'растения корень стебель лист цветок плод ботаника природа' });
-{ const g = GAMES.find(x => x.id === 'learn-plants'); if (g) g.hide = () => !LEARN.plants.items.length; }
-{ const nc = INTEREST_CAT.find(c => c.id === 'nature-cat'), pl = nc && (nc.items || []).find(it => it.id === 'plants'); if (pl && pl.tiles) ['plant-grow', 'plant-parts', 'learn-plants'].forEach(x => { if (!pl.tiles.includes(x)) pl.tiles.push(x); }); }
+GAMES.push({ id: 'plants', name: 'Растения', sub: 'вырасти дерево, части растения, листочки, истории', ico: () => pic('🌱'), bg: 'var(--t-green)', go: () => PLANTS.hub(), grp: 10, prog: () => LEARN.plants.items.length ? learnProg('plants') : '',
+  kw: 'растения дерево семечко вырастить яблоня листья лист листочек корень стебель цветок плод ботаника природа дуб клён берёза ель' });
+{ const g = GAMES.find(x => x.id === 'learn-plants'); if (g) g.hide = () => true; }  // the stories live inside the «Растения» tile
+{ const nc = INTEREST_CAT.find(c => c.id === 'nature-cat'), pl = nc && (nc.items || []).find(it => it.id === 'plants'); if (pl && pl.tiles) ['plants'].forEach(x => { if (!pl.tiles.includes(x)) pl.tiles.push(x); }); }
 /* PLANTS-END */
 /* SPACE-BEGIN */
 /* ---------- «Космос»: the Sun and eight planets drawn in SVG (original drawing, not to scale: the order and which is
