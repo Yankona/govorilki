@@ -58,11 +58,15 @@ const said = p => p.evaluate(() => { const a = window.__said.join(' / '); window
     await p.click('#surpBtn'); await p.waitForTimeout(1200);
     const sh = await p.evaluate(() => ({ h1: (document.querySelector('.bar h1') || {}).textContent, home: !!document.querySelector('#tabBar'), trail: !!document.querySelector('.ls-trail') }));
     ok(sh.h1 && !sh.home && !sh.trail, `${T} the surprise opened «${sh.h1}» (no lesson trail outside a lesson)`);
-    // a right answer in a «Говорим» game: stars out of the friend
-    await run(p, "sfx.good()"); await p.waitForTimeout(150);
-    ok(await p.$('.fsp span'), `${T} a right answer sends stars out of the friend`);
     // the round's pips (house is in every language)
     await run(p, "screenHouse()"); await p.waitForTimeout(900);
+    // a right answer in a «Говорим» game: stars out of the friend (the surprise game above may have no friend)
+    await run(p, "sfx.good()"); await p.waitForTimeout(150);
+    ok(await p.$('.fsp span'), `${T} a right answer sends stars out of the friend`);
+    // a game with its own star burst at the answer gets only that one
+    await p.waitForTimeout(1300);
+    await run(p, "sfx.good(); burst(100, 100)"); await p.waitForTimeout(150);
+    ok(!(await p.$('.fsp span')) && await p.$('.burst'), `${T} with the game's own burst: no second celebration`);
     const rd = await p.evaluate(() => ({ n: document.querySelectorAll('#gstrip .rd i').length, cur: document.querySelectorAll('#gstrip .rd i.cur').length }));
     ok(rd.n >= 5 && rd.cur === 1, `${T} «Где живёт звук»: ${rd.n} round pips, one current`);
     if (DEV === 'phone') await p.screenshot({ path: `${SHOTS}/${lang}-${DEV}-house.png` });
