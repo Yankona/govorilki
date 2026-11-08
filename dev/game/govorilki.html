@@ -13816,6 +13816,9 @@ INTEREST_CAT.forEach(cat => (cat.items || []).forEach(i => { if (Array.isArray(i
 // children: their numbers and their game; adults (grandparents, mum, dad…): when they last opened their link, their link,
 // and their screen exactly as they see it, in a preview that sends nothing and does not tie this phone to them
 var PREVIEW = null, PG_KEY = null;
+// a grown-up opened a child's game from the panel: games open with one tap (no «name first» for little ones)
+// until the phone is handed over through «Кто играет?» (v146)
+var ADULT_HOME = false;
 const PV_KEYS = [GPROG_KEY, GOUT_KEY, HG_KEY, 'govorilki-guest-here'];
 const pinHash = s => { let h = 5381; for (const c of 'govorilki-pult:' + s) h = (h * 33 + c.charCodeAt(0)) >>> 0; return h.toString(36); };
 function pultOpen() { if (ROOT.parentPhone) return true; try { return !!ROOT.pultPin && sessionStorage.getItem('govorilki-pult') === ROOT.pultPin; } catch (e) { return false; } }
@@ -13904,7 +13907,7 @@ function screenPult() {
     if (sl) { sfx.pop(); semShare(ROOT.families[sl.dataset.semlink], document.getElementById('pvsem-' + sl.dataset.semlink)); return; }
     if (sa) { sfx.tick(); ROOT.startAt = sa.dataset.start; save(); $$('[data-start]').forEach(x => { x.classList.toggle('sel', x === sa); x.setAttribute('aria-pressed', x === sa); }); return; }
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents(); return; }
-    if (k) { sfx.pop(); useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
+    if (k) { sfx.pop(); ADULT_HOME = true; useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
     if (a) { sfx.pop(); useFamily(a.dataset.add); P = ROOT.profiles[ROOT.cur] || P; famPeople(); save(); screenFamilyEdit(a.dataset.add); return; }
     if (l) {
@@ -20412,7 +20415,7 @@ const POLISH = (() => {
     st.addEventListener('click', e => {
       if (!document.body.classList.contains('young') || !$('#tabBar')) return;
       // a grandparent playing the child's games reads: one tap opens the game (v146)
-      if (GPLAY || (GUEST && GUEST_OFF && ROOT.curFam === 'gk')) return;
+      if (GPLAY || ADULT_HOME || (GUEST && GUEST_OFF && ROOT.curFam === 'gk')) return;
       const t = e.target.closest('.tile'); if (!t || !st.contains(t) || !t.closest('.tiles')) return;
       if (ARM && ARM.el === t && Date.now() - ARM.at < 10000) { ARM = null; t.classList.remove('tl-armed'); return; }
       e.preventDefault(); e.stopImmediatePropagation();
@@ -21481,7 +21484,7 @@ function whoEnter(fid, kid, here) {
 }
 const whoKid = (f, id) => { const st = ROOT.profiles[id].settings; return `<button class="who-kid" data-who="${id}" data-fam="${f.id}"><span class="who-face">${kidFace(id)}</span><b>${esc(st.label || st.name || '…')}</b><small>⭐ ${ROOT.profiles[id].stars || 0}</small></button>`; };
 function screenWho(fid) {
-  newScreen(); document.body.classList.remove('quest');
+  ADULT_HOME = false; newScreen(); document.body.classList.remove('quest');
   const fams = whoFams();
   if (!fams.length) { goHome(); return; }
   whoLangs();

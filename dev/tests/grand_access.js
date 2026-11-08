@@ -2,9 +2,10 @@
 // A) «👵 Бабушка или дедушка хочет поиграть» on the child's phone (GPLAY, «не в зачёт»);
 // B) the grandparent's own phone from the family link #vhod=… → «Открыть игру внуков» (the grandchild; «Все игры сразу»);
 // C) the who-plays screen of the child's phone → the grandmother's own screen → her grandchild's games;
-// D) the parent's preview of the grandmother's screen → «Открыть игру внуков».
+// D) the parent's preview of the grandmother's screen → «Поиграть в тесте» → her grandchild's games;
+// E) the parent's panel → a child (Тина 5, Тим 9) → the child's game, opened by a grown-up.
 // Fails on a tile that does not open, a tile the child has and the grandparent does not, or any page error.
-// Invented family only: бабушка Тома, Тина. node tests/grand_access.js [base] [phone|laptop] [langs=ru,en,pt,de]
+// Invented family only: бабушка Тома, Тина, Тим. node tests/grand_access.js [base] [phone|laptop] [langs=ru,en,pt,de]
 const { chromium, devices } = require('playwright');
 const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = process.argv[3] || 'phone';
 const ONLY = (process.argv[4] || 'ru,en,pt,de').split(',');
@@ -13,8 +14,8 @@ const LANGS = { ru: 'ru/', en: '', pt: 'pt/', de: 'de/' };
 const FAMCODE = 'tinafam0123456';
 const kid = (name, g, age, fr, lang) => ({ stars: 5, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: 'r', age, friend: fr, onboarded: true, lang } });
 const seedOf = lang => ({ engine: 'device', micOff: true, srOff: true, parentPhone: true, cur: 'k1', curFam: 'f1',
-  families: { f1: { id: 'f1', name: 'Т', cc: 'PT', code: FAMCODE, kids: ['k1'], grands: [{ id: 'toma', name: 'бабушка Тома', she: true, role: 'gm' }] } },
-  profiles: { k1: kid('Тина', 'f', 6, 'kitty', lang) } });
+  families: { f1: { id: 'f1', name: 'Т', cc: 'PT', code: FAMCODE, kids: ['k1', 'k2'], grands: [{ id: 'toma', name: 'бабушка Тома', she: true, role: 'gm' }] } },
+  profiles: { k1: kid('Тина', 'f', 5, 'kitty', lang), k2: kid('Тим', 'm', 9, 'tiger', lang) } });
 const ev = (p, s) => p.evaluate(s => window.__T.run(s), s);
 // all tiles of every home tab as the current profile sees them
 const tilesNow = p => ev(p, `(() => { const out = {}, keep = P.homeTab; for (const t of HOME_TABS) { P.homeTab = t.id; HOME_POS = null; goHome();
@@ -72,6 +73,18 @@ const NOT_FOR_GROWNUPS = ['chess-mm'];
     if (!(await ev(S.p, '!!GPLAY'))) bad.push('A: GPLAY did not start');
     let w = await walk(S.p, 'A', S.errs, bad); missing('A', w.tabs); info.push(`A ${w.n}`);
     if (await ev(S.p, 'ROOT.profiles.k1.stars !== 5')) bad.push('A: the child\'s stars changed');
+    // E) the parent's panel (👑 «Как дела у всех») → a child's row → that child's game, opened by a grown-up
+    await ev(S.p, 'gplayStop()');
+    for (const k of ['k1', 'k2']) {
+      await ev(S.p, 'screenPult()'); await S.p.waitForTimeout(300);
+      const row = await S.p.$(`[data-kid="${k}"]`);
+      if (!row) { bad.push(`E: no ${k} in the panel`); continue; }
+      await row.click(); await S.p.waitForTimeout(400);
+      w = await walk(S.p, 'E-' + k, S.errs, bad); info.push(`E-${k} ${w.n}`);
+    }
+    await ev(S.p, 'screenWho()'); await S.p.waitForTimeout(200);
+    if (await ev(S.p, 'ADULT_HOME')) bad.push('E: «Кто играет?» did not hand the phone back to the children');
+    await ev(S.p, 'switchKid("k1")');
     // C) who-plays → the grandmother's own screen → her grandchild's games
     await ev(S.p, 'gplayStop(); whoAdult("f1", "toma")'); await S.p.waitForTimeout(400);
     if (!(await S.p.$('#gKids'))) bad.push('C: no grandmother screen');
