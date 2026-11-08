@@ -50,7 +50,8 @@ every point they raised. Screenshots and screen videos from the owner show real 
   often wrong (accept names only); isolated words sound muddy in Piper (say a colour inside a phrase).
 
 ## Hard rules
-- Children's privacy: tests and fixtures use invented children only (Тина, Тоша, Тим). No real children's names,
+- Children's privacy: tests and fixtures use invented children only (Тина, Тоша, Тим). The first names already in the code
+  (the default family) stay — the owner decided so on 08.11; add no new personal details. No real children's names,
   photos, voices or videos in code, tests, commits or the public repo. Toy photos stay on the phone. Online chess is
   anonymous with no chat.
 - Secrets live only in GitHub secrets (`CLOUDFLARE_API_TOKEN`). Never ask for, print or commit them. Never log into the
