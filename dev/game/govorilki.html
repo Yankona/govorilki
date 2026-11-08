@@ -1570,6 +1570,7 @@ body.quest .fam-ok{color:#7BE0A0}
 .mc-face{width:80%;aspect-ratio:1}.mc-face svg{width:100%;height:100%}
 .mc-st{position:absolute;font-style:normal;font-size:18px}.mc-st.s1{top:6px;left:8px}.mc-st.s2{bottom:6px;right:8px}.mc-st.s3{top:6px;right:8px;font-size:15px}
 .mc-front{transform:rotateY(180deg);background:#222}.mc-front img{width:100%;height:100%;object-fit:cover;display:block}
+.fm-front{background:#fff;display:grid;place-items:center;padding:6px}.fm-svg{width:100%;height:auto;aspect-ratio:3/2;display:block;border-radius:8px;box-shadow:0 0 0 2px rgba(0,0,0,.12)}
 .mc.done .mc-front{box-shadow:0 0 0 4px var(--leaf),0 4px 0 rgba(0,0,0,.18)}
 .mc.done .mc-in{animation:mcpop .5s ease-out}@keyframes mcpop{50%{transform:rotateY(180deg) scale(1.08)}}
 .mem-toast{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);margin:0;padding:10px 14px;border-radius:16px;background:rgba(30,26,46,.9);color:#fff;font:800 16px/1.35 var(--f-body);text-align:center;z-index:20}
@@ -11189,10 +11190,10 @@ async function artStory(x) {
 function screenMuseum(tab = 'day', arg = null) {
   const t = newScreen(), my = artMy();
   shell('Музей мира', `<div class="art">
-      <div class="art-tabs" id="artTabs">${[['day', '🖼️ Картина дня'], ['how', '👀 Как смотреть'], ['mus', '🏛️ Музеи'], ['who', '🎨 Художники'], ['my', '❤️ Мой музей'], ['quiz', '🎯 Викторина'], ['mem', '🃏 Мемори']].map(([k, n]) => `<button class="chip ${k === tab ? 'sel' : ''}" data-tab="${k}">${n}</button>`).join('')}</div>
+      <div class="art-tabs" id="artTabs">${[['day', '🖼️ Картина дня'], ['how', '👀 Как смотреть'], ['mus', '🏛️ Музеи'], ['who', '🎨 Художники'], ['my', '❤️ Мой музей'], ['quiz', '🎯 Викторина']].map(([k, n]) => `<button class="chip ${k === tab ? 'sel' : ''}" data-tab="${k}">${n}</button>`).join('')}</div>
       <div id="artBox"><p class="lead">Открываю музей…</p></div>
     </div>`);
-  $('#artTabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (!b) return; sfx.pop(); if (b.dataset.tab === 'quiz') screenArtQuiz(); else if (b.dataset.tab === 'mem') screenArtMemory(); else screenMuseum(b.dataset.tab); };
+  $('#artTabs').onclick = e => { const b = e.target.closest('[data-tab]'); if (!b) return; sfx.pop(); if (b.dataset.tab === 'quiz') screenArtQuiz(); else screenMuseum(b.dataset.tab); };
   artLoad().then(D => {
     if (t !== tok) return;
     const box = $('#artBox'), P2 = D.p;
@@ -11370,46 +11371,73 @@ function screenArtLook(x, back) {
   };
   show();
 }
-// memory with paintings: open two cards, find the pairs
-function screenArtMemory(size) {
+/* FLAGMEM-BEGIN */
+// memory with flags (in «Узнавай»): open two cards, find the same flag; the voice names the country
+const FLAG_SVG = (() => {
+  const R = (y, h, c) => `<rect y="${y}" width="30" height="${h}" fill="${c}"/>`, V = (x, w, c) => `<rect x="${x}" width="${w}" height="20" fill="${c}"/>`;
+  const H3 = (a, b, c) => R(0, 6.67, a) + R(6.67, 6.67, b) + R(13.33, 6.67, c), V3 = (a, b, c) => V(0, 10, a) + V(10, 10, b) + V(20, 10, c);
+  const star = (cx, cy, r, c) => `<polygon fill="${c}" points="${[0, 1, 2, 3, 4].map(i => { const t = (i * 144 - 90) * Math.PI / 180; return (cx + r * Math.cos(t)).toFixed(2) + ',' + (cy + r * Math.sin(t)).toFixed(2); }).join(' ')}"/>`;
+  const stripes = Array.from({ length: 7 }, (_, i) => R(i * 20 / 7, 20 / 7, i % 2 ? '#fff' : '#B22234')).join('');
+  return {
+    RU: H3('#fff', '#0039A6', '#D52B1E'),
+    DE: H3('#000', '#DD0000', '#FFCE00'),
+    NL: H3('#AE1C28', '#fff', '#21468B'),
+    FR: V3('#0055A4', '#fff', '#EF4135'),
+    IT: V3('#009246', '#fff', '#CE2B37'),
+    UA: R(0, 10, '#0057B7') + R(10, 10, '#FFD700'),
+    PL: R(0, 10, '#fff') + R(10, 10, '#DC143C'),
+    ES: R(0, 20, '#AA151B') + R(5, 10, '#F1BF00'),
+    PT: V(0, 12, '#006600') + V(12, 18, '#FF0000') + '<circle cx="12" cy="10" r="4.2" fill="#FFE000" stroke="#fff" stroke-width=".8"/><circle cx="12" cy="10" r="2" fill="#FF0000"/>',
+    JP: R(0, 20, '#fff') + '<circle cx="15" cy="10" r="6" fill="#BC002D"/>',
+    SE: R(0, 20, '#006AA7') + V(9, 4, '#FECC00') + R(8, 4, '#FECC00'),
+    CH: R(0, 20, '#D52B1E') + '<rect x="13" y="4" width="4" height="12" fill="#fff"/><rect x="9" y="8" width="12" height="4" fill="#fff"/>',
+    CN: R(0, 20, '#DE2910') + star(5, 5, 3, '#FFDE00') + star(10, 2.2, 1, '#FFDE00') + star(12, 4.4, 1, '#FFDE00') + star(12, 7.4, 1, '#FFDE00') + star(10, 9.6, 1, '#FFDE00'),
+    BR: R(0, 20, '#009C3B') + '<polygon points="15,2 27,10 15,18 3,10" fill="#FFDF00"/><circle cx="15" cy="10" r="4.4" fill="#002776"/>',
+    GB: R(0, 20, '#012169') + '<path d="M0 0L30 20M30 0L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0L30 20M30 0L0 20" stroke="#C8102E" stroke-width="1.6"/>' + V(12, 6, '#fff') + R(7, 6, '#fff') + V(13, 4, '#C8102E') + R(8, 4, '#C8102E'),
+    US: R(0, 20, '#fff') + stripes + '<rect width="13" height="10.8" fill="#3C3B6E"/>' + Array.from({ length: 12 }, (_, i) => `<circle cx="${2 + (i % 4) * 3}" cy="${2 + Math.floor(i / 4) * 3}" r=".7" fill="#fff"/>`).join(''),
+    CA: V(0, 7.5, '#D52B1E') + V(7.5, 15, '#fff') + V(22.5, 7.5, '#D52B1E') + '<polygon points="15,3.5 16.4,7 19,6.2 18,10.2 20,10 16,13.4 16,16.5 14,16.5 14,13.4 10,10 12,10.2 11,6.2 13.6,7" fill="#D52B1E"/>'
+  };
+})();
+const FLAG_ORDER = ['RU', 'PT', 'DE', 'ES', 'FR', 'IT', 'GB', 'US', 'JP', 'CN', 'BR', 'NL', 'UA', 'PL', 'SE', 'CH', 'CA'];
+const flagSVG = cc => `<svg class="fm-svg" viewBox="0 0 30 20" aria-hidden="true">${FLAG_SVG[cc] || ''}</svg>`;
+function screenFlagMemory(size) {
   const t = newScreen();
-  size = size || (Q() ? 8 : 4);
-  const cols = size === 4 ? 2 : size === 6 ? 3 : 4, back = () => screenMuseum();
+  const wins = (P.flagMem && P.flagMem.w) || 0;
+  size = size || (wins >= 6 ? 8 : wins >= 4 ? 6 : wins >= 2 ? 4 : 3);
+  const cols = size <= 4 ? 2 : size === 6 ? 3 : 4, back = () => goHome();
   document.body.classList.toggle('quest', Q());
   app.innerHTML = `<div class="screen mem"><div class="mem-bar">
       <button class="ibtn" id="memBack" aria-label="Назад">${ICON.back}</button>
-      <div class="mem-n"><span>🃏 <b id="amP">0</b>/${size}</span><span>👣 <b id="amM">0</b></span></div>
-      <div class="mem-sz" id="amLv">${[4, 6, 8].map(n => `<button class="${n === size ? 'sel' : ''}" data-n="${n}" aria-label="${n * 2}">${n * 2}</button>`).join('')}</div>
+      <div class="mem-n"><span>🚩 <b id="amP">0</b>/${size}</span><span>👣 <b id="amM">0</b></span></div>
+      <div class="mem-sz" id="amLv">${[3, 4, 6, 8].map(n => `<button class="${n === size ? 'sel' : ''}" data-n="${n}" aria-label="${n * 2}">${n * 2}</button>`).join('')}</div>
     </div>
     <div class="mem-grid" id="amG" style="--cols:${cols};--rows:${size * 2 / cols}"></div>
     <p class="mem-toast" id="amOut" hidden></p></div>`;
   navEnter(back);
   $('#memBack').onclick = () => { sfx.pop(); back(); };
-  $('#amLv').onclick = e => { const b = e.target.closest('[data-n]'); if (b) { sfx.pop(); screenArtMemory(+b.dataset.n); } };
-  const backFace = `<span class="mc-back"><span class="mc-frame"><span class="mc-face">${friendSVG()}</span></span><i class="mc-st s1">⭐</i><i class="mc-st s2">✨</i><i class="mc-st s3">🎨</i></span>`;
-  artLoad().then(D => {
-    if (t !== tok) return;
-    const pics = sample(D.p.slice(0, 150), size), cards = sample([...pics, ...pics].map((x, i) => ({ x, i })), size * 2);
-    let open = [], moves = 0, pairs = 0, busy = false, toastT = 0;
-    $('#amG').innerHTML = cards.map((c, j) => `<button class="mc" data-j="${j}" aria-label="${j + 1}"><span class="mc-in">${backFace}<span class="mc-front"><img src="${artImg(c.x.f, 330)}" alt=""></span></span></button>`).join('');
-    talk('Мемори! Открывай по две карты и ищи одинаковые картины.');
-    const toast = txt => { const o = $('#amOut'); if (!o) return; o.textContent = txt; o.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { if (o) o.hidden = true; }, 2600); };
-    $('#amG').onclick = e => {
-      const b = e.target.closest('.mc'); if (!b || busy || b.classList.contains('up')) return;
-      b.classList.add('up'); sfx.tick(); open.push(b);
-      if (open.length < 2) return;
-      moves++; $('#amM').textContent = moves; busy = true;
-      const [a, c] = open, x = cards[+a.dataset.j].x;
-      if (x === cards[+c.dataset.j].x) {
-        later(() => { a.classList.add('done'); c.classList.add('done'); }, 350);
-        pairs++; $('#amP').textContent = pairs; sfx.good(); open = []; busy = false;
-        toast(`«${x.t}»${x.a ? ' — ' + x.a : ''}`); say(`«${x.t}».`);
-        const my = artMy(); if (!my.seen.includes(x.q)) { my.seen.push(x.q); save(); }
-        if (pairs === size) later(() => { confetti(); finish({ key: 'art-memory', stars: moves <= size * 1.6 ? 3 : moves <= size * 2.5 ? 2 : 1, line: `Все пары найдены за ${moves} ${plural(moves, ['ход', 'хода', 'ходов'])}!`, again: () => screenArtMemory(size), menu: back }); }, 1300);
-      } else later(() => { a.classList.remove('up'); c.classList.remove('up'); open = []; busy = false; }, 1100);
-    };
-  }, () => { if (t === tok) $('#amG').innerHTML = '<p class="lead">Чтобы открыть музей, нужен интернет.</p>'; });
+  $('#amLv').onclick = e => { const b = e.target.closest('[data-n]'); if (b) { sfx.pop(); screenFlagMemory(+b.dataset.n); } };
+  const backFace = `<span class="mc-back"><span class="mc-frame"><span class="mc-face">${friendSVG()}</span></span><i class="mc-st s1">⭐</i><i class="mc-st s2">✨</i><i class="mc-st s3">🌍</i></span>`;
+  const ccs = sample(FLAG_ORDER.slice(0, Math.max(size + 3, 6)), size), cards = sample([...ccs, ...ccs].map((x, i) => ({ x, i })), size * 2);
+  let open = [], moves = 0, pairs = 0, busy = false, toastT = 0;
+  $('#amG').innerHTML = cards.map((c, j) => `<button class="mc" data-j="${j}" aria-label="${j + 1}"><span class="mc-in">${backFace}<span class="mc-front fm-front">${flagSVG(c.x)}</span></span></button>`).join('');
+  talk('Мемори с флагами! Открывай по две карты и ищи одинаковые флаги.');
+  const toast = txt => { const o = $('#amOut'); if (!o) return; o.textContent = txt; o.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { if (o) o.hidden = true; }, 2600); };
+  $('#amG').onclick = e => {
+    const b = e.target.closest('.mc'); if (!b || busy || b.classList.contains('up')) return;
+    b.classList.add('up'); sfx.tick(); open.push(b);
+    if (open.length < 2) return;
+    moves++; $('#amM').textContent = moves; busy = true;
+    const [a, c] = open, x = cards[+a.dataset.j].x;
+    if (x === cards[+c.dataset.j].x) {
+      later(() => { a.classList.add('done'); c.classList.add('done'); }, 350);
+      pairs++; $('#amP').textContent = pairs; sfx.good(); open = []; busy = false;
+      const nm = COUNTRY_NAMES[x] || x; toast(nm); say(`${nm}.`);
+      if (pairs === size) later(() => { confetti(); P.flagMem = { w: wins + 1 }; save(); finish({ key: 'flag-memory', stars: moves <= size * 1.6 ? 3 : moves <= size * 2.5 ? 2 : 1, line: `Все пары найдены за ${moves} ${plural(moves, ['ход', 'хода', 'ходов'])}!`, again: () => screenFlagMemory(), menu: back }); }, 1700);
+    } else later(() => { a.classList.remove('up'); c.classList.remove('up'); open = []; busy = false; }, 1100);
+  };
 }
+GAMES.push({ id: 'flag-memory', name: 'Мемори: флаги', sub: 'найди пары — и узнай страну', ico: () => pic('🚩'), bg: 'var(--t-lilac)', go: () => screenFlagMemory(), grp: 10, kw: 'флаги страны мемори' });
+/* FLAGMEM-END */
 function screenArtQuiz() {
   const t = newScreen();
   shell('Викторина: картины', `<div class="art aq"><div class="sp-hud"><span>Вопрос <b id="aqN">1</b>/5</span><span>Верно <b id="aqOk">0</b></span></div><div id="aqBox"><p class="lead">Открываю музей…</p></div></div>`, { back: () => screenMuseum() });
@@ -11453,8 +11481,7 @@ function screenArtQuiz() {
 }
 GAMES.push(
   { id: 'museum', name: 'Музей мира', sub: '1000 картин и 200 художников', ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenMuseum(), grp: 4, also: [13], prog: () => { const n = (P.museum && P.museum.seen || []).length; return n ? `посмотрено: ${n}` : ''; } },
-  { id: 'art-quiz', name: 'Викторина: картины', sub: 'кто написал? где висит?', ico: () => pic('🎯'), bg: 'var(--t-yellow)', go: () => screenArtQuiz(), grp: 4, also: [13] },
-  { id: 'art-memory', name: 'Мемори: картины', sub: 'найди пары шедевров', ico: () => pic('🃏'), bg: 'var(--t-lilac)', go: () => screenArtMemory(), grp: 4, also: [13] }
+  { id: 'art-quiz', name: 'Викторина: картины', sub: 'кто написал? где висит?', ico: () => pic('🎯'), bg: 'var(--t-yellow)', go: () => screenArtQuiz(), grp: 4, also: [13] }
 );
 INTEREST_CAT.forEach(c => (c.items || []).forEach(i => { if (Array.isArray(i.tiles) && (i.tiles.includes('learn-art') || i.id === 'draw' || i.id === 'art') && !i.tiles.includes('museum')) i.tiles.splice(0, 0, 'museum'); }));
 
@@ -17777,7 +17804,7 @@ const THEMES = (() => {
   const s4 = sec(4); if (s4) { s4.h = 'Рисование и раскраски'; s4.p = 'рисуем, раскрашиваем, соединяем точки'; }
   SECTIONS.splice(at(4) + 1, 0, { g: 20, h: 'Музыка', p: 'песенки, ксилофон, композиторы', only: 'r' }, { g: 21, h: 'Картины и музей', p: 'музей мира, викторина, правда или выдумка', only: 'r' });
   ['songs', 'xylo', 'composers', 'guess-composer', 'conductor', 'cmp-tf'].forEach(id => move(id, 4, 20));
-  ['museum', 'art-quiz', 'art-memory'].forEach(id => move(id, 4, 21));
+  ['museum', 'art-quiz'].forEach(id => move(id, 4, 21));
   // «Творим»: the older track
   const s13 = sec(13); if (s13) { s13.h = 'Картины и музей'; s13.p = 'музей мира, викторина, правда или выдумка'; }
   SECTIONS.splice(at(13) + 1, 0, { g: 22, h: 'Музыка', p: 'композиторы, дирижёр, угадай мелодию', only: 'l' }, { g: 23, h: 'Рисование', p: 'рисуем и раскрашиваем', only: 'l' });
