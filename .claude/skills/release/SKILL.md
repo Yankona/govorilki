@@ -21,7 +21,8 @@ From `dev/`, on an up-to-date `main` (`git pull -q origin main`), with the child
 5. **Commit message** file (Russian title «<что нового> (vN)», 2–4 lines of body, the session's attribution trailers),
    then `build/publish.sh <file>`: one commit of the site and `dev/`, pushes `main` and `main:gh-pages`, waits until
    https://govorilki.com/play/sw.js serves vN (prints LIVE). If NOT LIVE: look at the «Site» action.
-6. **Artifact**: Artifact publish of `ru/index.html` (repo root) with
+6. **Artifact**: Artifact publish of `dev/artifact/ru.html` (made by the build: the Russian page with every data pack inline,
+   since the artifact cannot fetch `data/`) with
    `url: https://claude.ai/artifact/QGYxZFefN7EH7khLeqiVvt` and `label: "vN <коротко>"` (read it first if this session has
    not published it). The warning about downloads is known — ignore it.
 7. **Branches**: merged `task/*` branches stay on GitHub (the session's git proxy refuses branch deletion with 403);
