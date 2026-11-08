@@ -10337,7 +10337,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
     </div></main></div>`;
   } else shell(f ? 'Семья' : 'Новая семья', `<div class="fe">${form}</div>`, { back: back || (() => screenFamilies()), guide: false, raw: true });
   const read = () => {
-    $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); const bd = r.querySelector('.fe-bday'), v = bd ? bd.value : ''; if (ageFrom(v)) { kids[i].bday = v; kids[i].age = ageFrom(v); kids[i].track = ageTrack(kids[i].age); } });
+    $$('#feKids .fe-row').forEach((r, i) => { kids[i].name = cleanS(r.querySelector('.fe-name').value, 20); const bd = r.querySelector('.fe-bday'), v = bd ? bd.value : ''; if (ageFrom(v)) { kids[i].bday = v; kids[i].age = ageFrom(v); kids[i].track = ageTrack(kids[i].age); } else if (bd && !v) kids[i].bday = ''; });
     $$('#feGrands .fe-row').forEach((r, i) => { grands[i].name = cleanS(r.querySelector('.fe-name').value, 30); grands[i].cc = r.querySelector('.fe-gcc').value; });
   };
   const draw = () => { $('#feKids').innerHTML = kids.map(kidRow).join(''); $('#feGrands').innerHTML = grands.map(grandRow).join(''); };
@@ -10351,11 +10351,20 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
       pl.addEventListener('click', () => setTimeout(() => { const n = $('#fePlN'); if (n) n.textContent = cnt(); }, 0));
     } }
   if (add) { const rs = $$(add === 'kid' ? '#feKids .fe-name' : '#feGrands .fe-name'), el = rs[rs.length - 1]; if (el) { el.closest('.fe-row').scrollIntoView({ block: 'center' }); setTimeout(() => el.focus(), 300); } }
-  $('#feKids').addEventListener('change', e => { if (e.target.classList.contains('fe-bday')) { read(); draw(); } });
+  /* the date of birth is updated where it stands, never by redrawing the list: iPhone fires «change» while its calendar
+     is still open (each tapped day), and a redraw replaced the field and closed the calendar before a date was chosen */
+  const bdayNow = el => {
+    const r = el.closest('.fe-row'), i = r ? +r.dataset.k : -1, k = kids[i]; if (!k) return;
+    const v = el.value, a = ageFrom(v);
+    if (a) { k.bday = v; k.age = a; k.track = ageTrack(a); } else if (!v) k.bday = '';
+    const n = r.querySelector('.fe-agen'); if (n) n.textContent = k.age ? `${k.age} ${plural(k.age, ['год', 'года', 'лет'])}` : '';
+    r.querySelectorAll('[data-age]').forEach(b => b.classList.toggle('sel', !!a && +b.dataset.age === a));
+  };
+  ['input', 'change'].forEach(ev => $('#feKids').addEventListener(ev, e => { if (e.target.classList.contains('fe-bday')) bdayNow(e.target); }));
   $('#feKids').onclick = e => {
     const r = e.target.closest('.fe-row'); if (!r) return; const i = +r.dataset.k;
     const g = e.target.closest('[data-g]'); if (g) { read(); kids[i].she = g.dataset.g === 'f'; sfx.tick(); draw(); return; }
-    const a = e.target.closest('[data-age]'); if (a) { read(); kids[i].age = +a.dataset.age; kids[i].track = ageTrack(kids[i].age); sfx.tick(); draw(); return; }
+    const a = e.target.closest('[data-age]'); if (a) { read(); kids[i].age = +a.dataset.age; kids[i].bday = ''; kids[i].track = ageTrack(kids[i].age); sfx.tick(); draw(); return; }
     const x = e.target.closest('[data-x]'); if (!x) return;
     read(); const pr = kids[i].id && ROOT.profiles[kids[i].id];
     if (pr && pr.stars > 0 && ask !== 'k' + i) { ask = 'k' + i; draw(); return; }
@@ -10389,6 +10398,7 @@ function screenFamilyEdit(fid, { first = false, liga = '', back = null, done = n
       let kid = k.id && ROOT.profiles[k.id] ? k.id : null;
       if (!kid) { do kid = 'k' + rid6(); while (ROOT.profiles[kid]); fresh.push(kid); ROOT.profiles[kid] = blankProfile(k.name, k.she ? 'f' : 'm', k.track, ''); ROOT.profiles[kid].book.title = k.track === 'l' ? 'Моя книга' : ''; }
       Object.assign(ROOT.profiles[kid].settings, { name: k.name, gender: k.she ? 'f' : 'm', track: k.age ? ageTrack(k.age) : k.track, age: k.age || 0, ...(k.bday ? { bday: k.bday } : {}), nameTouched: true });
+      if (!k.bday) delete ROOT.profiles[kid].settings.bday; // the date was cleared or a plain age was picked
       return kid;
     });
     old.filter(x => !ids.includes(x)).forEach(x => delete ROOT.profiles[x]);
