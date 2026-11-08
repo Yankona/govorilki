@@ -1873,6 +1873,7 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .tl-read h2{margin:0;font:700 28px/1.15 var(--f-display);text-align:center}.tl-by{margin:4px 0 14px;text-align:center;color:var(--ink-soft);font:700 15px var(--f-body)}
 .tl-text{font:600 21px/1.6 var(--f-body)}.tl-p{margin:0 0 14px}.tl-p.verse{white-space:pre-line}
 .tl-text .ss{cursor:pointer}
+.tl-mode{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:0 0 6px}.tl-cr{margin:0 0 14px;text-align:center;color:var(--ink-soft);font:600 14px/1.4 var(--f-body)}
 .tl-end{text-align:center;font:700 24px var(--f-display);color:var(--ink-soft)}
 .tl-ctl{position:sticky;bottom:8px;z-index:5;display:flex;align-items:center;justify-content:center;gap:10px;width:max-content;max-width:100%;margin:-96px auto 0;padding:8px 12px;border-radius:999px;background:var(--paper);box-shadow:0 6px 18px rgba(42,35,70,.25)}
 .tl-ctl .big{min-height:52px;min-width:150px;padding:8px 18px;font-size:20px}
@@ -3356,11 +3357,11 @@ function pickVoice() {
   } catch (e) {}
 }
 if ('speechSynthesis' in window) { pickVoice(); try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch (e) {} }
-let sayTok = 0, SAYING = 0, HUSHED = 0;
+let sayTok = 0, SAYING = 0, HUSHED = 0, TALE_AUDIO = null;   // TALE_AUDIO: the actor's recording of an audio tale, stopped with every hush()
 const MIC = { stream: null, an: null, buf: null, denied: false, pending: null, timer: 0, keep: 0, live: false, quietUntil: 0, voiceUntil: 0 };
 const GUARD = { until: 0, run: 0, miss: 0, free: false };
 const pace = () => P.settings.rate < 1 ? 1.5 : 1.25;
-function hush() { sayTok++; HUSHED = sayTok; SAYING = 0; elStop(); try { speechSynthesis.cancel(); } catch (e) {} }
+function hush() { sayTok++; HUSHED = sayTok; SAYING = 0; elStop(); if (TALE_AUDIO) { try { TALE_AUDIO.pause(); } catch (e) {} } try { speechSynthesis.cancel(); } catch (e) {} }
 function speakOne(text, rate) {
   return new Promise(res => {
     let done = false;
@@ -20790,6 +20791,13 @@ const TALES = (() => {
     const r = await fetch(base() + 'index.json'); if (!r.ok) throw new Error('no tales');
     IDX = await r.json(); return IDX;
   }
+  // human-narrated recordings (LibriVox, public domain): tales/audio/index.json {id: {f, who, src, lic, dur, ts[sentence starts]}}
+  let RECS = null;
+  async function recs() {
+    if (RECS) return RECS;
+    try { const r = await fetch(base() + 'audio/index.json'); RECS = r.ok ? await r.json() : {}; } catch (e) { return {}; }
+    return RECS;
+  }
   async function text(id) {
     if (TXT[id]) return TXT[id];
     const r = await fetch(base() + id + '.json'); if (!r.ok) throw new Error('no tale');
@@ -20812,15 +20820,16 @@ const TALES = (() => {
     const t = newScreen();
     shell('Аудиосказки', `<div class="tl-wrap"><p class="lead" id="tlLead">Выбери сказку — я прочитаю её вслух. Текст будет на экране.</p>
       <div class="tl-list" id="tlList"><p class="muted">Открываю сказки…</p></div>
-      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
+      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
     talk('Выбери сказку. Я прочитаю её вслух.');
     let xs;
+    const RC = await recs().catch(() => ({}));
     try { xs = await index(); } catch (e) { if (t === tok) $('#tlList').innerHTML = '<p class="muted">Сказки не загрузились. Они откроются, когда появится интернет, а потом будут работать и без него.</p>'; return; }
     if (t !== tok) return;
     warm();
     const H = heard(), age = P.settings.age || 0;
     const row = x => { const h = H[x.id] || {};
-      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
+      return `<button class="tl-i ${h.done ? 'seen' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b><small>${esc(x.by)} · ${x.min} мин${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
     const mine = age ? xs.filter(x => !x.age || age <= x.age[1] + 1) : xs, rest = xs.filter(x => !mine.includes(x));
     $('#tlList').innerHTML = mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
     $('#tlList').onclick = e => { const b = e.target.closest('.tl-i'); if (b) { sfx.pop(); play(b.dataset.id, () => list(back)); } };
@@ -20832,9 +20841,12 @@ const TALES = (() => {
       shell('Аудиосказки', '<p class="lead">Эта сказка не загрузилась. Проверьте интернет и попробуйте ещё раз.</p>', { back: back || (() => list()) }); return;
     }
     if (t !== tok) return;
+    const R = ((await recs().catch(() => ({})))[id]) || null;
+    if (t !== tok) return;
     const S = [];
     const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${sentences(p).map(s => { const j = S.push({ s: s.trim(), pi }) - 1; return `<span class="ss" data-j="${j}">${esc(s)}</span>`; }).join('')}</p>`).join('');
     shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>
+        ${R ? `<div class="tl-mode" id="tlMode"><button class="chip" data-m="actor">🎙 Слушать актёра</button><button class="chip" data-m="voice">🔊 Голос игры</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
         <div class="tl-text" id="tlText">${html}</div><p class="tl-end" id="tlEnd" hidden>Конец 🌙</p></article>
       <div class="tl-ctl"><button class="ibtn" id="tlPrev" aria-label="Фраза назад">⏮</button><button class="big" id="tlPlay"></button>
         <button class="ibtn" id="tlNext" aria-label="Фраза вперёд">⏭</button><button class="ibtn" id="tlNight" aria-label="Ночной режим">🌙</button></div>`, { back: back || (() => list()), guide: false, raw: true });
@@ -20846,7 +20858,43 @@ const TALES = (() => {
       const el = spans[j]; if (el && !night) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
       const nt = $('#tlNightT'); if (nt && S[j]) nt.textContent = S[j].s;
     };
-    async function go() {
+    // the actor's recording (LibriVox): the same sentences lit up by their start times in the file; the game voice is the other way
+    let mode = R && me.mode !== 'voice' ? 'actor' : 'voice', au = null, auRun = 0;
+    const finish = () => {
+      playing = false; me.at = 0; me.done = 1; save();
+      spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
+      const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
+    };
+    const credit = () => { const c = $('#tlCr'); if (!c) return;
+      c.textContent = mode === 'actor' ? `🎙 Читает ${R.who}. Запись проекта LibriVox — общественное достояние (Public Domain).` : '🔊 Читает голос игры.';
+      $$('#tlMode .chip').forEach(b => b.classList.toggle('sel', b.dataset.m === mode)); };
+    function actorGo() {
+      auRun = ++run; playing = true; btn();
+      if (at >= S.length) at = 0;
+      $('#tlEnd').hidden = true; mark(at);
+      if (!au) {
+        au = new Audio(base() + 'audio/' + R.f); au.preload = 'auto';
+        au.addEventListener('timeupdate', () => {
+          if (t !== tok) { au.pause(); return; }
+          if (!playing) return;
+          let j = 0; for (let k = 0; k < R.ts.length; k++) { if (R.ts[k] <= au.currentTime + 0.12) j = k; else break; }
+          if (j !== at) { at = j; mark(j); if (at % 5 === 4) { me.at = at; save(); } }
+        });
+        au.addEventListener('ended', () => { if (t === tok && playing) { at = S.length; finish(); } });
+        au.addEventListener('pause', () => { if (t === tok && playing && !au.ended) { playing = false; btn(); } });
+        au.addEventListener('error', () => {
+          if (t !== tok) return;
+          const was = playing; au = null; TALE_AUDIO = null; mode = 'voice'; credit(); btn();
+          const c = $('#tlCr'); if (c) c.textContent = 'Запись не загрузилась (нужен интернет). Читает голос игры.';
+          if (was) { playing = false; go(); }
+        });
+      }
+      TALE_AUDIO = au;
+      const to = R.ts[at] || 0, seek = () => { try { au.currentTime = to; } catch (e) {} };
+      if (au.readyState >= 1) seek(); else au.addEventListener('loadedmetadata', seek, { once: true });
+      const pr = au.play(); if (pr && pr.catch) pr.catch(() => { playing = false; btn(); });
+    }
+    async function voiceGo() {
       const my = ++run; playing = true; btn();
       if (at >= S.length) at = 0;
       $('#tlEnd').hidden = true;
@@ -20857,10 +20905,9 @@ const TALES = (() => {
         await pause(para ? 700 : 280); if (t !== tok || my !== run) return;
         if (at % 5 === 4) { me.at = at + 1; save(); }
       }
-      playing = false; me.at = 0; me.done = 1; save();
-      spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
-      const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
+      finish();
     }
+    function go() { return mode === 'actor' && R ? actorGo() : voiceGo(); }
     function stop() { run++; playing = false; hush(); me.at = at < S.length ? at : 0; save(); btn(); }
     const jump = j => { at = Math.max(0, Math.min(S.length - 1, j)); if (playing) { run++; hush(); go(); } else { mark(at); btn(); } };
     const toggle = () => playing ? stop() : go();
@@ -20872,6 +20919,13 @@ const TALES = (() => {
         <button class="tl-nx" id="tlNightX" aria-label="Выйти из ночного режима">☀️</button></div>`);
       $('#tlNightOv').onclick = e => { if (e.target.closest('#tlNightX')) { setNight(false); return; } toggle(); };
       if (!playing) go();
+    }
+    if (R) {
+      credit();
+      $('#tlMode').onclick = e => {
+        const b = e.target.closest('[data-m]'); if (!b || b.dataset.m === mode) return; sfx.pop();
+        const was = playing; run++; playing = false; hush(); mode = b.dataset.m; me.mode = mode; save(); credit(); btn(); if (was) go();
+      };
     }
     $('#tlPlay').onclick = () => { if (!night) sfx.pop(); toggle(); };
     $('#tlPrev').onclick = () => jump(at - 1);
