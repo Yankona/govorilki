@@ -6,7 +6,7 @@ B = os.path.dirname(os.path.abspath(__file__))
 import glob
 FILES = sorted(glob.glob(os.path.join(B, '..', 'stories', '*', '*.json')))
 T = os.path.join(B, '..', 'i18n') + '/'
-ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp']
+ORDER = ['cascais', 'lisbon', 'porto', 'pt', 'spb', 'russia', 'ger', 'esp', 'space']
 more = {k: [] for k in ORDER}; stress = {}; ids = set(); warn = []
 for f in FILES:
     d = json.load(open(f, encoding='utf-8'))
@@ -55,16 +55,16 @@ part = """/* ---------- more city and country stories (Russian only: the other l
    so what was read stays read). ---------- */
 const MORE_STORIES = LX('MORE_STORIES', """ + js + """);
 (() => {
-  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'] };
+  const NEW = { cascais: ['Кашкайш', '🏖️', 'var(--t-mint)'], lisbon: ['Лиссабон', '🚋', 'var(--t-yellow)'], porto: ['Порту и север', '🌉', 'var(--t-peach)'], russia: ['Россия', '🪆', 'var(--t-pink)'], space: ['Космос', '🚀', 'var(--t-lilac)'] };
   const MOVE = { cascais: ['pt-king', 'pt-light', 'pt-boca', 'pt-farol', 'pt-guincho', 'pt-pescadores', 'pt-carmona'],
     lisbon: ['pt-tram', 'pt-santa-justa', 'pt-ponte-abril', 'pt-sao-jorge', 'pt-belem', 'pt-ocean', 'pt-nata', 'pt-c-pombal', 'pt-c-santo-antonio', 'pt-flamingos', 'pt-c-earthquake'],
     porto: ['pt-ponte-porto', 'pt-rabelo', 'pt-c-galo'] };
-  const SUB = { cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна' };
+  const SUB = { cascais: 'город у океана рядом с Лиссабоном', lisbon: 'трамваи, холмы и мосты', porto: 'Порту, Дору, Брага, Гимарайнш', russia: 'Байкал, Камчатка, Казань и вся страна', space: 'Гагарин, Луна, звёзды и телескопы' };
   Object.entries(NEW).forEach(([k, [name, e, bg]]) => {
     if (LEARN[k]) return;
     const items = [];
     (MOVE[k] || []).forEach(id => { const i = LEARN.pt.items.findIndex(x => x.id === id); if (i >= 0) items.push(...LEARN.pt.items.splice(i, 1)); });
-    LEARN[k] = { name, e, bg, place: k === 'russia' ? 'RU' : 'PT', sub: SUB[k], items };
+    LEARN[k] = { name, e, bg, place: k === 'russia' ? 'RU' : k === 'space' ? null : 'PT', sub: SUB[k], items };
   });
   LEARN.pt.name = 'Португалия';
   Object.entries(MORE_STORIES || {}).forEach(([k, list]) => { if (LEARN[k]) list.forEach(x => { if (!LEARN[k].items.some(y => y.id === x.id)) LEARN[k].items.push(x); }); });
