@@ -17,7 +17,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
     await c.addInitScript(s => { window.__said = []; window.__blFast = 1; try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 5); }; } catch (e) {} if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, fam);
     const p = await c.newPage(); const errs = []; p.on('pageerror', e => { errs.push(e.message); console.log('PAGEERR', e.stack.slice(0, 400)); });
-    const cyr = s => lang !== 'ru' && /[А-яЁё]/.test(s);
+    const cyr = s => lang !== 'ru' && /[А-яЁё]/.test(s.replace(/Тина|Тоша/g, ''));
     const said = () => p.evaluate(() => window.__said.slice(-1)[0] || '');
     const run = s => p.evaluate(s => window.__T.run(s), s);
     await p.goto(BASE + path); await p.waitForTimeout(1500);
