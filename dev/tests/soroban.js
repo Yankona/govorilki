@@ -57,7 +57,10 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       const top = () => run('SB.top()');
       // «Сегодня»: the step «Счёты» is on the path for every age
       const ids = await run('lessonPlan("soro").map(x => x.key).join() + "|" + LIDS().join()');
-      ok(/^soroban\|.*soro/.test(ids), `${name} ${age}: the lesson plan ${ids}`);
+      // little ones (≤5): «Счёты» and «Задачка дня» take turns by day
+      const alt = age <= 5 && !/soro/.test(ids.split('|')[1]);
+      ok(/^soroban\|/.test(ids) && (alt ? /puzzle/.test(ids) : /soro/.test(ids)), `${name} ${age}: the lesson plan ${ids}`);
+      if (alt) { await run('(() => { const o = Date.prototype.getDate; Date.prototype.getDate = function () { return o.call(this) + 1; }; goHome(); })()'); await p.waitForTimeout(600); }
       const node = await p.$('.pd-n[data-l="soro"]');
       ok(!!node, `${name} ${age}: «Сегодня» has the step ${node ? (await node.innerText()).replace(/\s+/g, ' ') : '-'}`);
       await shot('path');
