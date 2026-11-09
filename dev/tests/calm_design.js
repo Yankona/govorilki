@@ -2,7 +2,7 @@
 // 9-year-old plays the older track with the dark theme), phone and laptop, plus checks that the shared design tokens
 // are in place and no page errors happen. The family's look: calm (body.look-calm) or bright (the old look); the phone
 // run also switches it from «Выбери друга» and from «Для взрослых» → the child, and checks it after a reload.
-// node tests/calm_design.js [tag=after] [base] [langs=ru,en,pt,de] [look=calm|bright]
+// node tests/calm_design.js [tag=after] [base] [langs=ru,en,pt,de] [look=calm|bright|dark]
 // Shots: tests/shots/calm-<tag>[-bright]-<lang>-<device>-<screen>.png
 const { chromium, devices } = require('playwright');
 const path = require('path');
@@ -60,32 +60,33 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
         await run("GAMES.find(g=>g.id==='l-chist').go()").catch(e => miss.push('l-chist ' + e.message)); await wait(900); await shot('k3-game');
       }
       // the look: tokens only in the calm one
-      const isCalm = () => p.evaluate(() => document.body.classList.contains('look-calm'));
+      // which look the body shows: bright (no class), calm (look-calm), dark (look-calm + look-dark)
+      const isLook = k => p.evaluate(k => { const c = document.body.classList; return c.contains('look-calm') === (k !== 'bright') && c.contains('look-dark') === (k === 'dark'); }, k);
       if (TAG !== 'before') {
         const tok = await p.evaluate(() => getComputedStyle(document.body).getPropertyValue('--accent').trim());
-        if ((LOOK === 'calm') !== !!tok || (LOOK === 'calm') !== await isCalm()) miss.push(`look ${LOOK}: token «${tok}»`);
+        if ((LOOK !== 'bright') !== !!tok || !await isLook(LOOK)) miss.push(`look ${LOOK}: token «${tok}»`);
       }
       // switching: the child's own switch, a reload, another child keeps hers, then the grown-ups' switch back
       if (TAG !== 'before' && dev === 'phone') {
-        const other = LOOK === 'calm' ? 'bright' : 'calm';
+        const other = LOOK === 'calm' ? 'dark' : 'calm';
         await run("(ROOT.cur='k2', P=ROOT.profiles['k2'], screenFriends())"); await wait(700);
         const kb = await p.$(`#lookKid [data-look="${other}"]`);
         if (!kb) miss.push('friends look switch'); else { await kb.scrollIntoViewIfNeeded(); await kb.click(); await wait(400); }
         await shot('friends-look');
-        if (await isCalm() !== (other === 'calm')) miss.push('friends switch not applied');
+        if (!await isLook(other)) miss.push('friends switch not applied');
         await p.reload(); await wait(1500);
         const who2 = await p.$$('.who-kid'); if (who2.length) { await who2[1].click(); await wait(900); }
         await run("(ROOT.cur='k2', P=ROOT.profiles['k2'], P.homeTab='speak', goHome())"); await wait(700);
-        if (await isCalm() !== (other === 'calm')) miss.push('look lost after reload');
+        if (!await isLook(other)) miss.push('look lost after reload');
         await shot('k2-speak-' + other);
         await run("(ROOT.cur='k1', P=ROOT.profiles['k1'], goHome())"); await wait(500);
-        if (await isCalm() !== (LOOK === 'calm')) miss.push('look leaked to another child');
+        if (!await isLook(LOOK)) miss.push('look leaked to another child');
         await run("(ROOT.cur='k2', P=ROOT.profiles['k2'], screenParents())"); await wait(700);
         const pg = await p.$('[data-page="kid"]'); if (pg) { await pg.click(); await wait(500); }
         const pb = await p.$(`#lookPar [data-look="${LOOK}"]`);
         if (!pb) miss.push('parents look switch'); else { await pb.scrollIntoViewIfNeeded(); await pb.click(); await wait(400); }
         await shot('parents-look');
-        if (await isCalm() !== (LOOK === 'calm')) miss.push('parents switch not applied');
+        if (!await isLook(LOOK)) miss.push('parents switch not applied');
         const kept = await p.evaluate(() => JSON.parse(localStorage.getItem('govorilki-v2')).profiles.k2.settings.look);
         if (kept !== LOOK) miss.push('stored look ' + kept);
       }
