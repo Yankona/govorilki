@@ -50,7 +50,7 @@ W = {
   'Посчитай бусины у перекладины. Верхняя — это пять. Какое число?': ('Count the beads at the bar. The top one is five. What number is it?', 'Conta as contas junto à barra. A de cima vale cinco. Que número é?', 'Zähl die Perlen an der Leiste. Die obere ist fünf. Welche Zahl ist das?'),
   'Какое число?': ('What number?', 'Que número?', 'Welche Zahl?'),
   'На счётах {0}. {1} {2}.': ('The abacus shows {0}. {1} {2}.', 'No ábaco está {0}. {1} {2}.', 'Auf dem Abakus ist {0}. {1} {2}.'),
-  'Прибавь': ('Add', 'Junta', 'Rechne plus'), 'Отними': ('Take away', 'Tira', 'Nimm weg'),
+  'Прибавь': ('Add', 'Junta', 'Plus'), 'Отними': ('Take away', 'Tira', 'Minus'),
   'Числа будут мелькать. Сразу прибавляй каждое на счётах!': ('Numbers will flash by. Add each one on the abacus straight away!', 'Os números vão passar depressa. Junta cada um logo no ábaco!', 'Gleich blitzen Zahlen auf. Rechne jede sofort auf dem Abakus dazu!'),
   'Счёты стали призраком. Смотри, как двигаются бусины, а потом они исчезнут. Запомни!': ('The abacus is a ghost now. Watch the beads move, then they will vanish. Remember!', 'O ábaco virou fantasma. Vê as contas a mexer, depois elas desaparecem. Lembra-te!', 'Der Abakus ist jetzt ein Geist. Schau, wie sich die Perlen bewegen, dann verschwinden sie. Merk es dir!'),
   'Счётов нет — они у тебя в голове. Представляй бусины и складывай!': ('No abacus now — it is in your head. Picture the beads and add!', 'Não há ábaco — está na tua cabeça. Imagina as contas e soma!', 'Kein Abakus mehr — er ist in deinem Kopf. Stell dir die Perlen vor und rechne!'),

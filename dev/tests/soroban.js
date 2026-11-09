@@ -8,7 +8,7 @@ const D = require('path').join(__dirname, 'shots') + '/';
 require('fs').mkdirSync(D, { recursive: true });
 const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = process.argv[3] || 'phone';
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
-const kid = (name, g, age, track, lang) => ({ stars: 5, plays: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: 'kitty', onboarded: true, lang } });
+const kid = (name, g, age, track, lang) => ({ stars: 5, plays: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: 'kitty', onboarded: true, lang, look: process.env.LOOK || 'bright' } });
 let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m); if (!c) bad++; };
 (async () => {
   const b = await chromium.launch();
@@ -25,7 +25,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
       const run = s => p.evaluate(s => window.__T.run(s), s);
       await run('GUARD.free = 1');
-      const shot = n => (lang === 'ru' || n === 'path') && p.screenshot({ path: D + `soroban-${n}-${age}-${lang}-${DEV}.png` });
+      const shot = n => (lang === 'ru' || n === 'path') && p.screenshot({ path: D + `soroban${process.env.LOOK === 'calm' ? '-calm' : ''}-${n}-${age}-${lang}-${DEV}.png` });
       // set the abacus to a number by tapping beads, the way a child does
       const setTo = async n => {
         const rods = await p.$$eval('.sb2-rod', r => r.length), want = String(n).padStart(rods, '0').slice(-rods);
@@ -57,12 +57,13 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       const top = () => run('SB.top()');
       // «Сегодня»: the step «Счёты» is on the path for every age
       const ids = await run('lessonPlan("soro").map(x => x.key).join() + "|" + LIDS().join()');
-      // little ones (≤5): «Счёты» and «Задачка дня» take turns by day
-      const alt = age <= 5 && !/soro/.test(ids.split('|')[1]);
-      ok(/^soroban\|/.test(ids) && (alt ? /puzzle/.test(ids) : /soro/.test(ids)), `${name} ${age}: the lesson plan ${ids}`);
-      if (alt) { await run('(() => { const o = Date.prototype.getDate; Date.prototype.getDate = function () { return o.call(this) + 1; }; goHome(); })()'); await p.waitForTimeout(600); }
+      ok(/^soroban\|.*soro/.test(ids), `${name} ${age}: the lesson plan ${ids}`);
       const node = await p.$('.pd-n[data-l="soro"]');
       ok(!!node, `${name} ${age}: «Сегодня» has the step ${node ? (await node.innerText()).replace(/\s+/g, ' ') : '-'}`);
+      // a short day for the little ones: «Счёты» instead of «Задачка дня» at 4–5
+      const pz = !!(await p.$('.pd-n[data-l="puzzle"]')), nn = (await p.$$('.pd-n[data-l]')).length;
+      ok(age <= 5 ? !pz && nn === 4 : pz && nn === 5, `${name} ${age}: ${nn} steps on «Сегодня», «Задачка дня»: ${pz}`);
+      if (process.env.LOOK === 'calm') ok(await p.evaluate(() => document.body.classList.contains('look-calm')), 'the calm look is on');
       await shot('path');
       // the step opens the story first: a little game of moving beads
       await node.click(); await p.waitForTimeout(600);

@@ -3645,20 +3645,20 @@ const LESSONS_R = {
   speech: { name: 'Логопед', sub: 'дыхание, язычок, Р и шипящие', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Чтение', sub: 'буквы, слоги, слова', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   math: { name: 'Математика', sub: 'считаем и складываем', mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' },
-  soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
-  puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
+  puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
+  soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LESSONS_L = {
   speech: { name: 'Тренировка Л', sub: 'разогрев, язык, арена Л', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Скорочтение', sub: 'слоги и текст на время', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   book: { name: 'Книга', sub: 'немного каждый день, с удовольствием', mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
-  soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
-  puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
+  puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
+  soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LS = () => {
   let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
-  // little ones (up to 5): «Счёты» and «Задачка дня» take turns by day, so the path stays short
-  if ((P.settings.age || 5) <= 5) { const { [dayNo() % 2 ? 'puzzle' : 'soro']: _, ...r } = b; b = r; }
+  // a short day for the little ones (4–5): «Счёты» every day takes the place of «Задачка дня»
+  if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3677,16 +3677,16 @@ function todayState() {
     P.today = { date: k, v: 2, done: { speech: [], read: [], math: [] } };
     if (old && old.date === k && Array.isArray(old.done) && !dayTotal(k)) P.today.done.speech = old.done;
   }
-  ['speech', 'read', 'math', 'book', 'soro', 'puzzle'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
+  ['speech', 'read', 'math', 'book', 'puzzle', 'soro'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
   return P.today;
 }
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
 // the plan depends on the date and on how many times this lesson was already done today
 function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
-  if (id === 'puzzle') return [gameStep('olymp-day', 'puzzle')];
   // «Счёты» every day, for every age: one short round at the child's level (soroban)
   if (id === 'soro') return [{ key: 'soroban', kind: 'math', name: 'Счёты', run: () => SB.daily() }];
+  if (id === 'puzzle') return [gameStep('olymp-day', 'puzzle')];
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
@@ -23966,7 +23966,7 @@ const PATH = (() => {
   // each child's first home screen after the game opens is «Сегодня»; later the tab they were on stays
   const SEEN = new Set();
   const fresh = id => { if (SEEN.has(id)) return false; SEEN.add(id); return true; };
-  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', soro: '🧮', puzzle: '🧩' };
+  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', puzzle: '🧩', soro: '🧮' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
     const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;

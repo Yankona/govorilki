@@ -84,7 +84,9 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       // «Задачка дня» on the path
       await run(`P.homeTab = 'today'; save(); goHome()`); await p.waitForTimeout(700);
       const node = await p.$('.pd-n[data-l="puzzle"]');
-      ok(!!node, `${name}: «Задачка дня» on «Сегодня»`);
+      // the little ones (4–5) have «Счёты» every day instead, so the day stays short
+      if (age <= 5) ok(!node && !!(await p.$('.pd-n[data-l="soro"]')), `${name} ${age}: «Счёты» instead of «Задачка дня»`);
+      else ok(!!node, `${name}: «Задачка дня» on «Сегодня»`);
       if (lang === 'ru' && lv === 1) await p.screenshot({ path: D + `olymp-today-${DEV}.png` });
       if (node) {
         await node.click(); await p.waitForTimeout(800);
