@@ -42,7 +42,10 @@ const AUDIT = () => {
     const fg = parse(cs.color), bg = bgOf(el); if (!fg || !bg) continue;
     const f = fg.a < 1 ? mix(fg, bg) : fg, L1 = lum(f), L2 = lum(bg), ratio = (Math.max(L1, L2) + .05) / (Math.min(L1, L2) + .05);
     const size = parseFloat(cs.fontSize), large = size >= 24 || (size >= 18.6 && +cs.fontWeight >= 700);
-    if (ratio < (large ? 3 : 4.5)) { const k = own.slice(0, 40); if (seen.has(k)) continue; seen.add(k); out.push(`«${k}» ${ratio.toFixed(2)} (${el.tagName.toLowerCase()}.${String(el.className).split(' ')[0]})`); }
+    // play pieces whose colours are the content and the same in every look: xylophone bars, paint swatches,
+    // book covers, the faint letter to trace
+    if (el.closest('.xbar, .swl, .book, .guide-l')) continue;
+    if (ratio < (large ? 3 : 4.5)) { const k = own.slice(0, 40); if (seen.has(k)) continue; seen.add(k); out.push(`«${k}» ${ratio.toFixed(2)} (${el.tagName.toLowerCase()}.${String(el.className).split(" ")[0]} in ${el.parentElement ? el.parentElement.className : ""})`); }
   }
   return out;
 };
@@ -58,7 +61,7 @@ const AUDIT = () => {
   const p = await c.newPage(), errs = [], bad = [], miss = [];
   p.on('pageerror', e => errs.push(e.message));
   const run = s => p.evaluate(x => window.__T.run(x), s);
-  const check = async (name, shot) => { await wait(800); if (shot) await p.screenshot({ path: `${SHOTS}/dark-${LANG}-${DEV}-${name}.png` }); const f = await p.evaluate(AUDIT); f.forEach(x => bad.push(`${name}: ${x}`)); };
+  const check = async (name, shot) => { await wait(800); if (shot) await p.screenshot({ path: `${SHOTS}/look-${LOOK}-${LANG}-${DEV}-${name}.png` }); const f = await p.evaluate(AUDIT); f.forEach(x => bad.push(`${name}: ${x}`)); };
   await p.goto(BASE + SUB[LANG]); await wait(1500);
   const who = await p.$$('.who-kid'); if (who.length) { await who[1].click(); await wait(900); }
   await run("(ROOT.cur='k2', P=ROOT.profiles['k2'], P.homeTab='today', goHome())");
@@ -96,7 +99,7 @@ const AUDIT = () => {
   await run("(ROOT.cur='k3', P=ROOT.profiles['k3'], P.homeTab='today', goHome())"); await wait(600);
   const q = await p.evaluate(() => ({ cls: document.body.className, f: getComputedStyle(document.body).getPropertyValue('--f-display') }));
   if (!/quest/.test(q.cls) || !/Russo/.test(q.f)) miss.push('Миссия Л look changed: ' + JSON.stringify(q));
-  await p.screenshot({ path: `${SHOTS}/dark-${LANG}-${DEV}-quest.png` });
+  await p.screenshot({ path: `${SHOTS}/look-${LOOK}-${LANG}-${DEV}-quest.png` });
   console.log(bad.length ? 'LOW CONTRAST:\n  ' + bad.join('\n  ') : 'contrast ok');
   console.log(`look_dark ${LOOK} ${LANG} ${DEV}: low contrast ${bad.length} | missing ${JSON.stringify(miss)} | errors ${JSON.stringify(errs)}`);
   await b.close(); process.exit(bad.length || errs.length || miss.length ? 1 : 0);
