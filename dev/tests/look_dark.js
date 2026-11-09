@@ -43,8 +43,9 @@ const AUDIT = () => {
     const f = fg.a < 1 ? mix(fg, bg) : fg, L1 = lum(f), L2 = lum(bg), ratio = (Math.max(L1, L2) + .05) / (Math.min(L1, L2) + .05);
     const size = parseFloat(cs.fontSize), large = size >= 24 || (size >= 18.6 && +cs.fontWeight >= 700);
     // play pieces whose colours are the content and the same in every look: xylophone bars, paint swatches,
-    // book covers, the faint letter to trace
+    // book covers, the faint letter to trace; letters painted in the colour they name (an inline colour)
     if (el.closest('.xbar, .swl, .book, .guide-l')) continue;
+    if (el.style.color) continue;
     if (ratio < (large ? 3 : 4.5)) { const k = own.slice(0, 40); if (seen.has(k)) continue; seen.add(k); out.push(`«${k}» ${ratio.toFixed(2)} (${el.tagName.toLowerCase()}.${String(el.className).split(" ")[0]} in ${el.parentElement ? el.parentElement.className : ""})`); }
   }
   return out;
