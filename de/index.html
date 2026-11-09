@@ -2032,19 +2032,37 @@ body.quest .fam-ok{color:#7BE0A0}
 .pw-k.blk{background:#2A2346;color:#fff;height:150px}
 .pw-k.next{background:#FFD93D;box-shadow:0 0 0 4px #F5B400,0 4px 0 var(--line-strong);animation:pulse .9s ease-in-out infinite}.pw-k.blk.next{background:#F5B400;color:#2A2346}
 .pw-k.hit{transform:translateY(3px)}.pw-k.no{background:#FFB3B3}
-.soro{display:flex;flex-direction:column;align-items:center;gap:12px}
-.sb-q{margin:0;font:800 22px/1.3 var(--f-body);text-align:center}
+.sbx{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.sbx-lv{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding:2px 2px 6px;scrollbar-width:none}.sbx-lv .chip{flex:none}
+.sbx-hud{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:center;font:800 15px var(--f-body);color:var(--ink-soft);text-align:center}
+.sbx-dots{display:inline-flex;gap:5px}.sbx-dots i{width:13px;height:13px;border-radius:50%;background:var(--line-strong)}.sbx-dots i.cur{box-shadow:0 0 0 3px var(--sea)}.sbx-dots i.ok{background:var(--leaf)}.sbx-dots i.no{background:#FFB3B3}
+.sb-q{margin:0;font:800 22px/1.3 var(--f-body);text-align:center;min-height:1.3em}
 .sb-n{font:900 40px var(--f-body);color:var(--sea)}
-.sb-n.big{font-size:90px;margin:20px 0}
-.sb{display:flex;gap:18px;justify-content:center;padding:14px 22px;border-radius:18px;background:#8A5A2B;box-shadow:inset 0 0 0 6px #6B4220,0 5px 0 #4E2F14}
-.sb-rod{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px;height:300px}
-.sb-stick{position:absolute;top:0;bottom:0;left:50%;width:6px;margin-left:-3px;background:#D9C3A0;border-radius:3px}
-.sb-beam{position:relative;width:96px;height:12px;background:#F2E6CF;border-radius:4px;margin:0 0 0;z-index:1}
-.sb-b{position:relative;z-index:2;width:62px;height:34px;border:0;border-radius:50%/60%;background:radial-gradient(circle at 35% 30%,#FFD9A8,#E8833A 60%,#B85A1E);box-shadow:0 2px 0 #7A3A10;cursor:pointer;transition:transform .15s}
-.sb-b.up{margin-bottom:56px}.sb-b.up.on{transform:translateY(56px)}
-.sb-b.lo:not(.on){transform:translateY(64px)}
-.sb.sm .sb-rod{height:220px}
-@media (max-height:780px){#sbBox{zoom:.76}.soro{gap:8px}}
+.sbx-val{font:900 44px/1 var(--f-body);color:var(--sea);min-height:44px}.sbx-val:empty{display:none}
+.sbx-row{display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;width:100%}
+.sbx-flash{font:900 96px/1 var(--f-body);color:var(--tiger);min-height:110px;display:flex;align-items:center;justify-content:center}
+.sbx-flash[hidden]{display:none}.sbx-flash.blink{animation:sbBlink .3s ease-out}
+@keyframes sbBlink{from{transform:scale(.6);opacity:.2}to{transform:scale(1);opacity:1}}
+.sbx-in{font:900 40px var(--f-body);color:var(--sea);min-width:120px;text-align:center;padding:4px 16px;border-radius:16px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
+.sb2{--bh:44px;--bw:78px;display:flex;gap:14px;justify-content:center;padding:14px 18px 6px;border-radius:24px;background:linear-gradient(#9E6C3A,#7A4F27);box-shadow:inset 0 0 0 6px #66401E,0 6px 0 #4A2D12;touch-action:none;user-select:none;-webkit-user-select:none;transition:opacity .9s}
+.sb2.r3{--bh:40px;--bw:66px;gap:10px}
+.sb2.sm{--bh:24px;--bw:46px;padding:8px 12px 4px;gap:8px}
+.sb2-rod{position:relative;width:var(--bw);height:calc(var(--bh) * 7 + 46px)}
+.sb2.sm .sb2-rod{height:calc(var(--bh) * 7 + 30px)}
+.sb2-stick{position:absolute;left:50%;top:0;height:calc(var(--bh) * 7 + 28px);width:6px;margin-left:-3px;background:#EAD9B6;border-radius:3px}
+.sb2-bar{position:absolute;left:-9px;right:-9px;top:calc(var(--bh) * 2 + 4px);height:14px;background:#F7EDD9;border-radius:3px;z-index:1;box-shadow:0 2px 0 #C9A878}
+.sb2-dot{position:absolute;left:50%;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#7A4F27}
+.sb2-b{position:absolute;left:0;width:var(--bw);height:calc(var(--bh) - 2px);border:0;padding:0;margin:0;border-radius:50%;z-index:2;background:radial-gradient(ellipse at 35% 30%,#FFE2BC,#F08A3C 55%,#B4561C);box-shadow:0 3px 0 #7A3A10;cursor:pointer;transition:top .18s ease-out;touch-action:none;-webkit-tap-highlight-color:transparent}
+.sb2-b.up{background:radial-gradient(ellipse at 35% 30%,#D4EEFF,#3E9BE0 55%,#1E5E9A);box-shadow:0 3px 0 #123E66}
+.sb2-b.hint{animation:sbGlow 1s ease-in-out infinite;outline:4px solid #FFD93D;outline-offset:1px}
+@keyframes sbGlow{50%{outline-color:#FFF6C2;outline-offset:4px}}
+.sb2-pl{position:absolute;bottom:0;left:-8px;right:-8px;text-align:center;font:800 11px var(--f-body);color:#FFE9C8}
+.sb2.ghost{opacity:.3;pointer-events:none;filter:saturate(.4)}.sb2.ghost.gone{opacity:0}
+.sbi-hero{display:flex;align-items:center;gap:10px;max-width:520px;width:100%}
+.sbi-fr{flex:none;width:84px;height:84px}.sbi-fr svg{width:100%;height:100%}
+.sbi-say{margin:0;flex:1;padding:12px 14px;border-radius:18px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong);font:700 17px/1.35 var(--f-body)}
+@media (max-height:760px){.sb2{--bh:34px;--bw:68px}.sb2.r3{--bh:30px;--bw:58px}.sb2.sm{--bh:20px;--bw:40px}.sbx-val{font-size:34px;min-height:34px}.sbx{gap:6px}.sb-q{font-size:20px}.sb-n{font-size:34px}.sbx-flash{font-size:68px;min-height:72px}.sbi-fr{width:64px;height:64px}}
+@media (min-width:900px) and (min-height:820px){.sb2{--bh:48px;--bw:86px}}
 .st .st-ladder{display:flex;gap:6px;overflow-x:auto;width:100%;padding:4px 2px 8px;scrollbar-width:none}
 .st-step{flex:none;width:40px;height:40px;border:0;border-radius:12px;background:var(--paper);font:900 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
 .st-step.done{background:var(--t-green)}.st-step.sel{outline:3px solid var(--sea)}.st-step[disabled]{opacity:.45}
@@ -2481,6 +2499,29 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .ol-hint{margin:0;padding:10px 14px;border-radius:14px;background:rgba(255,200,58,.18);font:700 16px/1.4 var(--f-body)}
 .ol-why{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .ol-why p{margin:0;font:700 17px/1.45 var(--f-body)}
+.ol-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 8px}
+.ol-top .ol-lv{order:-1;flex-basis:100%}
+.ol-lv{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.ol-lv b{font:900 16px var(--f-body);white-space:nowrap}.ol-lv small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.ol-hard{align-self:center;padding:6px 14px;border-radius:99px;background:linear-gradient(90deg,#FFC83A,#FF8A2A);color:#2A2346;font:900 15px var(--f-body);box-shadow:0 3px 0 #D9640C}
+.ol-dayb{background:linear-gradient(90deg,#FFE27A,#FFC83A)}
+#olBox{display:flex;flex-direction:column;gap:12px}
+.ol-pic{align-self:center;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:100%;font:800 34px/1.25 var(--f-body);text-align:center;letter-spacing:2px}
+.ol-svg{display:block;max-width:100%;height:auto}
+.ol-die{width:54px;height:54px}
+.ol-grid{display:grid;grid-template-columns:repeat(var(--c),minmax(0,52px));gap:4px;padding:6px;border-radius:14px;background:var(--line)}
+.ol-grid span{aspect-ratio:1;display:grid;place-items:center;border-radius:9px;background:var(--paper);font-size:28px}
+.ol-grid span.w{background:#5B4A3A}
+.ol-opts.ol-n2,.ol-opts.ol-n3{grid-template-columns:repeat(var(--n,2),1fr)}.ol-opts.ol-n3{--n:3}
+.ol-opts.ol-big .ol-o{justify-content:center;font-size:30px;min-height:70px;text-align:center}
+.ol-o{justify-content:center;text-align:center;min-height:54px}
+.ol-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ol-in{align-self:center}
+.ol-why{background:var(--paper);border-radius:18px;padding:14px 16px;box-shadow:0 4px 0 var(--line)}
+.ol-why h3{margin:0;font:900 18px var(--f-body)}
+.ol-why ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font:700 17px/1.45 var(--f-body)}
+.ol-badge{margin:0;font:900 18px var(--f-body);color:var(--tiger-deep)}
+.ol-why .big{align-self:stretch}
 @media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
 .said-card{position:fixed;z-index:44;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + var(--guide-h,96px) + 88px);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(42,35,70,.25);text-align:center;animation:popin .3s both}
 .said-card small{font:800 13px var(--f-body);color:var(--ink-soft)}
@@ -3348,6 +3389,100 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .aq .pick-b.no,.aq .aq-th.no{opacity:.4}
 #aqLv{color:var(--tiger-deep);letter-spacing:.02em}
 /* FUN-CSS-END */
+/* CALM-CSS: the calm look (testers: «перегружено, радужная палитра отвлекает»). One design system on top of the
+   older rules: a soft neutral background, ONE accent (the friend's orange), one success green, one warning yellow;
+   the pastel tints come from a small muted set, and the home tiles take one tint per tab instead of a rainbow;
+   flat cards with a soft shadow instead of chunky 3D slabs; one type scale. The night theme of the older child
+   (body.quest) gets the same rules with its own values. Everything sits under body.look-calm: the family chooses
+   «Ярко» (the old bright look, no class) or «Спокойно» (LOOK below; the default). */
+body.look-calm{
+  --bg:#F6F3EE; --surface:#FFFFFF; --accent:var(--tiger); --accent-deep:var(--tiger-deep); --ok:#2FA865; --warn:#F2B630;
+  --sky:#F6F3EE; --ink-soft:#6B6585;
+  --t-blue:#E6EDF8; --t-green:#E6F1E2; --t-peach:#FBECE0; --t-lilac:#EEE9F7; --t-pink:#F8E8EC; --t-yellow:#FAF1D9; --t-mint:#E1F1EA;
+  --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
+  --sh-1:0 1px 2px rgba(42,35,70,.06),0 3px 10px rgba(42,35,70,.06); --sh-2:0 2px 4px rgba(42,35,70,.07),0 8px 22px rgba(42,35,70,.08);
+  --r-card:22px; --r-chip:999px;
+  --fs-h1:26px; --fs-h2:22px; --fs-title:18px; --fs-body:16px; --fs-small:13px;
+  --line-strong:rgba(42,35,70,.11);
+}
+body.look-calm .pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
+body.look-calm.quest{--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#A8B0D8;
+  --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
+  --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
+  --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
+/* the background: calm and plain (no clouds by day; the night sky keeps its few stars) */
+body.look-calm:not(.quest){background-color:var(--bg);background-image:none}
+body.look-calm.quest{background-color:var(--bg)}
+body.look-calm .logo .lt:nth-child(n){color:var(--ink);transform:none}
+/* one tint per tab on the home tiles */
+body.look-calm .home-t[data-tab="speak"]{--tint:var(--tint-speak)}body.look-calm .home-t[data-tab="learn"]{--tint:var(--tint-learn)}
+body.look-calm .home-t[data-tab="create"]{--tint:var(--tint-create)}body.look-calm .home-t[data-tab="discover"]{--tint:var(--tint-discover)}
+body.look-calm .home-t{--tint:var(--surface)}
+body.look-calm .home-t .tile,body.look-calm .home-t .mini{background:var(--tint)}
+/* tiles: a clear picture and a short name; the second line small and on one line */
+body.look-calm .tile{min-height:156px;border-radius:var(--r-card);padding:14px;gap:6px;box-shadow:var(--sh-1)}
+body.look-calm .tile:active,body.look-calm .mini:active,body.look-calm .card:active,body.look-calm .chip:active,body.look-calm .ibtn:active,body.look-calm .disc:active,body.look-calm .at-card:active{transform:scale(.97);box-shadow:var(--sh-1)}
+body.look-calm .tile b{font:700 var(--fs-title)/1.15 var(--f-display)}
+body.look-calm .tile small{font:700 var(--fs-small)/1.3 var(--f-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+body.look-calm .tile .prog{font-size:var(--fs-small)}
+body.look-calm.quest .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
+body.look-calm .tile.tl-armed{box-shadow:0 0 0 4px var(--warn),var(--sh-1)}
+body.look-calm .mini,body.look-calm .card{box-shadow:var(--sh-1)}
+/* cards, chips and round buttons: flat, a soft shadow */
+body.look-calm .chip,body.look-calm .kid,body.look-calm .ibtn,body.look-calm .starpill,body.look-calm .disc,body.look-calm .at-card,body.look-calm .hol-card,body.look-calm .hol-card.soon,body.look-calm .hm-more,body.look-calm .qcard,body.look-calm .rank,body.look-calm .ld-tab,body.look-calm .ld-pts li,body.look-calm .ld-steps li,body.look-calm .af-house,body.look-calm .today,body.look-calm .today.is-done{box-shadow:var(--sh-1)}
+body.look-calm .chip,body.look-calm .kid{background:var(--surface)}
+body.look-calm .kid.sel{background:var(--t-peach);box-shadow:0 0 0 2px var(--accent),var(--sh-1)}
+body.look-calm .bubble{box-shadow:var(--sh-1)}
+body.look-calm .sec-nav{background:rgba(246,243,238,.94)}
+body.look-calm .sec-nav .chip{box-shadow:none;background:var(--surface);border:1px solid var(--line)}
+body.look-calm.quest .sec-nav{background:rgba(20,26,49,.94)}
+body.look-calm .surp{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+body.look-calm .surp .surp-q{background:var(--accent);color:#fff}
+body.look-calm .rf-card,body.look-calm .rf-card.soft{background:var(--surface);border:0;border-left:6px solid var(--warn);box-shadow:var(--sh-1)}
+body.look-calm.quest .rf-card,body.look-calm.quest .rf-card.soft{background:var(--surface);border-color:var(--warn)}
+/* one type scale */
+body.look-calm .group-head h2,body.look-calm .today h2{font:700 var(--fs-h2)/1.15 var(--f-display)}
+body.look-calm .group-head p{font:700 14px/1.3 var(--f-body)}
+body.look-calm.young .group-head p{display:none}
+body.look-calm .tab-head h1{font:900 var(--fs-h1)/1.1 var(--f-display,var(--f-body))}
+body.look-calm .bar h1{font:700 clamp(20px,4.2vw,26px)/1.1 var(--f-display)}
+body.look-calm .group{gap:10px}
+body.look-calm .stage.scroll{gap:20px}
+/* the bottom tabs: one quiet selection */
+body.look-calm .tabbar{box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(30,26,46,.06)}
+body.look-calm .tb.sel{background:var(--t-peach);color:var(--ink)}body.look-calm .tb.sel .emo{transform:none}
+body.look-calm.quest .tb.sel{background:#2E3866}
+@media (min-width:900px){body.look-calm .home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.look-calm.quest .home-t .tb.sel{background:#2E3866}}
+/* «Сегодня»: the path is the one big thing; the child's own things are small chips under it */
+body.look-calm .pd-lb,body.look-calm .pd-bub{box-shadow:var(--sh-1)}
+body.look-calm .pd-n.now .pd-lb{box-shadow:0 4px 0 var(--accent-deep)}
+body.look-calm .pd-mine{gap:8px}
+body.look-calm .pd-mine .chip{min-height:44px;padding:6px 14px 6px 8px;font-size:15px;box-shadow:none;border:1px solid var(--line)}
+body.look-calm .pd-mine .chip .emo{font-size:22px}
+body.look-calm .pd-card{box-shadow:var(--sh-1)!important}
+/* the game frame: the same header, the friend at the bottom, one main button */
+body.look-calm .big{box-shadow:0 5px 0 var(--accent-deep)}
+body.look-calm .big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-deep)}
+body.look-calm .big.danger{box-shadow:0 5px 0 #B8305A}
+body.look-calm .big.ghost,body.look-calm .big.ghost.danger{background:var(--surface);box-shadow:var(--sh-1),inset 0 0 0 2px var(--line)}
+body.look-calm .big.ghost:active{transform:scale(.97)}
+body.look-calm .winbox{border-radius:28px;box-shadow:var(--sh-2)}
+/* CALM-CSS-END */
+/* LOOK-CSS: the «Ярко / Спокойно» picker with a tiny picture of each look */
+.lk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:460px;margin-inline:auto}
+.lk-c{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 10px 12px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 0 0 2px var(--line),0 3px 10px rgba(42,35,70,.08);font:inherit}
+.lk-c b{font:800 19px/1.1 var(--f-body)}
+.lk-c.sel{box-shadow:0 0 0 4px var(--tiger),0 3px 10px rgba(42,35,70,.08)}
+.lk-c:active{transform:scale(.97)}
+.lk-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;aspect-ratio:4/3;padding:10px;border-radius:14px}
+.lk-mini i{border-radius:9px}
+.lk-bright{background:#CDEEF6 radial-gradient(ellipse 40% 18% at 22% 12%,#fff 70%,transparent 72%)}
+.lk-bright i{box-shadow:0 4px 0 rgba(42,35,70,.22)}
+.lk-bright i:nth-child(1){background:#FFE6CC}.lk-bright i:nth-child(2){background:#DCEDFF}.lk-bright i:nth-child(3){background:#E3F5D0}.lk-bright i:nth-child(4){background:#FFE0E8}
+.lk-calm{background:#EFE9E0}
+.lk-calm i{background:#F7DCC8;box-shadow:0 1px 3px rgba(42,35,70,.12)}
+.lk-ob .lk-pick{margin-block:6px 10px}
+/* LOOK-CSS-END */
 </style>
 </head>
 <body>
@@ -3545,15 +3680,21 @@ const MEDALS = [{ n: 3, e: '🥉', t: "3 Tage am Stück" }, { n: 7, e: '🥈', t
 const LESSONS_R = {
   speech: { name: "Sprechen", sub: "Atmen, Zunge, R und SCH-Laute", mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: "Lesen", sub: "Buchstaben, Silben, Wörter", mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
-  math: { name: "Mathe", sub: "zählen und plus rechnen", mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' }
+  math: { name: "Mathe", sub: "zählen und plus rechnen", mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' },
+  puzzle: { name: "Rätsel des Tages", sub: "ein kniffliges Rätsel, das du schaffst", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
+  soro: { name: "Abakus", sub: "Perlen und Kopfrechnen, jeden Tag", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LESSONS_L = {
   speech: { name: "L-Training", sub: "Aufwärmen, Zunge, L-Arena", mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: "Schnelllesen", sub: "Silben und Text auf Zeit", mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
-  book: { name: "Buch", sub: "jeden Tag ein bisschen, mit Freude", mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' }
+  book: { name: "Buch", sub: "jeden Tag ein bisschen, mit Freude", mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
+  puzzle: { name: "Rätsel des Tages", sub: "ein kniffliges Rätsel, das du schaffst", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
+  soro: { name: "Abakus", sub: "Perlen und Kopfrechnen, jeden Tag", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LS = () => {
-  const b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  
+  if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
   return customSounds() ? { ...b, speech: { ...b.speech, name: "Sprechen", sub: "Atmen, Zunge, " + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3572,13 +3713,16 @@ function todayState() {
     P.today = { date: k, v: 2, done: { speech: [], read: [], math: [] } };
     if (old && old.date === k && Array.isArray(old.done) && !dayTotal(k)) P.today.done.speech = old.done;
   }
-  ['speech', 'read', 'math', 'book'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
+  ['speech', 'read', 'math', 'book', 'puzzle', 'soro'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
   return P.today;
 }
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
 
 function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
+  
+  if (id === 'soro') return [{ key: 'soroban', kind: 'math', name: "Abakus", run: () => SB.daily() }];
+  if (id === 'puzzle') return [gameStep('olymp-day', 'puzzle')];
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
@@ -4261,6 +4405,7 @@ function newScreen() {
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
+  lookApply();
   return tok;
 }
 function later(fn, ms) { const t = tok; timers.push(setTimeout(() => { if (t === tok) fn(); }, ms)); }
@@ -4607,7 +4752,7 @@ const greet = () => gx((Q()
   : `Hallo${nameBit()}! Ich bin ${friend().who}. ${friend().hello} ${dayTotal(dayKey()) ? "Heute hast du schon geübt. Du kannst noch mehr machen!" : "Wollen wir eine Übung machen?"}`) + holGreet());
 function lessonsCard() {
   const td = todayState(), c = dayCounts(td.date);
-  const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b></span>", math: '<span class="ico-num">1+2</span>', book: pic('📖') };
+  const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b></span>", math: '<span class="ico-num">1+2</span>', book: pic('📖'), soro: pic('🧮') };
   const rows = LIDS().map(id => {
     const L = LS()[id], plan = lessonPlan(id), d = td.done[id].length, n = c[id] || 0;
     const state = id === 'book' ? (n ? "Heute gelesen ✓" : "Lesen eintragen") : d ? `Weiter · ${d}/${plan.length}` : n ? "Noch mal" : "Start";
@@ -4737,7 +4882,7 @@ function goHome() {
   const RF = readFineCheck();
   navHome();
   setTimeout(() => statPing(), 4000);
-  document.body.classList.toggle('quest', Q());
+  document.body.classList.toggle('quest', Q()); lookApply();
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
@@ -4801,7 +4946,7 @@ function goHome() {
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || "<p class=\"lead\">Hier ist noch nichts. Spiele werden unter „Für Erwachsene“ → „Interessen und Spiele“ eingeschaltet.</p>"}`;
   }
-  app.innerHTML = `<div class="screen home-t">
+  app.innerHTML = `<div class="screen home-t" data-tab="${tab}">
    <main class="stage scroll" id="stage">
     ${GUEST ? `<button class="g-back" id="guestTop">${GRAND[GUEST.who].e} ← Mein Bereich: Enkel, Loben, Schach</button>` : ''}
     ${kidsBar()}
@@ -8857,7 +9002,7 @@ const placeOn = k => famPlaces().includes(k);
  
 const LEARN_SUB = { phys: "Schaukel, Rutsche, Ball, Trampolin: Wie funktioniert das?", spb: "Geschichte der Stadt für Kinder", pt: "Cascais, Sintra, Lissabon", music: "Tschaikowski, Mozart, Vivaldi …", art: "Aiwasowski, Schischkin, van Gogh …", old: "Pyramiden, Ritter, Wikinger — und was zuerst war" };
 GAMES.push(
-  { id: 'olymp', name: "Olympiade", sub: "knifflige Aufgaben: Logik, Zahlen, Schach", ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, prog: () => P.olymp ? `gelöst ${P.olymp.solved.length}/${OLYMP.length}` : '' },
+  { id: 'olymp', name: "Olympiade", sub: "knifflige Rätsel, die du schaffst: Logik, Möglichkeiten, Roboter, Streichhölzer", kw: "Olympiade Logik Rätsel Wahrscheinlichkeit Kombinatorik Algorithmen Streichhölzer", ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, also: [3], prog: () => OLY.lvTxt() },
   { id: 'flash', name: "Blitzrechnen", sub: "Kopfrechnen", ico: () => pic('⚡'), bg: 'var(--t-yellow)', go: () => screenFlash(), grp: 8, prog: () => `Level ${P.flashLv || 1}` },
   { id: 'dots', name: "Punkte der Reihe nach", sub: "verbinde sie und schau, was entsteht", ico: () => pic('🔢'), bg: 'var(--t-green)', go: () => screenDots(), grp: 4 },
   { id: 'chess-online', name: "Schach online", sub: "eine Partie mit der Familie", ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => ROOT.curFam === 'gk' && GUEST ? (GUEST_OFF = false, screenGuest()) : screenFamChess(), grp: 8,
@@ -9567,6 +9712,189 @@ const OLYMP = [
   { id: 'o79', cat: "Kombinatorik", lvl: 3, q: "Wie viele dreistellige Zahlen gibt es, deren Ziffern zusammen 3 ergeben?", opts: ['2', '3', '4', '5', '6'], a: 4, hint: "Die erste Ziffer kann nur 1, 2 oder 3 sein. Probiere alle Möglichkeiten durch.", why: "102, 111, 120, 201, 210 und 300 – sechs Zahlen." },
   { id: 'o80', cat: "Zahlen", lvl: 3, q: "Sava denkt sich eine zweistellige Zahl, deren Ziffern zusammen 7 ergeben. Vertauscht man die Ziffern, wird die Zahl um 27 größer. Welche Zahl hat sich Sava gedacht?", opts: ['16', '25', '34', '43', '52'], a: 1, hint: "Prüfe jede Antwort: Vertausche die Ziffern und berechne den Unterschied.", why: "25 → 52, und 52 − 25 = 27. Bei den anderen klappt es nicht: 61 − 16 = 45, 43 − 34 = 9, und 43 und 52 werden beim Vertauschen kleiner." }
 ];
+ 
+
+
+const OLYMP_NEW = [
+  
+  { id: 'k1', lv: 1, cat: "Logik", p: '🐘 🐭', q: "Wer ist schwerer: der Elefant oder die Maus?", o: ['🐘', '🐭'], a: 0, h1: "Überleg, wen du leichter hochheben kannst.", h2: "Die Maus passt auf deine Hand, aber der Elefant ist größer als ein Auto.", w: ["Der Elefant ist riesig und die Maus ist winzig.", "Also ist der Elefant schwerer."] },
+  { id: 'k2', lv: 1, cat: "Reihen", p: '🍎 🍐 🍎 🍐 🍎 ❓', q: "Was kommt als Nächstes?", o: ['🍐', '🍎'], a: 0, h1: "Die Früchte kommen immer abwechselnd.", h2: "Schau, was gleich nach dem Apfel kommt.", w: ["Apfel, Birne, Apfel, Birne: Sie wechseln sich ab.", "Zuletzt kam ein Apfel, also kommt als Nächstes eine Birne."] },
+  { id: 'k3', lv: 1, cat: "Beine und Ohren", p: '🐔', q: "Wie viele Beine hat ein Huhn?", o: ['2', '4'], a: 0, h1: "Ein Huhn ist ein Vogel.", h2: "Stell dich hin wie ein Huhn. Auf wie vielen Beinen stehst du?", w: ["Ein Huhn ist ein Vogel.", "Vögel haben zwei Beine."] },
+  { id: 'k4', lv: 1, cat: "Beine und Ohren", p: '🐶', q: "Wie viele Pfoten hat ein Welpe?", o: ['4', '2'], a: 0, h1: "Ein Welpe läuft auf allen Pfoten gleichzeitig.", h2: "Zwei Pfoten vorne und noch welche hinten.", w: ["Ein Welpe hat zwei Pfoten vorne und zwei hinten.", "Zwei und zwei sind vier."] },
+  { id: 'k5', lv: 1, cat: "Mit Haken", p: '🍎 🍎 🍎', q: "Es waren 3 Äpfel da. Ein Apfel wurde gegessen. Wie viele Äpfel wurden gegessen?", o: ['1', '2'], a: 0, h1: "Hör gut zu: Gefragt ist, wie viele gegessen wurden, nicht wie viele übrig sind.", h2: "Im Rätsel steht genau, wie viele Äpfel gegessen wurden.", w: ["Der Trick steckt in der Frage: Gefragt ist, wie viele gegessen wurden.", "Es wurde ein Apfel gegessen."] },
+  { id: 'k6', lv: 1, cat: "Reihen", p: '🔴 🔵 🔵 🔴 🔵 🔵 🔴 ❓', q: "Welcher Ball kommt als Nächstes?", o: ['🔵', '🔴'], a: 0, h1: "Schau, was nach dem roten Ball kommt.", h2: "Nach Rot kommen immer zwei blaue.", w: ["Die Bälle gehen so: rot, blau, blau.", "Nach Rot kommt Blau."] },
+  { id: 'k7', lv: 1, cat: "Logik", p: '🐱 🐶 🐰', q: "Das Häschen steht ganz hinten. Wer steht in der Mitte?", o: ['🐶', '🐱'], a: 0, h1: "Die Mitte ist zwischen dem Ersten und dem Letzten.", h2: "Das Kätzchen ist Erstes, das Häschen ist Letztes. Wer ist dazwischen?", w: ["Das Kätzchen steht vorne und das Häschen steht hinten.", "Dazwischen, in der Mitte, steht der Welpe."] },
+  { id: 'k8', lv: 1, cat: "Wie viele Möglichkeiten", p: '🧢 👒 ➕ 👕', q: "Es gibt zwei Mützen und ein T-Shirt. Wie viele verschiedene Outfits kannst du zusammenstellen?", o: ['2', '1'], a: 0, h1: "Es gibt ein T-Shirt und zwei Mützen.", h2: "Zieh das T-Shirt mit der ersten Mütze an und dann mit der zweiten.", w: ["Das T-Shirt mit der Kappe ist ein Outfit.", "Das T-Shirt mit dem Hut ist das zweite Outfit.", "Das sind zusammen zwei Outfits."] },
+  { id: 'k9', lv: 1, cat: "Wahrscheinlichkeit", p: '🔴 🔴 🔴 🔴 🔵', q: "In einem Sack sind 4 rote Bälle und 1 blauer Ball. Welchen Ball ziehst du am ehesten, wenn du nicht hinschaust?", o: ['🔴', '🔵'], a: 0, h1: "Von welchen Bällen sind mehr im Sack?", h2: "Es sind vier rote und nur ein blauer.", w: ["Es gibt viel mehr rote Bälle als blaue.", "Darum ziehst du am ehesten einen roten."] },
+  { id: 'k10', lv: 1, cat: "Algorithmen", p: '#robot:Rab', it: ['🍎', '🍌'], q: "Der Roboter hat zwei Schritte nach rechts gemacht: ➡️ ➡️. Was hat er gefunden?", o: ['🍌', '🍎'], a: 0, h1: "Geh mit deinem Finger zusammen mit dem Roboter.", h2: "Der erste Schritt geht zum Apfel, der zweite noch weiter.", w: ["Erster Schritt: Der Roboter ist beim Apfel.", "Zweiter Schritt: Der Roboter ist bei der Banane."] },
+  { id: 'k11', lv: 1, cat: "Von hinten", p: '🍬 🍬', q: "Das Bärchen hat ein Bonbon gegessen, und jetzt hat es noch zwei. Wie viele Bonbons waren es am Anfang?", o: ['3', '1'], a: 0, h1: "Leg das gegessene Bonbon zurück.", h2: "Zwei Bonbons sind übrig und eins wurde gegessen.", w: ["Zwei Bonbons sind übrig.", "Wir legen das dazu, das das Bärchen gegessen hat: zwei und eins sind drei."] },
+  { id: 'k12', lv: 1, cat: "Würfel", p: '#cubes:3', q: "Wie viele Würfel sind im Turm?", o: ['3', '2'], a: 0, h1: "Zähl die Würfel von unten nach oben.", h2: "Der untere, der mittlere und der obere.", w: ["Der untere ist eins, der mittlere ist zwei, der obere ist drei.", "Der Turm hat drei Würfel."] },
+  { id: 'k13', lv: 1, cat: "Beine und Ohren", p: '🐔 🐔', q: "Wie viele Beine haben zwei Hühner?", o: ['4', '2'], a: 0, h1: "Jedes Huhn hat zwei Beine.", h2: "Zähl erst die Beine von einem Huhn, dann von dem anderen.", w: ["Ein Huhn hat zwei Beine.", "Zwei Hühner haben zwei und zwei, das sind vier."] },
+  { id: 'k14', lv: 1, cat: "Logik", p: '🦒 🐘', q: "Die Giraffe ist größer als der Elefant. Wer ist kleiner?", o: ['🐘', '🦒'], a: 0, h1: "Wenn die Giraffe größer ist, ist der andere kleiner.", h2: "Kleiner ist der, der nicht größer ist.", w: ["Die Giraffe ist größer als der Elefant.", "Also ist der Elefant kleiner als die Giraffe."] },
+  { id: 'k15', lv: 1, cat: "Reihen", p: '1 2 3 4 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['5', '6'], a: 0, h1: "Zähl der Reihe nach.", h2: "Eins, zwei, drei, vier, und dann?", w: ["Die Zahlen gehen der Reihe nach: Jede ist um eins größer.", "Nach der Vier kommt die Fünf."] },
+  { id: 'k16', lv: 1, cat: "Wiegen", p: '🍉 ⚖️ 🍒', q: "Auf der Waage war die Wassermelone schwerer als die Kirsche. Was ist leichter?", o: ['🍒', '🍉'], a: 0, h1: "Schwerer heißt, dass sie mehr wiegt.", h2: "Die Schale mit dem leichten Ding geht nach oben.", w: ["Die Wassermelone wiegt mehr, also ist sie schwerer.", "Die Kirsche ist leichter."] },
+  { id: 'k17', lv: 1, cat: "Beine und Ohren", p: '🐰 🐰', q: "Wie viele Ohren haben zwei Häschen?", o: ['4', '2'], a: 0, h1: "Ein Häschen hat zwei lange Ohren.", h2: "Zwei Ohren bei dem einen und zwei bei dem anderen.", w: ["Jedes Häschen hat zwei Ohren.", "Zwei und zwei sind vier."] },
+  { id: 'k18', lv: 1, cat: "Streichhölzer", p: '#sticks:1x1', q: "Wie viele Stäbchen sind in einem Quadrat?", o: ['4', '3'], a: 0, h1: "Zähl die Seiten des Quadrats.", h2: "Oben, unten, links und rechts.", w: ["Ein Quadrat hat vier Seiten.", "Jede Seite ist ein Stäbchen, also sind es vier."] },
+  { id: 'k19', lv: 1, cat: "Streichhölzer", p: '🔺', q: "Wie viele Stäbchen brauchst du für ein Dreieck?", o: ['3', '4'], a: 0, h1: "Wie viele Ecken hat ein Dreieck? Genauso viele Seiten hat es.", h2: "Dreieck heißt „drei Ecken“.", w: ["Ein Dreieck hat drei Seiten.", "Also brauchst du drei Stäbchen."] },
+  { id: 'k20', lv: 1, cat: "Logik", p: '🍳 🍝', q: "Was kommt früher: das Frühstück oder das Abendessen?", o: ['🍳', '🍝'], a: 0, h1: "Frühstück gibt es am Morgen.", h2: "Und Abendessen gibt es am Abend, vor dem Schlafen.", w: ["Das Frühstück ist am Morgen und das Abendessen am Abend.", "Der Morgen ist früher als der Abend, also kommt das Frühstück zuerst."] },
+  { id: 'k21', lv: 1, cat: "Wie viele Möglichkeiten", p: '🍦 🍰', q: "Das Häschen sucht sich eine Leckerei aus: Eis oder Kuchen. Wie viele Möglichkeiten hat es?", o: ['2', '1'], a: 0, h1: "Zähl die Leckereien auf dem Bild.", h2: "Es kann Eis nehmen oder Kuchen.", w: ["Die erste Möglichkeit ist Eis.", "Die zweite Möglichkeit ist Kuchen.", "Das sind zusammen zwei Möglichkeiten."] },
+  { id: 'k22', lv: 1, cat: "Algorithmen", p: '#robot:a|b|R', it: ['🍓', '🥕'], q: "Der Roboter hat einen Schritt nach oben gemacht: ⬆️. Was hat er gefunden?", o: ['🥕', '🍓'], a: 0, h1: "Geh mit deinem Finger ein Feld nach oben.", h2: "Direkt über dem Roboter ist eine Karotte.", w: ["Der Roboter steht unten.", "Ein Schritt nach oben und er ist bei der Karotte."] },
+  { id: 'k23', lv: 1, cat: "Mit Haken", p: '🌳 🐦 🐦', q: "In einem Baum saßen 2 Vögelchen. Eins fing an zu singen. Wie viele Vögelchen sind im Baum?", o: ['2', '1'], a: 0, h1: "Das Vögelchen hat gesungen, aber es ist nicht weggeflogen.", h2: "Vom Singen werden es nicht weniger Vögelchen.", w: ["Das Vögelchen hat nur gesungen: Keins ist weggeflogen.", "Im Baum sind immer noch zwei Vögelchen."] },
+
+  
+  { id: 'm1', lv: 2, cat: "Reihen", p: '🔺 🟦 🟦 🔺 🟦 🟦 ❓', q: "Was kommt dann?", o: ['🔺', '🟦', '🟢'], a: 0, h1: "Finde das Stück, das sich wiederholt.", h2: "Dreieck, Quadrat, Quadrat, und dann geht es von vorn los.", w: ["Es wiederholt sich: Dreieck, Quadrat, Quadrat.", "Zwei Quadrate waren schon da, also kommt als Nächstes ein Dreieck."] },
+  { id: 'm2', lv: 2, cat: "Beine und Ohren", p: '🐶 🐔', q: "Wie viele Beine haben ein Welpe und ein Huhn zusammen?", o: ['6', '4', '8'], a: 0, h1: "Ein Welpe hat vier Pfoten.", h2: "Und ein Huhn hat zwei Beine. Zähl zusammen.", w: ["Ein Welpe hat 4 Pfoten, ein Huhn hat 2 Beine.", "Vier und zwei sind sechs."] },
+  { id: 'm3', lv: 2, cat: "Logik", p: '🦒 🐴 🐕', q: "Die Giraffe ist größer als das Pferd, und das Pferd ist größer als der Hund. Wer ist am kleinsten?", o: ['🐕', '🐴', '🦒'], a: 0, h1: "Stell sie der Größe nach auf.", h2: "Das Pferd ist größer als der Hund, und die Giraffe ist größer als alle.", w: ["Die Giraffe ist größer als das Pferd, das Pferd ist größer als der Hund.", "Also ist der Hund am kleinsten."] },
+  { id: 'm4', lv: 2, cat: "Mit Haken", p: '🪶 ⚖️ 🔩', q: "Was ist schwerer: ein Kilo Federn oder ein Kilo Nägel?", o: ["Gleich", "Nägel", "Federn"], a: 0, h1: "Schau, wie viel jedes wiegt.", h2: "Ein Kilo ist immer ein Kilo.", w: ["Beides ist ein Kilo schwer.", "Federn sind nur viel größer an Menge, aber sie wiegen gleich viel."] },
+  { id: 'm5', lv: 2, cat: "Wie viele Möglichkeiten", p: '👕 👚 ➕ 👖 🩳', q: "Das Bärchen hat 2 T-Shirts und 2 Hosen. Wie viele verschiedene Outfits kann es anziehen?", o: ['4', '2', '3'], a: 0, h1: "Zum ersten T-Shirt passt jede der Hosen.", h2: "Mit jedem T-Shirt gibt es zwei Outfits.", w: ["Erstes T-Shirt: mit langer Hose und mit kurzer Hose, das sind zwei Outfits.", "Das zweite T-Shirt gibt noch zwei.", "Das sind zusammen vier Outfits."] },
+  { id: 'm6', lv: 2, cat: "Wahrscheinlichkeit", p: '🔴 🔴 🔵 🔵 🔵 🔵 🔵', q: "In einem Sack sind 2 rote und 5 blaue Bälle. Welche Farbe ziehst du am ehesten?", o: ['🔵', '🔴', "Gleich"], a: 0, h1: "Von welchen Bällen gibt es mehr?", h2: "Es sind fünf blaue und nur zwei rote.", w: ["Es gibt mehr blaue Bälle als rote.", "Darum ziehst du am ehesten einen blauen."] },
+  { id: 'm7', lv: 2, cat: "Algorithmen", p: '#robot:b.c|...|R.a', it: ['🍎', '🍌', '🍒'], q: "Der Roboter macht diese Befehle: ➡️ ➡️ ⬆️ ⬆️. Wo kommt er an?", o: ['🍒', '🍎', '🍌'], a: 0, h1: "Mach die Befehle einen nach dem anderen mit dem Finger.", h2: "Zwei Schritte nach rechts: Der Roboter ist beim Apfel. Jetzt zwei Schritte nach oben.", w: ["Zwei Schritte nach rechts: Der Roboter ist beim Apfel.", "Zwei Schritte nach oben: Der Roboter ist bei der Kirsche."] },
+  { id: 'm8', lv: 2, cat: "Von hinten", p: '🐿️ 🌰', q: "Das Eichhörnchen hat 3 Nüsse gefunden und hat jetzt 5. Wie viele Nüsse hatte es am Anfang?", o: ['2', '8', '3'], a: 0, h1: "Nimm die gefundenen Nüsse weg.", h2: "Von fünf nimm drei weg.", w: ["Jetzt sind es fünf, und drei davon sind neu.", "Fünf minus drei ist zwei. Es waren zwei Nüsse."] },
+  { id: 'm9', lv: 2, cat: "Würfel", p: '#cubes:2,1', q: "Wie viele Würfel sind auf dem Bild?", o: ['3', '2', '4'], a: 0, h1: "Zähl jedes Türmchen für sich.", h2: "Das hohe Türmchen hat zwei Würfel.", w: ["Das hohe Türmchen hat zwei Würfel, das niedrige hat einen.", "Zwei und eins sind drei."] },
+  { id: 'm10', lv: 2, cat: "Streichhölzer", p: '#sticks:1x2', q: "Wie viele Stäbchen sind in dieser Figur aus zwei kleinen Quadraten?", o: ['7', '8', '6'], a: 0, h1: "Das mittlere Stäbchen gehört zu beiden kleinen Quadraten.", h2: "Zähl: zwei oben, zwei unten und dazu die stehenden.", w: ["Zwei Stäbchen oben und zwei unten.", "Stehende sind es drei: links, in der Mitte und rechts.", "Insgesamt sieben: Das mittlere Stäbchen gehört zu beiden Quadraten."] },
+  { id: 'm11', lv: 2, cat: "Reihen", p: '2 4 6 8 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['10', '9', '12'], a: 0, h1: "Um wie viel ist jede Zahl größer als die davor?", h2: "Die Zahlen wachsen mit einer Lücke: Zähl jedes Mal zwei dazu.", w: ["Jede Zahl ist um zwei größer als die davor.", "Acht und zwei sind zehn."] },
+  { id: 'm12', lv: 2, cat: "Logik", p: '🐶 ❓ ❓', q: "Die Katze sitzt zwischen dem Hund und der Maus. Der Hund ist links. Wer sitzt rechts?", o: ['🐭', '🐱', '🐶'], a: 0, h1: "Die Katze ist in der Mitte.", h2: "Der Hund ist links, die Katze in der Mitte. Wer bleibt übrig?", w: ["Die Katze ist zwischen den beiden, also in der Mitte.", "Links ist der Hund und rechts ist die Maus."] },
+  { id: 'm13', lv: 2, cat: "Beine und Ohren", p: '🐱 🐱 🐱', q: "Wie viele Ohren haben drei Kätzchen?", o: ['6', '3', '9'], a: 0, h1: "Jedes Kätzchen hat zwei Ohren.", h2: "Zwei, noch zwei und noch zwei.", w: ["Jedes Kätzchen hat zwei Ohren.", "Zwei, vier, sechs: sechs Ohren."] },
+  { id: 'm14', lv: 2, cat: "Mit Haken", p: '🐓 🏠', q: "Ein Hahn hat ein Ei ganz oben aufs Dach gelegt. In welche Richtung rollt es?", o: ["Hähne legen keine Eier", "Nach links", "Nach rechts"], a: 0, h1: "Wer legt eigentlich Eier?", h2: "Hühner legen Eier, und der Hahn ist der Papa der Küken.", w: ["Das Huhn legt die Eier.", "Ein Hahn legt keine Eier, also gibt es nichts, was rollt."] },
+  { id: 'm15', lv: 2, cat: "Wiegen", p: '🍎 🍎 ⚖️ 🍐', q: "Zwei Äpfel wiegen so viel wie eine Birne. Wie viele Äpfel wiegen so viel wie zwei Birnen?", o: ['4', '3', '2'], a: 0, h1: "Leg statt jeder Birne zwei Äpfel hin.", h2: "Eine Birne sind zwei Äpfel. Und zwei Birnen?", w: ["Eine Birne wiegt so viel wie zwei Äpfel.", "Zwei Birnen sind wie zwei und zwei, also vier Äpfel."] },
+  { id: 'm16', lv: 2, cat: "Wahrscheinlichkeit", p: '🟢 🟢 🟢 🟢', q: "In der Schachtel liegen nur grüne Stifte. Welchen Stift ziehst du, wenn du nicht hinschaust?", o: ["Ganz sicher grün", "Vielleicht rot", "Vielleicht blau"], a: 0, h1: "Welche Stifte sind in der Schachtel?", h2: "Außer den grünen sind keine anderen drin.", w: ["In der Schachtel sind nur grüne Stifte.", "Also ziehst du ganz sicher einen grünen."] },
+  { id: 'm17', lv: 2, cat: "Wie viele Möglichkeiten", p: '🔴 🔵', q: "Es gibt einen roten und einen blauen Ball. Auf wie viele Arten kannst du sie in eine Reihe hängen?", o: ['2', '1', '3'], a: 0, h1: "Welcher Ball kann der erste sein?", h2: "Der erste kann der rote sein oder der blaue.", w: ["Rot, dann Blau: die erste Art.", "Blau, dann Rot: die zweite Art."] },
+  { id: 'm18', lv: 2, cat: "Algorithmen", p: '🍽️ 🧽 🗄️', q: "Ein Roboter spült Geschirr: Er nimmt einen Teller, spült ihn und stellt ihn ins Regal. Was macht er gleich nach dem Spülen?", o: ["Stellt ihn ins Regal", "Nimmt einen Teller", "Schläft"], a: 0, h1: "Sag die Schritte des Roboters der Reihe nach.", h2: "Nimmt, spült, und dann?", w: ["Die Reihenfolge ist: nehmen, spülen, wegstellen.", "Nach „spülen“ kommt „ins Regal stellen“."] },
+  { id: 'm19', lv: 2, cat: "Mit Haken", p: '🍓 🍓 🍓 ➖ 🍉 🍉', q: "Wo sind es weniger Beeren und Früchte: in der Reihe Erdbeeren oder in der Reihe Wassermelonen?", o: ['🍉', '🍓', "Gleich viele"], a: 0, h1: "Zähl, wie viele es sind, nicht wie groß sie sind.", h2: "Erdbeeren sind es drei, und Wassermelonen?", w: ["Drei Erdbeeren, zwei Wassermelonen.", "Wassermelonen sind groß, aber es sind weniger."] },
+  { id: 'm20', lv: 2, cat: "Beine und Ohren", p: '🕷️', q: "Wie viele Beine hat eine Spinne?", o: ['8', '6', '4'], a: 0, h1: "Eine Spinne hat mehr Beine als ein Käfer.", h2: "Vier Beine auf jeder Seite.", w: ["Eine Spinne hat vier Beine auf jeder Seite.", "Vier und vier sind acht."] },
+  { id: 'm21', lv: 2, cat: "Von hinten", p: '🐰 🥕', q: "Das Häschen hat 2 Karotten einem Freund gegeben und hat noch 4. Wie viele Karotten hatte es am Anfang?", o: ['6', '2', '4'], a: 0, h1: "Nimm die verschenkten Karotten zurück.", h2: "Vier und noch zwei.", w: ["Vier sind übrig.", "Wir legen die zwei zurück, die es verschenkt hat: vier und zwei sind sechs."] },
+  { id: 'm22', lv: 2, cat: "Zeit", p: '📅', q: "Heute ist Montag. Welcher Tag war gestern?", o: ["Sonntag", "Dienstag", "Samstag"], a: 0, h1: "Gestern ist der Tag vor heute.", h2: "Welcher Wochentag kommt vor dem Montag?", w: ["Die Woche: Montag, Dienstag ... Samstag, Sonntag.", "Vor dem Montag kommt der Sonntag."] },
+
+  
+  { id: 'n1', lv: 3, cat: "Reihen", p: '1 3 5 7 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['9', '8', '10'], a: 0, h1: "Um wie viel wachsen die Zahlen?", h2: "Zähl jedes Mal zwei dazu.", w: ["Die Zahlen wachsen um zwei: 1, 3, 5, 7.", "Sieben und zwei sind neun."] },
+  { id: 'n2', lv: 3, cat: "Reihen", p: '🔴 🔵 🔵 🟢 🔴 🔵 🔵 🟢 🔴 ❓', q: "Welcher Ball kommt als Nächstes?", o: ['🔵', '🔴', '🟢'], a: 0, h1: "Finde das Stück, das sich wiederholt.", h2: "Nach einem roten Ball kommt immer ein blauer.", w: ["Es wiederholt sich: rot, blau, blau, grün.", "Der letzte ist rot, und danach kommt Blau."] },
+  { id: 'n3', lv: 3, cat: "Beine und Ohren", p: '🐔 🐔 🐔 🐕 🐕', q: "Im Hof sind 3 Hühner und 2 Hunde. Wie viele Beine sind es zusammen?", o: ['14', '10', '12', '20'], a: 0, h1: "Zähl die Beine der Hühner und die Pfoten der Hunde einzeln.", h2: "Drei Hühner mit je zwei Beinen, zwei Hunde mit je vier Pfoten.", w: ["Drei Hühner haben 6 Beine.", "Zwei Hunde haben 8 Pfoten.", "Sechs und acht sind vierzehn."] },
+  { id: 'n4', lv: 3, cat: "Logik", p: '🦔 🐿️ 🐰 🏁', q: "Igel, Eichhörnchen und Häschen sind zum Ziel gerannt. Das Eichhörnchen war vor dem Igel da, und das Häschen war vor dem Eichhörnchen da. Wer war Erster?", o: ["Häschen", "Eichhörnchen", "Igel"], a: 0, h1: "Wer war vor dem Eichhörnchen da?", h2: "Das Häschen war vor dem Eichhörnchen da, und das Eichhörnchen war vor dem Igel da.", w: ["Das Eichhörnchen war schneller als der Igel.", "Das Häschen war schneller als das Eichhörnchen.", "Also war das Häschen Erstes."] },
+  { id: 'n5', lv: 3, cat: "Wie viele Möglichkeiten", p: '🥤 🍦 ➕ 🍫 🍓 🍨', q: "Eis gibt es im Becher oder in der Waffel, und der Geschmack ist Schokolade, Erdbeere oder Vanille. Wie viele verschiedene Eis kannst du aussuchen?", o: ['6', '5', '3', '9'], a: 0, h1: "Such zuerst den Becher aus. Wie viele Sorten können hinein?", h2: "Im Becher gibt es drei Sorten und in der Waffel auch drei Sorten.", w: ["Im Becher gibt es drei Sorten.", "In der Waffel gibt es noch drei Sorten.", "Drei und drei sind sechs verschiedene Eis."] },
+  { id: 'n6', lv: 3, cat: "Wahrscheinlichkeit", p: '#dice:6', q: "Wir würfeln mit einem normalen Würfel. Was ist wahrscheinlicher: eine Sechs oder irgendeine Zahl unter sechs?", o: ["Eine Zahl unter 6", "Eine Sechs", "Gleich"], a: 0, h1: "Wie viele Seiten haben eine Sechs und wie viele kleinere Zahlen?", h2: "Die Sechs gibt es einmal, und Zahlen unter sechs gibt es fünf: 1, 2, 3, 4, 5.", w: ["Die Sechs ist eine Seite von sechs.", "Zahlen unter sechs sind fünf Seiten.", "Fünf Chancen sind mehr als eine."] },
+  { id: 'n7', lv: 3, cat: "Algorithmen", p: '#robot:..bd|R..a|.c..', it: ['🍎', '🍌', '🍒', '🧀'], q: "Der Roboter macht diese Befehle: ➡️ ➡️ ⬆️. Wo kommt er an?", o: ['🍌', '🍎', '🍒', '🧀'], a: 0, h1: "Mach einen Befehl nach dem anderen.", h2: "Nach zwei Schritten nach rechts steht der Roboter unter der Banane.", w: ["Zwei Schritte nach rechts.", "Ein Schritt nach oben und der Roboter ist bei der Banane."] },
+  { id: 'n8', lv: 3, cat: "Von hinten", p: '🦔 🍄', q: "Der Igel hat Pilze gefunden. Die Hälfte hat er dem Eichhörnchen gegeben, und er hat noch 4 Pilze. Wie viele Pilze hat er gefunden?", o: ['8', '6', '4', '2'], a: 0, h1: "Die Hälfte sind zwei gleich große Teile.", h2: "Der Igel hat genauso viele abgegeben, wie er behalten hat.", w: ["Der Igel hat die Hälfte behalten: 4 Pilze.", "Die andere Hälfte ist auch 4.", "Es waren insgesamt 8 Pilze."] },
+  { id: 'n9', lv: 3, cat: "Streichhölzer", p: '#sticks:1x3', q: "Wie viele Streichhölzer sind in dieser Figur?", o: ['10', '12', '9', '8'], a: 0, h1: "Quadrate nebeneinander teilen sich ein Streichholz.", h2: "Liegende Streichhölzer sind es 6, und wie viele stehende?", w: ["Liegende Streichhölzer: 3 oben und 3 unten — 6.", "Stehende — 4.", "Sechs und vier sind zehn."] },
+  { id: 'n10', lv: 3, cat: "Würfel", p: '#cubes:3,2,1', q: "Wie viele Würfel sind in dieser Treppe?", o: ['6', '5', '3'], a: 0, h1: "Zähl jeden Turm.", h2: "Türme aus 3, 2 und 1 Würfel.", w: ["Die Türme haben 3, 2 und 1 Würfel.", "Drei, zwei und eins sind sechs."] },
+  { id: 'n11', lv: 3, cat: "Mit Haken", p: '👦 👦 👦 👦 👦 👦 👦 👧', q: "Sieben Brüder haben eine Schwester, die gleiche für alle. Wie viele Kinder sind in der Familie?", o: ['8', '14', '7'], a: 0, h1: "Alle Brüder haben dieselbe Schwester.", h2: "Sieben Brüder und noch ein Mädchen.", w: ["Es gibt nur eine Schwester, für alle Brüder zusammen.", "Sieben und eins sind acht Kinder."] },
+  { id: 'n12', lv: 3, cat: "Wiegen", p: '🍌 ⚖️ 🍑 🍑 · 🍈 ⚖️ 🍌 🍌 🍌', q: "Eine Banane wiegt so viel wie 2 Pfirsiche, und eine Melone wiegt so viel wie 3 Bananen. Wie viele Pfirsiche wiegt die Melone?", o: ['6', '5', '3', '9'], a: 0, h1: "Tausche jede Banane gegen zwei Pfirsiche.", h2: "Drei Bananen, und jede ist wie zwei Pfirsiche.", w: ["Die Melone sind drei Bananen.", "Jede Banane sind zwei Pfirsiche.", "Zwei, vier, sechs — sechs Pfirsiche."] },
+  { id: 'n13', lv: 3, cat: "Wie viele Möglichkeiten", p: '🐱 🐱 🐱', q: "Drei Kätzchen trafen sich, und jedes stupste jedes andere einmal mit der Nase an. Wie viele Nasenstupser gab es?", o: ['3', '6', '2'], a: 0, h1: "Nenne die Kätzchen 1, 2 und 3 und schreib die Paare auf.", h2: "Die Paare: erstes mit zweitem, erstes mit drittem, zweites mit drittem.", w: ["Die Kätzchen-Paare: 1 und 2, 1 und 3, 2 und 3.", "Jedes Paar ist ein Treffen.", "Zusammen sind es drei Treffen."] },
+  { id: 'n14', lv: 3, cat: "Reihen", p: '5 10 15 20 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['25', '30', '21'], a: 0, h1: "Um wie viel wachsen die Zahlen?", h2: "Jedes Mal kommt fünf dazu.", w: ["Jede Zahl ist um fünf größer als die davor.", "Zwanzig und fünf sind fünfundzwanzig."] },
+  { id: 'n15', lv: 3, cat: "Logik", p: '🦊 🎈', q: "Das Füchslein ist ein Spaßvogel und sagt immer das Gegenteil. Es sagte: „Mein Ballon ist blau.“ Sein Ballon ist entweder blau oder rot. Welcher?", o: ["Rot", "Blau", "Weiß man nicht"], a: 0, h1: "Das Füchslein sagt nie die Wahrheit.", h2: "Wenn der Ballon nicht blau ist, welche Farbe hat er dann?", w: ["Das Füchslein sagt das Gegenteil, also ist der Ballon nicht blau.", "Es bleibt nur Rot."] },
+  { id: 'n16', lv: 3, cat: "Zeit", p: '🎂 ⏲️', q: "Ein Kuchen backte 30 Minuten und kühlte danach noch 30 Minuten ab. Wie viel Zeit ist insgesamt vergangen?", o: ["1 Stunde", "30 Minuten", "2 Stunden"], a: 0, h1: "Zähl die Minuten zusammen.", h2: "Eine Stunde hat 60 Minuten.", w: ["Dreißig und dreißig sind sechzig Minuten.", "Sechzig Minuten sind eine Stunde."] },
+  { id: 'n17', lv: 3, cat: "Wie viele Möglichkeiten", p: '1️⃣ 2️⃣', q: "Aus den Karten mit den Ziffern 1 und 2 legt man eine zweistellige Zahl. Wie viele verschiedene Zahlen gibt es?", o: ['2', '4', '1'], a: 0, h1: "Welche Karte kann vorn liegen?", h2: "Vorn kann die Eins oder die Zwei liegen.", w: ["Die Eins zuerst — es wird 12.", "Die Zwei zuerst — es wird 21.", "Es gibt nur zwei Zahlen."] },
+  { id: 'n18', lv: 3, cat: "Beine und Ohren", p: '🐰 🐰 🐱 🐱 🐱', q: "Wie viele Ohren haben zwei Hasen und drei Katzen zusammen?", o: ['10', '5', '12'], a: 0, h1: "Jedes Tier hat zwei Ohren.", h2: "Wie viele Tiere sind es zusammen?", w: ["Es sind fünf Tiere: zwei Hasen und drei Katzen.", "Jedes hat zwei Ohren: fünf mal zwei ist zehn."] },
+  { id: 'n19', lv: 3, cat: "Würfel", p: '#cubes:2,1/1,1', q: "Wie viele Würfel sind in der Figur?", o: ['5', '4', '6'], a: 0, h1: "Zähl die untere Schicht und dann die obere.", h2: "Unten sind vier Würfel.", w: ["Die untere Schicht hat vier Würfel.", "Oben liegt noch einer.", "Zusammen sind es fünf."] },
+  { id: 'n20', lv: 3, cat: "Algorithmen", p: '#robot:R.*', q: "Der Roboter muss zum Stern kommen. Welche Befehle sind richtig?", o: ['➡️ ➡️', '⬆️ ➡️', '➡️ ⬅️'], a: 0, h1: "Wo ist der Stern: rechts oder oben?", h2: "Der Stern ist rechts, ein Feld dazwischen.", w: ["Der Stern ist zwei Felder rechts vom Roboter.", "Also sind es zwei Schritte nach rechts."] },
+  { id: 'n21', lv: 3, cat: "Wahrscheinlichkeit", p: '🔴 🔴 🔴 🔵 🔵 🔵', q: "In einem Sack sind 3 rote und 3 blaue Bälle. Welchen Ball ziehst du wahrscheinlicher?", o: ["Gleich", "Rot", "Blau"], a: 0, h1: "Vergleich, wie viele Bälle es von jeder Farbe gibt.", h2: "Es sind gleich viele rote und blaue.", w: ["Drei rote und drei blaue.", "Die Chancen sind gleich."] },
+  { id: 'n22', lv: 3, cat: "Mit Haken", p: '🦆 🦆 🦆 ➡️ 🌊 ⬅️ 🪿 🪿', q: "Drei Entenküken gingen zum Teich, und ihnen kamen 2 Gänse entgegen. Wie viele Vögel gingen zum Teich?", o: ['3', '5', '2'], a: 0, h1: "Die Gänse kamen von der anderen Seite, in die andere Richtung.", h2: "Nur die Entenküken gingen zum Teich.", w: ["Die Gänse kamen entgegen, also vom Teich weg.", "Drei Entenküken gingen zum Teich."] },
+
+  
+  { id: 'p1', lv: 4, cat: "Reihen", p: '1 2 4 7 11 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['16', '15', '14', '18'], a: 0, h1: "Schau, um wie viel jede Zahl wächst.", h2: "Erst kommt 1 dazu, dann 2, dann 3, dann 4…", w: ["Es kamen nacheinander 1, 2, 3, 4 dazu.", "Jetzt kommt 5 dazu: elf und fünf sind sechzehn."] },
+  { id: 'p2', lv: 4, cat: "Beine und Ohren", p: '🐔 🐇', q: "In einem Gehege sind Hühner und Kaninchen. Es sind 5 Köpfe und 14 Beine. Wie viele Kaninchen sind es?", o: ['2', '3', '1', '4'], a: 0, h1: "Stell dir vor, alle fünf sind Hühner. Wie viele Beine wären das?", h2: "Fünf Hühner hätten 10 Beine. Jedes Kaninchen bringt 2 dazu.", w: ["Wären alle Hühner, gäbe es 10 Beine.", "Es sind 4 Beine zu viel, und jedes Kaninchen bringt 2 zu viel.", "Vier geteilt durch zwei — zwei Kaninchen. Probe: 2 Kaninchen und 3 Hühner — 8 und 6 Beine, 14."] },
+  { id: 'p3', lv: 4, cat: "Wie viele Möglichkeiten", p: '🟥 ⬜ 🟦', q: "Eine Fahne hat zwei Streifen: einen oberen und einen unteren. Es gibt rote, weiße und blaue Farbe, und die Streifen haben verschiedene Farben. Wie viele verschiedene Fahnen gibt es?", o: ['6', '3', '9', '5'], a: 0, h1: "Such die Farbe des oberen Streifens aus. Wie viele Farben bleiben für den unteren?", h2: "Drei Farben für oben, die zwei übrigen für unten.", w: ["Der obere Streifen kann mit drei Farben gemalt werden.", "Für den unteren bleiben zwei.", "Drei mal zwei sind sechs Fahnen."] },
+  { id: 'p4', lv: 4, cat: "Wie viele Möglichkeiten", p: '💌 🐻 🦊 🐰', q: "3 Freunde trafen sich, und jeder schenkte jedem anderen eine Karte. Wie viele Karten wurden insgesamt verschenkt?", o: ['6', '3', '9', '4'], a: 0, h1: "Wie viele Karten schenkt ein Freund?", h2: "Jeder schenkt zwei Freunden.", w: ["Jeder schenkt den zwei anderen Karten.", "Es sind drei Freunde: drei mal zwei ist sechs."] },
+  { id: 'p5', lv: 4, cat: "Wahrscheinlichkeit", p: '#dice:1,1', q: "Wir würfeln mit zwei Würfeln und zählen die Augen zusammen. Kann die Summe 1 sein?", o: ["Nein, weniger als 2 geht nicht", "Ja, aber selten", "Ja, oft"], a: 0, h1: "Was ist die kleinste Zahl auf einem Würfel?", h2: "Jeder Würfel zeigt mindestens 1.", w: ["Jeder Würfel hat mindestens ein Auge.", "Die kleinste Summe ist eins und eins, also zwei.", "Die Summe 1 gibt es nie."] },
+  { id: 'p6', lv: 4, cat: "Algorithmen", p: '#robot:d..a|..b.|....|R..c', it: ['⭐', '🍎', '🍌', '🍒'], q: "Der Roboter macht: „Wiederhole 3 Mal: ➡️ ⬆️“. Wo landet er?", o: ['⭐', '🍎', '🍌', '🍒'], a: 0, h1: "Geh: nach rechts, nach oben, und das dreimal.", h2: "Jede Wiederholung ist ein Schritt schräg, wie eine Treppe.", w: ["Erste Wiederholung: nach rechts und nach oben.", "Zweite Wiederholung — der Roboter ist beim Apfel.", "Dritte Wiederholung — der Roboter ist beim Stern."] },
+  { id: 'p7', lv: 4, cat: "Von hinten", p: '🤔', q: "Ich habe mir eine Zahl gedacht, 5 dazugezählt, dann 3 weggenommen und 10 bekommen. Welche Zahl habe ich mir gedacht?", o: ['8', '12', '18', '2'], a: 0, h1: "Fang hinten an und mach alles rückwärts.", h2: "Statt „3 weggenommen“ zähl 3 dazu; statt „5 dazugezählt“ nimm 5 weg.", w: ["Von hinten: 10 und 3 sind 13.", "Dreizehn minus fünf ist acht.", "Probe: 8 + 5 − 3 = 10."] },
+  { id: 'p8', lv: 4, cat: "Streichhölzer", p: '#sticks:2x2', q: "Wie viele Streichhölzer sind in diesem 2-mal-2-Quadrat?", o: ['12', '16', '8', '10'], a: 0, h1: "Zähl die liegenden und die stehenden Streichhölzer getrennt.", h2: "Liegende — 3 Reihen mit je 2.", w: ["Liegende: drei Reihen mit je zwei — 6.", "Stehende: auch drei Reihen mit je zwei — 6.", "Zusammen sind es zwölf."] },
+  { id: 'p9', lv: 4, cat: "Streichhölzer", p: '#sticks:1x3', q: "Hier sind 3 Quadrate. Nimm beim rechten Quadrat das Streichholz ganz rechts weg. Wie viele Quadrate bleiben?", o: ['2', '1', '3', '0'], a: 0, h1: "Welches Quadrat geht kaputt?", h2: "Nur das rechte Quadrat geht kaputt.", w: ["Ohne die rechte Seite fällt das rechte Quadrat auseinander.", "Die anderen zwei sind heil — es bleiben zwei Quadrate."] },
+  { id: 'p10', lv: 4, cat: "Würfel", p: '#cubes:2,2/2,2', q: "Wie viele kleine Würfel sind in diesem großen Würfel?", o: ['8', '4', '6', '12'], a: 0, h1: "Zähl die obere Schicht und mal die Zahl der Schichten.", h2: "In einer Schicht sind 4 Würfel, und es gibt zwei Schichten.", w: ["In einer Schicht sind vier Würfel.", "Es gibt zwei Schichten: vier und vier sind acht."] },
+  { id: 'p11', lv: 4, cat: "Logik", p: '🟥 🟦 🟩 🏠', q: "Igel, Eichhörnchen und Häschen wohnen in einem roten, einem blauen und einem grünen Häuschen. Der Igel wohnt nicht im roten und nicht im blauen. Das Eichhörnchen wohnt nicht im roten. Wer wohnt im roten Häuschen?", o: ["Häschen", "Eichhörnchen", "Igel"], a: 0, h1: "Fang beim Igel an: Welches Häuschen bleibt für ihn?", h2: "Der Igel ist im grünen. Das Eichhörnchen ist nicht im roten, also in welchem?", w: ["Der Igel wohnt nicht im roten und nicht im blauen, also im grünen.", "Das Eichhörnchen wohnt nicht im roten, also im blauen.", "Das Häschen wohnt im roten."] },
+  { id: 'p12', lv: 4, cat: "Mit Haken", p: '🪵 🪵 🪵', q: "Wie viele Enden haben dreieinhalb Stöcke?", o: ['8', '7', '6', '14'], a: 0, h1: "Wie viele Enden hat ein halber Stock?", h2: "Ein halber Stock hat auch zwei Enden!", w: ["Jeder Stock hat zwei Enden: drei haben sechs.", "Der halbe hat auch zwei Enden.", "Zusammen sind es acht."] },
+  { id: 'p13', lv: 4, cat: "Zeit", p: '🕗', q: "Jetzt ist es 8 Uhr morgens. Wie spät ist es in 10 Stunden?", o: ['18:00', '16:00', '10:00', '20:00'], a: 0, h1: "Zähl die Stunden zusammen.", h2: "Acht und zehn.", w: ["Acht und zehn sind achtzehn.", "Es ist dann 18:00, also sechs Uhr abends."] },
+  { id: 'p14', lv: 4, cat: "Wiegen", p: '🪙 🪙 🪙 ⚖️', q: "Von 3 Münzen ist eine falsch, und sie ist leichter. Wie oft muss man auf einer Waage mit zwei Schalen wiegen, um sie sicher zu finden?", o: ['1', '2', '3', '0'], a: 0, h1: "Leg auf jede Schale eine Münze.", h2: "Wenn die Waage im Gleichgewicht ist, wo ist die falsche?", w: ["Wir legen auf jede Schale eine Münze.", "Die Schale, die hochgeht, hat die falsche Münze.", "Ist sie im Gleichgewicht, ist die übrige Münze die falsche. Einmal wiegen reicht."] },
+  { id: 'p15', lv: 4, cat: "Reihen", p: '🔺 🟦 🟢 · 🟦 🟢 🔺 · 🟢 🔺 ❓', q: "Welche Form fehlt?", o: ['🟦', '🔺', '🟢'], a: 0, h1: "In jeder Dreiergruppe sind alle drei Formen.", h2: "In der letzten Dreiergruppe sind schon ein Kreis und ein Dreieck.", w: ["Jede Dreiergruppe hat ein Dreieck, ein Quadrat und einen Kreis.", "In der letzten fehlt ein Quadrat."] },
+  { id: 'p16', lv: 4, cat: "Wie viele Möglichkeiten", p: '🪑 🪑 🪑', q: "Auf wie viele Arten können drei Freunde auf 3 Stühlen in einer Reihe sitzen?", o: ['6', '3', '9', '4'], a: 0, h1: "Wer kann auf dem ersten Stuhl sitzen? Und auf dem zweiten?", h2: "Auf den ersten jeder der drei, auf den zweiten jeder der zwei übrigen.", w: ["Für den ersten Stuhl — drei zur Auswahl.", "Für den zweiten — zwei, und für den dritten — der letzte.", "Drei mal zwei sind sechs Arten."] },
+  { id: 'p17', lv: 4, cat: "Wahrscheinlichkeit", p: '🪙 🦅 🦅 🦅 ❓', q: "Eine Münze wurde 3 Mal geworfen, und jedes Mal fiel Kopf. Was ist beim vierten Mal wahrscheinlicher?", o: ["Gleich", "Zahl", "Kopf"], a: 0, h1: "Weiß die Münze noch, was vorher gefallen ist?", h2: "Eine Münze hat kein Gedächtnis.", w: ["Die Münze erinnert sich nicht an frühere Würfe.", "Kopf und Zahl sind wieder gleich möglich."] },
+  { id: 'p18', lv: 4, cat: "Beine und Ohren", p: '🐝 🐝 🐝 🐝', q: "Eine Biene hat 6 Beine. Wie viele Beine haben 4 Bienen?", o: ['24', '20', '16', '30'], a: 0, h1: "Zähl sechs viermal zusammen.", h2: "Sechs, zwölf, achtzehn…", w: ["Vier mal sechs.", "Sechs, zwölf, achtzehn, vierundzwanzig."] },
+  { id: 'p19', lv: 4, cat: "Logik", p: '🐻 🐰 🦊 🐺 🐿️', q: "In einer Schlange stehen 5 Tiere. Der Fuchs ist der Dritte von vorn. Der Wievielte ist er von hinten?", o: ['3', '2', '4', '5'], a: 0, h1: "Wie viele Tiere stehen hinter dem Fuchs?", h2: "Zwei stehen vor dem Fuchs und zwei hinter ihm.", w: ["Zwei vor dem Fuchs, und hinter ihm auch zwei.", "Von hinten ist er auch der Dritte."] },
+  { id: 'p20', lv: 4, cat: "Algorithmen", p: '3 ➡️ ✖️2 ➡️ ➕1 ➡️ ✖️2', q: "Wir beginnen mit der Zahl 3. Befehle: „mal 2“, „plus 1“, „mal 2“. Was kommt heraus?", o: ['14', '13', '16', '12'], a: 0, h1: "Mach die Befehle der Reihe nach.", h2: "Drei mal zwei ist sechs. Und dann?", w: ["Drei mal zwei ist sechs.", "Sechs und eins sind sieben.", "Sieben mal zwei ist vierzehn."] },
+  { id: 'p21', lv: 4, cat: "Von hinten", p: '🐿️ 🌰', q: "Das Eichhörnchen isst jeden Tag die Hälfte seiner Nüsse. Am Morgen des dritten Tages hat es 4 Nüsse. Wie viele hatte es am Morgen des ersten Tages?", o: ['16', '8', '12', '32'], a: 0, h1: "Geh rückwärts: Wenn es die Hälfte gegessen hat, wie viele waren es vorher?", h2: "Am Morgen des zweiten Tages waren es doppelt so viele wie am Morgen des dritten.", w: ["Am Morgen des dritten Tages — 4.", "Am Morgen des zweiten — doppelt so viele: 8.", "Am Morgen des ersten — noch einmal doppelt so viele: 16."] },
+  { id: 'p22', lv: 4, cat: "Würfel", p: '📄 ✂️', q: "Ein Blatt wurde in der Mitte gefaltet, dann noch einmal, und ein Loch wurde hineingeschnitten. Wie viele Löcher hat das aufgefaltete Blatt?", o: ['4', '2', '1', '8'], a: 0, h1: "Wie viele Papierschichten sind nach zwei Falten da?", h2: "Die erste Falte macht 2 Schichten, die zweite 4 Schichten.", w: ["Nach zwei Falten hat das Blatt vier Schichten.", "Das Loch ging durch jede Schicht.", "Also sind es vier Löcher."] },
+
+  
+  { id: 'q1', lv: 5, cat: "Wahrscheinlichkeit", p: '🔴 🔴 🔴 🔵 🔵 🟢', q: "In einem Sack sind 3 rote, 2 blaue und 1 grüner Ball. Wie viele Bälle musst du ohne Hinsehen ziehen, damit sicher ein blauer dabei ist?", o: ['5', '3', '4', '6'], a: 0, h1: "Stell dir vor, du hast ganz viel Pech.", h2: "Zuerst können alle roten und der grüne kommen.", w: ["Das größte Pech: 3 rote und 1 grüner — 4 Bälle ohne blauen.", "Der nächste, der fünfte, ist sicher blau."] },
+  { id: 'q2', lv: 5, cat: "Algorithmen", p: '3 1 2', q: "Ein Sortier-Roboter geht eine Reihe von links nach rechts entlang und tauscht zwei Nachbarzahlen, wenn die linke größer ist. Er ist einmal an der Reihe 3, 1, 2 entlanggegangen. Was kam heraus?", o: ['1, 2, 3', '1, 3, 2', '3, 2, 1', '2, 1, 3'], a: 0, h1: "Vergleich das erste Paar: 3 und 1.", h2: "Nach dem ersten Tausch ist die Reihe 1, 3, 2. Jetzt vergleich 3 und 2.", w: ["3 ist größer als 1 — wir tauschen: 1, 3, 2.", "3 ist größer als 2 — wir tauschen: 1, 2, 3."] },
+  { id: 'q3', lv: 5, cat: "Streichhölzer", p: '#match:9+2=8', q: "Leg ein Streichholz um, damit die Gleichung stimmt. Was kommt heraus?", o: ['6 + 2 = 8', '5 + 3 = 8', '9 - 1 = 8', '4 + 4 = 8'], a: 0, h1: "Du kannst ein Streichholz innerhalb einer Ziffer umlegen.", h2: "Schau auf die Neun: Daraus kann man eine Sechs machen.", w: ["Von der Neun nehmen wir das Streichholz oben rechts.", "Wir legen es unten links hin — jetzt ist es eine Sechs.", "6 + 2 = 8 — stimmt!"] },
+  { id: 'q4', lv: 5, cat: "Mit Haken", p: '📅', q: "In wie vielen Monaten des Jahres gibt es einen 28.?", o: ['12', '1', '0', '6'], a: 0, h1: "Sogar der kürzeste Monat hat 28 Tage.", h2: "Jeder Monat hat mindestens 28 Tage.", w: ["Der kürzeste Monat ist der Februar, er hat 28 oder 29 Tage.", "Alle anderen haben mehr Tage.", "Also gibt es den 28. in allen 12 Monaten."] },
+  { id: 'q5', lv: 5, cat: "Wie viele Möglichkeiten", p: '🍲 ➕ 🍝', q: "In einem Café gibt es 3 verschiedene Suppen und 4 verschiedene Hauptgerichte. Wie viele verschiedene Mittagessen „Suppe + Hauptgericht“ kann man bestellen?", o: ['12', '7', '10', '16'], a: 0, h1: "Zu jeder Suppe kann man jedes Hauptgericht nehmen.", h2: "Mit einer Suppe — 4 Mittagessen. Und es gibt drei Suppen.", w: ["Zu jeder Suppe — 4 Hauptgerichte.", "Drei mal vier sind zwölf Mittagessen."] },
+  { id: 'q6', lv: 5, cat: "Logik", p: '🐱 🐶', q: "Ein Freund lügt immer, der andere sagt immer die Wahrheit. Die Katze sagte: „Der Hund ist ein Lügner.“ Der Hund sagte: „Wir sagen beide die Wahrheit.“ Wer lügt?", o: ["Hund", "Katze", "Beide"], a: 0, h1: "Kann „wir sagen beide die Wahrheit“ stimmen?", h2: "Nach der Aufgabe lügt einer von beiden bestimmt.", w: ["Einer von beiden lügt, also stimmt der Satz vom Hund „wir sind beide ehrlich“ nicht.", "Der Hund lügt.", "Die Katze sagt die Wahrheit: Der Hund ist wirklich ein Lügner."] },
+  { id: 'q7', lv: 5, cat: "Würfel", p: '#cubes:3,2,1/2,1,0/1,0,0', q: "Wie viele Würfel sind in dieser Figur?", o: ['10', '9', '6', '12'], a: 0, h1: "Zähl die Höhe von jedem Turm.", h2: "Hintere Reihe: 3, 2, 1. Mittlere: 2, 1. Vordere: 1.", w: ["Hintere Reihe: 3 + 2 + 1 = 6.", "Mittlere: 2 + 1 = 3. Vordere: 1.", "Zusammen 6 + 3 + 1 = 10."] },
+  { id: 'q8', lv: 5, cat: "Wiegen", p: '💰 💰 💰 💰 ⚖️', q: "Es gibt 4 Säckchen mit Münzen, und eins ist leichter als die anderen. Wie viele Wägungen braucht man, um es sicher zu finden?", o: ['2', '1', '3', '4'], a: 0, h1: "Eine Wägung vergleicht nur zwei Schalen.", h2: "Leg zuerst auf jede Schale zwei Säckchen.", w: ["Zwei Säckchen gegen zwei — so wissen wir, in welchem Paar das leichte ist.", "Dann eins gegen eins — so finden wir es.", "Mit einer Wägung kann man nicht aus vier eins finden, man braucht zwei."] },
+  { id: 'q9', lv: 5, cat: "Beine und Ohren", p: '🪑', q: "Im Klassenzimmer stehen Hocker mit 3 Beinen und Stühle mit 4 Beinen. Es sind 5 Sitze und 18 Beine. Wie viele Hocker sind es?", o: ['2', '3', '1', '4'], a: 0, h1: "Stell dir vor, alle fünf sind Stühle.", h2: "Fünf Stühle hätten 20 Beine. Jeder Hocker hat ein Bein weniger.", w: ["Wären alle Stühle — 20 Beine.", "Es fehlen zwei, und jeder Hocker hat ein Bein weniger.", "Also sind es zwei Hocker. Probe: 6 + 12 = 18."] },
+  { id: 'q10', lv: 5, cat: "Reihen", p: '1 1 2 3 5 8 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['13', '11', '12', '16'], a: 0, h1: "Schau auf zwei Nachbarzahlen und die danach.", h2: "Jede Zahl ist die Summe der zwei davor.", w: ['2 = 1 + 1, 3 = 1 + 2, 5 = 2 + 3, 8 = 3 + 5.', "Als Nächstes kommt 5 + 8 = 13."] },
+  { id: 'q11', lv: 5, cat: "Algorithmen", p: '#robot:R.#.|..#*|....', q: "Der Roboter geht über Felder nach oben, unten, links und rechts und kann nicht durch Wände. Wie viele Schritte braucht er mindestens bis zum Stern?", o: ['6', '4', '5', '7'], a: 0, h1: "Du musst unten um die Wand herumgehen.", h2: "Geh runter in die unterste Reihe, unter der Wand durch und wieder hoch.", w: ["Zwei Schritte nach unten bis zur untersten Reihe.", "Drei Schritte nach rechts unter der Wand.", "Ein Schritt nach oben zum Stern — zusammen sechs."] },
+  { id: 'q12', lv: 5, cat: "Wahrscheinlichkeit", p: '#dice:1,1', q: "Wir würfeln mit zwei Würfeln. Welche Summe fällt öfter: 2 oder 7?", o: ['7', '2', "Gleich"], a: 0, h1: "Auf wie viele Arten kann man 2 bekommen?", h2: "Zwei geht nur als „1 und 1“. Und sieben als „1 und 6“, „2 und 5“, „3 und 4“…", w: ["Die Summe 2 gibt es nur auf eine Art: 1 und 1.", "Die Summe 7 gibt es auf sechs Arten: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.", "Die Sieben fällt sechsmal so oft."] },
+
+  
+  { id: 'r1', lv: 6, cat: "Wie viele Möglichkeiten", p: '#robot:..*|...|R..', q: "Der Roboter geht zum Stern nur nach rechts ➡️ und nach oben ⬆️. Wie viele verschiedene Wege hat er?", o: ['6', '4', '8', '5'], a: 0, kp: 1, h1: "Er muss zwei Schritte nach rechts und zwei nach oben machen — in welcher Reihenfolge?", h2: "Zähl für jedes Feld, auf wie viele Arten man dorthin kommt.", w: ["Der Roboter macht 2 Schritte nach rechts und 2 nach oben, in beliebiger Reihenfolge.", "Schreiben wir sie auf: ➡️➡️⬆️⬆️, ➡️⬆️➡️⬆️, ➡️⬆️⬆️➡️, ⬆️➡️➡️⬆️, ⬆️➡️⬆️➡️, ⬆️⬆️➡️➡️.", "Zusammen sind es sechs Wege."] },
+  { id: 'r2', lv: 6, cat: "Wahrscheinlichkeit", p: '🔴 🔴 🔵 🔵', q: "In einem Sack sind 2 rote und 2 blaue Bälle. Es werden 2 Bälle auf einmal gezogen. Wie viele verschiedene Farbkombinationen können herauskommen?", o: ['3', '4', '2', '6'], a: 0, h1: "Nur die Farben zählen, nicht welcher Ball zuerst kommt.", h2: "Zwei rote, zwei blaue oder…", w: ["Es können zwei rote kommen.", "Es können zwei blaue kommen.", "Oder ein roter und ein blauer. Zusammen sind es drei Kombinationen."] },
+  { id: 'r3', lv: 6, cat: "Streichhölzer", p: '#match:6-5=9', q: "Leg ein Streichholz um, damit die Gleichung stimmt. Was kommt heraus?", o: ['8 - 5 = 3', '6 - 3 = 3', '9 - 5 = 4', '6 + 3 = 9'], a: 0, h1: "Aus einer Neun kann man eine Drei machen, wenn man ein Streichholz wegnimmt.", h2: "Wohin muss das übrige Streichholz, damit aus der Sechs eine Acht wird?", w: ["Von der Neun nehmen wir das Streichholz oben links weg — es wird eine Drei.", "Wir legen es an die Sechs oben rechts — es wird eine Acht.", "8 − 5 = 3 — stimmt!"] },
+  { id: 'r4', lv: 6, cat: "Algorithmen", p: '6 ➡️ … ➡️ 1', q: "Die Regel: Ist die Zahl gerade, teile sie durch 2; ist sie ungerade, nimm sie mal 3 und zähl 1 dazu. Wir beginnen bei 6. Wie viele Schritte braucht man bis zur 1?", o: ['8', '6', '7', '9'], a: 0, kp: 1, h1: "Schreib die Zahlen nacheinander auf und zähl die Schritte.", h2: '6 → 3 → 10 → 5 → …', w: ['6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1.', "Wir zählen die Pfeile: acht Schritte."] },
+  { id: 'r5', lv: 6, cat: "Von hinten", p: '🐸 🦟', q: "Ein Frosch fängt jeden Tag doppelt so viele Mücken wie am Tag davor. In 3 Tagen hat er 21 Mücken gefangen. Wie viele waren es am ersten Tag?", o: ['3', '7', '4', '6'], a: 0, kp: 1, h1: "Sagen wir, am ersten Tag ist es ein Häufchen. Wie viele Häufchen sind es am zweiten und dritten?", h2: "Erster Tag — 1 Teil, zweiter — 2 Teile, dritter — 4 Teile.", w: ["Teile zusammen: 1 + 2 + 4 = 7.", "21 Mücken geteilt in 7 Teile — je 3.", "Am ersten Tag — 3 Mücken. Probe: 3 + 6 + 12 = 21."] },
+  { id: 'r6', lv: 6, cat: "Logik", p: '📦 📦 📦', q: "Auf drei Kisten steht „Äpfel“, „Birnen“ und „Äpfel und Birnen“, aber alle Schilder sind falsch. Aus welcher Kiste reicht es, eine Frucht zu nehmen, um zu wissen, was in allen liegt?", o: ["„Äpfel und Birnen“", "„Äpfel“", "„Birnen“"], a: 0, h1: "In der Kiste mit dem Schild „Äpfel und Birnen“ ist in Wirklichkeit keine Mischung.", h2: "Also sind dort nur Äpfel oder nur Birnen — eine Frucht zeigt es.", w: ["Die Kiste „Äpfel und Birnen“ ist keine Mischung — dort ist nur eine Sorte.", "Zieht man zum Beispiel einen Apfel, sind dort Äpfel.", "Die Kiste „Birnen“ hat nicht nur Birnen und nicht nur Äpfel — also die Mischung, und in „Äpfel“ sind Birnen."] },
+  { id: 'r7', lv: 6, cat: "Würfel", p: '#cubes:2,2/2,2', q: "Ein 2×2×2-Würfel wurde außen angemalt und in 8 kleine zersägt. Wie viele Seiten jedes kleinen Würfels sind angemalt?", o: ['3', '2', '1', '6'], a: 0, h1: "Wo sitzt jeder kleine Würfel?", h2: "Jeder kleine Würfel ist eine Ecke des großen.", w: ["Alle 8 Würfel stehen in den Ecken des großen Würfels.", "Ein Eckwürfel hat drei Seiten, die nach außen schauen.", "Also sind bei jedem drei Seiten angemalt."] },
+  { id: 'r8', lv: 6, cat: "Beine und Ohren", p: '🐉 🐲', q: "Eine Schlange hat 3 Köpfe und 2 Beine, ein Drache hat 1 Kopf und 4 Beine. Zusammen sind es 9 Köpfe und 16 Beine. Wie viele Schlangen sind es?", o: ['2', '3', '4', '1'], a: 0, h1: "Probier es: Es gibt nur eine Schlange. Wie viele Drachen sind es dann?", h2: "Probier alle durch: 1 Schlange, 2 Schlangen, 3 Schlangen — und prüfe die Beine.", w: ["Nehmen wir 2 Schlangen: Sie haben 6 Köpfe und 4 Beine.", "Es bleiben 3 Köpfe — das sind 3 Drachen mit 12 Beinen.", "Beine: 4 + 12 = 16 — das passt. Es sind zwei Schlangen."] },
+  { id: 'r9', lv: 6, cat: "Wiegen", p: "⚖️ 1 g · 3 g · 9 g", q: "Du hast eine Waage mit zwei Schalen und Gewichte mit 1 g, 3 g und 9 g, von jedem eins. Du darfst Gewichte auf beide Schalen legen. Was ist das größte Gewicht, das du abwiegen kannst?", o: ["13 g", "12 g", "9 g", "27 g"], a: 0, h1: "Was, wenn du alle Gewichte auf eine Schale legst?", h2: "Mehr als alle Gewichte zusammen kannst du nicht abwiegen.", w: ["Alle Gewichte zusammen: 1 + 3 + 9 = 13 Gramm.", "Mehr geht auf keinen Fall.", "Und wenn du beide Schalen benutzt, kannst du jedes Gewicht von 1 bis 13 Gramm abwiegen."] },
+  { id: 'r10', lv: 6, cat: "Wahrscheinlichkeit", p: '🪙 🪙', q: "Eine Münze wird 2-mal geworfen. Was ist wahrscheinlicher: zweimal Kopf oder einmal Kopf und einmal Zahl?", o: ["Einmal Kopf und einmal Zahl", "Zweimal Kopf", "Gleich"], a: 0, h1: "Schreib alle Ergebnisse von zwei Würfen auf.", h2: "Die Ergebnisse: KK, KZ, ZK, ZZ.", w: ["Insgesamt gibt es 4 gleiche Ergebnisse: KK, KZ, ZK, ZZ.", "Zweimal Kopf ist nur KK: 1 Ergebnis.", "Kopf und Zahl ist KZ und ZK: 2 Ergebnisse. Das ist wahrscheinlicher."] },
+  { id: 'r11', lv: 6, cat: "Wie viele Möglichkeiten", p: '1️⃣ 2️⃣', q: "Wie viele dreistellige Zahlen kannst du nur mit den Ziffern 1 und 2 schreiben (Ziffern dürfen sich wiederholen)?", o: ['8', '6', '4', '9'], a: 0, kp: 1, h1: "Wie viele Möglichkeiten gibt es für jede der drei Ziffern?", h2: "Auf jeden Platz kommt eine 1 oder eine 2.", w: ["Jeder der drei Plätze hat zwei Möglichkeiten.", '2 × 2 × 2 = 8.', '111, 112, 121, 122, 211, 212, 221, 222.'] },
+
+  
+  { id: 's1', lv: 7, cat: "Wie viele Möglichkeiten", p: '⭕', q: "Auf einem Kreis sind 6 Punkte markiert und jeder ist mit jedem verbunden. Wie viele Strecken sind entstanden?", o: ['15', '12', '30', '6'], a: 0, kp: 1, h1: "Wie viele Strecken gehen von einem Punkt aus?", h2: "Von jedem Punkt gehen 5 Strecken aus, aber jede Strecke ist doppelt gezählt.", w: ["Von jedem Punkt gehen 5 Strecken aus: 6 × 5 = 30.", "Jede Strecke ist zweimal gezählt — von beiden Enden.", '30 : 2 = 15.'] },
+  { id: 's2', lv: 7, cat: "Wahrscheinlichkeit", p: '🟥🎲 🟦🎲', q: "Wir werfen einen roten und einen blauen Würfel. Auf wie viele Arten kann die Summe 7 fallen?", o: ['6', '3', '7', '5'], a: 0, kp: 1, h1: "Geh durch, was auf dem roten fallen kann.", h2: "Rot 1 — Blau 6, Rot 2 — Blau 5 …", w: ["Auf dem roten kann jede Zahl von 1 bis 6 fallen.", "Für jede gibt es genau eine Zahl auf dem blauen: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.", "Insgesamt sechs Arten."] },
+  { id: 's3', lv: 7, cat: "Algorithmen", p: '1 … 100 ❓', q: "Ich habe mir eine Zahl von 1 bis 100 ausgedacht. Du fragst „Ist sie größer als …?“ und ich sage „ja“ oder „nein“. Mit wie vielen Fragen errätst du sie mindestens sicher?", o: ['7', '10', '6', '50'], a: 0, h1: "Die beste Frage teilt die Zahlen in der Mitte.", h2: '100 → 50 → 25 → 13 → 7 → 4 → 2 → 1.', w: ["Jede Frage halbiert die übrigen Zahlen.", "100, 50, 25, 13, 7, 4, 2, 1 — sieben Fragen.", "Mit sechs geht es nicht: Sechs Antworten unterscheiden nur 64 Zahlen."] },
+  { id: 's4', lv: 7, cat: "Streichhölzer", p: '#match:8+2=5', q: "Leg ein Streichholz um, damit die Gleichung stimmt. Was kommt heraus?", o: ['8 - 2 = 6', '3 + 2 = 5', '9 - 4 = 5', '8 - 3 = 5'], a: 0, h1: "Das Pluszeichen ist auch aus Streichhölzern gemacht.", h2: "Nimm das senkrechte Hölzchen aus dem Plus — es wird ein Minus.", w: ["Wir nehmen das senkrechte Hölzchen aus dem Plus — das ergibt ein Minus.", "Wir legen es unten links an die Fünf — das ergibt eine Sechs.", "8 − 2 = 6 — stimmt!"] },
+  { id: 's5', lv: 7, cat: "Von hinten", p: '🍬 👧 👦 🧒', q: "Drei Kinder teilten Bonbons. Das erste nahm die Hälfte und noch eins, das zweite die Hälfte vom Rest und noch eins, und das dritte bekam die letzten 3. Wie viele Bonbons waren es?", o: ['18', '16', '20', '14'], a: 0, kp: 1, h1: "Fang beim dritten an: Vor ihm waren es 3 Bonbons.", h2: "Das zweite nahm die Hälfte und eins, und 3 blieben übrig. Also ist die Hälfte vom Rest 3 + 1.", w: ["Vor dem zweiten: 3 + 1 = 4 — das ist die Hälfte, also 8 insgesamt.", "Vor dem ersten: 8 + 1 = 9 — das ist die Hälfte, also 18 insgesamt.", "Probe: 18 → nahm 10, 8 bleiben → nahm 5, 3 bleiben."] },
+  { id: 's6', lv: 7, cat: "Logik", p: '🦔 🐱 🦉 🐰', q: "Der Igel ist kleiner als die Katze, die Katze ist kleiner als die Eule, und der Hase ist größer als die Eule. Wer ist der Zweitgrößte, vom Größten aus gezählt?", o: ["Eule", "Katze", "Hase", "Igel"], a: 0, h1: "Stell alle nach der Größe in eine Reihe.", h2: "Igel < Katze < Eule, und der Hase ist größer als die Eule.", w: ["Nach Größe: Igel, Katze, Eule, Hase.", "Am größten ist der Hase, der Zweite ist die Eule."] },
+  { id: 's7', lv: 7, cat: "Logik", p: '🦔 🐱 🦉 🥧', q: "Einer der drei hat den Kuchen gegessen. Igel: „Das war die Katze.“ Katze: „Ich war es nicht.“ Eule: „Ich war es nicht.“ Nur einer hat die Wahrheit gesagt. Wer hat den Kuchen gegessen?", o: ["Eule", "Katze", "Igel"], a: 0, h1: "Igel und Katze widersprechen sich — einer von ihnen hat bestimmt recht.", h2: "Also hat die Eule nicht die Wahrheit gesagt.", w: ["Igel und Katze sagen das Gegenteil — genau einer von ihnen sagt die Wahrheit.", "Nur einer hat die Wahrheit gesagt, also hat die Eule gelogen.", "Die Eule hat gelogen, als sie „Ich war es nicht“ sagte — die Eule hat den Kuchen gegessen."] },
+  { id: 's8', lv: 7, cat: "Würfel", p: '🧊 4×4×4', q: "Ein 4×4×4-Würfel wurde außen angemalt und in 64 kleine Würfel zersägt. Bei wie vielen kleinen Würfeln sind genau zwei Seiten angemalt?", o: ['24', '12', '8', '32'], a: 0, kp: 1, h1: "Zwei angemalte Seiten haben die Würfel an den Kanten, aber nicht in den Ecken.", h2: "Ein Würfel hat 12 Kanten. Wie viele Würfel ohne Ecke sind auf einer Kante?", w: ["Auf jeder Kante sind 4 Würfel, 2 davon sind Ecken.", "Würfel ohne Ecke auf einer Kante: 2.", "Es gibt 12 Kanten: 12 × 2 = 24."] },
+  { id: 's9', lv: 7, cat: "Wiegen", p: '🪙 × 27 ⚖️', q: "Von 27 Münzen ist eine falsch — sie ist leichter. Mit wie vielen Wägungen findest du sie mindestens sicher?", o: ['3', '4', '9', '5'], a: 0, h1: "Teile die Münzen in drei Haufen.", h2: "Jede Wägung macht die Verdächtigen 3-mal weniger.", w: ["27 teilen wir in drei Haufen zu 9 — nach dem Wiegen kennen wir den richtigen Haufen.", "9 teilen wir in drei zu 3 — noch eine Wägung.", "3 teilen wir in drei zu 1 — die dritte Wägung. Insgesamt drei."] },
+  { id: 's10', lv: 7, cat: "Reihen", p: '2 6 12 20 30 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['42', '40', '36', '44'], a: 0, kp: 1, h1: "Schau dir die Unterschiede zwischen den Nachbarzahlen an.", h2: "Unterschiede: 4, 6, 8, 10 … Oder so: 1×2, 2×3, 3×4 …", w: ["Die Unterschiede wachsen: 4, 6, 8, 10, und dann kommt 12.", '30 + 12 = 42.', "Das ist 6 × 7."] },
+  { id: 's11', lv: 7, cat: "Wie viele Möglichkeiten", p: '🧒 🧒 🧒 🧒 🧒', q: "Auf wie viele Arten kannst du 2 Dienstkinder aus 5 Kindern auswählen?", o: ['10', '20', '5', '25'], a: 0, kp: 1, h1: "Paare mit denselben zwei Kindern sind gleich.", h2: "Das erste auf 5 Arten, das zweite auf 4, aber jedes Paar ist doppelt gezählt.", w: ["Das erste wählen wir auf 5 Arten, das zweite auf 4: 20.", "Das Paar „erstes und zweites“ ist dasselbe wie „zweites und erstes“, deshalb teilen wir durch 2.", "Zehn Arten."] },
+
+  
+  { id: 't1', lv: 8, cat: "Wahrscheinlichkeit", p: '#dice:3,4', q: "Zwei Würfel werden geworfen und die Augen zusammengezählt. Welche Summe kommt am häufigsten vor?", o: ['7', '6', '12', '8'], a: 0, h1: "Zähl, auf wie viele Arten jede Summe entsteht.", h2: "Die Summe 7 entsteht bei jeder Zahl auf dem ersten Würfel.", w: ["Für die Summe 7 passt jede Zahl auf dem ersten Würfel: 6 Arten.", "Für 6 und 8 — je 5, und für 12 — eine.", "Am häufigsten — die Sieben."] },
+  { id: 't2', lv: 8, cat: "Wie viele Möglichkeiten", p: '#robot:...*|....|....|R...', q: "Ein Roboter geht nur nach rechts und nach oben zum Stern. Wie viele verschiedene Wege hat er?", o: ['20', '9', '12', '27'], a: 0, kp: 1, h1: "Er braucht 3 Schritte nach rechts und 3 nach oben. Schreib in jedes Feld die Zahl der Wege.", h2: "In jedem Feld sind so viele Wege wie im Feld links und im Feld darunter zusammen.", w: ["Die Felder in der untersten Reihe und der linken Spalte haben je einen Weg.", "Jedes nächste Feld ist die Summe aus dem linken und dem unteren: 1, 3, 6, 10 …", "Die obere rechte Ecke hat 20 Wege."] },
+  { id: 't3', lv: 8, cat: "Algorithmen", p: '🗼 🗼 🗼', q: "Drei Stäbe; auf dem ersten steckt ein Turm aus 3 Ringen, der große unten. Die Ringe werden einzeln umgesetzt, und ein großer Ring kommt nie auf einen kleinen. In wie vielen Zügen kannst du den Turm auf den dritten Stab bringen?", o: ['7', '6', '8', '9'], a: 0, kp: 1, h1: "Zuerst musst du die oberen zwei Ringe auf den mittleren Stab bringen.", h2: "Die oberen zwei brauchen 3 Züge, der große 1 Zug, und wieder die zwei 3 Züge.", w: ["Zwei kleine Ringe auf den mittleren Stab — 3 Züge.", "Der große Ring auf den dritten Stab — 1 Zug.", "Die zwei kleinen obendrauf — noch 3. Insgesamt 7."] },
+  { id: 't4', lv: 8, cat: "Logik", p: '🕛', q: "Wie oft am Tag liegen der Stundenzeiger und der Minutenzeiger übereinander?", o: ['22', '24', '23', '12'], a: 0, kp: 1, h1: "In 12 Stunden überholt der Minutenzeiger den Stundenzeiger 11-mal.", h2: "Jedes Überholen ist ein Treffen. Und ein Tag hat zweimal 12 Stunden.", w: ["In 12 Stunden macht der Minutenzeiger 12 Runden, der Stundenzeiger 1.", "Der Minutenzeiger überholt den Stundenzeiger 11-mal — 11 Treffen.", "An einem Tag — 22 Treffen."] },
+  { id: 't5', lv: 8, cat: "Mit Haken", p: '🐈 🐈 🐈 🐁', q: "Drei Katzen fangen drei Mäuse in 3 Minuten. Wie viele Katzen fangen 100 Mäuse in 100 Minuten?", o: ['3', '100', '33', '9'], a: 0, kp: 1, h1: "Wie viele Mäuse fängt eine Katze in 3 Minuten?", h2: "Jede Katze fängt in 3 Minuten eine Maus.", w: ["Eine Katze fängt in 3 Minuten eine Maus.", "In 100 Minuten fängt eine Katze 33 Mäuse und noch ein Drittel.", "Drei Katzen fangen 100 Mäuse — also reichen drei Katzen."] },
+  { id: 't6', lv: 8, cat: "Wiegen", p: '🪙 × 8 ⚖️', q: "Von 8 Münzen ist eine falsch — sie ist leichter. Mit wie vielen Wägungen findest du sie mindestens sicher?", o: ['2', '3', '4', '1'], a: 0, h1: "Teile die Münzen in drei Haufen: 3, 3 und 2.", h2: "Nach der ersten Wägung bleiben höchstens drei Verdächtige.", w: ["Wiege 3 gegen 3. Wenn sie gleich sind, ist die falsche unter den zwei übrigen.", "Die zweite Wägung findet sie unter drei oder zwei.", "Mit einer Wägung geht es nicht: Die Waage hat nur drei Ergebnisse. Die Antwort ist zwei."] },
+  { id: 't7', lv: 8, cat: "Wie viele Möglichkeiten", p: '⬡', q: "Wie viele Diagonalen hat ein Sechseck?", o: ['9', '6', '12', '8'], a: 0, kp: 1, h1: "Von jeder Ecke gehen Diagonalen zu allen anderen, außer zu ihr selbst und ihren zwei Nachbarn.", h2: "Von jeder Ecke gehen 3 Diagonalen aus, aber jede ist doppelt gezählt.", w: ["Von jeder Ecke gehen 3 Diagonalen aus: 6 × 3 = 18.", "Jede ist von beiden Enden gezählt: 18 : 2 = 9."] },
+  { id: 't8', lv: 8, cat: "Wahrscheinlichkeit", p: '🧦 ⚪ × 4 ⚫ × 6', q: "In einer Schublade sind 4 weiße und 6 schwarze Socken. Wie viele Socken musst du ohne Hinsehen herausnehmen, damit sicher 2 schwarze dabei sind?", o: ['6', '3', '5', '8'], a: 0, kp: 1, h1: "Der unglücklichste Anfang ist: erst alle weißen hintereinander.", h2: "Zuerst können 4 weiße kommen.", w: ["Im schlimmsten Fall sind die ersten 4 weiß.", "Danach sind nur noch schwarze übrig: noch 2.", "Insgesamt 6."] },
+  { id: 't9', lv: 8, cat: "Reihen", p: '3 5 9 17 33 ❓', q: "Welche Zahl kommt als Nächstes?", o: ['65', '49', '66', '64'], a: 0, kp: 1, h1: "Schau dir die Unterschiede an.", h2: "Unterschiede: 2, 4, 8, 16 … Oder: jede Zahl = die vorige × 2 − 1.", w: ["Jede Zahl ist die vorige mal 2, minus 1.", '33 × 2 − 1 = 65.'] },
+  { id: 't10', lv: 8, cat: "Algorithmen", p: '5 4 3 2 1', q: "Die Karten liegen so: 5, 4, 3, 2, 1. In einem Zug kannst du zwei Nachbarkarten tauschen. Was ist die kleinste Zahl von Zügen, um 1, 2, 3, 4, 5 zu bekommen?", o: ['10', '5', '4', '8'], a: 0, kp: 1, h1: "Jeder Tausch bringt nur ein „falsches“ Paar in Ordnung.", h2: "Zähl die Paare, bei denen die größere Zahl links von der kleineren steht.", w: ["Falsche Paare: jedes Paar der 5 Karten — 10 Paare.", "Ein Tausch von Nachbarn bringt genau ein Paar in Ordnung.", "Man braucht 10 Züge."] },
+  { id: 't11', lv: 8, cat: "Logik", p: '1 × 2 × 3 × … × 20', q: "Mit wie vielen Nullen endet das Produkt aller Zahlen von 1 bis 20?", o: ['4', '2', '3', '5'], a: 0, kp: 1, h1: "Eine Null am Ende kommt von einem Paar 2 × 5.", h2: "Zweien gibt es viele. Wie viele Fünfen stecken in den Zahlen bis 20?", w: ["Jede Null ist ein Faktor 10 = 2 × 5.", "Fünfen stecken in 5, 10, 15, 20 — vier.", "Zweien gibt es mehr, also sind es vier Nullen."] },
+  { id: 't12', lv: 8, cat: "Würfel", p: '#cubes:3,3,3/3,3,3/3,3,3', q: "Ein 3×3×3-Würfel wurde außen angemalt und in 27 kleine Würfel zersägt. Bei wie vielen kleinen Würfeln ist genau eine Seite angemalt?", o: ['6', '8', '12', '9'], a: 0, kp: 1, h1: "Eine angemalte Seite hat der Würfel in der Mitte jeder Seite.", h2: "Ein Würfel hat 6 Seiten.", w: ["Der Würfel in der Mitte einer Seite hat eine angemalte Seite.", "Auf jeder Seite gibt es einen, und es gibt sechs Seiten.", "Also sechs Würfel."] },
+  { id: 't13', lv: 8, cat: "Wie viele Möglichkeiten", p: '▭ ▭▭', q: "Ein Weg der Länge 6 wird mit Fliesen der Länge 1 und 2 gelegt. Wie viele verschiedene Arten gibt es?", o: ['13', '8', '11', '21'], a: 0, kp: 1, h1: "Zähl für einen Weg der Länge 1, 2, 3 …", h2: "Arten für Länge n = Arten für n−1 plus Arten für n−2.", w: ["Länge 1 — 1 Art, 2 — 2, 3 — 3, 4 — 5, 5 — 8.", "Die letzte Fliese ist entweder 1 oder 2 — wir zählen die zwei vorigen zusammen.", "Länge 6: 5 + 8 = 13."] },
+  { id: 't14', lv: 8, cat: "Von hinten", p: '📈 📉', q: "Eine Zahl wurde um 20 % erhöht und dann um 20 % verkleinert. Es kam 96 heraus. Wie war die Zahl?", o: ['100', '96', '120', '80'], a: 0, kp: 1, h1: "Minus 20 % heißt: mal 0,8 nehmen.", h2: "96 sind 80 % der Zahl nach der Erhöhung.", w: ["96 sind 80 % von 120.", "120 sind 20 % mehr als 100.", "Es waren 100. Der Trick: Die Prozente wurden von verschiedenen Zahlen berechnet."] },
+  { id: 't15', lv: 8, cat: "Logik", p: '🏆', q: "In einem K.-o.-Turnier sind 32 Spieler: Wer verliert, scheidet aus. Wie viele Spiele werden gespielt, bis nur noch ein Sieger übrig ist?", o: ['31', '16', '32', '64'], a: 0, kp: 1, h1: "Jedes Spiel scheidet genau einen Spieler aus.", h2: "Wie viele Spieler müssen ausscheiden?", w: ["Jedes Spiel — ein Spieler raus.", "Alle müssen ausscheiden außer dem Sieger: 31.", "Also 31 Spiele."] },
+  { id: 't16', lv: 8, cat: "Streichhölzer", p: '#match:1-9=2', q: "Leg ein Streichholz um, damit die Gleichung stimmt. Was kommt heraus?", o: ['7 - 5 = 2', '1 + 1 = 2', '4 - 2 = 2', '9 - 7 = 2'], a: 0, h1: "Eine Neun kann man in eine Fünf verwandeln.", h2: "Leg das übrige Hölzchen oben auf die Eins.", w: ["Von der Neun nehmen wir das Hölzchen oben rechts weg — es wird eine Fünf.", "Wir legen es oben auf die Eins — es wird eine Sieben.", "7 − 5 = 2 — stimmt!"] },
+  { id: 't17', lv: 8, cat: "Wahrscheinlichkeit", p: '🪙 🪙 🪙', q: "Eine Münze wird 3-mal geworfen. Wie viele der 8 möglichen Ergebnisse haben genau 2-mal Kopf?", o: ['3', '2', '4', '6'], a: 0, kp: 1, h1: "Zahl kann beim ersten, zweiten oder dritten Wurf fallen.", h2: "KKZ, KZK, …", w: ["Genau 2-mal Kopf heißt: genau 1-mal Zahl.", "Zahl beim ersten, zweiten oder dritten Wurf: ZKK, KZK, KKZ.", "Drei Ergebnisse."] }
+];
+ 
+const OLYMP_H2 = {
+  o1: "Zwei Stücke — ein Schnitt, drei Stücke — zwei Schnitte.", o2: "Jede Zahl ist die vorige mal 2.", o3: "Das ist 1×1, 2×2, 3×3, 4×4, 5×5. Und wie geht es weiter?", o4: "Eine halbe Wassermelone wiegt 4 kg.", o5: "10 Tage sind eine Woche und noch 3 Tage.",
+  o6: "17:45 und eine Stunde sind 18:45. Noch eine halbe Stunde.", o7: "Der Saft kostet 3 Euro. Wie viel kosten das Eis und der Saft zusammen?", o8: "Zuerst am Rand entlang bis zur nächsten Ecke, dann nach oben.", o9: "Probier alle 8 Springerzüge aus — welche bleiben auf dem Brett?", o10: "Vor dem Malnehmen waren es 15. Und vor dem Dazuzählen?",
+  o11: "Der Erste — 3, der Zweite — noch 2, der Dritte — noch 1.", o12: "Wenn die ersten zwei Socken verschiedene Farben haben, dann die dritte …", o13: "Bis zum 3. Stock sind es 2 Treppenabschnitte zu 18 Stufen. Bis zum 6. — 5 Abschnitte.", o14: "Zwei Münzen zu 5 sind 10, und zwei zu 2 sind 4.", o15: "Die mittlere Zahl ist 8.",
+  o16: "Die Ziffer 1 steckt in 1, 10, 11, 12 … 19. In 11 sind es zwei.", o17: "Wenn die erste Ziffer 1 ist, welche muss die zweite sein?", o18: "Die Spinnen haben 24 Beine. Wie viele bleiben für die Käfer?", o19: "4 kleine und 1 großer.", o20: "Es waren 4, einer wurde in 4 geschnitten: 3 + 4.",
+  o21: "Borya ist kein Pianist und kein Skater — also ist er der Schachspieler.", o22: "Die Erste — 3 Arten, die Zweite — 2, die Dritte — 1.", o23: "Für den ersten Platz gibt es 3 Ziffern, für den zweiten — die 2 übrigen.", o24: '4 + 3 + 2 + 1.', o25: "Am Morgen des 7. Tages ist die Schnecke bei 6 m, und tagsüber steigt sie 3 hoch.",
+  o26: "1 + 2 + … + 9 = 45, es gibt drei Reihen.", o27: "Innen ist ein Würfel, genau in der Mitte.", o28: "Wenn der Erste ein Lügner ist, dann stimmt „Wir sind beide Lügner“ nicht.", o29: "Das Ende muss 300 Meter fahren.", o30: "Der König geht die Diagonale entlang: a1, b2, c3 …",
+  o31: "15 und noch zweimal 3.", o32: "Eine Schicht hat 3 × 3 = 9 Würfel, und es gibt drei Schichten.", o33: "Eine Katze in der Ecke sieht drei andere Katzen.", o34: "In der zweiten Halbzeit fallen 6 Tore.", o35: "Der zweite ist um 9:15, der dritte um 9:30.",
+  o36: "Dreiecke — 3 × 3, Quadrate — 2 × 4.", o37: "Es gibt 64 Felder, die Hälfte davon weiß.", o38: "Gelb, dann Grün, dann …", o39: "Die gedachte Zahl ist 9.", o40: "Bis 11:00 sind es 10 Minuten, dann bleiben noch 15.",
+  o41: "Dusya ist leichter als Busya, und Busya ist leichter als Musya.", o42: "Die Katzen haben 3 × 4 Beine, die Tauben 2 × 2.", o43: "Vier Seiten zu 3 m.", o44: "8 Figuren und 8 Bauern.", o45: "2 T-Shirts, und zu jedem 4 Shorts.",
+  o46: "Sava ist Zweiter. Vera ist nicht Erste, also ist sie …", o47: "Eine Stunde sind 60 Minuten, eine halbe Stunde sind 30.", o48: "Die größte zweistellige Zahl ist 99.", o49: "Von 2:25 bis 2:50 sind es 25 Minuten.", o50: "Jeder Sieg statt eines Unentschiedens gibt 2 Punkte mehr. Es fehlen 8.",
+  o51: "17 + 12 = 29, das sind 4 mehr als Schüler.", o52: "Der Ausschnitt ändert den Umfang nicht: Die Seiten sind nur nach innen „eingedrückt“.", o53: "In der Reihe sind 7 freie Felder und in der Spalte 7.", o54: "Der Erste kann 5 oder 7 sein.", o55: "Bis Mitternacht — 2 Std. 30 Min., danach — 7 Std. 15 Min.",
+  o56: "Es fehlen 36 Euro, 6 pro Woche.", o57: "Vor Vera sind 4 Leute, hinter ihr 2.", o58: "Entlang von 8 m — 4 Matten, entlang von 6 m — 3.", o59: "Suche die erste Zahl, die in beiden Listen steht.", o60: "Erster Zug e2–e4, danach jeweils ein Feld.",
+  o61: "Den Kapitän auf 5 Arten, den Torwart auf 4.", o62: "Vom 1. bis zum 4. — 3 Abstände zu 3 Minuten.", o63: "Heute ist Donnerstag.", o64: "Ohne die überzähligen 6 Sticker — 14, je 7, gleich viele.", o65: "Länge 1 — 4, Länge 2 — 3, Länge 3 — 2, Länge 4 — 1.",
+  o66: "5 Möglichkeiten für die erste Ziffer und 5 für die zweite.", o67: "Der Dritte hat gelogen, also ist mindestens einer der ersten zwei ein Ritter.", o68: "Es passen 00:00, 11:11 und … 22:22.", o69: "Wiege 3 gegen 3: So weißt du gleich, in welchem Dreier die falsche ist.", o70: "Probier: 3 Jungen und 4 Mädchen.",
+  o71: "9 Quadrate 1 × 1, 4 Quadrate 2 × 2 und 1 Quadrat 3 × 3.", o72: "Wie ein Turm — 14 Züge, wie ein Läufer — 13.", o73: "1 Stufe — 1 Art, 2 — 2, 3 — 3, 4 — 5 …", o74: "6 Stunden sind vergangen, also geht die Uhr 12 Minuten nach.", o75: "9 einstellige Zahlen und 6 zweistellige.",
+  o76: "Zuerst die Maus bringen: Katze und Käse streiten nicht.", o77: "Die Seiten zusammen sind 10 cm, eine ist um 4 größer: 3 und 7.", o78: "a1 und h8 haben dieselbe Farbe, also ist die Zahl der Züge gerade. In 4 schaffst du es nicht.", o79: '300, 210, 201, 120, 102, 111.', o80: "Die Ziffern unterscheiden sich um 3, und ihre Summe ist 7."
+};
+const OLYMP_LV8 = ['o68', 'o69', 'o70', 'o73', 'o76', 'o79', 'o80'];
+OLYMP.forEach(p => { p.lv = OLYMP_LV8.includes(p.id) ? 8 : p.lvl + 4; p.o = p.opts; p.h1 = p.hint; p.h2 = OLYMP_H2[p.id] || ''; p.w = [p.why]; });
+OLYMP.push(...OLYMP_NEW);
+ 
 
 
 const lvlOf = xp => { let n = 1; while (5 * n * (n + 1) / 2 <= xp) n++; return n; };
@@ -9947,35 +10275,7 @@ function screenFlash() {
 }
 
  
-function screenOlymp() {
-  const t = newScreen();
-  P.olymp = P.olymp || { solved: [] };
-  const fresh = OLYMP.filter(p => !P.olymp.solved.includes(p.id)), pool = fresh.length >= 5 ? fresh : OLYMP;
-  const deck = [1, 1, 2, 2, 3].map(l => { const xs = pool.filter(p => p.lvl === l); return xs.length ? pickOne(xs) : pickOne(pool); }).filter((p, i, a) => a.indexOf(p) === i);
-  while (deck.length < 5) { const p = pickOne(pool); if (!deck.includes(p)) deck.push(p); }
-  let k = 0, first = 0, solvedNow = 0, miss = 0;
-  shell("Olympiade", `<div class="ol"><div class="ol-head"><span id="olN"></span><span id="olCat"></span></div>
-    <p class="ol-q" id="olQ"></p><div class="ol-opts" id="olO"></div>
-    <p class="ol-hint" id="olH" hidden></p><div class="ol-why" id="olW" hidden></div></div>`);
-  function show() {
-    const p = deck[k]; miss = 0;
-    $('#olN').textContent = `Aufgabe ${k + 1} von ${deck.length}`; $('#olCat').textContent = `${p.cat} · ${'★'.repeat(p.lvl)}${'☆'.repeat(3 - p.lvl)}`;
-    $('#olQ').textContent = p.q; $('#olH').hidden = true; $('#olW').hidden = true;
-    $('#olO').innerHTML = p.opts.map((o, i) => `<button class="ol-o" data-i="${i}"><b>${"ABCDE"[i]}</b>${esc(o)}</button>`).join('');
-    if (k === 0) talk("Olympiade! Fünf Aufgaben, von leicht bis knifflig. Lies genau und wähle eine Antwort.");
-  }
-  $('#olO').onclick = e => {
-    const b = e.target.closest('.ol-o'); if (!b || b.disabled) return;
-    const p = deck[k];
-    if (+b.dataset.i !== p.a) { miss++; b.disabled = true; wiggle(b); sfx.oops(); if (miss === 1) { $('#olH').hidden = false; $('#olH').textContent = "💡 Tipp: " + p.hint; } return; }
-    sfx.good(); b.classList.add('right'); $$('.ol-o').forEach(x => x.disabled = true);
-    if (!miss) first++;
-    if (!P.olymp.solved.includes(p.id)) { P.olymp.solved.push(p.id); save(); } solvedNow++;
-    $('#olW').hidden = false; $('#olW').innerHTML = `<p>✅ ${esc(p.why)}</p><button class="big" id="olNext">${k + 1 < deck.length ? "Weiter" : "Ergebnis"}</button>`;
-    $('#olNext').onclick = () => { sfx.pop(); k++; if (k < deck.length) show(); else finish({ key: 'olymp', stars: first >= 4 ? 3 : first >= 2 ? 2 : 1, ev: { solved: solvedNow, first }, line: `Beim ersten Versuch: ${first} von ${deck.length}. Insgesamt gelöste Aufgaben: ${P.olymp.solved.length} von ${OLYMP.length}.`, again: screenOlymp }); };
-  };
-  show();
-}
+function screenOlymp() { OLY.play(); }
 
 
 
@@ -10448,7 +10748,9 @@ function screenFriends() {
   const st = shell("Wähle einen Freund", `<p class="lead">Wer übt mit dir? Tipp auf einen Freund.</p>
     ${TOY.pickHTML()}
     ${groups.map(([h, ids]) => `<h2 class="sec-h fr-h">${h}</h2><div class="friends ${ids === HER ? 'her' : ''}">${ids.map(btn).join('')}</div>`).join('')}
+    <h2 class="sec-h fr-h">So sieht das Spiel aus</h2>${lookHTML(lookCur(), 'lookKid')}
     <button class="big" id="friendOk">Fertig</button>`);
+  lookBind($('#lookKid'), lookSetKid);
   talk(likes && likes.includes('football') ? "Wer übt mit dir? Wähle einen Fußballer oder einen anderen Freund." : Q() ? "Wer übt mit dir? Tippe auf einen Freund." : "Wer übt mit dir? Wähle ein Super-Mädchen von den Feuervögeln oder ein Tierkind.");
   st.onclick = e => {
     const b = e.target.closest('.friend'); if (!b) return;
@@ -10581,7 +10883,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); SB.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11326,10 +11628,50 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     save(); sfx.magic();
     if (ROOT.cur === id) P = pr;
     if (queue.length) screenKidSetup(queue[0], { queue: queue.slice(1), first, liga, back, idx: idx + 1, total });
-    else if (first) screenObDone({ liga });
+    else if (first) screenObLook({ liga });
     else (back || screenParents)();
   };
 }
+
+
+function lookCur() {
+  let p = '', f = null;
+  try { p = (P && P.settings && P.settings.look) || ''; } catch (e) {}
+  try { f = fam(); } catch (e) {}
+  return p || (f && f.look) || 'calm';
+}
+function lookApply() { try { document.body.classList.toggle('look-calm', lookCur() !== 'bright'); } catch (e) {} }
+function lookHTML(sel, id = 'lookPick') {
+  return `<div class="lk-pick" id="${id}" role="radiogroup">${[['bright', "Bunt"], ['calm', "Ruhig"]].map(([k, n]) => `<button class="lk-c ${sel === k ? 'sel' : ''}" data-look="${k}" role="radio" aria-checked="${sel === k}"><span class="lk-mini lk-${k}"><i></i><i></i><i></i><i></i></span><b>${n}</b></button>`).join('')}</div>`;
+}
+function lookBind(box, set) {
+  if (!box) return;
+  box.onclick = e => {
+    const b = e.target.closest('[data-look]'); if (!b) return;
+    sfx.tick(); set(b.dataset.look);
+    box.querySelectorAll('[data-look]').forEach(x => { x.classList.toggle('sel', x === b); x.setAttribute('aria-checked', x === b); });
+    lookApply(); say(b.querySelector('b').textContent);
+  };
+}
+function lookSetKid(k) { P.settings.look = k; save(); }
+
+function screenObLook({ liga = '' } = {}) {
+  newScreen(); document.body.classList.remove('quest');
+  const f = fam(); if (f && !f.look) f.look = 'calm';
+  lookApply();
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe ob lk-ob">
+    <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1>Welches Aussehen gefällt dir besser?</h1><p>Du kannst es später ändern: «Wähle einen Freund» oder «Für Erwachsene».</p></div></header>
+    ${lookHTML(lookCur())}
+    <div class="prow-btns"><button class="big" id="lkNext">Weiter</button></div>
+  </div></main></div>`;
+  lookBind($('#lookPick'), k => { const f = fam(); if (f) { f.look = k; f.kids.forEach(id => { ROOT.profiles[id].settings.look = k; }); } save(); });
+  $('#lkNext').onclick = () => {
+    sfx.pop(); const f = fam();
+    if (f) f.kids.forEach(id => { const st = ROOT.profiles[id].settings; if (!st.look) st.look = f.look || 'calm'; });
+    save(); screenObDone({ liga });
+  };
+}
+ 
 function screenObDone({ liga = '' } = {}) {
   newScreen(); document.body.classList.remove('quest');
   const f = fam();
@@ -14439,100 +14781,271 @@ const keypadHTML = id => `<div class="keypad" id="${id}">${[1, 2, 3, 4, 5, 6, 7,
 const DIV = LANG === 'en' ? '÷' : ':';
 
  
-function sbHTML(vals, { tap = true, small = false } = {}) {
-  return `<div class="sb ${small ? 'sm' : ''}">${vals.map((v, r) => { const up = v >= 5 ? 1 : 0, lo = v % 5;
-    return `<div class="sb-rod" data-r="${r}"><span class="sb-stick"></span>
-      <button class="sb-b up ${up ? 'on' : ''}" data-r="${r}" data-k="5" ${tap ? '' : 'tabindex="-1"'} aria-label="5"></button>
-      <span class="sb-beam"></span>
-      ${[0, 1, 2, 3].map(k => `<button class="sb-b lo ${k < lo ? 'on' : ''}" data-r="${r}" data-k="${k}" ${tap ? '' : 'tabindex="-1"'} aria-label="1"></button>`).join('')}</div>`; }).join('')}</div>`;
-}
-const sbValue = vals => vals.reduce((s, v) => s * 10 + v, 0);
-const SORO = [
-  { n: "Zeig eine Zahl von 0 bis 4", rods: 1, max: 4, kind: 'show' },
-  { n: "Zeig eine Zahl von 0 bis 9", rods: 1, max: 9, kind: 'show' },
-  { n: "Wie viel zeigt der Abakus?", rods: 1, max: 9, kind: 'read' },
-  { n: "Plus und Minus auf dem Abakus", rods: 1, max: 9, kind: 'add' },
-  { n: "Zahlen bis 99", rods: 2, max: 99, kind: 'show' },
-  { n: "Rechnen im Kopf", rods: 1, max: 9, kind: 'mind' }
-];
-function screenSoroban(lv) {
-  const t = newScreen();
-  P.soro = P.soro || { top: 1 };
-  lv = Math.min(lv || P.soro.top, P.soro.top);
-  const L = SORO[lv - 1];
-  let k = 0, ok = 0, vals = Array(L.rods).fill(0), task = null, busy = false;
-  shell("Abakus", `<div class="soro">
-      <div class="ai-lv" id="sbLv">${SORO.map((x, i) => `<button class="chip ${i + 1 === lv ? 'sel' : ''}" data-lv="${i + 1}" ${i + 1 > P.soro.top ? 'disabled' : ''}>${i + 1 > P.soro.top ? '🔒' : '🧮'} ${i + 1}</button>`).join('')}</div>
-      <div class="sp-hud"><span>${esc(L.n)}</span><span><b id="sbK">1</b>/5 · ✅ <b id="sbOk">0</b></span></div>
-      <p class="sb-q" id="sbQ"></p>
-      <div id="sbBox"></div>
-      <div id="sbAns"></div>
-    </div>`);
-  $('#sbLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); screenSoroban(+b.dataset.lv); };
-  const box = $('#sbBox'), ans = $('#sbAns');
-  function drawSb(tap = true) { box.innerHTML = sbHTML(vals, { tap }); }
-  function next() {
-    busy = false; $('#sbK').textContent = k + 1; vals = Array(L.rods).fill(0); ans.innerHTML = '';
-    if (L.kind === 'show') {
-      const n = L.rods === 2 ? ri(10, 99) : ri(lv === 1 ? 0 : 1, L.max);
-      task = { a: n }; $('#sbQ').innerHTML = `Zeig auf dem Abakus: <b class="sb-n">${n}</b>`; drawSb();
-      ans.innerHTML = `<button class="big" id="sbCheck">Fertig</button>`;
-      talk(k === 0 ? `Zeig die Zahl ${n} auf dem Abakus. Die obere Perle ist fünf, die unteren sind jeweils eins. Schieb die Perlen zur Querstange.` : `Zeig die Zahl ${n}.`);
-    } else if (L.kind === 'read') {
-      const n = ri(0, 9); vals = [n]; task = { a: n }; drawSb(false);
-      const opts = sample([n, ...sample([...Array(10).keys()].filter(x => x !== n), 2)], 3);
-      $('#sbQ').textContent = "Welche Zahl zeigt der Abakus?";
-      ans.innerHTML = `<div class="picks-g three nums">${opts.map(o => `<button class="pick-b" data-a="${o}">${o}</button>`).join('')}</div>`;
-      talk(k === 0 ? "Zähl die Perlen an der Querstange. Die obere ist fünf. Welche Zahl zeigt der Abakus?" : "Welche Zahl?");
-    } else if (L.kind === 'add') {
-      const a = ri(1, 8), plus = Math.random() < .6, b = plus ? ri(1, 9 - a) : ri(1, a), r = plus ? a + b : a - b;
-      vals = [a]; task = { a: r, from: a, b, plus }; drawSb();
-      $('#sbQ').innerHTML = `<b class="sb-n">${a} ${plus ? '+' : '−'} ${b}</b> — mach es auf dem Abakus`;
-      ans.innerHTML = `<button class="big" id="sbCheck">Fertig</button>`;
-      const five = plus ? (a < 5 && a + b >= 5 && b < 5) : (a >= 5 && a - b < 5 && b < 5);
-      talk(`Auf dem Abakus ist ${a}. ${plus ? "Rechne plus" : "Rechne minus"} ${b}.` + (five ? (plus ? ` Tipp: Die unteren Perlen reichen nicht – schieb die Fünf herunter und nimm ${5 - b} weg.` : ` Tipp: Schieb die Fünf hoch und nimm ${5 - b} dazu.`) : ''));
-    } else {
-      
-      const ns = [ri(1, 4), ri(1, 4), ri(1, 4)], sum = ns.reduce((s, x) => s + x, 0);
-      task = { a: sum }; $('#sbQ').textContent = "Schau hin und rechne im Kopf"; busy = true;
-      talk("Schau auf den Abakus und rechne im Kopf zusammen.");
-      (async () => {
-        await wait(1200);
-        for (const n of ns) { if (t !== tok) return; vals = [n]; drawSb(false); sfx.tick(); await wait(1300); box.innerHTML = sbHTML([0], { tap: false }); await wait(350); }
-        if (t !== tok) return;
-        box.innerHTML = '<p class="sb-n big">?</p>'; busy = false;
-        const opts = sample([sum, ...sample([...Array(13).keys()].map(x => x + 1).filter(x => x !== sum && Math.abs(x - sum) <= 3), 2)], 3);
-        $('#sbQ').textContent = "Wie viel ist das zusammen?";
-        ans.innerHTML = `<div class="picks-g three nums">${opts.map(o => `<button class="pick-b" data-a="${o}">${o}</button>`).join('')}</div>`;
-        talk("Wie viel ist das zusammen?");
-      })();
+
+
+const SB = (() => {
+  const PL = ["Einer", "Zehner", "Hunderter"];
+  
+  const parts = v => [v >= 5 ? 1 : 0, v % 5];
+  const direct = (a, r) => { const [au, al] = parts(a), [ru, rl] = parts(r); return r > a ? ru >= au && rl >= al : ru <= au && rl <= al; };
+  const GEN = {
+    direct() { for (;;) { const a = ri(0, 9), b = ri(1, 4 + (Math.random() < .4 ? 5 : 0)), plus = Math.random() < .55, r = plus ? a + b : a - b; if (r < 0 || r > 9 || !direct(a, r)) continue; return { a, b, plus, r, h: plus ? "Schieb Perlen an die Leiste." : "Schieb Perlen von der Leiste weg." }; } },
+    small() {
+      if (Math.random() < .55) { const a = ri(1, 4), b = ri(5 - a, 4); return { a, b, plus: true, r: a + b, h: `Es gibt nicht genug untere Perlen. ${b} ist 5 weniger ${5 - b}: schieb die Fünf runter und nimm ${5 - b} ${plural(5 - b, ["untere Perle", "untere Perlen", "untere Perlen"])} weg.` }; }
+      const a = ri(5, 8), b = ri(a - 4, 4); return { a, b, plus: false, r: a - b, h: `Es gibt nicht genug untere Perlen. ${b} ist 5 weniger ${5 - b}: schieb die Fünf hoch und nimm ${5 - b} ${plural(5 - b, ["untere Perle", "untere Perlen", "untere Perlen"])} dazu.` };
+    },
+    big() {
+      if (Math.random() < .55) { const u = ri(1, 9), b = ri(Math.max(1, 10 - u), 9), a = ri(0, 7) * 10 + u; return { a, b, plus: true, r: a + b, h: `Es gibt nicht genug Einer. ${b} ist 10 weniger ${10 - b}: nimm links einen Zehner dazu und rechts ${10 - b} weg.` }; }
+      const u = ri(0, 8), b = ri(u + 1, 9), a = ri(1, 8) * 10 + u; return { a, b, plus: false, r: a - b, h: `Es gibt nicht genug Einer. ${b} ist 10 weniger ${10 - b}: nimm links einen Zehner weg und rechts ${10 - b} dazu.` };
+    },
+    two() { if (Math.random() < .55) { const a = ri(10, 79), b = ri(10, 99 - a); return { a, b, plus: true, r: a + b, h: "Von links nach rechts: erst die Zehner, dann die Einer." }; } const a = ri(30, 99), b = ri(10, a - 10); return { a, b, plus: false, r: a - b, h: "Von links nach rechts: erst die Zehner, dann die Einer." }; },
+    three() { if (Math.random() < .55) { const a = ri(100, 799), b = ri(11, Math.min(399, 999 - a)); return { a, b, plus: true, r: a + b, h: "Von links nach rechts: Hunderter, Zehner, Einer." }; } const a = ri(250, 999), b = ri(11, Math.min(399, a - 100)); return { a, b, plus: false, r: a - b, h: "Von links nach rechts: Hunderter, Zehner, Einer." }; }
+  };
+  const L = [
+    { n: "Zeig eine Zahl bis 4", k: 'show', rods: 1, max: 4 },
+    { n: "Zeig eine Zahl bis 9", k: 'show', rods: 1, max: 9 },
+    { n: "Wie viel ist auf dem Abakus?", k: 'read', rods: 1 },
+    { n: "Plus und Minus", k: 'calc', rods: 1, g: 'direct' },
+    { n: "Kleine Freunde: die Fünf", k: 'calc', rods: 1, g: 'small' },
+    { n: "Große Freunde: die Zehn", k: 'calc', rods: 2, g: 'big' },
+    { n: "Zweistellige Zahlen", k: 'calc', rods: 2, g: 'two' },
+    { n: "Dreistellige Zahlen", k: 'calc', rods: 3, g: 'three' },
+    { n: "Blitzrechnen auf dem Abakus", k: 'flash', rods: 2 },
+    { n: "Geister-Abakus", k: 'ghost', rods: 2 },
+    { n: "Kopfrechnen", k: 'mind', rods: 2 },
+    { n: "Kopfrechen-Meister", k: 'mind', rods: 3, big: 1 }
+  ];
+  const mk = () => { try { return MSK.has() ? MSK.lv() : MSK.startLv(); } catch (e) { return 1; } };
+  const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5), m = mk(); return a <= 5 ? 1 : a <= 7 ? (m >= 5 ? 3 : 2) : m >= 7 ? 4 : 3; };
+  const S = () => {
+    let s = P.soro; if (!s || typeof s !== 'object') s = P.soro = {};
+    if (s.v !== 2) { const old = +s.top || 0; s.v = 2; s.top = Math.max(startLv(), Math.min(old, 4)); s.lv = s.top; s.wins = {}; }
+    s.wins = s.wins || {}; s.top = Math.max(1, Math.min(L.length, s.top || 1)); s.lv = Math.max(1, Math.min(s.top, s.lv || s.top));
+    return s;
+  };
+  const top = () => S().top;
+  
+  function abacus(box, rods, { tap = true, ghost = false, small = false, onChange = null } = {}) {
+    box.innerHTML = `<div class="sb2 r${rods}${ghost ? ' ghost' : ''}${small ? ' sm' : ''}" role="group" aria-label="Abakus">${Array.from({ length: rods }, (_, r) => `<div class="sb2-rod" data-r="${r}"><i class="sb2-stick"></i><i class="sb2-bar">${r === rods - 1 ? '<b class="sb2-dot"></b>' : ''}</i><button class="sb2-b up" data-r="${r}" data-k="5" aria-label="5" ${tap ? '' : 'tabindex="-1"'}></button>${[0, 1, 2, 3].map(k => `<button class="sb2-b lo" data-r="${r}" data-k="${k}" aria-label="1" ${tap ? '' : 'tabindex="-1"'}></button>`).join('')}${rods > 1 ? `<small class="sb2-pl">${PL[rods - 1 - r]}</small>` : ''}</div>`).join('')}</div>`;
+    const el = box.firstElementChild, A = { el, vals: Array(rods).fill(0), tap, onChange };
+    A.value = () => A.vals.reduce((s, v) => s * 10 + v, 0);
+    A.draw = () => {
+      el.querySelectorAll('.sb2-rod').forEach((rod, r) => {
+        const [u, lo] = parts(A.vals[r]);
+        rod.querySelectorAll('.sb2-b').forEach(b => {
+          const k = b.dataset.k; let on, t;
+          if (k === '5') { on = !!u; t = on ? 'calc(var(--bh) + 4px)' : '0px'; }
+          else { const i = +k; on = i < lo; t = `calc(var(--bh) * ${on ? 2 + i : 3 + i} + ${on ? 20 : 26}px)`; }
+          b.classList.toggle('on', on); b.style.top = t;
+        });
+      });
+      el.dataset.v = A.value();
+    };
+    A.set = n => { const s = String(Math.max(0, Math.floor(n))).padStart(rods, '0').slice(-rods); A.vals = [...s].map(Number); A.draw(); };
+    A.hint = list => { el.querySelectorAll('.sb2-b.hint').forEach(b => b.classList.remove('hint')); (list || []).forEach(([r, k]) => { const b = el.querySelector(`.sb2-b[data-r="${r}"][data-k="${k}"]`); if (b) b.classList.add('hint'); }); };
+    
+    const move = (b, dir) => {
+      const r = +b.dataset.r, [u, lo] = parts(A.vals[r]), k = b.dataset.k;
+      let nu = u, nl = lo;
+      if (k === '5') nu = dir === 0 ? 1 - u : dir > 0 ? 1 : 0;
+      else { const i = +k, on = i < lo; nl = dir === 0 ? (on ? i : i + 1) : dir < 0 ? Math.max(lo, i + 1) : Math.min(lo, i); }
+      const v = nu * 5 + nl; if (v === A.vals[r]) return;
+      A.vals[r] = v; A.draw(); sfx.tick(); if (A.onChange) A.onChange(A.value());
+    };
+    let down = null;
+    el.addEventListener('pointerdown', e => { const b = e.target.closest('.sb2-b'); if (!b || !A.tap) return; e.preventDefault(); down = { b, y: e.clientY }; try { b.setPointerCapture(e.pointerId); } catch (x) {} });
+    el.addEventListener('pointerup', e => { if (!down) return; const { b, y } = down, dy = e.clientY - y; down = null; move(b, Math.abs(dy) < 10 ? 0 : dy > 0 ? 1 : -1); });
+    el.addEventListener('pointercancel', () => { down = null; });
+    el.addEventListener('click', e => { const b = e.target.closest('.sb2-b'); if (b && A.tap && e.detail === 0) move(b, 0); });
+    A.draw();
+    return A;
+  }
+  
+  const hintFor = (n, rods = 1) => { const out = [], s = String(n).padStart(rods, '0'); [...s].forEach((d, r) => { const [u, lo] = parts(+d); if (u) out.push([r, 5]); for (let k = 0; k < lo; k++) out.push([r, k]); }); return out; };
+  const num = (x, i) => i === 0 ? String(x) : x < 0 ? `− ${-x}` : `+ ${x}`;
+  const saidNum = (x, i) => i === 0 ? String(x) : x < 0 ? `minus ${-x}` : `plus ${x}`;
+  
+  function flashSet(l, lv) {
+    const m = mk(), w = S().wins[lv] || 0;
+    if (l.big) { const c = 3 + (m >= 10 ? 1 : 0); let sum = 0; const xs = []; for (let i = 0; i < c; i++) { let x = ri(10, 49); if (i && m >= 8 && Math.random() < .35 && sum - x >= 0) x = -x; xs.push(x); sum += x; } return { xs, sum, ms: Math.max(900, 1700 - 40 * m - 80 * w) }; }
+    const c = Math.min(6, 3 + (m >= 5 ? 1 : 0) + (m >= 9 ? 1 : 0) + (w >= 3 ? 1 : 0));
+    let sum = 0; const xs = [];
+    for (let i = 0; i < c; i++) { let x = ri(1, 9); if (i && m >= 4 && Math.random() < .3 && sum - x >= 0) x = -x; xs.push(x); sum += x; }
+    return { xs, sum, ms: Math.max(700, 1500 - 50 * m - 90 * w) };
+  }
+  
+  const STORY = [
+    { t: "Das ist ein Abakus — eine Zaubermaschine zum Rechnen. Perlen zählen nur, wenn sie die Leiste berühren. Jetzt schlafen alle Perlen — das ist null." },
+    { t: "Weck eine untere Perle: schieb sie hoch an die Leiste!", want: 1, hint: [[0, 0]] },
+    { t: "Eins! Jede untere Perle ist eins. Weck noch zwei. Wie viele sind es jetzt?", want: 3, hint: [[0, 1], [0, 2]] },
+    { t: "Drei! Die obere Perle ist besonders. Sie ist wie eine Hand: Sie ist fünf wert! Wir legen die unteren Perlen schlafen.", reset: 1 },
+    { t: "Schieb die obere Perle runter an die Leiste. Das ist fünf!", want: 5, hint: [[0, 5]] },
+    { t: "Fünf und noch eine untere ist sechs. Zeig sechs!", want: 6, hint: [[0, 0]] },
+    { t: "Hurra! Jetzt kennst du das Geheimnis des Abakus: unten je eins, oben die Fünf. Spielen wir?", end: 1 }
+  ];
+  function intro(then) {
+    const t = newScreen(); let i = 0, A = null;
+    shell("Wie der Abakus zählt", `<div class="sbx sbi">
+        <div class="sbi-hero"><span class="sbi-fr" id="sbiFr">${friendSVG()}</span><p class="sbi-say" id="sbiSay"></p></div>
+        <div id="sbBox" class="sbx-box"></div><div class="sbx-val" id="sbV">0</div>
+        <div id="sbAns"></div></div>`, { guide: false, back: then ? null : screenSoroban });
+    A = abacus($('#sbBox'), 1, { onChange: v => { $('#sbV').textContent = v; check(v); } });
+    let speakT = 0;
+    function check(v) {
+      const s = STORY[i]; clearTimeout(speakT);
+      if (s.want === undefined || v !== s.want) { speakT = setTimeout(() => { if (t === tok) say(String(v)); }, 450); return; }
+      A.hint([]); sfx.good(); hopEl($('#sbiFr')); i++; say(String(v)).then(() => { if (t === tok) later(step, 200); });
     }
+    function step() {
+      const s = STORY[i]; $('#sbiSay').textContent = gx(s.t);
+      if (s.reset) { A.set(0); $('#sbV').textContent = 0; }
+      A.hint(s.hint || []); A.tap = s.want !== undefined;
+      $('#sbAns').innerHTML = s.want !== undefined ? '' : `<button class="big" id="sbNext">${s.end ? "Spielen!" : "Weiter ▶"}</button>`;
+      if ($('#sbNext')) $('#sbNext').onclick = () => { sfx.pop(); if (s.end) { S().intro = 1; save(); (then || play)(); return; } i++; step(); };
+      say(s.t);
+    }
+    step();
   }
-  function done(right) {
-    busy = true;
-    if (right) { ok++; $('#sbOk').textContent = ok; sfx.good(); say(`${task.a}!`); }
-    else { sfx.oops(); vals = String(task.a).padStart(L.rods, '0').split('').map(Number).slice(-L.rods); if (L.kind !== 'mind') drawSb(false); say(`Richtig wäre ${task.a}.`); }
-    k++;
-    later(() => {
-      if (k < 5) { next(); return; }
-      const up = ok >= 4 && lv === P.soro.top && lv < SORO.length; if (up) P.soro.top = lv + 1; save();
-      finish({ key: 'soroban', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: `${ok} von 5 richtig.` + (up ? ` Level ${lv + 1} ist frei: ${SORO[lv].n}!` : ''), again: () => screenSoroban(up ? lv + 1 : lv), menu: screenMathPath });
-    }, right ? 900 : 2200);
+  
+  function play(lvArg, { daily = false } = {}) {
+    const s = S();
+    if (!s.intro) { intro(() => play(lvArg, { daily })); return; }
+    const lv = Math.max(1, Math.min(s.top, lvArg || (daily ? s.top : s.lv))), l = L[lv - 1];
+    s.lv = lv; save();
+    const t = newScreen(), N = l.k === 'flash' || l.k === 'ghost' || l.k === 'mind' ? 3 : daily ? 4 : 5;
+    let k = 0, right = 0, task = null, miss = 0, busy = true, A = null, input = '', okT = 0, speakT = 0;
+    shell("Abakus", `<div class="sbx">
+        ${daily ? '' : `<div class="sbx-lv" id="sbLv">${L.map((x, i) => `<button class="chip ${i + 1 === lv ? 'sel' : ''}" data-lv="${i + 1}" ${i + 1 > s.top ? 'disabled' : ''} title="${esc(x.n)}">${i + 1 > s.top ? '🔒' : '🧮'} ${i + 1}</button>`).join('')}</div>`}
+        <div class="sbx-hud"><b>${lv}. ${esc(l.n)}</b><span class="sbx-dots" id="sbDots">${Array.from({ length: N }, (_, i) => `<i class="${i === 0 ? 'cur' : ''}"></i>`).join('')}</span></div>
+        <p class="sb-q" id="sbQ"></p>
+        <div class="sbx-flash" id="sbF" hidden></div>
+        <div id="sbBox" class="sbx-box"></div>
+        <div class="sbx-row"><div class="sbx-val" id="sbV"></div><div id="sbAns"></div></div>
+        ${daily ? '' : "<button class=\"link-btn\" id=\"sbHow\">🐣 Wie zählt der Abakus?</button>"}
+      </div>`, { back: daily ? null : screenMathPath });
+    if (!daily) {
+      $('#sbLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); play(+b.dataset.lv); };
+      $('#sbHow').onclick = () => { sfx.pop(); intro(() => play(lv)); };
+      const sel = $('#sbLv .sel'); if (sel) sel.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+    const box = $('#sbBox'), ans = $('#sbAns'), Q1 = $('#sbQ'), V = $('#sbV'), F = $('#sbF');
+    const showV = v => { V.textContent = l.k === 'read' || l.k === 'ghost' || l.k === 'mind' ? '' : v; };
+    const onBeads = v => {
+      showV(v); clearTimeout(okT); clearTimeout(speakT);
+      if (busy || !task) return;
+      if (l.k === 'show') speakT = setTimeout(() => { if (t === tok && !busy) say(String(v)); }, 500);
+      if (v === task.ans) okT = setTimeout(() => { if (t === tok && !busy && A.value() === task.ans) done(true); }, 450);
+    };
+    const doneBtn = () => { ans.innerHTML = `<button class="big" id="sbOk">Fertig</button>`; $('#sbOk').onclick = () => { if (busy) return; sfx.pop(); A.value() === task.ans ? done(true) : wrong(); }; };
+    const keypad = () => {
+      ans.innerHTML = `<div class="sbx-in" id="sbIn">?</div>${keypadHTML('sbKp')}`; input = '';
+      $('#sbKp').onclick = e => { const b = e.target.closest('[data-k]'); if (!b || busy) return; const v = b.dataset.k; sfx.tick();
+        if (v === 'del') input = input.slice(0, -1); else if (v === 'ok') { if (input) { +input === task.ans ? done(true) : wrong(); input = ''; } } else if (input.length < 4) input += v;
+        const i = $('#sbIn'); if (i) i.textContent = input || '?'; };
+    };
+    const opts = () => {
+      const n = task.ans, o = sample([n, ...sample([...Array(10).keys()].filter(x => x !== n && Math.abs(x - n) <= 4), 2)], 3);
+      ans.innerHTML = `<div class="picks-g three nums">${o.map(x => `<button class="pick-b" data-a="${x}">${x}</button>`).join('')}</div>`;
+      ans.querySelector('.picks-g').onclick = e => { const b = e.target.closest('[data-a]'); if (!b || busy) return; if (+b.dataset.a === n) { b.classList.add('ok'); done(true); } else { b.classList.add('no'); b.disabled = true; wrong(); } };
+    };
+    async function flashRun(set, ghost) {
+      F.hidden = false; F.textContent = ''; Q1.textContent = "Mach dich bereit…"; await talk("Schau genau hin!"); if (t !== tok) return false;
+      let sum = 0;
+      for (let i = 0; i < set.xs.length; i++) {
+        if (t !== tok) return false;
+        sum += set.xs[i]; F.textContent = num(set.xs[i], i); F.classList.remove('blink'); void F.offsetWidth; F.classList.add('blink'); sfx.tick();
+        if (ghost && A) A.set(sum);
+        if (set.ms >= 1100) say(saidNum(set.xs[i], i));
+        await wait(set.ms); F.textContent = ''; await wait(260);
+      }
+      if (t !== tok) return false;
+      F.hidden = true;
+      if (ghost && A) { A.el.classList.add('gone'); }
+      return true;
+    }
+    async function next() {
+      busy = true; miss = 0; task = null; clearTimeout(okT);
+      $$('#sbDots i').forEach((d, i) => d.classList.toggle('cur', i === k));
+      ans.innerHTML = ''; V.textContent = ''; F.hidden = true; box.innerHTML = '';
+      if (l.k === 'show') {
+        const n = ri(lv === 1 ? 0 : 1, l.max); task = { ans: n }; box.dataset.a = n;
+        A = abacus(box, 1, { onChange: onBeads }); showV(0);
+        Q1.innerHTML = `Zeig auf dem Abakus: <b class="sb-n">${n}</b>`;
+        if ((P.settings.age || 6) <= 5 && k === 0) A.hint(hintFor(n));
+        doneBtn(); busy = false;
+        talk(k === 0 ? `Zeig die Zahl ${n} auf dem Abakus. Eine untere Perle ist eins, die obere ist fünf.` : `Zeig ${n}.`);
+      } else if (l.k === 'read') {
+        const n = ri(0, 9); task = { ans: n }; box.dataset.a = n;
+        A = abacus(box, 1, { tap: false }); A.set(n);
+        Q1.textContent = "Welche Zahl ist auf dem Abakus?"; opts(); busy = false;
+        talk(k === 0 ? "Zähl die Perlen an der Leiste. Die obere ist fünf. Welche Zahl ist das?" : "Welche Zahl?");
+      } else if (l.k === 'calc') {
+        const g = GEN[l.g](); task = { ...g, ans: g.r }; box.dataset.a = g.r;
+        A = abacus(box, l.rods, { onChange: onBeads }); A.set(g.a); showV(g.a);
+        Q1.innerHTML = `<b class="sb-n">${g.a} ${g.plus ? '+' : '−'} ${g.b}</b>`;
+        doneBtn(); busy = false;
+        talk(`Auf dem Abakus ist ${g.a}. ${g.plus ? "Plus" : "Minus"} ${g.b}.` + (k === 0 && (l.g === 'small' || l.g === 'big') ? ' ' + g.h : ''));
+      } else {
+        const set = flashSet(l, lv); task = { ans: set.sum }; box.dataset.a = set.sum;
+        Q1.textContent = '';
+        if (l.k === 'flash') { A = abacus(box, l.rods, { onChange: onBeads }); showV(0); }
+        else if (l.k === 'ghost') A = abacus(box, l.rods, { tap: false, ghost: true, small: true });
+        else A = null;
+        if (k === 0 && l.k === 'flash') { await talk("Gleich blitzen Zahlen auf. Rechne jede sofort auf dem Abakus dazu!"); if (t !== tok) return; }
+        if (k === 0 && l.k === 'ghost') { await talk("Der Abakus ist jetzt ein Geist. Schau, wie sich die Perlen bewegen, dann verschwinden sie. Merk es dir!"); if (t !== tok) return; }
+        if (k === 0 && l.k === 'mind') { await talk("Kein Abakus mehr — er ist in deinem Kopf. Stell dir die Perlen vor und rechne!"); if (t !== tok) return; }
+        if (!(await flashRun(set, l.k === 'ghost'))) return;
+        Q1.textContent = "Wie viel ist es?";
+        if (l.k === 'flash') { doneBtn(); busy = false; if (A.value() === task.ans) { done(true); return; } talk("Wie viel ist es? Zeig es auf dem Abakus und drück «Fertig»."); }
+        else { keypad(); busy = false; talk("Wie viel ist es?"); }
+      }
+    }
+    function wrong() {
+      if (busy) return; miss++; sfx.oops();
+      const tgt = $('#sbBox .sb2') || $('#sbIn'); if (tgt) wiggle(tgt);
+      if (miss === 1) {
+        const h = l.k === 'calc' ? task.h : l.k === 'show' ? "Eine untere Perle ist eins, die obere ist fünf. Zähl noch mal." : l.k === 'read' ? "Die obere Perle an der Leiste ist fünf, und jede untere ist eins mehr." : "Fast! Versuch es noch mal.";
+        if (l.k === 'show' || l.k === 'calc') A.hint(l.k === 'show' ? hintFor(task.ans) : []);
+        talk("Fast! " + h); return;
+      }
+      
+      busy = true;
+      if (A && l.k !== 'mind') { A.el.classList.remove('gone'); A.set(task.ans); }
+      V.textContent = task.ans; mark(false);
+      talk(`So: ${task.ans}. Macht nichts, das schaffst du!`).then(() => { if (t === tok) step(); });
+    }
+    function done(good) {
+      busy = true; clearTimeout(okT); clearTimeout(speakT); if (A) A.hint([]);
+      if (good) { right++; mark(true); sfx.good(); V.textContent = task.ans; if (A && l.k === 'ghost') { A.el.classList.remove('gone'); A.set(task.ans); } }
+      talk(pickOne(["Richtig!", "Ja!", "Genau!", "Stimmt!"]) + ` ${task.ans}!`).then(() => { if (t === tok) step(); });
+    }
+    function mark(ok) { const d = $$('#sbDots i')[k]; if (d) d.className = ok ? 'ok' : 'no'; }
+    function step() {
+      k++;
+      if (k < N) { later(next, 400); return; }
+      const pass = right >= N - 1;
+      if (pass) s.wins[lv] = (s.wins[lv] || 0) + 1;
+      const up = pass && lv === s.top && s.top < L.length; if (up) { s.top++; s.lv = s.top; }
+      save();
+      finish({ key: 'soroban', stars: right === N ? 3 : right >= N - 1 ? 2 : 1, ev: { right, lv, up },
+        line: `${right} von ${N} richtig.` + (up ? ` Stufe ${s.top} ist offen: ${L[s.top - 1].n}!` : pass ? '' : " Noch einmal, dann klappt es!"),
+        again: () => play(up ? s.top : lv), menu: screenMathPath });
+    }
+    next();
   }
-  box.onclick = e => {
-    const b = e.target.closest('.sb-b'); if (!b || busy || L.kind === 'read' || L.kind === 'mind') return;
-    const r = +b.dataset.r, v = vals[r], up = v >= 5 ? 1 : 0, lo = v % 5;
-    if (b.classList.contains('up')) vals[r] = (up ? 0 : 5) + lo;
-    else { const kk = +b.dataset.k; vals[r] = up * 5 + (kk < lo ? kk : kk + 1); }
-    sfx.tick(); drawSb();
-  };
-  ans.onclick = e => {
-    if (busy) return;
-    if (e.target.closest('#sbCheck')) { done(sbValue(vals) === task.a); return; }
-    const b = e.target.closest('[data-a]'); if (b) { b.classList.add(+b.dataset.a === task.a ? 'ok' : 'no'); done(+b.dataset.a === task.a); }
-  };
-  next();
-}
+  
+  const daily = () => play(0, { daily: true });
+  
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    const s = S();
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="sbLvIn">🧮 Abakus: Stufe <select id="sbLvIn">${L.map((x, i) => `<option value="${i + 1}" ${s.top === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)}</option>`).join('')}</select></label>`);
+    $('#sbLvIn').onchange = e => { const s = S(); s.top = s.lv = +e.target.value; s.intro = 1; save(); sfx.tick(); };
+  }
+  return { play, daily, intro, top, S, L, GEN, flashSet, startLv, settingsRow, abacus };
+})();
+function screenSoroban(lv) { SB.play(lv); }
+ 
 
  
 const STEPS = [
@@ -14617,25 +15130,24 @@ function screenSteps(lv) {
  
 function screenMathPath() {
   newScreen();
-  const age = P.settings.age || (Q() ? 9 : 5), so = (P.soro && P.soro.top) || 1, st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
+  const age = P.settings.age || (Q() ? 9 : 5), so = SB.top(), st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
   const card = (id, e, h, sub, prog, rec) => `<button class="mp-card ${rec ? 'rec' : ''}" data-go="${id}"><span class="emo">${e}</span><span class="mp-t"><b>${h}</b><small>${sub}</small><em>${prog}</em></span>${rec ? '<span class="mp-rec">⭐</span>' : ''}</button>`;
   shell("Mathe-Weg", `<div class="mp">
       ${card('m-skill', '🎯', "Mathe nach deinem Können", "wir prüfen dein Können — dann Aufgaben genau für dich", MSK.has() ? MSK.rankTxt() : '', true)}
+      ${card('olymp', '🏅', "Olympiade nach deiner Kraft", "knifflige Rätsel: Logik, Möglichkeiten, Roboter, Streichhölzer", `${OLY.name()} · gelöst ${ol}`, age >= 7 || (MSK.has() && MSK.lv() >= 7))}
       <div class="mp-arrow">⬇️</div>
-      ${card('soroban', '🧮', "Abakus – Kopfrechnen", "4–7 Jahre: erst Perlen, dann Kopfrechnen", `Level ${so} von ${SORO.length}`, age <= 6)}
+      ${card('soroban', '🧮', "Abakus – Kopfrechnen", "für alle: Perlen, dann Kopfrechnen", `Level ${so} von ${SB.L.length}`, true)}
       ${card('flash', '⚡', "Blitzrechnen", "Zahlen blitzen auf – rechne im Kopf zusammen", `Level ${P.flashLv || 1}`, false)}
       <div class="mp-arrow">⬇️</div>
       ${card('steps', '🪜', "Stufen", "6–10 Jahre: jeden Tag eine Stufe höher", `Stufe ${st} von ${STEPS.length}`, age >= 6 && age <= 9)}
       ${card('m-sprint', '⏱️', "Mathe-Sprint", "wie viele Aufgaben in einer Minute", P.mathBest ? `Rekord: ${P.mathBest}` : '', false)}
-      <div class="mp-arrow">⬇️</div>
-      ${card('olymp', '🏅', "Mathe-Olympiade", "ab 8 Jahren: knifflige Aufgaben", `gelöst: ${ol} von ${OLYMP.length}`, age >= 8)}
     </div>`);
   $('.mp').onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; sfx.pop(); const g = GAMES.find(x => x.id === b.dataset.go); if (b.dataset.go === 'soroban') screenSoroban(); else if (b.dataset.go === 'steps') screenSteps(); else if (g) g.go(); };
   talk("Mathe-Weg: erst Abakus und Kopfrechnen, dann die Stufen und danach die Mathe-Olympiade. Ein Sternchen zeigt, was gerade gut zu dir passt.");
 }
 GAMES.push(
   { id: 'math-path', name: "Mathe-Weg", sub: "Abakus → Stufen → Olympiade", ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenMathPath(), grp: 3, also: [8] },
-  { id: 'soroban', name: "Abakus", sub: "Kopfrechnen", ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `Level ${(P.soro && P.soro.top) || 1}` },
+  { id: 'soroban', name: "Abakus", sub: "Kopfrechnen", ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `Level ${SB.top()}` },
   { id: 'steps', name: "Stufen", sub: "jeden Tag eine Stufe höher", ico: () => pic('🪜'), bg: 'var(--t-blue)', go: () => screenSteps(), grp: 3, also: [8], prog: () => `Stufe ${stepsTop()}` }
 );
  
@@ -14829,6 +15341,160 @@ const MSK = (() => {
   GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'math-count')), 0, { id: 'm-skill', name: "Mathe nach deinem Können", sub: "Aufgaben genau für dich: schwerer oder leichter", kw: "Mathe Niveau schwerer leichter Einmaleins", ico: () => pic('🎯'), bg: 'var(--t-peach)', go: () => play(), grp: 3, also: [17], prog: () => has() ? rankTxt() : "fang mit einem Test an" });
   return { play, check, lv, has, setLv, rank, rankTxt, sprintTask, settingsRow, L, pick, startLv };
 })();
+ 
+ 
+
+
+const OLY = (() => {
+  const LV = [['🐣', "Schlaues Küken"], ['🐥', "Kluges Vögelchen"], ['🦊', "Listiger Fuchs"], ['🦉', "Weises Eulchen"], ['🐯', "Mutiger Tiger"], ['🦁', "König der Rätsel"], ['🚀', "Gipfelstürmer"], ['🏆', "Olympionike"]];
+  const PRAISE = ["Guter Versuch!", "Mutiger Gedanke! Wir denken noch ein bisschen nach.", "Fast! Du bist auf dem richtigen Weg.", "Fehler gehören zum Lösen dazu. Versuch es noch mal!"];
+  const WIN = ["Richtig!", "Super!", "Ja! Was für ein kluger Kopf!", "Genau!", "Gut gedacht!"];
+  const cl = n => Math.max(1, Math.min(8, n));
+  const S = () => { if (!P.olymp || typeof P.olymp !== 'object') P.olymp = { solved: [] }; const o = P.olymp; if (!Array.isArray(o.solved)) o.solved = []; if (!Array.isArray(o.seen)) o.seen = []; return o; };
+  const startLv = () => { if (MSK.has()) return cl(Math.ceil(MSK.lv() / 2)); const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : cl(a - 3); };
+  const lv = () => cl(S().lv || startLv());
+  const setLv = n => { S().lv = cl(n); save(); };
+  const name = (l = lv()) => `${LV[l - 1][0]} ${LV[l - 1][1]}`;
+  const lvTxt = () => `Stufe ${lv()} · gelöst ${S().solved.length}`;
+  
+  function cubes(spec) {
+    const rows = spec.split('/').map(r => r.split(',').map(Number)), s = 26, cx = s * .866, it = [];
+    rows.forEach((r, y) => r.forEach((h, x) => { for (let z = 0; z < h; z++) it.push([x, y, z]); }));
+    it.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[2] - b[2]);
+    const pr = (x, y, z) => [(x - y) * cx, (x + y) * s / 2 - z * s], pts = [];
+    const poly = (ps, f) => { ps.forEach(p => pts.push(p)); return `<polygon points="${ps.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="${f}"/>`; };
+    const body = it.map(([x, y, z]) => poly([pr(x, y, z + 1), pr(x + 1, y, z + 1), pr(x + 1, y + 1, z + 1), pr(x, y + 1, z + 1)], '#FFD45C')
+      + poly([pr(x, y + 1, z), pr(x + 1, y + 1, z), pr(x + 1, y + 1, z + 1), pr(x, y + 1, z + 1)], '#FF9F43')
+      + poly([pr(x + 1, y, z), pr(x + 1, y + 1, z), pr(x + 1, y + 1, z + 1), pr(x + 1, y, z + 1)], '#E67E22')).join('');
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs) - 3, y0 = Math.min(...ys) - 3, w = Math.max(...xs) - x0 + 3, h = Math.max(...ys) - y0 + 3;
+    return `<svg class="ol-svg" viewBox="${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" style="width:${Math.min(240, w * 1.6).toFixed(0)}px" aria-hidden="true"><g stroke="#7A4A1E" stroke-width="1.6" stroke-linejoin="round">${body}</g></svg>`;
+  }
+  const stick = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#E7B26A" stroke-width="5" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="4" fill="#E0442E"/>`;
+  function sticks(spec) {
+    const [R, C] = spec.split('x').map(Number), L = 44, o = 8; let g = '';
+    for (let r = 0; r <= R; r++) for (let c = 0; c < C; c++) g += stick(o + c * L + 5, o + r * L, o + (c + 1) * L - 5, o + r * L);
+    for (let c = 0; c <= C; c++) for (let r = 0; r < R; r++) g += stick(o + c * L, o + r * L + 5, o + c * L, o + (r + 1) * L - 5);
+    const w = C * L + 2 * o, h = R * L + 2 * o;
+    return `<svg class="ol-svg" viewBox="0 0 ${w} ${h}" style="width:${Math.min(260, w * 1.3)}px" aria-hidden="true">${g}</svg>`;
+  }
+  const SEG = { a: [4, 2, 26, 2], b: [28, 4, 28, 26], c: [28, 30, 28, 52], d: [4, 54, 26, 54], e: [2, 30, 2, 52], f: [2, 4, 2, 26], g: [4, 28, 26, 28], h: [4, 28, 26, 28], v: [15, 17, 15, 39] };
+  const DIG = { 0: 'abcdef', 1: 'bc', 2: 'abged', 3: 'abgcd', 4: 'fgbc', 5: 'afgcd', 6: 'afgedc', 7: 'abc', 8: 'abcdefg', 9: 'abcdfg', '+': 'hv', '-': 'h' };
+  function match(spec) {
+    let x = 4, g = '';
+    for (const ch of spec) {
+      if (ch === '=') { g += stick(x + 4, 22, x + 26, 22) + stick(x + 4, 34, x + 26, 34); x += 38; continue; }
+      [...(DIG[ch] || '')].forEach(s => { const [x1, y1, x2, y2] = SEG[s]; g += stick(x + x1, y1 + 4, x + x2, y2 + 4); }); x += 38;
+    }
+    return `<svg class="ol-svg ol-match" viewBox="0 0 ${x} 64" style="width:${Math.min(300, x * 1.5)}px" aria-hidden="true">${g}</svg>`;
+  }
+  const PIP = { 1: [[2, 2]], 2: [[1, 1], [3, 3]], 3: [[1, 1], [2, 2], [3, 3]], 4: [[1, 1], [3, 1], [1, 3], [3, 3]], 5: [[1, 1], [3, 1], [2, 2], [1, 3], [3, 3]], 6: [[1, 1], [3, 1], [1, 2], [3, 2], [1, 3], [3, 3]] };
+  const dice = spec => spec.split(',').map(n => `<svg class="ol-die" viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="10" fill="#fff" stroke="#2A2346" stroke-width="3"/>${(PIP[n] || []).map(([a, b]) => `<circle cx="${a * 11 + 2}" cy="${b * 11 + 2}" r="4.5" fill="#2A2346"/>`).join('')}</svg>`).join('');
+  function robot(spec, it) {
+    const rows = spec.split('|'), C = Math.max(...rows.map(r => r.length));
+    const cell = ch => ch === '#' ? '<span class="w"></span>' : `<span>${ch === 'R' ? '🤖' : ch === '*' ? '⭐' : /[a-d]/.test(ch) ? (it || [])['abcd'.indexOf(ch)] || '' : ''}</span>`;
+    return `<div class="ol-grid" style="--c:${C}">${rows.map(r => [...r.padEnd(C, '.')].map(cell).join('')).join('')}</div>`;
+  }
+  function picHTML(p) {
+    if (!p.p) return '';
+    const m = /^#(\w+):(.*)$/.exec(p.p);
+    if (!m) return `<div class="ol-pic">${esc(p.p)}</div>`;
+    const k = m[1], v = m[2];
+    return `<div class="ol-pic ol-pic-${k}">${k === 'cubes' ? cubes(v) : k === 'sticks' ? sticks(v) : k === 'match' ? match(v) : k === 'dice' ? dice(v) : k === 'robot' ? robot(v, p.it) : ''}</div>`;
+  }
+  
+  function pick(l, n, not = []) {
+    const s = S(), at = OLYMP.filter(p => p.lv === l && !not.includes(p));
+    const fresh = at.filter(p => !s.solved.includes(p.id) && !s.seen.includes(p.id)), mid = at.filter(p => !s.seen.includes(p.id));
+    const pool = shuffle([...(fresh.length >= n ? fresh : mid.length >= n ? mid : at)]), out = [];
+    for (const p of pool) { if (out.length >= n) break; if (!out.some(q => q.cat === p.cat)) out.push(p); }
+    for (const p of pool) { if (out.length >= n) break; if (!out.includes(p)) out.push(p); }
+    return out;
+  }
+  const seen = p => { const s = S(); s.seen = [p.id, ...s.seen.filter(x => x !== p.id)].slice(0, 60); };
+  const num = s => /^-?\d+$/.test(String(s).trim());
+  const sayQ = p => p.q;
+  
+  function ask(p, { hard = false, day = false, intro = '', onDone }) {
+    const box = $('#olBox'), o = p.o.map((x, i) => ({ x, i }));
+    const opts = o.every(z => num(z.x)) ? o.sort((a, b) => +a.x - +b.x) : shuffle(o);
+    const big = o.every(z => z.x.length <= 4);
+    let miss = 0, hints = 0, over = false, input = '';
+    box.innerHTML = `${hard ? "<div class=\"ol-hard\">⭐ Knifflige Aufgabe!</div>" : ''}${day ? "<div class=\"ol-hard ol-dayb\">🌞 Rätsel des Tages</div>" : ''}${picHTML(p)}
+      <p class="ol-q no-said">${esc(p.q)}</p>
+      ${p.kp ? `<div class="mk-in ol-in" id="olIn">?</div>${keypadHTML('olKp')}` : `<div class="ol-opts ${big ? 'ol-big' : ''} ol-n${opts.length}">${opts.map(z => `<button class="ol-o" data-i="${z.i}">${esc(z.x)}</button>`).join('')}</div>`}
+      <div class="ol-tools"><button class="chip" id="olHint">💡 Tipp</button><button class="chip" id="olSay">🔊 Noch mal</button></div>
+      <p class="ol-hint no-said" id="olH" hidden></p><div class="ol-why" id="olW" hidden></div>`;
+    box.dataset.id = p.id; seen(p); save();
+    const hint = () => { const h = hints === 0 ? p.h1 : p.h2 || p.h1; hints = Math.min(2, hints + 1); const el = $('#olH'); el.hidden = false; el.textContent = `💡 ${h}`; return h; };
+    $('#olHint').onclick = () => { if (over) return; sfx.pop(); talk(hint()); };
+    $('#olSay').onclick = () => { sfx.pop(); talk(over ? p.w.join(' ') : sayQ(p)); };
+    function solve(first) {
+      over = true; const s = S();
+      if (!s.solved.includes(p.id)) s.solved.push(p.id);
+      if (hard && first) s.hard = (s.hard || 0) + 1;
+      save();
+      $$('.ol-o').forEach(b => { b.disabled = true; if (+b.dataset.i === p.a) b.classList.add('right'); });
+      const inEl = $('#olIn'); if (inEl) { inEl.textContent = p.o[p.a]; inEl.classList.add('ok'); }
+      const kp = $('#olKp'); if (kp) kp.remove();
+      $('#olH').hidden = true; $('.ol-tools').hidden = true;
+      const w = $('#olW'); w.hidden = false;
+      w.innerHTML = `${hard && first ? "<p class=\"ol-badge\">🏅 Knifflige Aufgabe gelöst!</p>" : ''}<h3>🧠 So geht die Lösung</h3><ol>${p.w.map(x => `<li>${esc(x)}</li>`).join('')}</ol><button class="big" id="olNext">Weiter</button>`;
+      if (hard && first) { confetti(60); sfx.magic(); }
+      $('#olNext').onclick = () => { sfx.pop(); hush(); onDone(first); };
+      const lead = first ? pickOne(WIN) : miss >= 3 ? "Lass es uns zusammen herausfinden." : pickOne(["Geschafft!", "Ja, genau so!", "Richtig! Du hast nicht aufgegeben."]);
+      talk(`${lead} ${p.w.join(' ')}`);
+    }
+    function wrong(b) {
+      miss++; sfx.oops(); if (b) { b.disabled = true; wiggle(b); }
+      if (miss >= 3) { solve(false); return; }
+      const h = hints < miss ? hint() : null;
+      talk(`${pickOne(PRAISE)}${h ? ' ' + h : ''}`);
+    }
+    function tryAns(i, b) { if (over) return; if (i === p.a) { sfx.good(); if (b) b.classList.add('right'); solve(miss === 0); } else wrong(b); }
+    if (p.kp) {
+      const show = () => { const el = $('#olIn'); if (el) el.textContent = input || '?'; };
+      $('#olKp').onclick = e => {
+        const k = e.target.closest('[data-k]'); if (!k || over) return; const v = k.dataset.k; sfx.tick();
+        if (v === 'del') input = input.slice(0, -1);
+        else if (v === 'ok') { if (!input) return; const good = +input === parseInt(p.o[p.a], 10); input = ''; if (good) tryAns(p.a); else { wrong(null); wiggle($('#olIn')); } }
+        else if (input.length < 4) input += v;
+        if (!over) show();
+      };
+    } else $('.ol-opts').onclick = e => { const b = e.target.closest('.ol-o'); if (!b || b.disabled) return; tryAns(+b.dataset.i, b); };
+    talk((intro ? intro + ' ' : '') + sayQ(p));
+  }
+  function head(l) { return `<div class="ol-top"><button class="chip" id="olDown">🐢 Leichter</button><span class="ol-lv"><b>${LV[l - 1][0]} Stufe ${l}</b><small>${esc(LV[l - 1][1])}</small></span><button class="chip" id="olUp">🚀 Schwerer</button></div>`; }
+  function play() {
+    newScreen(); noGuard();   
+    const l = lv(), first4 = pick(l, 4), deck = [...first4, ...pick(cl(l + 1), 1, first4)];
+    let k = 0, first = 0;
+    shell("Olympiade", `<div class="ol">${head(l)}<div class="ol-head"><span id="olN"></span><span id="olCat"></span></div><div id="olBox"></div></div>`);
+    $('#olDown').onclick = () => { if (l <= 1) return; sfx.pop(); hush(); setLv(l - 1); play(); };
+    $('#olUp').onclick = () => { if (l >= 8) return; sfx.pop(); hush(); setLv(l + 1); play(); };
+    function show() {
+      const p = deck[k], hard = k === 4;
+      $('#olN').textContent = `Aufgabe ${k + 1} von ${deck.length}`; $('#olCat').textContent = p.cat;
+      ask(p, { hard, intro: k === 0 ? "Olympiade! Fünf knifflige Aufgaben, die letzte ist die schwerste. Fehler sind nicht schlimm: Es gibt Tipps." : '', onDone: f => { if (f) first++; k++; if (k < deck.length) show(); else end(); } });
+    }
+    function end() {
+      const up = first >= 4 && l < 8; if (up) setLv(l + 1);
+      const s = S();
+      finish({ key: 'olymp', stars: first >= 3 ? 3 : 2, ev: { solved: deck.length, first }, again: play,
+        line: `Beim ersten Versuch: ${first} von ${deck.length}. Knifflige Aufgaben gelöst: ${s.hard || 0}.` + (up ? ` Neue Stufe: ${name(l + 1)}!` : ` ${name(l)}.`) });
+    }
+    show();
+  }
+  
+  function day() {
+    newScreen(); noGuard();
+    const l = lv(), s = S(), at = OLYMP.filter(p => p.lv === l), fresh = at.filter(p => !s.solved.includes(p.id)), pool = fresh.length ? fresh : at;
+    const p = pool[dayNo() % pool.length];
+    shell("Rätsel des Tages", `<div class="ol"><div class="ol-head"><span>${esc(name(l))}</span><span id="olCat">${esc(p.cat)}</span></div><div id="olBox"></div></div>`);
+    ask(p, { day: true, onDone: f => finish({ key: 'olymp-day', stars: 3, ev: { first: f ? 1 : 0 }, again: play, line: f ? "Rätsel des Tages gleich beim ersten Mal gelöst! Magst du mehr? In der „Olympiade“ gibt es viele." : "Rätsel des Tages gelöst! Morgen gibt es ein neues." }) });
+  }
+  return { play, day, lv, setLv, name, lvTxt, pick, startLv };
+})();
+GAMES.push({ id: 'olymp-day', name: "Rätsel des Tages", sub: "ein kniffliges Rätsel, das du schaffst", ico: () => pic('🧩'), bg: 'var(--t-yellow)', go: () => OLY.day(), grp: 3, inside: true });
  
 
 
@@ -15233,7 +15899,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '152';
+const APP_VER = '153';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 
@@ -16100,7 +16766,8 @@ function readFineHTML() {
     const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
     return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ["Tag", "Tage", "Tage"])} ohne Lesen` : "Gestern nicht gelesen"}: −${sum} ⭐</b><small>${done ? "Heute schon gelesen – super!" : "Lies heute, dann bleiben dir morgen deine Sterne."}</small></span>${done ? '' : "<button class=\"chip\" id=\"rfGo\">📖 Lesen</button>"}</div>`;
   }
-  if (!done && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Heute noch nicht gelesen</b><small>Ein Tag ohne Lesen kostet ${READ_FINE} Sterne. Eine „Lesen“-Übung oder das Buch – und alles ist gut.</small></span><button class="chip" id="rfGo">📖 Lesen</button></div>`;
+  
+  if (!done && P.readFrom !== today && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Heute noch nicht gelesen</b><small>Ein Tag ohne Lesen kostet ${READ_FINE} Sterne. Eine „Lesen“-Übung oder das Buch – und alles ist gut.</small></span><button class="chip" id="rfGo">📖 Lesen</button></div>`;
   return '';
 }
 function bindReadFine(fines) {
@@ -21057,6 +21724,7 @@ const SETUI = (() => {
     if (S.prog) list([row($('#expBtn'), '📤', "Fortschritt kopieren"), row($('#impBtn'), '📥', "Fortschritt einfügen")]);
     if ($('#resetBtn')) list([row($('#resetBtn'), '🗑️', "Neu anfangen", '', true)]);
 
+    if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Aussehen: bunt oder ruhig</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || "Kind", lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
       ['fam', '👪', "Familie", '', [S.fam]],
@@ -22761,7 +23429,7 @@ const PATH = (() => {
   
   const SEEN = new Set();
   const fresh = id => { if (SEEN.has(id)) return false; SEEN.add(id); return true; };
-  const ICO = { speech: '👂', read: '📖', math: '🧮', book: '📚' };
+  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', puzzle: '🧩', soro: '🧮' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
     const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;

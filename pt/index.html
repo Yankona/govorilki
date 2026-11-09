@@ -2032,19 +2032,37 @@ body.quest .fam-ok{color:#7BE0A0}
 .pw-k.blk{background:#2A2346;color:#fff;height:150px}
 .pw-k.next{background:#FFD93D;box-shadow:0 0 0 4px #F5B400,0 4px 0 var(--line-strong);animation:pulse .9s ease-in-out infinite}.pw-k.blk.next{background:#F5B400;color:#2A2346}
 .pw-k.hit{transform:translateY(3px)}.pw-k.no{background:#FFB3B3}
-.soro{display:flex;flex-direction:column;align-items:center;gap:12px}
-.sb-q{margin:0;font:800 22px/1.3 var(--f-body);text-align:center}
+.sbx{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.sbx-lv{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding:2px 2px 6px;scrollbar-width:none}.sbx-lv .chip{flex:none}
+.sbx-hud{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:center;font:800 15px var(--f-body);color:var(--ink-soft);text-align:center}
+.sbx-dots{display:inline-flex;gap:5px}.sbx-dots i{width:13px;height:13px;border-radius:50%;background:var(--line-strong)}.sbx-dots i.cur{box-shadow:0 0 0 3px var(--sea)}.sbx-dots i.ok{background:var(--leaf)}.sbx-dots i.no{background:#FFB3B3}
+.sb-q{margin:0;font:800 22px/1.3 var(--f-body);text-align:center;min-height:1.3em}
 .sb-n{font:900 40px var(--f-body);color:var(--sea)}
-.sb-n.big{font-size:90px;margin:20px 0}
-.sb{display:flex;gap:18px;justify-content:center;padding:14px 22px;border-radius:18px;background:#8A5A2B;box-shadow:inset 0 0 0 6px #6B4220,0 5px 0 #4E2F14}
-.sb-rod{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px;height:300px}
-.sb-stick{position:absolute;top:0;bottom:0;left:50%;width:6px;margin-left:-3px;background:#D9C3A0;border-radius:3px}
-.sb-beam{position:relative;width:96px;height:12px;background:#F2E6CF;border-radius:4px;margin:0 0 0;z-index:1}
-.sb-b{position:relative;z-index:2;width:62px;height:34px;border:0;border-radius:50%/60%;background:radial-gradient(circle at 35% 30%,#FFD9A8,#E8833A 60%,#B85A1E);box-shadow:0 2px 0 #7A3A10;cursor:pointer;transition:transform .15s}
-.sb-b.up{margin-bottom:56px}.sb-b.up.on{transform:translateY(56px)}
-.sb-b.lo:not(.on){transform:translateY(64px)}
-.sb.sm .sb-rod{height:220px}
-@media (max-height:780px){#sbBox{zoom:.76}.soro{gap:8px}}
+.sbx-val{font:900 44px/1 var(--f-body);color:var(--sea);min-height:44px}.sbx-val:empty{display:none}
+.sbx-row{display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;width:100%}
+.sbx-flash{font:900 96px/1 var(--f-body);color:var(--tiger);min-height:110px;display:flex;align-items:center;justify-content:center}
+.sbx-flash[hidden]{display:none}.sbx-flash.blink{animation:sbBlink .3s ease-out}
+@keyframes sbBlink{from{transform:scale(.6);opacity:.2}to{transform:scale(1);opacity:1}}
+.sbx-in{font:900 40px var(--f-body);color:var(--sea);min-width:120px;text-align:center;padding:4px 16px;border-radius:16px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
+.sb2{--bh:44px;--bw:78px;display:flex;gap:14px;justify-content:center;padding:14px 18px 6px;border-radius:24px;background:linear-gradient(#9E6C3A,#7A4F27);box-shadow:inset 0 0 0 6px #66401E,0 6px 0 #4A2D12;touch-action:none;user-select:none;-webkit-user-select:none;transition:opacity .9s}
+.sb2.r3{--bh:40px;--bw:66px;gap:10px}
+.sb2.sm{--bh:24px;--bw:46px;padding:8px 12px 4px;gap:8px}
+.sb2-rod{position:relative;width:var(--bw);height:calc(var(--bh) * 7 + 46px)}
+.sb2.sm .sb2-rod{height:calc(var(--bh) * 7 + 30px)}
+.sb2-stick{position:absolute;left:50%;top:0;height:calc(var(--bh) * 7 + 28px);width:6px;margin-left:-3px;background:#EAD9B6;border-radius:3px}
+.sb2-bar{position:absolute;left:-9px;right:-9px;top:calc(var(--bh) * 2 + 4px);height:14px;background:#F7EDD9;border-radius:3px;z-index:1;box-shadow:0 2px 0 #C9A878}
+.sb2-dot{position:absolute;left:50%;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#7A4F27}
+.sb2-b{position:absolute;left:0;width:var(--bw);height:calc(var(--bh) - 2px);border:0;padding:0;margin:0;border-radius:50%;z-index:2;background:radial-gradient(ellipse at 35% 30%,#FFE2BC,#F08A3C 55%,#B4561C);box-shadow:0 3px 0 #7A3A10;cursor:pointer;transition:top .18s ease-out;touch-action:none;-webkit-tap-highlight-color:transparent}
+.sb2-b.up{background:radial-gradient(ellipse at 35% 30%,#D4EEFF,#3E9BE0 55%,#1E5E9A);box-shadow:0 3px 0 #123E66}
+.sb2-b.hint{animation:sbGlow 1s ease-in-out infinite;outline:4px solid #FFD93D;outline-offset:1px}
+@keyframes sbGlow{50%{outline-color:#FFF6C2;outline-offset:4px}}
+.sb2-pl{position:absolute;bottom:0;left:-8px;right:-8px;text-align:center;font:800 11px var(--f-body);color:#FFE9C8}
+.sb2.ghost{opacity:.3;pointer-events:none;filter:saturate(.4)}.sb2.ghost.gone{opacity:0}
+.sbi-hero{display:flex;align-items:center;gap:10px;max-width:520px;width:100%}
+.sbi-fr{flex:none;width:84px;height:84px}.sbi-fr svg{width:100%;height:100%}
+.sbi-say{margin:0;flex:1;padding:12px 14px;border-radius:18px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong);font:700 17px/1.35 var(--f-body)}
+@media (max-height:760px){.sb2{--bh:34px;--bw:68px}.sb2.r3{--bh:30px;--bw:58px}.sb2.sm{--bh:20px;--bw:40px}.sbx-val{font-size:34px;min-height:34px}.sbx{gap:6px}.sb-q{font-size:20px}.sb-n{font-size:34px}.sbx-flash{font-size:68px;min-height:72px}.sbi-fr{width:64px;height:64px}}
+@media (min-width:900px) and (min-height:820px){.sb2{--bh:48px;--bw:86px}}
 .st .st-ladder{display:flex;gap:6px;overflow-x:auto;width:100%;padding:4px 2px 8px;scrollbar-width:none}
 .st-step{flex:none;width:40px;height:40px;border:0;border-radius:12px;background:var(--paper);font:900 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
 .st-step.done{background:var(--t-green)}.st-step.sel{outline:3px solid var(--sea)}.st-step[disabled]{opacity:.45}
@@ -2481,6 +2499,29 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .ol-hint{margin:0;padding:10px 14px;border-radius:14px;background:rgba(255,200,58,.18);font:700 16px/1.4 var(--f-body)}
 .ol-why{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .ol-why p{margin:0;font:700 17px/1.45 var(--f-body)}
+.ol-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 8px}
+.ol-top .ol-lv{order:-1;flex-basis:100%}
+.ol-lv{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.ol-lv b{font:900 16px var(--f-body);white-space:nowrap}.ol-lv small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.ol-hard{align-self:center;padding:6px 14px;border-radius:99px;background:linear-gradient(90deg,#FFC83A,#FF8A2A);color:#2A2346;font:900 15px var(--f-body);box-shadow:0 3px 0 #D9640C}
+.ol-dayb{background:linear-gradient(90deg,#FFE27A,#FFC83A)}
+#olBox{display:flex;flex-direction:column;gap:12px}
+.ol-pic{align-self:center;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:100%;font:800 34px/1.25 var(--f-body);text-align:center;letter-spacing:2px}
+.ol-svg{display:block;max-width:100%;height:auto}
+.ol-die{width:54px;height:54px}
+.ol-grid{display:grid;grid-template-columns:repeat(var(--c),minmax(0,52px));gap:4px;padding:6px;border-radius:14px;background:var(--line)}
+.ol-grid span{aspect-ratio:1;display:grid;place-items:center;border-radius:9px;background:var(--paper);font-size:28px}
+.ol-grid span.w{background:#5B4A3A}
+.ol-opts.ol-n2,.ol-opts.ol-n3{grid-template-columns:repeat(var(--n,2),1fr)}.ol-opts.ol-n3{--n:3}
+.ol-opts.ol-big .ol-o{justify-content:center;font-size:30px;min-height:70px;text-align:center}
+.ol-o{justify-content:center;text-align:center;min-height:54px}
+.ol-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ol-in{align-self:center}
+.ol-why{background:var(--paper);border-radius:18px;padding:14px 16px;box-shadow:0 4px 0 var(--line)}
+.ol-why h3{margin:0;font:900 18px var(--f-body)}
+.ol-why ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font:700 17px/1.45 var(--f-body)}
+.ol-badge{margin:0;font:900 18px var(--f-body);color:var(--tiger-deep)}
+.ol-why .big{align-self:stretch}
 @media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
 .said-card{position:fixed;z-index:44;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + var(--guide-h,96px) + 88px);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(42,35,70,.25);text-align:center;animation:popin .3s both}
 .said-card small{font:800 13px var(--f-body);color:var(--ink-soft)}
@@ -3348,6 +3389,100 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .aq .pick-b.no,.aq .aq-th.no{opacity:.4}
 #aqLv{color:var(--tiger-deep);letter-spacing:.02em}
 /* FUN-CSS-END */
+/* CALM-CSS: the calm look (testers: «перегружено, радужная палитра отвлекает»). One design system on top of the
+   older rules: a soft neutral background, ONE accent (the friend's orange), one success green, one warning yellow;
+   the pastel tints come from a small muted set, and the home tiles take one tint per tab instead of a rainbow;
+   flat cards with a soft shadow instead of chunky 3D slabs; one type scale. The night theme of the older child
+   (body.quest) gets the same rules with its own values. Everything sits under body.look-calm: the family chooses
+   «Ярко» (the old bright look, no class) or «Спокойно» (LOOK below; the default). */
+body.look-calm{
+  --bg:#F6F3EE; --surface:#FFFFFF; --accent:var(--tiger); --accent-deep:var(--tiger-deep); --ok:#2FA865; --warn:#F2B630;
+  --sky:#F6F3EE; --ink-soft:#6B6585;
+  --t-blue:#E6EDF8; --t-green:#E6F1E2; --t-peach:#FBECE0; --t-lilac:#EEE9F7; --t-pink:#F8E8EC; --t-yellow:#FAF1D9; --t-mint:#E1F1EA;
+  --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
+  --sh-1:0 1px 2px rgba(42,35,70,.06),0 3px 10px rgba(42,35,70,.06); --sh-2:0 2px 4px rgba(42,35,70,.07),0 8px 22px rgba(42,35,70,.08);
+  --r-card:22px; --r-chip:999px;
+  --fs-h1:26px; --fs-h2:22px; --fs-title:18px; --fs-body:16px; --fs-small:13px;
+  --line-strong:rgba(42,35,70,.11);
+}
+body.look-calm .pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
+body.look-calm.quest{--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#A8B0D8;
+  --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
+  --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
+  --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
+/* the background: calm and plain (no clouds by day; the night sky keeps its few stars) */
+body.look-calm:not(.quest){background-color:var(--bg);background-image:none}
+body.look-calm.quest{background-color:var(--bg)}
+body.look-calm .logo .lt:nth-child(n){color:var(--ink);transform:none}
+/* one tint per tab on the home tiles */
+body.look-calm .home-t[data-tab="speak"]{--tint:var(--tint-speak)}body.look-calm .home-t[data-tab="learn"]{--tint:var(--tint-learn)}
+body.look-calm .home-t[data-tab="create"]{--tint:var(--tint-create)}body.look-calm .home-t[data-tab="discover"]{--tint:var(--tint-discover)}
+body.look-calm .home-t{--tint:var(--surface)}
+body.look-calm .home-t .tile,body.look-calm .home-t .mini{background:var(--tint)}
+/* tiles: a clear picture and a short name; the second line small and on one line */
+body.look-calm .tile{min-height:156px;border-radius:var(--r-card);padding:14px;gap:6px;box-shadow:var(--sh-1)}
+body.look-calm .tile:active,body.look-calm .mini:active,body.look-calm .card:active,body.look-calm .chip:active,body.look-calm .ibtn:active,body.look-calm .disc:active,body.look-calm .at-card:active{transform:scale(.97);box-shadow:var(--sh-1)}
+body.look-calm .tile b{font:700 var(--fs-title)/1.15 var(--f-display)}
+body.look-calm .tile small{font:700 var(--fs-small)/1.3 var(--f-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+body.look-calm .tile .prog{font-size:var(--fs-small)}
+body.look-calm.quest .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
+body.look-calm .tile.tl-armed{box-shadow:0 0 0 4px var(--warn),var(--sh-1)}
+body.look-calm .mini,body.look-calm .card{box-shadow:var(--sh-1)}
+/* cards, chips and round buttons: flat, a soft shadow */
+body.look-calm .chip,body.look-calm .kid,body.look-calm .ibtn,body.look-calm .starpill,body.look-calm .disc,body.look-calm .at-card,body.look-calm .hol-card,body.look-calm .hol-card.soon,body.look-calm .hm-more,body.look-calm .qcard,body.look-calm .rank,body.look-calm .ld-tab,body.look-calm .ld-pts li,body.look-calm .ld-steps li,body.look-calm .af-house,body.look-calm .today,body.look-calm .today.is-done{box-shadow:var(--sh-1)}
+body.look-calm .chip,body.look-calm .kid{background:var(--surface)}
+body.look-calm .kid.sel{background:var(--t-peach);box-shadow:0 0 0 2px var(--accent),var(--sh-1)}
+body.look-calm .bubble{box-shadow:var(--sh-1)}
+body.look-calm .sec-nav{background:rgba(246,243,238,.94)}
+body.look-calm .sec-nav .chip{box-shadow:none;background:var(--surface);border:1px solid var(--line)}
+body.look-calm.quest .sec-nav{background:rgba(20,26,49,.94)}
+body.look-calm .surp{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+body.look-calm .surp .surp-q{background:var(--accent);color:#fff}
+body.look-calm .rf-card,body.look-calm .rf-card.soft{background:var(--surface);border:0;border-left:6px solid var(--warn);box-shadow:var(--sh-1)}
+body.look-calm.quest .rf-card,body.look-calm.quest .rf-card.soft{background:var(--surface);border-color:var(--warn)}
+/* one type scale */
+body.look-calm .group-head h2,body.look-calm .today h2{font:700 var(--fs-h2)/1.15 var(--f-display)}
+body.look-calm .group-head p{font:700 14px/1.3 var(--f-body)}
+body.look-calm.young .group-head p{display:none}
+body.look-calm .tab-head h1{font:900 var(--fs-h1)/1.1 var(--f-display,var(--f-body))}
+body.look-calm .bar h1{font:700 clamp(20px,4.2vw,26px)/1.1 var(--f-display)}
+body.look-calm .group{gap:10px}
+body.look-calm .stage.scroll{gap:20px}
+/* the bottom tabs: one quiet selection */
+body.look-calm .tabbar{box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(30,26,46,.06)}
+body.look-calm .tb.sel{background:var(--t-peach);color:var(--ink)}body.look-calm .tb.sel .emo{transform:none}
+body.look-calm.quest .tb.sel{background:#2E3866}
+@media (min-width:900px){body.look-calm .home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.look-calm.quest .home-t .tb.sel{background:#2E3866}}
+/* «Сегодня»: the path is the one big thing; the child's own things are small chips under it */
+body.look-calm .pd-lb,body.look-calm .pd-bub{box-shadow:var(--sh-1)}
+body.look-calm .pd-n.now .pd-lb{box-shadow:0 4px 0 var(--accent-deep)}
+body.look-calm .pd-mine{gap:8px}
+body.look-calm .pd-mine .chip{min-height:44px;padding:6px 14px 6px 8px;font-size:15px;box-shadow:none;border:1px solid var(--line)}
+body.look-calm .pd-mine .chip .emo{font-size:22px}
+body.look-calm .pd-card{box-shadow:var(--sh-1)!important}
+/* the game frame: the same header, the friend at the bottom, one main button */
+body.look-calm .big{box-shadow:0 5px 0 var(--accent-deep)}
+body.look-calm .big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-deep)}
+body.look-calm .big.danger{box-shadow:0 5px 0 #B8305A}
+body.look-calm .big.ghost,body.look-calm .big.ghost.danger{background:var(--surface);box-shadow:var(--sh-1),inset 0 0 0 2px var(--line)}
+body.look-calm .big.ghost:active{transform:scale(.97)}
+body.look-calm .winbox{border-radius:28px;box-shadow:var(--sh-2)}
+/* CALM-CSS-END */
+/* LOOK-CSS: the «Ярко / Спокойно» picker with a tiny picture of each look */
+.lk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:460px;margin-inline:auto}
+.lk-c{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 10px 12px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 0 0 2px var(--line),0 3px 10px rgba(42,35,70,.08);font:inherit}
+.lk-c b{font:800 19px/1.1 var(--f-body)}
+.lk-c.sel{box-shadow:0 0 0 4px var(--tiger),0 3px 10px rgba(42,35,70,.08)}
+.lk-c:active{transform:scale(.97)}
+.lk-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;aspect-ratio:4/3;padding:10px;border-radius:14px}
+.lk-mini i{border-radius:9px}
+.lk-bright{background:#CDEEF6 radial-gradient(ellipse 40% 18% at 22% 12%,#fff 70%,transparent 72%)}
+.lk-bright i{box-shadow:0 4px 0 rgba(42,35,70,.22)}
+.lk-bright i:nth-child(1){background:#FFE6CC}.lk-bright i:nth-child(2){background:#DCEDFF}.lk-bright i:nth-child(3){background:#E3F5D0}.lk-bright i:nth-child(4){background:#FFE0E8}
+.lk-calm{background:#EFE9E0}
+.lk-calm i{background:#F7DCC8;box-shadow:0 1px 3px rgba(42,35,70,.12)}
+.lk-ob .lk-pick{margin-block:6px 10px}
+/* LOOK-CSS-END */
 </style>
 </head>
 <body>
@@ -3545,15 +3680,21 @@ const MEDALS = [{ n: 3, e: '🥉', t: "3 dias seguidos" }, { n: 7, e: '🥈', t:
 const LESSONS_R = {
   speech: { name: "Fala", sub: "respiração, língua, R, CH e J", mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: "Leitura", sub: "letras, sílabas, palavras", mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
-  math: { name: "Matemática", sub: "contar e somar", mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' }
+  math: { name: "Matemática", sub: "contar e somar", mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' },
+  puzzle: { name: "Problema do dia", sub: "um problema esperto ao teu alcance", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
+  soro: { name: "Ábaco", sub: "contas e cálculo mental, todos os dias", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LESSONS_L = {
   speech: { name: "Treino do L", sub: "aquecimento, língua, arena do L", mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: "Leitura rápida", sub: "sílabas e texto contra o relógio", mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
-  book: { name: "Livro", sub: "um pouco todos os dias, com gosto", mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' }
+  book: { name: "Livro", sub: "um pouco todos os dias, com gosto", mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
+  puzzle: { name: "Problema do dia", sub: "um problema esperto ao teu alcance", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
+  soro: { name: "Ábaco", sub: "contas e cálculo mental, todos os dias", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LS = () => {
-  const b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  
+  if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
   return customSounds() ? { ...b, speech: { ...b.speech, name: "Fala", sub: "respiração, língua, " + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3572,13 +3713,16 @@ function todayState() {
     P.today = { date: k, v: 2, done: { speech: [], read: [], math: [] } };
     if (old && old.date === k && Array.isArray(old.done) && !dayTotal(k)) P.today.done.speech = old.done;
   }
-  ['speech', 'read', 'math', 'book'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
+  ['speech', 'read', 'math', 'book', 'puzzle', 'soro'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
   return P.today;
 }
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
 
 function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
+  
+  if (id === 'soro') return [{ key: 'soroban', kind: 'math', name: "Ábaco", run: () => SB.daily() }];
+  if (id === 'puzzle') return [gameStep('olymp-day', 'puzzle')];
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
@@ -4261,6 +4405,7 @@ function newScreen() {
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
+  lookApply();
   return tok;
 }
 function later(fn, ms) { const t = tok; timers.push(setTimeout(() => { if (t === tok) fn(); }, ms)); }
@@ -4607,7 +4752,7 @@ const greet = () => gx((Q()
   : `Olá${nameBit()}! Sou ${friend().who}. ${friend().hello} ${dayTotal(dayKey()) ? "Hoje já treinaste. Podes treinar mais!" : "Começamos a lição?"}`) + holGreet());
 function lessonsCard() {
   const td = todayState(), c = dayCounts(td.date);
-  const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b></span>", math: '<span class="ico-num">1+2</span>', book: pic('📖') };
+  const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : "<span class=\"ico-letters\"><b class=\"L v\">A</b><b class=\"L c\">B</b></span>", math: '<span class="ico-num">1+2</span>', book: pic('📖'), soro: pic('🧮') };
   const rows = LIDS().map(id => {
     const L = LS()[id], plan = lessonPlan(id), d = td.done[id].length, n = c[id] || 0;
     const state = id === 'book' ? (n ? "Lido hoje ✓" : "Marcar a leitura") : d ? `Continuar · ${d}/${plan.length}` : n ? "Outra vez" : "Começar";
@@ -4737,7 +4882,7 @@ function goHome() {
   const RF = readFineCheck();
   navHome();
   setTimeout(() => statPing(), 4000);
-  document.body.classList.toggle('quest', Q());
+  document.body.classList.toggle('quest', Q()); lookApply();
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
@@ -4801,7 +4946,7 @@ function goHome() {
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || "<p class=\"lead\">Ainda não há nada aqui. Os jogos ligam-se em «Para adultos» → «Interesses e jogos».</p>"}`;
   }
-  app.innerHTML = `<div class="screen home-t">
+  app.innerHTML = `<div class="screen home-t" data-tab="${tab}">
    <main class="stage scroll" id="stage">
     ${GUEST ? `<button class="g-back" id="guestTop">${GRAND[GUEST.who].e} ← A minha entrada: netos, elogios, xadrez</button>` : ''}
     ${kidsBar()}
@@ -8857,7 +9002,7 @@ const placeOn = k => famPlaces().includes(k);
  
 const LEARN_SUB = { phys: "baloiço, escorrega, bola, trampolim: porque é assim", spb: "a história da cidade, para crianças", pt: "Cascais, Sintra, Lisboa", music: "Tchaikovsky, Mozart, Vivaldi…", art: "Aivazovsky, Shishkin, Van Gogh…", old: "pirâmides, cavaleiros, vikings — e o que veio primeiro" };
 GAMES.push(
-  { id: 'olymp', name: "Olimpíada", sub: "problemas engenhosos: lógica, números, xadrez", ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, prog: () => P.olymp ? `resolvidos ${P.olymp.solved.length}/${OLYMP.length}` : '' },
+  { id: 'olymp', name: "Olimpíada", sub: "problemas espertos ao teu alcance: lógica, opções, robôs, fósforos", kw: "olimpíada lógica problemas probabilidade combinatória algoritmos fósforos", ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, also: [3], prog: () => OLY.lvTxt() },
   { id: 'flash', name: "Contas Relâmpago", sub: "cálculo mental", ico: () => pic('⚡'), bg: 'var(--t-yellow)', go: () => screenFlash(), grp: 8, prog: () => `nível ${P.flashLv || 1}` },
   { id: 'dots', name: "Pontos por ordem", sub: "liga os pontos e descobre o que aparece", ico: () => pic('🔢'), bg: 'var(--t-green)', go: () => screenDots(), grp: 4 },
   { id: 'chess-online', name: "Xadrez online", sub: "uma partida com a família", ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => ROOT.curFam === 'gk' && GUEST ? (GUEST_OFF = false, screenGuest()) : screenFamChess(), grp: 8,
@@ -9567,6 +9712,189 @@ const OLYMP = [
   { id: 'o79', cat: "Combinatória", lvl: 3, q: "Quantos números de três algarismos há cuja soma dos algarismos é 3?", opts: ['2', '3', '4', '5', '6'], a: 4, hint: "O primeiro algarismo só pode ser 1, 2 ou 3. Experimenta todas as hipóteses.", why: "102, 111, 120, 201, 210 e 300: seis números." },
   { id: 'o80', cat: "Números", lvl: 3, q: "O Sava pensou num número de dois algarismos cuja soma dos algarismos é 7. Se trocarmos os algarismos de lugar, o número aumenta 27. Em que número pensou o Sava?", opts: ['16', '25', '34', '43', '52'], a: 1, hint: "Verifica cada resposta: troca os algarismos de lugar e calcula a diferença.", why: "25 → 52, e 52 − 25 = 27. Os outros não: 61 − 16 = 45, 43 − 34 = 9, e 43 e 52 ficam mais pequenos com a troca." }
 ];
+ 
+
+
+const OLYMP_NEW = [
+  
+  { id: 'k1', lv: 1, cat: "Lógica", p: '🐘 🐭', q: "Quem é mais pesado: o elefante ou o rato?", o: ['🐘', '🐭'], a: 0, h1: "Pensa em qual é mais fácil de levantar.", h2: "O rato cabe na palma da mão, mas o elefante é maior do que um carro.", w: ["O elefante é enorme e o rato é minúsculo.", "Então o elefante é mais pesado."] },
+  { id: 'k2', lv: 1, cat: "Sequências", p: '🍎 🍐 🍎 🍐 🍎 ❓', q: "O que vem a seguir?", o: ['🍐', '🍎'], a: 0, h1: "As frutas vêm uma a seguir à outra.", h2: "Vê o que vem logo a seguir à maçã.", w: ["Maçã, pera, maçã, pera: vêm à vez.", "A última foi uma maçã, por isso a seguir vem uma pera."] },
+  { id: 'k3', lv: 1, cat: "Pernas e orelhas", p: '🐔', q: "Quantas pernas tem uma galinha?", o: ['2', '4'], a: 0, h1: "A galinha é uma ave.", h2: "Põe-te como uma galinha. Em quantas pernas estás em pé?", w: ["A galinha é uma ave.", "As aves têm duas pernas."] },
+  { id: 'k4', lv: 1, cat: "Pernas e orelhas", p: '🐶', q: "Quantas patas tem um cachorrinho?", o: ['4', '2'], a: 0, h1: "O cachorrinho corre com todas as patas ao mesmo tempo.", h2: "Duas patas à frente e mais algumas atrás.", w: ["O cachorrinho tem duas patas à frente e duas atrás.", "Duas e duas são quatro."] },
+  { id: 'k5', lv: 1, cat: "Com rasteira", p: '🍎 🍎 🍎', q: "Havia 3 maçãs. Comeram uma maçã. Quantas maçãs foram comidas?", o: ['1', '2'], a: 0, h1: "Ouve com atenção: pergunta quantas foram comidas, não quantas sobraram.", h2: "O problema diz mesmo quantas maçãs foram comidas.", w: ["O truque está na pergunta: pergunta quantas foram comidas.", "Foi comida uma maçã."] },
+  { id: 'k6', lv: 1, cat: "Sequências", p: '🔴 🔵 🔵 🔴 🔵 🔵 🔴 ❓', q: "Qual é a bola seguinte?", o: ['🔵', '🔴'], a: 0, h1: "Vê o que vem a seguir à bola vermelha.", h2: "Depois da vermelha vêm sempre duas azuis.", w: ["As bolas vão assim: vermelha, azul, azul.", "Depois da vermelha vem a azul."] },
+  { id: 'k7', lv: 1, cat: "Lógica", p: '🐱 🐶 🐰', q: "O Coelhinho está em último. Quem está no meio?", o: ['🐶', '🐱'], a: 0, h1: "O meio é entre o primeiro e o último.", h2: "O Gatinho é o primeiro, o Coelhinho é o último. Quem está entre eles?", w: ["O Gatinho está em primeiro e o Coelhinho em último.", "Entre eles, no meio, está o cachorrinho."] },
+  { id: 'k8', lv: 1, cat: "Quantas opções", p: '🧢 👒 ➕ 👕', q: "Há dois chapéus e uma t-shirt. Quantos conjuntos diferentes podes fazer?", o: ['2', '1'], a: 0, h1: "Há uma t-shirt e dois chapéus.", h2: "Veste a t-shirt com o primeiro chapéu e depois com o segundo.", w: ["A t-shirt com o boné é um conjunto.", "A t-shirt com o chapéu é o segundo conjunto.", "Ao todo são dois conjuntos."] },
+  { id: 'k9', lv: 1, cat: "Probabilidade", p: '🔴 🔴 🔴 🔴 🔵', q: "Num saco há 4 bolas vermelhas e 1 azul. Que bola vais tirar mais provavelmente, sem olhar?", o: ['🔴', '🔵'], a: 0, h1: "De que bolas há mais no saco?", h2: "Há quatro vermelhas e só uma azul.", w: ["Há muito mais bolas vermelhas do que azuis.", "Por isso, o mais provável é saíres uma vermelha."] },
+  { id: 'k10', lv: 1, cat: "Algoritmos", p: '#robot:Rab', it: ['🍎', '🍌'], q: "O robô deu dois passos para a direita: ➡️ ➡️. O que encontrou?", o: ['🍌', '🍎'], a: 0, h1: "Anda com o dedinho junto com o robô.", h2: "O primeiro passo é até à maçã, o segundo é mais além.", w: ["Primeiro passo: o robô está na maçã.", "Segundo passo: o robô está na banana."] },
+  { id: 'k11', lv: 1, cat: "Do fim para o princípio", p: '🍬 🍬', q: "O Ursinho comeu um rebuçado e ficou com dois. Quantos rebuçados havia no início?", o: ['3', '1'], a: 0, h1: "Devolve o rebuçado que foi comido.", h2: "Sobraram dois rebuçados e mais um que foi comido.", w: ["Sobraram dois rebuçados.", "Vamos juntar o que o Ursinho comeu: dois e um são três."] },
+  { id: 'k12', lv: 1, cat: "Cubos", p: '#cubes:3', q: "Quantos cubos há na torre?", o: ['3', '2'], a: 0, h1: "Conta os cubos de baixo para cima.", h2: "O de baixo, o do meio e o de cima.", w: ["O de baixo é um, o do meio é dois, o de cima é três.", "A torre tem três cubos."] },
+  { id: 'k13', lv: 1, cat: "Pernas e orelhas", p: '🐔 🐔', q: "Quantas pernas têm duas galinhas?", o: ['4', '2'], a: 0, h1: "Cada galinha tem duas pernas.", h2: "Conta primeiro as pernas de uma galinha, depois as da outra.", w: ["Uma galinha tem duas pernas.", "Duas galinhas têm duas e duas, que são quatro."] },
+  { id: 'k14', lv: 1, cat: "Lógica", p: '🦒 🐘', q: "A girafa é mais alta do que o elefante. Quem é mais baixo?", o: ['🐘', '🦒'], a: 0, h1: "Se a girafa é mais alta, o outro é mais baixo.", h2: "O mais baixo é o que não é mais alto.", w: ["A girafa é mais alta do que o elefante.", "Então o elefante é mais baixo do que a girafa."] },
+  { id: 'k15', lv: 1, cat: "Sequências", p: '1 2 3 4 ❓', q: "Qual é o número seguinte?", o: ['5', '6'], a: 0, h1: "Conta por ordem.", h2: "Um, dois, três, quatro, e depois?", w: ["Os números vão por ordem: cada um é mais um.", "Depois do quatro vem o cinco."] },
+  { id: 'k16', lv: 1, cat: "Pesagens", p: '🍉 ⚖️ 🍒', q: "Na balança, a melancia pesou mais do que a cereja. Qual é mais leve?", o: ['🍒', '🍉'], a: 0, h1: "Pesar mais quer dizer que é mais pesada.", h2: "O prato com a coisa leve sobe.", w: ["A melancia pesou mais, por isso é mais pesada.", "A cereja é mais leve."] },
+  { id: 'k17', lv: 1, cat: "Pernas e orelhas", p: '🐰 🐰', q: "Quantas orelhas têm dois coelhinhos?", o: ['4', '2'], a: 0, h1: "Um coelhinho tem duas orelhas compridas.", h2: "Duas orelhas num e duas no outro.", w: ["Cada coelhinho tem duas orelhas.", "Duas e duas são quatro."] },
+  { id: 'k18', lv: 1, cat: "Fósforos", p: '#sticks:1x1', q: "Quantos palitos há num quadrado?", o: ['4', '3'], a: 0, h1: "Conta os lados do quadrado.", h2: "Em cima, em baixo, à esquerda e à direita.", w: ["O quadrado tem quatro lados.", "Cada lado é um palito, por isso são quatro."] },
+  { id: 'k19', lv: 1, cat: "Fósforos", p: '🔺', q: "Quantos palitos são precisos para fazer um triângulo?", o: ['3', '4'], a: 0, h1: "Quantos cantos tem um triângulo? Tem o mesmo número de lados.", h2: "Triângulo quer dizer “três ângulos”.", w: ["O triângulo tem três lados.", "Então são precisos três palitos."] },
+  { id: 'k20', lv: 1, cat: "Lógica", p: '🍳 🍝', q: "O que vem mais cedo: o pequeno-almoço ou o jantar?", o: ['🍳', '🍝'], a: 0, h1: "Tomamos o pequeno-almoço de manhã.", h2: "E jantamos à noite, antes de dormir.", w: ["O pequeno-almoço é de manhã e o jantar é à noite.", "A manhã vem antes da noite, por isso o pequeno-almoço vem primeiro."] },
+  { id: 'k21', lv: 1, cat: "Quantas opções", p: '🍦 🍰', q: "O Coelhinho escolhe uma guloseima: gelado ou bolo. Quantas opções tem?", o: ['2', '1'], a: 0, h1: "Conta as guloseimas na imagem.", h2: "Pode escolher gelado ou pode escolher bolo.", w: ["A primeira opção é o gelado.", "A segunda opção é o bolo.", "Ao todo são duas opções."] },
+  { id: 'k22', lv: 1, cat: "Algoritmos", p: '#robot:a|b|R', it: ['🍓', '🥕'], q: "O robô deu um passo para cima: ⬆️. O que encontrou?", o: ['🥕', '🍓'], a: 0, h1: "Dá um passo com o dedinho, uma casa para cima.", h2: "Mesmo por cima do robô está uma cenoura.", w: ["O robô está em baixo.", "Um passo para cima e está na cenoura."] },
+  { id: 'k23', lv: 1, cat: "Com rasteira", p: '🌳 🐦 🐦', q: "Estavam 2 passarinhos numa árvore. Um pôs-se a cantar. Quantos passarinhos estão na árvore?", o: ['2', '1'], a: 0, h1: "O passarinho cantou, mas não voou.", h2: "Cantar não faz os passarinhos ficarem menos.", w: ["O passarinho só cantou: ninguém voou.", "Na árvore continuam a estar dois passarinhos."] },
+
+  
+  { id: 'm1', lv: 2, cat: "Sequências", p: '🔺 🟦 🟦 🔺 🟦 🟦 ❓', q: "E a seguir?", o: ['🔺', '🟦', '🟢'], a: 0, h1: "Descobre qual é a parte que se repete.", h2: "Triângulo, quadrado, quadrado, e começa outra vez.", w: ["O que se repete é: triângulo, quadrado, quadrado.", "Já houve dois quadrados, por isso a seguir vem um triângulo."] },
+  { id: 'm2', lv: 2, cat: "Pernas e orelhas", p: '🐶 🐔', q: "Quantas pernas têm juntos um cachorrinho e uma galinha?", o: ['6', '4', '8'], a: 0, h1: "O cachorrinho tem quatro patas.", h2: "E a galinha tem duas pernas. Soma.", w: ["O cachorrinho tem 4 patas, a galinha tem 2 pernas.", "Quatro e duas são seis."] },
+  { id: 'm3', lv: 2, cat: "Lógica", p: '🦒 🐴 🐕', q: "A girafa é mais alta do que o cavalo, e o cavalo é mais alto do que o cão. Quem é o mais baixo?", o: ['🐕', '🐴', '🦒'], a: 0, h1: "Põe-nos por ordem de altura.", h2: "O cavalo é mais alto do que o cão, e a girafa é mais alta do que todos.", w: ["A girafa é mais alta do que o cavalo, o cavalo é mais alto do que o cão.", "Então o mais baixo é o cão."] },
+  { id: 'm4', lv: 2, cat: "Com rasteira", p: '🪶 ⚖️ 🔩', q: "O que pesa mais: um quilo de penas ou um quilo de pregos?", o: ["Igual", "Pregos", "Penas"], a: 0, h1: "Vê quanto pesa cada um.", h2: "Um quilo é sempre um quilo.", w: ["Tanto um como o outro têm um quilo.", "As penas é que são muitas mais em tamanho, mas pesam o mesmo."] },
+  { id: 'm5', lv: 2, cat: "Quantas opções", p: '👕 👚 ➕ 👖 🩳', q: "O Ursinho tem 2 t-shirts e 2 calças. Quantos conjuntos diferentes pode vestir?", o: ['4', '2', '3'], a: 0, h1: "Com a primeira t-shirt pode vestir qualquer das calças.", h2: "Com cada t-shirt há dois conjuntos.", w: ["Primeira t-shirt: com calças e com calções, são dois conjuntos.", "A segunda t-shirt dá mais dois.", "Ao todo são quatro conjuntos."] },
+  { id: 'm6', lv: 2, cat: "Probabilidade", p: '🔴 🔴 🔵 🔵 🔵 🔵 🔵', q: "Num saco há 2 bolas vermelhas e 5 azuis. De que cor é a bola que vais tirar mais provavelmente?", o: ['🔵', '🔴', "Igual"], a: 0, h1: "De que bolas há mais?", h2: "Há cinco azuis e só duas vermelhas.", w: ["Há mais bolas azuis do que vermelhas.", "Por isso, o mais provável é saíres uma azul."] },
+  { id: 'm7', lv: 2, cat: "Algoritmos", p: '#robot:b.c|...|R.a', it: ['🍎', '🍌', '🍒'], q: "O robô cumpre as ordens: ➡️ ➡️ ⬆️ ⬆️. Onde vai ficar?", o: ['🍒', '🍎', '🍌'], a: 0, h1: "Faz as ordens uma a uma, com o dedinho.", h2: "Dois passos para a direita: o robô está na maçã. Agora dois passos para cima.", w: ["Dois passos para a direita: o robô está na maçã.", "Dois passos para cima: o robô está na cereja."] },
+  { id: 'm8', lv: 2, cat: "Do fim para o princípio", p: '🐿️ 🌰', q: "O Esquilo encontrou 3 nozes e ficou com 5. Quantas nozes tinha no início?", o: ['2', '8', '3'], a: 0, h1: "Tira as nozes que foram encontradas.", h2: "De cinco, tira três.", w: ["Agora são cinco, e três são novas.", "Cinco menos três são dois. Havia duas nozes."] },
+  { id: 'm9', lv: 2, cat: "Cubos", p: '#cubes:2,1', q: "Quantos cubos há na imagem?", o: ['3', '2', '4'], a: 0, h1: "Conta cada torrezinha à parte.", h2: "A torre alta tem dois cubos.", w: ["A torre alta tem dois cubos e a baixa tem um.", "Dois e um são três."] },
+  { id: 'm10', lv: 2, cat: "Fósforos", p: '#sticks:1x2', q: "Quantos palitos há nesta figura de dois quadradinhos?", o: ['7', '8', '6'], a: 0, h1: "O palito do meio é comum aos dois quadradinhos.", h2: "Conta: duas em cima, duas em baixo, e ainda as de pé.", w: ["Duas em cima e duas em baixo.", "As de pé são três: à esquerda, no meio e à direita.", "Sete ao todo: o palito do meio serve os dois quadradinhos."] },
+  { id: 'm11', lv: 2, cat: "Sequências", p: '2 4 6 8 ❓', q: "Qual é o número seguinte?", o: ['10', '9', '12'], a: 0, h1: "Quanto é que cada número é maior do que o anterior?", h2: "Os números crescem saltando um: soma dois de cada vez.", w: ["Cada número é mais dois do que o anterior.", "Oito e dois são dez."] },
+  { id: 'm12', lv: 2, cat: "Lógica", p: '🐶 ❓ ❓', q: "O gato está sentado entre o cão e o rato. O cão está à esquerda. Quem está à direita?", o: ['🐭', '🐱', '🐶'], a: 0, h1: "O gato está no meio.", h2: "O cão está à esquerda, o gato no meio. Quem sobra?", w: ["O gato está entre os dois, por isso está no meio.", "À esquerda está o cão e à direita está o rato."] },
+  { id: 'm13', lv: 2, cat: "Pernas e orelhas", p: '🐱 🐱 🐱', q: "Quantas orelhas têm três gatinhos?", o: ['6', '3', '9'], a: 0, h1: "Cada gatinho tem duas orelhas.", h2: "Duas, mais duas e mais duas.", w: ["Cada gatinho tem duas orelhas.", "Duas, quatro, seis: seis orelhas."] },
+  { id: 'm14', lv: 2, cat: "Com rasteira", p: '🐓 🏠', q: "Um galo pôs um ovo mesmo no cimo do telhado. Para que lado vai rolar?", o: ["Os galos não põem ovos", "Para a esquerda", "Para a direita"], a: 0, h1: "Afinal, quem põe ovos?", h2: "As galinhas é que põem ovos, e o galo é o pai dos pintainhos.", w: ["É a galinha que põe ovos.", "O galo não põe ovos, por isso não há nada para rolar."] },
+  { id: 'm15', lv: 2, cat: "Pesagens", p: '🍎 🍎 ⚖️ 🍐', q: "Duas maçãs pesam o mesmo que uma pera. Quantas maçãs pesam o mesmo que duas peras?", o: ['4', '3', '2'], a: 0, h1: "Em vez de cada pera, põe duas maçãs.", h2: "Uma pera são duas maçãs. E duas peras?", w: ["Uma pera pesa o mesmo que duas maçãs.", "Duas peras são como duas e duas, ou seja, quatro maçãs."] },
+  { id: 'm16', lv: 2, cat: "Probabilidade", p: '🟢 🟢 🟢 🟢', q: "Na caixa só há lápis verdes. Que lápis vais tirar, sem olhar?", o: ["De certeza verde", "Talvez vermelho", "Talvez azul"], a: 0, h1: "Que lápis há na caixa?", h2: "Não há outros além dos verdes.", w: ["Na caixa só há lápis verdes.", "Então vais tirar um verde, de certeza."] },
+  { id: 'm17', lv: 2, cat: "Quantas opções", p: '🔴 🔵', q: "Há uma bola vermelha e uma azul. De quantas maneiras as podes pendurar em fila?", o: ['2', '1', '3'], a: 0, h1: "Que bola pode ser a primeira?", h2: "A primeira pode ser a vermelha ou pode ser a azul.", w: ["Vermelha e depois azul: a primeira maneira.", "Azul e depois vermelha: a segunda maneira."] },
+  { id: 'm18', lv: 2, cat: "Algoritmos", p: '🍽️ 🧽 🗄️', q: "Um robô lava a loiça: pega num prato, lava-o e põe-no na prateleira. O que faz logo depois de lavar?", o: ["Põe na prateleira", "Pega num prato", "Dorme"], a: 0, h1: "Repete os passos do robô por ordem.", h2: "Pega, lava, e depois?", w: ["A ordem é: pegar, lavar, pôr no lugar.", "Depois de “lavar” vem “pôr na prateleira”."] },
+  { id: 'm19', lv: 2, cat: "Com rasteira", p: '🍓 🍓 🍓 ➖ 🍉 🍉', q: "Onde há menos frutos: na fila dos morangos ou na fila das melancias?", o: ['🍉', '🍓', "Igual"], a: 0, h1: "Conta quantos são, não o tamanho.", h2: "Morangos são três, e melancias?", w: ["Três morangos, duas melancias.", "As melancias são grandes, mas são menos."] },
+  { id: 'm20', lv: 2, cat: "Pernas e orelhas", p: '🕷️', q: "Quantas pernas tem uma aranha?", o: ['8', '6', '4'], a: 0, h1: "A aranha tem mais pernas do que o escaravelho.", h2: "Quatro pernas de cada lado.", w: ["A aranha tem quatro pernas de cada lado.", "Quatro e quatro são oito."] },
+  { id: 'm21', lv: 2, cat: "Do fim para o princípio", p: '🐰 🥕', q: "O Coelhinho deu 2 cenouras a um amigo e ficou com 4. Quantas cenouras tinha no início?", o: ['6', '2', '4'], a: 0, h1: "Devolve as cenouras que foram dadas.", h2: "Quatro e mais duas.", w: ["Sobraram quatro.", "Vamos devolver as duas que deu: quatro e duas são seis."] },
+  { id: 'm22', lv: 2, cat: "Tempo", p: '📅', q: "Hoje é segunda-feira. Que dia foi ontem?", o: ["Domingo", "Terça-feira", "Sábado"], a: 0, h1: "Ontem é o dia antes de hoje.", h2: "Que dia da semana vem antes da segunda-feira?", w: ["A semana: segunda-feira, terça-feira... sábado, domingo.", "Antes da segunda-feira vem o domingo."] },
+
+  
+  { id: 'n1', lv: 3, cat: "Sequências", p: '1 3 5 7 ❓', q: "Qual é o número seguinte?", o: ['9', '8', '10'], a: 0, h1: "Quanto crescem os números?", h2: "Soma dois de cada vez.", w: ["Os números crescem de dois em dois: 1, 3, 5, 7.", "Sete e dois são nove."] },
+  { id: 'n2', lv: 3, cat: "Sequências", p: '🔴 🔵 🔵 🟢 🔴 🔵 🔵 🟢 🔴 ❓', q: "Qual é a bola seguinte?", o: ['🔵', '🔴', '🟢'], a: 0, h1: "Descobre qual é a parte que se repete.", h2: "Depois da bola vermelha vem sempre uma azul.", w: ["O que se repete é: vermelha, azul, azul, verde.", "A última é vermelha, e depois dela vem azul."] },
+  { id: 'n3', lv: 3, cat: "Pernas e orelhas", p: '🐔 🐔 🐔 🐕 🐕', q: "No pátio há 3 galinhas e 2 cães. Quantas pernas há ao todo?", o: ['14', '10', '12', '20'], a: 0, h1: "Conta à parte as pernas das galinhas e as patas dos cães.", h2: "Três galinhas com duas pernas cada, dois cães com quatro patas cada.", w: ["Três galinhas têm 6 pernas.", "Dois cães têm 8 patas.", "Seis e oito são catorze."] },
+  { id: 'n4', lv: 3, cat: "Lógica", p: '🦔 🐿️ 🐰 🏁', q: "O Ouriço, o Esquilo e o Coelhinho correram até à meta. O Esquilo chegou antes do Ouriço, e o Coelhinho chegou antes do Esquilo. Quem foi o primeiro?", o: ["Coelhinho", "Esquilo", "Ouriço"], a: 0, h1: "Quem chegou antes do Esquilo?", h2: "O Coelhinho chegou antes do Esquilo, e o Esquilo chegou antes do Ouriço.", w: ["O Esquilo ganhou ao Ouriço.", "O Coelhinho ganhou ao Esquilo.", "Então o Coelhinho foi o primeiro."] },
+  { id: 'n5', lv: 3, cat: "Quantas opções", p: '🥤 🍦 ➕ 🍫 🍓 🍨', q: "O gelado vem em copo ou em cone, e o sabor é chocolate, morango ou baunilha. Quantos gelados diferentes podes escolher?", o: ['6', '5', '3', '9'], a: 0, h1: "Primeiro escolhe o copo. Quantos sabores podes pôr nele?", h2: "O copo tem três sabores e o cone tem três sabores.", w: ["No copo há três sabores.", "No cone há mais três sabores.", "Três e três são seis gelados diferentes."] },
+  { id: 'n6', lv: 3, cat: "Probabilidade", p: '#dice:6', q: "Lançamos um dado normal. O que é mais provável: um seis ou qualquer número menor do que seis?", o: ["Um número menor do que 6", "Um seis", "Igual"], a: 0, h1: "Quantas faces têm o seis e quantas têm números menores?", h2: "Há um seis, e números menores do que seis são cinco: 1, 2, 3, 4, 5.", w: ["O seis é uma face em seis.", "Os números menores do que seis são cinco faces.", "Cinco hipóteses são mais do que uma."] },
+  { id: 'n7', lv: 3, cat: "Algoritmos", p: '#robot:..bd|R..a|.c..', it: ['🍎', '🍌', '🍒', '🧀'], q: "O robô cumpre as ordens: ➡️ ➡️ ⬆️. Onde vai ficar?", o: ['🍌', '🍎', '🍒', '🧀'], a: 0, h1: "Faz uma ordem de cada vez.", h2: "Depois de dois passos para a direita, o robô está debaixo da banana.", w: ["Dois passos para a direita.", "Um passo para cima e o robô está na banana."] },
+  { id: 'n8', lv: 3, cat: "Do fim para o princípio", p: '🦔 🍄', q: "O Ouriço encontrou cogumelos. Deu metade ao Esquilo e ficou com 4 cogumelos. Quantos cogumelos encontrou?", o: ['8', '6', '4', '2'], a: 0, h1: "Metade quer dizer duas partes iguais.", h2: "O Ouriço deu tantos quantos guardou.", w: ["O Ouriço ficou com metade: 4 cogumelos.", "A outra metade também é 4.", "Ao todo havia 8 cogumelos."] },
+  { id: 'n9', lv: 3, cat: "Fósforos", p: '#sticks:1x3', q: "Quantos fósforos há nesta figura?", o: ['10', '12', '9', '8'], a: 0, h1: "Os quadrados vizinhos partilham um fósforo.", h2: "Há 6 fósforos deitados, e quantos de pé?", w: ["Fósforos deitados: 3 em cima e 3 em baixo — 6.", "Em pé — 4.", "Seis e quatro são dez."] },
+  { id: 'n10', lv: 3, cat: "Cubos", p: '#cubes:3,2,1', q: "Quantos cubos há nesta escada?", o: ['6', '5', '3'], a: 0, h1: "Conta cada torre.", h2: "Torres de 3, 2 e 1 cubos.", w: ["As torres têm 3, 2 e 1 cubos.", "Três, dois e um são seis."] },
+  { id: 'n11', lv: 3, cat: "Com rasteira", p: '👦 👦 👦 👦 👦 👦 👦 👧', q: "Sete irmãos têm uma irmã, a mesma para todos. Quantos filhos há na família?", o: ['8', '14', '7'], a: 0, h1: "Todos os irmãos têm a mesma irmã.", h2: "Sete irmãos e mais uma menina.", w: ["Há só uma irmã, comum a todos os irmãos.", "Sete e uma são oito crianças."] },
+  { id: 'n12', lv: 3, cat: "Pesagens", p: '🍌 ⚖️ 🍑 🍑 · 🍈 ⚖️ 🍌 🍌 🍌', q: "Uma banana pesa como 2 pêssegos e um melão pesa como 3 bananas. Quantos pêssegos pesa o melão?", o: ['6', '5', '3', '9'], a: 0, h1: "Troca cada banana por dois pêssegos.", h2: "Três bananas, e cada uma é como dois pêssegos.", w: ["O melão são três bananas.", "Cada banana são dois pêssegos.", "Dois, quatro, seis — seis pêssegos."] },
+  { id: 'n13', lv: 3, cat: "Quantas opções", p: '🐱 🐱 🐱', q: "Três gatinhos encontraram-se e cada um esfregou o nariz em cada um dos outros uma vez. Quantos encontros de narizes houve?", o: ['3', '6', '2'], a: 0, h1: "Chama aos gatinhos 1, 2 e 3 e escreve os pares.", h2: "Os pares: o primeiro com o segundo, o primeiro com o terceiro, o segundo com o terceiro.", w: ["Os pares de gatinhos: 1 e 2, 1 e 3, 2 e 3.", "Cada par é um encontro.", "Ao todo, três encontros."] },
+  { id: 'n14', lv: 3, cat: "Sequências", p: '5 10 15 20 ❓', q: "Qual é o número seguinte?", o: ['25', '30', '21'], a: 0, h1: "Quanto crescem os números?", h2: "De cada vez somam-se cinco.", w: ["Cada número é cinco a mais do que o anterior.", "Vinte e cinco são vinte e cinco."] },
+  { id: 'n15', lv: 3, cat: "Lógica", p: '🦊 🎈', q: "O raposinho brincalhão diz sempre o contrário. Ele disse: «O meu balão é azul.» O balão dele é azul ou vermelho. Qual?", o: ["Vermelho", "Azul", "Não se sabe"], a: 0, h1: "O raposinho nunca diz a verdade.", h2: "Se o balão não é azul, então de que cor é?", w: ["O raposinho diz o contrário, por isso o balão não é azul.", "Só resta o vermelho."] },
+  { id: 'n16', lv: 3, cat: "Tempo", p: '🎂 ⏲️', q: "Um bolo esteve a cozer 30 minutos e depois arrefeceu mais 30 minutos. Quanto tempo passou ao todo?", o: ["1 hora", "30 minutos", "2 horas"], a: 0, h1: "Soma os minutos.", h2: "Uma hora tem 60 minutos.", w: ["Trinta e trinta são sessenta minutos.", "Sessenta minutos é uma hora."] },
+  { id: 'n17', lv: 3, cat: "Quantas opções", p: '1️⃣ 2️⃣', q: "Com os cartões dos algarismos 1 e 2 forma-se um número de dois algarismos. Quantos números diferentes se podem formar?", o: ['2', '4', '1'], a: 0, h1: "Que cartão pode ficar em primeiro?", h2: "Em primeiro pode ficar o um ou o dois.", w: ["O um primeiro — fica 12.", "O dois primeiro — fica 21.", "Ao todo, só dois números."] },
+  { id: 'n18', lv: 3, cat: "Pernas e orelhas", p: '🐰 🐰 🐱 🐱 🐱', q: "Quantas orelhas têm ao todo duas lebres e três gatos?", o: ['10', '5', '12'], a: 0, h1: "Cada bichinho tem duas orelhas.", h2: "Quantos bichinhos há ao todo?", w: ["São cinco bichinhos: duas lebres e três gatos.", "Cada um tem duas orelhas: cinco vezes dois são dez."] },
+  { id: 'n19', lv: 3, cat: "Cubos", p: '#cubes:2,1/1,1', q: "Quantos cubos há na figura?", o: ['5', '4', '6'], a: 0, h1: "Conta a camada de baixo e depois a de cima.", h2: "Em baixo há quatro cubos.", w: ["A camada de baixo tem quatro cubos.", "Em cima há mais um.", "Ao todo, cinco."] },
+  { id: 'n20', lv: 3, cat: "Algoritmos", p: '#robot:R.*', q: "O robô tem de chegar à estrela. Que comandos estão certos?", o: ['➡️ ➡️', '⬆️ ➡️', '➡️ ⬅️'], a: 0, h1: "Onde está a estrela: à direita ou em cima?", h2: "A estrela está à direita, depois de um quadrado.", w: ["A estrela está dois quadrados à direita do robô.", "Portanto, são dois passos para a direita."] },
+  { id: 'n21', lv: 3, cat: "Probabilidade", p: '🔴 🔴 🔴 🔵 🔵 🔵', q: "Num saco há 3 bolas vermelhas e 3 azuis. Que bola é mais provável tirar?", o: ["Igual", "Vermelho", "Azul"], a: 0, h1: "Compara quantas bolas há de cada cor.", h2: "Há tantas vermelhas como azuis.", w: ["Três vermelhas e três azuis.", "As hipóteses são iguais."] },
+  { id: 'n22', lv: 3, cat: "Com rasteira", p: '🦆 🦆 🦆 ➡️ 🌊 ⬅️ 🪿 🪿', q: "Três patinhos iam a caminho do lago e, em sentido contrário, vinham 2 gansos. Quantas aves iam a caminho do lago?", o: ['3', '5', '2'], a: 0, h1: "Os gansos vinham em sentido contrário, na direção oposta.", h2: "Só os patinhos iam para o lago.", w: ["Os gansos vinham em sentido contrário, ou seja, do lago.", "Três patinhos iam para o lago."] },
+
+  
+  { id: 'p1', lv: 4, cat: "Sequências", p: '1 2 4 7 11 ❓', q: "Qual é o número seguinte?", o: ['16', '15', '14', '18'], a: 0, h1: "Vê quanto cresce cada número.", h2: "Soma-se 1, depois 2, depois 3, depois 4…", w: ["Somou-se 1, 2, 3, 4, um a seguir ao outro.", "Agora somamos 5: onze e cinco são dezasseis."] },
+  { id: 'p2', lv: 4, cat: "Pernas e orelhas", p: '🐔 🐇', q: "Num cercado há galinhas e coelhos. Há 5 cabeças e 14 patas. Quantos coelhos há?", o: ['2', '3', '1', '4'], a: 0, h1: "Imagina que os cinco são galinhas. Quantas patas haveria?", h2: "Cinco galinhas teriam 10 patas. Cada coelho acrescenta mais 2.", w: ["Se todos fossem galinhas, haveria 10 patas.", "Há 4 patas a mais e cada coelho dá 2 a mais.", "Quatro a dividir por dois — dois coelhos. Verificação: 2 coelhos e 3 galinhas — 8 e 6 patas, 14."] },
+  { id: 'p3', lv: 4, cat: "Quantas opções", p: '🟥 ⬜ 🟦', q: "Uma bandeira tem duas faixas: a de cima e a de baixo. Há tinta vermelha, branca e azul, e as faixas têm cores diferentes. Quantas bandeiras diferentes há?", o: ['6', '3', '9', '5'], a: 0, h1: "Escolhe a cor da faixa de cima. Quantas cores sobram para a de baixo?", h2: "Três cores para cima, as outras duas para baixo.", w: ["A de cima pode ser pintada com três tintas.", "Sobram duas para a de baixo.", "Três vezes dois são seis bandeiras."] },
+  { id: 'p4', lv: 4, cat: "Quantas opções", p: '💌 🐻 🦊 🐰', q: "Encontraram-se 3 amigos e cada um ofereceu um postal a cada um dos outros. Quantos postais foram oferecidos ao todo?", o: ['6', '3', '9', '4'], a: 0, h1: "Quantos postais oferece um amigo?", h2: "Cada um oferece a dois.", w: ["Cada um oferece postais aos outros dois.", "São três amigos: três vezes dois são seis."] },
+  { id: 'p5', lv: 4, cat: "Probabilidade", p: '#dice:1,1', q: "Lançamos dois dados e somamos os pontos. A soma pode ser 1?", o: ["Não, não pode ser menos de 2", "Sim, mas raramente", "Sim, muitas vezes"], a: 0, h1: "Qual é o menor número num dado?", h2: "Cada dado mostra pelo menos 1.", w: ["Cada dado tem pelo menos um ponto.", "A menor soma é um e um, ou seja, dois.", "A soma 1 nunca sai."] },
+  { id: 'p6', lv: 4, cat: "Algoritmos", p: '#robot:d..a|..b.|....|R..c', it: ['⭐', '🍎', '🍌', '🍒'], q: "O robô executa: «Repete 3 vezes: ➡️ ⬆️». Onde vai parar?", o: ['⭐', '🍎', '🍌', '🍒'], a: 0, h1: "Anda: para a direita, para cima, e faz isso três vezes.", h2: "Cada repetição é um passo na diagonal, como uma escada.", w: ["Primeira repetição: para a direita e para cima.", "Segunda repetição — o robô está na maçã.", "Terceira repetição — o robô está na estrela."] },
+  { id: 'p7', lv: 4, cat: "Do fim para o princípio", p: '🤔', q: "Pensei num número, somei 5, depois tirei 3 e deu 10. Em que número pensei?", o: ['8', '12', '18', '2'], a: 0, h1: "Começa pelo fim e faz tudo ao contrário.", h2: "Em vez de «tirei 3», soma 3; em vez de «somei 5», tira 5.", w: ["Do fim: 10 e 3 são 13.", "Treze menos cinco são oito.", "Verificação: 8 + 5 − 3 = 10."] },
+  { id: 'p8', lv: 4, cat: "Fósforos", p: '#sticks:2x2', q: "Quantos fósforos há neste quadrado de 2 por 2?", o: ['12', '16', '8', '10'], a: 0, h1: "Conta separadamente os fósforos deitados e os de pé.", h2: "Deitados — 3 filas de 2.", w: ["Deitados: três filas de dois — 6.", "Em pé: também três filas de dois — 6.", "Ao todo, doze."] },
+  { id: 'p9', lv: 4, cat: "Fósforos", p: '#sticks:1x3', q: "Aqui há 3 quadrados. Tira o fósforo da extremidade direita do quadrado da direita. Quantos quadrados sobram?", o: ['2', '1', '3', '0'], a: 0, h1: "Que quadrado se desfaz?", h2: "Só o quadrado da direita se desfaz.", w: ["Sem a parede da direita, o quadrado da direita desfaz-se.", "Os outros dois estão inteiros — ficam dois quadrados."] },
+  { id: 'p10', lv: 4, cat: "Cubos", p: '#cubes:2,2/2,2', q: "Quantos cubinhos há neste cubo grande?", o: ['8', '4', '6', '12'], a: 0, h1: "Conta a camada de cima e multiplica pelo número de camadas.", h2: "Numa camada há 4 cubos e há duas camadas.", w: ["Numa camada há quatro cubos.", "Há duas camadas: quatro e quatro são oito."] },
+  { id: 'p11', lv: 4, cat: "Lógica", p: '🟥 🟦 🟩 🏠', q: "O Ouriço, o Esquilo e o Coelhinho vivem numa casa vermelha, numa azul e numa verde. O Ouriço não vive na vermelha nem na azul. O Esquilo não vive na vermelha. Quem vive na casa vermelha?", o: ["Coelhinho", "Esquilo", "Ouriço"], a: 0, h1: "Começa pelo Ouriço: que casa lhe resta?", h2: "O Ouriço está na verde. O Esquilo não está na vermelha, então em qual?", w: ["O Ouriço não está na vermelha nem na azul, por isso está na verde.", "O Esquilo não está na vermelha, por isso está na azul.", "O Coelhinho vive na vermelha."] },
+  { id: 'p12', lv: 4, cat: "Com rasteira", p: '🪵 🪵 🪵', q: "Quantas pontas têm três paus e meio?", o: ['8', '7', '6', '14'], a: 0, h1: "Quantas pontas tem meio pau?", h2: "Meio pau também tem duas pontas!", w: ["Cada pau tem duas pontas: três têm seis.", "O meio pau também tem duas pontas.", "Ao todo, oito."] },
+  { id: 'p13', lv: 4, cat: "Tempo", p: '🕗', q: "Agora são 8 horas da manhã. Que horas serão daqui a 10 horas?", o: ['18:00', '16:00', '10:00', '20:00'], a: 0, h1: "Soma as horas.", h2: "Oito e dez.", w: ["Oito e dez são dezoito.", "Serão 18:00, ou seja, seis horas da tarde."] },
+  { id: 'p14', lv: 4, cat: "Pesagens", p: '🪙 🪙 🪙 ⚖️', q: "De 3 moedas, uma é falsa e é mais leve. Quantas pesagens são precisas numa balança de dois pratos para a encontrar de certeza?", o: ['1', '2', '3', '0'], a: 0, h1: "Põe uma moeda em cada prato.", h2: "Se a balança ficar equilibrada, onde está a falsa?", w: ["Pomos uma moeda em cada prato.", "O prato que sobe tem a moeda falsa.", "Se ficar equilibrada, a falsa é a que ficou de fora. Basta uma pesagem."] },
+  { id: 'p15', lv: 4, cat: "Sequências", p: '🔺 🟦 🟢 · 🟦 🟢 🔺 · 🟢 🔺 ❓', q: "Que figura falta?", o: ['🟦', '🔺', '🟢'], a: 0, h1: "Em cada trio há as três figuras.", h2: "No último trio já há um círculo e um triângulo.", w: ["Cada trio tem um triângulo, um quadrado e um círculo.", "No último falta um quadrado."] },
+  { id: 'p16', lv: 4, cat: "Quantas opções", p: '🪑 🪑 🪑', q: "De quantas maneiras se podem sentar três amigos em 3 cadeiras seguidas?", o: ['6', '3', '9', '4'], a: 0, h1: "Quem se pode sentar na primeira cadeira? E na segunda?", h2: "Na primeira, qualquer um dos três; na segunda, qualquer um dos dois que sobram.", w: ["Para a primeira cadeira — três à escolha.", "Para a segunda — dois e para a terceira — o que sobra.", "Três vezes dois são seis maneiras."] },
+  { id: 'p17', lv: 4, cat: "Probabilidade", p: '🪙 🦅 🦅 🦅 ❓', q: "Lançou-se uma moeda 3 vezes e saiu sempre cara. O que é mais provável à quarta vez?", o: ["Igual", "Coroa", "Cara"], a: 0, h1: "A moeda lembra-se do que saiu antes?", h2: "Uma moeda não tem memória.", w: ["A moeda não se lembra dos lançamentos anteriores.", "Cara e coroa são de novo igualmente possíveis."] },
+  { id: 'p18', lv: 4, cat: "Pernas e orelhas", p: '🐝 🐝 🐝 🐝', q: "Uma abelha tem 6 patas. Quantas patas têm 4 abelhas?", o: ['24', '20', '16', '30'], a: 0, h1: "Soma seis quatro vezes.", h2: "Seis, doze, dezoito…", w: ["Quatro vezes seis.", "Seis, doze, dezoito, vinte e quatro."] },
+  { id: 'p19', lv: 4, cat: "Lógica", p: '🐻 🐰 🦊 🐺 🐿️', q: "Numa fila há 5 animais. A Raposa é a terceira a contar do início. Que lugar ocupa a contar do fim?", o: ['3', '2', '4', '5'], a: 0, h1: "Quantos animais estão atrás da Raposa?", h2: "Duas estão à frente da Raposa e duas atrás dela.", w: ["Duas à frente da Raposa e também duas atrás dela.", "A contar do fim, também é a terceira."] },
+  { id: 'p20', lv: 4, cat: "Algoritmos", p: '3 ➡️ ✖️2 ➡️ ➕1 ➡️ ✖️2', q: "Começamos com o número 3. Comandos: «multiplica por 2», «soma 1», «multiplica por 2». O que dá?", o: ['14', '13', '16', '12'], a: 0, h1: "Executa os comandos, um a seguir ao outro.", h2: "Três vezes dois são seis. E depois?", w: ["Três vezes dois são seis.", "Seis e um são sete.", "Sete vezes dois são catorze."] },
+  { id: 'p21', lv: 4, cat: "Do fim para o princípio", p: '🐿️ 🌰', q: "O Esquilo come todos os dias metade das suas nozes. Na manhã do terceiro dia tem 4 nozes. Quantas tinha na manhã do primeiro dia?", o: ['16', '8', '12', '32'], a: 0, h1: "Vai para trás: se comeu metade, quantas havia antes?", h2: "Na manhã do segundo dia havia o dobro da manhã do terceiro.", w: ["Na manhã do terceiro dia — 4.", "Na manhã do segundo — o dobro: 8.", "Na manhã do primeiro — outra vez o dobro: 16."] },
+  { id: 'p22', lv: 4, cat: "Cubos", p: '📄 ✂️', q: "Dobrou-se uma folha ao meio, depois outra vez ao meio, e fez-se nela um buraco. Quantos buracos terá a folha aberta?", o: ['4', '2', '1', '8'], a: 0, h1: "Quantas camadas de papel há depois de duas dobras?", h2: "A primeira dobra dá 2 camadas, a segunda dá 4 camadas.", w: ["Depois de duas dobras, a folha tem quatro camadas.", "O buraco passou por todas as camadas.", "Portanto, há quatro buracos."] },
+
+  
+  { id: 'q1', lv: 5, cat: "Probabilidade", p: '🔴 🔴 🔴 🔵 🔵 🟢', q: "Num saco há 3 bolas vermelhas, 2 azuis e 1 verde. Quantas bolas é preciso tirar sem olhar para ter a certeza de que há uma azul?", o: ['5', '3', '4', '6'], a: 0, h1: "Imagina que tens muito azar.", h2: "Primeiro podem sair todas as vermelhas e a verde.", w: ["O pior azar: 3 vermelhas e 1 verde — 4 bolas sem azul.", "A seguinte, a quinta, é de certeza azul."] },
+  { id: 'q2', lv: 5, cat: "Algoritmos", p: '3 1 2', q: "Um robô organizador percorre a fila da esquerda para a direita e troca dois números vizinhos se o da esquerda for maior. Passou uma vez pela fila 3, 1, 2. O que ficou?", o: ['1, 2, 3', '1, 3, 2', '3, 2, 1', '2, 1, 3'], a: 0, h1: "Compara o primeiro par: 3 e 1.", h2: "Depois da primeira troca, a fila é 1, 3, 2. Agora compara 3 e 2.", w: ["3 é maior do que 1 — trocamos: 1, 3, 2.", "3 é maior do que 2 — trocamos: 1, 2, 3."] },
+  { id: 'q3', lv: 5, cat: "Fósforos", p: '#match:9+2=8', q: "Muda um fósforo de sítio para a igualdade ficar certa. O que fica?", o: ['6 + 2 = 8', '5 + 3 = 8', '9 - 1 = 8', '4 + 4 = 8'], a: 0, h1: "Podes mudar um fósforo de sítio dentro de um algarismo.", h2: "Olha para o nove: dele pode fazer-se um seis.", w: ["Do nove tiramos o fósforo de cima à direita.", "Pomo-lo em baixo à esquerda — fica um seis.", "6 + 2 = 8 — certo!"] },
+  { id: 'q4', lv: 5, cat: "Com rasteira", p: '📅', q: "Em quantos meses do ano existe o dia 28?", o: ['12', '1', '0', '6'], a: 0, h1: "Mesmo o mês mais curto tem 28 dias.", h2: "Todos os meses têm pelo menos 28 dias.", w: ["O mês mais curto é fevereiro, com 28 ou 29 dias.", "Todos os outros têm mais dias.", "Portanto, o dia 28 existe em todos os 12 meses."] },
+  { id: 'q5', lv: 5, cat: "Quantas opções", p: '🍲 ➕ 🍝', q: "Num café há 3 sopas diferentes e 4 pratos principais diferentes. Quantos almoços diferentes de «sopa + prato» se podem pedir?", o: ['12', '7', '10', '16'], a: 0, h1: "Com cada sopa podes escolher qualquer prato principal.", h2: "Com uma sopa — 4 almoços. E há três sopas.", w: ["Com cada sopa — 4 pratos principais.", "Três vezes quatro são doze almoços."] },
+  { id: 'q6', lv: 5, cat: "Lógica", p: '🐱 🐶', q: "Um dos amigos mente sempre e o outro diz sempre a verdade. O Gato disse: «O Cão é mentiroso.» O Cão disse: «Nós os dois dizemos a verdade.» Quem mente?", o: ["Cão", "Gato", "Os dois"], a: 0, h1: "Pode ser verdade «nós os dois dizemos a verdade»?", h2: "Pelo enunciado, um deles mente de certeza.", w: ["Um deles é mentiroso, por isso as palavras do Cão «os dois somos honestos» não são verdade.", "Quem mente é o Cão.", "O Gato diz a verdade: o Cão é mesmo mentiroso."] },
+  { id: 'q7', lv: 5, cat: "Cubos", p: '#cubes:3,2,1/2,1,0/1,0,0', q: "Quantos cubos há nesta figura?", o: ['10', '9', '6', '12'], a: 0, h1: "Conta a altura de cada torre.", h2: "Fila de trás: 3, 2, 1. Do meio: 2, 1. Da frente: 1.", w: ["Fila de trás: 3 + 2 + 1 = 6.", "Do meio: 2 + 1 = 3. Da frente: 1.", "Ao todo 6 + 3 + 1 = 10."] },
+  { id: 'q8', lv: 5, cat: "Pesagens", p: '💰 💰 💰 💰 ⚖️', q: "Há 4 sacos de moedas e um deles é mais leve do que os outros. Quantas pesagens são precisas para o encontrar de certeza?", o: ['2', '1', '3', '4'], a: 0, h1: "Uma pesagem compara só dois pratos.", h2: "Primeiro põe dois sacos em cada prato.", w: ["Dois sacos contra dois — ficamos a saber em que par está o leve.", "Depois um contra um — encontramo-lo.", "Com uma pesagem não se escolhe um de quatro, são precisas duas."] },
+  { id: 'q9', lv: 5, cat: "Pernas e orelhas", p: '🪑', q: "Na sala há bancos de 3 pernas e cadeiras de 4 pernas. Ao todo há 5 assentos e 18 pernas. Quantos bancos há?", o: ['2', '3', '1', '4'], a: 0, h1: "Imagina que os cinco são cadeiras.", h2: "Cinco cadeiras teriam 20 pernas. Cada banco tem menos uma perna.", w: ["Se todos fossem cadeiras — 20 pernas.", "Faltam duas e cada banco dá menos uma perna.", "Portanto, há dois bancos. Verificação: 6 + 12 = 18."] },
+  { id: 'q10', lv: 5, cat: "Sequências", p: '1 1 2 3 5 8 ❓', q: "Qual é o número seguinte?", o: ['13', '11', '12', '16'], a: 0, h1: "Olha para dois números vizinhos e para o que vem a seguir.", h2: "Cada número é a soma dos dois anteriores.", w: ['2 = 1 + 1, 3 = 1 + 2, 5 = 2 + 3, 8 = 3 + 5.', "A seguir vem 5 + 8 = 13."] },
+  { id: 'q11', lv: 5, cat: "Algoritmos", p: '#robot:R.#.|..#*|....', q: "O robô anda pelos quadrados para cima, para baixo, para a esquerda e para a direita e não pode atravessar paredes. Qual é o menor número de passos para chegar à estrela?", o: ['6', '4', '5', '7'], a: 0, h1: "Vais ter de contornar a parede por baixo.", h2: "Desce até à fila de baixo, passa por baixo da parede e sobe.", w: ["Dois passos para baixo até à fila de baixo.", "Três passos para a direita, por baixo da parede.", "Um passo para cima até à estrela — seis ao todo."] },
+  { id: 'q12', lv: 5, cat: "Probabilidade", p: '#dice:1,1', q: "Lançamos dois dados. Que soma sai mais vezes: 2 ou 7?", o: ['7', '2', "Igual"], a: 0, h1: "De quantas maneiras se pode obter 2?", h2: "O dois é só «1 e 1». E o sete é «1 e 6», «2 e 5», «3 e 4»…", w: ["A soma 2 sai de uma só maneira: 1 e 1.", "A soma 7 sai de seis maneiras: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.", "O sete sai seis vezes mais."] },
+
+  
+  { id: 'r1', lv: 6, cat: "Quantas opções", p: '#robot:..*|...|R..', q: "O robô vai até à estrela só para a direita ➡️ e para cima ⬆️. Quantos caminhos diferentes tem?", o: ['6', '4', '8', '5'], a: 0, kp: 1, h1: "Tem de dar dois passos para a direita e dois para cima — em que ordem?", h2: "Para cada quadrado, conta de quantas maneiras se pode chegar lá.", w: ["O robô dá 2 passos para a direita e 2 para cima, por qualquer ordem.", "Vamos escrevê-los: ➡️➡️⬆️⬆️, ➡️⬆️➡️⬆️, ➡️⬆️⬆️➡️, ⬆️➡️➡️⬆️, ⬆️➡️⬆️➡️, ⬆️⬆️➡️➡️.", "Ao todo, seis caminhos."] },
+  { id: 'r2', lv: 6, cat: "Probabilidade", p: '🔴 🔴 🔵 🔵', q: "Num saco há 2 bolas vermelhas e 2 azuis. Tiram-se 2 bolas de uma vez. Quantas combinações de cores diferentes podem sair?", o: ['3', '4', '2', '6'], a: 0, h1: "Só as cores importam, não qual é a primeira bola.", h2: "Duas vermelhas, duas azuis ou…", w: ["Podem sair duas vermelhas.", "Podem sair duas azuis.", "Ou uma vermelha e uma azul. Ao todo, três combinações."] },
+  { id: 'r3', lv: 6, cat: "Fósforos", p: '#match:6-5=9', q: "Muda um fósforo de sítio para a igualdade ficar certa. O que fica?", o: ['8 - 5 = 3', '6 - 3 = 3', '9 - 5 = 4', '6 + 3 = 9'], a: 0, h1: "De um nove pode fazer-se um três tirando um fósforo.", h2: "Onde pôr o fósforo que sobra para o seis se tornar um oito?", w: ["Do nove tiramos o fósforo de cima à esquerda — fica um três.", "Pomo-lo no seis, em cima à direita — fica um oito.", "8 − 5 = 3 — certo!"] },
+  { id: 'r4', lv: 6, cat: "Algoritmos", p: '6 ➡️ … ➡️ 1', q: "A regra: se o número for par, divide-o por 2; se for ímpar, multiplica por 3 e soma 1. Começamos com 6. Quantos passos são precisos para chegar a 1?", o: ['8', '6', '7', '9'], a: 0, kp: 1, h1: "Escreve os números, um a seguir ao outro, e conta os passos.", h2: '6 → 3 → 10 → 5 → …', w: ['6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1.', "Contamos as setas: oito passos."] },
+  { id: 'r5', lv: 6, cat: "Do fim para o princípio", p: '🐸 🦟', q: "Todos os dias uma rã apanha o dobro dos mosquitos do dia anterior. Em 3 dias apanhou 21 mosquitos. Quantos no primeiro dia?", o: ['3', '7', '4', '6'], a: 0, kp: 1, h1: "Digamos que no primeiro dia é um montinho. Quantos montinhos no segundo e no terceiro?", h2: "Primeiro dia — 1 parte, segundo — 2 partes, terceiro — 4 partes.", w: ["Partes ao todo: 1 + 2 + 4 = 7.", "21 mosquitos divididos por 7 partes — 3 em cada.", "No primeiro dia — 3 mosquitos. Verificação: 3 + 6 + 12 = 21."] },
+  { id: 'r6', lv: 6, cat: "Lógica", p: '📦 📦 📦', q: "Em três caixas está escrito «Maçãs», «Peras» e «Maçãs e peras», mas todos os rótulos estão errados. De que caixa basta tirar uma fruta para saber o que está em todas?", o: ["«Maçãs e peras»", "«Maçãs»", "«Peras»"], a: 0, h1: "A caixa com o rótulo «Maçãs e peras» não tem mesmo uma mistura.", h2: "Portanto, tem só maçãs ou só peras — uma fruta mostra qual.", w: ["A caixa «Maçãs e peras» não é mistura — tem fruta de um só tipo.", "Tiras, por exemplo, uma maçã — então tem maçãs.", "A caixa «Peras» não tem só peras nem só maçãs — é a mistura, e a das «Maçãs» tem peras."] },
+  { id: 'r7', lv: 6, cat: "Cubos", p: '#cubes:2,2/2,2', q: "Um cubo 2×2×2 foi pintado por fora e serrado em 8 cubinhos. Quantas faces de cada cubinho ficam pintadas?", o: ['3', '2', '1', '6'], a: 0, h1: "Onde fica cada cubinho?", h2: "Cada cubinho é um canto do cubo grande.", w: ["Os 8 cubinhos estão nos cantos do cubo grande.", "Um cubinho de canto tem três faces viradas para fora.", "Por isso, cada um tem três faces pintadas."] },
+  { id: 'r8', lv: 6, cat: "Pernas e orelhas", p: '🐉 🐲', q: "A Serpente tem 3 cabeças e 2 patas, e o Dragão tem 1 cabeça e 4 patas. No total há 9 cabeças e 16 patas. Quantas Serpentes há?", o: ['2', '3', '4', '1'], a: 0, h1: "Experimenta: se houver só uma Serpente, quantos Dragões há então?", h2: "Experimenta todos: 1 Serpente, 2 Serpentes, 3 Serpentes — e confere as patas.", w: ["Se houver 2 Serpentes: têm 6 cabeças e 4 patas.", "Sobram 3 cabeças — são 3 Dragões com 12 patas.", "Patas: 4 + 12 = 16 — bate certo. São duas Serpentes."] },
+  { id: 'r9', lv: 6, cat: "Pesagens", p: "⚖️ 1 g · 3 g · 9 g", q: "Tens uma balança de dois pratos e pesos de 1 g, 3 g e 9 g, um de cada. Podes pôr pesos nos dois pratos. Qual é o maior peso que consegues medir?", o: ["13 g", "12 g", "9 g", "27 g"], a: 0, h1: "E se puseres todos os pesos num prato só?", h2: "Não dá para medir mais do que todos os pesos juntos.", w: ["Todos os pesos juntos: 1 + 3 + 9 = 13 gramas.", "Não há maneira de conseguir mais.", "E se usares os dois pratos, consegues medir qualquer peso de 1 a 13 gramas."] },
+  { id: 'r10', lv: 6, cat: "Probabilidade", p: '🪙 🪙', q: "Lança-se uma moeda 2 vezes. O que é mais provável: cara as duas vezes, ou uma cara e uma coroa?", o: ["Uma cara e uma coroa", "Cara as duas vezes", "Igual"], a: 0, h1: "Escreve todos os resultados de dois lançamentos.", h2: "Os resultados: CC, CK, KC, KK.", w: ["No total há 4 resultados iguais: CC, CK, KC, KK.", "Duas caras é só CC: 1 resultado.", "Uma cara e uma coroa é CK e KC: 2 resultados. É mais provável."] },
+  { id: 'r11', lv: 6, cat: "Quantas opções", p: '1️⃣ 2️⃣', q: "Quantos números de três algarismos podes escrever só com os algarismos 1 e 2 (os algarismos podem repetir-se)?", o: ['8', '6', '4', '9'], a: 0, kp: 1, h1: "Quantas escolhas há para cada um dos três algarismos?", h2: "Em cada lugar pode ir 1 ou 2.", w: ["Cada um dos três lugares tem duas escolhas.", '2 × 2 × 2 = 8.', '111, 112, 121, 122, 211, 212, 221, 222.'] },
+
+  
+  { id: 's1', lv: 7, cat: "Quantas opções", p: '⭕', q: "Marcaram-se 6 pontos numa circunferência e ligou-se cada um a todos os outros. Quantos segmentos ficaram?", o: ['15', '12', '30', '6'], a: 0, kp: 1, h1: "Quantos segmentos saem de um ponto?", h2: "De cada ponto saem 5 segmentos, mas cada segmento foi contado duas vezes.", w: ["De cada ponto saem 5 segmentos: 6 × 5 = 30.", "Cada segmento é contado duas vezes — pelas duas pontas.", '30 : 2 = 15.'] },
+  { id: 's2', lv: 7, cat: "Probabilidade", p: '🟥🎲 🟦🎲', q: "Lançamos um dado vermelho e um azul. De quantas maneiras pode sair a soma 7?", o: ['6', '3', '7', '5'], a: 0, kp: 1, h1: "Vê o que pode sair no vermelho.", h2: "Vermelho 1 — azul 6, vermelho 2 — azul 5…", w: ["O vermelho pode ser qualquer número de 1 a 6.", "Para cada um há exatamente um número no azul: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.", "Seis maneiras no total."] },
+  { id: 's3', lv: 7, cat: "Algoritmos", p: '1 … 100 ❓', q: "Pensei num número de 1 a 100. Perguntas «é maior do que …?» e eu respondo «sim» ou «não». Com quantas perguntas, no mínimo, tens a certeza de acertar?", o: ['7', '10', '6', '50'], a: 0, h1: "A melhor pergunta divide os números ao meio.", h2: '100 → 50 → 25 → 13 → 7 → 4 → 2 → 1.', w: ["Cada pergunta divide ao meio os números que sobram.", "100, 50, 25, 13, 7, 4, 2, 1 — sete perguntas.", "Com seis não dá: seis respostas só distinguem 64 números."] },
+  { id: 's4', lv: 7, cat: "Fósforos", p: '#match:8+2=5', q: "Muda um fósforo de sítio para a igualdade ficar certa. O que fica?", o: ['8 - 2 = 6', '3 + 2 = 5', '9 - 4 = 5', '8 - 3 = 5'], a: 0, h1: "O sinal de mais também é feito de fósforos.", h2: "Tira o fósforo em pé do mais — fica um menos.", w: ["Tiramos o fósforo em pé do mais — fica um menos.", "Pomo-lo no cinco, em baixo à esquerda — fica um seis.", "8 − 2 = 6 — certo!"] },
+  { id: 's5', lv: 7, cat: "Do fim para o princípio", p: '🍬 👧 👦 🧒', q: "Três crianças repartiram rebuçados. A primeira ficou com metade e mais um, a segunda com metade do que sobrou e mais um, e a terceira ficou com os últimos 3. Quantos rebuçados havia?", o: ['18', '16', '20', '14'], a: 0, kp: 1, h1: "Começa pela terceira: antes dela havia 3 rebuçados.", h2: "A segunda ficou com metade e mais um, e sobraram 3. Então metade do que havia é 3 + 1.", w: ["Antes da segunda: 3 + 1 = 4 — é metade, logo 8 no total.", "Antes da primeira: 8 + 1 = 9 — é metade, logo 18 no total.", "Confere: 18 → ficou com 10, sobram 8 → ficou com 5, sobram 3."] },
+  { id: 's6', lv: 7, cat: "Lógica", p: '🦔 🐱 🦉 🐰', q: "O Ouriço é mais baixo que o Gato, o Gato é mais baixo que a Coruja, e a Lebre é mais alta que a Coruja. Quem é o segundo mais alto, a contar do mais alto?", o: ["Coruja", "Gato", "Lebre", "Ouriço"], a: 0, h1: "Põe todos em fila por altura.", h2: "Ouriço < Gato < Coruja, e a Lebre é mais alta que a Coruja.", w: ["Por altura: Ouriço, Gato, Coruja, Lebre.", "O mais alto é a Lebre, o segundo é a Coruja."] },
+  { id: 's7', lv: 7, cat: "Lógica", p: '🦔 🐱 🦉 🥧', q: "Um dos três comeu a tarte. Ouriço: «Foi o Gato.» Gato: «Não fui eu.» Coruja: «Não fui eu.» Só um disse a verdade. Quem comeu a tarte?", o: ["Coruja", "Gato", "Ouriço"], a: 0, h1: "O Ouriço e o Gato contradizem-se — um deles tem de estar certo.", h2: "Então a Coruja não disse a verdade.", w: ["O Ouriço e o Gato dizem coisas opostas — exatamente um deles diz a verdade.", "Só um disse a verdade, então a Coruja mentiu.", "A Coruja mentiu ao dizer «não fui eu» — foi a Coruja que comeu a tarte."] },
+  { id: 's8', lv: 7, cat: "Cubos", p: '🧊 4×4×4', q: "Um cubo 4×4×4 foi pintado por fora e serrado em 64 cubinhos. Quantos cubinhos têm exatamente duas faces pintadas?", o: ['24', '12', '8', '32'], a: 0, kp: 1, h1: "Os cubinhos nas arestas, mas não nos cantos, têm duas faces pintadas.", h2: "Um cubo tem 12 arestas. Quantos cubinhos que não são de canto há numa aresta?", w: ["Em cada aresta há 4 cubinhos, 2 deles de canto.", "Cubinhos sem ser de canto numa aresta: 2.", "Há 12 arestas: 12 × 2 = 24."] },
+  { id: 's9', lv: 7, cat: "Pesagens", p: '🪙 × 27 ⚖️', q: "De 27 moedas, uma é falsa — é mais leve. Com quantas pesagens, no mínimo, a encontras de certeza?", o: ['3', '4', '9', '5'], a: 0, h1: "Divide as moedas em três montes.", h2: "Cada pesagem reduz os suspeitos para um terço.", w: ["Dividimos 27 em três montes de 9 — depois de pesar, sabemos qual é o monte certo.", "Dividimos 9 em três de 3 — mais uma pesagem.", "Dividimos 3 em três de 1 — a terceira. Três no total."] },
+  { id: 's10', lv: 7, cat: "Sequências", p: '2 6 12 20 30 ❓', q: "Qual é o número seguinte?", o: ['42', '40', '36', '44'], a: 0, kp: 1, h1: "Olha para as diferenças entre números vizinhos.", h2: "Diferenças: 4, 6, 8, 10… Ou assim: 1×2, 2×3, 3×4…", w: ["As diferenças crescem: 4, 6, 8, 10, e a seguir é 12.", '30 + 12 = 42.', "É 6 × 7."] },
+  { id: 's11', lv: 7, cat: "Quantas opções", p: '🧒 🧒 🧒 🧒 🧒', q: "De quantas maneiras se podem escolher 2 ajudantes entre 5 crianças?", o: ['10', '20', '5', '25'], a: 0, kp: 1, h1: "Pares com as mesmas duas crianças são iguais.", h2: "A primeira de 5 maneiras, a segunda de 4, mas cada par foi contado duas vezes.", w: ["Escolhemos a primeira de 5 maneiras, a segunda de 4: 20.", "O par «primeira e segunda» é o mesmo que «segunda e primeira», por isso dividimos por 2.", "Dez maneiras."] },
+
+  
+  { id: 't1', lv: 8, cat: "Probabilidade", p: '#dice:3,4', q: "Lançam-se dois dados e somam-se os pontos. Que soma sai mais vezes?", o: ['7', '6', '12', '8'], a: 0, h1: "Conta de quantas maneiras se obtém cada soma.", h2: "A soma 7 obtém-se com qualquer número no primeiro dado.", w: ["Para a soma 7 serve qualquer número no primeiro dado: 6 maneiras.", "Para 6 e 8 — 5 cada, e para 12 — uma.", "Mais vezes — o sete."] },
+  { id: 't2', lv: 8, cat: "Quantas opções", p: '#robot:...*|....|....|R...', q: "Um robô vai até à estrela só para a direita e para cima. Quantos caminhos diferentes tem?", o: ['20', '9', '12', '27'], a: 0, kp: 1, h1: "Precisa de 3 passos para a direita e 3 para cima. Escreve em cada quadrado o número de caminhos.", h2: "Cada quadrado tem tantos caminhos como o da esquerda e o de baixo juntos.", w: ["Os quadrados da fila de baixo e da coluna da esquerda têm um caminho cada.", "Cada quadrado seguinte é a soma do da esquerda e do de baixo: 1, 3, 6, 10…", "O canto de cima à direita tem 20 caminhos."] },
+  { id: 't3', lv: 8, cat: "Algoritmos", p: '🗼 🗼 🗼', q: "Três pinos; no primeiro há uma torre de 3 argolas, a grande em baixo. As argolas mudam-se uma de cada vez e nunca se põe a grande em cima da pequena. Em quantas jogadas se pode passar a torre para o terceiro pino?", o: ['7', '6', '8', '9'], a: 0, kp: 1, h1: "Primeiro é preciso levar as duas argolas de cima para o pino do meio.", h2: "As duas de cima levam 3 jogadas, a grande 1 jogada, e outra vez as duas, 3 jogadas.", w: ["Duas argolas pequenas para o pino do meio — 3 jogadas.", "A argola grande para o terceiro pino — 1 jogada.", "As duas pequenas por cima dela — mais 3. Total: 7."] },
+  { id: 't4', lv: 8, cat: "Lógica", p: '🕛', q: "Quantas vezes por dia o ponteiro das horas e o dos minutos coincidem?", o: ['22', '24', '23', '12'], a: 0, kp: 1, h1: "Em 12 horas, o ponteiro dos minutos ultrapassa o das horas 11 vezes.", h2: "Cada ultrapassagem é um encontro. E um dia tem duas vezes 12 horas.", w: ["Em 12 horas, o ponteiro dos minutos dá 12 voltas, o das horas dá 1.", "O ponteiro dos minutos ultrapassa o das horas 11 vezes — 11 encontros.", "Num dia — 22 encontros."] },
+  { id: 't5', lv: 8, cat: "Com rasteira", p: '🐈 🐈 🐈 🐁', q: "Três gatos apanham três ratinhos em 3 minutos. Quantos gatos apanham 100 ratinhos em 100 minutos?", o: ['3', '100', '33', '9'], a: 0, kp: 1, h1: "Quantos ratinhos apanha um gato em 3 minutos?", h2: "Cada gato apanha um ratinho em 3 minutos.", w: ["Um gato apanha um ratinho em 3 minutos.", "Em 100 minutos, um gato apanha 33 ratinhos e mais um terço.", "Três gatos apanham 100 ratinhos — logo, três gatos chegam."] },
+  { id: 't6', lv: 8, cat: "Pesagens", p: '🪙 × 8 ⚖️', q: "De 8 moedas, uma é falsa — é mais leve. Com quantas pesagens, no mínimo, a encontras de certeza?", o: ['2', '3', '4', '1'], a: 0, h1: "Divide as moedas em três montes: 3, 3 e 2.", h2: "Depois da primeira pesagem, ficam no máximo três suspeitas.", w: ["Pesa 3 contra 3. Se forem iguais, a falsa está entre as duas que sobram.", "A segunda pesagem encontra-a entre três ou duas.", "Com uma pesagem não dá: a balança só tem três resultados. A resposta é duas."] },
+  { id: 't7', lv: 8, cat: "Quantas opções", p: '⬡', q: "Quantas diagonais tem um hexágono?", o: ['9', '6', '12', '8'], a: 0, kp: 1, h1: "De cada vértice saem diagonais para todos os outros, menos para si e para os dois vizinhos.", h2: "De cada vértice saem 3 diagonais, mas cada uma foi contada duas vezes.", w: ["De cada vértice saem 3 diagonais: 6 × 3 = 18.", "Cada uma foi contada pelas duas pontas: 18 : 2 = 9."] },
+  { id: 't8', lv: 8, cat: "Probabilidade", p: '🧦 ⚪ × 4 ⚫ × 6', q: "Numa gaveta há 4 meias brancas e 6 pretas. Quantas meias tens de tirar sem olhar para teres a certeza de ter 2 pretas?", o: ['6', '3', '5', '8'], a: 0, kp: 1, h1: "O pior começo é sair só branca, uma atrás da outra.", h2: "Primeiro podem sair 4 brancas.", w: ["No pior caso, as primeiras 4 são brancas.", "Depois só sobram pretas: mais 2.", "6 no total."] },
+  { id: 't9', lv: 8, cat: "Sequências", p: '3 5 9 17 33 ❓', q: "Qual é o número seguinte?", o: ['65', '49', '66', '64'], a: 0, kp: 1, h1: "Olha para as diferenças.", h2: "Diferenças: 2, 4, 8, 16… Ou: cada um = o anterior × 2 − 1.", w: ["Cada número é o anterior vezes 2, menos 1.", '33 × 2 − 1 = 65.'] },
+  { id: 't10', lv: 8, cat: "Algoritmos", p: '5 4 3 2 1', q: "As cartas estão assim: 5, 4, 3, 2, 1. Numa jogada podes trocar duas cartas vizinhas. Qual é o menor número de jogadas para obter 1, 2, 3, 4, 5?", o: ['10', '5', '4', '8'], a: 0, kp: 1, h1: "Cada troca corrige só um par «errado».", h2: "Conta os pares em que o número maior está à esquerda do menor.", w: ["Pares errados: todos os pares das 5 cartas — 10 pares.", "Uma troca de vizinhas corrige exatamente um par.", "São precisas 10 jogadas."] },
+  { id: 't11', lv: 8, cat: "Lógica", p: '1 × 2 × 3 × … × 20', q: "Com quantos zeros termina o produto de todos os números de 1 a 20?", o: ['4', '2', '3', '5'], a: 0, kp: 1, h1: "Um zero no fim vem de um par 2 × 5.", h2: "Há muitos dois. Quantos cincos há nos números até 20?", w: ["Cada zero é um fator 10 = 2 × 5.", "Há cincos em 5, 10, 15, 20 — quatro.", "Há mais dois, por isso são quatro zeros."] },
+  { id: 't12', lv: 8, cat: "Cubos", p: '#cubes:3,3,3/3,3,3/3,3,3', q: "Um cubo 3×3×3 foi pintado por fora e serrado em 27 cubinhos. Quantos cubinhos têm exatamente uma face pintada?", o: ['6', '8', '12', '9'], a: 0, kp: 1, h1: "Uma face pintada tem o cubinho no meio de cada lado.", h2: "Um cubo tem 6 lados.", w: ["O cubinho no meio de um lado tem uma face pintada.", "Há um assim em cada lado, e há seis lados.", "Então, seis cubinhos."] },
+  { id: 't13', lv: 8, cat: "Quantas opções", p: '▭ ▭▭', q: "Um caminho de comprimento 6 é coberto com ladrilhos de comprimento 1 e 2. Quantas maneiras diferentes há?", o: ['13', '8', '11', '21'], a: 0, kp: 1, h1: "Conta para um caminho de comprimento 1, 2, 3…", h2: "Maneiras para o comprimento n = maneiras para n−1 mais maneiras para n−2.", w: ["Comprimento 1 — 1 maneira, 2 — 2, 3 — 3, 4 — 5, 5 — 8.", "O último ladrilho é de 1 ou de 2 — somamos os dois anteriores.", "Comprimento 6: 5 + 8 = 13."] },
+  { id: 't14', lv: 8, cat: "Do fim para o princípio", p: '📈 📉', q: "Um número aumentou 20% e depois diminuiu 20%. Ficou 96. Qual era o número?", o: ['100', '96', '120', '80'], a: 0, kp: 1, h1: "Menos 20% é multiplicar por 0,8.", h2: "96 é 80% do número depois do aumento.", w: ["96 é 80% de 120.", "120 é mais 20% do que 100.", "Era 100. O truque: as percentagens foram calculadas sobre números diferentes."] },
+  { id: 't15', lv: 8, cat: "Lógica", p: '🏆', q: "Num torneio a eliminar há 32 jogadores: quem perde sai. Quantos jogos se disputam até ficar um só vencedor?", o: ['31', '16', '32', '64'], a: 0, kp: 1, h1: "Cada jogo elimina exatamente um jogador.", h2: "Quantos jogadores têm de ser eliminados?", w: ["Cada jogo — um jogador eliminado.", "Têm de sair todos, menos o vencedor: 31.", "Então, 31 jogos."] },
+  { id: 't16', lv: 8, cat: "Fósforos", p: '#match:1-9=2', q: "Muda um fósforo de sítio para a igualdade ficar certa. O que fica?", o: ['7 - 5 = 2', '1 + 1 = 2', '4 - 2 = 2', '9 - 7 = 2'], a: 0, h1: "Um nove pode transformar-se num cinco.", h2: "Põe o fósforo a mais em cima do um.", w: ["Do nove tiramos o fósforo de cima à direita — fica um cinco.", "Pomo-lo em cima do um — fica um sete.", "7 − 5 = 2 — certo!"] },
+  { id: 't17', lv: 8, cat: "Probabilidade", p: '🪙 🪙 🪙', q: "Lança-se uma moeda 3 vezes. Quantos dos 8 resultados possíveis dão exatamente 2 caras?", o: ['3', '2', '4', '6'], a: 0, kp: 1, h1: "A coroa pode sair no primeiro, no segundo ou no terceiro lançamento.", h2: "CCK, CKC, …", w: ["Exatamente 2 caras quer dizer exatamente 1 coroa.", "A coroa no primeiro, segundo ou terceiro lançamento: KCC, CKC, CCK.", "Três resultados."] }
+];
+ 
+const OLYMP_H2 = {
+  o1: "Dois pedaços — um corte, três pedaços — dois cortes.", o2: "Cada número é o anterior, vezes 2.", o3: "É 1×1, 2×2, 3×3, 4×4, 5×5. E a seguir?", o4: "Meia melancia pesa 4 kg.", o5: "10 dias são uma semana e mais 3 dias.",
+  o6: "17:45 e uma hora são 18:45. Mais meia hora.", o7: "O sumo custa 3 euros. Quanto custam o gelado e o sumo juntos?", o8: "Primeiro pela borda até ao canto vizinho, depois para cima.", o9: "Experimenta as 8 jogadas do cavalo — quais ficam no tabuleiro?", o10: "Antes de multiplicar era 15. E antes de somar?",
+  o11: "O primeiro — 3, o segundo — mais 2, o terceiro — mais 1.", o12: "Se as duas primeiras meias forem de cores diferentes, então a terceira…", o13: "Até ao 3.º andar são 2 lanços de 18 degraus. Até ao 6.º — 5 lanços.", o14: "Duas moedas de 5 dão 10, e duas de 2 dão 4.", o15: "O número do meio é 8.",
+  o16: "O algarismo 1 está em 1, 10, 11, 12…19. Em 11 há dois.", o17: "Se o primeiro algarismo é 1, qual tem de ser o segundo?", o18: "As aranhas têm 24 patas. Quantas sobram para os escaravelhos?", o19: "4 pequenos e 1 grande.", o20: "Eram 4, um foi cortado em 4: 3 + 4.",
+  o21: "O Borya não é pianista nem patinador — então é o jogador de xadrez.", o22: "A primeira — 3 maneiras, a segunda — 2, a terceira — 1.", o23: "Para o primeiro lugar há 3 algarismos, para o segundo — os 2 que sobram.", o24: '4 + 3 + 2 + 1.', o25: "Na manhã do 7.º dia, o caracol está a 6 m, e de dia sobe 3.",
+  o26: "1 + 2 + … + 9 = 45, há três filas.", o27: "Lá dentro há um cubinho, mesmo no meio.", o28: "Se o primeiro é mentiroso, então «somos os dois mentirosos» não é verdade.", o29: "A cauda precisa de percorrer 300 metros.", o30: "O rei vai pela diagonal: a1, b2, c3…",
+  o31: "15 e mais duas vezes 3.", o32: "Uma camada tem 3 × 3 = 9 cubinhos, e há três camadas.", o33: "Um gato num canto vê três outros gatos.", o34: "Na segunda parte há 6 golos.", o35: "O segundo é às 9:15, o terceiro às 9:30.",
+  o36: "Triângulos — 3 × 3, quadrados — 2 × 4.", o37: "Há 64 casas no total, metade são brancas.", o38: "Amarelo, depois verde, depois…", o39: "O número em que pensei é 9.", o40: "Até às 11:00 faltam 10 minutos, e ainda sobram 15.",
+  o41: "A Dusya é mais leve do que a Busya, e a Busya é mais leve do que a Musya.", o42: "Os gatos têm 3 × 4 patas, os pombos 2 × 2.", o43: "Quatro lados de 3 m.", o44: "8 peças e 8 peões.", o45: "2 camisolas, e 4 calções para cada uma.",
+  o46: "O Sava é o segundo. A Vera não é a primeira, então é…", o47: "Uma hora são 60 minutos, meia hora são 30.", o48: "O maior número de dois algarismos é 99.", o49: "Das 2:25 às 2:50 são 25 minutos.", o50: "Cada vitória em vez de um empate dá mais 2 pontos. Faltam 8.",
+  o51: "17 + 12 = 29, são mais 4 do que os alunos.", o52: "O recorte não muda o perímetro: os lados só ficaram «empurrados» para dentro.", o53: "Na linha há 7 casas livres e na coluna 7.", o54: "O primeiro pode ser 5 ou 7.", o55: "Até à meia-noite — 2 h 30 min, depois — 7 h 15 min.",
+  o56: "Faltam 36 euros, a 6 por semana.", o57: "À frente da Vera estão 4 pessoas, atrás dela 2.", o58: "Ao longo de 8 m — 4 tapetes, ao longo de 6 m — 3.", o59: "Procura o primeiro número que está nas duas listas.", o60: "Primeira jogada e2–e4, e depois uma casa de cada vez.",
+  o61: "O capitão de 5 maneiras, o guarda-redes de 4.", o62: "Do 1.º ao 4.º — 3 intervalos de 3 minutos.", o63: "Hoje é quinta-feira.", o64: "Sem os 6 autocolantes a mais — 14, 7 para cada um, por igual.", o65: "Comprimento 1 — 4, comprimento 2 — 3, comprimento 3 — 2, comprimento 4 — 1.",
+  o66: "5 escolhas para o primeiro algarismo e 5 para o segundo.", o67: "O terceiro mentiu, então pelo menos um dos dois primeiros é cavaleiro.", o68: "Servem 00:00, 11:11 e… 22:22.", o69: "Pesa 3 contra 3: assim logo sabes em que trio está a falsa.", o70: "Experimenta: 3 rapazes e 4 raparigas.",
+  o71: "9 quadrados 1 × 1, 4 quadrados 2 × 2 e 1 quadrado 3 × 3.", o72: "Como a torre — 14 jogadas, como o bispo — 13.", o73: "1 degrau — 1 maneira, 2 — 2, 3 — 3, 4 — 5…", o74: "Passaram 6 horas, então o relógio está atrasado 12 minutos.", o75: "9 números de um algarismo e 6 de dois algarismos.",
+  o76: "Leva-se primeiro o ratinho: o gato e o queijo não se zangam.", o77: "Os lados juntos são 10 cm, um tem mais 4: 3 e 7.", o78: "a1 e h8 são da mesma cor, então o número de jogadas é par. Com 4 não dá.", o79: '300, 210, 201, 120, 102, 111.', o80: "Os algarismos diferem em 3, e a soma deles é 7."
+};
+const OLYMP_LV8 = ['o68', 'o69', 'o70', 'o73', 'o76', 'o79', 'o80'];
+OLYMP.forEach(p => { p.lv = OLYMP_LV8.includes(p.id) ? 8 : p.lvl + 4; p.o = p.opts; p.h1 = p.hint; p.h2 = OLYMP_H2[p.id] || ''; p.w = [p.why]; });
+OLYMP.push(...OLYMP_NEW);
+ 
 
 
 const lvlOf = xp => { let n = 1; while (5 * n * (n + 1) / 2 <= xp) n++; return n; };
@@ -9947,35 +10275,7 @@ function screenFlash() {
 }
 
  
-function screenOlymp() {
-  const t = newScreen();
-  P.olymp = P.olymp || { solved: [] };
-  const fresh = OLYMP.filter(p => !P.olymp.solved.includes(p.id)), pool = fresh.length >= 5 ? fresh : OLYMP;
-  const deck = [1, 1, 2, 2, 3].map(l => { const xs = pool.filter(p => p.lvl === l); return xs.length ? pickOne(xs) : pickOne(pool); }).filter((p, i, a) => a.indexOf(p) === i);
-  while (deck.length < 5) { const p = pickOne(pool); if (!deck.includes(p)) deck.push(p); }
-  let k = 0, first = 0, solvedNow = 0, miss = 0;
-  shell("Olimpíada", `<div class="ol"><div class="ol-head"><span id="olN"></span><span id="olCat"></span></div>
-    <p class="ol-q" id="olQ"></p><div class="ol-opts" id="olO"></div>
-    <p class="ol-hint" id="olH" hidden></p><div class="ol-why" id="olW" hidden></div></div>`);
-  function show() {
-    const p = deck[k]; miss = 0;
-    $('#olN').textContent = `Problema ${k + 1} de ${deck.length}`; $('#olCat').textContent = `${p.cat} · ${'★'.repeat(p.lvl)}${'☆'.repeat(3 - p.lvl)}`;
-    $('#olQ').textContent = p.q; $('#olH').hidden = true; $('#olW').hidden = true;
-    $('#olO').innerHTML = p.opts.map((o, i) => `<button class="ol-o" data-i="${i}"><b>${"ABCDE"[i]}</b>${esc(o)}</button>`).join('');
-    if (k === 0) talk("Olimpíada! Cinco problemas, dos simples aos engenhosos. Lê com atenção e escolhe a resposta.");
-  }
-  $('#olO').onclick = e => {
-    const b = e.target.closest('.ol-o'); if (!b || b.disabled) return;
-    const p = deck[k];
-    if (+b.dataset.i !== p.a) { miss++; b.disabled = true; wiggle(b); sfx.oops(); if (miss === 1) { $('#olH').hidden = false; $('#olH').textContent = "💡 Dica: " + p.hint; } return; }
-    sfx.good(); b.classList.add('right'); $$('.ol-o').forEach(x => x.disabled = true);
-    if (!miss) first++;
-    if (!P.olymp.solved.includes(p.id)) { P.olymp.solved.push(p.id); save(); } solvedNow++;
-    $('#olW').hidden = false; $('#olW').innerHTML = `<p>✅ ${esc(p.why)}</p><button class="big" id="olNext">${k + 1 < deck.length ? "Seguinte" : "Resultado"}</button>`;
-    $('#olNext').onclick = () => { sfx.pop(); k++; if (k < deck.length) show(); else finish({ key: 'olymp', stars: first >= 4 ? 3 : first >= 2 ? 2 : 1, ev: { solved: solvedNow, first }, line: `À primeira tentativa: ${first} de ${deck.length}. Problemas resolvidos ao todo: ${P.olymp.solved.length} de ${OLYMP.length}.`, again: screenOlymp }); };
-  };
-  show();
-}
+function screenOlymp() { OLY.play(); }
 
 
 
@@ -10448,7 +10748,9 @@ function screenFriends() {
   const st = shell("Escolhe um amigo", `<p class="lead">Quem vai treinar contigo? Carrega num amigo.</p>
     ${TOY.pickHTML()}
     ${groups.map(([h, ids]) => `<h2 class="sec-h fr-h">${h}</h2><div class="friends ${ids === HER ? 'her' : ''}">${ids.map(btn).join('')}</div>`).join('')}
+    <h2 class="sec-h fr-h">Aspeto do jogo</h2>${lookHTML(lookCur(), 'lookKid')}
     <button class="big" id="friendOk">Pronto</button>`);
+  lookBind($('#lookKid'), lookSetKid);
   talk(likes && likes.includes('football') ? "Quem vai treinar contigo? Escolhe um futebolista ou outro amigo." : Q() ? "Quem vai treinar contigo? Carrega num amigo." : "Quem vai treinar contigo? Escolhe uma super-rapariga das Aves de Fogo ou um bichinho.");
   st.onclick = e => {
     const b = e.target.closest('.friend'); if (!b) return;
@@ -10581,7 +10883,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); SB.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11326,10 +11628,50 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     save(); sfx.magic();
     if (ROOT.cur === id) P = pr;
     if (queue.length) screenKidSetup(queue[0], { queue: queue.slice(1), first, liga, back, idx: idx + 1, total });
-    else if (first) screenObDone({ liga });
+    else if (first) screenObLook({ liga });
     else (back || screenParents)();
   };
 }
+
+
+function lookCur() {
+  let p = '', f = null;
+  try { p = (P && P.settings && P.settings.look) || ''; } catch (e) {}
+  try { f = fam(); } catch (e) {}
+  return p || (f && f.look) || 'calm';
+}
+function lookApply() { try { document.body.classList.toggle('look-calm', lookCur() !== 'bright'); } catch (e) {} }
+function lookHTML(sel, id = 'lookPick') {
+  return `<div class="lk-pick" id="${id}" role="radiogroup">${[['bright', "Colorido"], ['calm', "Calmo"]].map(([k, n]) => `<button class="lk-c ${sel === k ? 'sel' : ''}" data-look="${k}" role="radio" aria-checked="${sel === k}"><span class="lk-mini lk-${k}"><i></i><i></i><i></i><i></i></span><b>${n}</b></button>`).join('')}</div>`;
+}
+function lookBind(box, set) {
+  if (!box) return;
+  box.onclick = e => {
+    const b = e.target.closest('[data-look]'); if (!b) return;
+    sfx.tick(); set(b.dataset.look);
+    box.querySelectorAll('[data-look]').forEach(x => { x.classList.toggle('sel', x === b); x.setAttribute('aria-checked', x === b); });
+    lookApply(); say(b.querySelector('b').textContent);
+  };
+}
+function lookSetKid(k) { P.settings.look = k; save(); }
+
+function screenObLook({ liga = '' } = {}) {
+  newScreen(); document.body.classList.remove('quest');
+  const f = fam(); if (f && !f.look) f.look = 'calm';
+  lookApply();
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe ob lk-ob">
+    <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1>Que aspeto preferes?</h1><p>Podes mudar depois: «Escolhe um amigo» ou «Para adultos».</p></div></header>
+    ${lookHTML(lookCur())}
+    <div class="prow-btns"><button class="big" id="lkNext">Seguinte</button></div>
+  </div></main></div>`;
+  lookBind($('#lookPick'), k => { const f = fam(); if (f) { f.look = k; f.kids.forEach(id => { ROOT.profiles[id].settings.look = k; }); } save(); });
+  $('#lkNext').onclick = () => {
+    sfx.pop(); const f = fam();
+    if (f) f.kids.forEach(id => { const st = ROOT.profiles[id].settings; if (!st.look) st.look = f.look || 'calm'; });
+    save(); screenObDone({ liga });
+  };
+}
+ 
 function screenObDone({ liga = '' } = {}) {
   newScreen(); document.body.classList.remove('quest');
   const f = fam();
@@ -14439,100 +14781,271 @@ const keypadHTML = id => `<div class="keypad" id="${id}">${[1, 2, 3, 4, 5, 6, 7,
 const DIV = LANG === 'en' ? '÷' : ':';
 
  
-function sbHTML(vals, { tap = true, small = false } = {}) {
-  return `<div class="sb ${small ? 'sm' : ''}">${vals.map((v, r) => { const up = v >= 5 ? 1 : 0, lo = v % 5;
-    return `<div class="sb-rod" data-r="${r}"><span class="sb-stick"></span>
-      <button class="sb-b up ${up ? 'on' : ''}" data-r="${r}" data-k="5" ${tap ? '' : 'tabindex="-1"'} aria-label="5"></button>
-      <span class="sb-beam"></span>
-      ${[0, 1, 2, 3].map(k => `<button class="sb-b lo ${k < lo ? 'on' : ''}" data-r="${r}" data-k="${k}" ${tap ? '' : 'tabindex="-1"'} aria-label="1"></button>`).join('')}</div>`; }).join('')}</div>`;
-}
-const sbValue = vals => vals.reduce((s, v) => s * 10 + v, 0);
-const SORO = [
-  { n: "Mostra um número de 0 a 4", rods: 1, max: 4, kind: 'show' },
-  { n: "Mostra um número de 0 a 9", rods: 1, max: 9, kind: 'show' },
-  { n: "O que mostra o ábaco?", rods: 1, max: 9, kind: 'read' },
-  { n: "Mais e menos no ábaco", rods: 1, max: 9, kind: 'add' },
-  { n: "Números até 99", rods: 2, max: 99, kind: 'show' },
-  { n: "Cálculo de cabeça", rods: 1, max: 9, kind: 'mind' }
-];
-function screenSoroban(lv) {
-  const t = newScreen();
-  P.soro = P.soro || { top: 1 };
-  lv = Math.min(lv || P.soro.top, P.soro.top);
-  const L = SORO[lv - 1];
-  let k = 0, ok = 0, vals = Array(L.rods).fill(0), task = null, busy = false;
-  shell("Ábaco", `<div class="soro">
-      <div class="ai-lv" id="sbLv">${SORO.map((x, i) => `<button class="chip ${i + 1 === lv ? 'sel' : ''}" data-lv="${i + 1}" ${i + 1 > P.soro.top ? 'disabled' : ''}>${i + 1 > P.soro.top ? '🔒' : '🧮'} ${i + 1}</button>`).join('')}</div>
-      <div class="sp-hud"><span>${esc(L.n)}</span><span><b id="sbK">1</b>/5 · ✅ <b id="sbOk">0</b></span></div>
-      <p class="sb-q" id="sbQ"></p>
-      <div id="sbBox"></div>
-      <div id="sbAns"></div>
-    </div>`);
-  $('#sbLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); screenSoroban(+b.dataset.lv); };
-  const box = $('#sbBox'), ans = $('#sbAns');
-  function drawSb(tap = true) { box.innerHTML = sbHTML(vals, { tap }); }
-  function next() {
-    busy = false; $('#sbK').textContent = k + 1; vals = Array(L.rods).fill(0); ans.innerHTML = '';
-    if (L.kind === 'show') {
-      const n = L.rods === 2 ? ri(10, 99) : ri(lv === 1 ? 0 : 1, L.max);
-      task = { a: n }; $('#sbQ').innerHTML = `Mostra no ábaco: <b class="sb-n">${n}</b>`; drawSb();
-      ans.innerHTML = `<button class="big" id="sbCheck">Pronto</button>`;
-      talk(k === 0 ? `Mostra o número ${n} no ábaco. A bolinha de cima vale cinco, as de baixo valem uma cada. Encosta as bolinhas à barra.` : `Mostra o número ${n}.`);
-    } else if (L.kind === 'read') {
-      const n = ri(0, 9); vals = [n]; task = { a: n }; drawSb(false);
-      const opts = sample([n, ...sample([...Array(10).keys()].filter(x => x !== n), 2)], 3);
-      $('#sbQ').textContent = "Que número está no ábaco?";
-      ans.innerHTML = `<div class="picks-g three nums">${opts.map(o => `<button class="pick-b" data-a="${o}">${o}</button>`).join('')}</div>`;
-      talk(k === 0 ? "Conta as bolinhas junto à barra. A de cima vale cinco. Que número está no ábaco?" : "Que número?");
-    } else if (L.kind === 'add') {
-      const a = ri(1, 8), plus = Math.random() < .6, b = plus ? ri(1, 9 - a) : ri(1, a), r = plus ? a + b : a - b;
-      vals = [a]; task = { a: r, from: a, b, plus }; drawSb();
-      $('#sbQ').innerHTML = `<b class="sb-n">${a} ${plus ? '+' : '−'} ${b}</b> — faz no ábaco`;
-      ans.innerHTML = `<button class="big" id="sbCheck">Pronto</button>`;
-      const five = plus ? (a < 5 && a + b >= 5 && b < 5) : (a >= 5 && a - b < 5 && b < 5);
-      talk(`No ábaco está ${a}. ${plus ? "Soma" : "Tira"} ${b}.` + (five ? (plus ? ` Dica: não chegam as bolinhas de baixo, por isso baixa a de cinco e tira ${5 - b}.` : ` Dica: sobe a de cinco e junta ${5 - b}.`) : ''));
-    } else {
-      
-      const ns = [ri(1, 4), ri(1, 4), ri(1, 4)], sum = ns.reduce((s, x) => s + x, 0);
-      task = { a: sum }; $('#sbQ').textContent = "Olha e soma de cabeça"; busy = true;
-      talk("Olha para o ábaco e soma de cabeça.");
-      (async () => {
-        await wait(1200);
-        for (const n of ns) { if (t !== tok) return; vals = [n]; drawSb(false); sfx.tick(); await wait(1300); box.innerHTML = sbHTML([0], { tap: false }); await wait(350); }
-        if (t !== tok) return;
-        box.innerHTML = '<p class="sb-n big">?</p>'; busy = false;
-        const opts = sample([sum, ...sample([...Array(13).keys()].map(x => x + 1).filter(x => x !== sum && Math.abs(x - sum) <= 3), 2)], 3);
-        $('#sbQ').textContent = "Quanto é ao todo?";
-        ans.innerHTML = `<div class="picks-g three nums">${opts.map(o => `<button class="pick-b" data-a="${o}">${o}</button>`).join('')}</div>`;
-        talk("Quanto é ao todo?");
-      })();
+
+
+const SB = (() => {
+  const PL = ["unidades", "dezenas", "centenas"];
+  
+  const parts = v => [v >= 5 ? 1 : 0, v % 5];
+  const direct = (a, r) => { const [au, al] = parts(a), [ru, rl] = parts(r); return r > a ? ru >= au && rl >= al : ru <= au && rl <= al; };
+  const GEN = {
+    direct() { for (;;) { const a = ri(0, 9), b = ri(1, 4 + (Math.random() < .4 ? 5 : 0)), plus = Math.random() < .55, r = plus ? a + b : a - b; if (r < 0 || r > 9 || !direct(a, r)) continue; return { a, b, plus, r, h: plus ? "Encosta contas à barra." : "Afasta contas da barra." }; } },
+    small() {
+      if (Math.random() < .55) { const a = ri(1, 4), b = ri(5 - a, 4); return { a, b, plus: true, r: a + b, h: `Não há contas de baixo que cheguem. ${b} é 5 menos ${5 - b}: desce o cinco e tira ${5 - b} ${plural(5 - b, ["conta de baixo", "contas de baixo", "contas de baixo"])}.` }; }
+      const a = ri(5, 8), b = ri(a - 4, 4); return { a, b, plus: false, r: a - b, h: `Não há contas de baixo que cheguem. ${b} é 5 menos ${5 - b}: sobe o cinco e junta ${5 - b} ${plural(5 - b, ["conta de baixo", "contas de baixo", "contas de baixo"])}.` };
+    },
+    big() {
+      if (Math.random() < .55) { const u = ri(1, 9), b = ri(Math.max(1, 10 - u), 9), a = ri(0, 7) * 10 + u; return { a, b, plus: true, r: a + b, h: `Não há unidades que cheguem. ${b} é 10 menos ${10 - b}: junta uma dezena à esquerda e tira ${10 - b} à direita.` }; }
+      const u = ri(0, 8), b = ri(u + 1, 9), a = ri(1, 8) * 10 + u; return { a, b, plus: false, r: a - b, h: `Não há unidades que cheguem. ${b} é 10 menos ${10 - b}: tira uma dezena à esquerda e junta ${10 - b} à direita.` };
+    },
+    two() { if (Math.random() < .55) { const a = ri(10, 79), b = ri(10, 99 - a); return { a, b, plus: true, r: a + b, h: "Da esquerda para a direita: primeiro as dezenas, depois as unidades." }; } const a = ri(30, 99), b = ri(10, a - 10); return { a, b, plus: false, r: a - b, h: "Da esquerda para a direita: primeiro as dezenas, depois as unidades." }; },
+    three() { if (Math.random() < .55) { const a = ri(100, 799), b = ri(11, Math.min(399, 999 - a)); return { a, b, plus: true, r: a + b, h: "Da esquerda para a direita: centenas, dezenas, unidades." }; } const a = ri(250, 999), b = ri(11, Math.min(399, a - 100)); return { a, b, plus: false, r: a - b, h: "Da esquerda para a direita: centenas, dezenas, unidades." }; }
+  };
+  const L = [
+    { n: "Mostra um número até 4", k: 'show', rods: 1, max: 4 },
+    { n: "Mostra um número até 9", k: 'show', rods: 1, max: 9 },
+    { n: "Quanto está no ábaco?", k: 'read', rods: 1 },
+    { n: "Mais e menos", k: 'calc', rods: 1, g: 'direct' },
+    { n: "Amigos pequenos: o cinco", k: 'calc', rods: 1, g: 'small' },
+    { n: "Amigos grandes: a dezena", k: 'calc', rods: 2, g: 'big' },
+    { n: "Números de dois algarismos", k: 'calc', rods: 2, g: 'two' },
+    { n: "Números de três algarismos", k: 'calc', rods: 3, g: 'three' },
+    { n: "Contas-relâmpago no ábaco", k: 'flash', rods: 2 },
+    { n: "Ábaco-fantasma", k: 'ghost', rods: 2 },
+    { n: "Cálculo mental", k: 'mind', rods: 2 },
+    { n: "Mestre do cálculo mental", k: 'mind', rods: 3, big: 1 }
+  ];
+  const mk = () => { try { return MSK.has() ? MSK.lv() : MSK.startLv(); } catch (e) { return 1; } };
+  const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5), m = mk(); return a <= 5 ? 1 : a <= 7 ? (m >= 5 ? 3 : 2) : m >= 7 ? 4 : 3; };
+  const S = () => {
+    let s = P.soro; if (!s || typeof s !== 'object') s = P.soro = {};
+    if (s.v !== 2) { const old = +s.top || 0; s.v = 2; s.top = Math.max(startLv(), Math.min(old, 4)); s.lv = s.top; s.wins = {}; }
+    s.wins = s.wins || {}; s.top = Math.max(1, Math.min(L.length, s.top || 1)); s.lv = Math.max(1, Math.min(s.top, s.lv || s.top));
+    return s;
+  };
+  const top = () => S().top;
+  
+  function abacus(box, rods, { tap = true, ghost = false, small = false, onChange = null } = {}) {
+    box.innerHTML = `<div class="sb2 r${rods}${ghost ? ' ghost' : ''}${small ? ' sm' : ''}" role="group" aria-label="Ábaco">${Array.from({ length: rods }, (_, r) => `<div class="sb2-rod" data-r="${r}"><i class="sb2-stick"></i><i class="sb2-bar">${r === rods - 1 ? '<b class="sb2-dot"></b>' : ''}</i><button class="sb2-b up" data-r="${r}" data-k="5" aria-label="5" ${tap ? '' : 'tabindex="-1"'}></button>${[0, 1, 2, 3].map(k => `<button class="sb2-b lo" data-r="${r}" data-k="${k}" aria-label="1" ${tap ? '' : 'tabindex="-1"'}></button>`).join('')}${rods > 1 ? `<small class="sb2-pl">${PL[rods - 1 - r]}</small>` : ''}</div>`).join('')}</div>`;
+    const el = box.firstElementChild, A = { el, vals: Array(rods).fill(0), tap, onChange };
+    A.value = () => A.vals.reduce((s, v) => s * 10 + v, 0);
+    A.draw = () => {
+      el.querySelectorAll('.sb2-rod').forEach((rod, r) => {
+        const [u, lo] = parts(A.vals[r]);
+        rod.querySelectorAll('.sb2-b').forEach(b => {
+          const k = b.dataset.k; let on, t;
+          if (k === '5') { on = !!u; t = on ? 'calc(var(--bh) + 4px)' : '0px'; }
+          else { const i = +k; on = i < lo; t = `calc(var(--bh) * ${on ? 2 + i : 3 + i} + ${on ? 20 : 26}px)`; }
+          b.classList.toggle('on', on); b.style.top = t;
+        });
+      });
+      el.dataset.v = A.value();
+    };
+    A.set = n => { const s = String(Math.max(0, Math.floor(n))).padStart(rods, '0').slice(-rods); A.vals = [...s].map(Number); A.draw(); };
+    A.hint = list => { el.querySelectorAll('.sb2-b.hint').forEach(b => b.classList.remove('hint')); (list || []).forEach(([r, k]) => { const b = el.querySelector(`.sb2-b[data-r="${r}"][data-k="${k}"]`); if (b) b.classList.add('hint'); }); };
+    
+    const move = (b, dir) => {
+      const r = +b.dataset.r, [u, lo] = parts(A.vals[r]), k = b.dataset.k;
+      let nu = u, nl = lo;
+      if (k === '5') nu = dir === 0 ? 1 - u : dir > 0 ? 1 : 0;
+      else { const i = +k, on = i < lo; nl = dir === 0 ? (on ? i : i + 1) : dir < 0 ? Math.max(lo, i + 1) : Math.min(lo, i); }
+      const v = nu * 5 + nl; if (v === A.vals[r]) return;
+      A.vals[r] = v; A.draw(); sfx.tick(); if (A.onChange) A.onChange(A.value());
+    };
+    let down = null;
+    el.addEventListener('pointerdown', e => { const b = e.target.closest('.sb2-b'); if (!b || !A.tap) return; e.preventDefault(); down = { b, y: e.clientY }; try { b.setPointerCapture(e.pointerId); } catch (x) {} });
+    el.addEventListener('pointerup', e => { if (!down) return; const { b, y } = down, dy = e.clientY - y; down = null; move(b, Math.abs(dy) < 10 ? 0 : dy > 0 ? 1 : -1); });
+    el.addEventListener('pointercancel', () => { down = null; });
+    el.addEventListener('click', e => { const b = e.target.closest('.sb2-b'); if (b && A.tap && e.detail === 0) move(b, 0); });
+    A.draw();
+    return A;
+  }
+  
+  const hintFor = (n, rods = 1) => { const out = [], s = String(n).padStart(rods, '0'); [...s].forEach((d, r) => { const [u, lo] = parts(+d); if (u) out.push([r, 5]); for (let k = 0; k < lo; k++) out.push([r, k]); }); return out; };
+  const num = (x, i) => i === 0 ? String(x) : x < 0 ? `− ${-x}` : `+ ${x}`;
+  const saidNum = (x, i) => i === 0 ? String(x) : x < 0 ? `menos ${-x}` : `mais ${x}`;
+  
+  function flashSet(l, lv) {
+    const m = mk(), w = S().wins[lv] || 0;
+    if (l.big) { const c = 3 + (m >= 10 ? 1 : 0); let sum = 0; const xs = []; for (let i = 0; i < c; i++) { let x = ri(10, 49); if (i && m >= 8 && Math.random() < .35 && sum - x >= 0) x = -x; xs.push(x); sum += x; } return { xs, sum, ms: Math.max(900, 1700 - 40 * m - 80 * w) }; }
+    const c = Math.min(6, 3 + (m >= 5 ? 1 : 0) + (m >= 9 ? 1 : 0) + (w >= 3 ? 1 : 0));
+    let sum = 0; const xs = [];
+    for (let i = 0; i < c; i++) { let x = ri(1, 9); if (i && m >= 4 && Math.random() < .3 && sum - x >= 0) x = -x; xs.push(x); sum += x; }
+    return { xs, sum, ms: Math.max(700, 1500 - 50 * m - 90 * w) };
+  }
+  
+  const STORY = [
+    { t: "Isto é um ábaco — uma máquina mágica de contar. As contas só contam quando tocam na barra. Agora estão todas a dormir — isso é zero." },
+    { t: "Acorda uma conta de baixo: empurra-a para cima, até à barra!", want: 1, hint: [[0, 0]] },
+    { t: "Um! Cada conta de baixo vale um. Acorda mais duas. Quantas ficam?", want: 3, hint: [[0, 1], [0, 2]] },
+    { t: "Três! A conta de cima é especial. É como uma mão: vale cinco! Vamos pôr as contas de baixo a dormir.", reset: 1 },
+    { t: "Desce a conta de cima até à barra. Isso é cinco!", want: 5, hint: [[0, 5]] },
+    { t: "Cinco e mais uma de baixo é seis. Mostra seis!", want: 6, hint: [[0, 0]] },
+    { t: "Viva! Agora sabes o segredo do ábaco: em baixo vale um, em cima vale cinco. Vamos jogar?", end: 1 }
+  ];
+  function intro(then) {
+    const t = newScreen(); let i = 0, A = null;
+    shell("Como conta o ábaco", `<div class="sbx sbi">
+        <div class="sbi-hero"><span class="sbi-fr" id="sbiFr">${friendSVG()}</span><p class="sbi-say" id="sbiSay"></p></div>
+        <div id="sbBox" class="sbx-box"></div><div class="sbx-val" id="sbV">0</div>
+        <div id="sbAns"></div></div>`, { guide: false, back: then ? null : screenSoroban });
+    A = abacus($('#sbBox'), 1, { onChange: v => { $('#sbV').textContent = v; check(v); } });
+    let speakT = 0;
+    function check(v) {
+      const s = STORY[i]; clearTimeout(speakT);
+      if (s.want === undefined || v !== s.want) { speakT = setTimeout(() => { if (t === tok) say(String(v)); }, 450); return; }
+      A.hint([]); sfx.good(); hopEl($('#sbiFr')); i++; say(String(v)).then(() => { if (t === tok) later(step, 200); });
     }
+    function step() {
+      const s = STORY[i]; $('#sbiSay').textContent = gx(s.t);
+      if (s.reset) { A.set(0); $('#sbV').textContent = 0; }
+      A.hint(s.hint || []); A.tap = s.want !== undefined;
+      $('#sbAns').innerHTML = s.want !== undefined ? '' : `<button class="big" id="sbNext">${s.end ? "Jogar!" : "Seguinte ▶"}</button>`;
+      if ($('#sbNext')) $('#sbNext').onclick = () => { sfx.pop(); if (s.end) { S().intro = 1; save(); (then || play)(); return; } i++; step(); };
+      say(s.t);
+    }
+    step();
   }
-  function done(right) {
-    busy = true;
-    if (right) { ok++; $('#sbOk').textContent = ok; sfx.good(); say(`${task.a}!`); }
-    else { sfx.oops(); vals = String(task.a).padStart(L.rods, '0').split('').map(Number).slice(-L.rods); if (L.kind !== 'mind') drawSb(false); say(`Certo, é ${task.a}.`); }
-    k++;
-    later(() => {
-      if (k < 5) { next(); return; }
-      const up = ok >= 4 && lv === P.soro.top && lv < SORO.length; if (up) P.soro.top = lv + 1; save();
-      finish({ key: 'soroban', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: `Acertaste ${ok} em 5.` + (up ? ` Nível ${lv + 1} desbloqueado: ${SORO[lv].n}!` : ''), again: () => screenSoroban(up ? lv + 1 : lv), menu: screenMathPath });
-    }, right ? 900 : 2200);
+  
+  function play(lvArg, { daily = false } = {}) {
+    const s = S();
+    if (!s.intro) { intro(() => play(lvArg, { daily })); return; }
+    const lv = Math.max(1, Math.min(s.top, lvArg || (daily ? s.top : s.lv))), l = L[lv - 1];
+    s.lv = lv; save();
+    const t = newScreen(), N = l.k === 'flash' || l.k === 'ghost' || l.k === 'mind' ? 3 : daily ? 4 : 5;
+    let k = 0, right = 0, task = null, miss = 0, busy = true, A = null, input = '', okT = 0, speakT = 0;
+    shell("Ábaco", `<div class="sbx">
+        ${daily ? '' : `<div class="sbx-lv" id="sbLv">${L.map((x, i) => `<button class="chip ${i + 1 === lv ? 'sel' : ''}" data-lv="${i + 1}" ${i + 1 > s.top ? 'disabled' : ''} title="${esc(x.n)}">${i + 1 > s.top ? '🔒' : '🧮'} ${i + 1}</button>`).join('')}</div>`}
+        <div class="sbx-hud"><b>${lv}. ${esc(l.n)}</b><span class="sbx-dots" id="sbDots">${Array.from({ length: N }, (_, i) => `<i class="${i === 0 ? 'cur' : ''}"></i>`).join('')}</span></div>
+        <p class="sb-q" id="sbQ"></p>
+        <div class="sbx-flash" id="sbF" hidden></div>
+        <div id="sbBox" class="sbx-box"></div>
+        <div class="sbx-row"><div class="sbx-val" id="sbV"></div><div id="sbAns"></div></div>
+        ${daily ? '' : "<button class=\"link-btn\" id=\"sbHow\">🐣 Como conta o ábaco?</button>"}
+      </div>`, { back: daily ? null : screenMathPath });
+    if (!daily) {
+      $('#sbLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); play(+b.dataset.lv); };
+      $('#sbHow').onclick = () => { sfx.pop(); intro(() => play(lv)); };
+      const sel = $('#sbLv .sel'); if (sel) sel.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+    const box = $('#sbBox'), ans = $('#sbAns'), Q1 = $('#sbQ'), V = $('#sbV'), F = $('#sbF');
+    const showV = v => { V.textContent = l.k === 'read' || l.k === 'ghost' || l.k === 'mind' ? '' : v; };
+    const onBeads = v => {
+      showV(v); clearTimeout(okT); clearTimeout(speakT);
+      if (busy || !task) return;
+      if (l.k === 'show') speakT = setTimeout(() => { if (t === tok && !busy) say(String(v)); }, 500);
+      if (v === task.ans) okT = setTimeout(() => { if (t === tok && !busy && A.value() === task.ans) done(true); }, 450);
+    };
+    const doneBtn = () => { ans.innerHTML = `<button class="big" id="sbOk">Pronto</button>`; $('#sbOk').onclick = () => { if (busy) return; sfx.pop(); A.value() === task.ans ? done(true) : wrong(); }; };
+    const keypad = () => {
+      ans.innerHTML = `<div class="sbx-in" id="sbIn">?</div>${keypadHTML('sbKp')}`; input = '';
+      $('#sbKp').onclick = e => { const b = e.target.closest('[data-k]'); if (!b || busy) return; const v = b.dataset.k; sfx.tick();
+        if (v === 'del') input = input.slice(0, -1); else if (v === 'ok') { if (input) { +input === task.ans ? done(true) : wrong(); input = ''; } } else if (input.length < 4) input += v;
+        const i = $('#sbIn'); if (i) i.textContent = input || '?'; };
+    };
+    const opts = () => {
+      const n = task.ans, o = sample([n, ...sample([...Array(10).keys()].filter(x => x !== n && Math.abs(x - n) <= 4), 2)], 3);
+      ans.innerHTML = `<div class="picks-g three nums">${o.map(x => `<button class="pick-b" data-a="${x}">${x}</button>`).join('')}</div>`;
+      ans.querySelector('.picks-g').onclick = e => { const b = e.target.closest('[data-a]'); if (!b || busy) return; if (+b.dataset.a === n) { b.classList.add('ok'); done(true); } else { b.classList.add('no'); b.disabled = true; wrong(); } };
+    };
+    async function flashRun(set, ghost) {
+      F.hidden = false; F.textContent = ''; Q1.textContent = "Prepara-te…"; await talk("Olha com atenção!"); if (t !== tok) return false;
+      let sum = 0;
+      for (let i = 0; i < set.xs.length; i++) {
+        if (t !== tok) return false;
+        sum += set.xs[i]; F.textContent = num(set.xs[i], i); F.classList.remove('blink'); void F.offsetWidth; F.classList.add('blink'); sfx.tick();
+        if (ghost && A) A.set(sum);
+        if (set.ms >= 1100) say(saidNum(set.xs[i], i));
+        await wait(set.ms); F.textContent = ''; await wait(260);
+      }
+      if (t !== tok) return false;
+      F.hidden = true;
+      if (ghost && A) { A.el.classList.add('gone'); }
+      return true;
+    }
+    async function next() {
+      busy = true; miss = 0; task = null; clearTimeout(okT);
+      $$('#sbDots i').forEach((d, i) => d.classList.toggle('cur', i === k));
+      ans.innerHTML = ''; V.textContent = ''; F.hidden = true; box.innerHTML = '';
+      if (l.k === 'show') {
+        const n = ri(lv === 1 ? 0 : 1, l.max); task = { ans: n }; box.dataset.a = n;
+        A = abacus(box, 1, { onChange: onBeads }); showV(0);
+        Q1.innerHTML = `Mostra no ábaco: <b class="sb-n">${n}</b>`;
+        if ((P.settings.age || 6) <= 5 && k === 0) A.hint(hintFor(n));
+        doneBtn(); busy = false;
+        talk(k === 0 ? `Mostra o número ${n} no ábaco. Uma conta de baixo vale um, a de cima vale cinco.` : `Mostra ${n}.`);
+      } else if (l.k === 'read') {
+        const n = ri(0, 9); task = { ans: n }; box.dataset.a = n;
+        A = abacus(box, 1, { tap: false }); A.set(n);
+        Q1.textContent = "Que número está no ábaco?"; opts(); busy = false;
+        talk(k === 0 ? "Conta as contas junto à barra. A de cima vale cinco. Que número é?" : "Que número?");
+      } else if (l.k === 'calc') {
+        const g = GEN[l.g](); task = { ...g, ans: g.r }; box.dataset.a = g.r;
+        A = abacus(box, l.rods, { onChange: onBeads }); A.set(g.a); showV(g.a);
+        Q1.innerHTML = `<b class="sb-n">${g.a} ${g.plus ? '+' : '−'} ${g.b}</b>`;
+        doneBtn(); busy = false;
+        talk(`No ábaco está ${g.a}. ${g.plus ? "Junta" : "Tira"} ${g.b}.` + (k === 0 && (l.g === 'small' || l.g === 'big') ? ' ' + g.h : ''));
+      } else {
+        const set = flashSet(l, lv); task = { ans: set.sum }; box.dataset.a = set.sum;
+        Q1.textContent = '';
+        if (l.k === 'flash') { A = abacus(box, l.rods, { onChange: onBeads }); showV(0); }
+        else if (l.k === 'ghost') A = abacus(box, l.rods, { tap: false, ghost: true, small: true });
+        else A = null;
+        if (k === 0 && l.k === 'flash') { await talk("Os números vão passar depressa. Junta cada um logo no ábaco!"); if (t !== tok) return; }
+        if (k === 0 && l.k === 'ghost') { await talk("O ábaco virou fantasma. Vê as contas a mexer, depois elas desaparecem. Lembra-te!"); if (t !== tok) return; }
+        if (k === 0 && l.k === 'mind') { await talk("Não há ábaco — está na tua cabeça. Imagina as contas e soma!"); if (t !== tok) return; }
+        if (!(await flashRun(set, l.k === 'ghost'))) return;
+        Q1.textContent = "Quanto deu?";
+        if (l.k === 'flash') { doneBtn(); busy = false; if (A.value() === task.ans) { done(true); return; } talk("Quanto deu? Mostra no ábaco e carrega em «Pronto»."); }
+        else { keypad(); busy = false; talk("Quanto deu?"); }
+      }
+    }
+    function wrong() {
+      if (busy) return; miss++; sfx.oops();
+      const tgt = $('#sbBox .sb2') || $('#sbIn'); if (tgt) wiggle(tgt);
+      if (miss === 1) {
+        const h = l.k === 'calc' ? task.h : l.k === 'show' ? "Uma conta de baixo vale um, a de cima vale cinco. Conta outra vez." : l.k === 'read' ? "A conta de cima junto à barra vale cinco, e cada uma de baixo vale mais um." : "Quase! Tenta outra vez.";
+        if (l.k === 'show' || l.k === 'calc') A.hint(l.k === 'show' ? hintFor(task.ans) : []);
+        talk("Quase! " + h); return;
+      }
+      
+      busy = true;
+      if (A && l.k !== 'mind') { A.el.classList.remove('gone'); A.set(task.ans); }
+      V.textContent = task.ans; mark(false);
+      talk(`Assim: ${task.ans}. Não faz mal, vais conseguir!`).then(() => { if (t === tok) step(); });
+    }
+    function done(good) {
+      busy = true; clearTimeout(okT); clearTimeout(speakT); if (A) A.hint([]);
+      if (good) { right++; mark(true); sfx.good(); V.textContent = task.ans; if (A && l.k === 'ghost') { A.el.classList.remove('gone'); A.set(task.ans); } }
+      talk(pickOne(["Certo!", "Sim!", "Exato!", "Correto!"]) + ` ${task.ans}!`).then(() => { if (t === tok) step(); });
+    }
+    function mark(ok) { const d = $$('#sbDots i')[k]; if (d) d.className = ok ? 'ok' : 'no'; }
+    function step() {
+      k++;
+      if (k < N) { later(next, 400); return; }
+      const pass = right >= N - 1;
+      if (pass) s.wins[lv] = (s.wins[lv] || 0) + 1;
+      const up = pass && lv === s.top && s.top < L.length; if (up) { s.top++; s.lv = s.top; }
+      save();
+      finish({ key: 'soroban', stars: right === N ? 3 : right >= N - 1 ? 2 : 1, ev: { right, lv, up },
+        line: `${right} de ${N} certas.` + (up ? ` Nível ${s.top} desbloqueado: ${L[s.top - 1].n}!` : pass ? '' : " Mais uma vez e vais conseguir!"),
+        again: () => play(up ? s.top : lv), menu: screenMathPath });
+    }
+    next();
   }
-  box.onclick = e => {
-    const b = e.target.closest('.sb-b'); if (!b || busy || L.kind === 'read' || L.kind === 'mind') return;
-    const r = +b.dataset.r, v = vals[r], up = v >= 5 ? 1 : 0, lo = v % 5;
-    if (b.classList.contains('up')) vals[r] = (up ? 0 : 5) + lo;
-    else { const kk = +b.dataset.k; vals[r] = up * 5 + (kk < lo ? kk : kk + 1); }
-    sfx.tick(); drawSb();
-  };
-  ans.onclick = e => {
-    if (busy) return;
-    if (e.target.closest('#sbCheck')) { done(sbValue(vals) === task.a); return; }
-    const b = e.target.closest('[data-a]'); if (b) { b.classList.add(+b.dataset.a === task.a ? 'ok' : 'no'); done(+b.dataset.a === task.a); }
-  };
-  next();
-}
+  
+  const daily = () => play(0, { daily: true });
+  
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    const s = S();
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="sbLvIn">🧮 Ábaco: nível <select id="sbLvIn">${L.map((x, i) => `<option value="${i + 1}" ${s.top === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)}</option>`).join('')}</select></label>`);
+    $('#sbLvIn').onchange = e => { const s = S(); s.top = s.lv = +e.target.value; s.intro = 1; save(); sfx.tick(); };
+  }
+  return { play, daily, intro, top, S, L, GEN, flashSet, startLv, settingsRow, abacus };
+})();
+function screenSoroban(lv) { SB.play(lv); }
+ 
 
  
 const STEPS = [
@@ -14617,25 +15130,24 @@ function screenSteps(lv) {
  
 function screenMathPath() {
   newScreen();
-  const age = P.settings.age || (Q() ? 9 : 5), so = (P.soro && P.soro.top) || 1, st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
+  const age = P.settings.age || (Q() ? 9 : 5), so = SB.top(), st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
   const card = (id, e, h, sub, prog, rec) => `<button class="mp-card ${rec ? 'rec' : ''}" data-go="${id}"><span class="emo">${e}</span><span class="mp-t"><b>${h}</b><small>${sub}</small><em>${prog}</em></span>${rec ? '<span class="mp-rec">⭐</span>' : ''}</button>`;
   shell("Caminho da matemática", `<div class="mp">
       ${card('m-skill', '🎯', "Matemática à tua medida", "vemos o teu nível — e depois tarefas mesmo à tua medida", MSK.has() ? MSK.rankTxt() : '', true)}
+      ${card('olymp', '🏅', "Olimpíada à tua medida", "desafios astutos: lógica, maneiras, robôs, fósforos", `${OLY.name()} · resolvidos ${ol}`, age >= 7 || (MSK.has() && MSK.lv() >= 7))}
       <div class="mp-arrow">⬇️</div>
-      ${card('soroban', '🧮', "Ábaco: cálculo de cabeça", "4–7 anos: primeiro as bolinhas, depois o cálculo de cabeça", `nível ${so} de ${SORO.length}`, age <= 6)}
+      ${card('soroban', '🧮', "Ábaco: cálculo de cabeça", "para todos: contas, depois cálculo mental", `nível ${so} de ${SB.L.length}`, true)}
       ${card('flash', '⚡', "Contas Relâmpago", "os números passam a voar: soma de cabeça", `nível ${P.flashLv || 1}`, false)}
       <div class="mp-arrow">⬇️</div>
       ${card('steps', '🪜', "Degraus", "6–10 anos: todos os dias um degrau mais alto", `degrau ${st} de ${STEPS.length}`, age >= 6 && age <= 9)}
       ${card('m-sprint', '⏱️', "Sprint de matemática", "quantas contas num minuto", P.mathBest ? `recorde: ${P.mathBest}` : '', false)}
-      <div class="mp-arrow">⬇️</div>
-      ${card('olymp', '🏅', "Olimpíada", "8+ anos: problemas com truque", `resolvidos: ${ol} de ${OLYMP.length}`, age >= 8)}
     </div>`);
   $('.mp').onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; sfx.pop(); const g = GAMES.find(x => x.id === b.dataset.go); if (b.dataset.go === 'soroban') screenSoroban(); else if (b.dataset.go === 'steps') screenSteps(); else if (g) g.go(); };
   talk("Caminho da matemática: primeiro o ábaco e o cálculo de cabeça, depois os degraus e, a seguir, a olimpíada. A estrelinha marca o que é indicado para ti agora.");
 }
 GAMES.push(
   { id: 'math-path', name: "Caminho da matemática", sub: "ábaco → degraus → olimpíada", ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenMathPath(), grp: 3, also: [8] },
-  { id: 'soroban', name: "Ábaco", sub: "cálculo mental", ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `nível ${(P.soro && P.soro.top) || 1}` },
+  { id: 'soroban', name: "Ábaco", sub: "cálculo mental", ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `nível ${SB.top()}` },
   { id: 'steps', name: "Degraus", sub: "todos os dias um degrau mais alto", ico: () => pic('🪜'), bg: 'var(--t-blue)', go: () => screenSteps(), grp: 3, also: [8], prog: () => `degrau ${stepsTop()}` }
 );
  
@@ -14829,6 +15341,160 @@ const MSK = (() => {
   GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'math-count')), 0, { id: 'm-skill', name: "Matemática à tua medida", sub: "tarefas à tua medida: mais difíceis ou mais fáceis", kw: "matemática nível mais difícil mais fácil tabuada", ico: () => pic('🎯'), bg: 'var(--t-peach)', go: () => play(), grp: 3, also: [17], prog: () => has() ? rankTxt() : "começa por uma verificação" });
   return { play, check, lv, has, setLv, rank, rankTxt, sprintTask, settingsRow, L, pick, startLv };
 })();
+ 
+ 
+
+
+const OLY = (() => {
+  const LV = [['🐣', "Pintainho Matreiro"], ['🐥', "Passarinho Esperto"], ['🦊', "Raposinho Astuto"], ['🦉', "Corujinha Sábia"], ['🐯', "Tigre Corajoso"], ['🦁', "Rei dos Desafios"], ['🚀', "Conquistador de Cumes"], ['🏆', "Olímpico"]];
+  const PRAISE = ["Boa tentativa!", "Ideia corajosa! Vamos pensar mais um pouco.", "Quase! Estás no bom caminho.", "Errar faz parte de resolver. Tenta outra vez!"];
+  const WIN = ["Certo!", "Ótimo!", "Sim! Que cabeça!", "Exato!", "Bem pensado!"];
+  const cl = n => Math.max(1, Math.min(8, n));
+  const S = () => { if (!P.olymp || typeof P.olymp !== 'object') P.olymp = { solved: [] }; const o = P.olymp; if (!Array.isArray(o.solved)) o.solved = []; if (!Array.isArray(o.seen)) o.seen = []; return o; };
+  const startLv = () => { if (MSK.has()) return cl(Math.ceil(MSK.lv() / 2)); const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : cl(a - 3); };
+  const lv = () => cl(S().lv || startLv());
+  const setLv = n => { S().lv = cl(n); save(); };
+  const name = (l = lv()) => `${LV[l - 1][0]} ${LV[l - 1][1]}`;
+  const lvTxt = () => `nível ${lv()} · resolvidos ${S().solved.length}`;
+  
+  function cubes(spec) {
+    const rows = spec.split('/').map(r => r.split(',').map(Number)), s = 26, cx = s * .866, it = [];
+    rows.forEach((r, y) => r.forEach((h, x) => { for (let z = 0; z < h; z++) it.push([x, y, z]); }));
+    it.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[2] - b[2]);
+    const pr = (x, y, z) => [(x - y) * cx, (x + y) * s / 2 - z * s], pts = [];
+    const poly = (ps, f) => { ps.forEach(p => pts.push(p)); return `<polygon points="${ps.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="${f}"/>`; };
+    const body = it.map(([x, y, z]) => poly([pr(x, y, z + 1), pr(x + 1, y, z + 1), pr(x + 1, y + 1, z + 1), pr(x, y + 1, z + 1)], '#FFD45C')
+      + poly([pr(x, y + 1, z), pr(x + 1, y + 1, z), pr(x + 1, y + 1, z + 1), pr(x, y + 1, z + 1)], '#FF9F43')
+      + poly([pr(x + 1, y, z), pr(x + 1, y + 1, z), pr(x + 1, y + 1, z + 1), pr(x + 1, y, z + 1)], '#E67E22')).join('');
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs) - 3, y0 = Math.min(...ys) - 3, w = Math.max(...xs) - x0 + 3, h = Math.max(...ys) - y0 + 3;
+    return `<svg class="ol-svg" viewBox="${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" style="width:${Math.min(240, w * 1.6).toFixed(0)}px" aria-hidden="true"><g stroke="#7A4A1E" stroke-width="1.6" stroke-linejoin="round">${body}</g></svg>`;
+  }
+  const stick = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#E7B26A" stroke-width="5" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="4" fill="#E0442E"/>`;
+  function sticks(spec) {
+    const [R, C] = spec.split('x').map(Number), L = 44, o = 8; let g = '';
+    for (let r = 0; r <= R; r++) for (let c = 0; c < C; c++) g += stick(o + c * L + 5, o + r * L, o + (c + 1) * L - 5, o + r * L);
+    for (let c = 0; c <= C; c++) for (let r = 0; r < R; r++) g += stick(o + c * L, o + r * L + 5, o + c * L, o + (r + 1) * L - 5);
+    const w = C * L + 2 * o, h = R * L + 2 * o;
+    return `<svg class="ol-svg" viewBox="0 0 ${w} ${h}" style="width:${Math.min(260, w * 1.3)}px" aria-hidden="true">${g}</svg>`;
+  }
+  const SEG = { a: [4, 2, 26, 2], b: [28, 4, 28, 26], c: [28, 30, 28, 52], d: [4, 54, 26, 54], e: [2, 30, 2, 52], f: [2, 4, 2, 26], g: [4, 28, 26, 28], h: [4, 28, 26, 28], v: [15, 17, 15, 39] };
+  const DIG = { 0: 'abcdef', 1: 'bc', 2: 'abged', 3: 'abgcd', 4: 'fgbc', 5: 'afgcd', 6: 'afgedc', 7: 'abc', 8: 'abcdefg', 9: 'abcdfg', '+': 'hv', '-': 'h' };
+  function match(spec) {
+    let x = 4, g = '';
+    for (const ch of spec) {
+      if (ch === '=') { g += stick(x + 4, 22, x + 26, 22) + stick(x + 4, 34, x + 26, 34); x += 38; continue; }
+      [...(DIG[ch] || '')].forEach(s => { const [x1, y1, x2, y2] = SEG[s]; g += stick(x + x1, y1 + 4, x + x2, y2 + 4); }); x += 38;
+    }
+    return `<svg class="ol-svg ol-match" viewBox="0 0 ${x} 64" style="width:${Math.min(300, x * 1.5)}px" aria-hidden="true">${g}</svg>`;
+  }
+  const PIP = { 1: [[2, 2]], 2: [[1, 1], [3, 3]], 3: [[1, 1], [2, 2], [3, 3]], 4: [[1, 1], [3, 1], [1, 3], [3, 3]], 5: [[1, 1], [3, 1], [2, 2], [1, 3], [3, 3]], 6: [[1, 1], [3, 1], [1, 2], [3, 2], [1, 3], [3, 3]] };
+  const dice = spec => spec.split(',').map(n => `<svg class="ol-die" viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="10" fill="#fff" stroke="#2A2346" stroke-width="3"/>${(PIP[n] || []).map(([a, b]) => `<circle cx="${a * 11 + 2}" cy="${b * 11 + 2}" r="4.5" fill="#2A2346"/>`).join('')}</svg>`).join('');
+  function robot(spec, it) {
+    const rows = spec.split('|'), C = Math.max(...rows.map(r => r.length));
+    const cell = ch => ch === '#' ? '<span class="w"></span>' : `<span>${ch === 'R' ? '🤖' : ch === '*' ? '⭐' : /[a-d]/.test(ch) ? (it || [])['abcd'.indexOf(ch)] || '' : ''}</span>`;
+    return `<div class="ol-grid" style="--c:${C}">${rows.map(r => [...r.padEnd(C, '.')].map(cell).join('')).join('')}</div>`;
+  }
+  function picHTML(p) {
+    if (!p.p) return '';
+    const m = /^#(\w+):(.*)$/.exec(p.p);
+    if (!m) return `<div class="ol-pic">${esc(p.p)}</div>`;
+    const k = m[1], v = m[2];
+    return `<div class="ol-pic ol-pic-${k}">${k === 'cubes' ? cubes(v) : k === 'sticks' ? sticks(v) : k === 'match' ? match(v) : k === 'dice' ? dice(v) : k === 'robot' ? robot(v, p.it) : ''}</div>`;
+  }
+  
+  function pick(l, n, not = []) {
+    const s = S(), at = OLYMP.filter(p => p.lv === l && !not.includes(p));
+    const fresh = at.filter(p => !s.solved.includes(p.id) && !s.seen.includes(p.id)), mid = at.filter(p => !s.seen.includes(p.id));
+    const pool = shuffle([...(fresh.length >= n ? fresh : mid.length >= n ? mid : at)]), out = [];
+    for (const p of pool) { if (out.length >= n) break; if (!out.some(q => q.cat === p.cat)) out.push(p); }
+    for (const p of pool) { if (out.length >= n) break; if (!out.includes(p)) out.push(p); }
+    return out;
+  }
+  const seen = p => { const s = S(); s.seen = [p.id, ...s.seen.filter(x => x !== p.id)].slice(0, 60); };
+  const num = s => /^-?\d+$/.test(String(s).trim());
+  const sayQ = p => p.q;
+  
+  function ask(p, { hard = false, day = false, intro = '', onDone }) {
+    const box = $('#olBox'), o = p.o.map((x, i) => ({ x, i }));
+    const opts = o.every(z => num(z.x)) ? o.sort((a, b) => +a.x - +b.x) : shuffle(o);
+    const big = o.every(z => z.x.length <= 4);
+    let miss = 0, hints = 0, over = false, input = '';
+    box.innerHTML = `${hard ? "<div class=\"ol-hard\">⭐ Desafio difícil!</div>" : ''}${day ? "<div class=\"ol-hard ol-dayb\">🌞 Desafio do dia</div>" : ''}${picHTML(p)}
+      <p class="ol-q no-said">${esc(p.q)}</p>
+      ${p.kp ? `<div class="mk-in ol-in" id="olIn">?</div>${keypadHTML('olKp')}` : `<div class="ol-opts ${big ? 'ol-big' : ''} ol-n${opts.length}">${opts.map(z => `<button class="ol-o" data-i="${z.i}">${esc(z.x)}</button>`).join('')}</div>`}
+      <div class="ol-tools"><button class="chip" id="olHint">💡 Pista</button><button class="chip" id="olSay">🔊 Outra vez</button></div>
+      <p class="ol-hint no-said" id="olH" hidden></p><div class="ol-why" id="olW" hidden></div>`;
+    box.dataset.id = p.id; seen(p); save();
+    const hint = () => { const h = hints === 0 ? p.h1 : p.h2 || p.h1; hints = Math.min(2, hints + 1); const el = $('#olH'); el.hidden = false; el.textContent = `💡 ${h}`; return h; };
+    $('#olHint').onclick = () => { if (over) return; sfx.pop(); talk(hint()); };
+    $('#olSay').onclick = () => { sfx.pop(); talk(over ? p.w.join(' ') : sayQ(p)); };
+    function solve(first) {
+      over = true; const s = S();
+      if (!s.solved.includes(p.id)) s.solved.push(p.id);
+      if (hard && first) s.hard = (s.hard || 0) + 1;
+      save();
+      $$('.ol-o').forEach(b => { b.disabled = true; if (+b.dataset.i === p.a) b.classList.add('right'); });
+      const inEl = $('#olIn'); if (inEl) { inEl.textContent = p.o[p.a]; inEl.classList.add('ok'); }
+      const kp = $('#olKp'); if (kp) kp.remove();
+      $('#olH').hidden = true; $('.ol-tools').hidden = true;
+      const w = $('#olW'); w.hidden = false;
+      w.innerHTML = `${hard && first ? "<p class=\"ol-badge\">🏅 Desafio difícil resolvido!</p>" : ''}<h3>🧠 Como resolver</h3><ol>${p.w.map(x => `<li>${esc(x)}</li>`).join('')}</ol><button class="big" id="olNext">Seguinte</button>`;
+      if (hard && first) { confetti(60); sfx.magic(); }
+      $('#olNext').onclick = () => { sfx.pop(); hush(); onDone(first); };
+      const lead = first ? pickOne(WIN) : miss >= 3 ? "Vamos resolver juntos." : pickOne(["Conseguiste!", "Sim, é assim mesmo!", "Certo! Não desististe."]);
+      talk(`${lead} ${p.w.join(' ')}`);
+    }
+    function wrong(b) {
+      miss++; sfx.oops(); if (b) { b.disabled = true; wiggle(b); }
+      if (miss >= 3) { solve(false); return; }
+      const h = hints < miss ? hint() : null;
+      talk(`${pickOne(PRAISE)}${h ? ' ' + h : ''}`);
+    }
+    function tryAns(i, b) { if (over) return; if (i === p.a) { sfx.good(); if (b) b.classList.add('right'); solve(miss === 0); } else wrong(b); }
+    if (p.kp) {
+      const show = () => { const el = $('#olIn'); if (el) el.textContent = input || '?'; };
+      $('#olKp').onclick = e => {
+        const k = e.target.closest('[data-k]'); if (!k || over) return; const v = k.dataset.k; sfx.tick();
+        if (v === 'del') input = input.slice(0, -1);
+        else if (v === 'ok') { if (!input) return; const good = +input === parseInt(p.o[p.a], 10); input = ''; if (good) tryAns(p.a); else { wrong(null); wiggle($('#olIn')); } }
+        else if (input.length < 4) input += v;
+        if (!over) show();
+      };
+    } else $('.ol-opts').onclick = e => { const b = e.target.closest('.ol-o'); if (!b || b.disabled) return; tryAns(+b.dataset.i, b); };
+    talk((intro ? intro + ' ' : '') + sayQ(p));
+  }
+  function head(l) { return `<div class="ol-top"><button class="chip" id="olDown">🐢 Mais fácil</button><span class="ol-lv"><b>${LV[l - 1][0]} Nível ${l}</b><small>${esc(LV[l - 1][1])}</small></span><button class="chip" id="olUp">🚀 Mais difícil</button></div>`; }
+  function play() {
+    newScreen(); noGuard();   
+    const l = lv(), first4 = pick(l, 4), deck = [...first4, ...pick(cl(l + 1), 1, first4)];
+    let k = 0, first = 0;
+    shell("Olimpíada", `<div class="ol">${head(l)}<div class="ol-head"><span id="olN"></span><span id="olCat"></span></div><div id="olBox"></div></div>`);
+    $('#olDown').onclick = () => { if (l <= 1) return; sfx.pop(); hush(); setLv(l - 1); play(); };
+    $('#olUp').onclick = () => { if (l >= 8) return; sfx.pop(); hush(); setLv(l + 1); play(); };
+    function show() {
+      const p = deck[k], hard = k === 4;
+      $('#olN').textContent = `Desafio ${k + 1} de ${deck.length}`; $('#olCat').textContent = p.cat;
+      ask(p, { hard, intro: k === 0 ? "Olimpíada! Cinco desafios astutos, o último é o mais difícil. Errar não faz mal: há pistas." : '', onDone: f => { if (f) first++; k++; if (k < deck.length) show(); else end(); } });
+    }
+    function end() {
+      const up = first >= 4 && l < 8; if (up) setLv(l + 1);
+      const s = S();
+      finish({ key: 'olymp', stars: first >= 3 ? 3 : 2, ev: { solved: deck.length, first }, again: play,
+        line: `À primeira: ${first} em ${deck.length}. Desafios difíceis resolvidos: ${s.hard || 0}.` + (up ? ` Novo nível: ${name(l + 1)}!` : ` ${name(l)}.`) });
+    }
+    show();
+  }
+  
+  function day() {
+    newScreen(); noGuard();
+    const l = lv(), s = S(), at = OLYMP.filter(p => p.lv === l), fresh = at.filter(p => !s.solved.includes(p.id)), pool = fresh.length ? fresh : at;
+    const p = pool[dayNo() % pool.length];
+    shell("Problema do dia", `<div class="ol"><div class="ol-head"><span>${esc(name(l))}</span><span id="olCat">${esc(p.cat)}</span></div><div id="olBox"></div></div>`);
+    ask(p, { day: true, onDone: f => finish({ key: 'olymp-day', stars: 3, ev: { first: f ? 1 : 0 }, again: play, line: f ? "Desafio do dia resolvido à primeira! Queres mais? Na «Olimpíada» há muitos." : "Desafio do dia resolvido! Amanhã há um novo." }) });
+  }
+  return { play, day, lv, setLv, name, lvTxt, pick, startLv };
+})();
+GAMES.push({ id: 'olymp-day', name: "Problema do dia", sub: "um problema esperto ao teu alcance", ico: () => pic('🧩'), bg: 'var(--t-yellow)', go: () => OLY.day(), grp: 3, inside: true });
  
 
 
@@ -15233,7 +15899,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '152';
+const APP_VER = '153';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 
@@ -16100,7 +16766,8 @@ function readFineHTML() {
     const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
     return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ["dia", "dias", "dias"])} sem leitura` : "Ontem não houve leitura"}: −${sum} ⭐</b><small>${done ? "Hoje já leste. Muito bem!" : "Lê hoje, e amanhã ficas com as tuas estrelas."}</small></span>${done ? '' : "<button class=\"chip\" id=\"rfGo\">📖 Ler</button>"}</div>`;
   }
-  if (!done && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Hoje ainda não houve leitura</b><small>Um dia sem leitura custa ${READ_FINE} estrelas. Uma lição de «Leitura» ou o livro, e está tudo bem.</small></span><button class="chip" id="rfGo">📖 Ler</button></div>`;
+  
+  if (!done && P.readFrom !== today && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Hoje ainda não houve leitura</b><small>Um dia sem leitura custa ${READ_FINE} estrelas. Uma lição de «Leitura» ou o livro, e está tudo bem.</small></span><button class="chip" id="rfGo">📖 Ler</button></div>`;
   return '';
 }
 function bindReadFine(fines) {
@@ -21057,6 +21724,7 @@ const SETUI = (() => {
     if (S.prog) list([row($('#expBtn'), '📤', "Copiar progresso"), row($('#impBtn'), '📥', "Colar progresso")]);
     if ($('#resetBtn')) list([row($('#resetBtn'), '🗑️', "Recomeçar", '', true)]);
 
+    if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Aspeto: colorido ou calmo</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || "Criança", lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
       ['fam', '👪', "Família", '', [S.fam]],
@@ -22761,7 +23429,7 @@ const PATH = (() => {
   
   const SEEN = new Set();
   const fresh = id => { if (SEEN.has(id)) return false; SEEN.add(id); return true; };
-  const ICO = { speech: '👂', read: '📖', math: '🧮', book: '📚' };
+  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', puzzle: '🧩', soro: '🧮' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
     const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;
