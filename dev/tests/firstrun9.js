@@ -1,5 +1,5 @@
 // A new 9-year-old's first minutes (an older first-time player): landing → family → her settings → the look step
-// («Какой вид больше нравится?»: pick = calm | bright | skip, skipped = calm) → ready → «Сегодня» → the first step.
+// («Какой вид больше нравится?»: pick = calm | bright | dark | skip, skipped = calm) → ready → «Сегодня» → the first step.
 // Checks that the chosen look is applied at once and stored for the family and the child. Screenshots for the
 // calm-design report. Invented child only (Тина).
 // node tests/firstrun9.js [tag=after] [base=http://localhost:8781/govorilki/] [lang=ru] [pick=skip]
@@ -36,17 +36,18 @@ const SHOTS = path.join(__dirname, 'shots');
     if (!(await p.$$('#lookPick [data-look]')).length) miss.push('look cards');
     if (PICK !== 'skip') { await tap(`#lookPick [data-look="${PICK}"]`, 'pick ' + PICK); await p.waitForTimeout(400); }
     await shot('look');
-    const calm = await p.evaluate(() => document.body.classList.contains('look-calm'));
-    if (calm !== (PICK !== 'bright')) miss.push('look applied at once: calm=' + calm);
+    if ((await p.$$('#lookPick [data-look]')).length !== 3) miss.push('three look cards');
+    const cl = await p.evaluate(() => ({ calm: document.body.classList.contains('look-calm'), dark: document.body.classList.contains('look-dark') }));
+    if (cl.calm !== (PICK !== 'bright') || cl.dark !== (PICK === 'dark')) miss.push('look applied at once: ' + JSON.stringify(cl));
     await tap('#lkNext', 'look next'); await p.waitForTimeout(800);
   }
   await shot('ready');
   await tap('#obGo', 'go'); await p.waitForTimeout(1200);
   await shot('home');
   if (TAG !== 'before') {
-    const st = await p.evaluate(() => { const r = JSON.parse(localStorage.getItem('govorilki-v2')), f = r.families[r.curFam]; return { f: f.look, k: r.profiles[r.cur].settings.look, calm: document.body.classList.contains('look-calm') }; });
-    const want = PICK === 'bright' ? 'bright' : 'calm';
-    if (st.f !== want || st.k !== want || st.calm !== (want === 'calm')) miss.push('stored look ' + JSON.stringify(st));
+    const st = await p.evaluate(() => { const r = JSON.parse(localStorage.getItem('govorilki-v2')), f = r.families[r.curFam]; return { f: f.look, k: r.profiles[r.cur].settings.look, calm: document.body.classList.contains('look-calm'), dark: document.body.classList.contains('look-dark') }; });
+    const want = PICK === 'skip' ? 'calm' : PICK;
+    if (st.f !== want || st.k !== want || st.calm !== (want !== 'bright') || st.dark !== (want === 'dark')) miss.push('stored look ' + JSON.stringify(st));
   }
   await p.evaluate(() => { const st = document.querySelector('#stage'); if (st) st.scrollTop = 700; }); await shot('home2');
   await p.evaluate(() => { const st = document.querySelector('#stage'); if (st) st.scrollTop = 1500; }); await shot('home3');

@@ -1875,7 +1875,7 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .bk-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .bk-tab{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;max-width:150px;padding:8px 10px;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line-strong);cursor:pointer;font:inherit}
 .bk-tab .emo{font-size:26px;line-height:1}.bk-tab b{font:700 14px/1.15 var(--f-display);text-align:center}.bk-tab small{font:700 12px var(--f-body);color:var(--ink-soft)}
-.bk-tab.sel{background:var(--sun);color:#2A2346;box-shadow:0 5px 0 #D9A21C}.bk-tab.sel small{color:#5E5683}
+.bk-tab.sel{background:var(--sun);color:#2A2346;box-shadow:0 5px 0 #D9A21C}.bk-tab.sel small{color:#463F6B}
 .bk-shelf h2{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:0;font:700 24px var(--f-display)}.bk-shelf h2 small{font:700 15px var(--f-body);color:var(--ink-soft)}
 .bk-cnt{margin:2px 0 10px;font:700 15px var(--f-body);color:var(--ink-soft)}
 .bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:18px 14px;padding-bottom:12px;background:linear-gradient(transparent calc(100% - 10px),#B9824F calc(100% - 10px));border-radius:0 0 6px 6px}
@@ -3366,13 +3366,13 @@ body.look-calm{
   --line-strong:rgba(42,35,70,.11);
 }
 body.look-calm .pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
-body.look-calm.quest{--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#A8B0D8;
+body.look-calm:is(.quest,.look-dark){--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#B4BBE0;
   --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
   --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
   --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
 /* the background: calm and plain (no clouds by day; the night sky keeps its few stars) */
 body.look-calm:not(.quest){background-color:var(--bg);background-image:none}
-body.look-calm.quest{background-color:var(--bg)}
+body.look-calm:is(.quest,.look-dark){background-color:var(--bg)}
 body.look-calm .logo .lt:nth-child(n){color:var(--ink);transform:none}
 /* one tint per tab on the home tiles */
 body.look-calm .home-t[data-tab="speak"]{--tint:var(--tint-speak)}body.look-calm .home-t[data-tab="learn"]{--tint:var(--tint-learn)}
@@ -3385,7 +3385,7 @@ body.look-calm .tile:active,body.look-calm .mini:active,body.look-calm .card:act
 body.look-calm .tile b{font:700 var(--fs-title)/1.15 var(--f-display)}
 body.look-calm .tile small{font:700 var(--fs-small)/1.3 var(--f-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
 body.look-calm .tile .prog{font-size:var(--fs-small)}
-body.look-calm.quest .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
+body.look-calm:is(.quest,.look-dark) .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
 body.look-calm .tile.tl-armed{box-shadow:0 0 0 4px var(--warn),var(--sh-1)}
 body.look-calm .mini,body.look-calm .card{box-shadow:var(--sh-1)}
 /* cards, chips and round buttons: flat, a soft shadow */
@@ -3395,11 +3395,11 @@ body.look-calm .kid.sel{background:var(--t-peach);box-shadow:0 0 0 2px var(--acc
 body.look-calm .bubble{box-shadow:var(--sh-1)}
 body.look-calm .sec-nav{background:rgba(246,243,238,.94)}
 body.look-calm .sec-nav .chip{box-shadow:none;background:var(--surface);border:1px solid var(--line)}
-body.look-calm.quest .sec-nav{background:rgba(20,26,49,.94)}
+body.look-calm:is(.quest,.look-dark) .sec-nav{background:rgba(20,26,49,.94)}
 body.look-calm .surp{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
 body.look-calm .surp .surp-q{background:var(--accent);color:#fff}
 body.look-calm .rf-card,body.look-calm .rf-card.soft{background:var(--surface);border:0;border-left:6px solid var(--warn);box-shadow:var(--sh-1)}
-body.look-calm.quest .rf-card,body.look-calm.quest .rf-card.soft{background:var(--surface);border-color:var(--warn)}
+body.look-calm:is(.quest,.look-dark) .rf-card,body.look-calm:is(.quest,.look-dark) .rf-card.soft{background:var(--surface);border-color:var(--warn)}
 /* one type scale */
 body.look-calm .group-head h2,body.look-calm .today h2{font:700 var(--fs-h2)/1.15 var(--f-display)}
 body.look-calm .group-head p{font:700 14px/1.3 var(--f-body)}
@@ -3411,8 +3411,8 @@ body.look-calm .stage.scroll{gap:20px}
 /* the bottom tabs: one quiet selection */
 body.look-calm .tabbar{box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(30,26,46,.06)}
 body.look-calm .tb.sel{background:var(--t-peach);color:var(--ink)}body.look-calm .tb.sel .emo{transform:none}
-body.look-calm.quest .tb.sel{background:#2E3866}
-@media (min-width:900px){body.look-calm .home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.look-calm.quest .home-t .tb.sel{background:#2E3866}}
+body.look-calm:is(.quest,.look-dark) .tb.sel{background:#2E3866}
+@media (min-width:900px){body.look-calm .home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.look-calm:is(.quest,.look-dark) .home-t .tb.sel{background:#2E3866}}
 /* «Сегодня»: the path is the one big thing; the child's own things are small chips under it */
 body.look-calm .pd-lb,body.look-calm .pd-bub{box-shadow:var(--sh-1)}
 body.look-calm .pd-n.now .pd-lb{box-shadow:0 4px 0 var(--accent-deep)}
@@ -3429,9 +3429,9 @@ body.look-calm .big.ghost:active{transform:scale(.97)}
 body.look-calm .winbox{border-radius:28px;box-shadow:var(--sh-2)}
 /* CALM-CSS-END */
 /* LOOK-CSS: the «Ярко / Спокойно» picker with a tiny picture of each look */
-.lk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:460px;margin-inline:auto}
+.lk-pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:100%;max-width:560px;margin-inline:auto}
 .lk-c{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 10px 12px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 0 0 2px var(--line),0 3px 10px rgba(42,35,70,.08);font:inherit}
-.lk-c b{font:800 19px/1.1 var(--f-body)}
+.lk-c b{font:800 17px/1.1 var(--f-body)}
 .lk-c.sel{box-shadow:0 0 0 4px var(--tiger),0 3px 10px rgba(42,35,70,.08)}
 .lk-c:active{transform:scale(.97)}
 .lk-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;aspect-ratio:4/3;padding:10px;border-radius:14px}
@@ -3442,7 +3442,43 @@ body.look-calm .winbox{border-radius:28px;box-shadow:var(--sh-2)}
 .lk-calm{background:#EFE9E0}
 .lk-calm i{background:#F7DCC8;box-shadow:0 1px 3px rgba(42,35,70,.12)}
 .lk-ob .lk-pick{margin-block:6px 10px}
+.lk-dark{background:#141A31}
+.lk-dark i{background:#2A3360;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.lk-dark i:nth-child(1){background:#4A3A2E}
 /* LOOK-CSS-END */
+/* LOOK-DARK-CSS: «Тёмная» for any child — the night palette of «Миссия Л» (body.quest) on top of the calm design,
+   without its castle font and stars. «Миссия Л» itself keeps its own look (the :not(.quest) parts). Pictures and
+   canvases that must stay light (colouring, maps, the board) keep their own white grounds. */
+body.look-dark{--sky:#141A31;--ink:#EEF1FF;--ink-soft:#B4BBE0;--paper:#20284A;--tiger:#E27012;--tiger-deep:#A3500A;--berry:#FF6B8E;--leaf:#38CF86;--sun:#FFC83A;--sea:#62ABFF;--plum:#B49BFF;
+  --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
+  --line:rgba(255,255,255,.1);--line-strong:rgba(0,0,0,.32);--shade:rgba(5,8,20,.72);color-scheme:dark}
+body.look-dark .tabbar{background:#20284A}body.look-dark .tb{color:#B4BBE0}body.look-dark .tb.sel,body.look-dark .home-t .tb.sel{background:#2E3866;color:#fff}
+body.look-dark .sec-nav{background:rgba(20,26,49,.94)}
+body.look-dark .srch-box,body.look-dark .st-intro,body.look-dark .al-card{background:#20284A}
+body.look-dark .srch-i{background:#2E3866}body.look-dark .srch-i b,body.look-dark .mem-n{color:#fff}
+body.look-dark .av-bar{background:linear-gradient(transparent,#141834 30%)}
+body.look-dark .pd{--pd-dot:#4A5890;--pd-off:#39456F;--pd-offd:#28325A}
+body.look-dark .prow input,body.look-dark .prow select,body.look-dark textarea,body.look-dark input[type=text],body.look-dark input[type=search],body.look-dark input[type=date],body.look-dark select{background:#11162B;color:var(--ink);border-color:rgba(255,255,255,.16)}
+body.look-dark .winbox h2{color:var(--sun)}
+body.look-dark .said{color:#2A2346}
+body.look-dark .l-bar{background:rgba(255,255,255,.12)}
+body.look-dark .story,body.look-dark .fam-card{color:var(--ink)}
+body.look-dark .ch-note b{color:var(--sun)}
+body.look-dark .fam-ok,body.look-dark .og-st.mine{color:#7BE0A0}
+body.look-dark .ks-chips .chip.sel,body.look-dark .ks-mods .chip.sel{color:#1E1A2E;background:#FFE7A0}
+body.look-dark .scheme figcaption{color:#5E5683}
+body.look-dark .lk-c{background:var(--paper)}
+body.look-dark .lr-ht small{color:var(--sun)}
+body.look-dark .m-snd .chip{color:var(--ink)}body.look-dark .m-snd .chip.sel,body.look-dark .pr-steps span.now{color:#2A2346}
+body.look-dark .kp-k.ok{background:#1E8A4F}
+body.look-dark #aqLv{color:var(--sun)}
+body.look-dark .trn .trn-c,body.look-dark .trn .trn-w{background:#2E3866}
+body.look-dark .ico-letters .L.c{color:#8CC0FF}body.look-dark .ico-letters .L.v{color:#FF8F8A}
+body.look-dark .syl-ico i{color:#2A2346}
+body.look-dark .lg-t small{color:#C3C9EA}
+body.look-dark .pr-l.v small{color:#FF8F8A}body.look-dark .pr-l.c small{color:#8CC0FF}
+body.look-dark .win-main .big.share{background:#2F6FD6;box-shadow:0 5px 0 #1D4C9E}
+/* LOOK-DARK-CSS-END */
 </style>
 
 <div id="app"></div>
@@ -11973,9 +12009,9 @@ function lookCur() {
   try { f = fam(); } catch (e) {}
   return p || (f && f.look) || 'calm';
 }
-function lookApply() { try { document.body.classList.toggle('look-calm', lookCur() !== 'bright'); } catch (e) {} }
+function lookApply() { try { const k = lookCur(); document.body.classList.toggle('look-calm', k !== 'bright'); document.body.classList.toggle('look-dark', k === 'dark'); } catch (e) {} }
 function lookHTML(sel, id = 'lookPick') {
-  return `<div class="lk-pick" id="${id}" role="radiogroup">${[['bright', 'Ярко'], ['calm', 'Спокойно']].map(([k, n]) => `<button class="lk-c ${sel === k ? 'sel' : ''}" data-look="${k}" role="radio" aria-checked="${sel === k}"><span class="lk-mini lk-${k}"><i></i><i></i><i></i><i></i></span><b>${n}</b></button>`).join('')}</div>`;
+  return `<div class="lk-pick" id="${id}" role="radiogroup">${[['bright', 'Ярко'], ['calm', 'Спокойно'], ['dark', 'Тёмная']].map(([k, n]) => `<button class="lk-c ${sel === k ? 'sel' : ''}" data-look="${k}" role="radio" aria-checked="${sel === k}"><span class="lk-mini lk-${k}"><i></i><i></i><i></i><i></i></span><b>${n}</b></button>`).join('')}</div>`;
 }
 function lookBind(box, set) {
   if (!box) return;
@@ -22214,7 +22250,7 @@ const SETUI = (() => {
     if (S.prog) list([row($('#expBtn'), '📤', 'Скопировать прогресс'), row($('#impBtn'), '📥', 'Вставить прогресс')]);
     if ($('#resetBtn')) list([row($('#resetBtn'), '🗑️', 'Начать заново', '', true)]);
 
-    if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид: ярко или спокойно</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
+    if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид игры</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
       ['fam', '👪', 'Семья', '', [S.fam]],
