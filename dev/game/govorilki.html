@@ -2459,6 +2459,29 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .ol-hint{margin:0;padding:10px 14px;border-radius:14px;background:rgba(255,200,58,.18);font:700 16px/1.4 var(--f-body)}
 .ol-why{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .ol-why p{margin:0;font:700 17px/1.45 var(--f-body)}
+.ol-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 8px}
+.ol-top .ol-lv{order:-1;flex-basis:100%}
+.ol-lv{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.ol-lv b{font:900 16px var(--f-body);white-space:nowrap}.ol-lv small{font:700 13px var(--f-body);color:var(--ink-soft)}
+.ol-hard{align-self:center;padding:6px 14px;border-radius:99px;background:linear-gradient(90deg,#FFC83A,#FF8A2A);color:#2A2346;font:900 15px var(--f-body);box-shadow:0 3px 0 #D9640C}
+.ol-dayb{background:linear-gradient(90deg,#FFE27A,#FFC83A)}
+#olBox{display:flex;flex-direction:column;gap:12px}
+.ol-pic{align-self:center;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:100%;font:800 34px/1.25 var(--f-body);text-align:center;letter-spacing:2px}
+.ol-svg{display:block;max-width:100%;height:auto}
+.ol-die{width:54px;height:54px}
+.ol-grid{display:grid;grid-template-columns:repeat(var(--c),minmax(0,52px));gap:4px;padding:6px;border-radius:14px;background:var(--line)}
+.ol-grid span{aspect-ratio:1;display:grid;place-items:center;border-radius:9px;background:var(--paper);font-size:28px}
+.ol-grid span.w{background:#5B4A3A}
+.ol-opts.ol-n2,.ol-opts.ol-n3{grid-template-columns:repeat(var(--n,2),1fr)}.ol-opts.ol-n3{--n:3}
+.ol-opts.ol-big .ol-o{justify-content:center;font-size:30px;min-height:70px;text-align:center}
+.ol-o{justify-content:center;text-align:center;min-height:54px}
+.ol-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ol-in{align-self:center}
+.ol-why{background:var(--paper);border-radius:18px;padding:14px 16px;box-shadow:0 4px 0 var(--line)}
+.ol-why h3{margin:0;font:900 18px var(--f-body)}
+.ol-why ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;font:700 17px/1.45 var(--f-body)}
+.ol-badge{margin:0;font:900 18px var(--f-body);color:var(--tiger-deep)}
+.ol-why .big{align-self:stretch}
 @media (prefers-reduced-motion:reduce){.chest.ready{animation:none}}
 .said-card{position:fixed;z-index:44;left:0;right:0;margin-inline:auto;width:max-content;max-width:calc(100% - 32px);bottom:calc(env(safe-area-inset-bottom,0px) + var(--guide-h,96px) + 88px);display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 8px 24px rgba(42,35,70,.25);text-align:center;animation:popin .3s both}
 .said-card small{font:800 13px var(--f-body);color:var(--ink-soft)}
@@ -3326,6 +3349,100 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .aq .pick-b.no,.aq .aq-th.no{opacity:.4}
 #aqLv{color:var(--tiger-deep);letter-spacing:.02em}
 /* FUN-CSS-END */
+/* CALM-CSS: the calm look (testers: «перегружено, радужная палитра отвлекает»). One design system on top of the
+   older rules: a soft neutral background, ONE accent (the friend's orange), one success green, one warning yellow;
+   the pastel tints come from a small muted set, and the home tiles take one tint per tab instead of a rainbow;
+   flat cards with a soft shadow instead of chunky 3D slabs; one type scale. The night theme of the older child
+   (body.quest) gets the same rules with its own values. Everything sits under body.look-calm: the family chooses
+   «Ярко» (the old bright look, no class) or «Спокойно» (LOOK below; the default). */
+body.look-calm{
+  --bg:#F6F3EE; --surface:#FFFFFF; --accent:var(--tiger); --accent-deep:var(--tiger-deep); --ok:#2FA865; --warn:#F2B630;
+  --sky:#F6F3EE; --ink-soft:#6B6585;
+  --t-blue:#E6EDF8; --t-green:#E6F1E2; --t-peach:#FBECE0; --t-lilac:#EEE9F7; --t-pink:#F8E8EC; --t-yellow:#FAF1D9; --t-mint:#E1F1EA;
+  --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
+  --sh-1:0 1px 2px rgba(42,35,70,.06),0 3px 10px rgba(42,35,70,.06); --sh-2:0 2px 4px rgba(42,35,70,.07),0 8px 22px rgba(42,35,70,.08);
+  --r-card:22px; --r-chip:999px;
+  --fs-h1:26px; --fs-h2:22px; --fs-title:18px; --fs-body:16px; --fs-small:13px;
+  --line-strong:rgba(42,35,70,.11);
+}
+body.look-calm .pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
+body.look-calm.quest{--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#A8B0D8;
+  --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
+  --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
+  --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
+/* the background: calm and plain (no clouds by day; the night sky keeps its few stars) */
+body.look-calm:not(.quest){background-color:var(--bg);background-image:none}
+body.look-calm.quest{background-color:var(--bg)}
+body.look-calm .logo .lt:nth-child(n){color:var(--ink);transform:none}
+/* one tint per tab on the home tiles */
+body.look-calm .home-t[data-tab="speak"]{--tint:var(--tint-speak)}body.look-calm .home-t[data-tab="learn"]{--tint:var(--tint-learn)}
+body.look-calm .home-t[data-tab="create"]{--tint:var(--tint-create)}body.look-calm .home-t[data-tab="discover"]{--tint:var(--tint-discover)}
+body.look-calm .home-t{--tint:var(--surface)}
+body.look-calm .home-t .tile,body.look-calm .home-t .mini{background:var(--tint)}
+/* tiles: a clear picture and a short name; the second line small and on one line */
+body.look-calm .tile{min-height:156px;border-radius:var(--r-card);padding:14px;gap:6px;box-shadow:var(--sh-1)}
+body.look-calm .tile:active,body.look-calm .mini:active,body.look-calm .card:active,body.look-calm .chip:active,body.look-calm .ibtn:active,body.look-calm .disc:active,body.look-calm .at-card:active{transform:scale(.97);box-shadow:var(--sh-1)}
+body.look-calm .tile b{font:700 var(--fs-title)/1.15 var(--f-display)}
+body.look-calm .tile small{font:700 var(--fs-small)/1.3 var(--f-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+body.look-calm .tile .prog{font-size:var(--fs-small)}
+body.look-calm.quest .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
+body.look-calm .tile.tl-armed{box-shadow:0 0 0 4px var(--warn),var(--sh-1)}
+body.look-calm .mini,body.look-calm .card{box-shadow:var(--sh-1)}
+/* cards, chips and round buttons: flat, a soft shadow */
+body.look-calm .chip,body.look-calm .kid,body.look-calm .ibtn,body.look-calm .starpill,body.look-calm .disc,body.look-calm .at-card,body.look-calm .hol-card,body.look-calm .hol-card.soon,body.look-calm .hm-more,body.look-calm .qcard,body.look-calm .rank,body.look-calm .ld-tab,body.look-calm .ld-pts li,body.look-calm .ld-steps li,body.look-calm .af-house,body.look-calm .today,body.look-calm .today.is-done{box-shadow:var(--sh-1)}
+body.look-calm .chip,body.look-calm .kid{background:var(--surface)}
+body.look-calm .kid.sel{background:var(--t-peach);box-shadow:0 0 0 2px var(--accent),var(--sh-1)}
+body.look-calm .bubble{box-shadow:var(--sh-1)}
+body.look-calm .sec-nav{background:rgba(246,243,238,.94)}
+body.look-calm .sec-nav .chip{box-shadow:none;background:var(--surface);border:1px solid var(--line)}
+body.look-calm.quest .sec-nav{background:rgba(20,26,49,.94)}
+body.look-calm .surp{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+body.look-calm .surp .surp-q{background:var(--accent);color:#fff}
+body.look-calm .rf-card,body.look-calm .rf-card.soft{background:var(--surface);border:0;border-left:6px solid var(--warn);box-shadow:var(--sh-1)}
+body.look-calm.quest .rf-card,body.look-calm.quest .rf-card.soft{background:var(--surface);border-color:var(--warn)}
+/* one type scale */
+body.look-calm .group-head h2,body.look-calm .today h2{font:700 var(--fs-h2)/1.15 var(--f-display)}
+body.look-calm .group-head p{font:700 14px/1.3 var(--f-body)}
+body.look-calm.young .group-head p{display:none}
+body.look-calm .tab-head h1{font:900 var(--fs-h1)/1.1 var(--f-display,var(--f-body))}
+body.look-calm .bar h1{font:700 clamp(20px,4.2vw,26px)/1.1 var(--f-display)}
+body.look-calm .group{gap:10px}
+body.look-calm .stage.scroll{gap:20px}
+/* the bottom tabs: one quiet selection */
+body.look-calm .tabbar{box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(30,26,46,.06)}
+body.look-calm .tb.sel{background:var(--t-peach);color:var(--ink)}body.look-calm .tb.sel .emo{transform:none}
+body.look-calm.quest .tb.sel{background:#2E3866}
+@media (min-width:900px){body.look-calm .home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.look-calm.quest .home-t .tb.sel{background:#2E3866}}
+/* «Сегодня»: the path is the one big thing; the child's own things are small chips under it */
+body.look-calm .pd-lb,body.look-calm .pd-bub{box-shadow:var(--sh-1)}
+body.look-calm .pd-n.now .pd-lb{box-shadow:0 4px 0 var(--accent-deep)}
+body.look-calm .pd-mine{gap:8px}
+body.look-calm .pd-mine .chip{min-height:44px;padding:6px 14px 6px 8px;font-size:15px;box-shadow:none;border:1px solid var(--line)}
+body.look-calm .pd-mine .chip .emo{font-size:22px}
+body.look-calm .pd-card{box-shadow:var(--sh-1)!important}
+/* the game frame: the same header, the friend at the bottom, one main button */
+body.look-calm .big{box-shadow:0 5px 0 var(--accent-deep)}
+body.look-calm .big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-deep)}
+body.look-calm .big.danger{box-shadow:0 5px 0 #B8305A}
+body.look-calm .big.ghost,body.look-calm .big.ghost.danger{background:var(--surface);box-shadow:var(--sh-1),inset 0 0 0 2px var(--line)}
+body.look-calm .big.ghost:active{transform:scale(.97)}
+body.look-calm .winbox{border-radius:28px;box-shadow:var(--sh-2)}
+/* CALM-CSS-END */
+/* LOOK-CSS: the «Ярко / Спокойно» picker with a tiny picture of each look */
+.lk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:460px;margin-inline:auto}
+.lk-c{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 10px 12px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 0 0 2px var(--line),0 3px 10px rgba(42,35,70,.08);font:inherit}
+.lk-c b{font:800 19px/1.1 var(--f-body)}
+.lk-c.sel{box-shadow:0 0 0 4px var(--tiger),0 3px 10px rgba(42,35,70,.08)}
+.lk-c:active{transform:scale(.97)}
+.lk-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;aspect-ratio:4/3;padding:10px;border-radius:14px}
+.lk-mini i{border-radius:9px}
+.lk-bright{background:#CDEEF6 radial-gradient(ellipse 40% 18% at 22% 12%,#fff 70%,transparent 72%)}
+.lk-bright i{box-shadow:0 4px 0 rgba(42,35,70,.22)}
+.lk-bright i:nth-child(1){background:#FFE6CC}.lk-bright i:nth-child(2){background:#DCEDFF}.lk-bright i:nth-child(3){background:#E3F5D0}.lk-bright i:nth-child(4){background:#FFE0E8}
+.lk-calm{background:#EFE9E0}
+.lk-calm i{background:#F7DCC8;box-shadow:0 1px 3px rgba(42,35,70,.12)}
+.lk-ob .lk-pick{margin-block:6px 10px}
+/* LOOK-CSS-END */
 </style>
 
 <div id="app"></div>
@@ -3528,16 +3645,20 @@ const LESSONS_R = {
   speech: { name: 'Логопед', sub: 'дыхание, язычок, Р и шипящие', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Чтение', sub: 'буквы, слоги, слова', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   math: { name: 'Математика', sub: 'считаем и складываем', mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' },
+  puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
   soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LESSONS_L = {
   speech: { name: 'Тренировка Л', sub: 'разогрев, язык, арена Л', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Скорочтение', sub: 'слоги и текст на время', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   book: { name: 'Книга', sub: 'немного каждый день, с удовольствием', mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
+  puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
   soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LS = () => {
-  const b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  // a short day for the little ones (4–5): «Счёты» every day takes the place of «Задачка дня»
+  if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3556,7 +3677,7 @@ function todayState() {
     P.today = { date: k, v: 2, done: { speech: [], read: [], math: [] } };
     if (old && old.date === k && Array.isArray(old.done) && !dayTotal(k)) P.today.done.speech = old.done;
   }
-  ['speech', 'read', 'math', 'book', 'soro'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
+  ['speech', 'read', 'math', 'book', 'puzzle', 'soro'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
   return P.today;
 }
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
@@ -3565,6 +3686,7 @@ function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
   // «Счёты» every day, for every age: one short round at the child's level (soroban)
   if (id === 'soro') return [{ key: 'soroban', kind: 'math', name: 'Счёты', run: () => SB.daily() }];
+  if (id === 'puzzle') return [gameStep('olymp-day', 'puzzle')];
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
@@ -4280,6 +4402,7 @@ function newScreen() {
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
+  lookApply();
   return tok;
 }
 function later(fn, ms) { const t = tok; timers.push(setTimeout(() => { if (t === tok) fn(); }, ms)); }
@@ -4756,7 +4879,7 @@ function goHome() {
   const RF = readFineCheck();
   navHome();
   setTimeout(() => statPing(), 4000);
-  document.body.classList.toggle('quest', Q());
+  document.body.classList.toggle('quest', Q()); lookApply();
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
@@ -4820,7 +4943,7 @@ function goHome() {
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || '<p class="lead">Здесь пока пусто. Игры включаются в «Для взрослых» → «Интересы и игры».</p>'}`;
   }
-  app.innerHTML = `<div class="screen home-t">
+  app.innerHTML = `<div class="screen home-t" data-tab="${tab}">
    <main class="stage scroll" id="stage">
     ${GUEST ? `<button class="g-back" id="guestTop">${GRAND[GUEST.who].e} ← Мой вход: внуки, похвала, шахматы</button>` : ''}
     ${kidsBar()}
@@ -9187,7 +9310,7 @@ const placeOn = k => famPlaces().includes(k);
 /* ---------- the new tiles on the home screen ---------- */
 const LEARN_SUB = { phys: 'качели, горка, мяч, батут — почему так', spb: 'история города для детей', pt: 'Кашкайш, Синтра, Лиссабон', music: 'Чайковский, Моцарт, Вивальди…', art: 'Айвазовский, Шишкин, Ван Гог…', old: 'пирамиды, рыцари, викинги — и что было раньше' };
 GAMES.push(
-  { id: 'olymp', name: 'Олимпиада', sub: 'хитрые задачи: логика, числа, шахматы', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, prog: () => P.olymp ? `решено ${P.olymp.solved.length}/${OLYMP.length}` : '' },
+  { id: 'olymp', name: 'Олимпиада', sub: 'хитрые задачи по силам: логика, варианты, роботы, спички', kw: 'олимпиада логика задачи вероятность комбинаторика алгоритмы спички', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: () => screenOlymp(), grp: 8, also: [3], prog: () => OLY.lvTxt() },
   { id: 'flash', name: 'Флеш-счёт', sub: 'ментальная арифметика', ico: () => pic('⚡'), bg: 'var(--t-yellow)', go: () => screenFlash(), grp: 8, prog: () => `уровень ${P.flashLv || 1}` },
   { id: 'dots', name: 'Точки по порядку', sub: 'соедини и узнай, что получится', ico: () => pic('🔢'), bg: 'var(--t-green)', go: () => screenDots(), grp: 4 },
   { id: 'chess-online', name: 'Шахматы онлайн', sub: 'партия с родными', ico: () => pic('👵'), bg: 'var(--t-mint)', go: () => ROOT.curFam === 'gk' && GUEST ? (GUEST_OFF = false, screenGuest()) : screenFamChess(), grp: 8,
@@ -9899,6 +10022,195 @@ const OLYMP = [
   { id: 'o79', cat: 'Комбинаторика', lvl: 3, q: 'Сколько существует трёхзначных чисел, у которых сумма цифр равна 3?', opts: ['2', '3', '4', '5', '6'], a: 4, hint: 'Первая цифра может быть только 1, 2 или 3. Перебери все варианты.', why: '102, 111, 120, 201, 210 и 300 — шесть чисел.' },
   { id: 'o80', cat: 'Числа', lvl: 3, q: 'Сава задумал двузначное число с суммой цифр 7. Если поменять его цифры местами, число станет больше на 27. Какое число задумал Сава?', opts: ['16', '25', '34', '43', '52'], a: 1, hint: 'Проверь каждый ответ: поменяй цифры местами и найди разницу.', why: '25 → 52, и 52 − 25 = 27. У других не так: 61 − 16 = 45, 43 − 34 = 9, а 43 и 52 после перестановки уменьшаются.' }
 ];
+/* OLYMIX-BEGIN */
+/* ---------- «Олимпиада» by skill (the owner: «сделать микс из всех этих задачек… немножко сложно и страшно, но именно
+   такая сложность, которая мотивирует»): eight levels from a 4-year-old (pictures, two answers) to 11–12 (olympiad).
+   Kinds: logic, sequences, how many ways, chance, algorithms (a robot on a grid), weighing, matchsticks, working
+   backwards, legs and ears, cubes and folding, trick questions. Every problem: a picture where it helps, answers (or the
+   keypad, kp), hint 1, hint 2 and the explanation in steps. All texts are our own. The old 80 problems (o1…o80) join
+   at levels 5–8. Pictures: '#robot:rows' (R robot, * star, # wall, a–d the items of `it`), '#cubes:h,h/h,h' (stacks,
+   back row first), '#sticks:RxC' (a grid of matchstick squares), '#match:9+2=8' (matchstick digits), '#dice:3,5',
+   anything else is shown as it is (emoji). ---------- */
+const OLYMP_NEW = [
+  // level 1 — 4 years: pictures, two answers
+  { id: 'k1', lv: 1, cat: 'Логика', p: '🐘 🐭', q: 'Кто тяжелее: слон или мышка?', o: ['🐘', '🐭'], a: 0, h1: 'Подумай, кого легче поднять.', h2: 'Мышка помещается на ладошке, а слон больше машины.', w: ['Слон огромный, а мышка крошечная.', 'Значит, тяжелее слон.'] },
+  { id: 'k2', lv: 1, cat: 'Ряды', p: '🍎 🍐 🍎 🍐 🍎 ❓', q: 'Что будет дальше?', o: ['🍐', '🍎'], a: 0, h1: 'Фрукты идут по очереди.', h2: 'Посмотри, что идёт сразу после яблока.', w: ['Яблоко, груша, яблоко, груша — они идут по очереди.', 'Последним было яблоко, значит, дальше груша.'] },
+  { id: 'k3', lv: 1, cat: 'Ноги и уши', p: '🐔', q: 'Сколько ног у курочки?', o: ['2', '4'], a: 0, h1: 'Курочка — птица.', h2: 'Встань, как курочка. На скольких ногах ты стоишь?', w: ['Курочка — птица.', 'У птиц две ноги.'] },
+  { id: 'k4', lv: 1, cat: 'Ноги и уши', p: '🐶', q: 'Сколько лап у щенка?', o: ['4', '2'], a: 0, h1: 'Щенок бегает на всех лапах сразу.', h2: 'Две лапы спереди и ещё сзади.', w: ['У щенка две лапы спереди и две сзади.', 'Два и два — четыре.'] },
+  { id: 'k5', lv: 1, cat: 'С подвохом', p: '🍎 🍎 🍎', q: 'Было 3 яблока. Одно яблоко съели. Сколько яблок съели?', o: ['1', '2'], a: 0, h1: 'Слушай внимательно: спрашивают, сколько съели, а не сколько осталось.', h2: 'В задаче прямо сказано, сколько яблок съели.', w: ['Хитрость в вопросе: спрашивают, сколько съели.', 'Съели одно яблоко.'] },
+  { id: 'k6', lv: 1, cat: 'Ряды', p: '🔴 🔵 🔵 🔴 🔵 🔵 🔴 ❓', q: 'Какой шарик дальше?', o: ['🔵', '🔴'], a: 0, h1: 'Посмотри, что идёт после красного шарика.', h2: 'После красного всегда два синих.', w: ['Шарики идут так: красный, синий, синий.', 'После красного — синий.'] },
+  { id: 'k7', lv: 1, cat: 'Логика', p: '🐱 🐶 🐰', q: 'Зайка стоит последним. Кто стоит в середине?', o: ['🐶', '🐱'], a: 0, h1: 'Середина — это между первым и последним.', h2: 'Котик первый, зайка последний. А кто между ними?', w: ['Первым стоит котик, последним — зайка.', 'Между ними, в середине, — щенок.'] },
+  { id: 'k8', lv: 1, cat: 'Сколько вариантов', p: '🧢 👒 ➕ 👕', q: 'Есть две шапки и одна футболка. Сколько разных нарядов можно собрать?', o: ['2', '1'], a: 0, h1: 'Футболка одна, а шапок две.', h2: 'Надень футболку с первой шапкой, а потом со второй.', w: ['Футболка с кепкой — один наряд.', 'Футболка со шляпкой — второй наряд.', 'Всего два наряда.'] },
+  { id: 'k9', lv: 1, cat: 'Вероятность', p: '🔴 🔴 🔴 🔴 🔵', q: 'В мешке 4 красных шарика и 1 синий. Какой шарик скорее всего достанешь, если не смотреть?', o: ['🔴', '🔵'], a: 0, h1: 'Каких шариков в мешке больше?', h2: 'Красных четыре, а синий только один.', w: ['Красных шариков намного больше, чем синих.', 'Поэтому скорее всего попадётся красный.'] },
+  { id: 'k10', lv: 1, cat: 'Алгоритмы', p: '#robot:Rab', it: ['🍎', '🍌'], q: 'Робот сделал два шага вправо: ➡️ ➡️. Что он нашёл?', o: ['🍌', '🍎'], a: 0, h1: 'Шагай пальчиком вместе с роботом.', h2: 'Первый шаг — к яблоку, второй — ещё дальше.', w: ['Первый шаг — робот у яблока.', 'Второй шаг — робот у банана.'] },
+  { id: 'k11', lv: 1, cat: 'С конца', p: '🍬 🍬', q: 'Мишка съел одну конфету, и у него осталось две. Сколько конфет было сначала?', o: ['3', '1'], a: 0, h1: 'Верни съеденную конфету обратно.', h2: 'Две конфеты остались и ещё одна съеденная.', w: ['Осталось две конфеты.', 'Добавим ту, что Мишка съел: два и один — три.'] },
+  { id: 'k12', lv: 1, cat: 'Кубики', p: '#cubes:3', q: 'Сколько кубиков в башне?', o: ['3', '2'], a: 0, h1: 'Посчитай кубики снизу вверх.', h2: 'Нижний, средний и верхний.', w: ['Нижний — один, средний — два, верхний — три.', 'В башне три кубика.'] },
+  { id: 'k13', lv: 1, cat: 'Ноги и уши', p: '🐔 🐔', q: 'Сколько ног у двух курочек?', o: ['4', '2'], a: 0, h1: 'У каждой курочки по две ноги.', h2: 'Посчитай ноги сначала у одной курочки, потом у другой.', w: ['У одной курочки две ноги.', 'У двух курочек: два и два — четыре.'] },
+  { id: 'k14', lv: 1, cat: 'Логика', p: '🦒 🐘', q: 'Жираф выше слона. Кто ниже?', o: ['🐘', '🦒'], a: 0, h1: 'Если жираф выше, то второй — ниже.', h2: 'Ниже тот, кто не выше.', w: ['Жираф выше слона.', 'Значит, слон ниже жирафа.'] },
+  { id: 'k15', lv: 1, cat: 'Ряды', p: '1 2 3 4 ❓', q: 'Какое число дальше?', o: ['5', '6'], a: 0, h1: 'Считай по порядку.', h2: 'Один, два, три, четыре, а дальше?', w: ['Числа идут по порядку: каждое на один больше.', 'После четырёх идёт пять.'] },
+  { id: 'k16', lv: 1, cat: 'Взвешивания', p: '🍉 ⚖️ 🍒', q: 'На весах арбуз перевесил вишенку. Что легче?', o: ['🍒', '🍉'], a: 0, h1: 'Перевесил — значит, оказался тяжелее.', h2: 'Чаша с лёгким поднимается вверх.', w: ['Арбуз перевесил, значит, он тяжелее.', 'Вишенка легче.'] },
+  { id: 'k17', lv: 1, cat: 'Ноги и уши', p: '🐰 🐰', q: 'Сколько ушей у двух зайчиков?', o: ['4', '2'], a: 0, h1: 'У зайчика два длинных уха.', h2: 'Два уха у одного и два у другого.', w: ['У каждого зайчика по два уха.', 'Два и два — четыре.'] },
+  { id: 'k18', lv: 1, cat: 'Спички', p: '#sticks:1x1', q: 'Сколько палочек в квадрате?', o: ['4', '3'], a: 0, h1: 'Посчитай стороны квадрата.', h2: 'Сверху, снизу, слева и справа.', w: ['У квадрата четыре стороны.', 'Каждая сторона — одна палочка, значит, их четыре.'] },
+  { id: 'k19', lv: 1, cat: 'Спички', p: '🔺', q: 'Сколько палочек нужно, чтобы сложить треугольник?', o: ['3', '4'], a: 0, h1: 'Сколько углов у треугольника? Столько и сторон.', h2: 'Треугольник — «три угла».', w: ['У треугольника три стороны.', 'Значит, нужно три палочки.'] },
+  { id: 'k20', lv: 1, cat: 'Логика', p: '🍳 🍝', q: 'Что бывает раньше: завтрак или ужин?', o: ['🍳', '🍝'], a: 0, h1: 'Завтракают утром.', h2: 'А ужинают вечером, перед сном.', w: ['Завтрак бывает утром, а ужин — вечером.', 'Утро раньше вечера, значит, раньше завтрак.'] },
+  { id: 'k21', lv: 1, cat: 'Сколько вариантов', p: '🍦 🍰', q: 'Зайка выбирает одно лакомство: мороженое или торт. Сколько у него вариантов?', o: ['2', '1'], a: 0, h1: 'Посчитай лакомства на картинке.', h2: 'Можно выбрать мороженое, а можно торт.', w: ['Первый вариант — мороженое.', 'Второй вариант — торт.', 'Всего два варианта.'] },
+  { id: 'k22', lv: 1, cat: 'Алгоритмы', p: '#robot:a|b|R', it: ['🍓', '🥕'], q: 'Робот сделал один шаг вверх: ⬆️. Что он нашёл?', o: ['🥕', '🍓'], a: 0, h1: 'Шагни пальчиком на одну клетку вверх.', h2: 'Прямо над роботом — морковка.', w: ['Робот стоит внизу.', 'Один шаг вверх — и он у морковки.'] },
+  { id: 'k23', lv: 1, cat: 'С подвохом', p: '🌳 🐦 🐦', q: 'На дереве сидели 2 птички. Одна запела. Сколько птичек на дереве?', o: ['2', '1'], a: 0, h1: 'Птичка запела, но не улетела.', h2: 'От песни птичек не становится меньше.', w: ['Птичка только запела — никто не улетел.', 'На дереве всё так же две птички.'] },
+
+  // level 2 — 5 years: three answers
+  { id: 'm1', lv: 2, cat: 'Ряды', p: '🔺 🟦 🟦 🔺 🟦 🟦 ❓', q: 'Что дальше?', o: ['🔺', '🟦', '🟢'], a: 0, h1: 'Найди, какой кусочек повторяется.', h2: 'Треугольник, квадрат, квадрат — и снова сначала.', w: ['Повторяется: треугольник, квадрат, квадрат.', 'Два квадрата уже были, значит, дальше треугольник.'] },
+  { id: 'm2', lv: 2, cat: 'Ноги и уши', p: '🐶 🐔', q: 'Сколько ног у щенка и курочки вместе?', o: ['6', '4', '8'], a: 0, h1: 'У щенка четыре лапы.', h2: 'А у курочки две ноги. Сложи.', w: ['У щенка 4 лапы, у курочки 2 ноги.', 'Четыре и два — шесть.'] },
+  { id: 'm3', lv: 2, cat: 'Логика', p: '🦒 🐴 🐕', q: 'Жираф выше лошади, а лошадь выше собаки. Кто самый низкий?', o: ['🐕', '🐴', '🦒'], a: 0, h1: 'Расставь их по росту.', h2: 'Лошадь выше собаки, а жираф выше всех.', w: ['Жираф выше лошади, лошадь выше собаки.', 'Значит, самая низкая — собака.'] },
+  { id: 'm4', lv: 2, cat: 'С подвохом', p: '🪶 ⚖️ 🔩', q: 'Что тяжелее: килограмм пёрышек или килограмм гвоздей?', o: ['Одинаково', 'Гвозди', 'Пёрышки'], a: 0, h1: 'Посмотри, сколько весит каждое.', h2: 'Килограмм — это всегда килограмм.', w: ['И там, и там по одному килограмму.', 'Перьев просто намного больше по размеру, а весят они одинаково.'] },
+  { id: 'm5', lv: 2, cat: 'Сколько вариантов', p: '👕 👚 ➕ 👖 🩳', q: 'У Мишки 2 футболки и 2 пары штанишек. Сколько разных нарядов он может надеть?', o: ['4', '2', '3'], a: 0, h1: 'С первой футболкой можно надеть любые штанишки.', h2: 'С каждой футболкой — два наряда.', w: ['Первая футболка: с брюками и с шортами — два наряда.', 'Вторая футболка — ещё два.', 'Всего четыре наряда.'] },
+  { id: 'm6', lv: 2, cat: 'Вероятность', p: '🔴 🔴 🔵 🔵 🔵 🔵 🔵', q: 'В мешке 2 красных и 5 синих шариков. Какого цвета шарик скорее всего вытащишь?', o: ['🔵', '🔴', 'Одинаково'], a: 0, h1: 'Каких шариков больше?', h2: 'Синих пять, а красных только два.', w: ['Синих шариков больше, чем красных.', 'Значит, скорее всего попадётся синий.'] },
+  { id: 'm7', lv: 2, cat: 'Алгоритмы', p: '#robot:b.c|...|R.a', it: ['🍎', '🍌', '🍒'], q: 'Робот выполняет команды: ➡️ ➡️ ⬆️ ⬆️. Где он окажется?', o: ['🍒', '🍎', '🍌'], a: 0, h1: 'Выполняй команды по одной, пальчиком.', h2: 'Два шага вправо — робот у яблока. Теперь два шага вверх.', w: ['Два шага вправо — робот у яблока.', 'Два шага вверх — робот у вишенки.'] },
+  { id: 'm8', lv: 2, cat: 'С конца', p: '🐿️ 🌰', q: 'Белка нашла 3 ореха, и у неё стало 5. Сколько орехов было сначала?', o: ['2', '8', '3'], a: 0, h1: 'Убери найденные орехи.', h2: 'Из пяти убери три.', w: ['Стало пять, из них три новые.', 'Пять без трёх — два. Было два ореха.'] },
+  { id: 'm9', lv: 2, cat: 'Кубики', p: '#cubes:2,1', q: 'Сколько кубиков на картинке?', o: ['3', '2', '4'], a: 0, h1: 'Посчитай каждую башенку отдельно.', h2: 'В высокой башенке два кубика.', w: ['В высокой башенке два кубика, в низкой — один.', 'Два и один — три.'] },
+  { id: 'm10', lv: 2, cat: 'Спички', p: '#sticks:1x2', q: 'Сколько палочек в этой фигуре из двух квадратиков?', o: ['7', '8', '6'], a: 0, h1: 'Средняя палочка общая для двух квадратиков.', h2: 'Посчитай: сверху две, снизу две, а ещё стоячие.', w: ['Сверху две палочки, снизу две.', 'Стоячих три: слева, в середине и справа.', 'Всего семь — средняя палочка служит обоим квадратикам.'] },
+  { id: 'm11', lv: 2, cat: 'Ряды', p: '2 4 6 8 ❓', q: 'Какое число дальше?', o: ['10', '9', '12'], a: 0, h1: 'Насколько каждое число больше предыдущего?', h2: 'Числа растут через одно: прибавляй по два.', w: ['Каждое число на два больше предыдущего.', 'Восемь и два — десять.'] },
+  { id: 'm12', lv: 2, cat: 'Логика', p: '🐶 ❓ ❓', q: 'Кот сидит между собакой и мышкой. Собака слева. Кто сидит справа?', o: ['🐭', '🐱', '🐶'], a: 0, h1: 'Кот в середине.', h2: 'Собака слева, кот посередине. Кто остался?', w: ['Кот между двумя, значит, в середине.', 'Слева собака, а справа — мышка.'] },
+  { id: 'm13', lv: 2, cat: 'Ноги и уши', p: '🐱 🐱 🐱', q: 'Сколько ушей у трёх котят?', o: ['6', '3', '9'], a: 0, h1: 'У каждого котёнка два уха.', h2: 'Два, ещё два и ещё два.', w: ['У каждого котёнка по два уха.', 'Два, четыре, шесть — шесть ушей.'] },
+  { id: 'm14', lv: 2, cat: 'С подвохом', p: '🐓 🏠', q: 'Петух снёс яйцо на самой верхушке крыши. В какую сторону оно покатится?', o: ['Петухи не несут яиц', 'Влево', 'Вправо'], a: 0, h1: 'А кто вообще несёт яйца?', h2: 'Яйца несут курицы, а петух — папа цыплят.', w: ['Яйца несёт курица.', 'Петух яиц не несёт, так что катиться нечему.'] },
+  { id: 'm15', lv: 2, cat: 'Взвешивания', p: '🍎 🍎 ⚖️ 🍐', q: 'Два яблока весят столько же, сколько одна груша. Сколько яблок весят столько же, сколько две груши?', o: ['4', '3', '2'], a: 0, h1: 'Вместо каждой груши положи два яблока.', h2: 'Одна груша — два яблока. А две груши?', w: ['Одна груша весит как два яблока.', 'Две груши — как два и два, то есть четыре яблока.'] },
+  { id: 'm16', lv: 2, cat: 'Вероятность', p: '🟢 🟢 🟢 🟢', q: 'В коробке лежат только зелёные карандаши. Какой карандаш ты достанешь, если не смотреть?', o: ['Точно зелёный', 'Может, красный', 'Может, синий'], a: 0, h1: 'Какие карандаши есть в коробке?', h2: 'Других, кроме зелёных, там нет.', w: ['В коробке только зелёные карандаши.', 'Значит, достанешь точно зелёный.'] },
+  { id: 'm17', lv: 2, cat: 'Сколько вариантов', p: '🔴 🔵', q: 'Есть красный и синий шарик. Сколькими способами их можно повесить в ряд?', o: ['2', '1', '3'], a: 0, h1: 'Какой шарик может быть первым?', h2: 'Первым может быть красный, а может — синий.', w: ['Красный, потом синий — первый способ.', 'Синий, потом красный — второй способ.'] },
+  { id: 'm18', lv: 2, cat: 'Алгоритмы', p: '🍽️ 🧽 🗄️', q: 'Робот моет посуду: берёт тарелку, моет её, ставит на полку. Что он делает сразу после того, как помоет?', o: ['Ставит на полку', 'Берёт тарелку', 'Спит'], a: 0, h1: 'Повтори шаги робота по порядку.', h2: 'Берёт, моет, а потом?', w: ['Порядок такой: взять, помыть, поставить.', 'После «помыть» — «поставить на полку».'] },
+  { id: 'm19', lv: 2, cat: 'С подвохом', p: '🍓 🍓 🍓 ➖ 🍉 🍉', q: 'Где ягод и фруктов меньше: в ряду клубник или в ряду арбузов?', o: ['🍉', '🍓', 'Поровну'], a: 0, h1: 'Считай штуки, а не размер.', h2: 'Клубник три, а арбузов?', w: ['Клубник три, арбузов два.', 'Арбузы большие, но их меньше.'] },
+  { id: 'm20', lv: 2, cat: 'Ноги и уши', p: '🕷️', q: 'Сколько ног у паучка?', o: ['8', '6', '4'], a: 0, h1: 'У паука больше ног, чем у жука.', h2: 'По четыре ноги с каждой стороны.', w: ['У паука по четыре ноги с каждой стороны.', 'Четыре и четыре — восемь.'] },
+  { id: 'm21', lv: 2, cat: 'С конца', p: '🐰 🥕', q: 'Зайка отдал 2 морковки другу, и у него осталось 4. Сколько морковок было сначала?', o: ['6', '2', '4'], a: 0, h1: 'Верни отданные морковки.', h2: 'Четыре и ещё две.', w: ['Осталось четыре.', 'Вернём две отданные: четыре и два — шесть.'] },
+  { id: 'm22', lv: 2, cat: 'Время', p: '📅', q: 'Сегодня понедельник. Какой день был вчера?', o: ['Воскресенье', 'Вторник', 'Суббота'], a: 0, h1: 'Вчера — это день перед сегодняшним.', h2: 'Какой день недели идёт перед понедельником?', w: ['Неделя: понедельник, вторник… суббота, воскресенье.', 'Перед понедельником — воскресенье.'] },
+
+  // level 3 — 6 years
+  { id: 'n1', lv: 3, cat: 'Ряды', p: '1 3 5 7 ❓', q: 'Какое число дальше?', o: ['9', '8', '10'], a: 0, h1: 'Насколько числа растут?', h2: 'Каждый раз прибавляй два.', w: ['Числа растут на два: 1, 3, 5, 7.', 'Семь и два — девять.'] },
+  { id: 'n2', lv: 3, cat: 'Ряды', p: '🔴 🔵 🔵 🟢 🔴 🔵 🔵 🟢 🔴 ❓', q: 'Какой шарик дальше?', o: ['🔵', '🔴', '🟢'], a: 0, h1: 'Найди кусочек, который повторяется.', h2: 'После красного шарика всегда идёт синий.', w: ['Повторяется: красный, синий, синий, зелёный.', 'Последний — красный, после него — синий.'] },
+  { id: 'n3', lv: 3, cat: 'Ноги и уши', p: '🐔 🐔 🐔 🐕 🐕', q: 'Во дворе 3 курицы и 2 собаки. Сколько всего ног?', o: ['14', '10', '12', '20'], a: 0, h1: 'Посчитай отдельно ноги куриц и лапы собак.', h2: 'Куриц три по две ноги, собак две по четыре лапы.', w: ['У трёх куриц 6 ног.', 'У двух собак 8 лап.', 'Шесть и восемь — четырнадцать.'] },
+  { id: 'n4', lv: 3, cat: 'Логика', p: '🦔 🐿️ 🐰 🏁', q: 'Ёжик, Белка и Зайка бежали к финишу. Белка прибежала раньше Ёжика, а Зайка — раньше Белки. Кто был первым?', o: ['Зайка', 'Белка', 'Ёжик'], a: 0, h1: 'Кто прибежал раньше Белки?', h2: 'Зайка раньше Белки, а Белка раньше Ёжика.', w: ['Белка обогнала Ёжика.', 'Зайка обогнал Белку.', 'Значит, первым был Зайка.'] },
+  { id: 'n5', lv: 3, cat: 'Сколько вариантов', p: '🥤 🍦 ➕ 🍫 🍓 🍨', q: 'Мороженое бывает в стаканчике или в рожке, а вкус — шоколадный, клубничный или ванильный. Сколько разных мороженых можно выбрать?', o: ['6', '5', '3', '9'], a: 0, h1: 'Сначала выбери стаканчик. Сколько вкусов можно в него положить?', h2: 'В стаканчике три вкуса и в рожке три вкуса.', w: ['В стаканчике — три вкуса.', 'В рожке — ещё три вкуса.', 'Три и три — шесть разных мороженых.'] },
+  { id: 'n6', lv: 3, cat: 'Вероятность', p: '#dice:6', q: 'Бросаем обычный кубик. Что выпадет скорее: шестёрка или любое число меньше шести?', o: ['Число меньше 6', 'Шестёрка', 'Одинаково'], a: 0, h1: 'Сколько граней с шестёркой и сколько с числами меньше?', h2: 'Шестёрка одна, а чисел меньше шести — пять: 1, 2, 3, 4, 5.', w: ['Шестёрка — одна грань из шести.', 'Числа меньше шести — пять граней.', 'Пять шансов больше одного.'] },
+  { id: 'n7', lv: 3, cat: 'Алгоритмы', p: '#robot:..bd|R..a|.c..', it: ['🍎', '🍌', '🍒', '🧀'], q: 'Робот выполняет команды: ➡️ ➡️ ⬆️. Где он окажется?', o: ['🍌', '🍎', '🍒', '🧀'], a: 0, h1: 'Делай по одной команде.', h2: 'После двух шагов вправо робот стоит под бананом.', w: ['Два шага вправо.', 'Шаг вверх — и робот у банана.'] },
+  { id: 'n8', lv: 3, cat: 'С конца', p: '🦔 🍄', q: 'Ёжик нашёл грибы. Половину он отдал Белке, и у него осталось 4 гриба. Сколько грибов он нашёл?', o: ['8', '6', '4', '2'], a: 0, h1: 'Половина — это две равные части.', h2: 'Ёжик отдал столько же, сколько оставил.', w: ['У Ёжика осталась половина — 4 гриба.', 'Вторая половина тоже 4.', 'Всего было 8 грибов.'] },
+  { id: 'n9', lv: 3, cat: 'Спички', p: '#sticks:1x3', q: 'Сколько спичек в этой фигуре?', o: ['10', '12', '9', '8'], a: 0, h1: 'Соседние квадраты делят спичку пополам.', h2: 'Лежачих спичек 6, а стоячих?', w: ['Лежачих спичек: 3 сверху и 3 снизу — 6.', 'Стоячих — 4.', 'Шесть и четыре — десять.'] },
+  { id: 'n10', lv: 3, cat: 'Кубики', p: '#cubes:3,2,1', q: 'Сколько кубиков в этой лесенке?', o: ['6', '5', '3'], a: 0, h1: 'Посчитай каждую башенку.', h2: 'Башенки из 3, 2 и 1 кубика.', w: ['В башенках 3, 2 и 1 кубик.', 'Три, два и один — шесть.'] },
+  { id: 'n11', lv: 3, cat: 'С подвохом', p: '👦 👦 👦 👦 👦 👦 👦 👧', q: 'У семи братьев есть сестра — одна на всех. Сколько всего детей в семье?', o: ['8', '14', '7'], a: 0, h1: 'Сестра у всех братьев одна и та же.', h2: 'Семь братьев и ещё одна девочка.', w: ['Сестра одна — общая для всех братьев.', 'Семь и одна — восемь детей.'] },
+  { id: 'n12', lv: 3, cat: 'Взвешивания', p: '🍌 ⚖️ 🍑 🍑 · 🍈 ⚖️ 🍌 🍌 🍌', q: 'Банан весит как 2 персика, а дыня — как 3 банана. Сколько персиков весит дыня?', o: ['6', '5', '3', '9'], a: 0, h1: 'Замени каждый банан двумя персиками.', h2: 'Три банана, и каждый — как два персика.', w: ['Дыня — это три банана.', 'Каждый банан — два персика.', 'Два, четыре, шесть — шесть персиков.'] },
+  { id: 'n13', lv: 3, cat: 'Сколько вариантов', p: '🐱 🐱 🐱', q: 'Три котёнка встретились, и каждый потёрся носиком о каждого по одному разу. Сколько было таких встреч носиками?', o: ['3', '6', '2'], a: 0, h1: 'Назови котят 1, 2 и 3 и выпиши пары.', h2: 'Пары: первый со вторым, первый с третьим, второй с третьим.', w: ['Пары котят: 1 и 2, 1 и 3, 2 и 3.', 'Каждая пара — одна встреча.', 'Всего три встречи.'] },
+  { id: 'n14', lv: 3, cat: 'Ряды', p: '5 10 15 20 ❓', q: 'Какое число дальше?', o: ['25', '30', '21'], a: 0, h1: 'Насколько числа растут?', h2: 'Каждый раз прибавляют пять.', w: ['Каждое число на пять больше предыдущего.', 'Двадцать и пять — двадцать пять.'] },
+  { id: 'n15', lv: 3, cat: 'Логика', p: '🦊 🎈', q: 'Лисёнок-шутник всегда говорит наоборот. Он сказал: «Мой шарик синий». У него шарик или синий, или красный. Какой?', o: ['Красный', 'Синий', 'Не узнать'], a: 0, h1: 'Лисёнок всегда говорит неправду.', h2: 'Если шарик не синий, то какой?', w: ['Лисёнок говорит наоборот, значит, шарик не синий.', 'Остаётся только красный.'] },
+  { id: 'n16', lv: 3, cat: 'Время', p: '🎂 ⏲️', q: 'Пирог пекли 30 минут, а потом ещё 30 минут он остывал. Сколько всего времени прошло?', o: ['1 час', '30 минут', '2 часа'], a: 0, h1: 'Сложи минуты.', h2: 'В одном часе 60 минут.', w: ['Тридцать и тридцать — шестьдесят минут.', 'Шестьдесят минут — это один час.'] },
+  { id: 'n17', lv: 3, cat: 'Сколько вариантов', p: '1️⃣ 2️⃣', q: 'Из карточек с цифрами 1 и 2 складывают двузначное число. Сколько разных чисел получится?', o: ['2', '4', '1'], a: 0, h1: 'Какая карточка может стоять первой?', h2: 'Первой может быть единица или двойка.', w: ['Единица первая — получится 12.', 'Двойка первая — получится 21.', 'Всего два числа.'] },
+  { id: 'n18', lv: 3, cat: 'Ноги и уши', p: '🐰 🐰 🐱 🐱 🐱', q: 'Сколько всего ушей у двух зайцев и трёх котов?', o: ['10', '5', '12'], a: 0, h1: 'У каждого зверька по два уха.', h2: 'Сколько всего зверьков?', w: ['Зверьков пять: два зайца и три кота.', 'У каждого по два уха: пять раз по два — десять.'] },
+  { id: 'n19', lv: 3, cat: 'Кубики', p: '#cubes:2,1/1,1', q: 'Сколько кубиков в фигуре?', o: ['5', '4', '6'], a: 0, h1: 'Посчитай нижний слой, а потом верхний.', h2: 'Внизу четыре кубика.', w: ['Нижний слой — четыре кубика.', 'Сверху ещё один.', 'Всего пять.'] },
+  { id: 'n20', lv: 3, cat: 'Алгоритмы', p: '#robot:R.*', q: 'Роботу нужно дойти до звёздочки. Какие команды правильные?', o: ['➡️ ➡️', '⬆️ ➡️', '➡️ ⬅️'], a: 0, h1: 'Где звёздочка: справа или сверху?', h2: 'Звёздочка через одну клетку справа.', w: ['Звёздочка на две клетки правее робота.', 'Значит, два шага вправо.'] },
+  { id: 'n21', lv: 3, cat: 'Вероятность', p: '🔴 🔴 🔴 🔵 🔵 🔵', q: 'В мешке 3 красных и 3 синих шарика. Какой шарик вытащить вероятнее?', o: ['Одинаково', 'Красный', 'Синий'], a: 0, h1: 'Сравни, сколько шариков каждого цвета.', h2: 'Красных и синих поровну.', w: ['Красных три и синих три.', 'Шансы одинаковые.'] },
+  { id: 'n22', lv: 3, cat: 'С подвохом', p: '🦆 🦆 🦆 ➡️ 🌊 ⬅️ 🪿 🪿', q: 'Три утёнка шли к пруду, а навстречу им шли 2 гуся. Сколько птиц шло к пруду?', o: ['3', '5', '2'], a: 0, h1: 'Гуси шли навстречу — в другую сторону.', h2: 'К пруду шли только утята.', w: ['Гуси шли навстречу, то есть от пруда.', 'К пруду шли три утёнка.'] },
+
+  // level 4 — 7 years
+  { id: 'p1', lv: 4, cat: 'Ряды', p: '1 2 4 7 11 ❓', q: 'Какое число дальше?', o: ['16', '15', '14', '18'], a: 0, h1: 'Посмотри, на сколько растёт каждое число.', h2: 'Прибавляют 1, потом 2, потом 3, потом 4…', w: ['Прибавляли по очереди 1, 2, 3, 4.', 'Теперь прибавим 5: одиннадцать и пять — шестнадцать.'] },
+  { id: 'p2', lv: 4, cat: 'Ноги и уши', p: '🐔 🐇', q: 'В загоне куры и кролики. Голов 5, а ног 14. Сколько кроликов?', o: ['2', '3', '1', '4'], a: 0, h1: 'Представь, что все пятеро — куры. Сколько тогда ног?', h2: 'У пяти кур было бы 10 ног. Каждый кролик добавляет ещё 2.', w: ['Если бы все были курами, ног было бы 10.', 'Лишних ног 4, а каждый кролик даёт 2 лишние.', 'Четыре на два — два кролика. Проверка: 2 кролика и 3 курицы — 8 и 6 ног, 14.'] },
+  { id: 'p3', lv: 4, cat: 'Сколько вариантов', p: '🟥 ⬜ 🟦', q: 'Флажок из двух полос: верхней и нижней. Есть красная, белая и синяя краска, полосы разного цвета. Сколько разных флажков?', o: ['6', '3', '9', '5'], a: 0, h1: 'Выбери цвет верхней полосы. Сколько цветов осталось для нижней?', h2: 'Для верха три цвета, для низа — два оставшихся.', w: ['Верх можно покрасить тремя красками.', 'Для низа остаются две.', 'Три раза по два — шесть флажков.'] },
+  { id: 'p4', lv: 4, cat: 'Сколько вариантов', p: '💌 🐻 🦊 🐰', q: 'Встретились 3 друга, и каждый подарил каждому другому открытку. Сколько всего открыток?', o: ['6', '3', '9', '4'], a: 0, h1: 'Сколько открыток дарит один друг?', h2: 'Каждый дарит двоим.', w: ['Каждый дарит открытки двум другим.', 'Друзей трое: три раза по два — шесть.'] },
+  { id: 'p5', lv: 4, cat: 'Вероятность', p: '#dice:1,1', q: 'Бросаем два кубика и складываем очки. Может ли сумма быть равна 1?', o: ['Нет, меньше 2 не бывает', 'Да, но редко', 'Да, часто'], a: 0, h1: 'Какое самое маленькое число на кубике?', h2: 'На каждом кубике выпадет хотя бы 1.', w: ['На каждом кубике не меньше одного очка.', 'Самая маленькая сумма — один и один, то есть два.', 'Сумма 1 не выпадет никогда.'] },
+  { id: 'p6', lv: 4, cat: 'Алгоритмы', p: '#robot:d..a|..b.|....|R..c', it: ['⭐', '🍎', '🍌', '🍒'], q: 'Робот выполняет: «Повтори 3 раза: ➡️ ⬆️». Где он окажется?', o: ['⭐', '🍎', '🍌', '🍒'], a: 0, h1: 'Шагай: вправо, вверх, и так три раза.', h2: 'Каждый повтор — это шаг по диагонали лесенкой.', w: ['Первый повтор: вправо и вверх.', 'Второй повтор — робот у яблока.', 'Третий повтор — робот у звезды.'] },
+  { id: 'p7', lv: 4, cat: 'С конца', p: '🤔', q: 'Я задумал число, прибавил 5, потом отнял 3 и получил 10. Какое число я задумал?', o: ['8', '12', '18', '2'], a: 0, h1: 'Иди с конца и делай всё наоборот.', h2: 'Вместо «отнял 3» прибавь 3, вместо «прибавил 5» отними 5.', w: ['С конца: 10 и 3 — 13.', 'Тринадцать без пяти — восемь.', 'Проверка: 8 + 5 − 3 = 10.'] },
+  { id: 'p8', lv: 4, cat: 'Спички', p: '#sticks:2x2', q: 'Сколько спичек в этом квадрате 2 на 2?', o: ['12', '16', '8', '10'], a: 0, h1: 'Посчитай отдельно лежачие и стоячие спички.', h2: 'Лежачих — 3 ряда по 2.', w: ['Лежачих: три ряда по две — 6.', 'Стоячих: тоже три ряда по две — 6.', 'Всего двенадцать.'] },
+  { id: 'p9', lv: 4, cat: 'Спички', p: '#sticks:1x3', q: 'Здесь 3 квадрата. Убери у правого квадрата его крайнюю правую спичку. Сколько квадратов останется?', o: ['2', '1', '3', '0'], a: 0, h1: 'Какой квадрат сломается?', h2: 'Сломается только правый квадрат.', w: ['Без правой стенки правый квадрат развалится.', 'Два других целы — останется два квадрата.'] },
+  { id: 'p10', lv: 4, cat: 'Кубики', p: '#cubes:2,2/2,2', q: 'Сколько маленьких кубиков в этом большом кубе?', o: ['8', '4', '6', '12'], a: 0, h1: 'Посчитай верхний слой и умножь на число слоёв.', h2: 'В одном слое 4 кубика, слоёв два.', w: ['В одном слое четыре кубика.', 'Слоёв два: четыре и четыре — восемь.'] },
+  { id: 'p11', lv: 4, cat: 'Логика', p: '🟥 🟦 🟩 🏠', q: 'Ёжик, Белка и Зайка живут в красном, синем и зелёном домиках. Ёжик живёт не в красном и не в синем. Белка — не в красном. Кто живёт в красном домике?', o: ['Зайка', 'Белка', 'Ёжик'], a: 0, h1: 'Начни с Ёжика: какой домик ему остаётся?', h2: 'Ёжик в зелёном. Белка не в красном — значит, в каком?', w: ['Ёжик не в красном и не в синем — он в зелёном.', 'Белка не в красном — она в синем.', 'В красном живёт Зайка.'] },
+  { id: 'p12', lv: 4, cat: 'С подвохом', p: '🪵 🪵 🪵', q: 'Сколько концов у трёх с половиной палок?', o: ['8', '7', '6', '14'], a: 0, h1: 'Сколько концов у половинки палки?', h2: 'У половинки палки тоже два конца!', w: ['У каждой палки два конца: у трёх — шесть.', 'У половинки тоже два конца.', 'Всего восемь.'] },
+  { id: 'p13', lv: 4, cat: 'Время', p: '🕗', q: 'Сейчас 8 часов утра. Сколько будет на часах через 10 часов?', o: ['18:00', '16:00', '10:00', '20:00'], a: 0, h1: 'Прибавь часы.', h2: 'Восемь и десять.', w: ['Восемь и десять — восемнадцать.', 'Будет 18:00, то есть шесть часов вечера.'] },
+  { id: 'p14', lv: 4, cat: 'Взвешивания', p: '🪙 🪙 🪙 ⚖️', q: 'Из 3 монет одна фальшивая — она легче. Сколько раз нужно взвесить на весах с двумя чашками, чтобы точно её найти?', o: ['1', '2', '3', '0'], a: 0, h1: 'Положи на чашки по одной монете.', h2: 'Если весы в равновесии, где фальшивая?', w: ['Кладём по монете на каждую чашку.', 'Какая чашка поднялась — там фальшивая.', 'Если равновесие — фальшивая та, что осталась. Хватит одного взвешивания.'] },
+  { id: 'p15', lv: 4, cat: 'Ряды', p: '🔺 🟦 🟢 · 🟦 🟢 🔺 · 🟢 🔺 ❓', q: 'Какой фигуры не хватает?', o: ['🟦', '🔺', '🟢'], a: 0, h1: 'В каждой тройке есть все три фигуры.', h2: 'В последней тройке уже есть круг и треугольник.', w: ['В каждой тройке — треугольник, квадрат и круг.', 'В последней не хватает квадрата.'] },
+  { id: 'p16', lv: 4, cat: 'Сколько вариантов', p: '🪑 🪑 🪑', q: 'Сколькими способами можно рассадить троих друзей на 3 стульчика в ряд?', o: ['6', '3', '9', '4'], a: 0, h1: 'Кто может сесть на первый стул? А на второй?', h2: 'На первый — любой из троих, на второй — любой из двоих оставшихся.', w: ['На первый стул — трое на выбор.', 'На второй — двое, на третий — последний.', 'Три на два — шесть способов.'] },
+  { id: 'p17', lv: 4, cat: 'Вероятность', p: '🪙 🦅 🦅 🦅 ❓', q: 'Монетку подбросили 3 раза, и каждый раз выпал орёл. Что вероятнее в четвёртый раз?', o: ['Одинаково', 'Решка', 'Орёл'], a: 0, h1: 'Помнит ли монетка, что выпадало раньше?', h2: 'У монетки нет памяти.', w: ['Монетка не помнит прошлых бросков.', 'Орёл и решка снова одинаково возможны.'] },
+  { id: 'p18', lv: 4, cat: 'Ноги и уши', p: '🐝 🐝 🐝 🐝', q: 'У пчелы 6 ног. Сколько ног у 4 пчёл?', o: ['24', '20', '16', '30'], a: 0, h1: 'Сложи шесть четыре раза.', h2: 'Шесть, двенадцать, восемнадцать…', w: ['Четыре раза по шесть.', 'Шесть, двенадцать, восемнадцать, двадцать четыре.'] },
+  { id: 'p19', lv: 4, cat: 'Логика', p: '🐻 🐰 🦊 🐺 🐿️', q: 'В очереди 5 зверей. Лиса стоит третьей с начала. Какая она по счёту с конца?', o: ['3', '2', '4', '5'], a: 0, h1: 'Сколько зверей стоит за Лисой?', h2: 'Перед Лисой двое, и за ней двое.', w: ['Перед Лисой двое, за ней тоже двое.', 'С конца она тоже третья.'] },
+  { id: 'p20', lv: 4, cat: 'Алгоритмы', p: '3 ➡️ ✖️2 ➡️ ➕1 ➡️ ✖️2', q: 'Начинаем с числа 3. Команды: «умножь на 2», «прибавь 1», «умножь на 2». Что получится?', o: ['14', '13', '16', '12'], a: 0, h1: 'Выполняй команды по очереди.', h2: 'Три на два — шесть. Дальше?', w: ['Три на два — шесть.', 'Шесть и один — семь.', 'Семь на два — четырнадцать.'] },
+  { id: 'p21', lv: 4, cat: 'С конца', p: '🐿️ 🌰', q: 'Белка каждый день съедает половину своих орехов. На третий день утром у неё 4 ореха. Сколько было в первый день утром?', o: ['16', '8', '12', '32'], a: 0, h1: 'Иди назад: если съела половину, сколько было до этого?', h2: 'Утром второго дня было вдвое больше, чем утром третьего.', w: ['Утром третьего дня — 4.', 'Утром второго — вдвое больше: 8.', 'Утром первого — ещё вдвое больше: 16.'] },
+  { id: 'p22', lv: 4, cat: 'Кубики', p: '📄 ✂️', q: 'Лист сложили пополам, потом ещё раз пополам и прорезали в нём одну дырку. Сколько дырок будет на развёрнутом листе?', o: ['4', '2', '1', '8'], a: 0, h1: 'Сколько слоёв бумаги после двух сгибов?', h2: 'Первый сгиб — 2 слоя, второй — 4 слоя.', w: ['После двух сгибов в листе четыре слоя.', 'Дырка прошла через каждый слой.', 'Значит, дырок четыре.'] },
+
+  // level 5 — 8 years (with the old problems of level 1)
+  { id: 'q1', lv: 5, cat: 'Вероятность', p: '🔴 🔴 🔴 🔵 🔵 🟢', q: 'В мешке 3 красных, 2 синих и 1 зелёный шар. Сколько шаров надо достать не глядя, чтобы среди них точно был синий?', o: ['5', '3', '4', '6'], a: 0, h1: 'Представь, что тебе очень не везёт.', h2: 'Сначала могут попасться все красные и зелёный.', w: ['Самое неудачное: 3 красных и 1 зелёный — 4 шара без синего.', 'Следующий, пятый, точно синий.'] },
+  { id: 'q2', lv: 5, cat: 'Алгоритмы', p: '3 1 2', q: 'Робот-сортировщик идёт по ряду слева направо и меняет местами два соседних числа, если левое больше. Он прошёл по ряду 3, 1, 2 один раз. Что получилось?', o: ['1, 2, 3', '1, 3, 2', '3, 2, 1', '2, 1, 3'], a: 0, h1: 'Сравни первую пару: 3 и 1.', h2: 'После первого обмена ряд стал 1, 3, 2. Теперь сравни 3 и 2.', w: ['3 больше 1 — меняем: 1, 3, 2.', '3 больше 2 — меняем: 1, 2, 3.'] },
+  { id: 'q3', lv: 5, cat: 'Спички', p: '#match:9+2=8', q: 'Переложи одну спичку, чтобы равенство стало верным. Что получится?', o: ['6 + 2 = 8', '5 + 3 = 8', '9 - 1 = 8', '4 + 4 = 8'], a: 0, h1: 'Можно переложить спичку внутри одной цифры.', h2: 'Посмотри на девятку: из неё можно сделать шестёрку.', w: ['У девятки берём верхнюю правую спичку.', 'Кладём её внизу слева — получилась шестёрка.', '6 + 2 = 8 — верно!'] },
+  { id: 'q4', lv: 5, cat: 'С подвохом', p: '📅', q: 'В скольких месяцах года есть 28-е число?', o: ['12', '1', '0', '6'], a: 0, h1: 'Даже в самом коротком месяце 28 дней есть.', h2: 'В каждом месяце не меньше 28 дней.', w: ['Самый короткий месяц — февраль, в нём 28 или 29 дней.', 'Во всех остальных дней больше.', 'Значит, 28-е число есть во всех 12 месяцах.'] },
+  { id: 'q5', lv: 5, cat: 'Сколько вариантов', p: '🍲 ➕ 🍝', q: 'В кафе 3 разных супа и 4 разных вторых блюда. Сколько разных обедов «суп + второе» можно заказать?', o: ['12', '7', '10', '16'], a: 0, h1: 'К каждому супу можно взять любое из вторых блюд.', h2: 'С одним супом — 4 обеда. А супов три.', w: ['К каждому супу — 4 вторых блюда.', 'Три раза по четыре — двенадцать обедов.'] },
+  { id: 'q6', lv: 5, cat: 'Логика', p: '🐱 🐶', q: 'Один из друзей всегда врёт, другой всегда говорит правду. Кот сказал: «Пёс — врунишка». Пёс сказал: «Мы оба говорим правду». Кто врёт?', o: ['Пёс', 'Кот', 'Оба'], a: 0, h1: 'Может ли быть правдой «мы оба говорим правду»?', h2: 'По условию один из них точно врёт.', w: ['Один из них врун, значит, слова Пса «мы оба честные» — неправда.', 'Врёт Пёс.', 'Кот говорит правду: Пёс и правда врунишка.'] },
+  { id: 'q7', lv: 5, cat: 'Кубики', p: '#cubes:3,2,1/2,1,0/1,0,0', q: 'Сколько кубиков в этой фигуре?', o: ['10', '9', '6', '12'], a: 0, h1: 'Посчитай высоту каждой башенки.', h2: 'Задний ряд: 3, 2, 1. Средний: 2, 1. Передний: 1.', w: ['Задний ряд: 3 + 2 + 1 = 6.', 'Средний: 2 + 1 = 3. Передний: 1.', 'Всего 6 + 3 + 1 = 10.'] },
+  { id: 'q8', lv: 5, cat: 'Взвешивания', p: '💰 💰 💰 💰 ⚖️', q: 'Есть 4 мешка с монетами, один из них легче остальных. Сколько взвешиваний нужно, чтобы точно его найти?', o: ['2', '1', '3', '4'], a: 0, h1: 'Одно взвешивание сравнивает только две чашки.', h2: 'Сначала положи по два мешка на каждую чашку.', w: ['Два мешка против двух — узнаём, в какой паре лёгкий.', 'Потом один против одного — находим его.', 'За одно взвешивание из четырёх не выбрать, нужно два.'] },
+  { id: 'q9', lv: 5, cat: 'Ноги и уши', p: '🪑', q: 'В классе стоят табуретки на 3 ножках и стулья на 4 ножках. Всего 5 сидений и 18 ножек. Сколько табуреток?', o: ['2', '3', '1', '4'], a: 0, h1: 'Представь, что все пять — стулья.', h2: 'У пяти стульев было бы 20 ножек. Каждая табуретка — на одну меньше.', w: ['Если бы все были стульями — 20 ножек.', 'Не хватает двух, а каждая табуретка даёт на одну ножку меньше.', 'Значит, табуреток две. Проверка: 6 + 12 = 18.'] },
+  { id: 'q10', lv: 5, cat: 'Ряды', p: '1 1 2 3 5 8 ❓', q: 'Какое число дальше?', o: ['13', '11', '12', '16'], a: 0, h1: 'Посмотри на два соседних числа и следующее за ними.', h2: 'Каждое число — сумма двух предыдущих.', w: ['2 = 1 + 1, 3 = 1 + 2, 5 = 2 + 3, 8 = 3 + 5.', 'Дальше 5 + 8 = 13.'] },
+  { id: 'q11', lv: 5, cat: 'Алгоритмы', p: '#robot:R.#.|..#*|....', q: 'Робот ходит по клеткам вверх, вниз, влево и вправо, через стенки нельзя. За какое наименьшее число шагов он дойдёт до звёздочки?', o: ['6', '4', '5', '7'], a: 0, h1: 'Стенку придётся обойти снизу.', h2: 'Спустись в нижний ряд, пройди под стенкой и поднимись.', w: ['Два шага вниз до нижнего ряда.', 'Три шага вправо под стенкой.', 'Один шаг вверх к звёздочке — всего шесть.'] },
+  { id: 'q12', lv: 5, cat: 'Вероятность', p: '#dice:1,1', q: 'Бросаем два кубика. Какая сумма выпадает чаще: 2 или 7?', o: ['7', '2', 'Одинаково'], a: 0, h1: 'Сколькими способами можно получить 2?', h2: 'Два — только «1 и 1». А семь — «1 и 6», «2 и 5», «3 и 4»…', w: ['Сумма 2 получается одним способом: 1 и 1.', 'Сумма 7 — шестью: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.', 'Семь выпадает в шесть раз чаще.'] },
+
+  // level 6 — 9 years (with the old problems of level 2)
+  { id: 'r1', lv: 6, cat: 'Сколько вариантов', p: '#robot:..*|...|R..', q: 'Робот идёт к звёздочке только вправо ➡️ и вверх ⬆️. Сколько у него разных путей?', o: ['6', '4', '8', '5'], a: 0, kp: 1, h1: 'Нужно сделать два шага вправо и два вверх — в каком порядке?', h2: 'Посчитай для каждой клетки, сколькими путями в неё можно прийти.', w: ['Робот делает 2 шага вправо и 2 вверх в любом порядке.', 'Выпишем: ➡️➡️⬆️⬆️, ➡️⬆️➡️⬆️, ➡️⬆️⬆️➡️, ⬆️➡️➡️⬆️, ⬆️➡️⬆️➡️, ⬆️⬆️➡️➡️.', 'Всего шесть путей.'] },
+  { id: 'r2', lv: 6, cat: 'Вероятность', p: '🔴 🔴 🔵 🔵', q: 'В мешке 2 красных и 2 синих шара. Достали сразу 2 шара. Сколько разных сочетаний цветов может получиться?', o: ['3', '4', '2', '6'], a: 0, h1: 'Важны только цвета, а не какой шар первый.', h2: 'Два красных, два синих или…', w: ['Можно вынуть два красных.', 'Можно два синих.', 'Или красный и синий. Всего три сочетания.'] },
+  { id: 'r3', lv: 6, cat: 'Спички', p: '#match:6-5=9', q: 'Переложи одну спичку, чтобы равенство стало верным. Что получится?', o: ['8 - 5 = 3', '6 - 3 = 3', '9 - 5 = 4', '6 + 3 = 9'], a: 0, h1: 'Из девятки можно сделать тройку, если убрать одну спичку.', h2: 'Куда положить лишнюю спичку, чтобы шестёрка стала восьмёркой?', w: ['У девятки убираем верхнюю левую спичку — получается тройка.', 'Кладём её в шестёрку справа сверху — получается восьмёрка.', '8 − 5 = 3 — верно!'] },
+  { id: 'r4', lv: 6, cat: 'Алгоритмы', p: '6 ➡️ … ➡️ 1', q: 'Правило: если число чётное — раздели его на 2, если нечётное — умножь на 3 и прибавь 1. Начинаем с 6. Сколько шагов нужно, чтобы дойти до 1?', o: ['8', '6', '7', '9'], a: 0, kp: 1, h1: 'Выписывай числа по очереди и считай шаги.', h2: '6 → 3 → 10 → 5 → …', w: ['6 → 3 → 10 → 5 → 16 → 8 → 4 → 2 → 1.', 'Считаем стрелки: восемь шагов.'] },
+  { id: 'r5', lv: 6, cat: 'С конца', p: '🐸 🦟', q: 'Лягушка каждый день ловит вдвое больше комаров, чем накануне. За 3 дня она поймала 21 комара. Сколько в первый день?', o: ['3', '7', '4', '6'], a: 0, kp: 1, h1: 'Пусть в первый день — одна кучка. Сколько кучек во второй и третий?', h2: 'Первый день — 1 часть, второй — 2 части, третий — 4 части.', w: ['Всего частей: 1 + 2 + 4 = 7.', '21 комар делим на 7 частей — по 3.', 'В первый день — 3 комара. Проверка: 3 + 6 + 12 = 21.'] },
+  { id: 'r6', lv: 6, cat: 'Логика', p: '📦 📦 📦', q: 'На трёх коробках написано «Яблоки», «Груши» и «Яблоки и груши», но все надписи неверные. Из какой коробки достаточно достать один фрукт, чтобы узнать, что лежит во всех?', o: ['«Яблоки и груши»', '«Яблоки»', '«Груши»'], a: 0, h1: 'В коробке с надписью «Яблоки и груши» на самом деле не смесь.', h2: 'Значит, там только яблоки или только груши — один фрукт это покажет.', w: ['В коробке «Яблоки и груши» не смесь — там фрукты одного вида.', 'Достали, например, яблоко — значит, там яблоки.', 'Коробка «Груши» не груши и не яблоки — там смесь, а в «Яблоках» — груши.'] },
+  { id: 'r7', lv: 6, cat: 'Кубики', p: '#cubes:2,2/2,2', q: 'Кубик 2×2×2 покрасили снаружи и распилили на 8 маленьких. Сколько граней покрашено у каждого маленького кубика?', o: ['3', '2', '1', '6'], a: 0, h1: 'Где находится каждый маленький кубик?', h2: 'Каждый маленький кубик — это угол большого.', w: ['Все 8 кубиков стоят в углах большого куба.', 'У углового кубика наружу смотрят три грани.', 'Значит, у каждого покрашено три грани.'] },
+  { id: 'r8', lv: 6, cat: 'Ноги и уши', p: '🐉 🐲', q: 'У Змея 3 головы и 2 лапы, а у Дракона 1 голова и 4 лапы. Всего 9 голов и 16 лап. Сколько Змеев?', o: ['2', '3', '4', '1'], a: 0, h1: 'Попробуй: пусть Змей один. Сколько тогда Драконов?', h2: 'Перебери: 1 Змей, 2 Змея, 3 Змея — и проверь лапы.', w: ['Пусть Змеев 2: у них 6 голов и 4 лапы.', 'Остаётся 3 головы — это 3 Дракона с 12 лапами.', 'Лап 4 + 12 = 16 — сходится. Змеев два.'] },
+  { id: 'r9', lv: 6, cat: 'Взвешивания', p: '⚖️ 1 г · 3 г · 9 г', q: 'Есть весы с двумя чашками и гирьки 1 г, 3 г и 9 г, по одной. Гирьки можно класть на обе чашки. Какой самый большой вес можно отмерить?', o: ['13 г', '12 г', '9 г', '27 г'], a: 0, h1: 'Если положить все гирьки на одну чашку?', h2: 'Больше, чем все гирьки вместе, отмерить нельзя.', w: ['Все гирьки вместе: 1 + 3 + 9 = 13 граммов.', 'Больше никак не получится.', 'А если класть на обе чашки, можно отмерить и любой вес от 1 до 13 граммов.'] },
+  { id: 'r10', lv: 6, cat: 'Вероятность', p: '🪙 🪙', q: 'Монетку бросают 2 раза. Что вероятнее: оба раза орёл или один орёл и одна решка?', o: ['Один орёл и одна решка', 'Оба раза орёл', 'Одинаково'], a: 0, h1: 'Выпиши все исходы двух бросков.', h2: 'Исходы: ОО, ОР, РО, РР.', w: ['Всего 4 равных исхода: ОО, ОР, РО, РР.', 'Два орла — только ОО: 1 исход.', 'Орёл и решка — ОР и РО: 2 исхода. Это вероятнее.'] },
+  { id: 'r11', lv: 6, cat: 'Сколько вариантов', p: '1️⃣ 2️⃣', q: 'Сколько трёхзначных чисел можно записать только цифрами 1 и 2 (цифры могут повторяться)?', o: ['8', '6', '4', '9'], a: 0, kp: 1, h1: 'Сколько вариантов для каждой из трёх цифр?', h2: 'На каждое место — 1 или 2.', w: ['На каждое из трёх мест — два варианта.', '2 × 2 × 2 = 8.', '111, 112, 121, 122, 211, 212, 221, 222.'] },
+
+  // level 7 — 10 years (with the old problems of level 3)
+  { id: 's1', lv: 7, cat: 'Сколько вариантов', p: '⭕', q: 'На окружности отметили 6 точек и соединили каждую с каждой. Сколько получилось отрезков?', o: ['15', '12', '30', '6'], a: 0, kp: 1, h1: 'Сколько отрезков выходит из одной точки?', h2: 'Из каждой точки — 5 отрезков, но каждый отрезок посчитан дважды.', w: ['Из каждой точки выходит 5 отрезков: 6 × 5 = 30.', 'Каждый отрезок посчитан два раза — с обоих концов.', '30 : 2 = 15.'] },
+  { id: 's2', lv: 7, cat: 'Вероятность', p: '🟥🎲 🟦🎲', q: 'Бросаем красный и синий кубики. Сколькими способами может выпасть сумма 7?', o: ['6', '3', '7', '5'], a: 0, kp: 1, h1: 'Перебери, что может выпасть на красном.', h2: 'На красном 1 — на синем 6, на красном 2 — на синем 5…', w: ['На красном может быть любое число от 1 до 6.', 'Для каждого есть ровно одно число на синем: 1+6, 2+5, 3+4, 4+3, 5+2, 6+1.', 'Всего шесть способов.'] },
+  { id: 's3', lv: 7, cat: 'Алгоритмы', p: '1 … 100 ❓', q: 'Я загадал число от 1 до 100. Ты спрашиваешь «оно больше, чем …?», а я отвечаю «да» или «нет». За какое наименьшее число вопросов ты точно угадаешь?', o: ['7', '10', '6', '50'], a: 0, h1: 'Лучший вопрос делит числа пополам.', h2: '100 → 50 → 25 → 13 → 7 → 4 → 2 → 1.', w: ['Каждый вопрос делит оставшиеся числа пополам.', '100, 50, 25, 13, 7, 4, 2, 1 — семь вопросов.', 'За шесть не выйдет: шесть ответов различают только 64 числа.'] },
+  { id: 's4', lv: 7, cat: 'Спички', p: '#match:8+2=5', q: 'Переложи одну спичку, чтобы равенство стало верным. Что получится?', o: ['8 - 2 = 6', '3 + 2 = 5', '9 - 4 = 5', '8 - 3 = 5'], a: 0, h1: 'Знак плюс тоже сделан из спичек.', h2: 'Возьми стоячую спичку из плюса — он станет минусом.', w: ['Из плюса берём стоячую спичку — получается минус.', 'Кладём её к пятёрке внизу слева — получается шестёрка.', '8 − 2 = 6 — верно!'] },
+  { id: 's5', lv: 7, cat: 'С конца', p: '🍬 👧 👦 🧒', q: 'Трое детей делили конфеты. Первый взял половину и ещё одну, второй — половину остатка и ещё одну, а третьему достались последние 3. Сколько было конфет?', o: ['18', '16', '20', '14'], a: 0, kp: 1, h1: 'Начни с третьего: перед ним было 3 конфеты.', h2: 'Второй взял половину и одну, а осталось 3. Значит, половина остатка — это 3 + 1.', w: ['Перед вторым: 3 + 1 = 4 — это половина, всего 8.', 'Перед первым: 8 + 1 = 9 — это половина, всего 18.', 'Проверка: 18 → взял 10, осталось 8 → взял 5, осталось 3.'] },
+  { id: 's6', lv: 7, cat: 'Логика', p: '🦔 🐱 🦉 🐰', q: 'Ёж ниже Кота, Кот ниже Совы, а Заяц выше Совы. Кто второй по росту, если считать от самого высокого?', o: ['Сова', 'Кот', 'Заяц', 'Ёж'], a: 0, h1: 'Построй всех в ряд по росту.', h2: 'Ёж < Кот < Сова, а Заяц выше Совы.', w: ['По росту: Ёж, Кот, Сова, Заяц.', 'Самый высокий — Заяц, второй — Сова.'] },
+  { id: 's7', lv: 7, cat: 'Логика', p: '🦔 🐱 🦉 🥧', q: 'Кто-то из троих съел пирог. Ёж: «Это Кот». Кот: «Это не я». Сова: «Это не я». Правду сказал только один. Кто съел пирог?', o: ['Сова', 'Кот', 'Ёж'], a: 0, h1: 'Слова Ежа и Кота спорят друг с другом — один из них точно прав.', h2: 'Значит, Сова сказала неправду.', w: ['Ёж и Кот говорят противоположное — правдив ровно один из них.', 'Правду сказал только один, значит, Сова солгала.', 'Сова сказала «это не я» неправду — пирог съела Сова.'] },
+  { id: 's8', lv: 7, cat: 'Кубики', p: '🧊 4×4×4', q: 'Куб 4×4×4 покрасили снаружи и распилили на 64 кубика. Сколько кубиков покрашено ровно с двух сторон?', o: ['24', '12', '8', '32'], a: 0, kp: 1, h1: 'Две покрашенные грани у кубиков на рёбрах, но не в углах.', h2: 'У куба 12 рёбер. Сколько не угловых кубиков на одном ребре?', w: ['На каждом ребре 4 кубика, из них 2 угловых.', 'Не угловых на ребре — 2.', 'Рёбер 12: 12 × 2 = 24.'] },
+  { id: 's9', lv: 7, cat: 'Взвешивания', p: '🪙 × 27 ⚖️', q: 'Из 27 монет одна фальшивая — она легче. За какое наименьшее число взвешиваний её точно можно найти?', o: ['3', '4', '9', '5'], a: 0, h1: 'Делите монеты на три кучки.', h2: 'Каждое взвешивание уменьшает подозреваемых в 3 раза.', w: ['27 делим на три кучки по 9 — после взвешивания знаем нужную кучку.', '9 делим на три по 3 — ещё одно взвешивание.', '3 делим на три по 1 — третье. Всего три.'] },
+  { id: 's10', lv: 7, cat: 'Ряды', p: '2 6 12 20 30 ❓', q: 'Какое число дальше?', o: ['42', '40', '36', '44'], a: 0, kp: 1, h1: 'Посмотри на разницы между соседними числами.', h2: 'Разницы: 4, 6, 8, 10… А можно и так: 1×2, 2×3, 3×4…', w: ['Разницы растут: 4, 6, 8, 10, а дальше 12.', '30 + 12 = 42.', 'Это 6 × 7.'] },
+  { id: 's11', lv: 7, cat: 'Сколько вариантов', p: '🧒 🧒 🧒 🧒 🧒', q: 'Сколькими способами можно выбрать 2 дежурных из 5 ребят?', o: ['10', '20', '5', '25'], a: 0, kp: 1, h1: 'Пары, в которых те же двое, одинаковые.', h2: 'Первого — 5 способов, второго — 4, но каждая пара посчитана дважды.', w: ['Первого выбираем 5 способами, второго — 4: 20.', 'Пара «первый и второй» та же, что «второй и первый», поэтому делим на 2.', 'Десять способов.'] },
+
+  // level 8 — 11–12 years: olympiad
+  { id: 't1', lv: 8, cat: 'Вероятность', p: '#dice:3,4', q: 'Бросают два кубика и складывают очки. Какая сумма выпадает чаще всего?', o: ['7', '6', '12', '8'], a: 0, h1: 'Сосчитай, сколькими способами получается каждая сумма.', h2: 'Сумма 7 получается при любом числе на первом кубике.', w: ['Для суммы 7 подходит любое число на первом кубике: 6 способов.', 'Для 6 и 8 — по 5, а для 12 — один.', 'Чаще всего — семь.'] },
+  { id: 't2', lv: 8, cat: 'Сколько вариантов', p: '#robot:...*|....|....|R...', q: 'Робот идёт к звёздочке только вправо и вверх. Сколько у него разных путей?', o: ['20', '9', '12', '27'], a: 0, kp: 1, h1: 'Нужно 3 шага вправо и 3 вверх. Подпиши в каждой клетке число путей.', h2: 'В каждую клетку путей столько, сколько в левую и нижнюю вместе.', w: ['В клетки нижнего ряда и левого столбца — по одному пути.', 'Каждая следующая клетка — сумма левой и нижней: 1, 3, 6, 10…', 'В правый верхний угол — 20 путей.'] },
+  { id: 't3', lv: 8, cat: 'Алгоритмы', p: '🗼 🗼 🗼', q: 'Три колышка, на первом — пирамидка из 3 колец: большое внизу. Кольца перекладывают по одному и никогда не кладут большое на маленькое. За сколько ходов можно перенести пирамидку на третий колышек?', o: ['7', '6', '8', '9'], a: 0, kp: 1, h1: 'Сначала надо убрать два верхних кольца на средний колышек.', h2: 'Две верхних — за 3 хода, большое — 1 ход, и снова две — 3 хода.', w: ['Два маленьких кольца на средний колышек — 3 хода.', 'Большое кольцо на третий — 1 ход.', 'Два маленьких сверху на него — ещё 3. Всего 7.'] },
+  { id: 't4', lv: 8, cat: 'Логика', p: '🕛', q: 'Сколько раз за сутки часовая и минутная стрелки совпадают?', o: ['22', '24', '23', '12'], a: 0, kp: 1, h1: 'За 12 часов минутная стрелка обгоняет часовую на 11 кругов.', h2: 'Каждый обгон — одна встреча. А в сутках дважды по 12 часов.', w: ['За 12 часов минутная делает 12 кругов, часовая — 1.', 'Минутная обгоняет часовую 11 раз — 11 встреч.', 'За сутки — 22 встречи.'] },
+  { id: 't5', lv: 8, cat: 'С подвохом', p: '🐈 🐈 🐈 🐁', q: 'Три кошки ловят трёх мышек за 3 минуты. Сколько кошек поймают 100 мышек за 100 минут?', o: ['3', '100', '33', '9'], a: 0, kp: 1, h1: 'Сколько мышек ловит одна кошка за 3 минуты?', h2: 'Каждая кошка ловит одну мышку за 3 минуты.', w: ['Одна кошка ловит одну мышку за 3 минуты.', 'За 100 минут одна кошка поймает 33 мышки и ещё треть.', 'Три кошки поймают 100 мышек — значит, хватит трёх кошек.'] },
+  { id: 't6', lv: 8, cat: 'Взвешивания', p: '🪙 × 8 ⚖️', q: 'Из 8 монет одна фальшивая — она легче. За какое наименьшее число взвешиваний её точно можно найти?', o: ['2', '3', '4', '1'], a: 0, h1: 'Делите монеты на три кучки: 3, 3 и 2.', h2: 'После первого взвешивания подозреваемых останется не больше трёх.', w: ['Взвешиваем 3 против 3. Если равны — фальшивая среди двух оставшихся.', 'Второе взвешивание находит её среди трёх или двух.', 'За одно взвешивание нельзя: у весов всего три исхода. Ответ — два.'] },
+  { id: 't7', lv: 8, cat: 'Сколько вариантов', p: '⬡', q: 'Сколько диагоналей у шестиугольника?', o: ['9', '6', '12', '8'], a: 0, kp: 1, h1: 'Из каждой вершины диагонали идут ко всем, кроме себя и двух соседей.', h2: 'Из каждой вершины — 3 диагонали, но каждая посчитана дважды.', w: ['Из каждой вершины выходит 3 диагонали: 6 × 3 = 18.', 'Каждая посчитана с двух концов: 18 : 2 = 9.'] },
+  { id: 't8', lv: 8, cat: 'Вероятность', p: '🧦 ⚪ × 4 ⚫ × 6', q: 'В ящике 4 белых и 6 чёрных носков. Сколько носков надо достать не глядя, чтобы среди них точно было 2 чёрных?', o: ['6', '3', '5', '8'], a: 0, kp: 1, h1: 'Самое неудачное начало — все белые подряд.', h2: 'Сначала могут выпасть 4 белых.', w: ['В худшем случае первые 4 — белые.', 'Дальше остались только чёрные: ещё 2.', 'Всего 6.'] },
+  { id: 't9', lv: 8, cat: 'Ряды', p: '3 5 9 17 33 ❓', q: 'Какое число дальше?', o: ['65', '49', '66', '64'], a: 0, kp: 1, h1: 'Посмотри на разницы.', h2: 'Разницы: 2, 4, 8, 16… Или: каждое = предыдущее × 2 − 1.', w: ['Каждое число — предыдущее умножить на 2 и отнять 1.', '33 × 2 − 1 = 65.'] },
+  { id: 't10', lv: 8, cat: 'Алгоритмы', p: '5 4 3 2 1', q: 'Карточки лежат так: 5, 4, 3, 2, 1. За один ход можно поменять местами две соседние карточки. За какое наименьшее число ходов можно получить 1, 2, 3, 4, 5?', o: ['10', '5', '4', '8'], a: 0, kp: 1, h1: 'Каждый обмен исправляет только одну «неправильную» пару.', h2: 'Посчитай пары, где большее число стоит левее меньшего.', w: ['Неправильных пар: каждая пара из 5 карточек — 10 пар.', 'Один обмен соседей исправляет ровно одну пару.', 'Нужно 10 ходов.'] },
+  { id: 't11', lv: 8, cat: 'Логика', p: '1 × 2 × 3 × … × 20', q: 'Сколькими нулями заканчивается произведение всех чисел от 1 до 20?', o: ['4', '2', '3', '5'], a: 0, kp: 1, h1: 'Ноль в конце получается из пары 2 × 5.', h2: 'Двоек много. Сколько пятёрок в числах до 20?', w: ['Каждый ноль — это множитель 10 = 2 × 5.', 'Пятёрки есть в 5, 10, 15, 20 — четыре.', 'Двоек больше, значит, нулей четыре.'] },
+  { id: 't12', lv: 8, cat: 'Кубики', p: '#cubes:3,3,3/3,3,3/3,3,3', q: 'Куб 3×3×3 покрасили снаружи и распилили на 27 кубиков. Сколько кубиков покрашено ровно с одной стороны?', o: ['6', '8', '12', '9'], a: 0, kp: 1, h1: 'Одна покрашенная грань — у кубика в центре каждой стороны.', h2: 'У куба 6 сторон.', w: ['У кубика в центре стороны покрашена одна грань.', 'На каждой стороне такой один, сторон шесть.', 'Значит, шесть кубиков.'] },
+  { id: 't13', lv: 8, cat: 'Сколько вариантов', p: '▭ ▭▭', q: 'Дорожку длиной 6 выкладывают плитками длиной 1 и 2. Сколько разных способов?', o: ['13', '8', '11', '21'], a: 0, kp: 1, h1: 'Посчитай для дорожки длиной 1, 2, 3…', h2: 'Способы для длины n = способы для n−1 плюс способы для n−2.', w: ['Длина 1 — 1 способ, 2 — 2, 3 — 3, 4 — 5, 5 — 8.', 'Последняя плитка либо 1, либо 2 — складываем два предыдущих.', 'Длина 6: 5 + 8 = 13.'] },
+  { id: 't14', lv: 8, cat: 'С конца', p: '📈 📉', q: 'Число увеличили на 20%, а потом уменьшили на 20%. Получилось 96. Каким было число?', o: ['100', '96', '120', '80'], a: 0, kp: 1, h1: 'Минус 20% — это умножить на 0,8.', h2: '96 — это 80% от числа после увеличения.', w: ['96 — это 80% от 120.', '120 — это на 20% больше, чем 100.', 'Было 100. Хитрость: проценты считались от разных чисел.'] },
+  { id: 't15', lv: 8, cat: 'Логика', p: '🏆', q: 'В турнире на выбывание 32 игрока: проигравший выбывает. Сколько матчей сыграют, пока не останется один победитель?', o: ['31', '16', '32', '64'], a: 0, kp: 1, h1: 'Каждый матч выбивает ровно одного игрока.', h2: 'Сколько игроков должно выбыть?', w: ['Каждый матч — один выбывший.', 'Выбыть должны все, кроме победителя: 31.', 'Значит, 31 матч.'] },
+  { id: 't16', lv: 8, cat: 'Спички', p: '#match:1-9=2', q: 'Переложи одну спичку, чтобы равенство стало верным. Что получится?', o: ['7 - 5 = 2', '1 + 1 = 2', '4 - 2 = 2', '9 - 7 = 2'], a: 0, h1: 'Девятку можно превратить в пятёрку.', h2: 'Лишнюю спичку положи сверху на единицу.', w: ['У девятки убираем верхнюю правую спичку — получается пятёрка.', 'Кладём её на единицу сверху — получается семёрка.', '7 − 5 = 2 — верно!'] },
+  { id: 't17', lv: 8, cat: 'Вероятность', p: '🪙 🪙 🪙', q: 'Монетку бросают 3 раза. Сколько из 8 возможных исходов дают ровно 2 орла?', o: ['3', '2', '4', '6'], a: 0, kp: 1, h1: 'Решка может выпасть в первый, второй или третий раз.', h2: 'ООР, ОРО, …', w: ['Ровно 2 орла — значит, ровно 1 решка.', 'Решка в первом, втором или третьем броске: РОО, ОРО, ООР.', 'Три исхода.'] }
+];
+/* old problems: their level on the new scale, a second hint and the explanation as a step */
+const OLYMP_H2 = {
+  o1: 'Два куска — один распил, три куска — два распила.', o2: 'Каждое число — предыдущее, умноженное на 2.', o3: 'Это 1×1, 2×2, 3×3, 4×4, 5×5. А дальше?', o4: 'Половина арбуза весит 4 кг.', o5: '10 дней — это неделя и ещё 3 дня.',
+  o6: '17:45 и час — это 18:45. Ещё полчаса.', o7: 'Сок стоит 3 евро. Сколько стоят мороженое и сок вместе?', o8: 'Сначала по краю до соседнего угла, потом вверх.', o9: 'Попробуй все 8 ходов коня — какие остаются на доске?', o10: 'Перед умножением было 15. А перед прибавлением?',
+  o11: 'Первый — 3, второй — ещё 2, третий — ещё 1.', o12: 'Если первые два носка разного цвета, то третий…', o13: 'До 3-го этажа 2 пролёта по 18 ступенек. До 6-го — 5 пролётов.', o14: 'Две монеты по 5 — это 10, и две по 2 — это 4.', o15: 'Среднее число — 8.',
+  o16: 'Единица есть в 1, 10, 11, 12…19. В 11 — две.', o17: 'Если первая цифра 1, какой должна быть вторая?', o18: 'У пауков 24 ноги. Сколько осталось на жуков?', o19: '4 маленьких и 1 большой.', o20: 'Было 4, один разрезали на 4: 3 + 4.',
+  o21: 'Боря не пианист и не скейтер — значит, шахматист.', o22: 'Первой — 3 способа, второй — 2, третьей — 1.', o23: 'На первое место 3 цифры, на второе — 2 оставшиеся.', o24: '4 + 3 + 2 + 1.', o25: 'К утру 7-го дня улитка на высоте 6 м, а днём поднимется на 3.',
+  o26: '1 + 2 + … + 9 = 45, строк три.', o27: 'Внутри — один кубик в самой середине.', o28: 'Если первый — лжец, то «мы оба лжецы» — неправда.', o29: 'Хвосту нужно проехать 300 метров.', o30: 'Король идёт по диагонали: a1, b2, c3…',
+  o31: '15 и ещё два раза по 3.', o32: 'В слое 3 × 3 = 9 кубиков, а слоёв три.', o33: 'Кошка в углу видит трёх других кошек.', o34: 'Во втором тайме 6 голов.', o35: 'Второй — 9:15, третий — 9:30.',
+  o36: 'Треугольники — 3 × 3, квадраты — 2 × 4.', o37: 'Всего 64 клетки, белых — половина.', o38: 'Жёлтый, потом зелёный, потом…', o39: 'Задуманное число — 9.', o40: 'До 11:00 — 10 минут, осталось ещё 15.',
+  o41: 'Дуся легче Буси, а Буся легче Муси.', o42: 'У кошек 3 × 4 лап, у голубей 2 × 2.', o43: 'Четыре стороны по 3 м.', o44: '8 фигур и 8 пешек.', o45: '2 футболки, к каждой 4 шорт.',
+  o46: 'Сава второй. Вера не первая, значит, она…', o47: 'Час — 60 минут, полчаса — 30.', o48: 'Самое большое двузначное число — 99.', o49: 'От 2:25 до 2:50 — 25 минут.', o50: 'Каждая победа вместо ничьей даёт ещё 2 очка. Не хватает 8.',
+  o51: '17 + 12 = 29, на 4 больше, чем учеников.', o52: 'Вырез не меняет периметр: стороны просто «вдавились» внутрь.', o53: 'В горизонтали 7 свободных клеток и в вертикали 7.', o54: 'Первой может быть 5 или 7.', o55: 'До полуночи — 2 ч 30 мин, после — 7 ч 15 мин.',
+  o56: 'Не хватает 36 евро, по 6 в неделю.', o57: 'Перед Верой 4 человека, за ней 2.', o58: 'Вдоль 8 м — 4 коврика, вдоль 6 м — 3.', o59: 'Ищи первое число, которое есть в обоих списках.', o60: 'Первым ходом e2–e4, а дальше по одной клетке.',
+  o61: 'Капитана 5 способами, вратаря — 4.', o62: 'От 1-й до 4-й — 3 промежутка по 3 минуты.', o63: 'Сегодня четверг.', o64: 'Без лишних 6 наклеек — 14, поровну по 7.', o65: 'Длиной 1 — 4, длиной 2 — 3, длиной 3 — 2, длиной 4 — 1.',
+  o66: '5 вариантов для первой цифры и 5 для второй.', o67: 'Третий солгал, значит, хотя бы один из первых двоих — рыцарь.', o68: 'Подходят 00:00, 11:11 и… 22:22.', o69: 'Взвесь 3 против 3: так сразу узнаешь, в какой тройке фальшивка.', o70: 'Попробуй: 3 мальчика и 4 девочки.',
+  o71: '9 квадратов 1 × 1, 4 квадрата 2 × 2 и 1 квадрат 3 × 3.', o72: 'Как ладья — 14 ходов, как слон — 13.', o73: '1 ступенька — 1 способ, 2 — 2, 3 — 3, 4 — 5…', o74: 'Прошло 6 часов, значит, часы отстали на 12 минут.', o75: '9 однозначных чисел и 6 двузначных.',
+  o76: 'Первой везти мышку: кот и сыр не ссорятся.', o77: 'Стороны вместе — 10 см, одна на 4 больше: 3 и 7.', o78: 'a1 и h8 одного цвета, значит, ходов чётное число. За 4 не успеть.', o79: '300, 210, 201, 120, 102, 111.', o80: 'Цифры отличаются на 3, а их сумма — 7.'
+};
+const OLYMP_LV8 = ['o68', 'o69', 'o70', 'o73', 'o76', 'o79', 'o80'];
+OLYMP.forEach(p => { p.lv = OLYMP_LV8.includes(p.id) ? 8 : p.lvl + 4; p.o = p.opts; p.h1 = p.hint; p.h2 = OLYMP_H2[p.id] || ''; p.w = [p.why]; });
+OLYMP.push(...OLYMP_NEW);
+/* OLYMIX-END */
 /* ---------- Sava's progression: levels and belts, a monthly season pass, three daily challenges with a chest,
    achievements, a streak flame with freezes, S/A/B/C grades. Every reward is earned and known in advance: no loot boxes. ---------- */
 const lvlOf = xp => { let n = 1; while (5 * n * (n + 1) / 2 <= xp) n++; return n; };
@@ -10283,36 +10595,8 @@ function screenFlash() {
   $('#flGo').onclick = () => { sfx.pop(); hush(); play(); };
 }
 
-/* ---------- Олимпиада: five problems a session, easy to hard, a hint after a miss, the reason after the answer ---------- */
-function screenOlymp() {
-  const t = newScreen();
-  P.olymp = P.olymp || { solved: [] };
-  const fresh = OLYMP.filter(p => !P.olymp.solved.includes(p.id)), pool = fresh.length >= 5 ? fresh : OLYMP;
-  const deck = [1, 1, 2, 2, 3].map(l => { const xs = pool.filter(p => p.lvl === l); return xs.length ? pickOne(xs) : pickOne(pool); }).filter((p, i, a) => a.indexOf(p) === i);
-  while (deck.length < 5) { const p = pickOne(pool); if (!deck.includes(p)) deck.push(p); }
-  let k = 0, first = 0, solvedNow = 0, miss = 0;
-  shell('Олимпиада', `<div class="ol"><div class="ol-head"><span id="olN"></span><span id="olCat"></span></div>
-    <p class="ol-q" id="olQ"></p><div class="ol-opts" id="olO"></div>
-    <p class="ol-hint" id="olH" hidden></p><div class="ol-why" id="olW" hidden></div></div>`);
-  function show() {
-    const p = deck[k]; miss = 0;
-    $('#olN').textContent = `Задача ${k + 1} из ${deck.length}`; $('#olCat').textContent = `${p.cat} · ${'★'.repeat(p.lvl)}${'☆'.repeat(3 - p.lvl)}`;
-    $('#olQ').textContent = p.q; $('#olH').hidden = true; $('#olW').hidden = true;
-    $('#olO').innerHTML = p.opts.map((o, i) => `<button class="ol-o" data-i="${i}"><b>${'АБВГД'[i]}</b>${esc(o)}</button>`).join('');
-    if (k === 0) talk('Олимпиада! Пять задач, от простых к хитрым. Читай внимательно и выбирай ответ.');
-  }
-  $('#olO').onclick = e => {
-    const b = e.target.closest('.ol-o'); if (!b || b.disabled) return;
-    const p = deck[k];
-    if (+b.dataset.i !== p.a) { miss++; b.disabled = true; wiggle(b); sfx.oops(); if (miss === 1) { $('#olH').hidden = false; $('#olH').textContent = '💡 Подсказка: ' + p.hint; } return; }
-    sfx.good(); b.classList.add('right'); $$('.ol-o').forEach(x => x.disabled = true);
-    if (!miss) first++;
-    if (!P.olymp.solved.includes(p.id)) { P.olymp.solved.push(p.id); save(); } solvedNow++;
-    $('#olW').hidden = false; $('#olW').innerHTML = `<p>✅ ${esc(p.why)}</p><button class="big" id="olNext">${k + 1 < deck.length ? 'Дальше' : 'Итог'}</button>`;
-    $('#olNext').onclick = () => { sfx.pop(); k++; if (k < deck.length) show(); else finish({ key: 'olymp', stars: first >= 4 ? 3 : first >= 2 ? 2 : 1, ev: { solved: solvedNow, first }, line: `С первой попытки: ${first} из ${deck.length}. Всего решено задач: ${P.olymp.solved.length} из ${OLYMP.length}.`, again: screenOlymp }); };
-  };
-  show();
-}
+/* ---------- Олимпиада: the new screen is OLY (OLYPLAY block, after «Математика по силам») ---------- */
+function screenOlymp() { OLY.play(); }
 
 /* ---------- the app's own voice: Piper (Rhasspy) running in a background worker of the browser, so games never stall.
    The voice file (about 63 MB) downloads once from Hugging Face and stays on the phone; until it is ready the phone's
@@ -10793,7 +11077,9 @@ function screenFriends() {
   const st = shell('Выбери друга', `<p class="lead">Кто будет с тобой заниматься? Нажми на друга.</p>
     ${TOY.pickHTML()}
     ${groups.map(([h, ids]) => `<h2 class="sec-h fr-h">${h}</h2><div class="friends ${ids === HER ? 'her' : ''}">${ids.map(btn).join('')}</div>`).join('')}
+    <h2 class="sec-h fr-h">Вид игры</h2>${lookHTML(lookCur(), 'lookKid')}
     <button class="big" id="friendOk">Готово</button>`);
+  lookBind($('#lookKid'), lookSetKid);
   talk(likes && likes.includes('football') ? 'Кто будет с тобой заниматься? Выбери футболиста или другого друга.' : Q() ? 'Кто будет с тобой заниматься? Нажми на друга.' : 'Кто будет с тобой заниматься? Выбери супер-девочку из Жар-птиц или зверёнка.');
   st.onclick = e => {
     const b = e.target.closest('.friend'); if (!b) return;
@@ -11674,10 +11960,51 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     save(); sfx.magic();
     if (ROOT.cur === id) P = pr;
     if (queue.length) screenKidSetup(queue[0], { queue: queue.slice(1), first, liga, back, idx: idx + 1, total });
-    else if (first) screenObDone({ liga });
+    else if (first) screenObLook({ liga });
     else (back || screenParents)();
   };
 }
+/* LOOK-BEGIN: «Ярко» (the bright look) or «Спокойно» (body.look-calm, the default): each child's own choice
+   (P.settings.look, synced with the profile), else the family's (fam().look). Function declarations on purpose:
+   newScreen() calls lookApply() from the very first screen. */
+function lookCur() {
+  let p = '', f = null;
+  try { p = (P && P.settings && P.settings.look) || ''; } catch (e) {}
+  try { f = fam(); } catch (e) {}
+  return p || (f && f.look) || 'calm';
+}
+function lookApply() { try { document.body.classList.toggle('look-calm', lookCur() !== 'bright'); } catch (e) {} }
+function lookHTML(sel, id = 'lookPick') {
+  return `<div class="lk-pick" id="${id}" role="radiogroup">${[['bright', 'Ярко'], ['calm', 'Спокойно']].map(([k, n]) => `<button class="lk-c ${sel === k ? 'sel' : ''}" data-look="${k}" role="radio" aria-checked="${sel === k}"><span class="lk-mini lk-${k}"><i></i><i></i><i></i><i></i></span><b>${n}</b></button>`).join('')}</div>`;
+}
+function lookBind(box, set) {
+  if (!box) return;
+  box.onclick = e => {
+    const b = e.target.closest('[data-look]'); if (!b) return;
+    sfx.tick(); set(b.dataset.look);
+    box.querySelectorAll('[data-look]').forEach(x => { x.classList.toggle('sel', x === b); x.setAttribute('aria-checked', x === b); });
+    lookApply(); say(b.querySelector('b').textContent);
+  };
+}
+function lookSetKid(k) { P.settings.look = k; save(); }
+// the first run: one step after the children's setup; skipped = «Спокойно»
+function screenObLook({ liga = '' } = {}) {
+  newScreen(); document.body.classList.remove('quest');
+  const f = fam(); if (f && !f.look) f.look = 'calm';
+  lookApply();
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe ob lk-ob">
+    <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1>Какой вид больше нравится?</h1><p>Поменять можно потом: «Выбери друга» или «Для взрослых».</p></div></header>
+    ${lookHTML(lookCur())}
+    <div class="prow-btns"><button class="big" id="lkNext">Дальше</button></div>
+  </div></main></div>`;
+  lookBind($('#lookPick'), k => { const f = fam(); if (f) { f.look = k; f.kids.forEach(id => { ROOT.profiles[id].settings.look = k; }); } save(); });
+  $('#lkNext').onclick = () => {
+    sfx.pop(); const f = fam();
+    if (f) f.kids.forEach(id => { const st = ROOT.profiles[id].settings; if (!st.look) st.look = f.look || 'calm'; });
+    save(); screenObDone({ liga });
+  };
+}
+/* LOOK-END */
 function screenObDone({ liga = '' } = {}) {
   newScreen(); document.body.classList.remove('quest');
   const f = fam();
@@ -15220,14 +15547,13 @@ function screenMathPath() {
   const card = (id, e, h, sub, prog, rec) => `<button class="mp-card ${rec ? 'rec' : ''}" data-go="${id}"><span class="emo">${e}</span><span class="mp-t"><b>${h}</b><small>${sub}</small><em>${prog}</em></span>${rec ? '<span class="mp-rec">⭐</span>' : ''}</button>`;
   shell('Путь по математике', `<div class="mp">
       ${card('m-skill', '🎯', 'Математика по силам', 'проверим уровень — и задания как раз для тебя', MSK.has() ? MSK.rankTxt() : '', true)}
+      ${card('olymp', '🏅', 'Олимпиада по силам', 'хитрые задачи: логика, варианты, роботы, спички', `${OLY.name()} · решено ${ol}`, age >= 7 || (MSK.has() && MSK.lv() >= 7))}
       <div class="mp-arrow">⬇️</div>
       ${card('soroban', '🧮', 'Счёты — ментальная арифметика', 'для всех: бусины, а потом счёт в уме', `уровень ${so} из ${SB.L.length}`, true)}
       ${card('flash', '⚡', 'Флеш-счёт', 'числа мелькают — складывай в уме', `уровень ${P.flashLv || 1}`, false)}
       <div class="mp-arrow">⬇️</div>
       ${card('steps', '🪜', 'Ступеньки', '6–10 лет: каждый день на шаг выше', `ступенька ${st} из ${STEPS.length}`, age >= 6 && age <= 9)}
       ${card('m-sprint', '⏱️', 'Мат-спринт', 'сколько примеров за минуту', P.mathBest ? `рекорд: ${P.mathBest}` : '', false)}
-      <div class="mp-arrow">⬇️</div>
-      ${card('olymp', '🏅', 'Олимпиада', '8+ лет: хитрые задачи', `решено: ${ol} из ${OLYMP.length}`, age >= 8)}
     </div>`);
   $('.mp').onclick = e => { const b = e.target.closest('[data-go]'); if (!b) return; sfx.pop(); const g = GAMES.find(x => x.id === b.dataset.go); if (b.dataset.go === 'soroban') screenSoroban(); else if (b.dataset.go === 'steps') screenSteps(); else if (g) g.go(); };
   talk('Путь по математике: сначала счёты и счёт в уме, потом ступеньки, а дальше олимпиада. Звёздочкой отмечено то, что подходит тебе сейчас.');
@@ -15436,6 +15762,163 @@ const MSK = (() => {
   return { play, check, lv, has, setLv, rank, rankTxt, sprintTask, settingsRow, L, pick, startLv };
 })();
 /* MSKILL-END */
+/* OLYPLAY-BEGIN */
+/* ---------- «Олимпиада» by skill: five problems at the child's level (the last one a «трудная задача» from the level
+   above), no penalty for a miss — praise for trying, hint 1, hint 2, and after the third miss the answer with its
+   explanation; the explanation in steps after every problem, said by the voice. The level starts from «Математика по
+   силам» (or the age), goes up after a clean round and stays after misses; «Полегче» / «Посложнее» at any time.
+   One problem a day also stands on the «Сегодня» path («Задачка дня»). ---------- */
+const OLY = (() => {
+  const LV = [['🐣', 'Цыплёнок-хитрюшка'], ['🐥', 'Смекалистый птенец'], ['🦊', 'Хитрый лисёнок'], ['🦉', 'Мудрый совёнок'], ['🐯', 'Отважный тигр'], ['🦁', 'Царь задач'], ['🚀', 'Покоритель вершин'], ['🏆', 'Олимпиец']];
+  const PRAISE = ['Хорошая попытка!', 'Смелая мысль! Подумаем ещё.', 'Почти! Ты на верном пути.', 'Ошибаться — это часть решения. Попробуй ещё!'];
+  const WIN = ['Верно!', 'Отлично!', 'Да! Вот это голова!', 'Правильно!', 'Здорово придумано!'];
+  const cl = n => Math.max(1, Math.min(8, n));
+  const S = () => { if (!P.olymp || typeof P.olymp !== 'object') P.olymp = { solved: [] }; const o = P.olymp; if (!Array.isArray(o.solved)) o.solved = []; if (!Array.isArray(o.seen)) o.seen = []; return o; };
+  const startLv = () => { if (MSK.has()) return cl(Math.ceil(MSK.lv() / 2)); const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : cl(a - 3); };
+  const lv = () => cl(S().lv || startLv());
+  const setLv = n => { S().lv = cl(n); save(); };
+  const name = (l = lv()) => `${LV[l - 1][0]} ${LV[l - 1][1]}`;
+  const lvTxt = () => `уровень ${lv()} · решено ${S().solved.length}`;
+  // the pictures
+  function cubes(spec) {
+    const rows = spec.split('/').map(r => r.split(',').map(Number)), s = 26, cx = s * .866, it = [];
+    rows.forEach((r, y) => r.forEach((h, x) => { for (let z = 0; z < h; z++) it.push([x, y, z]); }));
+    it.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1]) || a[2] - b[2]);
+    const pr = (x, y, z) => [(x - y) * cx, (x + y) * s / 2 - z * s], pts = [];
+    const poly = (ps, f) => { ps.forEach(p => pts.push(p)); return `<polygon points="${ps.map(p => p.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="${f}"/>`; };
+    const body = it.map(([x, y, z]) => poly([pr(x, y, z + 1), pr(x + 1, y, z + 1), pr(x + 1, y + 1, z + 1), pr(x, y + 1, z + 1)], '#FFD45C')
+      + poly([pr(x, y + 1, z), pr(x + 1, y + 1, z), pr(x + 1, y + 1, z + 1), pr(x, y + 1, z + 1)], '#FF9F43')
+      + poly([pr(x + 1, y, z), pr(x + 1, y + 1, z), pr(x + 1, y + 1, z + 1), pr(x + 1, y, z + 1)], '#E67E22')).join('');
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs) - 3, y0 = Math.min(...ys) - 3, w = Math.max(...xs) - x0 + 3, h = Math.max(...ys) - y0 + 3;
+    return `<svg class="ol-svg" viewBox="${x0.toFixed(1)} ${y0.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}" style="width:${Math.min(240, w * 1.6).toFixed(0)}px" aria-hidden="true"><g stroke="#7A4A1E" stroke-width="1.6" stroke-linejoin="round">${body}</g></svg>`;
+  }
+  const stick = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#E7B26A" stroke-width="5" stroke-linecap="round"/><circle cx="${x2}" cy="${y2}" r="4" fill="#E0442E"/>`;
+  function sticks(spec) {
+    const [R, C] = spec.split('x').map(Number), L = 44, o = 8; let g = '';
+    for (let r = 0; r <= R; r++) for (let c = 0; c < C; c++) g += stick(o + c * L + 5, o + r * L, o + (c + 1) * L - 5, o + r * L);
+    for (let c = 0; c <= C; c++) for (let r = 0; r < R; r++) g += stick(o + c * L, o + r * L + 5, o + c * L, o + (r + 1) * L - 5);
+    const w = C * L + 2 * o, h = R * L + 2 * o;
+    return `<svg class="ol-svg" viewBox="0 0 ${w} ${h}" style="width:${Math.min(260, w * 1.3)}px" aria-hidden="true">${g}</svg>`;
+  }
+  const SEG = { a: [4, 2, 26, 2], b: [28, 4, 28, 26], c: [28, 30, 28, 52], d: [4, 54, 26, 54], e: [2, 30, 2, 52], f: [2, 4, 2, 26], g: [4, 28, 26, 28], h: [4, 28, 26, 28], v: [15, 17, 15, 39] };
+  const DIG = { 0: 'abcdef', 1: 'bc', 2: 'abged', 3: 'abgcd', 4: 'fgbc', 5: 'afgcd', 6: 'afgedc', 7: 'abc', 8: 'abcdefg', 9: 'abcdfg', '+': 'hv', '-': 'h' };
+  function match(spec) {
+    let x = 4, g = '';
+    for (const ch of spec) {
+      if (ch === '=') { g += stick(x + 4, 22, x + 26, 22) + stick(x + 4, 34, x + 26, 34); x += 38; continue; }
+      [...(DIG[ch] || '')].forEach(s => { const [x1, y1, x2, y2] = SEG[s]; g += stick(x + x1, y1 + 4, x + x2, y2 + 4); }); x += 38;
+    }
+    return `<svg class="ol-svg ol-match" viewBox="0 0 ${x} 64" style="width:${Math.min(300, x * 1.5)}px" aria-hidden="true">${g}</svg>`;
+  }
+  const PIP = { 1: [[2, 2]], 2: [[1, 1], [3, 3]], 3: [[1, 1], [2, 2], [3, 3]], 4: [[1, 1], [3, 1], [1, 3], [3, 3]], 5: [[1, 1], [3, 1], [2, 2], [1, 3], [3, 3]], 6: [[1, 1], [3, 1], [1, 2], [3, 2], [1, 3], [3, 3]] };
+  const dice = spec => spec.split(',').map(n => `<svg class="ol-die" viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="2" width="44" height="44" rx="10" fill="#fff" stroke="#2A2346" stroke-width="3"/>${(PIP[n] || []).map(([a, b]) => `<circle cx="${a * 11 + 2}" cy="${b * 11 + 2}" r="4.5" fill="#2A2346"/>`).join('')}</svg>`).join('');
+  function robot(spec, it) {
+    const rows = spec.split('|'), C = Math.max(...rows.map(r => r.length));
+    const cell = ch => ch === '#' ? '<span class="w"></span>' : `<span>${ch === 'R' ? '🤖' : ch === '*' ? '⭐' : /[a-d]/.test(ch) ? (it || [])['abcd'.indexOf(ch)] || '' : ''}</span>`;
+    return `<div class="ol-grid" style="--c:${C}">${rows.map(r => [...r.padEnd(C, '.')].map(cell).join('')).join('')}</div>`;
+  }
+  function picHTML(p) {
+    if (!p.p) return '';
+    const m = /^#(\w+):(.*)$/.exec(p.p);
+    if (!m) return `<div class="ol-pic">${esc(p.p)}</div>`;
+    const k = m[1], v = m[2];
+    return `<div class="ol-pic ol-pic-${k}">${k === 'cubes' ? cubes(v) : k === 'sticks' ? sticks(v) : k === 'match' ? match(v) : k === 'dice' ? dice(v) : k === 'robot' ? robot(v, p.it) : ''}</div>`;
+  }
+  // choosing problems: unsolved first, not seen lately, different kinds
+  function pick(l, n, not = []) {
+    const s = S(), at = OLYMP.filter(p => p.lv === l && !not.includes(p));
+    const fresh = at.filter(p => !s.solved.includes(p.id) && !s.seen.includes(p.id)), mid = at.filter(p => !s.seen.includes(p.id));
+    const pool = shuffle([...(fresh.length >= n ? fresh : mid.length >= n ? mid : at)]), out = [];
+    for (const p of pool) { if (out.length >= n) break; if (!out.some(q => q.cat === p.cat)) out.push(p); }
+    for (const p of pool) { if (out.length >= n) break; if (!out.includes(p)) out.push(p); }
+    return out;
+  }
+  const seen = p => { const s = S(); s.seen = [p.id, ...s.seen.filter(x => x !== p.id)].slice(0, 60); };
+  const num = s => /^-?\d+$/.test(String(s).trim());
+  const sayQ = p => p.q;
+  // one problem on #olBox; done(firstTry) when it is solved or explained
+  function ask(p, { hard = false, day = false, intro = '', onDone }) {
+    const box = $('#olBox'), o = p.o.map((x, i) => ({ x, i }));
+    const opts = o.every(z => num(z.x)) ? o.sort((a, b) => +a.x - +b.x) : shuffle(o);
+    const big = o.every(z => z.x.length <= 4);
+    let miss = 0, hints = 0, over = false, input = '';
+    box.innerHTML = `${hard ? '<div class="ol-hard">⭐ Трудная задача!</div>' : ''}${day ? '<div class="ol-hard ol-dayb">🌞 Задачка дня</div>' : ''}${picHTML(p)}
+      <p class="ol-q no-said">${esc(p.q)}</p>
+      ${p.kp ? `<div class="mk-in ol-in" id="olIn">?</div>${keypadHTML('olKp')}` : `<div class="ol-opts ${big ? 'ol-big' : ''} ol-n${opts.length}">${opts.map(z => `<button class="ol-o" data-i="${z.i}">${esc(z.x)}</button>`).join('')}</div>`}
+      <div class="ol-tools"><button class="chip" id="olHint">💡 Подсказка</button><button class="chip" id="olSay">🔊 Ещё раз</button></div>
+      <p class="ol-hint no-said" id="olH" hidden></p><div class="ol-why" id="olW" hidden></div>`;
+    box.dataset.id = p.id; seen(p); save();
+    const hint = () => { const h = hints === 0 ? p.h1 : p.h2 || p.h1; hints = Math.min(2, hints + 1); const el = $('#olH'); el.hidden = false; el.textContent = `💡 ${h}`; return h; };
+    $('#olHint').onclick = () => { if (over) return; sfx.pop(); talk(hint()); };
+    $('#olSay').onclick = () => { sfx.pop(); talk(over ? p.w.join(' ') : sayQ(p)); };
+    function solve(first) {
+      over = true; const s = S();
+      if (!s.solved.includes(p.id)) s.solved.push(p.id);
+      if (hard && first) s.hard = (s.hard || 0) + 1;
+      save();
+      $$('.ol-o').forEach(b => { b.disabled = true; if (+b.dataset.i === p.a) b.classList.add('right'); });
+      const inEl = $('#olIn'); if (inEl) { inEl.textContent = p.o[p.a]; inEl.classList.add('ok'); }
+      const kp = $('#olKp'); if (kp) kp.remove();
+      $('#olH').hidden = true; $('.ol-tools').hidden = true;
+      const w = $('#olW'); w.hidden = false;
+      w.innerHTML = `${hard && first ? '<p class="ol-badge">🏅 Трудная задача решена!</p>' : ''}<h3>🧠 Как решить</h3><ol>${p.w.map(x => `<li>${esc(x)}</li>`).join('')}</ol><button class="big" id="olNext">Дальше</button>`;
+      if (hard && first) { confetti(60); sfx.magic(); }
+      $('#olNext').onclick = () => { sfx.pop(); hush(); onDone(first); };
+      const lead = first ? pickOne(WIN) : miss >= 3 ? 'Давай разберём вместе.' : pickOne(['Получилось!', 'Да, вот так!', 'Верно! Ты не сдался.']);
+      talk(`${lead} ${p.w.join(' ')}`);
+    }
+    function wrong(b) {
+      miss++; sfx.oops(); if (b) { b.disabled = true; wiggle(b); }
+      if (miss >= 3) { solve(false); return; }
+      const h = hints < miss ? hint() : null;
+      talk(`${pickOne(PRAISE)}${h ? ' ' + h : ''}`);
+    }
+    function tryAns(i, b) { if (over) return; if (i === p.a) { sfx.good(); if (b) b.classList.add('right'); solve(miss === 0); } else wrong(b); }
+    if (p.kp) {
+      const show = () => { const el = $('#olIn'); if (el) el.textContent = input || '?'; };
+      $('#olKp').onclick = e => {
+        const k = e.target.closest('[data-k]'); if (!k || over) return; const v = k.dataset.k; sfx.tick();
+        if (v === 'del') input = input.slice(0, -1);
+        else if (v === 'ok') { if (!input) return; const good = +input === parseInt(p.o[p.a], 10); input = ''; if (good) tryAns(p.a); else { wrong(null); wiggle($('#olIn')); } }
+        else if (input.length < 4) input += v;
+        if (!over) show();
+      };
+    } else $('.ol-opts').onclick = e => { const b = e.target.closest('.ol-o'); if (!b || b.disabled) return; tryAns(+b.dataset.i, b); };
+    talk((intro ? intro + ' ' : '') + sayQ(p));
+  }
+  function head(l) { return `<div class="ol-top"><button class="chip" id="olDown">🐢 Полегче</button><span class="ol-lv"><b>${LV[l - 1][0]} Уровень ${l}</b><small>${esc(LV[l - 1][1])}</small></span><button class="chip" id="olUp">🚀 Посложнее</button></div>`; }
+  function play() {
+    newScreen(); noGuard();   // a miss here is part of thinking: no lock, no fewer stars
+    const l = lv(), first4 = pick(l, 4), deck = [...first4, ...pick(cl(l + 1), 1, first4)];
+    let k = 0, first = 0;
+    shell('Олимпиада', `<div class="ol">${head(l)}<div class="ol-head"><span id="olN"></span><span id="olCat"></span></div><div id="olBox"></div></div>`);
+    $('#olDown').onclick = () => { if (l <= 1) return; sfx.pop(); hush(); setLv(l - 1); play(); };
+    $('#olUp').onclick = () => { if (l >= 8) return; sfx.pop(); hush(); setLv(l + 1); play(); };
+    function show() {
+      const p = deck[k], hard = k === 4;
+      $('#olN').textContent = `Задача ${k + 1} из ${deck.length}`; $('#olCat').textContent = p.cat;
+      ask(p, { hard, intro: k === 0 ? 'Олимпиада! Пять хитрых задач, последняя — самая трудная. Ошибаться не страшно: есть подсказки.' : '', onDone: f => { if (f) first++; k++; if (k < deck.length) show(); else end(); } });
+    }
+    function end() {
+      const up = first >= 4 && l < 8; if (up) setLv(l + 1);
+      const s = S();
+      finish({ key: 'olymp', stars: first >= 3 ? 3 : 2, ev: { solved: deck.length, first }, again: play,
+        line: `С первой попытки: ${first} из ${deck.length}. Трудных задач решено: ${s.hard || 0}.` + (up ? ` Новый уровень: ${name(l + 1)}!` : ` ${name(l)}.`) });
+    }
+    show();
+  }
+  // «Задачка дня»: one problem of the child's level, the same all day
+  function day() {
+    newScreen(); noGuard();
+    const l = lv(), s = S(), at = OLYMP.filter(p => p.lv === l), fresh = at.filter(p => !s.solved.includes(p.id)), pool = fresh.length ? fresh : at;
+    const p = pool[dayNo() % pool.length];
+    shell('Задачка дня', `<div class="ol"><div class="ol-head"><span>${esc(name(l))}</span><span id="olCat">${esc(p.cat)}</span></div><div id="olBox"></div></div>`);
+    ask(p, { day: true, onDone: f => finish({ key: 'olymp-day', stars: 3, ev: { first: f ? 1 : 0 }, again: play, line: f ? 'Задачка дня решена с первой попытки! Хочешь ещё? В «Олимпиаде» их много.' : 'Задачка дня разобрана! Завтра будет новая.' }) });
+  }
+  return { play, day, lv, setLv, name, lvTxt, pick, startLv };
+})();
+GAMES.push({ id: 'olymp-day', name: 'Задачка дня', sub: 'одна хитрая задача по силам', ico: () => pic('🧩'), bg: 'var(--t-yellow)', go: () => OLY.day(), grp: 3, inside: true });
+/* OLYPLAY-END */
 
 /* ---------- «Весёлые композиторы»: twelve great composers with their portraits (Wikimedia Commons), funny true facts
    and their famous themes played right here by a little synth (the music is centuries old and free; the arrangement is
@@ -16708,7 +17191,8 @@ function readFineHTML() {
     const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
     return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ['день', 'дня', 'дней'])} без чтения` : 'Вчера не было чтения'}: −${sum} ⭐</b><small>${done ? 'Сегодня чтение уже есть — молодец!' : 'Почитай сегодня, и завтра звёзды останутся с тобой.'}</small></span>${done ? '' : '<button class="chip" id="rfGo">📖 Читать</button>'}</div>`;
   }
-  if (!done && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Сегодня ещё не читали</b><small>День без чтения стоит ${READ_FINE} звёзд. Одно занятие «Чтение» или книга — и всё в порядке.</small></span><button class="chip" id="rfGo">📖 Читать</button></div>`;
+  // not on the very first day: a new child first meets the game, then its rules
+  if (!done && P.readFrom !== today && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Сегодня ещё не читали</b><small>День без чтения стоит ${READ_FINE} звёзд. Одно занятие «Чтение» или книга — и всё в порядке.</small></span><button class="chip" id="rfGo">📖 Читать</button></div>`;
   return '';
 }
 function bindReadFine(fines) {
@@ -21730,6 +22214,7 @@ const SETUI = (() => {
     if (S.prog) list([row($('#expBtn'), '📤', 'Скопировать прогресс'), row($('#impBtn'), '📥', 'Вставить прогресс')]);
     if ($('#resetBtn')) list([row($('#resetBtn'), '🗑️', 'Начать заново', '', true)]);
 
+    if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид: ярко или спокойно</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
       ['fam', '👪', 'Семья', '', [S.fam]],
@@ -23481,7 +23966,7 @@ const PATH = (() => {
   // each child's first home screen after the game opens is «Сегодня»; later the tab they were on stays
   const SEEN = new Set();
   const fresh = id => { if (SEEN.has(id)) return false; SEEN.add(id); return true; };
-  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', soro: '🧮' };
+  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', puzzle: '🧩', soro: '🧮' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
     const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;
