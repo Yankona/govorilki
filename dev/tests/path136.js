@@ -33,7 +33,7 @@ const said = p => p.evaluate(() => { const s = window.__said.slice(); window.__s
   await p.click('.pd-n.now'); await p.waitForTimeout(1200);
   log('now step opens:', !(await p.$('#tabBar')) ? await p.$eval('.bar h1', e => e.textContent).catch(() => 'a screen') : 'still home');
   // all done: the chest
-  await p.evaluate(() => window.__T.run("(() => { P.days[dayKey()] = { speech: 1, read: 1, math: 1 }; save(); goHome(); })()")); await p.waitForTimeout(800);
+  await p.evaluate(() => window.__T.run("(() => { P.days[dayKey()] = { speech: 1, read: 1, math: 1, soro: 1 }; save(); goHome(); })()")); await p.waitForTimeout(800);
   log('all done:', JSON.stringify(await nodes(p)), '|', await p.$eval('.pd-say', e => e.textContent));
   await p.screenshot({ path: D + `p136-${TAG}-ready.png` });
   const s0 = await p.evaluate(() => window.__T.P.stars);

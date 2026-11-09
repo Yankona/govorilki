@@ -1992,19 +1992,37 @@ body.quest .fam-ok{color:#7BE0A0}
 .pw-k.blk{background:#2A2346;color:#fff;height:150px}
 .pw-k.next{background:#FFD93D;box-shadow:0 0 0 4px #F5B400,0 4px 0 var(--line-strong);animation:pulse .9s ease-in-out infinite}.pw-k.blk.next{background:#F5B400;color:#2A2346}
 .pw-k.hit{transform:translateY(3px)}.pw-k.no{background:#FFB3B3}
-.soro{display:flex;flex-direction:column;align-items:center;gap:12px}
-.sb-q{margin:0;font:800 22px/1.3 var(--f-body);text-align:center}
+.sbx{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.sbx-lv{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding:2px 2px 6px;scrollbar-width:none}.sbx-lv .chip{flex:none}
+.sbx-hud{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:center;font:800 15px var(--f-body);color:var(--ink-soft);text-align:center}
+.sbx-dots{display:inline-flex;gap:5px}.sbx-dots i{width:13px;height:13px;border-radius:50%;background:var(--line-strong)}.sbx-dots i.cur{box-shadow:0 0 0 3px var(--sea)}.sbx-dots i.ok{background:var(--leaf)}.sbx-dots i.no{background:#FFB3B3}
+.sb-q{margin:0;font:800 22px/1.3 var(--f-body);text-align:center;min-height:1.3em}
 .sb-n{font:900 40px var(--f-body);color:var(--sea)}
-.sb-n.big{font-size:90px;margin:20px 0}
-.sb{display:flex;gap:18px;justify-content:center;padding:14px 22px;border-radius:18px;background:#8A5A2B;box-shadow:inset 0 0 0 6px #6B4220,0 5px 0 #4E2F14}
-.sb-rod{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:64px;height:300px}
-.sb-stick{position:absolute;top:0;bottom:0;left:50%;width:6px;margin-left:-3px;background:#D9C3A0;border-radius:3px}
-.sb-beam{position:relative;width:96px;height:12px;background:#F2E6CF;border-radius:4px;margin:0 0 0;z-index:1}
-.sb-b{position:relative;z-index:2;width:62px;height:34px;border:0;border-radius:50%/60%;background:radial-gradient(circle at 35% 30%,#FFD9A8,#E8833A 60%,#B85A1E);box-shadow:0 2px 0 #7A3A10;cursor:pointer;transition:transform .15s}
-.sb-b.up{margin-bottom:56px}.sb-b.up.on{transform:translateY(56px)}
-.sb-b.lo:not(.on){transform:translateY(64px)}
-.sb.sm .sb-rod{height:220px}
-@media (max-height:780px){#sbBox{zoom:.76}.soro{gap:8px}}
+.sbx-val{font:900 44px/1 var(--f-body);color:var(--sea);min-height:44px}.sbx-val:empty{display:none}
+.sbx-row{display:flex;align-items:center;justify-content:center;gap:10px 18px;flex-wrap:wrap;width:100%}
+.sbx-flash{font:900 96px/1 var(--f-body);color:var(--tiger);min-height:110px;display:flex;align-items:center;justify-content:center}
+.sbx-flash[hidden]{display:none}.sbx-flash.blink{animation:sbBlink .3s ease-out}
+@keyframes sbBlink{from{transform:scale(.6);opacity:.2}to{transform:scale(1);opacity:1}}
+.sbx-in{font:900 40px var(--f-body);color:var(--sea);min-width:120px;text-align:center;padding:4px 16px;border-radius:16px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong)}
+.sb2{--bh:44px;--bw:78px;display:flex;gap:14px;justify-content:center;padding:14px 18px 6px;border-radius:24px;background:linear-gradient(#9E6C3A,#7A4F27);box-shadow:inset 0 0 0 6px #66401E,0 6px 0 #4A2D12;touch-action:none;user-select:none;-webkit-user-select:none;transition:opacity .9s}
+.sb2.r3{--bh:40px;--bw:66px;gap:10px}
+.sb2.sm{--bh:24px;--bw:46px;padding:8px 12px 4px;gap:8px}
+.sb2-rod{position:relative;width:var(--bw);height:calc(var(--bh) * 7 + 46px)}
+.sb2.sm .sb2-rod{height:calc(var(--bh) * 7 + 30px)}
+.sb2-stick{position:absolute;left:50%;top:0;height:calc(var(--bh) * 7 + 28px);width:6px;margin-left:-3px;background:#EAD9B6;border-radius:3px}
+.sb2-bar{position:absolute;left:-9px;right:-9px;top:calc(var(--bh) * 2 + 4px);height:14px;background:#F7EDD9;border-radius:3px;z-index:1;box-shadow:0 2px 0 #C9A878}
+.sb2-dot{position:absolute;left:50%;top:3px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#7A4F27}
+.sb2-b{position:absolute;left:0;width:var(--bw);height:calc(var(--bh) - 2px);border:0;padding:0;margin:0;border-radius:50%;z-index:2;background:radial-gradient(ellipse at 35% 30%,#FFE2BC,#F08A3C 55%,#B4561C);box-shadow:0 3px 0 #7A3A10;cursor:pointer;transition:top .18s ease-out;touch-action:none;-webkit-tap-highlight-color:transparent}
+.sb2-b.up{background:radial-gradient(ellipse at 35% 30%,#D4EEFF,#3E9BE0 55%,#1E5E9A);box-shadow:0 3px 0 #123E66}
+.sb2-b.hint{animation:sbGlow 1s ease-in-out infinite;outline:4px solid #FFD93D;outline-offset:1px}
+@keyframes sbGlow{50%{outline-color:#FFF6C2;outline-offset:4px}}
+.sb2-pl{position:absolute;bottom:0;left:-8px;right:-8px;text-align:center;font:800 11px var(--f-body);color:#FFE9C8}
+.sb2.ghost{opacity:.3;pointer-events:none;filter:saturate(.4)}.sb2.ghost.gone{opacity:0}
+.sbi-hero{display:flex;align-items:center;gap:10px;max-width:520px;width:100%}
+.sbi-fr{flex:none;width:84px;height:84px}.sbi-fr svg{width:100%;height:100%}
+.sbi-say{margin:0;flex:1;padding:12px 14px;border-radius:18px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong);font:700 17px/1.35 var(--f-body)}
+@media (max-height:760px){.sb2{--bh:34px;--bw:68px}.sb2.r3{--bh:30px;--bw:58px}.sb2.sm{--bh:20px;--bw:40px}.sbx-val{font-size:34px;min-height:34px}.sbx{gap:6px}.sb-q{font-size:20px}.sb-n{font-size:34px}.sbx-flash{font-size:68px;min-height:72px}.sbi-fr{width:64px;height:64px}}
+@media (min-width:900px) and (min-height:820px){.sb2{--bh:48px;--bw:86px}}
 .st .st-ladder{display:flex;gap:6px;overflow-x:auto;width:100%;padding:4px 2px 8px;scrollbar-width:none}
 .st-step{flex:none;width:40px;height:40px;border:0;border-radius:12px;background:var(--paper);font:900 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
 .st-step.done{background:var(--t-green)}.st-step.sel{outline:3px solid var(--sea)}.st-step[disabled]{opacity:.45}
@@ -3627,16 +3645,20 @@ const LESSONS_R = {
   speech: { name: 'Логопед', sub: 'дыхание, язычок, Р и шипящие', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Чтение', sub: 'буквы, слоги, слова', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   math: { name: 'Математика', sub: 'считаем и складываем', mins: 10, color: 'var(--leaf)', bg: 'var(--t-green)' },
+  soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
   puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LESSONS_L = {
   speech: { name: 'Тренировка Л', sub: 'разогрев, язык, арена Л', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Скорочтение', sub: 'слоги и текст на время', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
   book: { name: 'Книга', sub: 'немного каждый день, с удовольствием', mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
+  soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
   puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
 };
 const LS = () => {
-  const b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
+  // little ones (up to 5): «Счёты» and «Задачка дня» take turns by day, so the path stays short
+  if ((P.settings.age || 5) <= 5) { const { [dayNo() % 2 ? 'puzzle' : 'soro']: _, ...r } = b; b = r; }
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3655,7 +3677,7 @@ function todayState() {
     P.today = { date: k, v: 2, done: { speech: [], read: [], math: [] } };
     if (old && old.date === k && Array.isArray(old.done) && !dayTotal(k)) P.today.done.speech = old.done;
   }
-  ['speech', 'read', 'math', 'book', 'puzzle'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
+  ['speech', 'read', 'math', 'book', 'soro', 'puzzle'].forEach(id => { if (!P.today.done[id]) P.today.done[id] = []; });
   return P.today;
 }
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
@@ -3663,6 +3685,8 @@ const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return 
 function lessonPlan(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
   if (id === 'puzzle') return [gameStep('olymp-day', 'puzzle')];
+  // «Счёты» every day, for every age: one short round at the child's level (soroban)
+  if (id === 'soro') return [{ key: 'soroban', kind: 'math', name: 'Счёты', run: () => SB.daily() }];
   if (id === 'speech' && customSounds()) return speechPlanMine(n, s);
   if (P.settings.track === 'l') {
     if (id === 'speech') {
@@ -4725,7 +4749,7 @@ const greet = () => gx((Q()
   : `Привет${nameBit()}! Я ${friend().who}. ${friend().hello} ${dayTotal(dayKey()) ? 'Сегодня ты уже позанималась. Можно ещё!' : 'Начнём занятие?'}`) + holGreet());
 function lessonsCard() {
   const td = todayState(), c = dayCounts(td.date);
-  const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : '<span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b></span>', math: '<span class="ico-num">1+2</span>', book: pic('📖') };
+  const ico = { speech: faceSVG('spatula'), read: P.settings.track === 'l' ? pic('⏱️') : '<span class="ico-letters"><b class="L v">А</b><b class="L c">Б</b></span>', math: '<span class="ico-num">1+2</span>', book: pic('📖'), soro: pic('🧮') };
   const rows = LIDS().map(id => {
     const L = LS()[id], plan = lessonPlan(id), d = td.done[id].length, n = c[id] || 0;
     const state = id === 'book' ? (n ? 'Сегодня прочитано ✓' : 'Отметить чтение') : d ? `Дальше · ${d}/${plan.length}` : n ? 'Ещё раз' : 'Начать';
@@ -11188,7 +11212,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); SB.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -15161,101 +15185,280 @@ INTEREST_CAT.forEach(c => (c.items || []).forEach(i => { if (Array.isArray(i.til
 const keypadHTML = id => `<div class="keypad" id="${id}">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 'del', 0, 'ok'].map(k => `<button class="kp-k ${k === 'ok' ? 'ok' : ''}" data-k="${k}">${k === 'del' ? '⌫' : k === 'ok' ? 'OK' : k}</button>`).join('')}</div>`;
 const DIV = LANG === 'en' ? '÷' : ':';
 
-/* the soroban */
-function sbHTML(vals, { tap = true, small = false } = {}) {
-  return `<div class="sb ${small ? 'sm' : ''}">${vals.map((v, r) => { const up = v >= 5 ? 1 : 0, lo = v % 5;
-    return `<div class="sb-rod" data-r="${r}"><span class="sb-stick"></span>
-      <button class="sb-b up ${up ? 'on' : ''}" data-r="${r}" data-k="5" ${tap ? '' : 'tabindex="-1"'} aria-label="5"></button>
-      <span class="sb-beam"></span>
-      ${[0, 1, 2, 3].map(k => `<button class="sb-b lo ${k < lo ? 'on' : ''}" data-r="${r}" data-k="${k}" ${tap ? '' : 'tabindex="-1"'} aria-label="1"></button>`).join('')}</div>`; }).join('')}</div>`;
-}
-const sbValue = vals => vals.reduce((s, v) => s * 10 + v, 0);
-const SORO = [
-  { n: 'Покажи число от 0 до 4', rods: 1, max: 4, kind: 'show' },
-  { n: 'Покажи число от 0 до 9', rods: 1, max: 9, kind: 'show' },
-  { n: 'Сколько на счётах?', rods: 1, max: 9, kind: 'read' },
-  { n: 'Плюс и минус на счётах', rods: 1, max: 9, kind: 'add' },
-  { n: 'Числа до 99', rods: 2, max: 99, kind: 'show' },
-  { n: 'Счёт в уме', rods: 1, max: 9, kind: 'mind' }
-];
-function screenSoroban(lv) {
-  const t = newScreen();
-  P.soro = P.soro || { top: 1 };
-  lv = Math.min(lv || P.soro.top, P.soro.top);
-  const L = SORO[lv - 1];
-  let k = 0, ok = 0, vals = Array(L.rods).fill(0), task = null, busy = false;
-  shell('Счёты', `<div class="soro">
-      <div class="ai-lv" id="sbLv">${SORO.map((x, i) => `<button class="chip ${i + 1 === lv ? 'sel' : ''}" data-lv="${i + 1}" ${i + 1 > P.soro.top ? 'disabled' : ''}>${i + 1 > P.soro.top ? '🔒' : '🧮'} ${i + 1}</button>`).join('')}</div>
-      <div class="sp-hud"><span>${esc(L.n)}</span><span><b id="sbK">1</b>/5 · ✅ <b id="sbOk">0</b></span></div>
-      <p class="sb-q" id="sbQ"></p>
-      <div id="sbBox"></div>
-      <div id="sbAns"></div>
-    </div>`);
-  $('#sbLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); screenSoroban(+b.dataset.lv); };
-  const box = $('#sbBox'), ans = $('#sbAns');
-  function drawSb(tap = true) { box.innerHTML = sbHTML(vals, { tap }); }
-  function next() {
-    busy = false; $('#sbK').textContent = k + 1; vals = Array(L.rods).fill(0); ans.innerHTML = '';
-    if (L.kind === 'show') {
-      const n = L.rods === 2 ? ri(10, 99) : ri(lv === 1 ? 0 : 1, L.max);
-      task = { a: n }; $('#sbQ').innerHTML = `Покажи на счётах: <b class="sb-n">${n}</b>`; drawSb();
-      ans.innerHTML = `<button class="big" id="sbCheck">Готово</button>`;
-      talk(k === 0 ? `Покажи на счётах число ${n}. Верхняя бусина — пять, нижние — по одной. Двигай бусины к перекладине.` : `Покажи число ${n}.`);
-    } else if (L.kind === 'read') {
-      const n = ri(0, 9); vals = [n]; task = { a: n }; drawSb(false);
-      const opts = sample([n, ...sample([...Array(10).keys()].filter(x => x !== n), 2)], 3);
-      $('#sbQ').textContent = 'Какое число на счётах?';
-      ans.innerHTML = `<div class="picks-g three nums">${opts.map(o => `<button class="pick-b" data-a="${o}">${o}</button>`).join('')}</div>`;
-      talk(k === 0 ? 'Посчитай бусины у перекладины. Верхняя — это пять. Какое число на счётах?' : 'Какое число?');
-    } else if (L.kind === 'add') {
-      const a = ri(1, 8), plus = Math.random() < .6, b = plus ? ri(1, 9 - a) : ri(1, a), r = plus ? a + b : a - b;
-      vals = [a]; task = { a: r, from: a, b, plus }; drawSb();
-      $('#sbQ').innerHTML = `<b class="sb-n">${a} ${plus ? '+' : '−'} ${b}</b> — сделай на счётах`;
-      ans.innerHTML = `<button class="big" id="sbCheck">Готово</button>`;
-      const five = plus ? (a < 5 && a + b >= 5 && b < 5) : (a >= 5 && a - b < 5 && b < 5);
-      talk(`На счётах ${a}. ${plus ? 'Прибавь' : 'Отними'} ${b}.` + (five ? (plus ? ` Подсказка: нижних бусин не хватает — опусти пятёрку и убери ${5 - b}.` : ` Подсказка: подними пятёрку и добавь ${5 - b}.`) : ''));
-    } else {
-      // the mind: three pictured numbers one after another, the child adds them in the head
-      const ns = [ri(1, 4), ri(1, 4), ri(1, 4)], sum = ns.reduce((s, x) => s + x, 0);
-      task = { a: sum }; $('#sbQ').textContent = 'Смотри и складывай в уме'; busy = true;
-      talk('Смотри на счёты и складывай в уме.');
-      (async () => {
-        await wait(1200);
-        for (const n of ns) { if (t !== tok) return; vals = [n]; drawSb(false); sfx.tick(); await wait(1300); box.innerHTML = sbHTML([0], { tap: false }); await wait(350); }
-        if (t !== tok) return;
-        box.innerHTML = '<p class="sb-n big">?</p>'; busy = false;
-        const opts = sample([sum, ...sample([...Array(13).keys()].map(x => x + 1).filter(x => x !== sum && Math.abs(x - sum) <= 3), 2)], 3);
-        $('#sbQ').textContent = 'Сколько всего?';
-        ans.innerHTML = `<div class="picks-g three nums">${opts.map(o => `<button class="pick-b" data-a="${o}">${o}</button>`).join('')}</div>`;
-        talk('Сколько всего?');
-      })();
+/* SOROBAN-BEGIN */
+/* ---------- «Счёты»: mental arithmetic the soroban way, for every age (the owner: «эти счёты я бы добавила как одну из
+   обязательных задач … для любого возраста»). Our own look: a warm wooden frame, a blue «five» bead above the bar and
+   four orange «one» beads below; beads move by a tap or a swipe toward the bar or away, big enough for a small finger;
+   the number on the abacus is shown and said. Twelve levels, per child in P.soro {v: 2, top, lv, wins, intro}:
+   show a number → read it → plus and minus on one rod → «small friends» (the five) → «big friends» (the ten) → two and
+   three digits → flash anzan (numbers flash, the child adds them on the abacus) → a ghost abacus that fades away →
+   in the head, then bigger numbers in the head. A round passed with at most one mistake at the top level opens the next.
+   The first time a short story with the friend shows how the beads count (a little game, not a lesson). The start
+   level and the flash numbers follow «Математика по силам» (MSK). A short round is a daily step of «Сегодня» for every
+   age (the lesson «soro»). ---------- */
+const SB = (() => {
+  const PL = ['единицы', 'десятки', 'сотни'];
+  // a direct move on one rod: beads only come to the bar (plus) or only leave it (minus)
+  const parts = v => [v >= 5 ? 1 : 0, v % 5];
+  const direct = (a, r) => { const [au, al] = parts(a), [ru, rl] = parts(r); return r > a ? ru >= au && rl >= al : ru <= au && rl <= al; };
+  const GEN = {
+    direct() { for (;;) { const a = ri(0, 9), b = ri(1, 4 + (Math.random() < .4 ? 5 : 0)), plus = Math.random() < .55, r = plus ? a + b : a - b; if (r < 0 || r > 9 || !direct(a, r)) continue; return { a, b, plus, r, h: plus ? 'Придвинь бусины к перекладине.' : 'Отодвинь бусины от перекладины.' }; } },
+    small() {
+      if (Math.random() < .55) { const a = ri(1, 4), b = ri(5 - a, 4); return { a, b, plus: true, r: a + b, h: `Нижних бусин не хватает. ${b} — это 5 без ${5 - b}: опусти пятёрку и убери ${5 - b} ${plural(5 - b, ['нижнюю', 'нижние', 'нижних'])}.` }; }
+      const a = ri(5, 8), b = ri(a - 4, 4); return { a, b, plus: false, r: a - b, h: `Нижних бусин не хватает. ${b} — это 5 без ${5 - b}: подними пятёрку и добавь ${5 - b} ${plural(5 - b, ['нижнюю', 'нижние', 'нижних'])}.` };
+    },
+    big() {
+      if (Math.random() < .55) { const u = ri(1, 9), b = ri(Math.max(1, 10 - u), 9), a = ri(0, 7) * 10 + u; return { a, b, plus: true, r: a + b, h: `Единиц не хватает. ${b} — это 10 без ${10 - b}: добавь десяток слева и убери ${10 - b} справа.` }; }
+      const u = ri(0, 8), b = ri(u + 1, 9), a = ri(1, 8) * 10 + u; return { a, b, plus: false, r: a - b, h: `Единиц не хватает. ${b} — это 10 без ${10 - b}: убери десяток слева и добавь ${10 - b} справа.` };
+    },
+    two() { if (Math.random() < .55) { const a = ri(10, 79), b = ri(10, 99 - a); return { a, b, plus: true, r: a + b, h: 'Слева направо: сначала десятки, потом единицы.' }; } const a = ri(30, 99), b = ri(10, a - 10); return { a, b, plus: false, r: a - b, h: 'Слева направо: сначала десятки, потом единицы.' }; },
+    three() { if (Math.random() < .55) { const a = ri(100, 799), b = ri(11, Math.min(399, 999 - a)); return { a, b, plus: true, r: a + b, h: 'Слева направо: сотни, десятки, единицы.' }; } const a = ri(250, 999), b = ri(11, Math.min(399, a - 100)); return { a, b, plus: false, r: a - b, h: 'Слева направо: сотни, десятки, единицы.' }; }
+  };
+  const L = [
+    { n: 'Покажи число до 4', k: 'show', rods: 1, max: 4 },
+    { n: 'Покажи число до 9', k: 'show', rods: 1, max: 9 },
+    { n: 'Сколько на счётах?', k: 'read', rods: 1 },
+    { n: 'Плюс и минус', k: 'calc', rods: 1, g: 'direct' },
+    { n: 'Маленькие друзья: пятёрка', k: 'calc', rods: 1, g: 'small' },
+    { n: 'Большие друзья: десяток', k: 'calc', rods: 2, g: 'big' },
+    { n: 'Двузначные числа', k: 'calc', rods: 2, g: 'two' },
+    { n: 'Трёхзначные числа', k: 'calc', rods: 3, g: 'three' },
+    { n: 'Флеш-анзан на счётах', k: 'flash', rods: 2 },
+    { n: 'Счёты-призрак', k: 'ghost', rods: 2 },
+    { n: 'Счёт в уме', k: 'mind', rods: 2 },
+    { n: 'Мастер счёта в уме', k: 'mind', rods: 3, big: 1 }
+  ];
+  const mk = () => { try { return MSK.has() ? MSK.lv() : MSK.startLv(); } catch (e) { return 1; } };
+  const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5), m = mk(); return a <= 5 ? 1 : a <= 7 ? (m >= 5 ? 3 : 2) : m >= 7 ? 4 : 3; };
+  const S = () => {
+    let s = P.soro; if (!s || typeof s !== 'object') s = P.soro = {};
+    if (s.v !== 2) { const old = +s.top || 0; s.v = 2; s.top = Math.max(startLv(), Math.min(old, 4)); s.lv = s.top; s.wins = {}; }
+    s.wins = s.wins || {}; s.top = Math.max(1, Math.min(L.length, s.top || 1)); s.lv = Math.max(1, Math.min(s.top, s.lv || s.top));
+    return s;
+  };
+  const top = () => S().top;
+  // ---- the abacus: build once, then only the beads move (so they slide)
+  function abacus(box, rods, { tap = true, ghost = false, small = false, onChange = null } = {}) {
+    box.innerHTML = `<div class="sb2 r${rods}${ghost ? ' ghost' : ''}${small ? ' sm' : ''}" role="group" aria-label="Счёты">${Array.from({ length: rods }, (_, r) => `<div class="sb2-rod" data-r="${r}"><i class="sb2-stick"></i><i class="sb2-bar">${r === rods - 1 ? '<b class="sb2-dot"></b>' : ''}</i><button class="sb2-b up" data-r="${r}" data-k="5" aria-label="5" ${tap ? '' : 'tabindex="-1"'}></button>${[0, 1, 2, 3].map(k => `<button class="sb2-b lo" data-r="${r}" data-k="${k}" aria-label="1" ${tap ? '' : 'tabindex="-1"'}></button>`).join('')}${rods > 1 ? `<small class="sb2-pl">${PL[rods - 1 - r]}</small>` : ''}</div>`).join('')}</div>`;
+    const el = box.firstElementChild, A = { el, vals: Array(rods).fill(0), tap, onChange };
+    A.value = () => A.vals.reduce((s, v) => s * 10 + v, 0);
+    A.draw = () => {
+      el.querySelectorAll('.sb2-rod').forEach((rod, r) => {
+        const [u, lo] = parts(A.vals[r]);
+        rod.querySelectorAll('.sb2-b').forEach(b => {
+          const k = b.dataset.k; let on, t;
+          if (k === '5') { on = !!u; t = on ? 'calc(var(--bh) + 4px)' : '0px'; }
+          else { const i = +k; on = i < lo; t = `calc(var(--bh) * ${on ? 2 + i : 3 + i} + ${on ? 20 : 26}px)`; }
+          b.classList.toggle('on', on); b.style.top = t;
+        });
+      });
+      el.dataset.v = A.value();
+    };
+    A.set = n => { const s = String(Math.max(0, Math.floor(n))).padStart(rods, '0').slice(-rods); A.vals = [...s].map(Number); A.draw(); };
+    A.hint = list => { el.querySelectorAll('.sb2-b.hint').forEach(b => b.classList.remove('hint')); (list || []).forEach(([r, k]) => { const b = el.querySelector(`.sb2-b[data-r="${r}"][data-k="${k}"]`); if (b) b.classList.add('hint'); }); };
+    // a bead: a tap moves it (and the ones it pushes); a swipe toward the bar wakes it, away from the bar puts it to sleep
+    const move = (b, dir) => {
+      const r = +b.dataset.r, [u, lo] = parts(A.vals[r]), k = b.dataset.k;
+      let nu = u, nl = lo;
+      if (k === '5') nu = dir === 0 ? 1 - u : dir > 0 ? 1 : 0;
+      else { const i = +k, on = i < lo; nl = dir === 0 ? (on ? i : i + 1) : dir < 0 ? Math.max(lo, i + 1) : Math.min(lo, i); }
+      const v = nu * 5 + nl; if (v === A.vals[r]) return;
+      A.vals[r] = v; A.draw(); sfx.tick(); if (A.onChange) A.onChange(A.value());
+    };
+    let down = null;
+    el.addEventListener('pointerdown', e => { const b = e.target.closest('.sb2-b'); if (!b || !A.tap) return; e.preventDefault(); down = { b, y: e.clientY }; try { b.setPointerCapture(e.pointerId); } catch (x) {} });
+    el.addEventListener('pointerup', e => { if (!down) return; const { b, y } = down, dy = e.clientY - y; down = null; move(b, Math.abs(dy) < 10 ? 0 : dy > 0 ? 1 : -1); });
+    el.addEventListener('pointercancel', () => { down = null; });
+    el.addEventListener('click', e => { const b = e.target.closest('.sb2-b'); if (b && A.tap && e.detail === 0) move(b, 0); });
+    A.draw();
+    return A;
+  }
+  // which beads to light up to show n starting from zero (for the youngest)
+  const hintFor = (n, rods = 1) => { const out = [], s = String(n).padStart(rods, '0'); [...s].forEach((d, r) => { const [u, lo] = parts(+d); if (u) out.push([r, 5]); for (let k = 0; k < lo; k++) out.push([r, k]); }); return out; };
+  const num = (x, i) => i === 0 ? String(x) : x < 0 ? `− ${-x}` : `+ ${x}`;
+  const saidNum = (x, i) => i === 0 ? String(x) : x < 0 ? `минус ${-x}` : `плюс ${x}`;
+  // the numbers of a flash round: more and faster with the maths level and the wins on this level
+  function flashSet(l, lv) {
+    const m = mk(), w = S().wins[lv] || 0;
+    if (l.big) { const c = 3 + (m >= 10 ? 1 : 0); let sum = 0; const xs = []; for (let i = 0; i < c; i++) { let x = ri(10, 49); if (i && m >= 8 && Math.random() < .35 && sum - x >= 0) x = -x; xs.push(x); sum += x; } return { xs, sum, ms: Math.max(900, 1700 - 40 * m - 80 * w) }; }
+    const c = Math.min(6, 3 + (m >= 5 ? 1 : 0) + (m >= 9 ? 1 : 0) + (w >= 3 ? 1 : 0));
+    let sum = 0; const xs = [];
+    for (let i = 0; i < c; i++) { let x = ri(1, 9); if (i && m >= 4 && Math.random() < .3 && sum - x >= 0) x = -x; xs.push(x); sum += x; }
+    return { xs, sum, ms: Math.max(700, 1500 - 50 * m - 90 * w) };
+  }
+  // ---- the story: how the beads count, a little game with the friend
+  const STORY = [
+    { t: 'Это счёты — волшебная машинка для счёта. Бусины считают, только когда прижмутся к перекладине. Сейчас все бусины спят — это ноль.' },
+    { t: 'Разбуди одну нижнюю бусину: подвинь её вверх, к перекладине!', want: 1, hint: [[0, 0]] },
+    { t: 'Один! Каждая нижняя бусина — это один. Разбуди ещё две. Сколько станет?', want: 3, hint: [[0, 1], [0, 2]] },
+    { t: 'Три! А верхняя бусина — особенная. Она как ладошка: стоит целых пять! Уложим нижние бусины спать.', reset: 1 },
+    { t: 'Опусти верхнюю бусину к перекладине. Это пять!', want: 5, hint: [[0, 5]] },
+    { t: 'Пять и ещё одна нижняя — это шесть. Покажи шесть!', want: 6, hint: [[0, 0]] },
+    { t: 'Ура! Теперь ты знаешь секрет счётов: внизу — по одной, наверху — пятёрка. Поиграем?', end: 1 }
+  ];
+  function intro(then) {
+    const t = newScreen(); let i = 0, A = null;
+    shell('Как считают счёты', `<div class="sbx sbi">
+        <div class="sbi-hero"><span class="sbi-fr" id="sbiFr">${friendSVG()}</span><p class="sbi-say" id="sbiSay"></p></div>
+        <div id="sbBox" class="sbx-box"></div><div class="sbx-val" id="sbV">0</div>
+        <div id="sbAns"></div></div>`, { guide: false, back: then ? null : screenSoroban });
+    A = abacus($('#sbBox'), 1, { onChange: v => { $('#sbV').textContent = v; check(v); } });
+    let speakT = 0;
+    function check(v) {
+      const s = STORY[i]; clearTimeout(speakT);
+      if (s.want === undefined || v !== s.want) { speakT = setTimeout(() => { if (t === tok) say(String(v)); }, 450); return; }
+      A.hint([]); sfx.good(); hopEl($('#sbiFr')); i++; say(String(v)).then(() => { if (t === tok) later(step, 200); });
     }
+    function step() {
+      const s = STORY[i]; $('#sbiSay').textContent = gx(s.t);
+      if (s.reset) { A.set(0); $('#sbV').textContent = 0; }
+      A.hint(s.hint || []); A.tap = s.want !== undefined;
+      $('#sbAns').innerHTML = s.want !== undefined ? '' : `<button class="big" id="sbNext">${s.end ? 'Играть!' : 'Дальше ▶'}</button>`;
+      if ($('#sbNext')) $('#sbNext').onclick = () => { sfx.pop(); if (s.end) { S().intro = 1; save(); (then || play)(); return; } i++; step(); };
+      say(s.t);
+    }
+    step();
   }
-  function done(right) {
-    busy = true;
-    if (right) { ok++; $('#sbOk').textContent = ok; sfx.good(); say(`${task.a}!`); }
-    else { sfx.oops(); vals = String(task.a).padStart(L.rods, '0').split('').map(Number).slice(-L.rods); if (L.kind !== 'mind') drawSb(false); say(`Правильно ${task.a}.`); }
-    k++;
-    later(() => {
-      if (k < 5) { next(); return; }
-      const up = ok >= 4 && lv === P.soro.top && lv < SORO.length; if (up) P.soro.top = lv + 1; save();
-      finish({ key: 'soroban', stars: ok >= 5 ? 3 : ok >= 3 ? 2 : 1, line: `Верно ${ok} из 5.` + (up ? ` Открыт уровень ${lv + 1}: ${SORO[lv].n}!` : ''), again: () => screenSoroban(up ? lv + 1 : lv), menu: screenMathPath });
-    }, right ? 900 : 2200);
+  // ---- a round: tasks of one level
+  function play(lvArg, { daily = false } = {}) {
+    const s = S();
+    if (!s.intro) { intro(() => play(lvArg, { daily })); return; }
+    const lv = Math.max(1, Math.min(s.top, lvArg || (daily ? s.top : s.lv))), l = L[lv - 1];
+    s.lv = lv; save();
+    const t = newScreen(), N = l.k === 'flash' || l.k === 'ghost' || l.k === 'mind' ? 3 : daily ? 4 : 5;
+    let k = 0, right = 0, task = null, miss = 0, busy = true, A = null, input = '', okT = 0, speakT = 0;
+    shell('Счёты', `<div class="sbx">
+        ${daily ? '' : `<div class="sbx-lv" id="sbLv">${L.map((x, i) => `<button class="chip ${i + 1 === lv ? 'sel' : ''}" data-lv="${i + 1}" ${i + 1 > s.top ? 'disabled' : ''} title="${esc(x.n)}">${i + 1 > s.top ? '🔒' : '🧮'} ${i + 1}</button>`).join('')}</div>`}
+        <div class="sbx-hud"><b>${lv}. ${esc(l.n)}</b><span class="sbx-dots" id="sbDots">${Array.from({ length: N }, (_, i) => `<i class="${i === 0 ? 'cur' : ''}"></i>`).join('')}</span></div>
+        <p class="sb-q" id="sbQ"></p>
+        <div class="sbx-flash" id="sbF" hidden></div>
+        <div id="sbBox" class="sbx-box"></div>
+        <div class="sbx-row"><div class="sbx-val" id="sbV"></div><div id="sbAns"></div></div>
+        ${daily ? '' : '<button class="link-btn" id="sbHow">🐣 Как считают счёты?</button>'}
+      </div>`, { back: daily ? null : screenMathPath });
+    if (!daily) {
+      $('#sbLv').onclick = e => { const b = e.target.closest('[data-lv]'); if (!b || b.disabled) return; sfx.pop(); play(+b.dataset.lv); };
+      $('#sbHow').onclick = () => { sfx.pop(); intro(() => play(lv)); };
+      const sel = $('#sbLv .sel'); if (sel) sel.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+    const box = $('#sbBox'), ans = $('#sbAns'), Q1 = $('#sbQ'), V = $('#sbV'), F = $('#sbF');
+    const showV = v => { V.textContent = l.k === 'read' || l.k === 'ghost' || l.k === 'mind' ? '' : v; };
+    const onBeads = v => {
+      showV(v); clearTimeout(okT); clearTimeout(speakT);
+      if (busy || !task) return;
+      if (l.k === 'show') speakT = setTimeout(() => { if (t === tok && !busy) say(String(v)); }, 500);
+      if (v === task.ans) okT = setTimeout(() => { if (t === tok && !busy && A.value() === task.ans) done(true); }, 450);
+    };
+    const doneBtn = () => { ans.innerHTML = `<button class="big" id="sbOk">Готово</button>`; $('#sbOk').onclick = () => { if (busy) return; sfx.pop(); A.value() === task.ans ? done(true) : wrong(); }; };
+    const keypad = () => {
+      ans.innerHTML = `<div class="sbx-in" id="sbIn">?</div>${keypadHTML('sbKp')}`; input = '';
+      $('#sbKp').onclick = e => { const b = e.target.closest('[data-k]'); if (!b || busy) return; const v = b.dataset.k; sfx.tick();
+        if (v === 'del') input = input.slice(0, -1); else if (v === 'ok') { if (input) { +input === task.ans ? done(true) : wrong(); input = ''; } } else if (input.length < 4) input += v;
+        const i = $('#sbIn'); if (i) i.textContent = input || '?'; };
+    };
+    const opts = () => {
+      const n = task.ans, o = sample([n, ...sample([...Array(10).keys()].filter(x => x !== n && Math.abs(x - n) <= 4), 2)], 3);
+      ans.innerHTML = `<div class="picks-g three nums">${o.map(x => `<button class="pick-b" data-a="${x}">${x}</button>`).join('')}</div>`;
+      ans.querySelector('.picks-g').onclick = e => { const b = e.target.closest('[data-a]'); if (!b || busy) return; if (+b.dataset.a === n) { b.classList.add('ok'); done(true); } else { b.classList.add('no'); b.disabled = true; wrong(); } };
+    };
+    async function flashRun(set, ghost) {
+      F.hidden = false; F.textContent = ''; Q1.textContent = 'Приготовились…'; await talk('Смотри внимательно!'); if (t !== tok) return false;
+      let sum = 0;
+      for (let i = 0; i < set.xs.length; i++) {
+        if (t !== tok) return false;
+        sum += set.xs[i]; F.textContent = num(set.xs[i], i); F.classList.remove('blink'); void F.offsetWidth; F.classList.add('blink'); sfx.tick();
+        if (ghost && A) A.set(sum);
+        if (set.ms >= 1100) say(saidNum(set.xs[i], i));
+        await wait(set.ms); F.textContent = ''; await wait(260);
+      }
+      if (t !== tok) return false;
+      F.hidden = true;
+      if (ghost && A) { A.el.classList.add('gone'); }
+      return true;
+    }
+    async function next() {
+      busy = true; miss = 0; task = null; clearTimeout(okT);
+      $$('#sbDots i').forEach((d, i) => d.classList.toggle('cur', i === k));
+      ans.innerHTML = ''; V.textContent = ''; F.hidden = true; box.innerHTML = '';
+      if (l.k === 'show') {
+        const n = ri(lv === 1 ? 0 : 1, l.max); task = { ans: n }; box.dataset.a = n;
+        A = abacus(box, 1, { onChange: onBeads }); showV(0);
+        Q1.innerHTML = `Покажи на счётах: <b class="sb-n">${n}</b>`;
+        if ((P.settings.age || 6) <= 5 && k === 0) A.hint(hintFor(n));
+        doneBtn(); busy = false;
+        talk(k === 0 ? `Покажи на счётах число ${n}. Нижняя бусина — один, верхняя — пять.` : `Покажи ${n}.`);
+      } else if (l.k === 'read') {
+        const n = ri(0, 9); task = { ans: n }; box.dataset.a = n;
+        A = abacus(box, 1, { tap: false }); A.set(n);
+        Q1.textContent = 'Какое число на счётах?'; opts(); busy = false;
+        talk(k === 0 ? 'Посчитай бусины у перекладины. Верхняя — это пять. Какое число?' : 'Какое число?');
+      } else if (l.k === 'calc') {
+        const g = GEN[l.g](); task = { ...g, ans: g.r }; box.dataset.a = g.r;
+        A = abacus(box, l.rods, { onChange: onBeads }); A.set(g.a); showV(g.a);
+        Q1.innerHTML = `<b class="sb-n">${g.a} ${g.plus ? '+' : '−'} ${g.b}</b>`;
+        doneBtn(); busy = false;
+        talk(`На счётах ${g.a}. ${g.plus ? 'Прибавь' : 'Отними'} ${g.b}.` + (k === 0 && (l.g === 'small' || l.g === 'big') ? ' ' + g.h : ''));
+      } else {
+        const set = flashSet(l, lv); task = { ans: set.sum }; box.dataset.a = set.sum;
+        Q1.textContent = '';
+        if (l.k === 'flash') { A = abacus(box, l.rods, { onChange: onBeads }); showV(0); }
+        else if (l.k === 'ghost') A = abacus(box, l.rods, { tap: false, ghost: true, small: true });
+        else A = null;
+        if (k === 0 && l.k === 'flash') { await talk('Числа будут мелькать. Сразу прибавляй каждое на счётах!'); if (t !== tok) return; }
+        if (k === 0 && l.k === 'ghost') { await talk('Счёты стали призраком. Смотри, как двигаются бусины, а потом они исчезнут. Запомни!'); if (t !== tok) return; }
+        if (k === 0 && l.k === 'mind') { await talk('Счётов нет — они у тебя в голове. Представляй бусины и складывай!'); if (t !== tok) return; }
+        if (!(await flashRun(set, l.k === 'ghost'))) return;
+        Q1.textContent = 'Сколько получилось?';
+        if (l.k === 'flash') { doneBtn(); busy = false; if (A.value() === task.ans) { done(true); return; } talk('Сколько получилось? Покажи на счётах и нажми «Готово».'); }
+        else { keypad(); busy = false; talk('Сколько получилось?'); }
+      }
+    }
+    function wrong() {
+      if (busy) return; miss++; sfx.oops();
+      const tgt = $('#sbBox .sb2') || $('#sbIn'); if (tgt) wiggle(tgt);
+      if (miss === 1) {
+        const h = l.k === 'calc' ? task.h : l.k === 'show' ? 'Нижняя бусина — один, верхняя — пять. Посчитай ещё раз.' : l.k === 'read' ? 'Верхняя бусина у перекладины — это пять, и ещё нижние по одной.' : 'Почти! Попробуй ещё раз.';
+        if (l.k === 'show' || l.k === 'calc') A.hint(l.k === 'show' ? hintFor(task.ans) : []);
+        talk('Почти! ' + h); return;
+      }
+      // the second miss: the answer, kindly, and on
+      busy = true;
+      if (A && l.k !== 'mind') { A.el.classList.remove('gone'); A.set(task.ans); }
+      V.textContent = task.ans; mark(false);
+      talk(`Вот так: ${task.ans}. Ничего, получится!`).then(() => { if (t === tok) step(); });
+    }
+    function done(good) {
+      busy = true; clearTimeout(okT); clearTimeout(speakT); if (A) A.hint([]);
+      if (good) { right++; mark(true); sfx.good(); V.textContent = task.ans; if (A && l.k === 'ghost') { A.el.classList.remove('gone'); A.set(task.ans); } }
+      talk(pickOne(['Верно!', 'Да!', 'Точно!', 'Правильно!']) + ` ${task.ans}!`).then(() => { if (t === tok) step(); });
+    }
+    function mark(ok) { const d = $$('#sbDots i')[k]; if (d) d.className = ok ? 'ok' : 'no'; }
+    function step() {
+      k++;
+      if (k < N) { later(next, 400); return; }
+      const pass = right >= N - 1;
+      if (pass) s.wins[lv] = (s.wins[lv] || 0) + 1;
+      const up = pass && lv === s.top && s.top < L.length; if (up) { s.top++; s.lv = s.top; }
+      save();
+      finish({ key: 'soroban', stars: right === N ? 3 : right >= N - 1 ? 2 : 1, ev: { right, lv, up },
+        line: `Верно ${right} из ${N}.` + (up ? ` Открыт уровень ${s.top}: ${L[s.top - 1].n}!` : pass ? '' : ' Ещё разок — и получится!'),
+        again: () => play(up ? s.top : lv), menu: screenMathPath });
+    }
+    next();
   }
-  box.onclick = e => {
-    const b = e.target.closest('.sb-b'); if (!b || busy || L.kind === 'read' || L.kind === 'mind') return;
-    const r = +b.dataset.r, v = vals[r], up = v >= 5 ? 1 : 0, lo = v % 5;
-    if (b.classList.contains('up')) vals[r] = (up ? 0 : 5) + lo;
-    else { const kk = +b.dataset.k; vals[r] = up * 5 + (kk < lo ? kk : kk + 1); }
-    sfx.tick(); drawSb();
-  };
-  ans.onclick = e => {
-    if (busy) return;
-    if (e.target.closest('#sbCheck')) { done(sbValue(vals) === task.a); return; }
-    const b = e.target.closest('[data-a]'); if (b) { b.classList.add(+b.dataset.a === task.a ? 'ok' : 'no'); done(+b.dataset.a === task.a); }
-  };
-  next();
-}
+  // the daily step of «Сегодня»: a short round at the child's level
+  const daily = () => play(0, { daily: true });
+  // the grown-ups' panel
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    const s = S();
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="sbLvIn">🧮 Счёты: уровень <select id="sbLvIn">${L.map((x, i) => `<option value="${i + 1}" ${s.top === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)}</option>`).join('')}</select></label>`);
+    $('#sbLvIn').onchange = e => { const s = S(); s.top = s.lv = +e.target.value; s.intro = 1; save(); sfx.tick(); };
+  }
+  return { play, daily, intro, top, S, L, GEN, flashSet, startLv, settingsRow, abacus };
+})();
+function screenSoroban(lv) { SB.play(lv); }
+/* SOROBAN-END */
 
 /* Ступеньки: each step is a kind of example; ten of them, a time to beat */
 const STEPS = [
@@ -15340,13 +15543,13 @@ function screenSteps(lv) {
 /* the path: where the child is on each of the three steps, and which one fits the age */
 function screenMathPath() {
   newScreen();
-  const age = P.settings.age || (Q() ? 9 : 5), so = (P.soro && P.soro.top) || 1, st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
+  const age = P.settings.age || (Q() ? 9 : 5), so = SB.top(), st = stepsTop(), ol = (P.olymp && P.olymp.solved || []).length;
   const card = (id, e, h, sub, prog, rec) => `<button class="mp-card ${rec ? 'rec' : ''}" data-go="${id}"><span class="emo">${e}</span><span class="mp-t"><b>${h}</b><small>${sub}</small><em>${prog}</em></span>${rec ? '<span class="mp-rec">⭐</span>' : ''}</button>`;
   shell('Путь по математике', `<div class="mp">
       ${card('m-skill', '🎯', 'Математика по силам', 'проверим уровень — и задания как раз для тебя', MSK.has() ? MSK.rankTxt() : '', true)}
       ${card('olymp', '🏅', 'Олимпиада по силам', 'хитрые задачи: логика, варианты, роботы, спички', `${OLY.name()} · решено ${ol}`, age >= 7 || (MSK.has() && MSK.lv() >= 7))}
       <div class="mp-arrow">⬇️</div>
-      ${card('soroban', '🧮', 'Счёты — ментальная арифметика', '4–7 лет: бусины, а потом счёт в уме', `уровень ${so} из ${SORO.length}`, age <= 6)}
+      ${card('soroban', '🧮', 'Счёты — ментальная арифметика', 'для всех: бусины, а потом счёт в уме', `уровень ${so} из ${SB.L.length}`, true)}
       ${card('flash', '⚡', 'Флеш-счёт', 'числа мелькают — складывай в уме', `уровень ${P.flashLv || 1}`, false)}
       <div class="mp-arrow">⬇️</div>
       ${card('steps', '🪜', 'Ступеньки', '6–10 лет: каждый день на шаг выше', `ступенька ${st} из ${STEPS.length}`, age >= 6 && age <= 9)}
@@ -15357,7 +15560,7 @@ function screenMathPath() {
 }
 GAMES.push(
   { id: 'math-path', name: 'Путь по математике', sub: 'счёты → ступеньки → олимпиада', ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenMathPath(), grp: 3, also: [8] },
-  { id: 'soroban', name: 'Счёты', sub: 'ментальная арифметика', ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `уровень ${(P.soro && P.soro.top) || 1}` },
+  { id: 'soroban', name: 'Счёты', sub: 'ментальная арифметика', ico: () => pic('🧮'), bg: 'var(--t-yellow)', go: () => screenSoroban(), grp: 3, also: [8], prog: () => `уровень ${SB.top()}` },
   { id: 'steps', name: 'Ступеньки', sub: 'каждый день на шаг выше', ico: () => pic('🪜'), bg: 'var(--t-blue)', go: () => screenSteps(), grp: 3, also: [8], prog: () => `ступенька ${stepsTop()}` }
 );
 /* MSKILL-BEGIN */
@@ -23763,7 +23966,7 @@ const PATH = (() => {
   // each child's first home screen after the game opens is «Сегодня»; later the tab they were on stays
   const SEEN = new Set();
   const fresh = id => { if (SEEN.has(id)) return false; SEEN.add(id); return true; };
-  const ICO = { speech: '👂', read: '📖', math: '🧮', book: '📚', puzzle: '🧩' };
+  const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', soro: '🧮', puzzle: '🧩' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
     const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;
