@@ -3308,6 +3308,100 @@ div.chest{border-radius:0;padding:0;font:inherit;background:none;color:inherit;c
 .aq .pick-b.no,.aq .aq-th.no{opacity:.4}
 #aqLv{color:var(--tiger-deep);letter-spacing:.02em}
 /* FUN-CSS-END */
+/* CALM-CSS: the calm look (testers: «перегружено, радужная палитра отвлекает»). One design system on top of the
+   older rules: a soft neutral background, ONE accent (the friend's orange), one success green, one warning yellow;
+   the pastel tints come from a small muted set, and the home tiles take one tint per tab instead of a rainbow;
+   flat cards with a soft shadow instead of chunky 3D slabs; one type scale. The night theme of the older child
+   (body.quest) gets the same rules with its own values. Everything sits under body.look-calm: the family chooses
+   «Ярко» (the old bright look, no class) or «Спокойно» (LOOK below; the default). */
+body.look-calm{
+  --bg:#F6F3EE; --surface:#FFFFFF; --accent:var(--tiger); --accent-deep:var(--tiger-deep); --ok:#2FA865; --warn:#F2B630;
+  --sky:#F6F3EE; --ink-soft:#6B6585;
+  --t-blue:#E6EDF8; --t-green:#E6F1E2; --t-peach:#FBECE0; --t-lilac:#EEE9F7; --t-pink:#F8E8EC; --t-yellow:#FAF1D9; --t-mint:#E1F1EA;
+  --tint-speak:#FCEADF; --tint-learn:#E6EDF8; --tint-create:#F1E8F5; --tint-discover:#E2F1E8;
+  --sh-1:0 1px 2px rgba(42,35,70,.06),0 3px 10px rgba(42,35,70,.06); --sh-2:0 2px 4px rgba(42,35,70,.07),0 8px 22px rgba(42,35,70,.08);
+  --r-card:22px; --r-chip:999px;
+  --fs-h1:26px; --fs-h2:22px; --fs-title:18px; --fs-body:16px; --fs-small:13px;
+  --line-strong:rgba(42,35,70,.11);
+}
+body.look-calm .pd{--pd-dot:#D8D0C4;--pd-off:#EDE8E0;--pd-offd:#DCD5CA}
+body.look-calm.quest{--bg:#141A31;--surface:#20284A;--accent:var(--tiger);--accent-deep:var(--tiger-deep);--sky:#141A31;--ink-soft:#A8B0D8;
+  --t-blue:#222D52;--t-green:#1F3438;--t-peach:#33292B;--t-lilac:#2A2850;--t-pink:#33263F;--t-yellow:#332F25;--t-mint:#1D3536;
+  --tint-speak:#2E2A3E;--tint-learn:#222D52;--tint-create:#2A2850;--tint-discover:#1D3536;
+  --line-strong:rgba(0,0,0,.32);--sh-1:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.25);--sh-2:0 2px 4px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.3)}
+/* the background: calm and plain (no clouds by day; the night sky keeps its few stars) */
+body.look-calm:not(.quest){background-color:var(--bg);background-image:none}
+body.look-calm.quest{background-color:var(--bg)}
+body.look-calm .logo .lt:nth-child(n){color:var(--ink);transform:none}
+/* one tint per tab on the home tiles */
+body.look-calm .home-t[data-tab="speak"]{--tint:var(--tint-speak)}body.look-calm .home-t[data-tab="learn"]{--tint:var(--tint-learn)}
+body.look-calm .home-t[data-tab="create"]{--tint:var(--tint-create)}body.look-calm .home-t[data-tab="discover"]{--tint:var(--tint-discover)}
+body.look-calm .home-t{--tint:var(--surface)}
+body.look-calm .home-t .tile,body.look-calm .home-t .mini{background:var(--tint)}
+/* tiles: a clear picture and a short name; the second line small and on one line */
+body.look-calm .tile{min-height:156px;border-radius:var(--r-card);padding:14px;gap:6px;box-shadow:var(--sh-1)}
+body.look-calm .tile:active,body.look-calm .mini:active,body.look-calm .card:active,body.look-calm .chip:active,body.look-calm .ibtn:active,body.look-calm .disc:active,body.look-calm .at-card:active{transform:scale(.97);box-shadow:var(--sh-1)}
+body.look-calm .tile b{font:700 var(--fs-title)/1.15 var(--f-display)}
+body.look-calm .tile small{font:700 var(--fs-small)/1.3 var(--f-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;line-clamp:1;overflow:hidden}
+body.look-calm .tile .prog{font-size:var(--fs-small)}
+body.look-calm.quest .tile{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(255,255,255,.06)}
+body.look-calm .tile.tl-armed{box-shadow:0 0 0 4px var(--warn),var(--sh-1)}
+body.look-calm .mini,body.look-calm .card{box-shadow:var(--sh-1)}
+/* cards, chips and round buttons: flat, a soft shadow */
+body.look-calm .chip,body.look-calm .kid,body.look-calm .ibtn,body.look-calm .starpill,body.look-calm .disc,body.look-calm .at-card,body.look-calm .hol-card,body.look-calm .hol-card.soon,body.look-calm .hm-more,body.look-calm .qcard,body.look-calm .rank,body.look-calm .ld-tab,body.look-calm .ld-pts li,body.look-calm .ld-steps li,body.look-calm .af-house,body.look-calm .today,body.look-calm .today.is-done{box-shadow:var(--sh-1)}
+body.look-calm .chip,body.look-calm .kid{background:var(--surface)}
+body.look-calm .kid.sel{background:var(--t-peach);box-shadow:0 0 0 2px var(--accent),var(--sh-1)}
+body.look-calm .bubble{box-shadow:var(--sh-1)}
+body.look-calm .sec-nav{background:rgba(246,243,238,.94)}
+body.look-calm .sec-nav .chip{box-shadow:none;background:var(--surface);border:1px solid var(--line)}
+body.look-calm.quest .sec-nav{background:rgba(20,26,49,.94)}
+body.look-calm .surp{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1)}
+body.look-calm .surp .surp-q{background:var(--accent);color:#fff}
+body.look-calm .rf-card,body.look-calm .rf-card.soft{background:var(--surface);border:0;border-left:6px solid var(--warn);box-shadow:var(--sh-1)}
+body.look-calm.quest .rf-card,body.look-calm.quest .rf-card.soft{background:var(--surface);border-color:var(--warn)}
+/* one type scale */
+body.look-calm .group-head h2,body.look-calm .today h2{font:700 var(--fs-h2)/1.15 var(--f-display)}
+body.look-calm .group-head p{font:700 14px/1.3 var(--f-body)}
+body.look-calm.young .group-head p{display:none}
+body.look-calm .tab-head h1{font:900 var(--fs-h1)/1.1 var(--f-display,var(--f-body))}
+body.look-calm .bar h1{font:700 clamp(20px,4.2vw,26px)/1.1 var(--f-display)}
+body.look-calm .group{gap:10px}
+body.look-calm .stage.scroll{gap:20px}
+/* the bottom tabs: one quiet selection */
+body.look-calm .tabbar{box-shadow:0 -1px 0 var(--line),0 -6px 18px rgba(30,26,46,.06)}
+body.look-calm .tb.sel{background:var(--t-peach);color:var(--ink)}body.look-calm .tb.sel .emo{transform:none}
+body.look-calm.quest .tb.sel{background:#2E3866}
+@media (min-width:900px){body.look-calm .home-t .tb.sel{background:var(--t-peach);box-shadow:none}body.look-calm.quest .home-t .tb.sel{background:#2E3866}}
+/* «Сегодня»: the path is the one big thing; the child's own things are small chips under it */
+body.look-calm .pd-lb,body.look-calm .pd-bub{box-shadow:var(--sh-1)}
+body.look-calm .pd-n.now .pd-lb{box-shadow:0 4px 0 var(--accent-deep)}
+body.look-calm .pd-mine{gap:8px}
+body.look-calm .pd-mine .chip{min-height:44px;padding:6px 14px 6px 8px;font-size:15px;box-shadow:none;border:1px solid var(--line)}
+body.look-calm .pd-mine .chip .emo{font-size:22px}
+body.look-calm .pd-card{box-shadow:var(--sh-1)!important}
+/* the game frame: the same header, the friend at the bottom, one main button */
+body.look-calm .big{box-shadow:0 5px 0 var(--accent-deep)}
+body.look-calm .big:active{transform:translateY(3px);box-shadow:0 2px 0 var(--accent-deep)}
+body.look-calm .big.danger{box-shadow:0 5px 0 #B8305A}
+body.look-calm .big.ghost,body.look-calm .big.ghost.danger{background:var(--surface);box-shadow:var(--sh-1),inset 0 0 0 2px var(--line)}
+body.look-calm .big.ghost:active{transform:scale(.97)}
+body.look-calm .winbox{border-radius:28px;box-shadow:var(--sh-2)}
+/* CALM-CSS-END */
+/* LOOK-CSS: the «Ярко / Спокойно» picker with a tiny picture of each look */
+.lk-pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:460px;margin-inline:auto}
+.lk-c{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 10px 12px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);cursor:pointer;box-shadow:0 0 0 2px var(--line),0 3px 10px rgba(42,35,70,.08);font:inherit}
+.lk-c b{font:800 19px/1.1 var(--f-body)}
+.lk-c.sel{box-shadow:0 0 0 4px var(--tiger),0 3px 10px rgba(42,35,70,.08)}
+.lk-c:active{transform:scale(.97)}
+.lk-mini{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;aspect-ratio:4/3;padding:10px;border-radius:14px}
+.lk-mini i{border-radius:9px}
+.lk-bright{background:#CDEEF6 radial-gradient(ellipse 40% 18% at 22% 12%,#fff 70%,transparent 72%)}
+.lk-bright i{box-shadow:0 4px 0 rgba(42,35,70,.22)}
+.lk-bright i:nth-child(1){background:#FFE6CC}.lk-bright i:nth-child(2){background:#DCEDFF}.lk-bright i:nth-child(3){background:#E3F5D0}.lk-bright i:nth-child(4){background:#FFE0E8}
+.lk-calm{background:#EFE9E0}
+.lk-calm i{background:#F7DCC8;box-shadow:0 1px 3px rgba(42,35,70,.12)}
+.lk-ob .lk-pick{margin-block:6px 10px}
+/* LOOK-CSS-END */
 </style>
 
 <div id="app"></div>
@@ -4258,6 +4352,7 @@ function newScreen() {
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
+  lookApply();
   return tok;
 }
 function later(fn, ms) { const t = tok; timers.push(setTimeout(() => { if (t === tok) fn(); }, ms)); }
@@ -4734,7 +4829,7 @@ function goHome() {
   const RF = readFineCheck();
   navHome();
   setTimeout(() => statPing(), 4000);
-  document.body.classList.toggle('quest', Q());
+  document.body.classList.toggle('quest', Q()); lookApply();
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
@@ -4798,7 +4893,7 @@ function goHome() {
       ${list.length > 1 ? `<nav class="sec-nav" id="secNav">${list.map(x => `<button class="chip" data-sec="${x.g}">${nm(x.h)}</button>`).join('')}</nav>` : ''}
       ${list.map(secHTML).join('') || '<p class="lead">Здесь пока пусто. Игры включаются в «Для взрослых» → «Интересы и игры».</p>'}`;
   }
-  app.innerHTML = `<div class="screen home-t">
+  app.innerHTML = `<div class="screen home-t" data-tab="${tab}">
    <main class="stage scroll" id="stage">
     ${GUEST ? `<button class="g-back" id="guestTop">${GRAND[GUEST.who].e} ← Мой вход: внуки, похвала, шахматы</button>` : ''}
     ${kidsBar()}
@@ -10771,7 +10866,9 @@ function screenFriends() {
   const st = shell('Выбери друга', `<p class="lead">Кто будет с тобой заниматься? Нажми на друга.</p>
     ${TOY.pickHTML()}
     ${groups.map(([h, ids]) => `<h2 class="sec-h fr-h">${h}</h2><div class="friends ${ids === HER ? 'her' : ''}">${ids.map(btn).join('')}</div>`).join('')}
+    <h2 class="sec-h fr-h">Вид игры</h2>${lookHTML(lookCur(), 'lookKid')}
     <button class="big" id="friendOk">Готово</button>`);
+  lookBind($('#lookKid'), lookSetKid);
   talk(likes && likes.includes('football') ? 'Кто будет с тобой заниматься? Выбери футболиста или другого друга.' : Q() ? 'Кто будет с тобой заниматься? Нажми на друга.' : 'Кто будет с тобой заниматься? Выбери супер-девочку из Жар-птиц или зверёнка.');
   st.onclick = e => {
     const b = e.target.closest('.friend'); if (!b) return;
@@ -11652,10 +11749,51 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     save(); sfx.magic();
     if (ROOT.cur === id) P = pr;
     if (queue.length) screenKidSetup(queue[0], { queue: queue.slice(1), first, liga, back, idx: idx + 1, total });
-    else if (first) screenObDone({ liga });
+    else if (first) screenObLook({ liga });
     else (back || screenParents)();
   };
 }
+/* LOOK-BEGIN: «Ярко» (the bright look) or «Спокойно» (body.look-calm, the default): each child's own choice
+   (P.settings.look, synced with the profile), else the family's (fam().look). Function declarations on purpose:
+   newScreen() calls lookApply() from the very first screen. */
+function lookCur() {
+  let p = '', f = null;
+  try { p = (P && P.settings && P.settings.look) || ''; } catch (e) {}
+  try { f = fam(); } catch (e) {}
+  return p || (f && f.look) || 'calm';
+}
+function lookApply() { try { document.body.classList.toggle('look-calm', lookCur() !== 'bright'); } catch (e) {} }
+function lookHTML(sel, id = 'lookPick') {
+  return `<div class="lk-pick" id="${id}" role="radiogroup">${[['bright', 'Ярко'], ['calm', 'Спокойно']].map(([k, n]) => `<button class="lk-c ${sel === k ? 'sel' : ''}" data-look="${k}" role="radio" aria-checked="${sel === k}"><span class="lk-mini lk-${k}"><i></i><i></i><i></i><i></i></span><b>${n}</b></button>`).join('')}</div>`;
+}
+function lookBind(box, set) {
+  if (!box) return;
+  box.onclick = e => {
+    const b = e.target.closest('[data-look]'); if (!b) return;
+    sfx.tick(); set(b.dataset.look);
+    box.querySelectorAll('[data-look]').forEach(x => { x.classList.toggle('sel', x === b); x.setAttribute('aria-checked', x === b); });
+    lookApply(); say(b.querySelector('b').textContent);
+  };
+}
+function lookSetKid(k) { P.settings.look = k; save(); }
+// the first run: one step after the children's setup; skipped = «Спокойно»
+function screenObLook({ liga = '' } = {}) {
+  newScreen(); document.body.classList.remove('quest');
+  const f = fam(); if (f && !f.look) f.look = 'calm';
+  lookApply();
+  app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="fe ob lk-ob">
+    <header class="fe-hero"><span class="fe-ryz">${friendSVG('', 'tiger')}</span><div><h1>Какой вид больше нравится?</h1><p>Поменять можно потом: «Выбери друга» или «Для взрослых».</p></div></header>
+    ${lookHTML(lookCur())}
+    <div class="prow-btns"><button class="big" id="lkNext">Дальше</button></div>
+  </div></main></div>`;
+  lookBind($('#lookPick'), k => { const f = fam(); if (f) { f.look = k; f.kids.forEach(id => { ROOT.profiles[id].settings.look = k; }); } save(); });
+  $('#lkNext').onclick = () => {
+    sfx.pop(); const f = fam();
+    if (f) f.kids.forEach(id => { const st = ROOT.profiles[id].settings; if (!st.look) st.look = f.look || 'calm'; });
+    save(); screenObDone({ liga });
+  };
+}
+/* LOOK-END */
 function screenObDone({ liga = '' } = {}) {
   newScreen(); document.body.classList.remove('quest');
   const f = fam();
@@ -16507,7 +16645,8 @@ function readFineHTML() {
     const sum = now.reduce((a, x) => a + x.s, 0), n = now.length;
     return `<div class="rf-card"><span class="emo">📖</span><span class="rf-t"><b>${n > 1 ? `${n} ${plural(n, ['день', 'дня', 'дней'])} без чтения` : 'Вчера не было чтения'}: −${sum} ⭐</b><small>${done ? 'Сегодня чтение уже есть — молодец!' : 'Почитай сегодня, и завтра звёзды останутся с тобой.'}</small></span>${done ? '' : '<button class="chip" id="rfGo">📖 Читать</button>'}</div>`;
   }
-  if (!done && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Сегодня ещё не читали</b><small>День без чтения стоит ${READ_FINE} звёзд. Одно занятие «Чтение» или книга — и всё в порядке.</small></span><button class="chip" id="rfGo">📖 Читать</button></div>`;
+  // not on the very first day: a new child first meets the game, then its rules
+  if (!done && P.readFrom !== today && new Date().getHours() >= 16) return `<div class="rf-card soft"><span class="emo">📖</span><span class="rf-t"><b>Сегодня ещё не читали</b><small>День без чтения стоит ${READ_FINE} звёзд. Одно занятие «Чтение» или книга — и всё в порядке.</small></span><button class="chip" id="rfGo">📖 Читать</button></div>`;
   return '';
 }
 function bindReadFine(fines) {
@@ -21529,6 +21668,7 @@ const SETUI = (() => {
     if (S.prog) list([row($('#expBtn'), '📤', 'Скопировать прогресс'), row($('#impBtn'), '📥', 'Вставить прогресс')]);
     if ($('#resetBtn')) list([row($('#resetBtn'), '🗑️', 'Начать заново', '', true)]);
 
+    if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид: ярко или спокойно</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
       ['fam', '👪', 'Семья', '', [S.fam]],
