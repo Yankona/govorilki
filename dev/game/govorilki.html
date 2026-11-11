@@ -5538,8 +5538,10 @@ const ABC = LX('ABC', [
 ]);
 const VOWELS = LX('VOWELS', 'АЕЁИОУЫЭЮЯ');
 const lcls = ch => VOWELS.includes(ch) ? 'v' : RU('ЪЬ').includes(ch) ? 's' : 'c';
-// how the voice names a letter (Portuguese gives every letter its name: bê, guê, agá…)
-const LNAME = LX('LNAME', { 'Ъ': 'твёрдый знак', 'Ь': 'мягкий знак', 'Й': 'и краткое' });
+// how the voice names a letter (Portuguese gives every letter its name: bê, guê, agá…). Russian consonants by name too:
+// a lone capital («буква Р.») is said by Руслан so short that a child heard «буква Я», and phones read it their own way
+const LNAME = LX('LNAME', { 'Б': 'бэ', 'В': 'вэ', 'Г': 'гэ', 'Д': 'дэ', 'Ж': 'жэ', 'З': 'зэ', 'К': 'ка', 'Л': 'эль', 'М': 'эм', 'Н': 'эн', 'П': 'пэ',
+  'Р': 'эр', 'С': 'эс', 'Т': 'тэ', 'Ф': 'эф', 'Х': 'ха', 'Ц': 'цэ', 'Ч': 'че', 'Ш': 'ша', 'Щ': 'ща', 'Ъ': 'твёрдый знак', 'Ь': 'мягкий знак', 'Й': 'и краткое' });
 const lsay = ch => LNAME[ch] || ch;
 const Lspan = ch => `<b class="L ${lcls(ch.toUpperCase())}">${ch}</b>`;
 const hiLetter = (w, L) => [...w.toUpperCase()].map(ch => ch === L ? `<b class="hl">${ch}</b>` : ch).join('');
@@ -5555,7 +5557,7 @@ function abcLine(i) {
   if (L === 'Ъ' || L === 'Ь') return `${cap(LNAME[L])}. Он живёт в слове ${w}.`;
   if (L === 'Ы') return `Ы. Как в слове ${w}.`;
   if (L === 'Й') return `И краткое. Как в слове ${w}.`;
-  return `${L}. ${cap(w)}.`;
+  return `${cap(lsay(L))}. ${cap(w)}.`;
 }
 // the syllables of a letter: a consonant pulls each vowel (МА, МО, МУ, МЫ, МИ), a vowel is pulled by the consonants;
 // English, whose blending is a sound and a word family (c + at), takes the words of M_LIST with that letter
@@ -5661,7 +5663,7 @@ function screenFindLetter() {
     if (b.dataset.c !== L) { wiggle(b); sfx.oops(); q.miss(opts.querySelector(`[data-c="${L}"]`)); talk(`Это ${lsay(b.dataset.c)}. ${askLine()}`); return; }
     busy = true; b.classList.add('right'); sfx.good(); q.hit(b, L);
     ask.innerHTML = `<span class="lt-show">${Lspan(L)}${pic(em)}</span><span class="abc-w">${hiLetter(w, L)}</span>`;
-    await talk(`Да! ${IS_RU ? L : cap(lsay(L))}. ${cap(w)}.`); if (t !== tok) return;
+    await talk(`Да! ${cap(lsay(L))}. ${cap(w)}.`); if (t !== tok) return;
     k++;
     if (k >= deck.length) finish({ key: 'abc-find', line: q.end + ' ' + 'Ты знаешь буквы!', again: screenFindLetter });
     else later(show, 300);
@@ -17991,9 +17993,20 @@ function plainText(t) {
     .replace(/\s*\/\s*/g, ' ').replace(/\s+([,.;:!?…])/g, '$1').replace(/[ \t]+/g, ' ').trim();
 }
 // the text a voice gets: numbers in words, then sentence by sentence with the stress marks
+// a letter the voice gets by its name (буква эр), wherever a line says «буква Р» or a letter alone («Р.»); «В лесу», «К маме» stay
+const SAY_LET = IS_RU ? new RegExp(RU('([Бб]укв[а-яё]*\\s+«?|(?:^|[.!?…]\\s+)«?)([БВГДЖЗКЛМНПРСТФХЦЧШЩЪЬЙ])(?![А-Яа-яЁё])'), 'g') : null;
+const sayLetters = t => t.replace(SAY_LET, (m, a, L, at, all) => {
+  const start = /^[\s«]*$|^[.!?…]/.test(a);
+  if (start && !/^[»\s]*[.!?…,:;]/.test(all.slice(at + m.length))) return m;
+  return a + (start ? cap(LNAME[L] || L) : LNAME[L] || L);
+});
+// a long vowel («а-а-а!»): Руслан makes it one short blip, so the voice gets three clear vowels (а, а, а!); the screen keeps it
+const SAY_LONG = IS_RU ? new RegExp(RU('(^|[^а-яё])([аоуыиэ](?:-[аоуыиэ])+)(?![а-яё])'), 'gi') : null;
+const sayLong = t => t.replace(SAY_LONG, (m, a, v) => new Set(v.toLowerCase().split('-')).size === 1 ? a + v.split('-').join(', ') : m);
 function sayParts(text) {
-  const t = IS_RU ? ruNums(plainText(text)) : plainText(text);
-  return (t.match(/[^.!?…]+[.!?…]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(Boolean).map(x => IS_RU ? sayMark(x) : x);
+  const t = IS_RU ? sayLong(sayLetters(ruNums(plainText(text)))) : plainText(text);
+  // a closing quote or bracket stays with its sentence («а-а-а!») — alone it would go to the voice as a part with nothing to say
+  return (t.match(/[^.!?…]+[.!?…]*[»"')\]]*/g) || []).map(x => x.replace(/\s+/g, ' ').trim()).filter(x => /[\p{L}\d]/u.test(x)).map(x => IS_RU ? sayMark(x) : x);
 }
 // for Piper: the corrected phonemes of the marked words; words of the family not yet worked out go to the voice to work out
 // a soft Л before a consonant or at the end of a word (альбом, медаль, соль): the phonemizer drops its softness, so
