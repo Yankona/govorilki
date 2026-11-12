@@ -15936,7 +15936,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '155';
+const APP_VER = '156';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 
@@ -18223,6 +18223,104 @@ function screenPrimerLesson(i, stage) {
  
 
 
+
+
+const FEELS = (() => {
+  const SAID = () => G("I said it!", "I said it!");
+   
+  const STORIES = [
+    [['🥚', "First there was an egg."], ['🐣', "A little chick hatched from the egg."], ['🐥', "The chick grew bigger."], ['🐔', "And became a hen."]],
+    [['🫘', "We planted a seed."], ['🌱', "A little shoot appeared."], ['🌿', "The shoot grew tall."], ['🌻', "A sunflower bloomed."]],
+    [['☁️', "A cloud came into the sky."], ['🌧️', "It began to rain."], ['🌈', "A rainbow peeped out."]],
+    [['❄️', "Snow fell."], ['⛄', "The children built a snowman."], ['☀️', "The sun came out and warmed everything."], ['💧', "The snowman melted."]],
+    [['😴', "I am asleep."], ['⏰', "The alarm clock rings."], ['🪥', "I brush my teeth."], ['🥣', "I eat my breakfast."]],
+    [['🐛', "The caterpillar eats leaves."], ['💤', "The caterpillar fell asleep in its cocoon."], ['🦋', "A butterfly flew out of the cocoon."]],
+    [['🥚', "They took eggs and flour."], ['🥣', "They mixed the dough."], ['🔥', "They baked it in the oven."], ['🥧', "The cake is ready!"]],
+    [['🌸', "The apple tree is in blossom."], ['🍏', "A green apple grew."], ['🍎', "The apple turned red."], ['🧺', "The apples were picked into a basket."]],
+    [['✏️', "I am writing a letter."], ['✉️', "I put it in an envelope."], ['📮', "I drop it in the postbox."], ['📬', "The letter got to Grandma."]],
+    [['🧱', "The bricks arrived."], ['🏗️', "They are building a house."], ['🏠', "The house is ready."]]];
+  function storySeq() {
+    const t = newScreen(), deck = sample(Q() ? STORIES.filter(s => s.length === 4) : STORIES, 3);
+    let k = 0, at = 0, busy = false, order = [];
+    shell("What comes first, what comes next", `<div class="lg"><p class="lg-q" id="lgQ">Put the pictures in order</p><div class="lg-grid" id="lgP"></div><p class="lg-story" id="lgSt"></p></div>`);
+    const show = () => {
+      busy = false; at = 0; const st = deck[k]; order = shuffle(st.map((_, i) => i));
+      if (order.every((x, i) => x === i)) order.reverse();
+      $('#lgSt').innerHTML = ''; $('#lgQ').textContent = "Put the pictures in order";
+      $('#lgP').innerHTML = order.map(i => `<button class="lg-pic" data-i="${i}">${pic(st[i][0])}<i class="lg-n"></i></button>`).join('');
+      talk(k === 0 ? "What happened first, and what happened next? Tap the pictures in order." : "A new story. What happened first?");
+    };
+    $('#lgP').onclick = async e => {
+      const b = e.target.closest('[data-i]'); if (!b || busy || b.classList.contains('right')) return;
+      if (+b.dataset.i !== at) { sfx.oops(); wiggle(b); talk(at === 0 ? "Think: how did it all begin?" : "And what happened next?"); return; }
+      sfx.pop(); b.classList.add('right'); b.querySelector('.lg-n').textContent = ++at;
+      if (at < deck[k].length) return;
+      busy = true; sfx.good();
+      const st = deck[k];
+      $('#lgSt').innerHTML = st.map(([, s]) => esc(s)).join(' ');
+      await talk(st.map(([, s]) => s).join(' ')); if (t !== tok) return;
+      $('#lgQ').textContent = "First… Then… At the end…";
+      await talk(G("Now tell the story yourself, from the pictures: first, then, at the end.", "Now tell the story yourself, from the pictures: first, then, at the end.")); if (t !== tok) return;
+      await askSaid(G("I told it!", "I told it!")); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'story-seq', line: "You tell stories in the right order!", again: storySeq }); else later(show, 300);
+    };
+    show();
+  }
+
+   
+  const FEEL = [['😄', "joy", "happily"], ['😢', "sadness", "sadly"], ['😠', "anger", "angrily"], ['😨', "fear", "fearfully"], ['😲', "surprise", "in surprise"]];
+  const SITS = [["A boy was given a puppy.", "joy"], ["A girl's balloon flew away.", "sadness"], ["The little brother knocked down the tower of blocks.", "anger"],
+    ["At night, thunder rumbled outside the window.", "fear"], ["A toy bunny jumped out of the box!", "surprise"], ["A friend did not come to the birthday party.", "sadness"],
+    ["Mum baked a favourite cake.", "joy"], ["A big dog is barking loudly and running towards you.", "fear"], ["In winter, a flower suddenly bloomed on the window!", "surprise"],
+    ["Someone took a favourite toy without asking.", "anger"], ["Grandma came to visit.", "joy"], ["The kitten got lost.", "sadness"]];
+  const PHR = ["Hello!", "Let's go for a walk.", "This is my ball.", "We have visitors.", "Look, snow!"];
+  function emo() {
+    const t = newScreen(), faces = sample(FEEL, 2), sits = sample(SITS, 3), it = pickOne(FEEL.filter(f => f[1] !== "fear"));
+    const deck = [...faces.map(f => ({ kind: 'face', f })), ...sits.map(s => ({ kind: 'sit', s })), { kind: 'voice', f: it, p: pickOne(PHR) }];
+    let k = 0, busy = false, wrongs = 0;
+    shell("What mood is it?", `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
+    const show = async () => {
+      busy = true; const d = deck[k]; $('#lgO').innerHTML = '';
+      if (d.kind === 'face') {
+        const opts = shuffle([d.f, ...sample(FEEL.filter(f => f !== d.f), 2)]);
+        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-q">What mood is it?</p>`;
+        await talk(`${k === 0 ? "Look at the face. " : ''}What mood is it: ${opts.map(f => f[1]).join(', ')}?`); if (t !== tok) return;
+        $('#lgO').innerHTML = opts.map(f => `<button class="lg-opt" data-o="${f[1]}">${esc(cap(f[1]))}</button>`).join('');
+      } else if (d.kind === 'sit') {
+        $('#lgC').innerHTML = `<p class="lg-sit">${esc(d.s[0])}</p><p class="lg-q">What mood does he or she feel?</p>`;
+        await talk(`${d.s[0]} What mood is it? Tap the face.`); if (t !== tok) return;
+        $('#lgO').innerHTML = `<div class="lg-faces">${shuffle(FEEL).map(f => `<button class="lg-fb" data-o="${f[1]}" aria-label="${f[1]}">${f[0]}</button>`).join('')}</div>`;
+      } else {
+        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-sit">“${esc(d.p)}”</p><p class="lg-q">Say it ${esc(d.f[2])}</p>`;
+        await talk(`Now with your voice. Say it ${d.f[2]}: ${d.p}`); if (t !== tok) return;
+        await askSaid(SAID()); if (t !== tok) return;
+        await talk("Your voice can show a mood!"); if (t !== tok) return;
+        k++; next(); return;
+      }
+      busy = false;
+    };
+    const next = () => { if (k >= deck.length) finish({ key: 'emo', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: "You understand feelings!", again: emo }); else later(show, 300); };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
+      const d = deck[k], right = d.kind === 'face' ? d.f[1] : d.s[1];
+      if (b.dataset.o !== right) { sfx.oops(); wiggle(b); wrongs++; await talk(G("Think again: how would you feel?", "Think again: how would you feel?")); busy = false; return; }
+      sfx.good(); b.classList.add('right');
+      if (d.kind === 'face') {
+        await talk(`That is ${right}. Show ${right === "surprise" ? "surprise" : right} with your face!`); if (t !== tok) return;
+        await askSaid(G("I did it!", "I did it!")); if (t !== tok) return;
+      } else { await talk(`Yes, ${right}.`); if (t !== tok) return; }
+      k++; next();
+    };
+    show();
+  }
+
+  GAMES.push(
+    { id: 'story-seq', name: "What comes first, what comes next", sub: "put the pictures in order and tell the story", ico: () => pic('🐣'), bg: 'var(--t-mint)', go: storySeq, grp: 16 },
+    { id: 'emo', name: "What mood is it?", sub: "feelings on the face and in the voice", ico: () => pic('😊'), bg: 'var(--t-lilac)', go: emo, grp: 16 }
+  );
+  return { storySeq, emo };
+})();
+
 const LOGO = (() => {
   const SAID = () => G('Я сказала!', 'Я сказал!');
   const VW = /[аеёиоуыэюя]/gi;
@@ -18556,93 +18654,6 @@ const LOGO = (() => {
     show();
   }
 
-   
-  const STORIES = [
-    [['🥚', 'Сначала было яйцо.'], ['🐣', 'Из яйца вылупился цыплёнок.'], ['🐥', 'Цыплёнок подрос.'], ['🐔', 'И стал курицей.']],
-    [['🫘', 'Посадили семечко.'], ['🌱', 'Появился росток.'], ['🌿', 'Росток вырос.'], ['🌻', 'Расцвёл подсолнух.']],
-    [['☁️', 'На небо пришла туча.'], ['🌧️', 'Пошёл дождь.'], ['🌈', 'Выглянула радуга.']],
-    [['❄️', 'Выпал снег.'], ['⛄', 'Дети слепили снеговика.'], ['☀️', 'Пригрело солнце.'], ['💧', 'Снеговик растаял.']],
-    [['😴', 'Я сплю.'], ['⏰', 'Звенит будильник.'], ['🪥', 'Я чищу зубы.'], ['🥣', 'Я завтракаю.']],
-    [['🐛', 'Гусеница ест листья.'], ['💤', 'Гусеница уснула в коконе.'], ['🦋', 'Из кокона вылетела бабочка.']],
-    [['🥚', 'Взяли яйца и муку.'], ['🥣', 'Замесили тесто.'], ['🔥', 'Испекли в духовке.'], ['🥧', 'Пирог готов!']],
-    [['🌸', 'Яблоня цветёт.'], ['🍏', 'Выросло зелёное яблоко.'], ['🍎', 'Яблоко покраснело.'], ['🧺', 'Яблоки собрали в корзину.']],
-    [['✏️', 'Пишу письмо.'], ['✉️', 'Кладу его в конверт.'], ['📮', 'Опускаю в почтовый ящик.'], ['📬', 'Письмо пришло к бабушке.']],
-    [['🧱', 'Привезли кирпичи.'], ['🏗️', 'Строят дом.'], ['🏠', 'Дом готов.']]];
-  function storySeq() {
-    const t = newScreen(), deck = sample(Q() ? STORIES.filter(s => s.length === 4) : STORIES, 3);
-    let k = 0, at = 0, busy = false, order = [];
-    shell('Что сначала, что потом', `<div class="lg"><p class="lg-q" id="lgQ">Разложи картинки по порядку</p><div class="lg-grid" id="lgP"></div><p class="lg-story" id="lgSt"></p></div>`);
-    const show = () => {
-      busy = false; at = 0; const st = deck[k]; order = shuffle(st.map((_, i) => i));
-      if (order.every((x, i) => x === i)) order.reverse();
-      $('#lgSt').innerHTML = ''; $('#lgQ').textContent = 'Разложи картинки по порядку';
-      $('#lgP').innerHTML = order.map(i => `<button class="lg-pic" data-i="${i}">${pic(st[i][0])}<i class="lg-n"></i></button>`).join('');
-      talk(k === 0 ? 'Что было сначала, а что потом? Нажимай на картинки по порядку.' : 'Новая история. Что было сначала?');
-    };
-    $('#lgP').onclick = async e => {
-      const b = e.target.closest('[data-i]'); if (!b || busy || b.classList.contains('right')) return;
-      if (+b.dataset.i !== at) { sfx.oops(); wiggle(b); talk(at === 0 ? 'Подумай: с чего всё началось?' : 'А что было дальше?'); return; }
-      sfx.pop(); b.classList.add('right'); b.querySelector('.lg-n').textContent = ++at;
-      if (at < deck[k].length) return;
-      busy = true; sfx.good();
-      const st = deck[k];
-      $('#lgSt').innerHTML = st.map(([, s]) => esc(s)).join(' ');
-      await talk(st.map(([, s]) => s).join(' ')); if (t !== tok) return;
-      $('#lgQ').textContent = 'Сначала… Потом… В конце…';
-      await talk(`Теперь расскажи сам${G('а', '')}, по картинкам: сначала, потом, в конце.`); if (t !== tok) return;
-      await askSaid(G('Я рассказала!', 'Я рассказал!')); if (t !== tok) return;
-      k++; if (k >= deck.length) finish({ key: 'story-seq', line: 'Ты рассказываешь истории по порядку!', again: storySeq }); else later(show, 300);
-    };
-    show();
-  }
-
-   
-  const FEEL = [['😄', 'радость', 'весело'], ['😢', 'грусть', 'грустно'], ['😠', 'злость', 'сердито'], ['😨', 'страх', 'испуганно'], ['😲', 'удивление', 'удивлённо']];
-  const SITS = [['Мальчику подарили щенка.', 'радость'], ['У девочки улетел воздушный шарик.', 'грусть'], ['Младший брат сломал башню из кубиков.', 'злость'],
-    ['Ночью за окном загремел гром.', 'страх'], ['Из коробки выпрыгнул игрушечный зайчик!', 'удивление'], ['Друг не пришёл на день рождения.', 'грусть'],
-    ['Мама испекла любимый пирог.', 'радость'], ['Большая собака громко лает и бежит навстречу.', 'страх'], ['Зимой на окне вдруг расцвёл цветок!', 'удивление'],
-    ['Кто-то без спроса взял любимую игрушку.', 'злость'], ['В гости приехала бабушка.', 'радость'], ['Котёнок потерялся.', 'грусть']];
-  const PHR = ['Привет!', 'Пойдём гулять.', 'Это мой мяч.', 'У нас гости.', 'Смотри, снег!'];
-  function emo() {
-    const t = newScreen(), faces = sample(FEEL, 2), sits = sample(SITS, 3), it = pickOne(FEEL.filter(f => f[1] !== 'страх'));
-    const deck = [...faces.map(f => ({ kind: 'face', f })), ...sits.map(s => ({ kind: 'sit', s })), { kind: 'voice', f: it, p: pickOne(PHR) }];
-    let k = 0, busy = false, wrongs = 0;
-    shell('Какое настроение?', `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
-    const show = async () => {
-      busy = true; const d = deck[k]; $('#lgO').innerHTML = '';
-      if (d.kind === 'face') {
-        const opts = shuffle([d.f, ...sample(FEEL.filter(f => f !== d.f), 2)]);
-        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-q">Какое настроение?</p>`;
-        await talk(`${k === 0 ? 'Посмотри на лицо. ' : ''}Какое настроение: ${opts.map(f => f[1]).join(', ')}?`); if (t !== tok) return;
-        $('#lgO').innerHTML = opts.map(f => `<button class="lg-opt" data-o="${f[1]}">${esc(cap(f[1]))}</button>`).join('');
-      } else if (d.kind === 'sit') {
-        $('#lgC').innerHTML = `<p class="lg-sit">${esc(d.s[0])}</p><p class="lg-q">Какое у него настроение?</p>`;
-        await talk(`${d.s[0]} Какое настроение? Нажми на лицо.`); if (t !== tok) return;
-        $('#lgO').innerHTML = `<div class="lg-faces">${shuffle(FEEL).map(f => `<button class="lg-fb" data-o="${f[1]}" aria-label="${f[1]}">${f[0]}</button>`).join('')}</div>`;
-      } else {
-        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-sit">«${esc(d.p)}»</p><p class="lg-q">Скажи ${esc(d.f[2])}</p>`;
-        await talk(`А теперь голосом. Скажи ${d.f[2]}: ${d.p}`); if (t !== tok) return;
-        await askSaid(SAID()); if (t !== tok) return;
-        await talk('Голосом можно показать настроение!'); if (t !== tok) return;
-        k++; next(); return;
-      }
-      busy = false;
-    };
-    const next = () => { if (k >= deck.length) finish({ key: 'emo', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты понимаешь чувства!', again: emo }); else later(show, 300); };
-    $('#lgO').onclick = async e => {
-      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
-      const d = deck[k], right = d.kind === 'face' ? d.f[1] : d.s[1];
-      if (b.dataset.o !== right) { sfx.oops(); wiggle(b); wrongs++; await talk('Подумай ещё: как бы ты себя почувствовал' + G('а', '') + '?'); busy = false; return; }
-      sfx.good(); b.classList.add('right');
-      if (d.kind === 'face') {
-        await talk(`Это ${right}. Покажи лицом ${right === 'удивление' ? 'удивление' : right}!`); if (t !== tok) return;
-        await askSaid(G('Показала!', 'Показал!')); if (t !== tok) return;
-      } else { await talk(`Да, ${right}.`); if (t !== tok) return; }
-      k++; next();
-    };
-    show();
-  }
-
   
 
   const CHECK = [['С', [['сок', '🧃'], ['оса', '🐝'], ['нос', '👃']]], ['З', [['зонт', '☂️'], ['коза', '🐐']]], ['Ц', [['цирк', '🎪'], ['курица', '🐔'], ['огурец', '🥒']]],
@@ -18741,13 +18752,11 @@ const LOGO = (() => {
     { id: 'gram-many', hide: RU_ONLY, name: 'Один — много', sub: 'один кот, много котов', ico: () => pic('🐈'), bg: 'var(--t-peach)', go: gramMany, grp: 16 },
     { id: 'gram-dim', hide: RU_ONLY, name: 'Назови ласково', sub: 'мяч — мячик, дом — домик', ico: () => pic('⚽'), bg: 'var(--t-pink)', go: gramDim, grp: 16 },
     { id: 'gram-whose', hide: RU_ONLY, name: 'Чей хвост?', sub: 'лисий, волчий, заячьи уши', ico: () => pic('🦊'), bg: 'var(--t-green)', go: gramWhose, grp: 16 },
-    { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 },
-    { id: 'story-seq', hide: RU_ONLY, name: 'Что сначала, что потом', sub: 'разложи картинки и расскажи', ico: () => pic('🐣'), bg: 'var(--t-mint)', go: storySeq, grp: 16 },
-    { id: 'emo', hide: RU_ONLY, name: 'Какое настроение?', sub: 'чувства на лице и в голосе', ico: () => pic('😊'), bg: 'var(--t-lilac)', go: emo, grp: 16 }
+    { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 }
   );
   const snd0 = GAMES.find(g => g.id === 'sounds'); if (snd0) snd0.also = [...(snd0.also || []), 15];
   SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Mücke und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
-  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: 'Слушаю и говорю', p: 'похожие слова, слоги, грамматика, рассказ и чувства' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'picture stories, feelings and a brain warm-up', pt: 'histórias em imagens, emoções e aquecimento do cérebro', de: 'Bildergeschichten, Gefühle und Kopf-Gymnastik' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
   const sp = HOME_TABS.find(x => x.id === 'speak');
   if (sp) { sp.g.splice(sp.g.indexOf(9) + 1, 0, 15); sp.g.push(16); }
   MODS.splice(MODS.findIndex(m => m.id === 'sh') + 1, 0, { id: 'sz', e: '💧', n: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', g: [15], snd: 'sz' }, { id: 'hear', e: '👂', n: { en: 'Listening, syllables, grammar and stories', pt: 'Ouvir, sílabas, gramática e histórias', de: 'Hören, Silben, Grammatik und Erzählen' }[LANG] || 'Слух, слоги, грамматика и рассказ', g: [16] });
@@ -19163,39 +19172,39 @@ const SWAB = (() => {
   const faceBud = (pose, at, cls = '') => faceSVG(pose, cls).replace(/<\/svg>$/, `${bud(at)}</svg>`);
   
   const EX = [
-    { id: 'lips', name: 'Палочка в губах', pose: 'horn', at: 'lips', for: ['sh', 'r', 'l', 'sz'],
-      text: 'Взрослый кладёт палочку поперёк губ. Ребёнок держит её только губами, не зубами, пока считаем до пяти. Потом взрослый чуть-чуть тянет палочку — губы не отпускают.',
-      tip: 'Зубы не кусают, губы сильные.', intro: 'Возьми палочку губками, не зубками. Держи крепко, пока я считаю до пяти.',
-      steps: [['horn', 'Раз', 1100, 'lips'], ['horn', 'Два', 1100, 'lips'], ['horn', 'Три', 1100, 'lips'], ['horn', 'Четыре', 1100, 'lips'], ['horn', 'Пять!', 1100, 'lips', 'pull'], ['frog', 'Отдыхаем', 1200, 'front']] },
-    { id: 'home', name: 'Домик для кончика языка', pose: 'swingUp', at: 'up', for: ['r', 'l', 'sh'],
-      text: 'Взрослый легко касается ваткой бугорков за верхними зубами. Ребёнок ставит кончик языка туда, где почувствовал ватку, и держит. Здесь живёт кончик языка для звуков Л, Р, Т, Д, Н.',
-      tip: 'Касаемся легко, не давим.', intro: 'Я коснусь ваткой домика за верхними зубками. Поставь туда кончик язычка.',
-      steps: rep(3, [['swingUp', 'Сюда!', 1500, 'up'], ['swingUp', 'Держим', 1500, ''], ['swingDown', 'Отдых', 1100, '']]) },
-    { id: 'chase', name: 'Догони ватку', pose: 'lickUp', at: 'lipUp', for: ['r', 'l', 'sh', 'sz'],
-      text: 'Взрослый касается ваткой то верхней губы, то уголков рта, то нижней губы. Ребёнок дотягивается кончиком языка до того места, где была ватка.',
-      tip: 'Нижняя челюсть не двигается, работает только язык.', intro: 'Где была ватка, туда и язычок! Догоняй.',
-      steps: rep(2, [['lickUp', 'Вверх', 1300, 'lipUp'], ['brushL', 'Влево', 1300, 'cornerL'], ['spatula', 'Вниз', 1300, 'lipDown'], ['brushR', 'Вправо', 1300, 'cornerR']]) },
-    { id: 'groove', name: 'Желобок', pose: 'cup', at: 'along', for: ['sz', 'sh'],
-      text: 'Взрослый кладёт палочку вдоль середины широкого языка. Ребёнок поднимает края языка, обнимая палочку, — получается желобок. Потом палочку убираем, а желобок остаётся, и по нему дуем.',
-      tip: 'Язык широкий, края поднимаются, губы не помогают.', intro: 'Положим палочку на серединку язычка. Обними её краешками.',
-      steps: rep(2, [['cup', 'Обними палочку', 1800, 'along'], ['cup', 'Убираю — держи желобок', 1800, ''], ['cup', 'Подуй!', 1800, '', 'tick']]) },
-    { id: 'spade', name: 'Лопаточка с палочкой', pose: 'spatula', at: 'across', for: ['sz', 'sh'],
-      text: 'Ребёнок кладёт широкий спокойный язык на нижнюю губу. Взрослый кладёт палочку поперёк языка. Язык держит её и не роняет, пока считаем до пяти.',
-      tip: 'Язык мягкий и широкий, не дрожит.', intro: 'Положи широкий язычок на нижнюю губку. Я положу на него палочку. Держи, не урони.',
-      steps: [['spatula', 'Раз', 1100, 'across'], ['spatula', 'Два', 1100, 'across'], ['spatula', 'Три', 1100, 'across'], ['spatula', 'Четыре', 1100, 'across'], ['spatula', 'Пять!', 1100, 'across'], ['frog', 'Отдыхаем', 1200, '']] },
-    { id: 'down', name: 'Кончик за нижние зубки', pose: 'donkey', at: 'lowTeeth', for: ['sz'],
-      text: 'Взрослый касается ваткой нижних зубов изнутри. Ребёнок упирает туда кончик языка и улыбается. Так кончик языка стоит для звуков С и З.',
-      tip: 'Кончик языка внизу, спинка выгнута горкой.', intro: 'Я коснусь ваткой нижних зубок изнутри. Упрись туда кончиком язычка и улыбнись.',
-      steps: rep(3, [['donkey', 'Сюда!', 1400, 'lowTeeth'], ['catHill', 'Горка', 1600, ''], ['frog', 'Отдых', 1000, '']]) },
-    { id: 'blow', name: 'Подуй на ватку', pose: 'frog', at: 'front', for: ['sz', 'sh', 'r', 'l'],
-      text: 'Взрослый держит палочку ваткой перед губами. Ребёнок улыбается и дует длинной холодной струйкой по середине языка — ватка шевелится. Щёки не надуваются.',
-      tip: 'Струя длинная и ровная, щёки спокойные.', intro: 'Улыбнись и подуй на ватку. Долго, ровно, щёчки не надуваем.',
-      steps: rep(3, [['frog', 'Вдох носом', 1100, 'front'], ['frog', 'Дуем…', 2200, 'front', 'blow'], ['frog', 'Отдых', 900, 'front']]) },
-    { id: 'motor', name: 'Моторчик для Р', pose: 'swingUp', at: 'under', for: ['r'], care: true,
-      text: 'Ребёнок поднимает кончик языка за верхние зубы и быстро говорит «д-д-д». Взрослый подводит палочку под язык и мягко покачивает её вправо-влево — язык начинает дрожать: «д-д-д» превращается в «ддррр».',
-      tip: 'Лучше, когда логопед уже показал это упражнение. Не давить на уздечку. Звук горловой или в нос — остановиться и спросить логопеда.',
-      intro: 'Подними кончик язычка за верхние зубки и говори быстро: д-д-д. А я помогу моторчику палочкой.',
-      steps: rep(3, [['swingUp', 'Быстро-быстро!', 1600, ''], ['swingUp', 'Моторчик!', 2200, 'under', 'wig'], ['swingDown', 'Отдых', 1100, '']]) }
+    { id: 'lips', name: "Bud between the lips", pose: 'horn', at: 'lips', for: ['sh', 'r', 'l', 'sz'],
+      text: "The grown-up lays the cotton bud across the child's lips. The child holds it with the lips only, not the teeth, while we count to five. Then the grown-up pulls the bud very gently: the lips do not let go.",
+      tip: "Teeth do not bite, lips are strong.", intro: "Hold the bud with your lips, not your teeth. Hold it tight while I count to five.",
+      steps: [['horn', "One", 1100, 'lips'], ['horn', "Two", 1100, 'lips'], ['horn', "Three", 1100, 'lips'], ['horn', "Four", 1100, 'lips'], ['horn', "Five!", 1100, 'lips', 'pull'], ['frog', "Let's rest", 1200, 'front']] },
+    { id: 'home', name: "A little house for the tip of the tongue", pose: 'swingUp', at: 'up', for: ['r', 'l', 'sh'],
+      text: "The grown-up lightly touches the little bumps behind the upper teeth with the cotton wool. The child puts the tip of the tongue where they felt it and holds it there. This is where the tip of the tongue lives for the sounds L, R, T, D and N.",
+      tip: "We touch lightly, we do not press.", intro: "I will touch the little house behind your top teeth with the cotton wool. Put the tip of your tongue there.",
+      steps: rep(3, [['swingUp', "Here!", 1500, 'up'], ['swingUp', "Hold it", 1500, ''], ['swingDown', "Rest", 1100, '']]) },
+    { id: 'chase', name: "Catch the cotton wool", pose: 'lickUp', at: 'lipUp', for: ['r', 'l', 'sh', 'sz'],
+      text: "The grown-up touches the cotton wool to the upper lip, then the corners of the mouth, then the lower lip. The child reaches with the tip of the tongue to the place where the cotton wool was.",
+      tip: "The lower jaw stays still, only the tongue works.", intro: "Wherever the cotton wool was, your tongue goes! Catch it.",
+      steps: rep(2, [['lickUp', "Up", 1300, 'lipUp'], ['brushL', "Left", 1300, 'cornerL'], ['spatula', "Down", 1300, 'lipDown'], ['brushR', "Right", 1300, 'cornerR']]) },
+    { id: 'groove', name: "Little groove", pose: 'cup', at: 'along', for: ['sz', 'sh'],
+      text: "The grown-up lays the cotton bud along the middle of the child's wide tongue. The child lifts the edges of the tongue to hug the bud, which makes a groove. Then we take the bud away, the groove stays, and we blow along it.",
+      tip: "The tongue is wide, the edges lift, the lips do not help.", intro: "Let's put the bud in the middle of your tongue. Hug it with the edges.",
+      steps: rep(2, [['cup', "Hug the bud", 1800, 'along'], ['cup', "I take it away. Keep the groove", 1800, ''], ['cup', "Blow!", 1800, '', 'tick']]) },
+    { id: 'spade', name: "Little paddle with a bud", pose: 'spatula', at: 'across', for: ['sz', 'sh'],
+      text: "The child rests a wide, calm tongue on the lower lip. The grown-up lays the cotton bud across the tongue. The tongue holds it and does not drop it while we count to five.",
+      tip: "The tongue is soft and wide and does not shake.", intro: "Rest your wide tongue on your bottom lip. I will put the bud on it. Hold it, don't drop it.",
+      steps: [['spatula', "One", 1100, 'across'], ['spatula', "Two", 1100, 'across'], ['spatula', "Three", 1100, 'across'], ['spatula', "Four", 1100, 'across'], ['spatula', "Five!", 1100, 'across'], ['frog', "Let's rest", 1200, '']] },
+    { id: 'down', name: "Tip behind the bottom teeth", pose: 'donkey', at: 'lowTeeth', for: ['sz'],
+      text: "The grown-up touches the inside of the lower teeth with the cotton wool. The child presses the tip of the tongue there and smiles. This is where the tip of the tongue stands for the sounds S and Z.",
+      tip: "The tip of the tongue is down, the back is arched like a little hill.", intro: "I will touch the inside of your bottom teeth with the cotton wool. Press the tip of your tongue there and smile.",
+      steps: rep(3, [['donkey', "Here!", 1400, 'lowTeeth'], ['catHill', "Little hill", 1600, ''], ['frog', "Rest", 1000, '']]) },
+    { id: 'blow', name: "Blow on the cotton wool", pose: 'frog', at: 'front', for: ['sz', 'sh', 'r', 'l'],
+      text: "The grown-up holds the cotton bud, wool end towards the child's lips. The child smiles and blows a long, cool stream of air along the middle of the tongue, and the cotton wool moves. The cheeks do not puff out.",
+      tip: "The air is long and steady, the cheeks stay calm.", intro: "Smile and blow on the cotton wool. Long and steady, and don't puff your cheeks.",
+      steps: rep(3, [['frog', "Breathe in through your nose", 1100, 'front'], ['frog', "Blowing…", 2200, 'front', 'blow'], ['frog', "Rest", 900, 'front']]) },
+    { id: 'motor', name: "Little motor for R", pose: 'swingUp', at: 'under', for: ['r'], care: true,
+      text: "The child lifts the tip of the tongue behind the upper teeth and quickly says “d-d-d”. The grown-up puts the bud under the tongue and gently rocks it left and right. The tongue starts to tremble, and “d-d-d” turns into “ddrrr”.",
+      tip: "It is better if a speech therapist has already shown this exercise. Do not press on the frenulum (the fold under the tongue). If the sound comes from the throat or the nose, stop and ask the speech therapist.",
+      intro: "Lift the tip of your tongue behind your top teeth and say quickly: d-d-d. I will help the little motor with the bud.",
+      steps: rep(3, [['swingUp', "Very fast!", 1600, ''], ['swingUp', "Little motor!", 2200, 'under', 'wig'], ['swingDown', "Rest", 1100, '']]) }
   ];
   const list = () => EX.filter(e => !e.care || mySounds().includes('r'));
   const ok = () => !!(P.settings.swabOk);
@@ -19203,19 +19212,19 @@ const SWAB = (() => {
   function menu() {
     newScreen();
     const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
-    shell('Гимнастика с ватной палочкой', `<div class="sw">
-      <details class="pr-tip sw-safe" ${ok() ? '' : 'open'}><summary>🧑‍🍼 Для взрослого: как безопасно</summary>
-        <p>Палочку держит только взрослый. Руки чистые, палочка новая, с плотной ваткой. Касаемся губ, кончика и середины языка, бугорков за зубами — не глубже: дальше начинается рвотный рефлекс.</p>
-        <p>Не давим, движения мягкие. Ребёнок не кусает палочку. Неприятно или страшно — останавливаемся и делаем то же упражнение без палочки.</p>
-        <p>Палочка подсказывает языку, куда идти. Ставить звуки лучше вместе с логопедом.</p>
-        ${ok() ? '' : '<div class="og-btns"><button class="big" id="swOk">Понятно, я рядом</button></div>'}</details>
-      <p class="lead">Садимся перед зеркалом. Взрослый держит палочку, ребёнок повторяет за девочкой.</p>
+    shell("Cotton bud exercises", `<div class="sw">
+      <details class="pr-tip sw-safe" ${ok() ? '' : 'open'}><summary>🧑‍🍼 For the grown-up: how to do it safely</summary>
+        <p>Only the grown-up holds the cotton bud. Wash your hands, use a new bud with firm cotton wool. Touch only the lips, the tip and the middle of the tongue, and the little bumps behind the teeth. Do not go deeper: further back, it makes the child gag.</p>
+        <p>Do not press, keep the movements gentle. The child must not bite the bud. If it feels unpleasant or scary, stop and do the same exercise without the bud.</p>
+        <p>The bud only shows the tongue where to go. It is best to work on sounds together with a speech therapist.</p>
+        ${ok() ? '' : "<div class=\"og-btns\"><button class=\"big\" id=\"swOk\">Got it, I am here</button></div>"}</details>
+      <p class="lead">Sit in front of the mirror. The grown-up holds the bud, the child copies the girl.</p>
       <div class="cards" id="swCards">${list().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceBud(a.pose, a.at)}<span>${a.name}</span>${P.best['swab:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>
-      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Одно упражнение с палочкой — в занятии «Логопед» после зарядки</label></div>`);
+      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> One cotton bud exercise in the “Speech” session, after the warm-up</label></div>`);
     const okb = $('#swOk'); if (okb) okb.onclick = () => { sfx.pop(); P.settings.swabOk = 1; save(); menu(); };
     $('#swDaily').onchange = e => { P.settings.swabDaily = e.target.checked; save(); sfx.tick(); };
-    $('#swCards').onclick = e => { const c = e.target.closest('.card'); if (!c) return; sfx.pop(); if (!ok()) { wiggle($('.sw-safe')); $('.sw-safe').open = true; talk('Сначала взрослый читает, как делать безопасно.'); return; } ex(+c.dataset.i); };
-    talk(ok() ? 'Возьмите ватную палочку. Выбери упражнение.' : 'Позови взрослого. Ему нужно прочитать, как делать с палочкой безопасно.');
+    $('#swCards').onclick = e => { const c = e.target.closest('.card'); if (!c) return; sfx.pop(); if (!ok()) { wiggle($('.sw-safe')); $('.sw-safe').open = true; talk("First the grown-up reads how to do it safely."); return; } ex(+c.dataset.i); };
+    talk(ok() ? "Take a cotton bud. Choose an exercise." : "Call a grown-up. They need to read how to use the bud safely.");
   }
   function ex(i, auto = false) {
     const t = newScreen(), a = list()[i];
@@ -19226,9 +19235,9 @@ const SWAB = (() => {
         ${camHTML}
         <div class="artic-side">
           <p class="howto">${esc(a.text)}<em>${esc(a.tip)}</em></p>
-          ${a.care ? '<p class="sw-care">⚠️ Только со взрослым и лучше после того, как упражнение показал логопед.</p>' : ''}
+          ${a.care ? "<p class=\"sw-care\">⚠️ Only with a grown-up, and best after a speech therapist has shown you the exercise.</p>" : ''}
           <div class="steps" id="steps">${a.steps.map(() => '<i></i>').join('')}</div>
-          <div class="prow-btns"><button class="big" id="go">${ICON.play}Начать</button><button class="big ghost" id="camBtn"></button></div>
+          <div class="prow-btns"><button class="big" id="go">${ICON.play}Start</button><button class="big ghost" id="camBtn"></button></div>
           <p class="muted" id="camNote" hidden></p>
         </div></div>`, { back: menu });
     bindCam($('#artStage'));
@@ -19237,7 +19246,7 @@ const SWAB = (() => {
     const start = async () => {
       if (started || t !== tok) return; started = true;
       $('#go').hidden = true; sfx.pop();
-      await talk('Взрослый, возьмите палочку. Приготовились!'); if (t !== tok) return;
+      await talk("Grown-up, take the bud. Ready!"); if (t !== tok) return;
       for (let k = 0; k < a.steps.length; k++) {
         const [pose, line, ms, at, fx] = a.steps[k];
         setFace(pose, at, fx); dots[k].classList.add('on');
@@ -19246,11 +19255,11 @@ const SWAB = (() => {
         await wait(ms * pace()); if (t !== tok) return;
       }
       sayB.hidden = true;
-      finish({ key: 'swab:' + a.id, stars: 1, line: 'Язычок знает, куда идти!', again: () => ex(i, auto), next: i < list().length - 1 ? () => ex(i + 1) : null, menu });
+      finish({ key: 'swab:' + a.id, stars: 1, line: "Your little tongue knows where to go!", again: () => ex(i, auto), next: i < list().length - 1 ? () => ex(i + 1) : null, menu });
     };
     $('#go').onclick = start;
     if (auto && ok()) talk(a.intro).then(() => later(start, 400));
-    else talk(a.intro + ' Нажми «Начать».');
+    else talk(a.intro + " Press “Start”.");
   }
   
   const step = n => {
@@ -19259,15 +19268,15 @@ const SWAB = (() => {
     const xs = mine.length ? mine : list(), a = xs[n % xs.length], i = list().indexOf(a);
     return { key: 'swab:' + a.id, kind: 'artic', name: a.name, run: () => (ok() ? ex(i, true) : menu()) };
   };
-  GAMES.push({ id: 'swab', hide: () => !IS_RU, name: 'Гимнастика с ватной палочкой', sub: 'со взрослым: палочка подсказывает языку', ico: () => faceBud('swingUp', 'up'), bg: 'var(--t-mint)', go: menu, grp: 0, also: [15],
-    prog: () => `${ICON.star}${list().filter(e => P.best['swab:' + e.id]).length} из ${list().length}` });
+  GAMES.push({ id: 'swab', name: "Cotton bud exercises", sub: "with a grown-up: the bud shows the tongue where to go", ico: () => faceBud('swingUp', 'up'), bg: 'var(--t-mint)', go: menu, grp: 0, also: [15],
+    prog: () => `${ICON.star}${list().filter(e => P.best['swab:' + e.id]).length} of ${list().length}` });
   return { step, menu, ex };
 })();
 
 
 
 const IDEAS = (() => {
-  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const SAID = () => G("I said it!", "I said it!");
   const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l' };
   const firstMine = list => list.find(L => mySounds().includes(SND[L])) || list[0];
 
@@ -19279,13 +19288,13 @@ const IDEAS = (() => {
     shell(title, `<div class="nr"><p class="lg-q">${esc(intro)}</p>${tip ? `<p class="muted">${esc(tip)}</p>` : ''}
       <div class="nr-card" id="nrC"><span class="nr-e">${items[0][0]}</span><b>${esc(items[0][1])}</b></div>
       <div class="nr-row">${items.map(([e, l], i) => `<span class="nr-mini" data-i="${i}">${e}<small>${esc(l)}</small></span>`).join('')}</div>
-      <p class="nr-round" id="nrR"></p><div class="og-btns"><button class="big" id="nrGo">${ICON.play}Начать</button></div></div>`);
+      <p class="nr-round" id="nrR"></p><div class="og-btns"><button class="big" id="nrGo">${ICON.play}Start</button></div></div>`);
     const go = async () => {
       if (started) return; started = true; $('#nrGo').hidden = true; sfx.pop();
-      await talk('Приготовились!'); if (t !== tok) return;
+      await talk("Ready!"); if (t !== tok) return;
       for (let r = 0; r < rounds; r++) {
         const ms = beat * Math.pow(.8, r);
-        $('#nrR').textContent = r === 0 ? 'Медленно' : r === rounds - 1 ? 'Быстро!' : 'Быстрее';
+        $('#nrR').textContent = r === 0 ? "Slowly" : r === rounds - 1 ? "Fast!" : "Faster";
         for (let i = 0; i < items.length; i++) {
           const [e, l, s] = items[i];
           $('#nrC').innerHTML = `<span class="nr-e">${e}</span><b>${esc(l)}</b>`; hopEl($('#nrC'));
@@ -19295,64 +19304,64 @@ const IDEAS = (() => {
         }
       }
       $$('.nr-mini').forEach(x => x.classList.remove('on'));
-      await talk('Получилось? Молодец!'); if (t !== tok) return;
-      await askSaid('Получилось!'); if (t !== tok) return;
-      finish({ key, stars: 2, line: line || 'Голова и руки работают вместе!', again });
+      await talk("Did it work? Well done!"); if (t !== tok) return;
+      await askSaid("You did it!"); if (t !== tok) return;
+      finish({ key, stars: 2, line: line || "Your head and hands work together!", again });
     };
     $('#nrGo').onclick = go;
-    talk(`${intro} Нажми «Начать».`);
+    talk(`${intro} Press “Start”.`);
   }
   const H = (e, cls = '') => `<span class="nr-h ${cls}">${e}</span>`;
   const NEURO = [
-    { id: 'fist', name: 'Кулак — ребро — ладонь', intro: 'Рука на столе: сначала кулак, потом ребро, потом ладонь. Повторяй за мной.', tip: 'Сначала правой рукой, потом левой, потом двумя вместе.',
-      items: () => [[H('✊'), 'Кулак'], [H('🤚', 'edge'), 'Ребро'], [H('✋', 'flat'), 'Ладонь']] },
-    { id: 'rings', name: 'Колечки', intro: 'Большой пальчик здоровается с каждым пальчиком по очереди: получаются колечки.', tip: 'Сначала одной рукой, потом двумя вместе.',
-      items: () => [[H('👌'), 'Указательный'], [H('👌'), 'Средний'], [H('👌'), 'Безымянный'], [H('👌'), 'Мизинчик']] },
-    { id: 'earnose', name: 'Ухо — нос', intro: 'Левой рукой возьмись за кончик носа, правой — за левое ухо. Хлопок — и поменяй руки!', tip: 'Руки перекрещиваются. Сначала медленно, потом быстрее.',
-      items: () => [[`${H('👃')}${H('👂')}`, 'Нос и ухо'], [H('👏'), 'Хлопок!'], [`${H('👂')}${H('👃')}`, 'Поменяли!'], [H('👏'), 'Хлопок!']] },
-    { id: 'lezginka', name: 'Лезгинка', intro: 'Левая рука в кулаке, большой палец в сторону. Правая ладонь касается кулачка. Меняем руки!', tip: 'Как в танце: раз — поменяли, два — поменяли.',
-      items: () => [[`${H('👍')}${H('✋')}`, 'Раз'], [`${H('✋')}${H('👍')}`, 'Два']] },
+    { id: 'fist', name: "Fist, edge, palm", intro: "Hand on the table: first a fist, then the edge, then the palm. Copy me.", tip: "First with your right hand, then your left, then both together.",
+      items: () => [[H('✊'), "Fist"], [H('🤚', 'edge'), "Edge"], [H('✋', 'flat'), "Palm"]] },
+    { id: 'rings', name: "Little rings", intro: "Your thumb says hello to each finger in turn, and they make little rings.", tip: "First with one hand, then with both together.",
+      items: () => [[H('👌'), "Pointer finger"], [H('👌'), "Middle finger"], [H('👌'), "Ring finger"], [H('👌'), "Little finger"]] },
+    { id: 'earnose', name: "Ear and nose", intro: "With your left hand hold the tip of your nose, with your right hand your left ear. Clap, and swap hands!", tip: "Your arms cross over. First slowly, then faster.",
+      items: () => [[`${H('👃')}${H('👂')}`, "Nose and ear"], [H('👏'), "Clap!"], [`${H('👂')}${H('👃')}`, "Swap!"], [H('👏'), "Clap!"]] },
+    { id: 'lezginka', name: "Dance hands", intro: "Left hand in a fist, thumb out to the side. Right palm touches the fist. Swap hands!", tip: "Like a dance: one, swap, two, swap.",
+      items: () => [[`${H('👍')}${H('✋')}`, "One"], [`${H('✋')}${H('👍')}`, "Two"]] },
     
-    { id: 'cross', name: 'Шагаем и говорим', intro: 'Правый локоть к левой коленке, потом левый локоть к правой. На каждый шаг — слог.', tip: 'Спина прямая, говорим чётко.',
-      items: () => { const L = firstMine(['Р', 'Ш', 'С', 'Л']), v = ['а', 'о', 'у', 'ы']; return v.map((x, i) => [i % 2 ? `${H('🦵')}${H('💪', 'flip')}` : `${H('💪')}${H('🦵', 'flip')}`, (L + x).toUpperCase(), L.toLowerCase() + x]); } }
+    { id: 'cross', name: "March and speak", intro: "Right elbow to left knee, then left elbow to right knee. One syllable for every step.", tip: "Back straight, speak clearly.",
+      items: () => { const L = IS_RU ? firstMine([RU('Р'), RU('Ш'), RU('С'), RU('Л')]) : 'R', v = IS_RU ? [RU('а'), RU('о'), RU('у'), RU('ы')] : ['a', 'o', 'u', 'i']; return v.map((x, i) => [i % 2 ? `${H('🦵')}${H('💪', 'flip')}` : `${H('💪')}${H('🦵', 'flip')}`, (L + x).toUpperCase(), L.toLowerCase() + x]); } }
   ];
   const neuro = i => { const n = NEURO[i % NEURO.length]; drill({ key: 'neuro', title: n.name, items: n.items(), intro: n.intro, tip: n.tip, rounds: 3, beat: n.id === 'cross' ? 1300 : 1500, again: () => neuroMenu() }); };
   function neuroMenu() {
     newScreen();
-    shell('Нейроразминка', `<div class="nr"><p class="lead">Руки и голова работают вместе — и речь становится лучше. Делаем стоя или за столом.</p>
+    shell("Brain warm-up", `<div class="nr"><p class="lead">Hands and head work together, and speech gets better. Do it standing up or at the table.</p>
       <div class="lg-grid" id="nrM">${NEURO.map((n, i) => `<button class="lg-pic" data-i="${i}">${n.items()[0][0]}<b>${esc(n.name)}</b></button>`).join('')}</div></div>`);
     $('#nrM').onclick = e => { const b = e.target.closest('[data-i]'); if (b) { sfx.pop(); neuro(+b.dataset.i); } };
-    talk('Нейроразминка! Выбери упражнение.');
+    talk("Brain warm-up! Choose an exercise.");
   }
 
    
   const R_EX = [
-    { id: 'drum', name: 'Барабанщик', text: 'Рот широко открыт. Кончик языка стучит по бугоркам за верхними зубами, как палочка по барабану: д-д-д. Нижняя челюсть не двигается.', pose: ['swingUp', 'catFlat'], line: 'Бам-бам-бам!' },
-    { id: 'gun', name: 'Пулемёт', text: 'Рот открыт, кончик языка за верхними зубами. Быстро-быстро: т-т-т, с сильным выдохом. Поднеси ладошку ко рту — чувствуешь ветерок?', pose: ['swingUp', 'catFlat'], line: 'Быстро-быстро!' },
-    { id: 'paint', name: 'Маляр', text: 'Рот открыт. Кончиком языка «красим» нёбо от зубов назад и обратно. Нижняя челюсть не двигается.', pose: ['swingUp', 'paintBack'], line: 'Красим!' }
+    { id: 'drum', name: "Drummer", text: "Open your mouth wide. The tip of your tongue taps the bumps behind your top teeth, like a drumstick on a drum: d-d-d. Your bottom jaw stays still.", pose: ['swingUp', 'catFlat'], line: "Boom-boom-boom!" },
+    { id: 'gun', name: "Machine gun", text: "Mouth open, tip of the tongue behind the top teeth. Very fast: t-t-t, with a strong puff of air. Hold your hand in front of your mouth. Can you feel a little breeze?", pose: ['swingUp', 'catFlat'], line: "Very fast!" },
+    { id: 'paint', name: "Painter", text: "Mouth open. With the tip of your tongue, “paint” the roof of your mouth from the teeth backwards and back again. Your bottom jaw stays still.", pose: ['swingUp', 'paintBack'], line: "Painting!" }
   ];
-  const THROAT = 'Положи ладошку на горлышко и скажи «а-а-а»: горлышко дрожит от голоса — это хорошо. А когда звучит Р, дрожит кончик языка впереди, за верхними зубами, а не горло. Если Р похоже на урчание в горле, не тренируем Р в словах: сначала барабанщик, пулемёт и маляр, и покажите ребёнка логопеду.';
-  const R_VOW = ['Ар!', 'Ор!', 'Ур!', 'Ыр!', 'Ара!', 'Оро!', 'Уру!', 'Ыры!'];
-  const R_WORDS = [['шар', '🎈'], ['сыр', '🧀'], ['комар', '🦟'], ['корова', '🐄'], ['гора', '⛰️'], ['барабан', '🥁'], ['морковка', '🥕'], ['пирамида', '🔺'], ['ведро', '🪣'], ['помидор', '🍅']];
+  const THROAT = "Put your hand on your throat and say “aaa”: your throat buzzes with your voice, and that is fine. But when the R sound is made, the tip of your tongue trembles at the front, behind your top teeth, not your throat. If your R sounds like a purr in the throat, do not practise R in words yet. Start with the drummer, the machine gun and the painter, and show your child to a speech therapist.";
+  const R_VOW = ["Ар!", "Ор!", "Ур!", "Ыр!", "Ара!", "Оро!", "Уру!", "Ыры!"];
+  const R_WORDS = [["шар", '🎈'], ["сыр", '🧀'], ["комар", '🦟'], ["корова", '🐄'], ["гора", '⛰️'], ["барабан", '🥁'], ["морковка", '🥕'], ["пирамида", '🔺'], ["ведро", '🪣'], ["помидор", '🍅']];
   function rMotor() {
     const t = newScreen(), plan = [...R_EX, 'vow', 'words'];
-    shell('Р без «д»', `<div class="nr"><div class="pr-steps" id="rS">${plan.map((p, i) => `<span>${i + 1}</span>`).join('')}</div><div id="rBox" class="gr-box"></div>
-      <details class="pr-tip"><summary>💡 Взрослому</summary><p>Если ребёнок говорит «др» вместо Р (дрыба, дрома), язык ещё не умеет дрожать сам и помогает себе ударом «д». Тренируем кончик языка (барабанщик, пулемёт, маляр) и Р после гласной: ар, ара — там «д» не к чему прицепиться. Слова с Р в начале — позже.</p>
-      <p>Горловое Р (урчит в горле) дома словами не исправляется: делаем упражнения для кончика языка и идём к логопеду.</p></details></div>`);
+    shell("R without “d”", `<div class="nr"><div class="pr-steps" id="rS">${plan.map((p, i) => `<span>${i + 1}</span>`).join('')}</div><div id="rBox" class="gr-box"></div>
+      <details class="pr-tip"><summary>💡 For the grown-up</summary><p>If a child says “dr” instead of R (“drabbit”, “drun”), the tongue cannot tremble by itself yet and helps itself with a “d” tap. Practise the tip of the tongue (drummer, machine gun, painter) and R after a vowel: ar, ara. There is no “d” to lean on there. Words that start with R come later.</p>
+      <p>A throaty R (a purr in the throat) cannot be fixed at home with words: do the tongue-tip exercises and see a speech therapist.</p></details></div>`);
     const box = $('#rBox');
     (async () => {
-      await talk('Тренируем Р без «д». Сначала зарядка для кончика языка.'); if (t !== tok) return;
+      await talk("Practising R without “d”. First, a warm-up for the tip of the tongue."); if (t !== tok) return;
       for (let k = 0; k < plan.length; k++) {
         if (t !== tok) return;
         $$('#rS span').forEach((x, n) => { x.classList.toggle('now', n === k); x.classList.toggle('done', n < k); });
         const p = plan[k];
         if (p === 'vow') {
-          box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">Р после гласной — без «д»</p></div>`;
-          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
+          box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">R after a vowel, without “d”</p></div>`;
+          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), "р"); await talk(`Repeat: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
-          box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
+          box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">R in the middle and at the end of a word</p></div>`;
           const ws = sample(R_WORDS, 5), redo = new Set();
-          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
+          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), "р"); await talk(`${cap(w)}. Say it clearly.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
         } else {
           box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
           await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;
@@ -19363,71 +19372,71 @@ const IDEAS = (() => {
           }
         }
       }
-      finish({ key: 'r-motor', line: 'Моторчик Р заводится!', again: rMotor });
+      finish({ key: 'r-motor', line: "The R motor is starting!", again: rMotor });
     })();
   }
   function rThroat() {
     const t = newScreen();
-    shell('Р не в горле', `<div class="artic-stage"><div class="mirror">${faceSVG('frog')}</div><div class="artic-side"><p class="howto">${esc(THROAT)}</p><div class="og-btns"><button class="big" id="rOk">Понятно</button><button class="big ghost" id="rGo">Барабанщик и Р без «д»</button></div></div></div>`);
-    talk('Положи ладошку на горлышко и скажи: а-а-а.');
-    $('#rOk').onclick = () => { if (t === tok) finish({ key: 'r-throat', stars: 1, line: 'Теперь ты знаешь, где живёт Р!', again: rThroat }); };
+    shell("R is not in the throat", `<div class="artic-stage"><div class="mirror">${faceSVG('frog')}</div><div class="artic-side"><p class="howto">${esc(THROAT)}</p><div class="og-btns"><button class="big" id="rOk">Got it</button><button class="big ghost" id="rGo">Drummer and R without “d”</button></div></div></div>`);
+    talk("Put your hand on your throat and say: aaa.");
+    $('#rOk').onclick = () => { if (t === tok) finish({ key: 'r-throat', stars: 1, line: "Now you know where R lives!", again: rThroat }); };
     $('#rGo').onclick = () => { sfx.pop(); rMotor(); };
   }
 
    
   const CHIST = {
-    'С': ['Са-са-са — в лесу бегает лиса.', 'Со-со-со — у Сони колесо.', 'Су-су-су — было холодно в лесу.', 'Сы-сы-сы — у кота усы.', 'Ас-ас-ас — у нас ананас.', 'Ос-ос-ос — в саду растёт кокос.'],
-    'З': ['За-за-за — вот идёт коза.', 'Зу-зу-зу — мы пасём козу.', 'Зы-зы-зы — колокольчик у козы.', 'Зо-зо-зо — у Зои новое пальто.', 'Зя-зя-зя — нам шалить нельзя.'],
-    'Ц': ['Ца-ца-ца — вот идёт овца.', 'Цы-цы-цы — у курицы птенцы.', 'Цо-цо-цо — у курицы яйцо.', 'Ец-ец-ец — песню пел скворец.'],
-    'Ш': ['Ша-ша-ша — мама моет малыша.', 'Шу-шу-шу — я письмо пишу.', 'Ши-ши-ши — в речке плавают ерши.', 'Шо-шо-шо — нам гулять хорошо.', 'Аш-аш-аш — вот новый карандаш.'],
-    'Ж': ['Жа-жа-жа — есть иголки у ежа.', 'Жу-жу-жу — молоко дадим ежу.', 'Жи-жи-жи — здесь живут ужи.', 'Жо-жо-жо — снега много, хорошо.'],
-    'Ч': ['Ча-ча-ча — горит в комнате свеча.', 'Чу-чу-чу — я на поезде качу.', 'Чи-чи-чи — прилетели к нам грачи.', 'Оч-оч-оч — наступила ночь.'],
-    'Щ': ['Ща-ща-ща — мы поймали леща.', 'Щу-щу-щу — я щенка ищу.', 'Щи-щи-щи — мама варит щи.', 'Ащ-ащ-ащ — у меня новый плащ.']
+    'С': ["Sa-sa-sa, a fox runs in the wood.", "So-so-so, Sonya has a wheel.", "Su-su-su, it was cold in the wood.", "Sy-sy-sy, the cat has whiskers.", "As-as-as, we have a pineapple.", "Os-os-os, a coconut grows in the garden."],
+    'З': ["Za-za-za, here comes a goat.", "Zu-zu-zu, we are minding the goat.", "Zy-zy-zy, the goat has a little bell.", "Zo-zo-zo, Zoya has a new coat.", "Zya-zya-zya, we must not be naughty."],
+    'Ц': ["Tsa-tsa-tsa, here comes a sheep.", "Tsy-tsy-tsy, the hen has chicks.", "Tso-tso-tso, the hen has an egg.", "Ets-ets-ets, the starling sang a song."],
+    'Ш': ["Sha-sha-sha, Mum is washing the baby.", "Shu-shu-shu, I am writing a letter.", "Shi-shi-shi, little perch swim in the river.", "Sho-sho-sho, it is nice to go for a walk.", "Ash-ash-ash, here is a new pencil."],
+    'Ж': ["Zha-zha-zha, the hedgehog has prickles.", "Zhu-zhu-zhu, we will give the hedgehog milk.", "Zhi-zhi-zhi, grass snakes live here.", "Zho-zho-zho, there is lots of snow, how nice."],
+    'Ч': ["Cha-cha-cha, a candle is burning in the room.", "Chu-chu-chu, I am riding on a train.", "Chi-chi-chi, the rooks have flown to us.", "Och-och-och, night has come."],
+    'Щ': ["Shcha-shcha-shcha, we caught a bream.", "Shchu-shchu-shchu, I am looking for a puppy.", "Shchi-shchi-shchi, Mum is cooking cabbage soup.", "Ashch-ashch-ashch, I have a new raincoat."]
   };
-  const chistOf = L => L === 'Р' ? CHIST_R : L === 'Л' ? CHIST_L : CHIST[L];
+  const chistOf = L => L === "Р" ? CHIST_R : L === "Л" ? CHIST_L : CHIST[L];
   function chist(L0) {
-    const L = L0 || firstMine(['С', 'Ш', 'Р', 'Л', 'З', 'Ж', 'Ч', 'Щ', 'Ц']), t = newScreen(), deck = sample(chistOf(L), 4);
+    const L = L0 || firstMine(["С", "Ш", "Р", "Л", "З", "Ж", "Ч", "Щ", "Ц"]), t = newScreen(), deck = sample(chistOf(L), 4);
     let k = 0;
-    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${['С', 'З', 'Ц', 'Ш', 'Ж', 'Ч', 'Щ', 'Р', 'Л'].map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
+    shell("Clear-speech rhymes", `<div class="nr"><div class="lg-chips" id="chS">${["С", "З", "Ц", "Ш", "Ж", "Ч", "Щ", "Р", "Л"].map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
     $('#chS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); chist(b.dataset.s); } };
     const tw = $('#tw');
     async function show() {
       const s = deck[k];
-      tw.innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><p class="tw-text">${hiS(s, L.toLowerCase())}</p><p class="tw-step" id="tws">Медленно и чётко</p>`;
-      await talk(k === 0 ? `Чистоговорки — чтобы не было каши во рту. Слушай и повтори чётко. ${s}` : s); if (t !== tok) return;
+      tw.innerHTML = `<p class="tw-n">${k + 1} of ${deck.length}</p><p class="tw-text">${hiS(s, L.toLowerCase())}</p><p class="tw-step" id="tws">Slowly and clearly</p>`;
+      await talk(k === 0 ? `Clear-speech rhymes, so there is no porridge in your mouth. Listen and repeat clearly. ${s}` : s); if (t !== tok) return;
       await askSaid(SAID()); if (t !== tok) return;
-      $('#tws').textContent = 'А теперь ещё раз, громко и быстрее!';
-      await talk('А теперь ещё раз, громко и быстрее!'); if (t !== tok) return;
+      $('#tws').textContent = "And now once more, loud and faster!";
+      await talk("And now once more, loud and faster!"); if (t !== tok) return;
       await askSaid(SAID()); if (t !== tok) return;
       k++;
-      if (k >= deck.length) finish({ key: 'chist-all', line: 'Никакой каши во рту!', again: () => chist(L) }); else show();
+      if (k >= deck.length) finish({ key: 'chist-all', line: "No porridge in your mouth!", again: () => chist(L) }); else show();
     }
     show();
   }
 
    
-  const TWIST = [['Шла Саша по шоссе и сосала сушку.', 'сш'], ['На дворе трава, на траве дрова.', 'р'], ['Карл у Клары украл кораллы, а Клара у Карла украла кларнет.', 'рл'],
-    ['Ехал Грека через реку, видит Грека — в реке рак.', 'р'], ['Сшила Саша Сашке шапку.', 'сш'], ['У ежа ежата, у ужа ужата.', 'ж'], ['Шесть мышат в шалаше шуршат.', 'ш'],
-    ['Щуку я тащу, тащу, щуку я не упущу.', 'щ'], ['Мила мыла мишку мылом.', 'л'], ['Слишком много ножек у сороконожек.', 'сж'], ['Бык тупогуб, тупогубенький бычок.', ''], ['Четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами чертёж.', 'ч']];
+  const TWIST = [["Sasha walked along the road and sucked a dry ring biscuit.", "сш"], ["In the yard there is grass, on the grass there is firewood.", "р"], ["Karl stole Clara's corals, and Clara stole Karl's clarinet.", "рл"],
+    ["Greek rode across the river, saw a crayfish in the river.", "р"], ["Sasha sewed Sashka a hat.", "сш"], ["The hedgehog has little hedgehogs, the grass snake has little grass snakes.", "ж"], ["Six little mice rustle in the hut.", "ш"],
+    ["I am pulling the pike, pulling it, I will not let the pike go.", "щ"], ["Mila washed the teddy bear with soap.", "л"], ["Centipedes have far too many legs.", "сж"], ["The bull has a blunt lip, a little bull with a blunt little lip.", ''], ["Four little black grubby imps drew a drawing with black ink.", "ч"]];
   function twistPencil() {
     const t = newScreen(), mine = TWIST.filter(([, s]) => s && mySounds().some(k => [...(SND_HI[k] || '')].some(c => s.includes(c))));
     const deck = [...new Set([...shuffle(mine), ...shuffle(TWIST)])].slice(0, 3);
     let k = 0;
-    shell('Скороговорки с карандашом', `<div class="nr"><details class="pr-tip"><summary>💡 Взрослому</summary><p>Карандаш (или палочку морковки) держим зубами поперёк, неглубоко: язык и губы работают сильнее, а без карандаша речь становится чётче. Карандаш чистый, острым концом не в рот; удобнее взять толстую морковную палочку.</p></details><div class="tw-card" id="tw"></div></div>`);
+    shell("Tongue twisters with a pencil", `<div class="nr"><details class="pr-tip"><summary>💡 For the grown-up</summary><p>Hold a pencil (or a carrot stick) across the teeth, not deep: the tongue and lips work harder, and without the pencil, speech becomes clearer. The pencil must be clean, with the sharp end never in the mouth. A thick carrot stick is easier.</p></details><div class="tw-card" id="tw"></div></div>`);
     const tw = $('#tw');
     async function show() {
       const [s, hl] = deck[k];
-      tw.innerHTML = `<p class="tw-n">${k + 1} из ${deck.length}</p><p class="tw-text">${hl ? hiS(s, hl) : esc(s)}</p><p class="tw-step" id="tws">1. Медленно, без карандаша</p><div class="tw-pen">✏️</div>`;
-      await talk(k === 0 ? `Морковный челлендж! Сначала скажи медленно. ${s}` : `Сначала медленно: ${s}`); if (t !== tok) return;
+      tw.innerHTML = `<p class="tw-n">${k + 1} of ${deck.length}</p><p class="tw-text">${hl ? hiS(s, hl) : esc(s)}</p><p class="tw-step" id="tws">1. Slowly, without the pencil</p><div class="tw-pen">✏️</div>`;
+      await talk(k === 0 ? `Carrot challenge! First say it slowly. ${s}` : `First slowly: ${s}`); if (t !== tok) return;
       await askSaid(SAID()); if (t !== tok) return;
-      $('#tws').textContent = '2. С карандашом в зубах — три раза, стараясь чётко'; tw.classList.add('pen');
-      await talk('А теперь возьми карандаш зубами поперёк и скажи три раза. Старайся чётко!'); if (t !== tok) return;
-      await askSaid(G('Я сказала три раза!', 'Я сказал три раза!')); if (t !== tok) return;
-      $('#tws').textContent = '3. Убери карандаш — и быстро!'; tw.classList.remove('pen');
-      await talk('Убери карандаш и скажи быстро. Слышишь, как стало чётко?'); if (t !== tok) return;
+      $('#tws').textContent = "2. With the pencil in your teeth, three times, as clearly as you can"; tw.classList.add('pen');
+      await talk("Now hold the pencil across your teeth and say it three times. Try to be clear!"); if (t !== tok) return;
+      await askSaid(G("I said it three times!", "I said it three times!")); if (t !== tok) return;
+      $('#tws').textContent = "3. Take the pencil out, and say it fast!"; tw.classList.remove('pen');
+      await talk("Take the pencil out and say it fast. Can you hear how clear it is now?"); if (t !== tok) return;
       await askSaid(SAID()); if (t !== tok) return;
       k++;
-      if (k >= deck.length) finish({ key: 'twist-pen', line: 'Дикция как у диктора!', again: twistPencil }); else show();
+      if (k >= deck.length) finish({ key: 'twist-pen', line: "Speech as clear as a newsreader's!", again: twistPencil }); else show();
     }
     show();
   }
@@ -19435,11 +19444,11 @@ const IDEAS = (() => {
    
   function dragon() {
     const t = newScreen(), need = Q() ? 3 : 2;
-    shell('Дракончик', `<div class="nr"><p class="lg-q">Вдохни носом. Выдохни ртом долго, тёплым воздухом, как дракончик огнём.</p>
+    shell("Little dragon", `<div class="nr"><p class="lg-q">Breathe in through your nose. Breathe out through your mouth for a long time, warm air, like a little dragon breathing fire.</p>
       <div class="lg-scene dr" id="drSc"><span class="dr-d">${pic('🐉')}</span><span class="dr-f" id="drF">${pic('🔥')}</span>
         <span class="dr-t" id="drT">${[0, 1, 2].map(() => `<i>${pic('🪵')}</i>`).join('')}</span></div>
-      <div class="lg-bar"><i id="drBar"></i></div><p class="lg-note" id="drN">Тяни выдох ${need} секунды — зажжёшь костёр.</p>
-      <button class="big lg-hold" id="drH">🖐 Дую</button><p class="muted">Микрофон слышит выдох. Нет микрофона — держи кнопку, пока дуешь.</p></div>`);
+      <div class="lg-bar"><i id="drBar"></i></div><p class="lg-note" id="drN">Breathe out for ${need} seconds to light the campfire.</p>
+      <button class="big lg-hold" id="drH">🖐 Blowing</button><p class="muted">The microphone hears your breath. No microphone? Hold the button while you blow.</p></div>`);
     let holding = false, mic = false, last = performance.now(), floor = .004, run = 0, lit = 0, over = false, rest = 0;
     bindHold($('#drH'), () => { holding = true; }, () => { holding = false; });
     const frame = now => {
@@ -19453,43 +19462,43 @@ const IDEAS = (() => {
       $('#drBar').style.width = (Math.min(1, run / need) * 100).toFixed(0) + '%';
       if (run >= need && !over) {
         lit++; run = 0; rest = 1.2; sfx.good(); $$('#drT i')[lit - 1].innerHTML = pic('🔥');
-        $('#drN').textContent = lit < 3 ? 'Костёр горит! Вдохни носом — и ещё раз.' : 'Все три костра горят!';
-        if (lit >= 3) { over = true; micRelease(); talk('Ты настоящий дракон!').then(() => { if (t === tok) finish({ key: 'breath:dragon', stars: 1, line: `Хорошо подул${G('а', '')}!`, again: dragon, menu: screenBreathMenu }); }); return; }
+        $('#drN').textContent = lit < 3 ? "The campfire is burning! Breathe in through your nose, and go again." : "All three campfires are burning!";
+        if (lit >= 3) { over = true; micRelease(); talk("You are a real dragon!").then(() => { if (t === tok) finish({ key: 'breath:dragon', stars: 1, line: G("Well blown!", "Well blown!"), again: dragon, menu: screenBreathMenu }); }); return; }
       }
       requestAnimationFrame(frame);
     };
-    (async () => { await talk('Дракончик! Вдохни носом, а выдыхай ртом долго-долго, как будто дышишь огнём.'); if (t !== tok) return; mic = await micOn(); if (t !== tok) return; if (!mic) $('#drH').classList.add('only'); last = performance.now(); requestAnimationFrame(frame); })();
+    (async () => { await talk("Little dragon! Breathe in through your nose, and breathe out through your mouth for a long, long time, as if you are breathing fire."); if (t !== tok) return; mic = await micOn(); if (t !== tok) return; if (!mic) $('#drH').classList.add('only'); last = performance.now(); requestAnimationFrame(frame); })();
   }
 
    
-  const FINGERS = [[H('🤝'), 'Замок', 'Пальчики в замок, покачали'], [H('👌'), 'Колечки', 'Колечки по очереди'], [H('🖐️'), 'Веер', 'Растопырили пальчики'], [H('✊'), 'Кулачок', 'Сжали кулачок'],
-    [H('🤏'), 'Щепотка', 'Пальчики щепоткой'], [H('🙌'), 'Пальчики здороваются', 'Пальчики здороваются']];
-  const fingers = () => drill({ key: 'hand-fingers', title: 'Пальчиковая гимнастика', items: FINGERS, rounds: 2, beat: 2200, intro: 'Разомнём пальчики перед письмом. Повторяй за мной.', tip: 'Каждое движение — пять раз.', again: fingers, line: 'Пальчики готовы писать!' });
+  const FINGERS = [[H('🤝'), "Lock", "Fingers locked together, and rock them"], [H('👌'), "Little rings", "Little rings, one finger after another"], [H('🖐️'), "Fan", "Spread your fingers wide"], [H('✊'), "Little fist", "Squeeze your hand into a fist"],
+    [H('🤏'), "Pinch", "Fingers pinched together"], [H('🙌'), "Fingers say hello", "Fingers say hello"]];
+  const fingers = () => drill({ key: 'hand-fingers', title: "Finger exercises", items: FINGERS, rounds: 2, beat: 2200, intro: "Let's warm up our fingers before writing. Copy me.", tip: "Do each movement five times.", again: fingers, line: "Your fingers are ready to write!" });
   function grip() {
     const t = newScreen();
-    shell('Как держать карандаш', `<div class="nr"><div class="lg-card lg-adult">
-      <p class="lg-q">✏️ Карандаш</p><ul class="lg-list"><li>Карандаш лежит на среднем пальце, сверху его держат большой и указательный — «щепоткой».</li>
-      <li>Пальцы — примерно на 2 см выше кончика, не у самого грифеля.</li><li>Не сжимать изо всех сил: рука мягкая, пальцы не белеют.</li><li>Верхний конец карандаша смотрит в плечо.</li></ul>
-      <p class="lg-q">🪑 Посадка</p><ul class="lg-list"><li>Спина прямая, между грудью и столом — кулачок.</li><li>Ноги стоят на полу.</li><li>Тетрадь чуть наклонена, вторая рука придерживает лист.</li><li>Свет падает слева (у левшей — справа).</li></ul>
-      <p class="muted">Почерк складывается из сильных пальцев, удобного захвата и ровных движений: пальчиковая гимнастика и дорожки — каждый день по чуть-чуть.</p>
-      <div class="og-btns"><button class="big" id="gOk">Понятно</button></div></div></div>`);
-    talk('Как держать карандаш и как сидеть. Взрослый читает и показывает.');
-    $('#gOk').onclick = () => { if (t === tok) finish({ key: 'hand-grip', stars: 1, line: 'Готово!', again: grip }); };
+    shell("How to hold a pencil", `<div class="nr"><div class="lg-card lg-adult">
+      <p class="lg-q">✏️ Pencil</p><ul class="lg-list"><li>The pencil rests on the middle finger, and the thumb and pointer finger hold it from above, in a “pinch”.</li>
+      <li>The fingers are about 2 cm above the tip, not right at the lead.</li><li>Do not squeeze with all your strength: the hand is soft and the fingers do not turn white.</li><li>The top end of the pencil points to the shoulder.</li></ul>
+      <p class="lg-q">🪑 Sitting</p><ul class="lg-list"><li>Back straight, with a fist’s width between the chest and the table.</li><li>Feet flat on the floor.</li><li>The notebook is tilted a little, and the other hand holds the paper.</li><li>Light comes from the left (from the right for left-handers).</li></ul>
+      <p class="muted">Handwriting comes from strong fingers, a comfortable grip and smooth movements: finger exercises and tracing paths, a little every day.</p>
+      <div class="og-btns"><button class="big" id="gOk">Got it</button></div></div></div>`);
+    talk("How to hold a pencil and how to sit. The grown-up reads and shows you.");
+    $('#gOk').onclick = () => { if (t === tok) finish({ key: 'hand-grip', stars: 1, line: "Done!", again: grip }); };
   }
   
   const spiral = () => { let d = ''; for (let a = 0; a <= 6 * Math.PI; a += .2) { const r = 4 + a * 3.3, x = 150 + r * Math.cos(a), y = 80 + r * Math.sin(a) * .9; d += (d ? ' L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } return d; };
   const loops = () => { let d = 'M10 110'; for (let x = 10; x < 270; x += 45) d += ` C${x + 30} 110 ${x + 42} 45 ${x + 26} 45 C${x + 10} 45 ${x + 14} 110 ${x + 45} 110`; return d; };
-  const PATHS = [['Волны', 'M10 80 Q45 30 80 80 T150 80 T220 80 T290 80'], ['Горки', 'M10 115 L45 45 L80 115 L115 45 L150 115 L185 45 L220 115 L255 45 L290 115'],
-    ['Заборчик', 'M25 125 L40 40 M70 125 L85 40 M115 125 L130 40 M160 125 L175 40 M205 125 L220 40 M250 125 L265 40'], ['Петельки', loops()],
-    ['Крючки', 'M30 40 L30 110 Q30 128 48 120 M90 40 L90 110 Q90 128 108 120 M150 40 L150 110 Q150 128 168 120 M210 40 L210 110 Q210 128 228 120'], ['Улитка', spiral()],
-    ['Мостики', 'M10 120 Q40 40 70 120 Q100 40 130 120 Q160 40 190 120 Q220 40 250 120 Q275 60 290 120']];
+  const PATHS = [["Waves", 'M10 80 Q45 30 80 80 T150 80 T220 80 T290 80'], ["Hills", 'M10 115 L45 45 L80 115 L115 45 L150 115 L185 45 L220 115 L255 45 L290 115'],
+    ["Fence", 'M25 125 L40 40 M70 125 L85 40 M115 125 L130 40 M160 125 L175 40 M205 125 L220 40 M250 125 L265 40'], ["Loops", loops()],
+    ["Hooks", 'M30 40 L30 110 Q30 128 48 120 M90 40 L90 110 Q90 128 108 120 M150 40 L150 110 Q150 128 168 120 M210 40 L210 110 Q210 128 228 120'], ["Snail", spiral()],
+    ["Bridges", 'M10 120 Q40 40 70 120 Q100 40 130 120 Q160 40 190 120 Q220 40 250 120 Q275 60 290 120']];
   function trace(k = 0, done = 0) {
     const t = newScreen(), [name, d] = PATHS[k % PATHS.length];
-    shell('Дорожки для почерка', `<div class="nr"><p class="lg-q">${esc(name)}: веди пальчиком по дорожке</p>
+    shell("Paths for handwriting", `<div class="nr"><p class="lg-q">${esc(name)}: follow the path with your finger</p>
       <svg class="tr" id="tr" viewBox="0 0 300 160"><path d="${d}" class="tr-p"/><path d="${d}" class="tr-d"/><polyline id="trU" class="tr-u" points=""/></svg>
-      <div class="lg-bar"><i id="trBar"></i></div><p class="lg-note" id="trN">Начни слева и веди, не отрывая пальчик.</p>
-      <div class="og-btns"><button class="big ghost" id="trR">↺ Заново</button></div></div>`);
-    talk(done === 0 ? 'Дорожки, как в прописях. Веди пальчиком по пунктиру — ровно и не торопясь.' : `${name}. Веди пальчиком.`);
+      <div class="lg-bar"><i id="trBar"></i></div><p class="lg-note" id="trN">Start on the left and go, without lifting your finger.</p>
+      <div class="og-btns"><button class="big ghost" id="trR">↺ Again</button></div></div>`);
+    talk(done === 0 ? "Paths like in a writing book. Follow the dotted line with your finger, smoothly and without rushing." : `${name}. Follow it with your finger.`);
     const svg = $('#tr'), path = svg.querySelector('.tr-p'), L = path.getTotalLength(), N = Math.max(40, Math.round(L / 8));
     const pts = Array.from({ length: N + 1 }, (_, i) => path.getPointAtLength(L * i / N)), hit = new Set();
     let drawing = false, stray = 0, ink = [], over = false;
@@ -19499,41 +19508,41 @@ const IDEAS = (() => {
     svg.addEventListener('pointermove', e => {
       if (!drawing || over) return; const p = toSvg(e); ink.push(p);
       let near = 1e9; pts.forEach((q, i) => { const dd = Math.hypot(q.x - p.x, q.y - p.y); if (dd < 14) hit.add(i); near = Math.min(near, dd); });
-      if (near > 26) { stray++; if (stray % 25 === 1) $('#trN').textContent = 'Ой, мимо дорожки! Держись пунктира.'; }
+      if (near > 26) { stray++; if (stray % 25 === 1) $('#trN').textContent = "Oops, off the path! Stay on the dotted line."; }
       upd();
     });
     const end = async () => {
       drawing = false; if (over || hit.size / pts.length < .88) return;
       over = true; sfx.good(); const ok = stray < 30;
-      $('#trN').textContent = ok ? 'Ровно и аккуратно!' : 'Прошли! В следующий раз — поближе к пунктиру.';
-      await talk(ok ? 'Ровно и аккуратно!' : 'Получилось! Следующую — поаккуратнее.'); if (t !== tok) return;
-      if (done + 1 >= 4) finish({ key: 'hand-trace', stars: ok ? 3 : 2, line: 'Рука готова к красивому почерку!', again: () => trace(k + 1, 0) });
+      $('#trN').textContent = ok ? "Smooth and neat!" : "You got through! Next time, stay closer to the dotted line.";
+      await talk(ok ? "Smooth and neat!" : "You did it! Be a little neater on the next one."); if (t !== tok) return;
+      if (done + 1 >= 4) finish({ key: 'hand-trace', stars: ok ? 3 : 2, line: "Your hand is ready for lovely handwriting!", again: () => trace(k + 1, 0) });
       else later(() => trace(k + 1, done + 1), 400);
     };
     ['pointerup', 'pointercancel'].forEach(ev => svg.addEventListener(ev, end));
-    $('#trR').onclick = () => { sfx.tick(); hit.clear(); ink = []; stray = 0; upd(); $('#trN').textContent = 'Начни слева и веди, не отрывая пальчик.'; };
+    $('#trR').onclick = () => { sfx.tick(); hit.clear(); ink = []; stray = 0; upd(); $('#trN').textContent = "Start on the left and go, without lifting your finger."; };
   }
   function handMenu() {
     newScreen();
-    shell('Красивый почерк', `<div class="nr"><p class="lead">Почерк начинается с пальцев и правильного захвата. Каждый день по чуть-чуть.</p>
-      <div class="lg-grid" id="hM"><button class="lg-pic" data-h="f">${pic('🖐️')}<b>Пальчиковая гимнастика</b></button><button class="lg-pic" data-h="g">${pic('✏️')}<b>Как держать карандаш</b></button>
-      <button class="lg-pic" data-h="t">${pic('〰️')}<b>Дорожки</b></button><button class="lg-pic" data-h="w">${pic('✍️')}<b>Пишем буквы</b></button></div></div>`);
+    shell("Lovely handwriting", `<div class="nr"><p class="lead">Handwriting starts with the fingers and a good grip. A little every day.</p>
+      <div class="lg-grid" id="hM"><button class="lg-pic" data-h="f">${pic('🖐️')}<b>Finger exercises</b></button><button class="lg-pic" data-h="g">${pic('✏️')}<b>How to hold a pencil</b></button>
+      <button class="lg-pic" data-h="t">${pic('〰️')}<b>Paths</b></button><button class="lg-pic" data-h="w">${pic('✍️')}<b>Writing letters</b></button></div></div>`);
     $('#hM').onclick = e => { const b = e.target.closest('[data-h]'); if (!b) return; sfx.pop(); ({ f: fingers, g: grip, t: () => trace(ri(0, PATHS.length - 1)), w: () => GAMES.find(g => g.id === 'write').go() })[b.dataset.h](); };
-    talk('Красивый почерк. Выбери, с чего начнём.');
+    talk("Lovely handwriting. Choose where to start.");
   }
 
    
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
-    { id: 'neuro', hide: RU_ONLY, name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
-    { id: 'chist-all', hide: RU_ONLY, name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b>-<b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
-    { id: 'twist-pen', hide: RU_ONLY, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
-    { id: 'r-motor', hide: RU_ONLY, name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
-    { id: 'r-throat', hide: RU_ONLY, name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
-    { id: 'hand', hide: RU_ONLY, name: 'Красивый почерк', sub: 'пальчики, карандаш, дорожки', ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
+    { id: 'neuro', name: "Brain warm-up", sub: "fist, edge, palm, little rings, ear and nose", ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
+    { id: 'chist-all', hide: RU_ONLY, name: "Clear-speech rhymes", sub: "for every sound, no porridge in your mouth", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">С</b><b class=\"L v\">А</b>-<b class=\"L c\">С</b><b class=\"L v\">А</b></span>", bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
+    { id: 'twist-pen', hide: RU_ONLY, name: "Tongue twisters with a pencil", sub: "the carrot challenge for clear speech", ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
+    { id: 'r-motor', hide: RU_ONLY, name: "R without “d”", sub: "drummer, machine gun, painter, ar-or-ur", ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
+    { id: 'r-throat', hide: RU_ONLY, name: "R is not in the throat", sub: "hand on your throat: where does it buzz?", ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
+    { id: 'hand', name: "Lovely handwriting", sub: "fingers, pencil, paths", ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
   );
   if (IS_RU) {
-    BREATH.push({ id: 'dragon', name: 'Дракончик', icon: '🐉', bg: 'var(--t-peach)' });
+    BREATH.push({ id: 'dragon', name: "Little dragon", icon: '🐉', bg: 'var(--t-peach)' });
     BREATH_RUN.dragon = dragon;
   }
   return { neuroMenu, chist, twistPencil, rMotor, rThroat, dragon, handMenu, trace, fingers, grip };

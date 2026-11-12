@@ -16157,7 +16157,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '155';
+const APP_VER = '156';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -18444,6 +18444,104 @@ function screenPrimerLesson(i, stage) {
  
 
 
+
+
+const FEELS = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+   
+  const STORIES = [
+    [['🥚', 'Сначала было яйцо.'], ['🐣', 'Из яйца вылупился цыплёнок.'], ['🐥', 'Цыплёнок подрос.'], ['🐔', 'И стал курицей.']],
+    [['🫘', 'Посадили семечко.'], ['🌱', 'Появился росток.'], ['🌿', 'Росток вырос.'], ['🌻', 'Расцвёл подсолнух.']],
+    [['☁️', 'На небо пришла туча.'], ['🌧️', 'Пошёл дождь.'], ['🌈', 'Выглянула радуга.']],
+    [['❄️', 'Выпал снег.'], ['⛄', 'Дети слепили снеговика.'], ['☀️', 'Пригрело солнце.'], ['💧', 'Снеговик растаял.']],
+    [['😴', 'Я сплю.'], ['⏰', 'Звенит будильник.'], ['🪥', 'Я чищу зубы.'], ['🥣', 'Я завтракаю.']],
+    [['🐛', 'Гусеница ест листья.'], ['💤', 'Гусеница уснула в коконе.'], ['🦋', 'Из кокона вылетела бабочка.']],
+    [['🥚', 'Взяли яйца и муку.'], ['🥣', 'Замесили тесто.'], ['🔥', 'Испекли в духовке.'], ['🥧', 'Пирог готов!']],
+    [['🌸', 'Яблоня цветёт.'], ['🍏', 'Выросло зелёное яблоко.'], ['🍎', 'Яблоко покраснело.'], ['🧺', 'Яблоки собрали в корзину.']],
+    [['✏️', 'Пишу письмо.'], ['✉️', 'Кладу его в конверт.'], ['📮', 'Опускаю в почтовый ящик.'], ['📬', 'Письмо пришло к бабушке.']],
+    [['🧱', 'Привезли кирпичи.'], ['🏗️', 'Строят дом.'], ['🏠', 'Дом готов.']]];
+  function storySeq() {
+    const t = newScreen(), deck = sample(Q() ? STORIES.filter(s => s.length === 4) : STORIES, 3);
+    let k = 0, at = 0, busy = false, order = [];
+    shell('Что сначала, что потом', `<div class="lg"><p class="lg-q" id="lgQ">Разложи картинки по порядку</p><div class="lg-grid" id="lgP"></div><p class="lg-story" id="lgSt"></p></div>`);
+    const show = () => {
+      busy = false; at = 0; const st = deck[k]; order = shuffle(st.map((_, i) => i));
+      if (order.every((x, i) => x === i)) order.reverse();
+      $('#lgSt').innerHTML = ''; $('#lgQ').textContent = 'Разложи картинки по порядку';
+      $('#lgP').innerHTML = order.map(i => `<button class="lg-pic" data-i="${i}">${pic(st[i][0])}<i class="lg-n"></i></button>`).join('');
+      talk(k === 0 ? 'Что было сначала, а что потом? Нажимай на картинки по порядку.' : 'Новая история. Что было сначала?');
+    };
+    $('#lgP').onclick = async e => {
+      const b = e.target.closest('[data-i]'); if (!b || busy || b.classList.contains('right')) return;
+      if (+b.dataset.i !== at) { sfx.oops(); wiggle(b); talk(at === 0 ? 'Подумай: с чего всё началось?' : 'А что было дальше?'); return; }
+      sfx.pop(); b.classList.add('right'); b.querySelector('.lg-n').textContent = ++at;
+      if (at < deck[k].length) return;
+      busy = true; sfx.good();
+      const st = deck[k];
+      $('#lgSt').innerHTML = st.map(([, s]) => esc(s)).join(' ');
+      await talk(st.map(([, s]) => s).join(' ')); if (t !== tok) return;
+      $('#lgQ').textContent = 'Сначала… Потом… В конце…';
+      await talk(G('Теперь расскажи сама, по картинкам: сначала, потом, в конце.', 'Теперь расскажи сам, по картинкам: сначала, потом, в конце.')); if (t !== tok) return;
+      await askSaid(G('Я рассказала!', 'Я рассказал!')); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'story-seq', line: 'Ты рассказываешь истории по порядку!', again: storySeq }); else later(show, 300);
+    };
+    show();
+  }
+
+   
+  const FEEL = [['😄', 'радость', 'весело'], ['😢', 'грусть', 'грустно'], ['😠', 'злость', 'сердито'], ['😨', 'страх', 'испуганно'], ['😲', 'удивление', 'удивлённо']];
+  const SITS = [['Мальчику подарили щенка.', 'радость'], ['У девочки улетел воздушный шарик.', 'грусть'], ['Младший брат сломал башню из кубиков.', 'злость'],
+    ['Ночью за окном загремел гром.', 'страх'], ['Из коробки выпрыгнул игрушечный зайчик!', 'удивление'], ['Друг не пришёл на день рождения.', 'грусть'],
+    ['Мама испекла любимый пирог.', 'радость'], ['Большая собака громко лает и бежит навстречу.', 'страх'], ['Зимой на окне вдруг расцвёл цветок!', 'удивление'],
+    ['Кто-то без спроса взял любимую игрушку.', 'злость'], ['В гости приехала бабушка.', 'радость'], ['Котёнок потерялся.', 'грусть']];
+  const PHR = ['Привет!', 'Пойдём гулять.', 'Это мой мяч.', 'У нас гости.', 'Смотри, снег!'];
+  function emo() {
+    const t = newScreen(), faces = sample(FEEL, 2), sits = sample(SITS, 3), it = pickOne(FEEL.filter(f => f[1] !== 'страх'));
+    const deck = [...faces.map(f => ({ kind: 'face', f })), ...sits.map(s => ({ kind: 'sit', s })), { kind: 'voice', f: it, p: pickOne(PHR) }];
+    let k = 0, busy = false, wrongs = 0;
+    shell('Какое настроение?', `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
+    const show = async () => {
+      busy = true; const d = deck[k]; $('#lgO').innerHTML = '';
+      if (d.kind === 'face') {
+        const opts = shuffle([d.f, ...sample(FEEL.filter(f => f !== d.f), 2)]);
+        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-q">Какое настроение?</p>`;
+        await talk(`${k === 0 ? 'Посмотри на лицо. ' : ''}Какое настроение: ${opts.map(f => f[1]).join(', ')}?`); if (t !== tok) return;
+        $('#lgO').innerHTML = opts.map(f => `<button class="lg-opt" data-o="${f[1]}">${esc(cap(f[1]))}</button>`).join('');
+      } else if (d.kind === 'sit') {
+        $('#lgC').innerHTML = `<p class="lg-sit">${esc(d.s[0])}</p><p class="lg-q">Какое у него настроение?</p>`;
+        await talk(`${d.s[0]} Какое настроение? Нажми на лицо.`); if (t !== tok) return;
+        $('#lgO').innerHTML = `<div class="lg-faces">${shuffle(FEEL).map(f => `<button class="lg-fb" data-o="${f[1]}" aria-label="${f[1]}">${f[0]}</button>`).join('')}</div>`;
+      } else {
+        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-sit">«${esc(d.p)}»</p><p class="lg-q">Скажи ${esc(d.f[2])}</p>`;
+        await talk(`А теперь голосом. Скажи ${d.f[2]}: ${d.p}`); if (t !== tok) return;
+        await askSaid(SAID()); if (t !== tok) return;
+        await talk('Голосом можно показать настроение!'); if (t !== tok) return;
+        k++; next(); return;
+      }
+      busy = false;
+    };
+    const next = () => { if (k >= deck.length) finish({ key: 'emo', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты понимаешь чувства!', again: emo }); else later(show, 300); };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
+      const d = deck[k], right = d.kind === 'face' ? d.f[1] : d.s[1];
+      if (b.dataset.o !== right) { sfx.oops(); wiggle(b); wrongs++; await talk(G('Подумай ещё: как бы ты себя почувствовала?', 'Подумай ещё: как бы ты себя почувствовал?')); busy = false; return; }
+      sfx.good(); b.classList.add('right');
+      if (d.kind === 'face') {
+        await talk(`Это ${right}. Покажи лицом ${right === 'удивление' ? 'удивление' : right}!`); if (t !== tok) return;
+        await askSaid(G('Показала!', 'Показал!')); if (t !== tok) return;
+      } else { await talk(`Да, ${right}.`); if (t !== tok) return; }
+      k++; next();
+    };
+    show();
+  }
+
+  GAMES.push(
+    { id: 'story-seq', name: 'Что сначала, что потом', sub: 'разложи картинки и расскажи', ico: () => pic('🐣'), bg: 'var(--t-mint)', go: storySeq, grp: 16 },
+    { id: 'emo', name: 'Какое настроение?', sub: 'чувства на лице и в голосе', ico: () => pic('😊'), bg: 'var(--t-lilac)', go: emo, grp: 16 }
+  );
+  return { storySeq, emo };
+})();
+
 const LOGO = (() => {
   const SAID = () => G('Я сказала!', 'Я сказал!');
   const VW = /[аеёиоуыэюя]/gi;
@@ -18777,93 +18875,6 @@ const LOGO = (() => {
     show();
   }
 
-   
-  const STORIES = [
-    [['🥚', 'Сначала было яйцо.'], ['🐣', 'Из яйца вылупился цыплёнок.'], ['🐥', 'Цыплёнок подрос.'], ['🐔', 'И стал курицей.']],
-    [['🫘', 'Посадили семечко.'], ['🌱', 'Появился росток.'], ['🌿', 'Росток вырос.'], ['🌻', 'Расцвёл подсолнух.']],
-    [['☁️', 'На небо пришла туча.'], ['🌧️', 'Пошёл дождь.'], ['🌈', 'Выглянула радуга.']],
-    [['❄️', 'Выпал снег.'], ['⛄', 'Дети слепили снеговика.'], ['☀️', 'Пригрело солнце.'], ['💧', 'Снеговик растаял.']],
-    [['😴', 'Я сплю.'], ['⏰', 'Звенит будильник.'], ['🪥', 'Я чищу зубы.'], ['🥣', 'Я завтракаю.']],
-    [['🐛', 'Гусеница ест листья.'], ['💤', 'Гусеница уснула в коконе.'], ['🦋', 'Из кокона вылетела бабочка.']],
-    [['🥚', 'Взяли яйца и муку.'], ['🥣', 'Замесили тесто.'], ['🔥', 'Испекли в духовке.'], ['🥧', 'Пирог готов!']],
-    [['🌸', 'Яблоня цветёт.'], ['🍏', 'Выросло зелёное яблоко.'], ['🍎', 'Яблоко покраснело.'], ['🧺', 'Яблоки собрали в корзину.']],
-    [['✏️', 'Пишу письмо.'], ['✉️', 'Кладу его в конверт.'], ['📮', 'Опускаю в почтовый ящик.'], ['📬', 'Письмо пришло к бабушке.']],
-    [['🧱', 'Привезли кирпичи.'], ['🏗️', 'Строят дом.'], ['🏠', 'Дом готов.']]];
-  function storySeq() {
-    const t = newScreen(), deck = sample(Q() ? STORIES.filter(s => s.length === 4) : STORIES, 3);
-    let k = 0, at = 0, busy = false, order = [];
-    shell('Что сначала, что потом', `<div class="lg"><p class="lg-q" id="lgQ">Разложи картинки по порядку</p><div class="lg-grid" id="lgP"></div><p class="lg-story" id="lgSt"></p></div>`);
-    const show = () => {
-      busy = false; at = 0; const st = deck[k]; order = shuffle(st.map((_, i) => i));
-      if (order.every((x, i) => x === i)) order.reverse();
-      $('#lgSt').innerHTML = ''; $('#lgQ').textContent = 'Разложи картинки по порядку';
-      $('#lgP').innerHTML = order.map(i => `<button class="lg-pic" data-i="${i}">${pic(st[i][0])}<i class="lg-n"></i></button>`).join('');
-      talk(k === 0 ? 'Что было сначала, а что потом? Нажимай на картинки по порядку.' : 'Новая история. Что было сначала?');
-    };
-    $('#lgP').onclick = async e => {
-      const b = e.target.closest('[data-i]'); if (!b || busy || b.classList.contains('right')) return;
-      if (+b.dataset.i !== at) { sfx.oops(); wiggle(b); talk(at === 0 ? 'Подумай: с чего всё началось?' : 'А что было дальше?'); return; }
-      sfx.pop(); b.classList.add('right'); b.querySelector('.lg-n').textContent = ++at;
-      if (at < deck[k].length) return;
-      busy = true; sfx.good();
-      const st = deck[k];
-      $('#lgSt').innerHTML = st.map(([, s]) => esc(s)).join(' ');
-      await talk(st.map(([, s]) => s).join(' ')); if (t !== tok) return;
-      $('#lgQ').textContent = 'Сначала… Потом… В конце…';
-      await talk(`Теперь расскажи сам${G('а', '')}, по картинкам: сначала, потом, в конце.`); if (t !== tok) return;
-      await askSaid(G('Я рассказала!', 'Я рассказал!')); if (t !== tok) return;
-      k++; if (k >= deck.length) finish({ key: 'story-seq', line: 'Ты рассказываешь истории по порядку!', again: storySeq }); else later(show, 300);
-    };
-    show();
-  }
-
-   
-  const FEEL = [['😄', 'радость', 'весело'], ['😢', 'грусть', 'грустно'], ['😠', 'злость', 'сердито'], ['😨', 'страх', 'испуганно'], ['😲', 'удивление', 'удивлённо']];
-  const SITS = [['Мальчику подарили щенка.', 'радость'], ['У девочки улетел воздушный шарик.', 'грусть'], ['Младший брат сломал башню из кубиков.', 'злость'],
-    ['Ночью за окном загремел гром.', 'страх'], ['Из коробки выпрыгнул игрушечный зайчик!', 'удивление'], ['Друг не пришёл на день рождения.', 'грусть'],
-    ['Мама испекла любимый пирог.', 'радость'], ['Большая собака громко лает и бежит навстречу.', 'страх'], ['Зимой на окне вдруг расцвёл цветок!', 'удивление'],
-    ['Кто-то без спроса взял любимую игрушку.', 'злость'], ['В гости приехала бабушка.', 'радость'], ['Котёнок потерялся.', 'грусть']];
-  const PHR = ['Привет!', 'Пойдём гулять.', 'Это мой мяч.', 'У нас гости.', 'Смотри, снег!'];
-  function emo() {
-    const t = newScreen(), faces = sample(FEEL, 2), sits = sample(SITS, 3), it = pickOne(FEEL.filter(f => f[1] !== 'страх'));
-    const deck = [...faces.map(f => ({ kind: 'face', f })), ...sits.map(s => ({ kind: 'sit', s })), { kind: 'voice', f: it, p: pickOne(PHR) }];
-    let k = 0, busy = false, wrongs = 0;
-    shell('Какое настроение?', `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
-    const show = async () => {
-      busy = true; const d = deck[k]; $('#lgO').innerHTML = '';
-      if (d.kind === 'face') {
-        const opts = shuffle([d.f, ...sample(FEEL.filter(f => f !== d.f), 2)]);
-        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-q">Какое настроение?</p>`;
-        await talk(`${k === 0 ? 'Посмотри на лицо. ' : ''}Какое настроение: ${opts.map(f => f[1]).join(', ')}?`); if (t !== tok) return;
-        $('#lgO').innerHTML = opts.map(f => `<button class="lg-opt" data-o="${f[1]}">${esc(cap(f[1]))}</button>`).join('');
-      } else if (d.kind === 'sit') {
-        $('#lgC').innerHTML = `<p class="lg-sit">${esc(d.s[0])}</p><p class="lg-q">Какое у него настроение?</p>`;
-        await talk(`${d.s[0]} Какое настроение? Нажми на лицо.`); if (t !== tok) return;
-        $('#lgO').innerHTML = `<div class="lg-faces">${shuffle(FEEL).map(f => `<button class="lg-fb" data-o="${f[1]}" aria-label="${f[1]}">${f[0]}</button>`).join('')}</div>`;
-      } else {
-        $('#lgC').innerHTML = `<span class="lg-face">${d.f[0]}</span><p class="lg-sit">«${esc(d.p)}»</p><p class="lg-q">Скажи ${esc(d.f[2])}</p>`;
-        await talk(`А теперь голосом. Скажи ${d.f[2]}: ${d.p}`); if (t !== tok) return;
-        await askSaid(SAID()); if (t !== tok) return;
-        await talk('Голосом можно показать настроение!'); if (t !== tok) return;
-        k++; next(); return;
-      }
-      busy = false;
-    };
-    const next = () => { if (k >= deck.length) finish({ key: 'emo', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты понимаешь чувства!', again: emo }); else later(show, 300); };
-    $('#lgO').onclick = async e => {
-      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
-      const d = deck[k], right = d.kind === 'face' ? d.f[1] : d.s[1];
-      if (b.dataset.o !== right) { sfx.oops(); wiggle(b); wrongs++; await talk('Подумай ещё: как бы ты себя почувствовал' + G('а', '') + '?'); busy = false; return; }
-      sfx.good(); b.classList.add('right');
-      if (d.kind === 'face') {
-        await talk(`Это ${right}. Покажи лицом ${right === 'удивление' ? 'удивление' : right}!`); if (t !== tok) return;
-        await askSaid(G('Показала!', 'Показал!')); if (t !== tok) return;
-      } else { await talk(`Да, ${right}.`); if (t !== tok) return; }
-      k++; next();
-    };
-    show();
-  }
-
   
 
   const CHECK = [['С', [['сок', '🧃'], ['оса', '🐝'], ['нос', '👃']]], ['З', [['зонт', '☂️'], ['коза', '🐐']]], ['Ц', [['цирк', '🎪'], ['курица', '🐔'], ['огурец', '🥒']]],
@@ -18962,13 +18973,11 @@ const LOGO = (() => {
     { id: 'gram-many', hide: RU_ONLY, name: 'Один — много', sub: 'один кот, много котов', ico: () => pic('🐈'), bg: 'var(--t-peach)', go: gramMany, grp: 16 },
     { id: 'gram-dim', hide: RU_ONLY, name: 'Назови ласково', sub: 'мяч — мячик, дом — домик', ico: () => pic('⚽'), bg: 'var(--t-pink)', go: gramDim, grp: 16 },
     { id: 'gram-whose', hide: RU_ONLY, name: 'Чей хвост?', sub: 'лисий, волчий, заячьи уши', ico: () => pic('🦊'), bg: 'var(--t-green)', go: gramWhose, grp: 16 },
-    { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 },
-    { id: 'story-seq', hide: RU_ONLY, name: 'Что сначала, что потом', sub: 'разложи картинки и расскажи', ico: () => pic('🐣'), bg: 'var(--t-mint)', go: storySeq, grp: 16 },
-    { id: 'emo', hide: RU_ONLY, name: 'Какое настроение?', sub: 'чувства на лице и в голосе', ico: () => pic('😊'), bg: 'var(--t-lilac)', go: emo, grp: 16 }
+    { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 }
   );
   const snd0 = GAMES.find(g => g.id === 'sounds'); if (snd0) snd0.also = [...(snd0.also || []), 15];
   SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Mücke und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
-  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: 'Слушаю и говорю', p: 'похожие слова, слоги, грамматика, рассказ и чувства' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'picture stories, feelings and a brain warm-up', pt: 'histórias em imagens, emoções e aquecimento do cérebro', de: 'Bildergeschichten, Gefühle und Kopf-Gymnastik' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
   const sp = HOME_TABS.find(x => x.id === 'speak');
   if (sp) { sp.g.splice(sp.g.indexOf(9) + 1, 0, 15); sp.g.push(16); }
   MODS.splice(MODS.findIndex(m => m.id === 'sh') + 1, 0, { id: 'sz', e: '💧', n: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', g: [15], snd: 'sz' }, { id: 'hear', e: '👂', n: { en: 'Listening, syllables, grammar and stories', pt: 'Ouvir, sílabas, gramática e histórias', de: 'Hören, Silben, Grammatik und Erzählen' }[LANG] || 'Слух, слоги, грамматика и рассказ', g: [16] });
@@ -19480,7 +19489,7 @@ const SWAB = (() => {
     const xs = mine.length ? mine : list(), a = xs[n % xs.length], i = list().indexOf(a);
     return { key: 'swab:' + a.id, kind: 'artic', name: a.name, run: () => (ok() ? ex(i, true) : menu()) };
   };
-  GAMES.push({ id: 'swab', hide: () => !IS_RU, name: 'Гимнастика с ватной палочкой', sub: 'со взрослым: палочка подсказывает языку', ico: () => faceBud('swingUp', 'up'), bg: 'var(--t-mint)', go: menu, grp: 0, also: [15],
+  GAMES.push({ id: 'swab', name: 'Гимнастика с ватной палочкой', sub: 'со взрослым: палочка подсказывает языку', ico: () => faceBud('swingUp', 'up'), bg: 'var(--t-mint)', go: menu, grp: 0, also: [15],
     prog: () => `${ICON.star}${list().filter(e => P.best['swab:' + e.id]).length} из ${list().length}` });
   return { step, menu, ex };
 })();
@@ -19535,7 +19544,7 @@ const IDEAS = (() => {
       items: () => [[`${H('👍')}${H('✋')}`, 'Раз'], [`${H('✋')}${H('👍')}`, 'Два']] },
     
     { id: 'cross', name: 'Шагаем и говорим', intro: 'Правый локоть к левой коленке, потом левый локоть к правой. На каждый шаг — слог.', tip: 'Спина прямая, говорим чётко.',
-      items: () => { const L = firstMine(['Р', 'Ш', 'С', 'Л']), v = ['а', 'о', 'у', 'ы']; return v.map((x, i) => [i % 2 ? `${H('🦵')}${H('💪', 'flip')}` : `${H('💪')}${H('🦵', 'flip')}`, (L + x).toUpperCase(), L.toLowerCase() + x]); } }
+      items: () => { const L = IS_RU ? firstMine([RU('Р'), RU('Ш'), RU('С'), RU('Л')]) : 'R', v = IS_RU ? [RU('а'), RU('о'), RU('у'), RU('ы')] : ['a', 'o', 'u', 'i']; return v.map((x, i) => [i % 2 ? `${H('🦵')}${H('💪', 'flip')}` : `${H('💪')}${H('🦵', 'flip')}`, (L + x).toUpperCase(), L.toLowerCase() + x]); } }
   ];
   const neuro = i => { const n = NEURO[i % NEURO.length]; drill({ key: 'neuro', title: n.name, items: n.items(), intro: n.intro, tip: n.tip, rounds: 3, beat: n.id === 'cross' ? 1300 : 1500, again: () => neuroMenu() }); };
   function neuroMenu() {
@@ -19675,7 +19684,7 @@ const IDEAS = (() => {
       if (run >= need && !over) {
         lit++; run = 0; rest = 1.2; sfx.good(); $$('#drT i')[lit - 1].innerHTML = pic('🔥');
         $('#drN').textContent = lit < 3 ? 'Костёр горит! Вдохни носом — и ещё раз.' : 'Все три костра горят!';
-        if (lit >= 3) { over = true; micRelease(); talk('Ты настоящий дракон!').then(() => { if (t === tok) finish({ key: 'breath:dragon', stars: 1, line: `Хорошо подул${G('а', '')}!`, again: dragon, menu: screenBreathMenu }); }); return; }
+        if (lit >= 3) { over = true; micRelease(); talk('Ты настоящий дракон!').then(() => { if (t === tok) finish({ key: 'breath:dragon', stars: 1, line: G('Хорошо подула!', 'Хорошо подул!'), again: dragon, menu: screenBreathMenu }); }); return; }
       }
       requestAnimationFrame(frame);
     };
@@ -19746,12 +19755,12 @@ const IDEAS = (() => {
    
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
-    { id: 'neuro', hide: RU_ONLY, name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
+    { id: 'neuro', name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
     { id: 'chist-all', hide: RU_ONLY, name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b>-<b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
     { id: 'twist-pen', hide: RU_ONLY, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
     { id: 'r-motor', hide: RU_ONLY, name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
     { id: 'r-throat', hide: RU_ONLY, name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
-    { id: 'hand', hide: RU_ONLY, name: 'Красивый почерк', sub: 'пальчики, карандаш, дорожки', ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
+    { id: 'hand', name: 'Красивый почерк', sub: 'пальчики, карандаш, дорожки', ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
   );
   if (IS_RU) {
     BREATH.push({ id: 'dragon', name: 'Дракончик', icon: '🐉', bg: 'var(--t-peach)' });
