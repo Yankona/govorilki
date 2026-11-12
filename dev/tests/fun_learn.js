@@ -77,7 +77,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     if (lang === 'ru') await p.screenshot({ path: D + `fun-learn-steps-${DEV}.png` });
     // «Счёты»: the button under the abacus is on screen
     await run(`screenSoroban()`); await p.waitForTimeout(600);
-    const sb = await aboveFriend('#sbCheck');
+    const sb = await aboveFriend('#sbOk, #sbNext');   // «Готово», or «Дальше» of the first-time tour
     ok(sb[0] <= sb[1] + 2, `soroban: «Готово» above the friend ${sb.map(Math.round)}`);
     if (lang === 'ru') await p.screenshot({ path: D + `fun-learn-soroban-${DEV}.png` });
     // smooth difficulty: after many plays the counting goes up to 10, the first plays stay within 5
