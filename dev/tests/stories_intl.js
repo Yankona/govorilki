@@ -1,11 +1,11 @@
 // Journey stories in en/pt/de: every place has at least MIN stories (or all its Russian ones), no Cyrillic in any story,
 // question or answer (all packs loaded), every place's screen and two stories per place opened on screen with the
 // quiz answered right (counts: all stories of a place, «big» ones included — a reader sees them all), the journey screen and its quiz without Russian. Invented child only (Тина).
-// node tests/stories_intl.js [base] [phone|laptop]     env: LANGS=en,pt  MIN=10
+// node tests/stories_intl.js [base] [phone|laptop]     env: LANGS=en,pt  MIN=20
 const { chromium, devices } = require('playwright');
 const fs = require('fs'), D = require('path').join(__dirname, 'shots') + '/';
 fs.mkdirSync(D, { recursive: true });
-const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = process.argv[3] || 'phone', MIN = +(process.env.MIN || 10);
+const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = process.argv[3] || 'phone', MIN = +(process.env.MIN || 20);
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const LANGS = Object.entries({ ru: 'ru/', en: '', pt: 'pt/', de: 'de/' }).filter(x => !process.env.LANGS || process.env.LANGS.includes(x[0]));
 const CYR = /[Ѐ-ӿ]/, NAMES = /Тина|Т\b/g;
