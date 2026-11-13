@@ -58,6 +58,8 @@ walk.simple(ast, {
       const v = lit(d.init); if (v === undefined) throw new Error(d.id.name + ': /*__PACK__*/ needs plain data');
       whole[d.id.name] = v; edits.push([d.init.start, d.init.end, 'null']); return;
     }
+    // the stories written for this language (LANGDATA.MORE_STORIES …) leave the page the same way
+    if (d.id.name === 'LANGDATA' && d.init && d.init.type === 'ObjectExpression') { d.init.properties.forEach(p => { if (p.type === 'Property' && STORY_SETS.includes(keyOf(p))) targets.push(p.value); }); return; }
     if (!STORY_SETS.includes(d.id.name) || !d.init || isLX(d.init)) return;
     targets.push(d.init);
   },
