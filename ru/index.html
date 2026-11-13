@@ -441,6 +441,7 @@ b.r{color:var(--berry)}
 .lg-slots{display:flex;gap:4px;align-items:center;flex-wrap:wrap;justify-content:center}.lg-slots i{font-style:normal;font:900 28px var(--f-body);color:var(--ink-soft)}
 .lg-slot{min-width:64px;height:58px;padding:0 8px;border-radius:14px;border:3px dashed var(--line-strong);display:grid;place-items:center;font:900 30px var(--f-body);background:var(--paper)}.lg-slot.full{border-style:solid;border-color:var(--leaf)}
 .lg-syls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.lg-syl{border:0;border-radius:14px;background:#F4F1FF;box-shadow:0 4px 0 var(--line-strong);padding:8px 18px;font:900 30px var(--f-body);color:#2A2346;cursor:pointer}.lg-syl.used{visibility:hidden}
+.lg-hw{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:4px 0 8px}.lg-hwb{border:0;border-radius:16px;background:var(--paper);box-shadow:0 3px 0 var(--line-strong);padding:6px 10px;display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink);font:inherit;font-size:1.05rem}.lg-hwb .pic{font-size:1.5em;line-height:1}
 .lg-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.lg-chips .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
 .lg-scene{position:relative;width:100%;height:200px;background:var(--paper);border-radius:22px;box-shadow:0 5px 0 var(--line-strong);overflow:hidden}
 .lg-scene .lg-goal{position:absolute;right:14px;top:50%;transform:translateY(-50%)}.lg-scene .lg-goal .emo{font-size:56px}
@@ -3781,7 +3782,7 @@ function lessonPlan(id) {
     const art = s === 0 ? [...[0, 1, 2].map(k => shI[(3 * n + k) % shI.length]), n % ARTIC.length] : [0, 1, 2].map(k => (n + 3 * s + k) % AR.length);
     art.forEach(i => steps.push({ key: 'artic:' + AR[i].id, kind: 'artic', name: AR[i].name, run: () => screenArtic(i, true) }));
     { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
-    const pri = ['r-end', 'sh-sort', 'beauty', 'sh-syll', 'sh-house', ...(IS_RU && modOnG(15) ? ['sz-sort', 'snd-hold', 'sz-syll', 'sz-house'] : [])];
+    const pri = ['r-end', 'sh-sort', 'beauty', 'sh-syll', 'sh-house', ...(modOnG(15) ? IS_RU ? ['sz-sort', 'snd-hold', 'sz-syll', 'sz-house'] : ['snd-hold'] : [])];
     steps.push(gameStep(pri[(n + s) % pri.length], 'game'));
     steps.push(gameStep(games[o % games.length].id, 'game'));
     if (IS_RU && modOnG(16) && !gp) { const h = LOGO.daily(n + s); if (h) steps.push(gameStep(h, 'game')); }
@@ -11760,7 +11761,7 @@ function speechPlanMine(n, s) {
   if (snd.includes('l')) pool.push('l-rap', 'l-move', 'l-twist', 'l-catch', 'l-boss', 'l-word', 'l-chist', 'l-house', 'l-moto');
   if (myWordsPool().length >= 4) pool.push('my-words', 'my-words');
   if (snd.includes('sz') && IS_RU) pool.push('sz-sort', 'sz-syll', 'sz-house', 'snd-hold');
-  else if (snd.includes('sz') && !pool.length) pool.push('l-moto');
+  else if (snd.includes('sz')) pool.push('snd-hold', ...(pool.length ? [] : ['l-moto']));
   const ok = [...new Set(pool)].filter(id => GAMES.some(g => g.id === id) && !gameOff(id));
   const list = ok.length ? ok : ['my-words'];
   [...new Set([list[o % list.length], list[(o + 1) % list.length]])].forEach(id => steps.push(gameStep(id, 'game')));
@@ -16157,7 +16158,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '156';
+const APP_VER = '157';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -18542,42 +18543,35 @@ const FEELS = (() => {
   return { storySeq, emo };
 })();
 
-const LOGO = (() => {
-  const SAID = () => G('Я сказала!', 'Я сказал!');
-  const VW = /[аеёиоуыэюя]/gi;
-  const sylN = w => (w.match(VW) || []).length;
-  
-  function hiDiff(a, b) {
-    if (a === b) return esc(a);
-    let p = 0; while (p < a.length && p < b.length && a[p] === b[p]) p++;
-    let s = 0; while (s < a.length - p && s < b.length - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
-    return esc(a.slice(0, p)) + `<b class="hl">${esc(a.slice(p, a.length - s))}</b>` + esc(a.slice(a.length - s));
-  }
-  const tiles = (list, cls = 'lg-pic') => list.map(([w, e]) => `<button class="${cls}" data-w="${esc(w)}">${pic(e)}<b></b></button>`).join('');
-
+ 
+const STRETCH = (() => {
   
 
-  const HOLD = {
+  
+  
+  const HOLD = LX('HOLD', {
     'С': { e: '🎈', goal: '', name: 'Насос качает шарик', how: 'Улыбнись, кончик языка за нижними зубками, дуй холодный ветерок: с-с-с.', grow: true },
     'З': { e: '🦟', goal: '🌸', name: 'Комарик летит к цветку', how: 'Как «с», только горлышко звенит: з-з-з.' },
     'Ш': { e: '🐍', goal: '🍎', name: 'Змейка ползёт к яблоку', how: 'Губы вперёд, язык чашечкой наверху, дуй тёплым воздухом: ш-ш-ш.' },
     'Ж': { e: '🪲', goal: '🌼', name: 'Жук летит к ромашке', how: 'Как «ш», только горлышко звенит: ж-ж-ж.' },
     'Р': { e: '🏍️', goal: '🏁', name: 'Мотоцикл едет к финишу', how: 'Кончик языка за верхними зубками дрожит, как моторчик: р-р-р.' },
     'Л': { e: '✈️', goal: '☁️', name: 'Самолёт летит к облаку', how: 'Кончик языка упирается в верхние зубки, гудим: л-л-л.' }
-  };
-  const HOLD_OF = { sz: 'С', sh: 'Ш', r: 'Р', l: 'Л' };
+  });
+  const HOLD_OF = LX('HOLD_OF', { sz: 'С', sh: 'Ш', r: 'Р', l: 'Л' });
+  const sec = x => LANG === 'en' ? x.toFixed(1) : x.toFixed(1).replace('.', ',');
   function hold(L0) {
-    const L = L0 || HOLD_OF[mySounds().find(k => HOLD_OF[k])] || 'С', H = HOLD[L], T = Q() ? 8 : 5;
+    const L = L0 && HOLD[L0] ? L0 : HOLD_OF[mySounds().find(k => HOLD_OF[k])] || HOLD_OF.sz, H = HOLD[L], T = Q() ? 8 : 5;
     const t = newScreen();
     shell('Тяни звук', `<div class="lg">
       <div class="lg-chips" id="lgS">${Object.keys(HOLD).map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${HOLD[x].e} ${x}</button>`).join('')}</div>
       <p class="lg-q">${esc(H.name)}: тяни звук <b class="L c">${L}</b> долго-долго</p>
       <div class="lg-scene ${H.grow ? 'grow' : ''}" id="lgSc"><span class="lg-goal">${H.goal ? pic(H.goal) : ''}</span><span class="lg-actor" id="lgA">${pic(H.e)}</span></div>
       <div class="lg-bar"><i id="lgBar"></i></div>
-      <p class="lg-note" id="lgN">${esc(H.how)}</p>
+      <p class="lg-note" id="lgN">${esc(H.how)}</p>${H.words ? `<div class="lg-hw" id="lgW">${H.words.map(([w, e]) => `<button class="lg-hwb" data-w="${esc(w)}">${pic(e)}<b>${esc(w)}</b></button>`).join('')}</div>` : ''}
       <button class="big lg-hold" id="lgH">🖐 Держу звук</button>
       <p class="muted">Микрофон слышит голос, но не отличает «с» от «ш». Взрослый слушает, чтобы звук был правильным. Микрофона нет — держи кнопку, пока тянешь звук.</p></div>`);
     $('#lgS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); hold(b.dataset.s); } };
+    if (H.words) $('#lgW').onclick = e => { const b = e.target.closest('[data-w]'); if (b) { sfx.pop(); talk(b.dataset.w); } };
     let holding = false, mic = false, last = performance.now(), floor = .004, voiced = 0, run = 0, best = 0, over = false;
     bindHold($('#lgH'), () => { holding = true; }, () => { holding = false; });
     const actor = $('#lgA'), bar = $('#lgBar'), sc = $('#lgSc');
@@ -18587,7 +18581,7 @@ const LOGO = (() => {
       if (H.grow) actor.style.transform = `translate(-50%, -50%) scale(${(.45 + p * 1.25).toFixed(3)})`;
       else actor.style.left = (6 + p * 70).toFixed(1) + '%';
       sc.classList.toggle('on', on);
-      $('#lgN').textContent = run > .3 ? `Тянешь ${run.toFixed(1).replace('.', ',')} с…` : best ? `Без остановки: ${best.toFixed(1).replace('.', ',')} с. Вдохни и тяни ещё.` : H.how;
+      $('#lgN').textContent = run > .3 ? `Тянешь ${sec(run)} с…` : best ? `Без остановки: ${sec(best)} с. Вдохни и тяни ещё.` : H.how;
     };
     const frame = now => {
       if (t !== tok) { micRelease(); return; }
@@ -18604,15 +18598,31 @@ const LOGO = (() => {
       micRelease();
       await talk(H.grow ? 'Шарик надут! Молодец!' : 'Доехали! Молодец!'); if (t !== tok) return;
       const stars = best >= (Q() ? 5 : 3) ? 3 : best >= 1.5 ? 2 : 1;
-      finish({ key: 'snd-hold', stars, line: `Без остановки ${best.toFixed(1).replace('.', ',')} с`, again: () => hold(L) });
+      finish({ key: 'snd-hold', stars, line: `Без остановки ${sec(best)} с`, again: () => hold(L) });
     }
     (async () => {
-      await talk(`${H.name}. Вдохни носом и тяни звук долго, без остановки, пока не получится.`); if (t !== tok) return;
+      const say = H.say ? H.say + ' ' : '';
+      await talk(`${H.name}. ${say}Вдохни носом и тяни звук долго, без остановки, пока не получится.`); if (t !== tok) return;
       mic = await micOn(); if (t !== tok) return;
       if (!mic) $('#lgH').classList.add('only');
       last = performance.now(); requestAnimationFrame(frame);
     })();
   }
+  GAMES.push({ id: 'snd-hold', name: 'Тяни звук', sub: 'насос, комарик, змейка, мотор', ico: () => pic('🎈'), bg: 'var(--t-blue)', go: () => hold(), grp: 0, also: [15], prog: () => '' });
+  return { hold };
+})();
+const LOGO = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const VW = /[аеёиоуыэюя]/gi;
+  const sylN = w => (w.match(VW) || []).length;
+  
+  function hiDiff(a, b) {
+    if (a === b) return esc(a);
+    let p = 0; while (p < a.length && p < b.length && a[p] === b[p]) p++;
+    let s = 0; while (s < a.length - p && s < b.length - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
+    return esc(a.slice(0, p)) + `<b class="hl">${esc(a.slice(p, a.length - s))}</b>` + esc(a.slice(a.length - s));
+  }
+  const tiles = (list, cls = 'lg-pic') => list.map(([w, e]) => `<button class="${cls}" data-w="${esc(w)}">${pic(e)}<b></b></button>`).join('');
 
    
   const SZ_ITEMS = [['С', 'сок', '🧃'], ['С', 'сыр', '🧀'], ['С', 'сумка', '👜'], ['С', 'самолёт', '✈️'], ['С', 'собака', '🐕'], ['С', 'сова', '🦉'], ['С', 'слон', '🐘'],
@@ -18962,7 +18972,6 @@ const LOGO = (() => {
    
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
-    { id: 'snd-hold', hide: RU_ONLY, name: 'Тяни звук', sub: 'насос, комарик, змейка, мотор', ico: () => pic('🎈'), bg: 'var(--t-blue)', go: () => hold(), grp: 0, also: [15], prog: () => '' },
     { id: 'sz-sort', hide: RU_ONLY, name: 'Водичка или комарик?', sub: 'С, З или Ц', ico: () => pic('🦟'), bg: 'var(--t-green)', go: szSort, grp: 15 },
     { id: 'sz-syll', hide: RU_ONLY, name: 'Свистящие слоги', sub: 'са-са-са… самолёт!', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenSyll(SYL_S, 'sz-syll', 'Свистящие слоги', 'сзц'), grp: 15 },
     { id: 'sz-house', hide: RU_ONLY, name: 'Где живёт звук С', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse('С'), grp: 15 },
@@ -18997,7 +19006,7 @@ const LOGO = (() => {
   
   const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
   const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
-  return { HOUSE_S, daily, hold, hearPairs, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
+  return { HOUSE_S, daily, hold: STRETCH.hold, hearPairs, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
 })();
 
 
