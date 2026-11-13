@@ -12,7 +12,7 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const LANGS = Object.entries({ ru: 'ru/', en: '', pt: 'pt/', de: 'de/' }).filter(x => !process.env.LANGS || process.env.LANGS.includes(x[0]));
 const KIDS = { young: ['Тина', 'f', 5, 'r'], older: ['Тим', 'm', 9, 'r'], mission: ['Тоша', 'm', 9, 'l'] };
 // Russian by nature: they teach Russian letters, Russian sounds, Russian grammar or play Russian audio
-const RU_ONLY = new Set(['primer', 'snd-hold', 'sz-sort', 'sz-syll', 'sz-house', 'speech-check', 'hear-pairs', 'syl-clap', 'syl-miss',
+const RU_ONLY = new Set(['primer', 'sz-sort', 'sz-syll', 'sz-house', 'speech-check', 'hear-pairs', 'syl-clap', 'syl-miss',
   'gram-many', 'gram-dim', 'gram-whose', 'gram-odd', 'gram-page', 'chist-all', 'twist-pen', 'r-motor', 'r-throat', 'tales', 'ml-phr', 'world-say', 'world-roles']);
 // names of the invented children may be Cyrillic anywhere
 const NAMES = /Тина|Тим|Тоша|Т\b/g;
