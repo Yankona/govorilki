@@ -1,0 +1,564 @@
+<title>Говорилки: простой день</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Russo+One&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Layout: a design sheet — the owner's question on top, «было» beside an interactive «стало» phone, decisions and questions under it. */
+:root {
+  --bg: #F6F2EC; --card: #FFFFFF; --ink: #2A2346; --mute: #6F6889; --line: #E6DFD3;
+  --tiger: #FF8A2A; --tiger-d: #D96A10; --leaf: #2FA865; --sea: #3D8BFD; --plum: #8C6CF2; --sun: #FFC83A;
+  --chip: #FFF1E3;
+  --f-head: 'Balsamiq Sans', 'Comic Sans MS', system-ui, sans-serif;
+  --f-body: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-q: 'Russo One', 'Arial Black', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15132A; --card: #201D3A; --ink: #EEF1FF; --mute: #A9A4C8; --line: #34305A; --chip: #3A2A22; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #15132A; --card: #201D3A; --ink: #EEF1FF; --mute: #A9A4C8; --line: #34305A; --chip: #3A2A22; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-weight: 600; font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 24px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-head); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1 }
+h2 { font-size: 24px; margin-bottom: 12px }
+.lead { color: var(--mute); max-width: 68ch; margin: 8px 0 0 }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 18px }
+.seg button { font: 800 15px var(--f-body); color: var(--ink); background: var(--card); border: 2px solid var(--line); border-radius: 999px; padding: 9px 16px; cursor: pointer }
+.seg button[aria-pressed="true"] { border-color: var(--tiger); background: var(--chip) }
+.seg button:focus-visible, button:focus-visible { outline: 3px solid var(--sea); outline-offset: 2px }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; align-items: start }
+.col h3 { font-size: 18px; margin-bottom: 10px; display: flex; gap: 8px; align-items: baseline }
+.col h3 small { font: 700 13px var(--f-body); color: var(--mute) }
+.before { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+.before img { width: 100%; border-radius: 18px; border: 1px solid var(--line); display: block }
+.before figcaption { font-size: 12px; color: var(--mute); margin-top: 4px }
+.before figure { margin: 0 }
+.pains { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 14px }
+.pains li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px }
+.notes { display: grid; gap: 10px; font-size: 14px }
+.note { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px }
+.note b { display: block; font-family: var(--f-head); font-size: 16px; margin-bottom: 2px }
+.toggle-ba { display: none; gap: 8px; margin-bottom: 12px }
+.toggle-ba button { flex: 1; font: 800 14px var(--f-body); padding: 8px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); color: var(--ink) }
+.toggle-ba button[aria-pressed="true"] { border-color: var(--tiger); background: var(--chip) }
+@media (max-width: 1000px) { .stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) } .col.side { grid-column: 1 / -1 } }
+@media (max-width: 720px) {
+  .stage { grid-template-columns: minmax(0, 1fr) } .toggle-ba { display: flex }
+  .stage[data-ba="after"] .col.was { display: none } .stage[data-ba="before"] .col.now { display: none }
+}
+
+/* ---------- the phone ---------- */
+.phone { width: 100%; max-width: 380px; margin: 0 auto; border-radius: 40px; padding: 10px; background: #1B1830; box-shadow: 0 18px 40px rgba(20, 15, 50, .25) }
+.scr { position: relative; height: 720px; border-radius: 32px; overflow: hidden; }
+.scr .sc { height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-width: none }
+.scr .sc::-webkit-scrollbar { display: none }
+/* kid looks: each is one fixed world, not theme-dependent */
+.lk-day { --p-bg: #F5EFE4; --p-bg2: #E7F1DE; --p-card: #FFFFFF; --p-ink: #2A2346; --p-mute: #7B7490; --p-trail: #D9CDB8; --p-done: #2FA865; --p-now: #FF8A2A; --p-node: #EFE8DB; --p-node-d: #D8CEBE; --p-tree: #8CC48A; font-family: var(--f-head) }
+.lk-night { --p-bg: #141936; --p-bg2: #1D2350; --p-card: #222A55; --p-ink: #EEF1FF; --p-mute: #A9B0DA; --p-trail: #3B4380; --p-done: #38CF86; --p-now: #FFAA2B; --p-node: #2E3670; --p-node-d: #1E2452; --p-tree: #2C5E57; font-family: var(--f-body) }
+.lk-night h4, .lk-night .big { font-family: var(--f-q); font-weight: 400 }
+.scr { background: linear-gradient(var(--p-bg), var(--p-bg2)); color: var(--p-ink) }
+.top { position: sticky; top: 0; z-index: 5; display: flex; gap: 6px; align-items: center; padding: 12px 12px 8px; background: linear-gradient(var(--p-bg) 70%, transparent) }
+.pill { display: inline-flex; align-items: center; gap: 4px; background: var(--p-card); color: var(--p-ink); border: 0; border-radius: 999px; padding: 6px 10px; font: 800 15px var(--f-body); box-shadow: 0 2px 0 rgba(0, 0, 0, .08); cursor: pointer }
+.pill.key.has { background: #FFE8A3; color: #5A3B00 }
+.top .grow { flex: 1 }
+.pill.adult { font-size: 13px; padding: 6px 8px; opacity: .75 }
+.season { margin: 0 12px; font: 800 12px var(--f-body); color: var(--p-mute); text-transform: uppercase; letter-spacing: .06em; display: flex; justify-content: space-between }
+.lant { letter-spacing: 0 }
+.hero { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px 4px }
+.fr { font-size: 52px; line-height: 1; background: none; border: 0; cursor: pointer; padding: 0 }
+.bub { flex: 1; background: var(--p-card); border-radius: 18px; padding: 10px 12px; font-size: 16px; line-height: 1.3; position: relative; min-height: 64px }
+.bub .bar { display: flex; gap: 6px; align-items: center; margin-top: 8px; font: 800 12px var(--f-body); color: var(--p-mute) }
+.bub .bar i { flex: 1; height: 8px; border-radius: 9px; background: var(--p-node); overflow: hidden; display: block }
+.bub .bar i b { display: block; height: 100%; background: var(--p-done); transition: width .4s }
+
+.map { position: relative; margin: 6px 0 0 }
+.map svg.trail { position: absolute; inset: 0; pointer-events: none }
+.map .deco { position: absolute; font-size: 26px; opacity: .55; pointer-events: none; filter: saturate(.8) }
+.nd { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; width: 128px; background: none; border: 0; padding: 0; cursor: pointer; color: var(--p-ink); font: inherit }
+.nd .c { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; font-size: 34px; background: var(--p-node); box-shadow: 0 6px 0 var(--p-node-d); position: relative; transition: transform .15s }
+.nd:active .c { transform: translateY(3px) }
+.nd .lb { font: 800 14px var(--f-body); line-height: 1.15; text-align: center; background: var(--p-card); padding: 4px 9px; border-radius: 10px; max-width: 128px }
+.nd .lb small { display: block; font-size: 11px; color: var(--p-mute); font-weight: 700 }
+.nd.now .c { background: var(--p-now); box-shadow: 0 6px 0 #C2600C, 0 0 0 8px rgba(255, 138, 42, .18) }
+.nd.done .c { background: var(--p-done); box-shadow: 0 6px 0 #1E7A48 }
+.nd .ck { position: absolute; right: -2px; bottom: -2px; width: 26px; height: 26px; border-radius: 50%; background: #fff; color: var(--p-done); font: 900 16px var(--f-body); display: grid; place-items: center; box-shadow: 0 1px 3px rgba(0,0,0,.2) }
+/* a door: an arched house of its area's colour */
+.nd.door .c { border-radius: 38px 38px 14px 14px; background: var(--a, #8C6CF2); box-shadow: 0 6px 0 rgba(0, 0, 0, .22) }
+.nd.door.locked .c { filter: grayscale(.55) brightness(.92) }
+.nd.door .lk { position: absolute; top: -8px; right: -8px; width: 30px; height: 30px; border-radius: 50%; background: var(--p-card); display: grid; place-items: center; font-size: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.25) }
+.nd.door.ready .c { animation: glow 1.4s ease-in-out infinite }
+@keyframes glow { 50% { box-shadow: 0 6px 0 rgba(0,0,0,.22), 0 0 0 10px rgba(255, 200, 58, .45) } }
+.nd.chest.ready .c, .nd.fav.ready .c { animation: glow 1.4s ease-in-out infinite }
+.nd.fav .c { background: #FF6FA3; box-shadow: 0 6px 0 #C2406F }
+.nd.fav.locked .c { filter: grayscale(.6) }
+.wig { animation: wig .4s }
+@keyframes wig { 25% { transform: translateX(-5px) rotate(-4deg) } 75% { transform: translateX(5px) rotate(4deg) } }
+@media (prefers-reduced-motion: reduce) { .nd.door.ready .c, .nd.chest.ready .c, .nd.fav.ready .c, .wig { animation: none } }
+
+.soon { margin: 8px 12px 18px; background: var(--p-card); border-radius: 18px; padding: 12px }
+.soon h4 { margin: 0 0 8px; font-size: 15px }
+.soon .row { display: flex; gap: 8px; flex-wrap: wrap }
+.ghost { display: flex; align-items: center; gap: 6px; border: 2px dashed var(--p-trail); border-radius: 14px; padding: 6px 10px; font: 800 13px var(--f-body); background: none; color: var(--p-ink); cursor: pointer }
+.ghost em { font-style: normal; color: var(--p-mute); font-weight: 700 }
+.mine { display: flex; gap: 8px; padding: 0 12px 18px; flex-wrap: wrap }
+
+/* sheets inside the phone */
+.sheet { position: absolute; inset: 0; z-index: 20; background: rgba(10, 8, 30, .45); display: flex; align-items: flex-end }
+.sheet .in { width: 100%; max-height: 88%; overflow-y: auto; background: var(--p-bg); border-radius: 26px 26px 0 0; padding: 16px 14px 20px; animation: up .25s ease-out }
+@keyframes up { from { transform: translateY(40px); opacity: .4 } }
+.sheet h4 { margin: 0 0 4px; font-size: 22px }
+.sheet p { margin: 4px 0 10px; color: var(--p-mute); font-family: var(--f-body); font-size: 14px }
+.act { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; background: var(--p-card); color: var(--p-ink); border: 0; border-radius: 16px; padding: 12px; margin-bottom: 8px; font: 800 16px var(--f-body); cursor: pointer }
+.act .e { font-size: 30px; width: 44px; text-align: center }
+.act small { display: block; color: var(--p-mute); font-weight: 700; font-size: 12px }
+.act.feat { outline: 3px solid var(--sun) }
+.act.done { opacity: .6 }
+.btn { display: block; width: 100%; border: 0; border-radius: 16px; padding: 13px; font: 900 17px var(--f-body); background: var(--p-now); color: #fff; cursor: pointer; margin-top: 6px }
+.btn.sec { background: var(--p-card); color: var(--p-ink) }
+.card-new { display: flex; gap: 10px; align-items: center; background: #FFF6D6; color: #4A3700; border-radius: 14px; padding: 10px 12px; margin: 8px 0; font: 800 14px var(--f-body) }
+.card-new .e { font-size: 30px }
+.timer { font: 900 46px var(--f-body); text-align: center; margin: 6px 0 }
+.toast { position: absolute; left: 50%; top: 70px; transform: translateX(-50%); z-index: 30; background: #2A2346; color: #fff; padding: 8px 14px; border-radius: 999px; font: 800 14px var(--f-body); white-space: nowrap; animation: up .25s }
+
+/* collections */
+.coll { padding: 4px 12px 20px }
+.coll h4 { font-size: 18px; margin: 14px 0 8px }
+.stamps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px }
+.stamp { aspect-ratio: 1; max-width: 100%; border-radius: 50%; display: grid; place-items: center; font-size: 24px; background: var(--p-card); border: 2px dashed var(--p-trail); position: relative; cursor: pointer; padding: 0; color: var(--p-ink) }
+.stamp.on { border: 3px solid var(--a); background: color-mix(in srgb, var(--a) 22%, var(--p-card)) }
+.stamp:not(.on) { filter: grayscale(1); opacity: .55 }
+.shelf { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px }
+.cardx { flex: 0 0 86px; background: var(--p-card); border-radius: 14px; padding: 8px; text-align: center; font: 800 11px var(--f-body); line-height: 1.2 }
+.cardx .e { font-size: 30px; display: block; margin-bottom: 4px }
+.cardx.no { opacity: .4 }
+.stk { display: flex; gap: 4px; flex-wrap: wrap; font-size: 26px }
+
+/* parent screen */
+.adult-scr { font-family: var(--f-body); --p-bg: #F7F6FB; --p-bg2: #F7F6FB; --p-card: #fff; --p-ink: #2A2346; --p-mute: #6F6889; --p-trail: #DDD8EA; --p-now: #FF8A2A }
+.ad { padding: 12px 14px 24px }
+.ad h4 { font: 900 20px var(--f-body); margin: 6px 0 2px }
+.ad h5 { font: 900 13px var(--f-body); color: var(--p-mute); text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 6px }
+.opt { background: #fff; border-radius: 14px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 6px; font-weight: 800; font-size: 14px }
+.opt small { display: block; font-weight: 700; color: var(--p-mute); font-size: 12px }
+.sw { width: 46px; height: 28px; border-radius: 99px; background: #CFCADF; border: 0; position: relative; cursor: pointer; flex: none }
+.sw::after { content: ''; position: absolute; left: 3px; top: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: left .15s }
+.sw[aria-checked="true"] { background: var(--leaf) }
+.sw[aria-checked="true"]::after { left: 21px }
+.mini { display: flex; gap: 4px; flex: none }
+.mini button { border: 2px solid #DDD8EA; background: #fff; border-radius: 10px; padding: 4px 8px; font: 800 13px var(--f-body); cursor: pointer; color: #2A2346 }
+.mini button[aria-pressed="true"] { border-color: var(--tiger); background: #FFF1E3 }
+.chips { display: flex; flex-wrap: wrap; gap: 6px }
+.achip { border: 2px solid var(--a); background: #fff; color: #2A2346; border-radius: 99px; padding: 4px 9px; font: 800 12px var(--f-body); cursor: pointer }
+.achip[aria-pressed="false"] { border-color: #DDD8EA; opacity: .5; text-decoration: line-through }
+.srch { width: 100%; border: 2px solid #DDD8EA; border-radius: 12px; padding: 9px 12px; font: 700 15px var(--f-body); background: #fff; color: #2A2346 }
+.gl { display: grid; grid-template-columns: 1fr 1fr; gap: 6px }
+.gm { background: #fff; border: 0; border-radius: 12px; padding: 8px 10px; text-align: left; font: 800 13px var(--f-body); cursor: pointer; color: #2A2346; line-height: 1.2 }
+.gm small { display: block; color: #6F6889; font-weight: 700; font-size: 11px }
+.gm .new { color: var(--leaf) }
+
+/* 30 days */
+.grid30 { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px }
+.grid30 table { border-collapse: separate; border-spacing: 2px; font-size: 12px }
+.grid30 th { font-weight: 700; color: var(--mute); text-align: left; white-space: nowrap; padding-right: 8px }
+.grid30 thead th { text-align: center; padding: 0; font-variant-numeric: tabular-nums; font-size: 10px; width: 16px }
+.grid30 td { width: 16px; height: 16px; border-radius: 4px; background: var(--line) }
+.grid30 td.on { background: var(--a) }
+.grid30 td.today { outline: 2px solid var(--ink); outline-offset: -1px }
+.stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; min-width: 150px }
+.stat b { font: 900 26px var(--f-body); display: block; font-variant-numeric: tabular-nums }
+.stat span { color: var(--mute); font-size: 13px }
+.days30 { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 12px }
+.day1 { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; font-size: 13px }
+.day1 b { display: block; font-size: 12px; color: var(--mute) }
+
+.below { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; margin-top: 40px }
+@media (max-width: 860px) { .below { grid-template-columns: minmax(0, 1fr) } }
+.dec { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px }
+.dec li { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px }
+.dec li b { font-family: var(--f-head); font-size: 17px; display: block; margin-bottom: 2px }
+.qs { margin: 0; padding-left: 20px; display: grid; gap: 10px }
+.qs li { padding-left: 4px }
+.qs li b { display: block }
+.kbd { font-variant-numeric: tabular-nums }
+</style>
+
+<div class="wrap">
+  <h1>Простой день</h1>
+  <p class="lead">Прототип новой главной для ребёнка. Один экран — тропа дня. Каждый шаг даёт ключ, ключ открывает одну из 2–3 «дверей дня». Двери меняются каждый день по очереди. После сундука — любимая игра на 10 минут. Все игры остались у взрослых. Нажимайте всё: шаги, двери, сундук, рюкзак.</p>
+
+  <div class="seg" role="group" aria-label="Чей экран">
+    <button id="v-tina" aria-pressed="true" data-v="tina">🐱 Тина, 5 лет</button>
+    <button id="v-tosha" aria-pressed="false" data-v="tosha">🐯 Тоша, 9 лет (Л)</button>
+    <button id="v-adult" aria-pressed="false" data-v="adult">⚙️ Взрослым: все игры</button>
+    <button id="v-30" aria-pressed="false" data-v="d30">📅 Очередь на 30 дней</button>
+  </div>
+
+  <section id="pane-phones">
+    <div class="toggle-ba" role="group" aria-label="Было или стало">
+      <button id="ba-b" aria-pressed="false" data-ba="before">Было</button>
+      <button id="ba-a" aria-pressed="true" data-ba="after">Стало</button>
+    </div>
+    <div class="stage" id="stage" data-ba="after">
+      <div class="col was">
+        <h3>Было <small>сейчас на сайте</small></h3>
+        <div class="before" id="before"></div>
+        <ul class="pains" id="pains"></ul>
+      </div>
+      <div class="col now">
+        <h3>Стало <small id="nowCap">нажимайте</small></h3>
+        <div class="phone"><div class="scr" id="scr"></div></div>
+      </div>
+      <div class="col side">
+        <h3>Что здесь видно</h3>
+        <div class="notes" id="notes"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pane-30" hidden>
+    <h2>Очередь дверей на 30 дней</h2>
+    <div class="seg" role="group" aria-label="Чья очередь">
+      <button id="q-tina" aria-pressed="true" data-q="tina">Тина (2 двери, любит рисовать и балет)</button>
+      <button id="q-tosha" aria-pressed="false" data-q="tosha">Тоша (3 двери, любит шахматы, космос, головоломки)</button>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="grid30" id="grid30"></div>
+    <div class="days30" id="days30"></div>
+  </section>
+
+  <div class="below">
+    <div>
+      <h2>Решения</h2>
+      <ul class="dec">
+        <li><b>Один экран вместо пяти вкладок</b>Ребёнок видит только тропу дня. Вкладки «Говорим, Учимся, Творим, Узнаём» уходят к взрослым в «Все игры». Наверху: серия 🔥, звёзды ⭐, ключи 🔑 и рюкзак 🎒 с коллекциями.</li>
+        <li><b>Шаг → ключ → дверь</b>Ядро дня остаётся как сейчас: речь, чтение, математика или счёты, задачка, по навыку и по языкам. Любой сделанный шаг даёт ключ. Ключ открывает одну дверь дня. Сначала дело, потом интересное, но маленькими кусочками, а не «всё после всего».</li>
+        <li><b>Двери дня по очереди</b>2 двери у маленьких (до 6 лет), 3 у старших. Каждый день новые и всегда из разных групп: «творим» (рисование, музыка, балет, комиксы), «узнаём» (путешествия, космос, опыты, тело, природа, профессии, новости, сказки), «думаем» (шахматы, головоломки, языки). У старших — по одной двери из каждой группы. Одна дверь не повторяется два дня подряд, каждая появляется хотя бы раз в 9–10 дней. Любимые темы ребёнка («Я люблю») приходят чаще, но тоже не подряд.</li>
+        <li><b>Закрытые двери манят</b>Под тропой: «Завтра откроются…» и «в четверг: Шахматная башня». Нажмёшь на чужую дверь — друг скажет, когда она откроется. Без замков на весь день и без наказаний.</li>
+        <li><b>Внутри двери — не больше трёх игр</b>Одна «игра дня» (подсвечена: новая история, новый композитор, новая картина) и ещё две из той же темы. Так дети не повторяют одну и ту же сказку: «игра дня» тоже идёт по кругу.</li>
+        <li><b>Любимая игра — награда</b>После сундука открывается «любимая игра» (сама считается по тому, во что ребёнок играет больше всего, или выбирается). 10 минут песочных часов, потом «до завтра». Время меняют взрослые.</li>
+        <li><b>Одна награда везде</b>Звёзды ⭐ — единственные очки, за любую игру. Ключи 🔑 живут один день и только открывают двери. Сундук +5⭐. В каждой двери — карточка темы (композитор, планета, профессия, город, картина) в один «Рюкзак» вместе с наклейками и трофеями. «Паспорт дверей»: печать за каждую тему, все 15 за месяц — особая награда за кругозор. Серия 🔥 мягкая, без штрафов.</li>
+        <li><b>Один мир на всю игру</b>Тропа идёт через «лес месяца» (ноябрь — «Ночной лес», декабрь — «Ёлочный бит»…). Каждый открытый сундук зажигает фонарик; к концу месяца лес светится. У Тоши тот же мир в тёмной «миссии», у Тины — светлый и ласковый.</li>
+        <li><b>Взрослым — все игры и настройки</b>«Для взрослых» → «Все игры»: поиск и все разделы как сейчас. Любую игру можно «Открыть сейчас» или «Добавить дверь на сегодня». Переключатели: очередь дверей вкл/выкл (выкл = все вкладки как раньше), 2 или 3 двери, время любимой игры, какие темы участвуют.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Вопросы владельцу</h2>
+      <ol class="qs">
+        <li><b>Ключ за каждый шаг — или двери только после всей тропы?</b>Предлагаю за каждый шаг: так дети не бросают тропу на первом шаге.</li>
+        <li><b>Сколько минут любимой игры?</b>Предлагаю 10 минут, а взрослые могут поставить 20 или «без лимита».</li>
+        <li><b>Уровни и сезонный пропуск Тоши — считать от тех же звёзд?</b>Сейчас у «Миссии Л» свои очки опыта. Предлагаю: уровень и пропуск растут от звёзд, отдельного опыта нет.</li>
+        <li><b>Арена Л и игры со звуками</b>Остаются внутри шага «Логопед / Тренировка Л» и в «любимой игре», не в дверях. Согласны?</li>
+        <li><b>Новости мира — с 7 лет?</b>В прототипе «Что нового в мире» только у старших.</li>
+        <li><b>Поиск 🔍 у ребёнка убрать?</b>Предлагаю убрать: поиск остаётся у взрослых.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHOTS = __SHOTS__;
+/* ---------- the areas behind the doors ---------- */
+const AREAS = {
+  art: { g: 'c', n: 'Мастерская', e: '🎨', a: '#F07AA8', acts: [['🖼️', 'Картина дня: «Подсолнухи»', 'Музей мира'], ['🖍️', 'Раскраска по слогам', 'новая картинка'], ['🎨', 'Рисовалка', 'рисуй что хочешь']], card: ['🌻', 'Ван Гог'] },
+  music: { g: 'c', n: 'Концертный зал', e: '🎻', a: '#8C6CF2', acts: [['🎼', 'Композитор дня: Чайковский', 'Весёлые композиторы'], ['🪄', 'Дирижёр', 'веди оркестр'], ['🎹', 'Пианино', 'Бетховен и «ла»']], card: ['🎼', 'Чайковский'] },
+  ballet: { g: 'c', n: 'Театр', e: '🩰', a: '#E58BD6', acts: [['🩰', 'Балет дня: «Щелкунчик»', 'история и музыка'], ['🦢', 'Повтори позицию', 'первая позиция'], ['🎭', 'Кто в театре работает', '']], card: ['🦢', 'Лебедь'] },
+  comics: { g: 'c', n: 'Комикс-студия', e: '💬', a: '#FF8A2A', acts: [['💬', 'Комикс дня', 'новая серия'], ['✏️', 'Собери свой кадр', 'герой и облачко'], ['📖', 'Мои комиксы', '']], card: ['🦸', 'Герой комикса'], fresh: 1 },
+  world: { g: 'k', n: 'Порт путешествий', e: '🧭', a: '#3D8BFD', acts: [['⛵', 'История дня: Порту и север', 'Путешествия'], ['🌍', 'Глобус', 'найди страну'], ['🏳️', 'Мемори: флаги', '']], card: ['🏰', 'Порту'] },
+  space: { g: 'k', n: 'Обсерватория', e: '🔭', a: '#4B5BD6', acts: [['🪐', 'Космос: кольца Сатурна', 'история дня'], ['🌙', 'Почему Луна меняется', ''], ['🚀', 'Ракета', 'собери и запусти']], card: ['🪐', 'Сатурн'] },
+  lab: { g: 'k', n: 'Лаборатория', e: '🧪', a: '#2FA8A0', acts: [['🧲', 'Опыт дня: магнит', 'Опыты на площадке'], ['⚙️', 'Как это устроено: лифт', ''], ['💡', 'Лампочка', '']], card: ['🧲', 'Магнит'] },
+  body: { g: 'k', n: 'Тело человека', e: '🫀', a: '#E2574C', acts: [['🫀', 'Сердце: насос внутри', 'Как устроено тело'], ['🦷', 'Зубы', ''], ['👁️', 'Как мы видим', '']], card: ['🫀', 'Сердце'] },
+  nature: { g: 'k', n: 'Сад и океан', e: '🌿', a: '#2FA865', acts: [['🐙', 'Океан: осьминог', 'Океан и вода'], ['🌱', 'Растения: семечко', ''], ['💧', 'Путешествие капли', '']], card: ['🐙', 'Осьминог'] },
+  jobs: { g: 'k', n: 'Город профессий', e: '👷', a: '#E0A21A', acts: [['🚒', 'Профессия дня: пожарный', 'новое'], ['🩺', 'Врач', ''], ['🧑‍🍳', 'Повар', '']], card: ['🚒', 'Пожарный'], fresh: 1 },
+  news: { g: 'k', n: 'Новости мира', e: '📰', a: '#5C6F86', age: 7, acts: [['📰', 'Что нового в мире', 'три новости недели'], ['🗺️', 'Где это случилось', 'на глобусе'], ['❓', 'Вопрос недели', '']], card: ['📰', 'Новость недели'], fresh: 1 },
+  books: { g: 'k', n: 'Библиотека сказок', e: '🧚', a: '#A0703A', acts: [['🐻', 'Сказка дня', 'Аудиосказки'], ['📚', 'Книжная полка', ''], ['📖', 'Книжки РА РО РУ', '']], card: ['🐻', 'Три медведя'] },
+  chess: { g: 't', n: 'Шахматная башня', e: '♟️', a: '#6B5B4B', acts: [['🏫', 'Шахматная школа: урок 7', ''], ['♞', 'Мат в 1 ход', 'Шахматные задачи'], ['🤖', 'Партия с компьютером', '']], card: ['♞', 'Конь'] },
+  logic: { g: 't', n: 'Головоломки', e: '🧩', a: '#D9862B', acts: [['🧊', 'Кубик Рубика: шаг 2', ''], ['🏅', 'Олимпиада', 'одна задача'], ['⚡', 'Флеш-счёт', '']], card: ['🧊', 'Кубик'] },
+  langs: { g: 't', n: 'Языки мира', e: '🗣️', a: '#3AA0D8', acts: [['👋', 'Скажи на всех языках', '«привет»'], ['🎧', 'Угадай язык', ''], ['🗺️', 'Где на каком языке', '']], card: ['👋', 'Привет!'] }
+};
+const KIDS = {
+  tina: { name: 'Тина', age: 5, fr: '🐱', look: 'lk-day', season: 'Осенний лес', likes: ['art', 'ballet'], k: 2,
+    steps: [['speech', 'Логопед', '👂'], ['read', 'Чтение', '📖'], ['math', 'Математика', '🔢'], ['soro', 'Счёты', '🧮']],
+    fav: ['🎨', 'Рисовалка'], words: { day: 'Сегодня', intro: n => `Привет, Тина! Сегодня ${n} шага и 2 двери. Начнём?` } },
+  tosha: { name: 'Тоша', age: 9, fr: '🐯', look: 'lk-night', season: 'Ночной лес', likes: ['chess', 'space', 'logic'], k: 3,
+    steps: [['speech', 'Тренировка Л', '👂'], ['read', 'Скорочтение', '⏱️'], ['book', 'Книга', '📚'], ['puzzle', 'Задачка дня', '🧩'], ['soro', 'Счёты', '🧮']],
+    fav: ['🎤', 'Рэп-баттл'], words: { day: 'Миссия', intro: n => `Миссия дня: ${n} шагов и 3 двери. Погнали!` } }
+};
+/* ---------- the rotation (the same rule goes into the game) ---------- */
+const GROUPS = { c: 'творим', k: 'узнаём', t: 'думаем' };
+function rng(seed) { let h = 2166136261; for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return () => { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 1e6) / 1e6; }; }
+function plan(kidId, { days = 40, k, off = [] } = {}) {
+  const kid = KIDS[kidId]; k = k || kid.k;
+  const pool = Object.entries(AREAS).filter(([id, a]) => kid.age >= (a.age || 0) && !off.includes(id)).map(([id, a]) => ({ id, g: a.g })), last = {}, out = [];
+  const r0 = rng(kidId), ord = pool.map(a => [a, r0()]).sort((x, z) => x[1] - z[1]).map(x => x[0]);
+  ord.forEach((a, i) => last[a.id] = -1 - i);
+  for (let d = 0; d < days; d++) {
+    const r = rng(kidId + ':' + d), y = out[d - 1] || [];
+    const score = a => { const gap = d - last[a.id]; return (gap >= 9 ? 100 : 0) + gap * (kid.likes.includes(a.id) ? 1.7 : 1) + r() * 2; };
+    const cand = pool.filter(a => !y.includes(a.id)).map(a => ({ a, s: score(a) })).sort((x, z) => z.s - x.s), pick = [];
+    for (const c of cand) { if (pick.length >= k) break; if (pick.some(p => p.g === c.a.g) && cand.some(o => o !== c && !pick.includes(o.a) && !pick.some(p => p.g === o.a.g))) continue; pick.push(c.a); }
+    for (const c of cand) { if (pick.length >= k) break; if (!pick.includes(c.a)) pick.push(c.a); }
+    pick.forEach(a => last[a.id] = d); out.push(pick.map(a => a.id));
+  }
+  return out;
+}
+const WD_IN = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу'];
+const WD_SH = ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'];
+const T0 = new Date(); T0.setHours(12, 0, 0, 0);
+const dayAt = d => new Date(T0.getTime() + d * 864e5);
+function whenOpens(p, id) {
+  const d = p.findIndex((x, i) => i > 0 && x.includes(id));
+  if (d < 0) return 'скоро';
+  if (d === 1) return 'завтра';
+  if (d === 2) return 'послезавтра';
+  if (d < 7) return WD_IN[dayAt(d).getDay()];
+  return `через ${d} ${d < 5 ? 'дня' : 'дней'}`;
+}
+
+/* ---------- state of the prototype ---------- */
+const ST = { view: 'tina', q: 'tina', screen: 'map', set: { rot: true, k: { tina: 2, tosha: 3 }, fav: 10, off: [] } };
+const fresh = id => ({ done: {}, open: {}, played: {}, chest: false, favUsed: false, stars: id === 'tina' ? 42 : 186, cards: { [id === 'tina' ? 'world' : 'chess']: 1, [id === 'tina' ? 'music' : 'space']: 1, books: 1, nature: 1 }, stickers: id === 'tina' ? 8 : 37 });
+const DAY = { tina: fresh('tina'), tosha: fresh('tosha') };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const favL = () => ST.set.fav ? ST.set.fav + ' мин' : 'без лимита';
+const plural = (n, f) => f[n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2];
+
+function today(kidId) { const p = plan(kidId, { k: ST.set.k[kidId], off: ST.set.off }); return { p, doors: p[0] }; }
+function keys(kidId) { const s = DAY[kidId]; return Object.keys(s.done).length - Object.keys(s.open).length; }
+
+/* the trail: steps with doors between them, then the chest and the favourite game */
+function seq(kidId) {
+  const kid = KIDS[kidId], { doors } = today(kidId), out = [];
+  const after = doors.length === 2 ? [0, 2] : [0, 2, 4];
+  kid.steps.forEach((s, i) => { out.push({ t: 'step', id: s[0], n: s[1], e: s[2] }); const j = after.indexOf(i); if (j >= 0 && doors[j]) out.push({ t: 'door', id: doors[j] }); });
+  doors.slice(after.length).forEach(id => out.push({ t: 'door', id }));
+  out.push({ t: 'chest' }, { t: 'fav' });
+  return out;
+}
+function line(kidId) {
+  const kid = KIDS[kidId], s = DAY[kidId], N = kid.steps.length, d = Object.keys(s.done).length, k = keys(kidId);
+  if (s.favUsed) return 'Любимая игра на сегодня всё. Завтра откроются новые двери!';
+  if (s.chest) return `Сундук открыт! Теперь твоя любимая игра: ${kid.fav[1]}, ${favL()}.`;
+  if (d === N) return 'Все шаги сделаны! Открывай сундук!';
+  if (k > 0) return `У тебя ${k === 1 ? 'ключ' : k + ' ключа'}! Открой любую дверь.`;
+  if (!d) return kid.words.intro(N);
+  return `Уже ${d} из ${N}! Сделай шаг — получишь ключ.`;
+}
+
+function render() {
+  const v = ST.view;
+  document.querySelectorAll('.seg [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+  $('#pane-phones').hidden = v === 'd30'; $('#pane-30').hidden = v !== 'd30';
+  if (v === 'd30') return render30();
+  renderBefore(); renderNotes();
+  const scr = $('#scr');
+  if (v === 'adult') { scr.className = 'scr adult-scr'; scr.innerHTML = `<div class="sc">${adultHTML()}</div>`; bindAdult(); $('#nowCap').textContent = 'экран «Для взрослых»'; return; }
+  const kid = KIDS[v]; scr.className = 'scr ' + kid.look; $('#nowCap').textContent = 'нажимайте шаги и двери';
+  scr.innerHTML = `<div class="sc">${ST.screen === 'bag' ? bagHTML(v) : mapHTML(v)}</div>`;
+  if (ST.screen === 'bag') bindBag(v); else { lay(v); bindMap(v); }
+}
+
+function renderBefore() {
+  const v = ST.view, imgs = v === 'tosha' ? [['b-k2-today', 'Тоша: «Сегодня»'], ['b-k2-t1', 'Тоша: «Говорим»']] : v === 'adult' ? [['b-k1-t4', 'Вкладка «Узнаём»'], ['b-k2-t2', 'Вкладка «Учимся»']] : [['b-k1-today', 'Тина: «Сегодня»'], ['b-k1-t3', 'Тина: «Творим»']];
+  $('#before').innerHTML = imgs.map(([k, c]) => `<figure><img src="${SHOTS[k]}" alt="${c}"><figcaption>${c}</figcaption></figure>`).join('');
+  const pains = v === 'adult'
+    ? ['Все ~130 игр видны ребёнку сразу, в пяти вкладках.', 'Взрослый не может «дать» игру на сегодня — только сказать.', 'Нет настройки, сколько времени на любимую игру.']
+    : ['Пять вкладок: ребёнок уходит в «Творим» и рисует каждый день.', 'Тропа дня не связана с играми: её легко пропустить.', 'Свои очки в разных местах: звёзды, опыт, пропуск, наклейки.'];
+  $('#pains').innerHTML = pains.map(p => `<li>${p}</li>`).join('');
+}
+function renderNotes() {
+  const v = ST.view;
+  const N = v === 'adult' ? [
+    ['Настройки дня наверху', 'Очередь дверей можно выключить: тогда у ребёнка снова все вкладки, как сейчас.'],
+    ['Все игры — как сейчас, но у взрослых', 'Поиск и четыре раздела. Новые «Комиксы», «Профессии», «Что нового в мире» уже внутри.'],
+    ['Открыть игру ребёнку', 'Нажмите любую игру: «Открыть сейчас» или «Дверь на сегодня» — она появится на тропе.'],
+    ['Темы в очереди', 'Выключенная тема не придёт в двери. Попробуйте: выключите тему и откройте «Очередь на 30 дней».']
+  ] : [
+    ['Шаг даёт ключ', `Нажмите «${KIDS[v].steps[0][1]}», потом «Сделано»: появится 🔑, дверь рядом засветится.`],
+    ['Двери дня', `Сегодня у ${v === 'tina' ? 'Тины 2 двери' : 'Тоши 3 двери'}: ${today(v).doors.map(id => AREAS[id].n).join(', ')}. Внутри не больше трёх игр и новая карточка в рюкзак.`],
+    ['Завтра — другие', 'Под тропой видно, что откроется завтра и в какой день вернётся любимая тема.'],
+    ['Сундук и любимая игра', `Сундук — когда все шаги готовы. После него — «${KIDS[v].fav[1]}» на ${favL()} (в прототипе минута идёт секунду).`],
+    ['Рюкзак 🎒', 'Все коллекции в одном месте: паспорт дверей, карточки тем, наклейки.']
+  ];
+  $('#notes').innerHTML = N.map(([b, t]) => `<div class="note"><b>${b}</b>${t}</div>`).join('');
+}
+
+function mapHTML(kidId) {
+  const kid = KIDS[kidId], s = DAY[kidId], sq = seq(kidId), N = kid.steps.length, d = Object.keys(s.done).length, k = keys(kidId), { p } = today(kidId);
+  const nowStep = kid.steps.find(x => !s.done[x[0]]);
+  const nodes = sq.map((it, i) => {
+    if (it.t === 'step') {
+      const st = s.done[it.id] ? 'done' : nowStep && nowStep[0] === it.id ? 'now' : '';
+      return `<button class="nd ${st}" data-i="${i}" aria-label="${esc(it.n)}"><span class="c">${it.e}${st === 'done' ? '<span class="ck">✓</span>' : ''}</span><span class="lb">${esc(it.n)}${st === 'done' ? '<small>+3 ⭐ +1 🔑</small>' : st === 'now' ? '<small>начать</small>' : ''}</span></button>`;
+    }
+    if (it.t === 'door') {
+      const a = AREAS[it.id], op = s.open[it.id], st = op ? 'done' : k > 0 ? 'ready' : 'locked';
+      return `<button class="nd door ${st}" data-i="${i}" style="--a:${a.a}" aria-label="Дверь: ${esc(a.n)}"><span class="c">${a.e}${op ? '<span class="ck">✓</span>' : `<span class="lk">${st === 'ready' ? '🔑' : '🔒'}</span>`}</span><span class="lb">${esc(a.n)}<small>${op ? 'открыта' : st === 'ready' ? 'открой ключом!' : 'нужен ключ'}</small></span></button>`;
+    }
+    if (it.t === 'chest') { const st = s.chest ? 'done' : d === N ? 'ready' : 'locked'; return `<button class="nd chest ${st}" data-i="${i}"><span class="c">📦${s.chest ? '<span class="ck">✓</span>' : ''}</span><span class="lb">Сундук<small>${s.chest ? '+5 ⭐ получено' : d === N ? 'открой!' : 'за весь день'}</small></span></button>`; }
+    const st = s.favUsed ? 'done' : s.chest ? 'ready' : 'locked';
+    return `<button class="nd fav ${st}" data-i="${i}"><span class="c">${kid.fav[0]}${st === 'locked' ? '<span class="lk" style="position:absolute;top:-8px;right:-8px;width:30px;height:30px;border-radius:50%;background:var(--p-card);display:grid;place-items:center;font-size:16px">⏳</span>' : ''}</span><span class="lb">Любимая игра<small>${esc(kid.fav[1])} · ${favL()}</small></span></button>`;
+  }).join('');
+  const tm = p[1] || [], later = Object.keys(AREAS).filter(id => !p[0].includes(id) && !tm.includes(id) && (AREAS[id].age || 0) <= kid.age && !ST.set.off.includes(id) && kid.likes.includes(id));
+  const lanterns = 6 + (s.chest ? 1 : 0);
+  return `<div class="top"><button class="pill" id="pStreak" aria-label="Серия">🔥 <b>3</b></button><span class="pill">⭐ <b>${s.stars}</b></span><span class="pill key ${k > 0 ? 'has' : ''}">🔑 <b>${k}</b></span><span class="grow"></span><button class="pill" id="pBag" aria-label="Рюкзак">🎒</button><button class="pill adult" id="pAdult" aria-label="Для взрослых">⚙️</button></div>
+    <div class="season"><span>${kid.season}</span><span class="lant">🏮 ${lanterns} из 30</span></div>
+    <div class="hero"><button class="fr" id="pFr" aria-label="Друг">${kid.fr}</button><div class="bub"><div id="pSay">${esc(line(kidId))}</div><div class="bar"><i><b style="width:${Math.round(d / N * 100)}%"></b></i>${d} из ${N}<span>📦</span></div></div></div>
+    <div class="map" id="pMap"><svg class="trail" aria-hidden="true"></svg>${nodes}</div>
+    <div class="soon"><h4>Завтра откроются</h4><div class="row">${tm.map(id => `<button class="ghost" data-soon="${id}"><span>${AREAS[id].e}</span>${esc(AREAS[id].n)}</button>`).join('')}</div>
+      ${later.length ? `<h4 style="margin-top:10px">Твои любимые</h4><div class="row">${later.map(id => `<button class="ghost" data-soon="${id}"><span>${AREAS[id].e}</span>${esc(AREAS[id].n)} <em>${whenOpens(p, id)}</em></button>`).join('')}</div>` : ''}</div>`;
+}
+function lay(kidId) {
+  const box = $('#pMap'); if (!box) return;
+  const W = box.clientWidth, ns = [...box.querySelectorAll('.nd')], DY = 118, X = i => [.28, .72][i % 2];
+  ns.forEach((n, i) => { n.style.left = X(i) * 100 + '%'; n.style.top = i * DY + 'px'; });
+  const H = (ns.length - 1) * DY + 130; box.style.height = H + 'px';
+  const cx = i => X(i) * W, cy = i => i * DY + 38, s = DAY[kidId], sq = seq(kidId);
+  const on = i => { const it = sq[i]; return it.t === 'step' ? s.done[it.id] : it.t === 'door' ? s.open[it.id] : it.t === 'chest' ? s.chest : s.favUsed; };
+  const svg = box.querySelector('svg'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
+  const deco = KIDS[kidId].look === 'lk-night' ? ['🌲', '✨', '🌲', '🦉', '🌲', '✨', '🍄', '🌲'] : ['🌳', '🍂', '🌲', '🍄', '🌳', '🦔', '🍂', '🌲'];
+  svg.innerHTML = ns.slice(0, -1).map((n, i) => `<path d="M${cx(i)} ${cy(i)} C ${cx(i)} ${cy(i) + DY * .6}, ${cx(i + 1)} ${cy(i + 1) - DY * .6}, ${cx(i + 1)} ${cy(i + 1)}" fill="none" stroke="${on(i) ? 'var(--p-done)' : 'var(--p-trail)'}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${on(i) ? '0' : '2 16'}"/>`).join('');
+  box.querySelectorAll('.deco').forEach(x => x.remove());
+  ns.forEach((n, i) => { if (i % 2) return; const dd = document.createElement('span'); dd.className = 'deco'; dd.textContent = deco[i % deco.length]; dd.style.left = (i % 4 ? 4 : 86) + '%'; dd.style.top = (i * DY + 50) + 'px'; box.append(dd); });
+}
+function toast(t) { const el = document.createElement('div'); el.className = 'toast'; el.textContent = t; $('#scr').append(el); setTimeout(() => el.remove(), 1600); }
+function wig(el) { el.classList.remove('wig'); void el.offsetWidth; el.classList.add('wig'); }
+function sayFr(t) { const el = $('#pSay'); if (el) el.textContent = t; }
+function sheet(html, bind) {
+  const sh = document.createElement('div'); sh.className = 'sheet'; sh.innerHTML = `<div class="in" role="dialog">${html}</div>`;
+  sh.onclick = e => { if (e.target === sh || e.target.closest('[data-x]')) sh.remove(); };
+  $('#scr').append(sh); bind && bind(sh); const f = sh.querySelector('button'); f && f.focus({ preventScroll: true }); return sh;
+}
+function bindMap(kidId) {
+  const kid = KIDS[kidId], s = DAY[kidId], sq = seq(kidId), { p } = today(kidId);
+  $('#pBag').onclick = () => { ST.screen = 'bag'; render(); };
+  $('#pAdult').onclick = () => { ST.view = 'adult'; render(); };
+  $('#pFr').onclick = () => wig($('#pFr'));
+  $('#pStreak').onclick = () => toast('3 дня подряд! Пропустил день — не страшно.');
+  document.querySelectorAll('[data-soon]').forEach(b => b.onclick = () => sayFr(`${AREAS[b.dataset.soon].n} откроется ${whenOpens(p, b.dataset.soon)}.`));
+  document.querySelectorAll('#pMap .nd').forEach(b => b.onclick = () => {
+    const it = sq[+b.dataset.i];
+    if (it.t === 'step') {
+      if (s.done[it.id]) return toast('Уже сделано! Можно повторить.');
+      sheet(`<h4>${it.e} ${esc(it.n)}</h4><p>Здесь начинается занятие, как сейчас. В прототипе — сразу «сделано».</p><button class="btn" data-ok>Сделано!</button><button class="btn sec" data-x>Назад</button>`, sh => {
+        sh.querySelector('[data-ok]').onclick = () => { s.done[it.id] = 1; s.stars += 3; sh.remove(); render(); toast('+3 ⭐ и ключ 🔑!'); };
+      });
+    } else if (it.t === 'door') {
+      const a = AREAS[it.id];
+      if (s.open[it.id]) return openRoom(kidId, it.id, false);
+      if (keys(kidId) <= 0) { wig(b.querySelector('.c')); return sayFr(`Дверь «${a.n}» открывается ключом. Сделай любой шаг!`); }
+      s.open[it.id] = 1; s.cards[it.id] = (s.cards[it.id] || 0) + 1; render(); openRoom(kidId, it.id, true);
+    } else if (it.t === 'chest') {
+      if (s.chest) return toast('Сундук уже открыт. Завтра будет новый!');
+      if (Object.keys(s.done).length < kid.steps.length) { wig(b.querySelector('.c')); const left = kid.steps.length - Object.keys(s.done).length; return sayFr(`Сундук откроется, когда всё будет сделано. Осталось ${left} ${plural(left, ['шаг', 'шага', 'шагов'])}.`); }
+      s.chest = true; s.stars += 5; s.stickers++; render();
+      sheet(`<div style="text-align:center;font-size:64px">📦</div><h4 style="text-align:center">Сундук дня!</h4><p style="text-align:center">+5 ⭐ · новая наклейка · фонарик в лесу зажёгся 🏮</p><button class="btn" data-x>Ура!</button>`);
+    } else {
+      if (s.favUsed) return sayFr('Любимая игра на сегодня всё. Завтра снова!');
+      if (!s.chest) { wig(b.querySelector('.c')); return sayFr(`Любимая игра откроется после сундука. Сначала шаги дня!`); }
+      favTimer(kidId);
+    }
+  });
+}
+function openRoom(kidId, id, first) {
+  const a = AREAS[id], s = DAY[kidId];
+  s.played[id] = s.played[id] || {};
+  const draw = sh => { sh.querySelector('.in').innerHTML = `<h4>${a.e} ${esc(a.n)}</h4><p>${GROUPS[a.g][0].toUpperCase() + GROUPS[a.g].slice(1)} · сегодня здесь три игры</p>
+    ${first ? `<div class="card-new"><span class="e">${a.card[0]}</span>Новая карточка в рюкзак: ${esc(a.card[1])}!</div>` : ''}
+    ${a.acts.map((x, i) => `<button class="act ${i ? '' : 'feat'} ${s.played[id][i] ? 'done' : ''}" data-a="${i}"><span class="e">${x[0]}</span><span>${esc(x[1])}<small>${i ? esc(x[2] || '') : 'игра дня' + (x[2] ? ' · ' + esc(x[2]) : '')}${s.played[id][i] ? ' · сыграно +2 ⭐' : ''}</small></span></button>`).join('')}
+    <button class="btn sec" data-x>На тропу</button>`;
+    sh.querySelectorAll('[data-a]').forEach(b => b.onclick = () => { if (!s.played[id][b.dataset.a]) { s.played[id][b.dataset.a] = 1; s.stars += 2; first = false; draw(sh); toast('+2 ⭐'); } });
+  };
+  const sh = sheet('', draw); sh.addEventListener('click', e => { if (e.target === sh || e.target.closest('[data-x]')) render(); });
+}
+function favTimer(kidId) {
+  const kid = KIDS[kidId], s = DAY[kidId]; let m = ST.set.fav || 30, t;
+  const sh = sheet(`<h4>${kid.fav[0]} ${esc(kid.fav[1])}</h4><p>Любимая игра. Песочные часы идут, пока играешь.</p><div class="timer" id="tmr">⏳ ${m}:00</div><button class="btn sec" data-x>Закрыть</button>`);
+  t = setInterval(() => { m--; const el = sh.querySelector('#tmr'); if (!el || !sh.isConnected) return clearInterval(t);
+    if (m <= 0) { clearInterval(t); s.favUsed = true; s.stars += 2; el.textContent = '⌛ Всё!'; sh.querySelector('p').textContent = 'Время любимой игры вышло. Завтра снова — и новые двери!'; return; }
+    el.textContent = `⏳ ${m}:00`; }, 1000);
+  sh.addEventListener('click', e => { if (e.target === sh || e.target.closest('[data-x]')) { clearInterval(t); render(); } });
+}
+function bagHTML(kidId) {
+  const kid = KIDS[kidId], s = DAY[kidId], { p } = today(kidId);
+  const ids = Object.keys(AREAS).filter(id => (AREAS[id].age || 0) <= kid.age);
+  const stk = ['🦊', '🐼', '🦄', '🐙', '🦖', '🐝', '🦋', '🐢', '🐬', '🦉', '🐸', '🦁'];
+  return `<div class="top"><button class="pill" id="pBack">← Тропа</button><span class="grow"></span><span class="pill">⭐ <b>${s.stars}</b></span></div>
+  <div class="coll"><h4 style="margin-top:0;font-size:24px">🎒 Рюкзак</h4>
+    <h4>Паспорт дверей <small style="font:700 12px var(--f-body);color:var(--p-mute)">${Object.keys(s.cards).length} из ${ids.length} в этом месяце</small></h4>
+    <div class="stamps">${ids.map(id => `<button class="stamp ${s.cards[id] ? 'on' : ''}" style="--a:${AREAS[id].a}" data-st="${id}" aria-label="${esc(AREAS[id].n)}">${AREAS[id].e}</button>`).join('')}</div>
+    <p style="font:700 12px var(--f-body);color:var(--p-mute);margin:8px 0 0" id="stInfo">Все печати за месяц — особая наклейка за кругозор.</p>
+    <h4>Карточки тем</h4>
+    <div class="shelf">${ids.map(id => `<div class="cardx ${s.cards[id] ? '' : 'no'}"><span class="e">${s.cards[id] ? AREAS[id].card[0] : '❔'}</span>${s.cards[id] ? esc(AREAS[id].card[1]) : esc(AREAS[id].n)}</div>`).join('')}</div>
+    <h4>Наклейки · ${s.stickers}</h4>
+    <div class="stk">${stk.slice(0, Math.min(12, s.stickers)).join('')}${s.stickers > 12 ? ` <small style="font:800 14px var(--f-body);align-self:center">+${s.stickers - 12}</small>` : ''}</div>
+    ${kidId === 'tosha' ? `<h4>Трофеи и уровень</h4><div class="opt" style="background:var(--p-card);color:var(--p-ink)"><span>🥋 Синий пояс · уровень 9<small style="color:var(--p-mute)">растёт от тех же звёзд</small></span><span>🏆 12</span></div>` : ''}
+  </div>`;
+}
+function bindBag(kidId) {
+  const { p } = today(kidId), s = DAY[kidId];
+  $('#pBack').onclick = () => { ST.screen = 'map'; render(); };
+  document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { const id = b.dataset.st, a = AREAS[id]; $('#stInfo').textContent = s.cards[id] ? `${a.n}: печать есть, карточка «${a.card[1]}».` : p[0].includes(id) ? `${a.n}: дверь открыта сегодня — на тропе!` : `${a.n}: дверь откроется ${whenOpens(p, id)}.`; });
+}
+
+/* ---------- the grown-ups' screen ---------- */
+const CAT = {
+  'Говорим': [['Дыхание'], ['Зарядка для языка'], ['Нейроразминка'], ['Слоги и слова', 'Р'], ['Где живёт звук Р'], ['Волшебник'], ['Шипящие слоги'], ['Змейка или жук?'], ['Свистящие слоги'], ['Чистоговорки'], ['Скороговорки с карандашом'], ['Проверка речи'], ['Грамматика: страница в день'], ['Рэп-баттл', 'Арена Л'], ['Мотогонка', 'Арена Л'], ['Л-ловушка', 'Арена Л'], ['Спарринг', 'Арена Л'], ['Диктофон'], ['Скороговорки вдвоём']],
+  'Учимся': [['Азбука'], ['Слоги-паровозики'], ['Читаем слова'], ['Пишем буквы'], ['Красивый почерк'], ['Чтение по силам'], ['Русский для меня'], ['Читаем на скорость'], ['Что значит слово?'], ['Сколько?'], ['Сотня'], ['Счёты'], ['Математика по силам'], ['Олимпиада', '', 'logic'], ['Флеш-счёт', '', 'logic'], ['Кубик Рубика', '', 'logic'], ['Шахматная школа', '', 'chess'], ['Шахматы с компьютером', '', 'chess'], ['Шахматы онлайн', '', 'chess']],
+  'Творим': [['Рисовалка', '', 'art'], ['Раскраски', '', 'art'], ['Раскрась по буквам', '', 'art'], ['Точки по порядку', '', 'art'], ['Музей мира', '', 'art'], ['Песенки', '', 'music'], ['Ксилофон', '', 'music'], ['Пианино', '', 'music'], ['Весёлые композиторы', '', 'music'], ['Дирижёр', '', 'music'], ['Балет', '', 'ballet'], ['Проект недели', '', 'art'], ['Комиксы', 'новое', 'comics']],
+  'Узнаём': [['Путешествия', '', 'world'], ['Глобус', '', 'world'], ['Мемори: флаги', '', 'world'], ['Космос', '', 'space'], ['Опыты на площадке', '', 'lab'], ['Как это устроено', '', 'lab'], ['Как устроено тело', '', 'body'], ['Океан и вода', '', 'nature'], ['Растения', '', 'nature'], ['Аудиосказки', '', 'books'], ['Книжная полка', '', 'books'], ['Языки мира', '', 'langs'], ['Профессии', 'новое', 'jobs'], ['Что нового в мире', 'новое', 'news']]
+};
+function adultHTML() {
+  const S = ST.set, q = ST.adSearch || '';
+  const norm = x => x.toLowerCase().replace(/ё/g, 'е');
+  const cat = Object.entries(CAT).map(([h, gs]) => { const hit = gs.filter(g => !q || norm(g[0]).includes(norm(q))); return hit.length ? `<h5>${h}</h5><div class="gl">${hit.map(g => `<button class="gm" data-g="${esc(g[0])}" data-area="${g[2] || ''}">${esc(g[0])}<small class="${g[1] === 'новое' ? 'new' : ''}">${g[1] || (g[2] ? AREAS[g[2]].e + ' ' + AREAS[g[2]].n : 'в шаге дня')}</small></button>`).join('')}</div>` : ''; }).join('');
+  return `<div class="top" style="background:#F7F6FB"><button class="pill" id="adBack">← Тина</button><span class="grow"></span><span class="pill">🔒 Для взрослых</span></div>
+  <div class="ad"><h4>Как устроен день</h4>
+    <div class="opt"><span>Двери по очереди<small>${S.rot ? 'ребёнок видит тропу и двери дня' : 'выключено: у ребёнка все вкладки, как раньше'}</small></span><button class="sw" id="swRot" role="switch" aria-checked="${S.rot}" aria-label="Двери по очереди"></button></div>
+    <div class="opt"><span>Дверей в день<small>Тина / Тоша</small></span><span class="mini">${[2, 3].map(n => `<button data-k="tina" data-n="${n}" aria-pressed="${S.k.tina === n}">${n}</button>`).join('')} / ${[2, 3].map(n => `<button data-k="tosha" data-n="${n}" aria-pressed="${S.k.tosha === n}">${n}</button>`).join('')}</span></div>
+    <div class="opt"><span>Любимая игра<small>после сундука</small></span><span class="mini">${[10, 20, 0].map(n => `<button data-fav="${n}" aria-pressed="${S.fav === n}">${n ? n + ' мин' : '∞'}</button>`).join('')}</span></div>
+    <h5>Темы в очереди</h5>
+    <div class="chips">${Object.entries(AREAS).map(([id, a]) => `<button class="achip" style="--a:${a.a}" data-off="${id}" aria-pressed="${!S.off.includes(id)}">${a.e} ${esc(a.n)}</button>`).join('')}</div>
+    <h4 style="margin-top:18px">Все игры</h4>
+    <input class="srch" id="adSearch" type="search" placeholder="Найти игру…" value="${esc(q)}" autocomplete="off">
+    ${cat || '<p>Ничего не нашлось.</p>'}
+  </div>`;
+}
+function bindAdult() {
+  const S = ST.set;
+  $('#adBack').onclick = () => { ST.view = 'tina'; ST.screen = 'map'; render(); };
+  $('#swRot').onclick = () => { S.rot = !S.rot; render(); toast(S.rot ? 'Тропа и двери дня включены' : 'У детей снова все вкладки, как раньше'); };
+  document.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { S.k[b.dataset.k] = +b.dataset.n; render(); });
+  document.querySelectorAll('[data-fav]').forEach(b => b.onclick = () => { S.fav = +b.dataset.fav; render(); });
+  document.querySelectorAll('[data-off]').forEach(b => b.onclick = () => { const id = b.dataset.off; S.off = S.off.includes(id) ? S.off.filter(x => x !== id) : [...S.off, id]; render(); });
+  const inp = $('#adSearch'); inp.oninput = () => { ST.adSearch = inp.value; const pos = inp.selectionStart; render(); const n = $('#adSearch'); n.focus(); n.setSelectionRange(pos, pos); };
+  document.querySelectorAll('[data-g]').forEach(b => b.onclick = () => {
+    const ar = b.dataset.area;
+    sheet(`<h4>${esc(b.dataset.g)}</h4><p>${ar ? 'Тема: ' + AREAS[ar].e + ' ' + esc(AREAS[ar].n) : 'Эта игра живёт внутри шага дня (Логопед, Чтение, Математика).'}</p>
+      <button class="btn" data-x>▶ Открыть сейчас для Тины</button>${ar ? `<button class="btn sec" data-door="${ar}">🚪 Дверь «${esc(AREAS[ar].n)}» Тине на сегодня</button>` : ''}<button class="btn sec" data-x>Закрыть</button>`, sh => {
+      const d = sh.querySelector('[data-door]'); if (d) d.onclick = () => { sh.remove(); toast('Дверь добавлена на тропу Тины'); };
+    });
+  });
+}
+
+/* ---------- 30 days ---------- */
+function render30() {
+  document.querySelectorAll('[data-q]').forEach(b => b.setAttribute('aria-pressed', b.dataset.q === ST.q));
+  const kidId = ST.q, kid = KIDS[kidId], p = plan(kidId, { k: ST.set.k[kidId], off: ST.set.off }).slice(0, 30);
+  const ids = Object.keys(AREAS).filter(id => (AREAS[id].age || 0) <= kid.age && !ST.set.off.includes(id));
+  let rep = 0; const cnt = {}, last = {}, gap = {};
+  p.forEach((ds, d) => ds.forEach(id => { if (d && p[d - 1].includes(id)) rep++; cnt[id] = (cnt[id] || 0) + 1; gap[id] = Math.max(gap[id] || 0, d - (last[id] ?? -1)); last[id] = d; }));
+  ids.forEach(id => gap[id] = Math.max(gap[id] || 30, 30 - (last[id] ?? -1)));
+  const maxGap = Math.max(...ids.map(id => gap[id])), likeAvg = kid.likes.filter(id => ids.includes(id)).reduce((a, id) => a + (cnt[id] || 0), 0) / Math.max(1, kid.likes.filter(id => ids.includes(id)).length), other = ids.filter(id => !kid.likes.includes(id)), othAvg = other.reduce((a, id) => a + (cnt[id] || 0), 0) / Math.max(1, other.length);
+  $('#stats').innerHTML = `<div class="stat"><b>${rep}</b><span>повторов два дня подряд</span></div><div class="stat"><b>${maxGap}</b><span>самый долгий перерыв темы, дней</span></div><div class="stat"><b>${likeAvg.toFixed(1)}</b><span>раз за месяц — любимая тема</span></div><div class="stat"><b>${othAvg.toFixed(1)}</b><span>раз за месяц — остальные</span></div>`;
+  const head = p.map((_, d) => `<th scope="col" title="${dayAt(d).toLocaleDateString('ru-RU')}">${dayAt(d).getDate()}</th>`).join('');
+  $('#grid30').innerHTML = `<table><thead><tr><th></th>${head}</tr></thead><tbody>${ids.map(id => `<tr><th scope="row">${AREAS[id].e} ${esc(AREAS[id].n)}${kid.likes.includes(id) ? ' 💛' : ''}</th>${p.map((ds, d) => `<td class="${ds.includes(id) ? 'on' : ''} ${d === 0 ? 'today' : ''}" style="--a:${AREAS[id].a}" title="${ds.includes(id) ? AREAS[id].n + ', ' + dayAt(d).toLocaleDateString('ru-RU') : ''}"></td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  $('#days30').innerHTML = p.slice(0, 14).map((ds, d) => `<div class="day1"><b>${d === 0 ? 'сегодня' : d === 1 ? 'завтра' : WD_SH[dayAt(d).getDay()] + ', ' + dayAt(d).getDate()}</b>${ds.map(id => AREAS[id].e + ' ' + AREAS[id].n).join('<br>')}</div>`).join('');
+}
+
+document.querySelectorAll('.seg [data-v]').forEach(b => b.onclick = () => { ST.view = b.dataset.v; ST.screen = 'map'; render(); });
+document.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { ST.q = b.dataset.q; render30(); });
+document.querySelectorAll('[data-ba]').forEach(b => b.onclick = () => { $('#stage').dataset.ba = b.dataset.ba; document.querySelectorAll('[data-ba]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+addEventListener('resize', () => { if (ST.view !== 'adult' && ST.view !== 'd30' && ST.screen === 'map') lay(ST.view); });
+render();
+</script>
