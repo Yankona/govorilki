@@ -2919,6 +2919,17 @@ body.pv-on #app{padding-top:52px}
 .tv-o span{font:400 28px/1 var(--f-emoji)}.tv-o:disabled{cursor:default}
 .tv-o.yes{background:var(--t-mint);box-shadow:0 5px 0 #3A9E7A,inset 0 0 0 3px #3A9E7A}.tv-o.no{opacity:.5}
 .tv-ans{padding:12px 14px;border-radius:18px;background:var(--t-yellow);color:var(--ink)}.tv-ans p{margin:0 0 8px;font:700 17px/1.45 var(--f-body)}
+/* NEWSJOBS-CSS: «Что нового в мире» and «Профессии» */
+.nw-c{position:relative}.nw-new{position:absolute;z-index:2;top:-8px;left:-6px;padding:3px 8px;border-radius:12px;background:var(--tiger,#FF8A2A);color:#fff;font:900 12px/1.2 var(--f-body);font-style:normal;transform:rotate(-6deg);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.tile-new{position:absolute;z-index:2;top:-6px;right:-4px;padding:3px 9px;border-radius:12px;background:#E63946;color:#fff;font:900 12px/1.2 var(--f-body);font-style:normal;transform:rotate(5deg);box-shadow:0 2px 0 rgba(0,0,0,.18);animation:pulse 1.6s ease-in-out infinite}
+.nw-d{display:block;font:700 12px var(--f-body);color:var(--ink-soft)}
+.nw-badge{display:flex;align-items:center;gap:12px;width:100%;max-width:680px;margin:0 auto 12px;padding:10px 14px;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 3px var(--line)}
+.nw-badge.got{background:var(--t-yellow);box-shadow:inset 0 0 0 3px #E0A800}.nw-be{font:400 40px/1 var(--f-emoji)}.nw-badge b{display:block;font:800 17px/1.25 var(--f-body)}.nw-badge small{font:700 14px/1.3 var(--f-body);color:var(--ink-soft)}
+.jb-top{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:680px;margin:0 auto 10px}.jb-top .big{min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 6px;font-size:15px;line-height:1.15;text-align:center}.jb-top small{font:700 12px var(--f-body);opacity:.85}.jb-top i{font:400 26px/1 var(--f-emoji);font-style:normal}
+.jp-g{width:100%;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}.jp-g.jd-res{grid-template-columns:repeat(3,1fr);max-width:560px;margin:0 auto}.jd-res .tv-e{font-size:52px}.jd-res .tv-c b{font-size:16px}.jp-g .tv-e{font-size:38px}.jp-g .tv-c b{font-size:14px}
+.jp-s{transform:rotate(var(--r,0deg))}.jp-s:not(.got){opacity:.55;filter:grayscale(1)}.jp-s.got{box-shadow:0 5px 0 var(--line-strong),inset 0 0 0 3px rgba(255,255,255,.8)}
+.jp-news{display:flex;flex-wrap:wrap;gap:10px}.jp-nb{display:flex;flex-direction:column;align-items:center;padding:8px 12px;border-radius:16px;background:var(--t-yellow);font:400 34px/1 var(--f-emoji)}.jp-nb small{font:700 12px var(--f-body);color:var(--ink)}
+.jg-tools{display:flex;justify-content:center;gap:4px;min-height:96px}.jg-tools .tv-big{font-size:58px;padding:10px 6px}
 /* TRAVEL-CSS-END */
 /* DISCOVER-FUN-CSS: «А знаешь ли ты?», the story list's progress and next story, the picture while listening, stamps, a line of time */
 .lr-prog{display:flex;align-items:center;gap:10px;width:100%;max-width:680px;margin:0 auto 10px}
@@ -3613,6 +3624,66 @@ body.look-dark .lg-t small{color:#C3C9EA}
 body.look-dark .pr-l.v small{color:#FF8F8A}body.look-dark .pr-l.c small{color:#8CC0FF}
 body.look-dark .win-main .big.share{background:#2F6FD6;box-shadow:0 5px 0 #1D4C9E}
 /* LOOK-DARK-CSS-END */
+/* comics: a page of panels drawn as a comic; bubbles and captions keep their print colours in every look */
+.cx{width:min(100%,860px);display:flex;flex-direction:column;gap:10px}
+.cx-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.cx-top b{font:700 22px/1.15 var(--f-display)}.cx-ep{font:800 14px var(--f-body);color:var(--ink-soft);background:var(--paper);border-radius:999px;padding:3px 10px}
+.cx-page{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:700px){.cx-page{grid-template-columns:1fr 1fr}.cx-page>.cx-end{grid-column:1/-1}}
+.cx-pan{position:relative;min-height:230px;border:4px solid #1E1A33;border-radius:8px;overflow:hidden;background:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:10px;color:#1E1A33;box-shadow:4px 5px 0 rgba(30,26,51,.35);animation:cxIn .45s ease-out}
+.cx-pan.cur{outline:4px solid var(--tiger);outline-offset:3px}.cx-pan.zap{animation:cxZap .7s ease-out}
+.cx-pan.power{box-shadow:0 0 0 4px #FFC83A,0 0 26px 8px rgba(255,200,58,.75)}
+@keyframes cxIn{from{opacity:0;transform:scale(.94) rotate(-1deg)}}
+@keyframes cxZap{40%{transform:scale(1.03)}}
+.cx-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.cx-bub,.cx-cap{position:relative;z-index:2;font:700 17px/1.3 var(--f-display);color:#1E1A33}
+.cx-bub{align-self:center;max-width:88%;background:#fff;border:3px solid #1E1A33;border-radius:22px;padding:8px 14px;margin-bottom:16px;text-align:center}
+.cx-bub::after{content:"";position:absolute;bottom:-17px;left:calc(var(--tx,50%) - 10px);border:10px solid transparent;border-top:15px solid #1E1A33}
+.cx-bub::before{content:"";position:absolute;bottom:-11px;left:calc(var(--tx,50%) - 7px);border:7px solid transparent;border-top:11px solid #fff;z-index:1}
+.cx-cap{align-self:flex-start;max-width:92%;background:#FFF1A8;border:3px solid #1E1A33;padding:6px 12px;font-style:italic}
+.cx-bub.l0,.cx-cap.l0{font-size:27px;letter-spacing:.04em;text-transform:uppercase;font-style:normal}
+.cx-bub.l2,.cx-cap.l2{font-size:16px;font-family:var(--f-body)}
+.cx-who{position:relative;z-index:1;display:flex;justify-content:space-around;align-items:flex-end;height:104px}
+.cx-who:empty{height:20px}
+.cx-ch{width:96px;height:96px;display:block}.cx-ch svg{width:100%;height:100%;display:block}
+.cx-ch.sp{transform:translateY(-4px) scale(1.06)}
+.cx-pan.cur .cx-ch.sp svg{animation:bob .8s ease-in-out 2}
+.cx-end{min-height:150px;background:#FFF1A8}.cx-end .cx-bg{opacity:.35}
+.cx-stamp{position:relative;z-index:2;align-self:flex-end;transform:rotate(-6deg);font:900 22px/1 var(--f-display);color:#fff;background:#EF4F7E;border:3px solid #1E1A33;padding:8px 14px;border-radius:8px;box-shadow:3px 3px 0 #1E1A33}
+.cx-ctl{position:sticky;bottom:0;z-index:5;display:flex;flex-direction:column;gap:8px;align-items:center;min-height:8px;padding:8px 6px;border-radius:22px 22px 0 0;background:color-mix(in srgb,var(--sky) 88%,transparent);backdrop-filter:blur(4px)}.cx-ctl:empty{padding:0}
+.cx-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.cx-mic.ear{animation:pulse 1s infinite}
+.cx-heard{margin:0;min-height:1.3em;text-align:center;color:var(--ink-soft);font-size:16px}
+.cx-pwt{margin:0;font:800 19px var(--f-display);display:flex;align-items:center;gap:8px}.cx-snd{font-size:28px}
+.cx-q{width:min(100%,560px);background:var(--paper);border-radius:20px;padding:12px;box-shadow:0 5px 0 var(--line-strong)}
+.cx-qq{margin:0 0 10px;text-align:center;font:800 19px/1.3 var(--f-display)}
+.cx-opts{display:grid;gap:8px}.cx-opts.two{grid-template-columns:1fr 1fr}
+.cx-o{min-height:54px;border:3px solid var(--line-strong);border-radius:16px;background:var(--paper);color:var(--ink);font:800 17px/1.2 var(--f-body);cursor:pointer;padding:8px}
+.cx-o.right{background:var(--leaf);color:#fff;border-color:var(--leaf)}.cx-o.wrong{opacity:.5}.cx-o.was{border-color:var(--tiger)}
+.cx-choice .cx-o{background:var(--t-yellow);color:#2A2346}
+.cx-win .cx-card{margin:8px auto}
+.cx-shelf{width:min(100%,900px);display:flex;flex-direction:column;gap:14px}
+.cx-lv{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--ink-soft);font-size:16px}
+.cx-lv .chip.on,.cx-tabs .chip.on,.cx-row .chip.on{background:var(--tiger);color:#fff}
+.cx-ser{display:grid;grid-template-columns:minmax(120px,38%) 1fr;gap:12px;background:var(--paper);border-radius:22px;padding:10px;box-shadow:0 5px 0 var(--line-strong)}
+.cx-ser h2{margin:0;font:700 21px/1.15 var(--f-display)}.cx-ser p{margin:4px 0;color:var(--ink-soft);font-size:15px}.cx-ser small{color:var(--ink-soft)}
+.cx-go{border:0;padding:0;background:none;cursor:pointer}
+.cx-cover{position:relative;border:3px solid #1E1A33;border-radius:8px;overflow:hidden;aspect-ratio:3/2.2;display:flex;align-items:flex-end}
+.cx-cover .cx-who{height:62%;width:100%}.cx-cover .cx-ch{width:34%;height:auto;aspect-ratio:1}
+.cx-logo{position:absolute;top:5px;left:5px;max-width:calc(100% - 10px);z-index:2;font:900 13px/1.15 var(--f-display);color:#fff;background:#1E1A33;border-radius:6px;padding:3px 7px;text-align:left}
+.cx-eps{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cx-e{width:50px;height:54px;border-radius:14px;border:3px solid var(--line-strong);background:var(--paper);color:var(--ink);display:grid;place-items:center;font:800 18px/1 var(--f-body);cursor:pointer;padding:2px}
+.cx-e small{font-size:12px}.cx-e.done{background:var(--leaf);color:#fff;border-color:var(--leaf)}.cx-e.new{background:var(--tiger);color:#fff;border-color:var(--tiger-deep);animation:bob 1.2s ease-in-out infinite}.cx-e.lock,.cx-e.soon{opacity:.6}
+.cx-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.cx-card{background:linear-gradient(160deg,#FFF1A8,#FFD3E0);color:#1E1A33;border:3px solid #1E1A33;border-radius:14px;padding:8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;max-width:200px}
+.cx-card b{font:800 15px/1.15 var(--f-display)}.cx-card small{font-size:12px;line-height:1.2}
+.cx-cart{width:70px;height:70px;display:grid;place-items:center;font-size:48px}.cx-cart svg{width:100%;height:100%}
+.cx-card.off{background:var(--paper);color:var(--ink-soft);border-style:dashed;border-color:var(--line-strong)}.cx-card.off .cx-cart{font-size:36px;opacity:.5}
+.cx-ownl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.cx-mk{width:min(100%,860px);display:flex;flex-direction:column;gap:10px}
+.cx-tt{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cx-tt input,.cx-say input{font:700 18px var(--f-body);padding:10px 12px;border-radius:14px;border:3px solid var(--line-strong);background:#fff;color:#2A2346;flex:1;min-width:0}
+.cx-tabs,.cx-row{display:flex;flex-wrap:wrap;gap:6px}.cx-edh{margin:6px 0 2px;font-weight:800}
+.cx-say{display:flex;gap:8px;align-items:center}.cx-hb .chip-face svg{width:28px;height:28px}
+.cx-mk .cx-pan{min-height:200px}
 </style>
 </head>
 <body>
@@ -3638,7 +3709,7 @@ const LANGDATA =  {};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
-const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"5f5bf805fd","HOLT":"3d8cb3624e","GLOBE_GEO":"f06c660690","sayru":"54057e5efb"};
+const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"e741a4afb2","HOLT":"3d8cb3624e","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"317a7f60ed"};
 const PACK = (() => {
   const got = {}, run = {}, root = location.pathname.replace(/[^/]*$/, '').replace(/(en|pt|ru|de)\/$/, '');
   const url = n => root + 'data/' + LANG + '/' + n + '.json?h=' + PACKS[n];
@@ -3827,6 +3898,8 @@ const LS = () => {
   if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
   
   if (b.read && (() => { try { return RUME.isDay(); } catch (e) { return false; } })()) b = { ...b, read: { ...b.read, name: 'Русский для меня', sub: RUME_UI.sub() } };
+  
+  else if (b.read && (() => { try { return COMIX.isDay(); } catch (e) { return false; } })()) b = { ...b, read: { ...b.read, name: 'Комикс дня', sub: COMIX.sub() } };
   else if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: readLangToday() !== LANG ? mlInfo(readLangToday())[1] + ' ' + 'Чтение' : keep ? b.read.name : IS_RU && RSK.early() ? 'Русское чтение' : 'Чтение', sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
@@ -5054,7 +5127,7 @@ function goHome() {
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
   const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !x.inside && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
-  const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">
+  const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">${newsDot(x.id) ? '<i class="tile-new">Новое!</i>' : ''}
       <span class="tile-ico">${x.ico()}</span><b>${nm(x.name)}</b><small>${esc(typeof x.sub === 'function' ? x.sub() : x.sub)}</small>
       <span class="prog">${x.prog ? x.prog() : starsRow(x.id)}</span></button>`;
   const tiles = g => vis(g).map(tileHTML).join('');
@@ -9113,16 +9186,17 @@ function screenLearn(k) {
   newScreen();
   const T = LEARN[k], items = learnItems(k);
   const nx = items.findIndex(x => !learnDone(x.id)), nDone = items.filter(x => learnDone(x.id)).length;
-  const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''} ${i === nx && nDone ? 'nx' : ''}" data-i="${i}" style="--bg:${T.bg}">${i === nx && nDone ? '<i class="nx-b">▶</i>' : ''}${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
+  const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''} ${i === nx && nDone ? 'nx' : ''}" data-i="${i}" style="--bg:${T.bg}">${i === nx && nDone ? '<i class="nx-b">▶</i>' : ''}${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${k === 'news' && x.date ? `<small class="nw-d">${newsDate(x.date)}</small>` : ''}${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
   const hook = learnHook([k]);
   const st = shell(T.name, `<p class="lead">${Q() ? 'Читай вслух, а потом ответь на вопрос.' : 'Послушай историю и ответь на вопрос.'}</p>
     <div class="lr-prog"><span class="lr-pb"><i style="width:${Math.round(100 * nDone / Math.max(1, items.length))}%"></i></span><b>${ICON.star}${nDone} из ${items.length}</b></div>
     ${hookHTML(hook)}
+    ${T.top ? T.top() : ''}${newsIn(k)}
     ${k === 'old' ? `<div class="prow-btns"><button class="big" id="oldQuiz">⏳ Что было раньше?</button></div>` : ''}
     ${T.secs ? T.secs.map(([sk, sn, se]) => { const xs = items.map((x, n) => [x, n]).filter(([x]) => x.sec === sk); return xs.length ? `<h3 class="sec-h">${se} ${esc(sn)}</h3><div class="cards">${xs.map(([x, n]) => cardOf(x, n)).join('')}</div>` : ''; }).join('') : `<div class="cards">${items.map(cardOf).join('')}</div>`}`, { back: T.place ? () => TRAVEL.screen() : k === 'phys' ? () => screenLab() : k === 'art' ? () => screenMuseum('who') : k === 'music' ? () => screenComposers() : k === 'plants' ? () => PLANTS.hub() : k === 'water' ? () => OCEAN.hub() : k === 'space' ? () => SPACE.screen() : null });
   hookBind(st);
   talk((Q() ? 'Выбери историю. Прочитай её вслух и ответь на вопрос.' : 'Выбери историю. Я расскажу, а ты ответишь на вопрос.') + (hook && !Q() ? ' ' + 'А знаешь ли ты?' + ' ' + hook.it.q : ''));
-  st.onclick = e => { if (e.target.closest('#oldQuiz')) { sfx.pop(); screenTimeline(); return; } const c = e.target.closest('.story-c'); if (c) { sfx.pop(); screenStory(k, +c.dataset.i); } };
+  st.onclick = e => { if (e.target.closest('#oldQuiz')) { sfx.pop(); screenTimeline(); return; } if (T.click && T.click(e)) return; const c = e.target.closest('.story-c'); if (c) { sfx.pop(); c.dataset.k ? screenStory(c.dataset.k, +c.dataset.i, { back: () => screenLearn(k) }) : screenStory(k, +c.dataset.i); } };
 }
 function screenStory(k, i, o = {}) {
   
@@ -9174,11 +9248,12 @@ function screenStory(k, i, o = {}) {
       { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); }
       const stamp0 = T.place && TRAVEL.stamped(k);
       P.learn = { ...(P.learn || {}), [it.id]: 1 }; save(); if (o.done) o.done();
+      const xl = T.onDone ? T.onDone(it) || '' : '';
       
       const order = items.map((x, j) => (i + 1 + j) % items.length).filter(j => j !== i), nj = o.back ? -1 : (order.find(j => !learnDone(items[j].id)) ?? (i + 1 < items.length ? i + 1 : -1));
       const nIt = nj >= 0 ? items[nj] : null;
       const nextCard = nIt ? `<button class="st-next" data-a="next"><span class="st-nt">${learnImg(nIt.id) ? `<img src="${esc(learnImg(nIt.id)[4] || `${SITE_ROOT}img/learn/${nIt.id}-s.webp`)}" alt="" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(nIt.e))}">` : pic(nIt.e)}</span><span class="st-nx"><small>Следующая история</small><b>${esc(nIt.t)}</b>${nIt.q ? `<i>🤔 ${esc(nIt.q)}</i>` : ''}</span></button>` : '';
-      const done = () => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Теперь ты знаешь ещё одну историю.`, extra: nextCard, nextLabel: nIt ? (Q() ? '▶ Читать дальше' : '▶ Слушать дальше') : '',
+      const done = () => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Теперь ты знаешь ещё одну историю.${xl ? ' ' + xl : ''}`, extra: nextCard, nextLabel: nIt ? (Q() ? '▶ Читать дальше' : '▶ Слушать дальше') : '',
         next: nIt ? () => screenStory(k, nj) : null, menu: back });
       later(() => { if (T.place && !stamp0 && TRAVEL.stamped(k)) TRAVEL.stampShow(k, done); else done(); }, 700);
     };
@@ -9301,6 +9376,144 @@ function screenTimeline() {
  
 const WATER_STORIES = LX('WATER_STORIES', {"name": "Моря, реки и озёра", "sub": "волны, приливы, Волга, Байкал, Амазонка", "items": [{ "id": "w-salty", "e": "🧂", "t": "Почему море солёное", "q": "Куда девается соль, когда морская вода испаряется?", px: "st11" }, { "id": "w-waves", "e": "🌊", "t": "Откуда берутся волны", "q": "Кто делает волны на море?", px: "st11" }, { "id": "w-tides", "e": "🌙", "t": "Прилив и отлив", "q": "Кто делает приливы и отливы?", px: "st11" }, { "id": "w-oceans", "e": "🗺️", "t": "Пять океанов", "q": "Какой океан самый большой?", px: "st11" }, { "id": "w-mouth", "e": "🏞️", "t": "Как река впадает в море", "q": "Как называется место, где река впадает в море?", px: "st11" }, { "id": "w-source", "e": "⛲", "t": "Где начинается река", "q": "С чего начинается Волга?", px: "st11" }, { "id": "w-volga", "e": "🚢", "t": "Волга — главная река России", "q": "Куда впадает Волга?", px: "st11" }, { "id": "w-amazon", "e": "🐊", "t": "Амазонка — река-великан", "q": "Какие дельфины живут в Амазонке?", px: "st11" }, { "id": "w-nile", "e": "🐪", "t": "Нил — река в пустыне", "q": "Почему египтяне жили у Нила?", px: "st11" }, { "id": "w-baikal", "e": "🦭", "t": "Байкал — самое глубокое озеро", "q": "Какой зверь живёт только на Байкале?", px: "st11" }, { "id": "w-caspian", "e": "🐟", "t": "Море, которое на самом деле озеро", "q": "Почему Каспийское море на самом деле озеро?", px: "st11" }, { "id": "w-dead", "e": "🏊", "t": "Море, где нельзя утонуть", "q": "Почему в Мёртвом море не тонут?", px: "st11" }, { "id": "w-colours", "e": "🎨", "t": "Почему море синее", "q": "Почему в пасмурный день море серое?", px: "st11" }, { "id": "w-yellow", "e": "🟡", "t": "Моря с цветными именами", "q": "Что красит Жёлтое море?", px: "st11" }, { "id": "w-iceberg", "e": "🧊", "t": "Айсберг — ледяная гора", "q": "Где прячется большая часть айсберга?", px: "st11" }, { "id": "w-current", "e": "🧭", "t": "Реки внутри океана", "q": "Что делает тёплое течение Гольфстрим?", px: "st11" }, { "id": "w-fresh", "e": "💧", "t": "Сколько воды можно пить", "q": "Где больше всего пресной воды?", px: "st11" }, { "id": "w-falls", "e": "🏔️", "t": "Самый высокий водопад", "q": "Как называют водопад Виктория местные жители?", px: "st11" }, { "id": "w-reef", "e": "🐠", "t": "Большой Барьерный риф", "q": "Кто построил Большой Барьерный риф?", px: "st11" }, { "id": "w-tsunami", "e": "🌋", "t": "Цунами — волна от землетрясения", "q": "Что делает цунами?", px: "st11" }]});
 if (WATER_STORIES.items) LEARN.water = { name: WATER_STORIES.name, e: '🌊', bg: 'var(--t-blue)', sub: WATER_STORIES.sub, items: WATER_STORIES.items };
+ 
+ 
+
+
+ 
+LEARN.news = { name: 'Что нового в мире', e: '🗞️', bg: 'var(--t-blue)', sub: 'настоящие новости: космос, звери, открытия', items: [{ "id": "news-starship-ship-catch", "e": "🚀", "t": "Корабль поймали «палочками»", "q": "Кого поймали стальные руки башни в Техасе?", "sec": "2026-11", "date": "2026-11-14", "topic": "space", px: "st11" }, { "id": "news-trex-trackway-north-dakota", "e": "🦖", "t": "Следы взрослого тираннозавра", "q": "Кто оставил найденные следы?", "sec": "2026-09", "date": "2026-09", "topic": "old", "place": "US", px: "st11" }, { "id": "news-eclipse-2026-spain", "e": "🌑", "t": "Солнце закрыла Луна", "q": "Что закрыло Солнце 12 августа 2026 года?", "sec": "2026-08", "date": "2026-08-12", "topic": "space", px: "st11" }, { "id": "news-world-cup-2026-spain", "e": "⚽", "t": "Чемпионат мира на трёх странах", "q": "Какая сборная стала чемпионом мира по футболу в 2026 году?", "sec": "2026-07", "date": "2026-07-19", "topic": "sport", "place": "US", px: "st11" }, { "id": "news-robot-half-marathon-2026", "e": "🤖", "t": "Робот-бегун быстрее рекорда", "q": "С чьим рекордом сравнили время самого быстрого робота?", "sec": "2026-04", "date": "2026-04-19", "topic": "tech", "place": "CN", px: "st11" }, { "id": "news-artemis2-moon-flight", "e": "🌙", "t": "Четверо вокруг Луны", "q": "Как называется миссия, в которой люди облетели Луну?", "sec": "2026-04", "date": "2026-04-01", "topic": "space", px: "st11" }, { "id": "news-morstad-viking-hoard", "e": "🪙", "t": "Клад викингов в поле", "q": "Чем нашли первые монеты клада?", "sec": "2026-04", "date": "2026-04", "topic": "old", "place": "NO", px: "st11" }, { "id": "news-ostrabot-muscle-fish", "e": "🐟", "t": "Рыбка с живой мышцей", "q": "Что двигает хвостами робота-рыбки Остработа?", "sec": "2026-03", "date": "2026-03-18", "topic": "tech", "place": "SG", px: "st11" }, { "id": "news-sagrada-familia-tallest", "e": "⛪", "t": "Самая высокая башня Гауди", "q": "Как звали главного архитектора собора Саграда-Фамилия?", "sec": "2026-02", "date": "2026-02-20", "topic": "places", "place": "ES", px: "st11" }, { "id": "news-skimo-olympic-debut", "e": "⛷️", "t": "Лыжи вверх и вниз", "q": "Как называется новый олимпийский вид, где сначала поднимаются в гору на лыжах, а потом спускаются?", "sec": "2026-02", "date": "2026-02-19", "topic": "sport", "place": "IT", px: "st11" }, { "id": "news-kakapo-record-2026", "e": "🦜", "t": "Рекорд толстых попугаев", "q": "Чем какапо отличается от других попугаев?", "sec": "2026-02", "date": "2026-02", "topic": "animals", px: "st11" }, { "id": "news-slonenok-linh-mai-2026", "e": "🐘", "t": "Слонёнок Линь Май", "q": "Что значит имя слонёнка Линь Май?", "sec": "2026-02", "date": "2026-02", "topic": "animals", px: "st11" }, { "id": "news-zubry-ispaniya-2026", "e": "🦬", "t": "Зубры в испанских горах", "q": "Что зубры будут делать в испанском лесу?", "sec": "2026-01", "date": "2026-01", "topic": "animals", px: "st11" }, { "id": "news-dogovor-otkrytyj-okean-2026", "e": "🌊", "t": "Договор об открытом океане", "q": "Что такое открытый океан?", "sec": "2026-01", "date": "2026-01", "topic": "water", px: "st11" }, { "id": "news-trupnyj-cvetok-adelaida-2026", "e": "🌺", "t": "Самый вонючий цветок", "q": "Зачем цветок так сильно пахнет?", "sec": "2026-01", "date": "2026-01", "topic": "plants", px: "st11" }, { "id": "news-comet-3i-atlas", "e": "☄️", "t": "Комета из другой звёздной системы", "q": "Откуда прилетела комета 3I/ATLAS?", "sec": "2025-12", "date": "2025-12-19", "topic": "space", px: "st11" }, { "id": "news-palma-komory-2025", "e": "🌴", "t": "Пальма с вулкана", "q": "Почему пальма из сада Кью не может дать семена?", "sec": "2025-11", "date": "2025-11", "topic": "plants", px: "st11" }, { "id": "news-grand-egyptian-museum", "e": "🏺", "t": "Большой египетский музей открылся", "q": "Чьи сокровища впервые собрали вместе в новом музее?", "sec": "2025-11", "date": "2025-11", "topic": "places", "place": "EG", px: "st11" }, { "id": "news-zelenaya-cherepaha-2025", "e": "🐢", "t": "Хорошие новости для морской черепахи", "q": "Почему черепаху назвали зелёной?", "sec": "2025-10", "date": "2025-10", "topic": "animals", px: "st11" }, { "id": "news-cr450-fast-train", "e": "🚄", "t": "Поезд быстрее четырёхсот пятидесяти", "q": "Зачем новому поезду длинный острый нос?", "sec": "2025-10", "date": "2025-10", "topic": "tech", "place": "CN", px: "st11" }, { "id": "news-lunar-eclipse-2025", "e": "🌕", "t": "Красная Луна", "q": "Почему Луна во время затмения красная?", "sec": "2025-09", "date": "2025-09-07", "topic": "space", px: "st11" }, { "id": "news-shukla-iss-india", "e": "🧑‍🚀", "t": "Первый индиец на станции", "q": "Из какой страны Шубханшу Шукла?", "sec": "2025-07", "date": "2025-07-15", "topic": "space", px: "st11" }, { "id": "news-rubin-first-images", "e": "🔭", "t": "Самая большая камера для неба", "q": "Где стоит обсерватория имени Веры Рубин?", "sec": "2025-06", "date": "2025-06-23", "topic": "space", px: "st11" }, { "id": "news-serval-kotyata-2025", "e": "🐆", "t": "Котята сервала", "q": "Откуда приехала мама котят Лайла?", "sec": "2025-06", "date": "2025-06", "topic": "animals", px: "st11" }, { "id": "news-saturn-128-moons", "e": "🪐", "t": "У Сатурна 128 новых лун", "q": "Сколько лун нашли у Сатурна в 2025 году?", "sec": "2025-03", "date": "2025-03-11", "topic": "space", px: "st11" }, { "id": "news-starship-booster-catch-2025", "e": "🦾", "t": "Башня ловит ракету", "q": "Чем поймали ракету-носитель?", "sec": "2025-03", "date": "2025-03-06", "topic": "space", px: "st11" }, { "id": "news-blue-ghost-moon", "e": "🛰️", "t": "«Голубой призрак» сел на Луну", "q": "Что такое Море Кризисов на Луне?", "sec": "2025-03", "date": "2025-03-02", "topic": "space", px: "st11" }, { "id": "news-kolossalny-kalmar-2025", "e": "🦑", "t": "Колоссальный кальмар на видео", "q": "Какой был кальмар на видео?", "sec": "2025-03", "date": "2025-03", "topic": "water", px: "st11" }, { "id": "news-thutmose-ii-tomb", "e": "🏜️", "t": "Найдена гробница Тутмоса Второго", "q": "Что помогло понять, чья это гробница?", "sec": "2025-02", "date": "2025-02-18", "topic": "old", "place": "EG", px: "st11" }, { "id": "news-parker-closest-sun", "e": "☀️", "t": "Зонд у самого Солнца", "q": "Что защищает зонд «Паркер» от жара?", "sec": "2024-12", "date": "2024-12-24", "topic": "space", px: "st11" }, { "id": "news-samyj-bolshoj-korall-2024", "e": "🪸", "t": "Самый большой коралл", "q": "На что был похож коралл сверху?", "sec": "2024-11", "date": "2024-11", "topic": "water", px: "st11" }] };
+LEARN.jobs = { name: 'Профессии', e: '🧑‍🔧', bg: 'var(--t-yellow)', sub: 'один день из жизни: врач, пилот, программист…', items: [{ "id": "job-pozharny", "e": "🧑‍🚒", "t": "Пожарный", "sec": "help", "q": "Каким становится пожарный рукав, когда по нему бежит вода?", "tools": "🚒🧯🪜", "clue": "Я приезжаю на красной машине с сиреной и тушу огонь водой из длинного рукава.", "tags": ["help", "sport", "tech"], px: "st11" }, { "id": "job-pediatr", "e": "👩‍⚕️", "t": "Детский врач", "sec": "help", "q": "Чем врач слушает, как дышит ребёнок?", "tools": "🩺🌡️📏", "clue": "Я лечу ребят от кашля и насморка, слушаю их трубочкой и смотрю горлышко.", "tags": ["help", "science"], px: "st11" }, { "id": "job-medsestra", "e": "🧑‍⚕️", "t": "Медсестра", "sec": "help", "q": "Что медсестра измеряет градусником?", "tools": "🌡️🩹📋", "clue": "Я хожу по палатам в больнице, измеряю температуру и ухаживаю за больными.", "tags": ["help", "science"], px: "st11" }, { "id": "job-feldsher", "e": "🚑", "t": "Фельдшер скорой помощи", "sec": "help", "q": "Что делают другие водители, когда едет скорая?", "tools": "🚑🩺🎒", "clue": "Я приезжаю на машине с сиреной и мигалкой туда, где человеку стало плохо, и помогаю ему.", "tags": ["help", "science", "travel"], px: "st11" }, { "id": "job-hirurg", "e": "🧑‍⚕️", "t": "Хирург", "sec": "help", "q": "Что делает хирург перед операцией?", "tools": "😷💡🧵", "clue": "Я в маске и шапочке, у меня ловкие руки, и я помогаю людям во время операции.", "tags": ["help", "science", "build"], px: "st11" }, { "id": "job-stomatolog", "e": "🦷", "t": "Стоматолог", "sec": "help", "q": "Сколько молочных зубов бывает у малыша?", "tools": "🪥🪞💡", "clue": "Я рассматриваю зубы маленьким зеркальцем и учу ребят правильно чистить их щёткой.", "tags": ["help", "science"], px: "st11" }, { "id": "job-veterinar", "e": "🧑‍⚕️", "t": "Ветеринар", "sec": "help", "q": "Сколько всего пальцев на лапах у кошки?", "tools": "🩺⚖️🧳", "clue": "Я лечу кошек, собак и хомяков, а они мне за это машут хвостами.", "tags": ["help", "animals", "science"], px: "st11" }, { "id": "job-farmacevt", "e": "💊", "t": "Фармацевт", "sec": "help", "q": "Что когда-то значило слово «аптека»?", "tools": "⚖️🧪📖", "clue": "Я работаю среди полок с лекарствами и витаминами и отдаю их людям по рецепту врача.", "tags": ["help", "science"], px: "st11" }, { "id": "job-psiholog", "e": "🧑‍🏫", "t": "Психолог", "sec": "help", "q": "Что помогает рассказать о чувствах без слов?", "tools": "🧸🎨🧩", "clue": "Я внимательно слушаю, играю с ребятами в кабинете и помогаю разобраться, когда обидно или страшно.", "tags": ["help", "art", "words"], px: "st11" }, { "id": "job-logoped", "e": "🧑‍🏫", "t": "Логопед", "sec": "help", "q": "Для чего логопеду зеркало?", "tools": "🪞🖼️🎈", "clue": "Я учу ребят правильно произносить звуки и придумываю для этого игры со словами.", "tags": ["help", "words"], px: "st11" }, { "id": "job-socrabotnik", "e": "🧑‍🦳", "t": "Социальный работник", "sec": "help", "q": "Кому помогает социальный работник?", "tools": "🛒📋☎️", "clue": "Я приношу бабушкам и дедушкам продукты и лекарства и люблю пить с ними чай.", "tags": ["help", "words"], px: "st11" }, { "id": "job-policeiski", "e": "👮‍♀️", "t": "Полицейский", "sec": "help", "q": "Зачем нужны светоотражающие полоски на рюкзаке?", "tools": "🚓📻🚦", "clue": "Я помогаю перейти дорогу, нахожу потерявшихся ребят и слежу за порядком на улицах.", "tags": ["help", "sport"], px: "st11" }, { "id": "job-stroitel", "e": "👷", "t": "Строитель", "sec": "build", "q": "Что показывает пузырёк в уровне?", "tools": "🧱🏗️📏", "clue": "Я кладу кирпичи, смотрю на чертёж, и после моей работы появляется новый дом.", "tags": ["build", "tech"], px: "st11" }, { "id": "job-arhitektor", "e": "👩‍💼", "t": "Архитектор", "sec": "build", "q": "Что архитектор клеит из картона?", "tools": "✏️📐🏠", "clue": "Я придумываю, каким будет новый дом, рисую его на чертеже и делаю его маленький макет.", "tags": ["art", "build", "computers"], px: "st11" }, { "id": "job-elektrik", "e": "🧑‍🔧", "t": "Электрик", "sec": "build", "q": "Из чего делают провода внутри?", "tools": "💡🔌🪛", "clue": "Если у вас погас свет, я приду, найду причину и починю провода и розетки.", "tags": ["tech", "build", "help"], px: "st11" }, { "id": "job-santehnik", "e": "🧑‍🔧", "t": "Сантехник", "sec": "build", "q": "Что поднимает воду на верхние этажи большого дома?", "tools": "🔧🚰🚿", "clue": "Я прихожу, когда в кране капает вода, и чиню трубы и краны.", "tags": ["tech", "build", "help"], px: "st11" }, { "id": "job-avtomehanik", "e": "🧑‍🔧", "t": "Автомеханик", "sec": "build", "q": "Как автомеханик слушает машину?", "tools": "🚗🔧🛞", "clue": "Я лечу машины: слушаю, где в моторе стучит, и меняю колёса и детали.", "tags": ["tech", "build", "help"], px: "st11" }, { "id": "job-tehnik-vetryak", "e": "🧑‍🔧", "t": "Техник ветряных электростанций", "sec": "build", "q": "Что делает ветряк?", "tools": "🌬️🪖🔧", "clue": "Я поднимаюсь на высокую башню с огромными лопастями, которые крутит ветер, и слежу, чтобы они работали.", "tags": ["tech", "nature", "science"], px: "st11" }, { "id": "job-montazhnik-solnechnyh", "e": "👩‍🔧", "t": "Монтажник солнечных батарей", "sec": "build", "q": "Что делают солнечные батареи из света?", "tools": "☀️🔋🪛", "clue": "Я кладу на крышу блестящие панели, которые берут силу у солнца и дают дому свет.", "tags": ["tech", "nature", "build"], px: "st11" }, { "id": "job-inzhener-3d", "e": "🧑‍💻", "t": "Инженер 3D-печати", "sec": "build", "q": "Как печатает 3D-принтер?", "tools": "🖨️💻🧵", "clue": "Я рисую вещь на компьютере, а потом мой принтер выращивает её слой за слоем.", "tags": ["tech", "computers", "build"], px: "st11" }, { "id": "job-inzhener-elektromobilej", "e": "👩‍💻", "t": "Инженер электромобилей", "sec": "build", "q": "Что подзаряжается, когда электромобиль тормозит?", "tools": "🔋🚗🔌", "clue": "Я придумываю машины, которые ездят на электричестве, и смотрю, как заряжается их аккумулятор.", "tags": ["tech", "science", "computers"], px: "st11" }, { "id": "job-inzhener-robototehnik", "e": "🧑‍💻", "t": "Инженер-робототехник", "sec": "build", "q": "Что робот делает по программе?", "tools": "🤖⚙️💻", "clue": "Я собираю машины с датчиками и пишу для них программу, чтобы они выполняли команды.", "tags": ["tech", "computers", "science"], px: "st11" }, { "id": "job-lyotchik", "e": "✈️", "t": "Лётчик", "sec": "move", "q": "С кем лётчик говорит по радио?", "tools": "🧭🎧🗺️", "clue": "Я управляю большим самолётом, который летит выше облаков, и говорю по радио с землёй.", "tags": ["travel", "tech", "science"], px: "st11" }, { "id": "job-voditel-avtobusa", "e": "🚌", "t": "Водитель автобуса", "sec": "move", "q": "Что водитель проверяет утром?", "tools": "🚏🪞🕐", "clue": "Я каждый день езжу по одному маршруту, останавливаюсь у остановок и открываю двери пассажирам.", "tags": ["tech", "travel"], px: "st11" }, { "id": "job-mashinist", "e": "🚆", "t": "Машинист", "sec": "move", "q": "Почему машинист замечает сигналы заранее?", "tools": "🚦📻🕐", "clue": "Я веду длинный поезд по рельсам, слежу за светофорами и вовремя включаю гудок.", "tags": ["tech", "travel"], px: "st12" }, { "id": "job-kapitan-korablya", "e": "🧑‍✈️", "t": "Капитан корабля", "sec": "move", "q": "В чём меряют скорость корабля?", "tools": "🧭🔭⚓", "clue": "Я стою на мостике, смотрю в бинокль и веду большой корабль по морю.", "tags": ["travel", "tech", "science"], px: "st12" }, { "id": "job-kosmonavt", "e": "🧑‍🚀", "t": "Космонавт", "sec": "move", "q": "Сколько раз за сутки космонавты видят рассвет?", "tools": "🛰️🔧📷", "clue": "Я каждый день облетаю вокруг Земли и вижу рассветы шестнадцать раз за сутки.", "tags": ["science", "travel", "tech"], px: "st12" }, { "id": "job-operator-dronov", "e": "🧑‍💻", "t": "Оператор дронов", "sec": "move", "q": "Где нельзя запускать дрон?", "tools": "🎮🔋🗺️", "clue": "Я стою на земле с пультом в руках, а мой маленький летающий помощник с винтами снимает всё сверху.", "tags": ["tech", "help", "travel"], px: "st12" }, { "id": "job-povar", "e": "🧑‍🍳", "t": "Повар", "sec": "make", "q": "Кем по-научному считается помидор?", "tools": "🔪🍳⚖️", "clue": "Я надеваю высокий колпак, варю суп и жарю котлеты для гостей.", "tags": ["food", "art", "help"], px: "st12" }, { "id": "job-pekar", "e": "🧑‍🍳", "t": "Пекарь", "sec": "make", "q": "Что делает тесто пышным?", "tools": "🍞🥖🌾", "clue": "Я встаю до рассвета, замешиваю тесто и достаю из печи тёплые булки.", "tags": ["food", "help", "art"], px: "st12" }, { "id": "job-portnoj", "e": "🧑‍🎨", "t": "Портной", "sec": "make", "q": "Что такое выкройка?", "tools": "✂️🧵🪡", "clue": "Я измеряю людей лентой, рисую эскиз и шью платья и костюмы.", "tags": ["art", "build"], px: "st12" }, { "id": "job-balerina", "e": "🩰", "t": "Артистка балета", "sec": "make", "q": "В каких туфлях танцуют балерины?", "tools": "🩰🎼👗", "clue": "Я танцую на сцене в особых туфлях с твёрдым носком, и мне аплодирует весь зал.", "tags": ["stage", "music", "sport"], px: "st12" }, { "id": "job-muzykant", "e": "🎻", "t": "Музыкант", "sec": "make", "q": "Из чего сделан волос смычка?", "tools": "🎻🎼🎶", "clue": "Я вожу смычком по струнам большого инструмента и играю на концертах.", "tags": ["music", "stage"], px: "st12" }, { "id": "job-dirizher", "e": "🎼", "t": "Дирижёр", "sec": "make", "q": "Что такое партитура?", "tools": "🪄🎼🎹", "clue": "Я не играю на инструментах, но руками и палочкой управляю целым оркестром.", "tags": ["music", "stage"], px: "st12" }, { "id": "job-akter", "e": "🎭", "t": "Актёр", "sec": "make", "q": "Сколько звонков звучит перед спектаклем в русском театре?", "tools": "🎭👑🪞", "clue": "Вечером я выхожу на сцену в костюме и становлюсь кем-то другим, а зрители смотрят спектакль.", "tags": ["stage", "words", "art"], px: "st12" }, { "id": "job-animator", "e": "🎨", "t": "Аниматор", "sec": "make", "q": "Что делает аниматор, чтобы герой ожил?", "tools": "🖍️🖥️🎞️", "clue": "Я рисую героя много раз, и на экране он оживает в мультфильме.", "tags": ["art", "computers", "words"], px: "st12" }, { "id": "job-fotograf", "e": "📷", "t": "Фотограф", "sec": "make", "q": "Что значит слово «фотография»?", "tools": "📷🔦🖼️", "clue": "Я смотрю в объектив, нажимаю кнопку, и красивый миг остаётся на снимке.", "tags": ["art", "travel", "computers"], px: "st12" }, { "id": "job-videomontazhyor", "e": "🎬", "t": "Видеомонтажёр", "sec": "make", "q": "Что делает видеомонтажёр?", "tools": "🎞️🎧💻", "clue": "Я склеиваю снятые кусочки в один фильм, выбираю лучшие кадры и подбираю музыку.", "tags": ["computers", "art", "stage"], px: "st12" }, { "id": "job-zvukorezhisser", "e": "🎧", "t": "Звукорежиссёр", "sec": "make", "q": "С чем звукорежиссёр сидит за пультом?", "tools": "🎤🎚️🎧", "clue": "Я расставляю микрофоны и двигаю бегунки на большом пульте, чтобы голоса и музыка звучали ясно.", "tags": ["music", "tech", "stage"], px: "st12" }, { "id": "job-uchitel-nachalnyh-klassov", "e": "🧑‍🏫", "t": "Учитель начальных классов", "sec": "learn", "q": "Чему Нина учит детей?", "tools": "📚✏️🔔", "clue": "Я встречаю первоклашек у двери класса и учу их читать и считать.", "tags": ["help", "words", "stage"], px: "st12" }, { "id": "job-bibliotekar", "e": "🧑‍🏫", "t": "Библиотекарь", "sec": "learn", "q": "Что на корешке помогает книге найти своё место?", "tools": "📚🛒💻", "clue": "Я знаю, где на полке живёт любая книга, и разрешаю брать их домой на время.", "tags": ["words", "help"], px: "st12" }, { "id": "job-hranitel-muzeya", "e": "🏛️", "t": "Хранитель музея", "sec": "learn", "q": "Как называются кладовые музея, где хранятся вещи?", "tools": "🔍🧤📒", "clue": "Я берегу старинные вещи, чтобы ты мог увидеть их на выставке.", "tags": ["art", "science", "help"], px: "st12" }, { "id": "job-arheolog", "e": "🧑‍🔬", "t": "Археолог", "sec": "learn", "q": "На чём писали письма в старом Новгороде?", "tools": "🖌️📏🏺", "clue": "Я осторожно разгребаю землю кисточкой и нахожу вещи, которым много веков.", "tags": ["science", "travel", "nature"], px: "st12" }, { "id": "job-geolog", "e": "🧑‍🔬", "t": "Геолог", "sec": "learn", "q": "Какой минерал самый твёрдый?", "tools": "🔨🧭🔍", "clue": "Я хожу по горам с молотком и лупой и читаю историю Земли по камням.", "tags": ["science", "nature", "travel"], px: "st12" }, { "id": "job-astronom", "e": "🔭", "t": "Астроном", "sec": "learn", "q": "За сколько минут свет Солнца доходит до Земли?", "tools": "🔭📷🌙", "clue": "Я не сплю по ночам, потому что смотрю в большую трубу на звёзды и планеты.", "tags": ["science", "computers"], px: "st12" }, { "id": "job-meteorolog", "e": "🌦️", "t": "Метеоролог", "sec": "learn", "q": "Что поднимается на воздушном шаре, когда его запускают метеорологи?", "tools": "🌡️🎈🛰️", "clue": "Я рассказываю по радио и телевизору, будет ли завтра дождь, снег или солнце.", "tags": ["science", "nature", "tech"], px: "st12" }, { "id": "job-klimatolog", "e": "🌍", "t": "Климатолог", "sec": "learn", "q": "За сколько лет обычно считают климат?", "tools": "📈🌡️🪵", "clue": "Я изучаю не сегодняшний дождь, а то, какая погода бывает у нас много лет подряд.", "tags": ["science", "nature", "computers"], px: "st12" }, { "id": "job-morskoy-biolog", "e": "🐙", "t": "Морской биолог", "sec": "learn", "q": "Сколько сердец у осьминога?", "tools": "🤿📷🐠", "clue": "Я ныряю в море, чтобы узнать, как живут рыбы, крабы и осьминоги.", "tags": ["animals", "nature", "science"], px: "st12" }, { "id": "job-zhurnalist", "e": "📰", "t": "Журналист", "sec": "learn", "q": "Какое главное правило у журналиста?", "tools": "🎙️📝📷", "clue": "Я задаю людям вопросы и пишу про всё, что узнал, чтобы все прочитали правду.", "tags": ["words", "travel", "help"], px: "st12" }, { "id": "job-perevodchik", "e": "🧑‍💼", "t": "Переводчик", "sec": "learn", "q": "Одинаково ли кричит петух на разных языках?", "tools": "📖🎧🗣️", "clue": "Я помогаю людям из разных стран понимать друг друга: говорю на двух языках и перекладываю слова.", "tags": ["words", "travel", "help"], px: "st12" }, { "id": "job-sudya", "e": "⚖️", "t": "Судья", "sec": "learn", "q": "Что держит в руках богиня справедливости Фемида?", "tools": "⚖️📖🖋️", "clue": "Я внимательно слушаю обе стороны спора и решаю по справедливости, как велит закон.", "tags": ["help", "words"], px: "st12" }, { "id": "job-fermer", "e": "🧑‍🌾", "t": "Фермер", "sec": "nature", "q": "Из скольких отделов состоит желудок коровы?", "tools": "🚜🪣🌾", "clue": "Я встаю до рассвета, кормлю коров и кур и езжу на тракторе по своему полю.", "tags": ["nature", "animals", "tech"], px: "st12" }, { "id": "job-smotritel-zooparka", "e": "🦒", "t": "Смотритель зоопарка", "sec": "nature", "q": "Какого цвета язык у жирафа?", "tools": "🪣🥕🧹", "clue": "Я каждое утро приношу жирафам листья, а слонам — овощи, и убираю их дом.", "tags": ["animals", "nature"], px: "st12" }, { "id": "job-sadovnik", "e": "🌳", "t": "Садовник", "sec": "nature", "q": "О чём рассказывают кольца на спиле дерева?", "tools": "✂️📐🌷", "clue": "Я рисую план красивого сада, сажаю деревья и цветы и подстригаю кусты.", "tags": ["nature", "art", "build"], px: "st12" }, { "id": "job-pererabotka-musora", "e": "♻️", "t": "Специалист по переработке мусора", "sec": "nature", "q": "Что вытаскивает железо из мусора?", "tools": "🧲🚛🥫", "clue": "Я помогаю бумаге, стеклу и пластику начать новую жизнь, а железные банки вытаскиваю магнитом.", "tags": ["nature", "tech", "science"], px: "st12" }, { "id": "job-lesnik", "e": "🌲", "t": "Лесник", "sec": "nature", "q": "Кого называют санитарами леса?", "tools": "🧭🔭🌱", "clue": "Я хожу по лесу с компасом и биноклем, сажаю ёлки и слежу, чтобы деревья были здоровы.", "tags": ["nature", "animals", "travel"], px: "st12" }, { "id": "job-programmist", "e": "🧑‍💻", "t": "Программист", "sec": "digital", "q": "Как называют ошибку в программе?", "tools": "⌨️🖥️🧩", "clue": "Я пишу для компьютера точные инструкции, чтобы он знал, что делать.", "tags": ["computers", "tech", "science"], px: "st12" }, { "id": "job-razrabotchik-prilozheniy", "e": "📱", "t": "Разработчик приложений", "sec": "digital", "q": "Где многие приложения сначала рисуют?", "tools": "📱💻✏️", "clue": "Я делаю программы для телефона, которые ты запускаешь одним нажатием на значок.", "tags": ["computers", "tech", "art"], px: "st12" }, { "id": "job-geymdizayner", "e": "🎮", "t": "Геймдизайнер", "sec": "digital", "q": "В каком городе придумали игру с падающими фигурками?", "tools": "🃏🧩💡", "clue": "Я придумываю правила и уровни для игр и смотрю, весело ли в них играть.", "tags": ["art", "computers", "science"], px: "st12" }, { "id": "job-dizayner-interfeysov", "e": "🧑‍🎨", "t": "Дизайнер интерфейсов", "sec": "digital", "q": "Если человек запутался в приложении, чья это ошибка?", "tools": "✏️📱🖱️", "clue": "Я стараюсь, чтобы кнопки в приложении были понятны даже тому, кто видит их впервые.", "tags": ["art", "computers", "help"], px: "st12" }, { "id": "job-specialist-po-dannym", "e": "📊", "t": "Специалист по данным", "sec": "digital", "q": "Что рисует специалист по данным, чтобы показать числа?", "tools": "📈🧮💻", "clue": "Я собираю много чисел и показываю их на картинках-графиках, чтобы понять, что происходит.", "tags": ["computers", "science", "help"], px: "st12" }, { "id": "job-kiberbezopasnost", "e": "🔐", "t": "Специалист по кибербезопасности", "sec": "digital", "q": "Какой пароль надёжнее?", "tools": "🔒🔑🛡️", "clue": "Я стерегу компьютеры от мошенников, как сторож, и учу всех хранить пароль в секрете.", "tags": ["computers", "help", "tech"], px: "st12" }, { "id": "job-uchitel-ii", "e": "🤖", "t": "Учитель искусственного интеллекта", "sec": "digital", "q": "Чему учится программа у Бориса?", "tools": "🖼️💻✅", "clue": "Я показываю компьютерной программе тысячи примеров и проверяю, правильно ли она отвечает.", "tags": ["computers", "science", "tech"], px: "st12" }, { "id": "job-trener-po-kibersportu", "e": "🏆", "t": "Тренер по киберспорту", "sec": "digital", "q": "Как часто полезно смотреть вдаль, чтобы отдохнули глаза?", "tools": "🖥️⏱️🏃", "clue": "Я учу команду играть вместе и слежу, чтобы все вовремя отдыхали, спали и бегали.", "tags": ["computers", "sport", "help"], px: "st12" }, { "id": "job-bloger", "e": "🎬", "t": "Блогер", "sec": "digital", "q": "Что блогер делает, прежде чем рассказывать?", "tools": "📹🎤✂️", "clue": "Я снимаю полезные видео и сначала проверяю, что в них всё правда.", "tags": ["stage", "computers", "words"], px: "st12" }] };
+ 
+const NEWS_MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+const newsMonth = m => { const [y, n] = String(m).split('-'); return `${NEWS_MONTHS[+n - 1] || ''} ${y}`; };
+
+const NEWS_TOPIC = { space: 'space', water: 'water', plants: 'plants', old: 'old', art: 'art', music: 'music', ballet: 'ballet' };
+const newsKeys = x => [NEWS_TOPIC[x.topic], ...(x.place ? PLACES().filter(k => LEARN[k].place === x.place).slice(0, 1) : [])].filter(k => k && LEARN[k]);
+const newsLatest = () => { const n = LEARN.news; return n && n.items.length ? n.items.map(x => x.m || x.sec).sort().pop() : ''; };
+
+const newsAge = x => (Date.now() - new Date((x.date || (x.m || x.sec) + '-15') + 'T12:00:00').getTime()) / 864e5;
+const newsDate = d => String(d).split('-').reverse().join('.');
+
+const NEWS_TILES = { 'learn-news': '', space: 'space', water: 'water', plants: 'plants', 'learn-old': 'old', travel: '*' };
+function newsDot(id) {
+  if (!(id in NEWS_TILES) || typeof LEARN !== 'object' || !LEARN.news) return false;
+  const k = NEWS_TILES[id];
+  return LEARN.news.items.some(x => newsAge(x) <= 60 && !learnDone(x.id) && (!k || (k === '*' ? !!x.place && PLACES().some(p => LEARN[p].place === x.place) : x.topic === k)));
+}
+
+const newsFresh = () => LEARN.news ? LEARN.news.items.slice(0, 5) : [];
+const newsBadge = () => { const its = newsFresh(); return { m: newsLatest(), n: its.filter(x => learnDone(x.id)).length, of: its.length }; };
+
+function newsIn(k) {
+  if (k === 'news' || !LEARN.news) return '';
+  const xs = LEARN.news.items.map((x, i) => [x, i]).filter(([x]) => x.sec !== 'arch' && newsKeys(x).includes(k)).slice(0, 4);
+  if (!xs.length) return '';
+  return `<h3 class="sec-h nw-h">🆕 Новое!</h3><div class="cards">${xs.map(([x, i]) => `<button class="card story-c nw-c ${learnDone(x.id) ? 'seen' : ''}" data-k="news" data-i="${i}" style="--bg:${LEARN.news.bg}"><i class="nw-new">Новое!</i>${pic(x.e)}<span>${esc(x.t)}</span><small class="nw-d">${esc(x.date ? newsDate(x.date) : newsMonth(x.m))}</small>${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>`;
+}
+if (LEARN.news) {
+  const N = LEARN.news;
+  N.items.forEach(x => { x.m = x.sec; if (newsAge(x) > 365) x.sec = 'arch'; });
+  N.secs = [...new Set(N.items.filter(x => x.sec !== 'arch').map(x => x.sec))].sort().reverse().map(m => [m, newsMonth(m), '🗓️'])
+    .concat(N.items.some(x => x.sec === 'arch') ? [['arch', 'Архив новостей', '🗄️']] : []);
+  N.top = () => { const b = newsBadge(), got = b.of && b.n >= b.of;
+    return b.of ? `<div class="nw-badge ${got ? 'got' : ''}"><span class="nw-be">${got ? '🏅' : '🗞️'}</span><span><b>${got ? 'Значок «Знаю новости» — твой!' : 'Значок «Знаю новости»'}</b><small>${got ? `${G('Ты послушала самые свежие новости', 'Ты послушал самые свежие новости')}: ${esc(newsMonth(b.m))}.` : `Послушай ${b.of} самых свежих новостей: ${b.n} из ${b.of}`}</small></span></div>` : ''; };
+  N.onDone = it => {
+    const b = newsBadge(); if (!newsFresh().includes(it) || b.n < b.of || (P.newsB || {})[b.m]) return '';
+    P.newsB = { ...(P.newsB || {}), [b.m]: 1 }; save();
+    return G('Ты послушала все свежие новости. Значок «Знаю новости» — твой!', 'Ты послушал все свежие новости. Значок «Знаю новости» — твой!');
+  };
+}
+const JOB_SECS = [['help', 'Спасают и лечат', '🚑'], ['build', 'Строят и чинят', '🏗️'], ['move', 'Водят, летают, плавают', '✈️'], ['make', 'Творят и выступают', '🎨'],
+  ['learn', 'Изучают и учат', '🔭'], ['nature', 'Земля, звери и растения', '🌱'], ['digital', 'Цифровые профессии', '💻']];
+if (LEARN.jobs) {
+  const J = LEARN.jobs;
+  J.secs = JOB_SECS;
+  J.top = () => { const n = J.items.filter(x => learnDone(x.id)).length;
+    return `<div class="prow-btns jb-top"><button class="big" id="jbPass"><i>🎫</i>Паспорт профессий<small>${n} из ${J.items.length}</small></button><button class="big" id="jbGuess"><i>🔎</i>Угадай профессию</button><button class="big" id="jbDream"><i>🌟</i>Кем я буду?</button></div>`; };
+  J.click = e => {
+    const b = e.target.closest('#jbPass,#jbGuess,#jbDream'); if (!b) return false;
+    sfx.pop(); ({ jbPass: screenJobPass, jbGuess: screenJobGuess, jbDream: screenJobDream })[b.id](); return true;
+  };
+  J.onDone = it => `Наклейка «${it.t}» — в паспорте профессий! ${G('А ты хотела бы так работать?', 'А ты хотел бы так работать?')}`;
+}
+const jobIdx = id => LEARN.jobs.items.findIndex(x => x.id === id);
+
+function screenJobPass() {
+  newScreen();
+  const J = LEARN.jobs, its = J.items, n = its.filter(x => learnDone(x.id)).length, nb = Object.keys(P.newsB || {}).sort();
+  const st = shell('Паспорт профессий', `<div class="tv-pass jp-head"><b>🎫 ${esc(P.settings.name || 'Мой')} — паспорт профессий</b><small>Наклеек: ${n} из ${its.length}. Послушай историю — получишь наклейку.</small></div>
+    ${JOB_SECS.map(([sk, sn, se]) => { const xs = its.filter(x => x.sec === sk); return xs.length ? `<h3 class="tv-h">${se} ${esc(sn)}</h3><div class="tv-grid jp-g">${xs.map((x, j) => `<button class="tv-c jp-s ${learnDone(x.id) ? 'got' : ''}" data-id="${x.id}" style="--bg:${learnDone(x.id) ? J.bg : 'var(--paper)'};--r:${[-6, 4, -3, 7, -5, 2][j % 6]}deg"><span class="tv-e">${pic(x.e)}</span><b>${esc(x.t)}</b>${learnDone(x.id) ? '' : '<small>?</small>'}</button>`).join('')}</div>` : ''; }).join('')}
+    <h3 class="tv-h">🗞️ Значки «Знаю новости»</h3>
+    ${nb.length ? `<div class="jp-news">${nb.map(m => `<span class="jp-nb">🏅<small>${esc(newsMonth(m))}</small></span>`).join('')}</div>` : `<p class="lead">Послушай самые свежие истории в разделе «Что нового в мире» — и здесь появится значок.</p>`}`, { back: () => screenLearn('jobs') });
+  talk(n ? `В твоём паспорте ${n} наклеек из ${its.length}. Выбери профессию и послушай историю!` : 'Это твой паспорт профессий. Послушай историю о профессии — и получишь наклейку!');
+  st.onclick = e => { const c = e.target.closest('.jp-s'); if (!c) return; sfx.pop(); screenStory('jobs', jobIdx(c.dataset.id), { back: screenJobPass }); };
+}
+
+function screenJobGuess() {
+  newScreen(); noGuard();
+  const its = LEARN.jobs.items.filter(x => x.clue && x.tools), rounds = shuffle([...its]).slice(0, 8);
+  let n = 0, right = 0;
+  shell('Угадай профессию', `<div class="tv"><div class="tv-q" id="jgQ"></div></div>`, { back: () => screenLearn('jobs') });
+  const show = () => {
+    const x = rounds[n], opts = shuffle([x, ...shuffle(its.filter(y => y !== x && y.sec !== x.sec)).slice(0, 2), ...shuffle(its.filter(y => y !== x && y.sec === x.sec)).slice(0, 1)]);
+    $('#jgQ').innerHTML = `<p class="tv-n">${n + 1} из ${rounds.length}</p><div class="tv-pic jg-tools">${[...x.tools.matchAll(/\p{Extended_Pictographic}(‍\p{Extended_Pictographic}|️)*/gu)].map(m => `<span class="tv-big">${pic(m[0])}</span>`).join('')}</div>
+      <p class="tv-t">«${esc(x.clue)}»</p><p class="tv-ask">Кто это?</p>
+      <div class="tv-opts">${opts.map(o => `<button class="tv-o" data-id="${o.id}"><span>${pic(o.e)}</span>${esc(o.t)}</button>`).join('')}</div><div class="tv-ans" id="jgAns" hidden></div>`;
+    talk(`${x.clue} Кто это? ${opts.map(o => o.t).join('? ')}?`);
+    $('.tv-opts').onclick = e => {
+      const b = e.target.closest('[data-id]'); if (!b || !$('#jgAns').hidden) return;
+      const ok = b.dataset.id === x.id; if (ok) right++;
+      $$('.tv-o').forEach(o => { o.disabled = true; o.classList.toggle('yes', o.dataset.id === x.id); o.classList.toggle('no', o === b && !ok); });
+      const line = `${ok ? 'Да!' : 'Нет.'} Правильный ответ: ${x.t}.`;
+      $('#jgAns').hidden = false;
+      $('#jgAns').innerHTML = `<p><b>${esc(line)}</b></p><div class="prow-btns tv-row"><button class="big ghost" id="jgSt">${ICON.speaker}История</button><button class="big" id="jgNext">${n + 1 < rounds.length ? 'Дальше →' : 'Готово'}</button></div>`;
+      if (ok) { sfx.good(); const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); } else { sfx.oops(); wiggle(b); }
+      talk(line);
+      $('#jgSt').onclick = () => { sfx.pop(); screenStory('jobs', jobIdx(x.id), { back: screenJobGuess }); };
+      $('#jgNext').onclick = () => { sfx.pop(); n++; if (n < rounds.length) show(); else finish({ key: 'job-guess', stars: right >= 6 ? 3 : right >= 4 ? 2 : 1, line: `Угадано ${right} из ${rounds.length}`, again: screenJobGuess, menu: () => screenLearn('jobs') }); };
+    };
+  };
+  show();
+}
+
+const JOB_ASK = [
+  ['Что тебе больше нравится?', [['🐶', 'Возиться со зверями', 'animals'], ['🔧', 'Чинить и собирать', 'tech build'], ['🎨', 'Рисовать и придумывать', 'art'], ['📚', 'Читать и сочинять истории', 'words']]],
+  ['Где интереснее?', [['🌳', 'На улице, в лесу и в поле', 'nature animals'], ['🚀', 'В небе, в море, в дороге', 'travel'], ['🔬', 'Там, где делают опыты', 'science'], ['💻', 'За компьютером', 'computers']]],
+  ['Какой подарок самый лучший?', [['🧪', 'Набор для опытов', 'science'], ['🎸', 'Гитара', 'music'], ['⚽', 'Мяч', 'sport'], ['🧱', 'Конструктор', 'build tech']]],
+  ['Что весело делать с друзьями?', [['🎭', 'Показывать спектакль', 'stage words'], ['🤝', 'Помогать, когда кому-то трудно', 'help'], ['🏃', 'Бегать и прыгать', 'sport'], ['🎲', 'Придумывать новые игры', 'computers art']]],
+  ['Что хочется узнать?', [['🌋', 'Почему вулкан извергается', 'science nature'], ['🍰', 'Как испечь торт', 'food'], ['🫀', 'Как устроено наше тело', 'help science'], ['🗺️', 'Какие бывают страны', 'travel words']]],
+  ['Какой звук самый приятный?', [['🎵', 'Музыка', 'music stage'], ['🚂', 'Гудок поезда', 'tech travel'], ['🐦', 'Пение птиц', 'nature animals'], ['👏', 'Аплодисменты', 'stage']]]
+];
+function screenJobDream() {
+  newScreen(); noGuard();
+  const like = {}; let n = 0;
+  shell('Кем я буду?', `<div class="tv"><div class="tv-q" id="jdQ"></div></div>`, { back: () => screenLearn('jobs') });
+  const show = () => {
+    const [q, opts] = JOB_ASK[n];
+    $('#jdQ').innerHTML = `<p class="tv-n">${n + 1} из ${JOB_ASK.length}</p><p class="tv-t">${esc(q)}</p>
+      <div class="tv-opts">${opts.map((o, j) => `<button class="tv-o" data-j="${j}"><span>${pic(o[0])}</span>${esc(o[1])}</button>`).join('')}</div>`;
+    talk(`${q} ${opts.map(o => o[1]).join('? ')}?`);
+    $('.tv-opts').onclick = e => {
+      const b = e.target.closest('[data-j]'); if (!b) return;
+      sfx.pop(); b.classList.add('yes'); opts[+b.dataset.j][2].split(' ').forEach(t => { like[t] = (like[t] || 0) + 1; });
+      later(() => { n++; if (n < JOB_ASK.length) show(); else result(); }, 350);
+    };
+  };
+  const result = () => {
+    const its = LEARN.jobs.items.filter(x => x.tags && x.tags.length), sc = x => x.tags.reduce((s, t) => s + (like[t] || 0), 0) / Math.sqrt(x.tags.length) + Math.random() * .3;
+    const top = its.map(x => [x, sc(x)]).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([x]) => x);
+    $('#jdQ').innerHTML = `<p class="tv-t">🌟 Может быть, тебе понравится:</p>
+      <div class="tv-grid jp-g jd-res">${top.map(x => `<button class="tv-c" data-id="${x.id}" style="--bg:${LEARN.jobs.bg}"><span class="tv-e">${pic(x.e)}</span><b>${esc(x.t)}</b><small>▶ послушать</small></button>`).join('')}</div>
+      <p class="tv-ask">Это просто идеи, а не ответ. Можно стать кем захочешь — и даже придумать новую профессию!</p>
+      <div class="prow-btns tv-row"><button class="big ghost" id="jdAgain">Ещё раз</button><button class="big" id="jdAll">Все профессии</button></div>`;
+    sfx.magic();
+    talk(`Может быть, тебе понравится: ${top.map(x => x.t).join(', ')}. Это просто идеи. Можно стать кем захочешь!`);
+    $('.jd-res').onclick = e => { const c = e.target.closest('[data-id]'); if (!c) return; sfx.pop(); screenStory('jobs', jobIdx(c.dataset.id), { back: () => screenLearn('jobs') }); };
+    $('#jdAgain').onclick = () => { sfx.pop(); screenJobDream(); };
+    $('#jdAll').onclick = () => { sfx.pop(); screenLearn('jobs'); };
+  };
+  show();
+}
  
 const PLACES = () => Object.keys(LEARN).filter(k => LEARN[k].place && LEARN[k].items.length);
 
@@ -15935,6 +16148,8 @@ const RSK = (() => {
   function plan(n, s) {
     
     try { if (RUME.isDay(n)) return [RUME_UI.step()]; } catch (e) {}
+    
+    try { if (COMIX.isDay(n)) return [COMIX.step()]; } catch (e) {}
     const l = lv(), o = big(), alt = a => a[(n + s) % a.length];
     const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()); };
     const pr = IS_RU && prState().at < PRIMER.length ? 'primer' : 'read-merge';
@@ -15963,6 +16178,433 @@ const RSK = (() => {
   }
   GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'abc')), 0, { id: 'r-skill', name: 'Чтение по силам', sub: 'задания как раз для тебя: от слогов до текстов', kw: 'чтение читать уровень слоги слова текст', ico: () => pic('📖'), bg: 'var(--t-blue)', go: () => play(), grp: 2, also: [6], prog: () => has() ? stepTxt() : '' });
   return { play, check, lv, has, setLv, plan, sub, early, settingsRow, L, make, startLv, stepTxt };
+})();
+ 
+ 
+
+
+let COMIC_EPS =  null;
+const COMIX = (() => {
+  const ORDER = ['foot', 'space', 'detective', 'dino'];
+  const MAXP = 4;   
+  const OWN_KEY = 'govorilki-comics-own';   
+  
+  const EYE = (x, y, r = 7) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff"/><circle cx="${x + 1}" cy="${y + 1}" r="${r * .5}" fill="#2A2346"/><circle cx="${x + 2.5}" cy="${y - 1.5}" r="${r * .2}" fill="#fff"/>`;
+  const ART = {
+    coach: `<circle cx="28" cy="34" r="15" fill="#7D8597"/><circle cx="92" cy="34" r="15" fill="#7D8597"/><circle cx="28" cy="35" r="7" fill="#3A3550"/><circle cx="92" cy="35" r="7" fill="#3A3550"/>
+      <ellipse cx="60" cy="68" rx="44" ry="40" fill="#A7AEBE"/><path d="M17 64q21-17 43-4 22-13 43 4-8 13-22 10-13-3-21 3-8-6-21-3-14 3-22-10z" fill="#3A3550"/>
+      ${EYE(44, 63)}${EYE(76, 63)}<ellipse cx="60" cy="92" rx="21" ry="14" fill="#F3F4F8"/><ellipse cx="60" cy="83" rx="7" ry="5" fill="#2A2346"/><path d="M52 95q8 6 16 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M22 38q38-36 76 0z" fill="#E63946"/><rect x="62" y="33" width="44" height="8" rx="4" fill="#B5172A"/><path d="M38 108q22 10 44 0" stroke="#FFC83A" stroke-width="3" fill="none"/>`,
+    bolt: `<path d="M60 6v14" stroke="#7A86A6" stroke-width="4"/><circle cx="60" cy="7" r="6" fill="#FF5E5E"/>
+      <rect x="16" y="20" width="88" height="84" rx="22" fill="#9AA8C8" stroke="#6E7CA0" stroke-width="3"/><rect x="8" y="50" width="10" height="24" rx="4" fill="#6E7CA0"/><rect x="102" y="50" width="10" height="24" rx="4" fill="#6E7CA0"/>
+      <rect x="27" y="40" width="66" height="28" rx="12" fill="#26304A"/><circle cx="45" cy="54" r="7" fill="#5FF2FF"/><circle cx="75" cy="54" r="7" fill="#5FF2FF"/>
+      <rect x="40" y="80" width="40" height="12" rx="4" fill="#26304A"/><path d="M48 80v12M56 80v12M64 80v12M72 80v12" stroke="#9AA8C8" stroke-width="2"/><circle cx="24" cy="28" r="3" fill="#6E7CA0"/><circle cx="96" cy="28" r="3" fill="#6E7CA0"/>`,
+    zhuk: `<path d="M44 26Q36 8 26 10M76 26q8-18 18-16" stroke="#2A2346" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="26" cy="10" r="5" fill="#2A2346"/><circle cx="94" cy="10" r="5" fill="#2A2346"/>
+      <ellipse cx="60" cy="66" rx="44" ry="42" fill="#2FA865"/><ellipse cx="44" cy="40" rx="14" ry="7" fill="#fff" opacity=".35"/><path d="M18 50h84" stroke="#FFC83A" stroke-width="9" stroke-linecap="round"/>
+      ${EYE(45, 70, 9)}${EYE(75, 70, 9)}${BLUSH(88, 30)}<path d="M52 92q8 7 16 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    iskra: `<path d="M60 4q26 22 26 56v38H34V60Q34 26 60 4z" fill="#F5F7FB" stroke="#C9D2E3" stroke-width="3"/><path d="M60 4q16 13 22 32H38Q44 17 60 4z" fill="#EF4F7E"/>
+      <path d="M34 72 16 100h18zM86 72l18 28H86z" fill="#EF4F7E"/><circle cx="60" cy="62" r="20" fill="#7CC8FF" stroke="#C9D2E3" stroke-width="4"/>
+      ${EYE(52, 60, 5)}${EYE(68, 60, 5)}<path d="M54 70q6 5 12 0" stroke="#2A2346" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M44 98q16 26 32 0z" fill="#FFC83A"/><path d="M52 98q8 14 16 0z" fill="#FF8A2A"/>`,
+    bip: `<path d="M60 20V6" stroke="#4FB35A" stroke-width="4"/><circle cx="60" cy="6" r="6" fill="#FFC83A"/><ellipse cx="18" cy="56" rx="10" ry="16" fill="#6FD27A"/><ellipse cx="102" cy="56" rx="10" ry="16" fill="#6FD27A"/>
+      <ellipse cx="60" cy="64" rx="44" ry="44" fill="#7EDC88"/>${EYE(38, 56, 8)}${EYE(60, 46, 9)}${EYE(82, 56, 8)}${BLUSH(82, 32)}
+      <ellipse cx="60" cy="84" rx="10" ry="7" fill="#2A2346"/><ellipse cx="60" cy="87" rx="6" ry="3" fill="#FF8FB0"/>`,
+    kometa: `<circle cx="60" cy="62" r="54" fill="#DFF2FF" opacity=".55" stroke="#9ED8FF" stroke-width="4"/><path d="M26 44 30 14l22 18zM94 44 90 14 68 32z" fill="#8C6CF2"/><path d="M32 36l2-14 10 9zM88 36l-2-14-10 9z" fill="#FFC1E0"/>
+      <ellipse cx="60" cy="66" rx="38" ry="34" fill="#9E84F5"/>${EYE(46, 62)}${EYE(74, 62)}${BLUSH(78, 25)}<path d="M55 74q5 4 10 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M22 76h16M22 84l16-3M98 76H82M98 84l-16-3" stroke="#2A2346" stroke-width="2" stroke-linecap="round"/><path d="M36 30q24-18 48 0" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>`,
+    sova: `<path d="M24 34 20 8l22 18zM96 34l4-26-22 18z" fill="#8A5A3B"/><ellipse cx="60" cy="66" rx="44" ry="44" fill="#A8714A"/><ellipse cx="60" cy="84" rx="26" ry="22" fill="#E9C9A0"/>
+      <circle cx="42" cy="54" r="16" fill="#FFF6E5"/><circle cx="78" cy="54" r="16" fill="#FFF6E5"/>${EYE(42, 54, 9)}${EYE(78, 54, 9)}<path d="M54 64l6 12 6-12z" fill="#FFB020"/>
+      <circle cx="78" cy="54" r="18" fill="none" stroke="#2A2346" stroke-width="3"/><path d="M92 66l14 16" stroke="#2A2346" stroke-width="5" stroke-linecap="round"/>`,
+    ezh: `<path d="M10 70 4 50l14 2-6-20 16 8-2-20 16 12 4-20 12 16 10-16 6 20 14-12-2 20 16-8-6 20 14-2-6 20z" fill="#7A5236"/>
+      <ellipse cx="60" cy="74" rx="38" ry="34" fill="#F1D3AE"/>${EYE(46, 70)}${EYE(74, 70)}${BLUSH(84, 26)}<circle cx="60" cy="84" r="5" fill="#2A2346"/><path d="M53 92q7 5 14 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M34 42q-10-22 10-22 6-14 16-6 10-8 16 6 20 0 10 22z" fill="#fff" stroke="#E2E6EE" stroke-width="2"/><rect x="34" y="38" width="52" height="10" rx="3" fill="#fff" stroke="#E2E6EE" stroke-width="2"/>`,
+    bublik: `<ellipse cx="18" cy="56" rx="14" ry="30" fill="#9B6B43" transform="rotate(14 18 56)"/><ellipse cx="102" cy="56" rx="14" ry="30" fill="#9B6B43" transform="rotate(-14 102 56)"/>
+      <ellipse cx="60" cy="62" rx="40" ry="42" fill="#E8C391"/><ellipse cx="60" cy="88" rx="22" ry="16" fill="#F6E3C6"/>${EYE(45, 58)}${EYE(75, 58)}
+      <ellipse cx="60" cy="78" rx="9" ry="6" fill="#2A2346"/><path d="M60 84v6M50 92q10 6 20 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M58 94q2 12 8 0z" fill="#FF7FA0"/>`,
+    pushok: `<path d="M22 44 26 10l24 22zM98 44 94 10 70 32z" fill="#FFFFFF" stroke="#D6D8E4" stroke-width="2.5"/><path d="M29 34l2-16 12 11zM91 34l-2-16-12 11z" fill="#FFC1D2"/>
+      <ellipse cx="60" cy="68" rx="44" ry="38" fill="#FFFFFF" stroke="#D6D8E4" stroke-width="2.5"/>${EYE(44, 64)}${EYE(76, 64)}${BLUSH(80, 30)}
+      <path d="M56 76l4 4 4-4z" fill="#FF8FB0"/><path d="M60 80q-5 7-10 3M60 80q5 7 10 3" stroke="#2A2346" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M18 74h20M18 82l20-3M102 74H82M102 82l-20-3" stroke="#B9BCCB" stroke-width="2" stroke-linecap="round"/><circle cx="90" cy="88" r="6" fill="#FFF3C4" stroke="#F2D27A" stroke-width="2"/>`,
+    shchek: `<circle cx="32" cy="30" r="12" fill="#E3A15A"/><circle cx="88" cy="30" r="12" fill="#E3A15A"/><circle cx="32" cy="31" r="6" fill="#FFC1C8"/><circle cx="88" cy="31" r="6" fill="#FFC1C8"/>
+      <ellipse cx="60" cy="64" rx="38" ry="38" fill="#F2B56B"/><ellipse cx="26" cy="80" rx="22" ry="20" fill="#FBE3C4"/><ellipse cx="94" cy="80" rx="22" ry="20" fill="#FBE3C4"/>
+      ${EYE(46, 58, 6)}${EYE(74, 58, 6)}<ellipse cx="60" cy="72" rx="5" ry="4" fill="#C2185B"/><path d="M54 80q6 4 12 0" stroke="#2A2346" stroke-width="2.5" fill="none" stroke-linecap="round"/><rect x="54" y="81" width="12" height="7" rx="2" fill="#fff"/>`,
+    prof: `<circle cx="78" cy="58" r="38" fill="#F2A65A"/><path d="M78 58m-4 0a4 4 0 1 1 8 0 10 10 0 1 1-20 0 16 16 0 1 1 32 0 22 22 0 1 1-44 0" stroke="#B5651D" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M34 50 28 22M46 48l4-28" stroke="#8BC34A" stroke-width="5" stroke-linecap="round"/><circle cx="28" cy="20" r="7" fill="#fff"/><circle cx="50" cy="18" r="7" fill="#fff"/><circle cx="29" cy="21" r="3.5" fill="#2A2346"/><circle cx="51" cy="19" r="3.5" fill="#2A2346"/>
+      <circle cx="28" cy="20" r="9" fill="none" stroke="#2A2346" stroke-width="2.5"/><circle cx="50" cy="18" r="9" fill="none" stroke="#2A2346" stroke-width="2.5"/><path d="M37 20h4" stroke="#2A2346" stroke-width="2.5"/>
+      <path d="M14 112q0-62 28-62 16 0 22 20v42z" fill="#9CCC65"/><path d="M28 84q8 6 16 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="62" cy="100" r="10" fill="#FFD54A" stroke="#B58A00" stroke-width="3"/><path d="M62 94v6l4 3" stroke="#B58A00" stroke-width="2" fill="none"/>`,
+    hrum: `<path d="M8 66Q8 12 60 12t52 54z" fill="#F6B43C"/><path d="M14 64q4-40 46-44 42 4 46 44" fill="none" stroke="#E08E1B" stroke-width="5" stroke-dasharray="2 12" stroke-linecap="round"/>
+      <path d="M38 40 30 18l16 16zM82 40l8-22-16 16z" fill="#FFF3D6"/><ellipse cx="60" cy="72" rx="38" ry="34" fill="#7DCB6A"/><path d="M60 82 52 64h16z" fill="#FFF3D6"/>
+      ${EYE(44, 64, 7)}${EYE(76, 64, 7)}${BLUSH(84, 26)}<path d="M50 92q10 7 20 0" stroke="#2A2346" stroke-width="3" fill="none" stroke-linecap="round"/>`,
+    grom: `<path d="M14 40q4-30 50-30 46 0 46 40v20q0 10-10 12H22Q10 80 12 62z" fill="#6F9E4C"/><circle cx="44" cy="36" r="9" fill="#fff"/><circle cx="46" cy="37" r="4.5" fill="#2A2346"/><path d="M32 26q12-8 22 0" stroke="#4E7A33" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M12 64h100v16q0 22-46 24-52-2-54-24z" fill="#86B861"/><path d="M14 64h96" stroke="#2A2346" stroke-width="3"/><path d="M24 64l5 8 5-8 5 8 5-8 5 8 5-8 5 8 5-8 5 8 5-8 5 8 5-8 5 8 5-8 5 8 5-8" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round"/>
+      <circle cx="90" cy="30" r="3" fill="#4E7A33"/><circle cx="98" cy="38" r="3" fill="#4E7A33"/><path d="M40 104l-6 10M52 106l2 10" stroke="#6F9E4C" stroke-width="6" stroke-linecap="round"/>`,
+    pera: `<path d="M4 70Q20 28 50 56L60 66 70 56q30-28 46 14-30-8-46 6H50Q34 62 4 70z" fill="#B197FC"/><path d="M50 40Q34 10 6 18q24 8 40 28z" fill="#8C6CF2"/>
+      <ellipse cx="60" cy="58" rx="22" ry="22" fill="#C9B6FF"/><path d="M76 56l40 10-40 8z" fill="#FFC83A"/>${EYE(56, 52, 6)}<circle cx="52" cy="64" r="5" fill="#FF5E7E" opacity=".35"/>`
+  };
+  const castSVG = id => id === 'me' ? friendSVG('', P.settings.friend || 'tiger') : `<svg class="ryz cx-cs" viewBox="0 0 120 120" aria-hidden="true"><g class="lv-body">${ART[id] || ''}</g></svg>`;
+  
+  const SC = {
+    stadium: `<rect width="300" height="200" fill="#8FD3FF"/><path d="M0 70h300v20H0z" fill="#5C6B8A"/><g fill="#FFC83A"><circle cx="20" cy="78" r="5"/><circle cx="60" cy="78" r="5"/><circle cx="100" cy="78" r="5"/><circle cx="140" cy="78" r="5"/><circle cx="180" cy="78" r="5"/><circle cx="220" cy="78" r="5"/><circle cx="260" cy="78" r="5"/></g><g fill="#EF4F7E"><circle cx="40" cy="80" r="5"/><circle cx="120" cy="80" r="5"/><circle cx="200" cy="80" r="5"/><circle cx="280" cy="80" r="5"/></g><rect y="90" width="300" height="110" fill="#5DBB63"/><path d="M0 120h300M0 160h300" stroke="#4FA855" stroke-width="18"/><path d="M150 90v110M150 150m-30 0a30 18 0 1 0 60 0a30 18 0 1 0-60 0" stroke="#fff" stroke-width="3" fill="none"/><path d="M250 96h46v40h-46z" fill="none" stroke="#fff" stroke-width="4"/><path d="M252 98l42 36M294 98l-42 36" stroke="#fff" stroke-width="1" opacity=".6"/>`,
+    locker: `<rect width="300" height="200" fill="#FFE6CC"/><g fill="#7CC8FF" stroke="#3D8BFD" stroke-width="3"><rect x="10" y="20" width="50" height="120" rx="4"/><rect x="66" y="20" width="50" height="120" rx="4"/><rect x="184" y="20" width="50" height="120" rx="4"/><rect x="240" y="20" width="50" height="120" rx="4"/></g><g fill="#3D8BFD"><rect x="20" y="36" width="30" height="5" rx="2"/><rect x="76" y="36" width="30" height="5" rx="2"/><rect x="194" y="36" width="30" height="5" rx="2"/><rect x="250" y="36" width="30" height="5" rx="2"/></g><path d="M130 30h44v34h-44z" fill="#EF4F7E"/><text x="152" y="56" font-size="22" text-anchor="middle" fill="#fff" font-weight="900">10</text><rect y="140" width="300" height="60" fill="#D7B48A"/><path d="M0 140h300" stroke="#B88D5E" stroke-width="4"/>`,
+    park: `<rect width="300" height="200" fill="#BFE8FF"/><circle cx="250" cy="34" r="18" fill="#FFD54A"/><ellipse cx="60" cy="36" rx="34" ry="12" fill="#fff"/><rect y="130" width="300" height="70" fill="#7DCB6A"/><rect x="34" y="84" width="10" height="50" fill="#9B6B43"/><circle cx="39" cy="74" r="30" fill="#4FA855"/><rect x="236" y="90" width="10" height="44" fill="#9B6B43"/><circle cx="241" cy="80" r="26" fill="#5DBB63"/><path d="M110 200q30-60 80-70" stroke="#E9D8B4" stroke-width="22" fill="none"/>`,
+    street: `<rect width="300" height="200" fill="#CDEEF6"/><rect x="10" y="40" width="70" height="110" fill="#F39BB5"/><rect x="90" y="20" width="60" height="130" fill="#FFC857"/><rect x="160" y="50" width="60" height="100" fill="#8CD48C"/><rect x="230" y="30" width="62" height="120" fill="#B59CF2"/><g fill="#fff" opacity=".8"><rect x="22" y="56" width="16" height="16"/><rect x="50" y="56" width="16" height="16"/><rect x="102" y="36" width="14" height="14"/><rect x="126" y="36" width="14" height="14"/><rect x="172" y="66" width="14" height="14"/><rect x="196" y="66" width="14" height="14"/><rect x="244" y="46" width="14" height="14"/><rect x="268" y="46" width="14" height="14"/></g><rect y="150" width="300" height="50" fill="#8A8FA3"/><path d="M0 175h300" stroke="#fff" stroke-width="4" stroke-dasharray="22 16"/>`,
+    city: `<rect width="300" height="200" fill="#FFD9B0"/><circle cx="60" cy="50" r="24" fill="#FFB36B"/><g fill="#8C6CF2" opacity=".85"><rect x="0" y="80" width="40" height="120"/><rect x="44" y="50" width="34" height="150"/><rect x="82" y="96" width="44" height="104"/><rect x="130" y="40" width="30" height="160"/><rect x="164" y="74" width="46" height="126"/><rect x="214" y="60" width="36" height="140"/><rect x="254" y="90" width="46" height="110"/></g><g fill="#FFE98A"><rect x="52" y="64" width="6" height="8"/><rect x="64" y="84" width="6" height="8"/><rect x="138" y="58" width="6" height="8"/><rect x="176" y="94" width="6" height="8"/><rect x="222" y="76" width="6" height="8"/><rect x="266" y="110" width="6" height="8"/></g><rect y="176" width="300" height="24" fill="#5E5683"/>`,
+    room: `<rect width="300" height="200" fill="#ECE3FF"/><rect x="30" y="30" width="70" height="56" rx="4" fill="#BFE8FF" stroke="#fff" stroke-width="6"/><path d="M65 30v56M30 58h70" stroke="#fff" stroke-width="4"/><rect x="180" y="40" width="90" height="10" fill="#B5651D"/><g><rect x="186" y="22" width="10" height="18" fill="#EF4F7E"/><rect x="198" y="26" width="8" height="14" fill="#3D8BFD"/><rect x="208" y="20" width="12" height="20" fill="#2FA865"/></g><rect y="140" width="300" height="60" fill="#D7B48A"/><ellipse cx="150" cy="172" rx="90" ry="16" fill="#EF8FB0" opacity=".7"/>`,
+    kitchen: `<rect width="300" height="200" fill="#FFF1BF"/><path d="M0 0h300v20H0z" fill="#EF4F7E"/><g fill="#fff" opacity=".6"><path d="M0 20h20v20H0zM40 20h20v20H40zM80 20h20v20H80zM120 20h20v20h-20zM160 20h20v20h-20zM200 20h20v20h-20zM240 20h20v20h-20zM280 20h20v20h-20z"/></g><rect x="200" y="54" width="80" height="60" rx="6" fill="#fff" stroke="#E2D3B0" stroke-width="3"/><rect x="0" y="130" width="300" height="70" fill="#E9B872"/><rect x="0" y="122" width="300" height="12" fill="#C98E62"/><path d="M40 122v-12h40v12z" fill="#FFF6EC"/><path d="M44 110q16-22 32 0" fill="#FF8FB0"/><circle cx="60" cy="96" r="4" fill="#EF4F7E"/>`,
+    garden: `<rect width="300" height="200" fill="#CDEEF6"/><circle cx="40" cy="36" r="18" fill="#FFD54A"/><rect y="120" width="300" height="80" fill="#8BD07A"/><path d="M0 120h300" stroke="#fff" stroke-width="0"/><g stroke="#B5651D" stroke-width="5"><path d="M10 112v30M40 112v30M70 112v30M100 112v30"/><path d="M0 120h110M0 132h110"/></g><g><path d="M200 130v-36" stroke="#4FA855" stroke-width="4"/><circle cx="200" cy="88" r="12" fill="#FFC83A"/><circle cx="200" cy="88" r="5" fill="#9B6B43"/><path d="M240 132v-28" stroke="#4FA855" stroke-width="4"/><circle cx="240" cy="98" r="10" fill="#FF8FB0"/><path d="M270 132v-40" stroke="#4FA855" stroke-width="4"/><circle cx="270" cy="88" r="11" fill="#B197FC"/></g>`,
+    space: `<rect width="300" height="200" fill="#1B1848"/><g fill="#fff"><circle cx="20" cy="20" r="1.6"/><circle cx="70" cy="44" r="1.2"/><circle cx="120" cy="16" r="2"/><circle cx="180" cy="36" r="1.4"/><circle cx="240" cy="14" r="1.8"/><circle cx="280" cy="60" r="1.2"/><circle cx="40" cy="90" r="1.4"/><circle cx="150" cy="80" r="1"/><circle cx="210" cy="110" r="1.6"/><circle cx="270" cy="150" r="1.2"/><circle cx="20" cy="160" r="1.8"/><circle cx="100" cy="180" r="1.2"/></g><circle cx="250" cy="150" r="34" fill="#3D8BFD"/><path d="M226 140q14-10 24 0t26 4" stroke="#2FA865" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="60" cy="40" r="12" fill="#E0E0E0"/><circle cx="56" cy="36" r="3" fill="#BDBDBD"/>`,
+    pad: `<rect width="300" height="200" fill="#FFCFA3"/><circle cx="240" cy="40" r="20" fill="#FFF1BF"/><rect y="150" width="300" height="50" fill="#C9B79C"/><rect x="100" y="140" width="100" height="14" rx="3" fill="#8A8FA3"/><path d="M60 150V40M60 60h30M60 100h30" stroke="#EF4F7E" stroke-width="6"/><path d="M60 40l10 110M60 150l10-110" stroke="#EF4F7E" stroke-width="2"/><circle cx="150" cy="147" r="5" fill="#FFC83A"/>`,
+    moon: `<rect width="300" height="200" fill="#120F33"/><g fill="#fff"><circle cx="30" cy="24" r="1.4"/><circle cx="130" cy="40" r="1.8"/><circle cx="210" cy="20" r="1.2"/><circle cx="280" cy="70" r="1.6"/></g><circle cx="230" cy="54" r="22" fill="#3D8BFD"/><path d="M214 48q8-8 16 0t18 2" stroke="#2FA865" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M0 140q80-30 160-6t140-10v76H0z" fill="#C9C9D2"/><ellipse cx="70" cy="168" rx="26" ry="8" fill="#A9A9B5"/><ellipse cx="210" cy="176" rx="34" ry="9" fill="#A9A9B5"/><ellipse cx="140" cy="150" rx="12" ry="4" fill="#A9A9B5"/>`,
+    mars: `<rect width="300" height="200" fill="#F2B38A"/><circle cx="60" cy="40" r="10" fill="#FFF1BF"/><circle cx="250" cy="30" r="5" fill="#E8D6C8"/><path d="M0 120l60-50 40 30 50-60 70 70 80-30v120H0z" fill="#C8552C"/><path d="M110 70l40-30 30 30z" fill="#E07A4A"/><path d="M0 150q150-30 300 0v50H0z" fill="#D9663A"/><ellipse cx="80" cy="176" rx="22" ry="6" fill="#B3471F"/><ellipse cx="220" cy="170" rx="16" ry="5" fill="#B3471F"/>`,
+    lab: `<rect width="300" height="200" fill="#D4F3E8"/><rect x="20" y="30" width="110" height="70" rx="6" fill="#26304A"/><path d="M30 80l20-20 20 14 20-30 30 26" stroke="#5FF2FF" stroke-width="3" fill="none"/><rect y="130" width="300" height="70" fill="#B0BEC5"/><rect y="122" width="300" height="10" fill="#90A4AE"/><path d="M190 122v-30h12v30zM230 122q-14-4-10-24h20q4 20-10 24z" fill="#9ED8FF" stroke="#5E5683" stroke-width="2"/><path d="M196 96h0M226 104q4-6 8 0" stroke="#EF4F7E" stroke-width="6" stroke-linecap="round"/><circle cx="262" cy="70" r="22" fill="#FFD54A" stroke="#B58A00" stroke-width="4"/><path d="M262 56v14l8 6" stroke="#B58A00" stroke-width="3" fill="none"/>`,
+    jungle: `<rect width="300" height="200" fill="#BDEBC8"/><path d="M0 60q40-30 80 0t80 0 80 0 60-10v-50H0z" fill="#4FA855"/><rect y="150" width="300" height="50" fill="#6FBF5A"/><g fill="#2E8B57"><path d="M30 150q-10-60 10-90 20 30 10 90z"/><path d="M250 150q-20-70 6-100 20 40 4 100z"/></g><g fill="#3E9B4F"><ellipse cx="40" cy="60" rx="40" ry="12" transform="rotate(-30 40 60)"/><ellipse cx="260" cy="56" rx="44" ry="12" transform="rotate(26 260 56)"/></g><path d="M120 150q-6-40 8-60M190 150q8-40-6-56" stroke="#3E7F35" stroke-width="5" fill="none"/>`,
+    volcano: `<rect width="300" height="200" fill="#FFD3B3"/><path d="M80 160 140 50h30l60 110z" fill="#8D6E63"/><path d="M140 50q15-30 30 0z" fill="#FF7043"/><path d="M146 50l-10 40 14-14 4 30 8-34 10 18-6-40z" fill="#FF5722"/><g fill="#B0A0A0" opacity=".8"><circle cx="150" cy="30" r="14"/><circle cx="170" cy="18" r="12"/><circle cx="188" cy="8" r="10"/></g><rect y="160" width="300" height="40" fill="#7DCB6A"/><path d="M0 160h300" stroke="#5DBB63" stroke-width="6"/>`,
+    cave: `<rect width="300" height="200" fill="#4A3F5C"/><path d="M0 0h300v40q-30 20-50 0t-50 10-50-10-50 14-50-8-50 10z" fill="#2E2640"/><ellipse cx="150" cy="110" rx="110" ry="80" fill="#6B5B86"/><path d="M60 40l6 24 6-24M220 40l5 20 5-20" fill="#2E2640"/><rect y="160" width="300" height="40" fill="#5A4B72"/><circle cx="240" cy="140" r="10" fill="#FFC83A" opacity=".8"/><path d="M240 150v14" stroke="#9B6B43" stroke-width="4"/>`,
+    sea: `<rect width="300" height="200" fill="#9ED8FF"/><circle cx="240" cy="40" r="18" fill="#FFD54A"/><rect y="100" width="300" height="100" fill="#3D8BFD"/><path d="M0 110q25-10 50 0t50 0 50 0 50 0 50 0 50 0" stroke="#fff" stroke-width="4" fill="none" opacity=".7"/><path d="M0 140q25-10 50 0t50 0 50 0 50 0 50 0 50 0" stroke="#fff" stroke-width="3" fill="none" opacity=".5"/><path d="M0 170q60-26 120-10v40H0z" fill="#F4D7A1"/>`,
+    night: `<rect width="300" height="200" fill="#2A2A6A"/><circle cx="240" cy="44" r="22" fill="#FFF1BF"/><circle cx="250" cy="38" r="20" fill="#2A2A6A"/><g fill="#fff"><circle cx="30" cy="30" r="1.6"/><circle cx="80" cy="60" r="1.2"/><circle cx="130" cy="24" r="1.8"/><circle cx="180" cy="70" r="1.2"/><circle cx="290" cy="90" r="1.4"/></g><g fill="#1B1848"><rect x="0" y="100" width="50" height="100"/><rect x="54" y="80" width="40" height="120"/><rect x="200" y="90" width="50" height="110"/><rect x="254" y="110" width="46" height="90"/></g><g fill="#FFE98A"><rect x="12" y="116" width="8" height="10"/><rect x="66" y="96" width="8" height="10"/><rect x="214" y="106" width="8" height="10"/></g><rect y="170" width="300" height="30" fill="#3E3E7A"/>`
+  };
+  const SCENE_E = { stadium: '🏟️', locker: '🎽', park: '🌳', street: '🚦', city: '🏙️', room: '🛋️', kitchen: '🍰', garden: '🌻', space: '🌌', pad: '🚀', moon: '🌙', mars: '🔴', lab: '🧪', jungle: '🌴', volcano: '🌋', cave: '🪨', sea: '🌊', night: '🌃' };
+  const sceneSVG = k => `<svg class="cx-bg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${SC[k] || SC.park}</svg>`;
+
+  
+  const avail = () => COMIC_EPS ? Object.keys(COMIC_EPS).length > 0 : !!PACKS.COMIC_EPS;
+  const forKid = () => avail() && (P.settings.age || 6) >= 5;
+  function ready(fn) {
+    if (COMIC_EPS) return true;
+    const t0 = tok;
+    PACK.get('COMIC_EPS').then(d => { COMIC_EPS = d; if (tok === t0) fn(); }, () => { if (tok === t0) { sfx.oops(); talk('Комиксы не загрузились. Проверь интернет.'); } });
+    return false;
+  }
+  const D = () => COMIC_EPS || {};
+  const list = () => ORDER.filter(id => D()[id]);
+  
+  const ST = () => { if (!P.comics) P.comics = { s: {}, day: '', cards: [], last: '' }; return P.comics; };
+  const ser = id => { const c = ST(); return c.s[id] || (c.s[id] = { n: 0, ch: [] }); };
+  
+  const stepLv = () => { let l = 4; try { l = RSK.lv(); } catch (e) {} return l <= 3 ? 0 : l <= 6 ? 1 : 2; };
+  const lvIdx = () => { const o = ST().lv; return o === 0 || o === 1 || o === 2 ? o : stepLv(); };
+  const fresh = () => ST().day !== dayKey();
+  const state = (id, k) => { const n = ser(id).n; return k < n ? 'done' : k === n ? (fresh() ? 'new' : 'soon') : 'lock'; };
+  const total = () => list().reduce((a, id) => a + D()[id].eps.length, 0);
+  const readN = () => list().reduce((a, id) => a + Math.min(ser(id).n, D()[id].eps.length), 0);
+  
+  const SND_L = { r: 'Р', l: 'Л', sz: 'С', sh: 'Ш' };
+  const sndOf = k => { const s = mySounds(); return s[k % s.length] || 'r'; };
+  const T = (x, L) => Array.isArray(x) ? x[Math.min(L, x.length - 1)] : x;
+  const nameOf = (sid, w) => w === 'me' ? friend().name : w === 'nar' ? '' : ((D()[sid] || {}).cast || {})[w] ? D()[sid].cast[w].n : '';
+  const castOf = w => { for (const id of list()) if ((D()[id].cast || {})[w]) return D()[id].cast[w]; return null; };
+
+  
+  
+  function panelHTML({ bg, who = [], sp, text, cls = '', L = 1 }) {
+    const w = who.slice(0, 3), i = w.indexOf(sp), n = w.length;
+    const tail = i < 0 ? 50 : Math.round((i + .5) / n * 100);
+    const t = esc(text || ''), big = L === 0 ? ' l0' : L === 2 ? ' l2' : '';
+    const bub = !text ? '' : sp === 'nar' || i < 0 ? `<div class="cx-cap${big}">${t}</div>` : `<div class="cx-bub${big}" style="--tx:${tail}%"><span>${t}</span></div>`;
+    return `<div class="cx-pan ${cls}">${sceneSVG(bg)}${bub}<div class="cx-who n${n}">${w.map(x => `<span class="cx-ch ${x === sp ? 'sp' : ''}" data-w="${esc(x)}">${castSVG(x)}</span>`).join('')}</div></div>`;
+  }
+  
+  function coverHTML(id) {
+    const S = D()[id], e0 = S.eps[0], c = Object.keys(S.cast || {}).slice(0, 2);
+    return `<div class="cx-cover">${sceneSVG((e0.p[0] || {}).bg || 'park')}<div class="cx-who n3">${['me', ...c].map(x => `<span class="cx-ch">${castSVG(x)}</span>`).join('')}</div><b class="cx-logo">${esc(S.t)}</b></div>`;
+  }
+  function cardHTML(sid, k, got) {
+    const c = D()[sid].eps[k].card || {}, art = c.c && (ART[c.c] || c.c === 'me') ? castSVG(c.c) : `<span class="emo">${esc(c.c || '⭐')}</span>`;
+    return got ? `<div class="cx-card" data-s="${sid}"><div class="cx-cart">${art}</div><b>${esc(c.n || '')}</b><small>${esc(c.d || '')}</small></div>`
+      : `<div class="cx-card off"><div class="cx-cart"><span class="emo">❔</span></div><b>${esc(D()[sid].t)}</b><small>${k + 1}</small></div>`;
+  }
+
+  
+  
+  function readStep(el, text, L, { first } = {}) {
+    return new Promise(res => {
+      const t = tok, ctl = $('#cxCtl'), mic = srOk();
+      el.classList.add('cur'); el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      ctl.innerHTML = `<div class="cx-btns">${mic ? '<button class="big cx-mic" id="cxMic"><span class="emo">🎤</span>Прочитаю вслух</button>' : ''}
+        <button class="big ${mic ? 'ghost' : ''}" id="cxDone">${G('✓ Прочитала', '✓ Прочитал')}</button>
+        <button class="chip" id="cxHear"><span class="emo">🔊</span>Послушать</button></div><p class="cx-heard" id="cxHeard" aria-live="polite"></p>`;
+      later(() => ctl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 350);
+      let done = false, tries = 0;
+      const ok = async aloud => {
+        if (done) return; done = true; el.classList.remove('cur'); el.classList.add('read');
+        if (aloud) { sfx.good(); el.classList.add('zap'); } else sfx.pop();
+        ctl.innerHTML = '';
+        
+        if (L < 2) { await say(text, { rate: .9 }); if (t !== tok) return; }
+        res(aloud);
+      };
+      $('#cxDone').onclick = () => ok(false);
+      $('#cxHear').onclick = () => { sfx.pop(); hush(); say(text, { rate: L === 0 ? .75 : .9 }); };
+      const m = $('#cxMic'), heard = $('#cxHeard');
+      if (m) m.onclick = async () => {
+        if (m.disabled || done) return; m.disabled = true; m.classList.add('ear'); sfx.tick(); hush();
+        heard.textContent = gx('Я слушаю…');
+        const r = await hear(text, { maxMs: 5000 + text.length * 110, onHeard: h => { if (heard.isConnected) heard.textContent = `Слышу: «${h}»`; } }).catch(() => ({}));
+        if (t !== tok || done || !m.isConnected) return; m.disabled = false; m.classList.remove('ear');
+        if (r && r.ok) { heard.textContent = '✓'; return ok(true); }
+        tries++;
+        if (r && r.slip) {
+          const how = ASR.HOW[r.slip], i = howIdx(IS_RU ? r.slip.toUpperCase() : { r: RU('Р'), l: RU('Л'), s: RU('С') }[r.slip] || '');
+          heard.innerHTML = `${esc(gx('Почти!'))} ${esc(`Слышу «${r.heard}».`)}${i >= 0 ? ` <button class="chip how-b" id="cxHow"><span class="emo">👄</span>Как сказать?</button>` : ''}`;
+          const hb = $('#cxHow'); if (hb) hb.onclick = () => { sfx.pop(); hush(); howOpen([i], i); };
+          talk(how ? `Почти! ${how} Прочитай ещё раз.` : 'Почти! Прочитай ещё раз, чётко.');
+        } else {
+          heard.textContent = r && r.heard ? `Слышу «${r.heard}». ${G('Прочитай ещё раз — или нажми «Прочитала».', 'Прочитай ещё раз — или нажми «Прочитал».')}` : G('Не слышно. Читай громче — или нажми «Прочитала».', 'Не слышно. Читай громче — или нажми «Прочитал».');
+          if (tries >= 2) talk(G('Ничего! Можно просто нажать «Прочитала».', 'Ничего! Можно просто нажать «Прочитал».'));
+        }
+      };
+      if (first) talk(Q() ? 'Читай реплики героев. Можно вслух.' : (mic ? 'Прочитай, что говорят герои. Можно вслух!' : G('Прочитай, что говорят герои, и нажми «Прочитала».', 'Прочитай, что говорят герои, и нажми «Прочитал».')));
+    });
+  }
+  
+  function powerStep(el, line, snd, { battle, rival, sid } = {}) {
+    return new Promise(res => {
+      const t = tok, ctl = $('#cxCtl'), mic = srOk(), letter = SND_L[snd] || 'Р', hi = howIdx(IS_RU ? letter : { r: RU('Р'), l: RU('Л'), sz: RU('С'), sh: RU('Ш') }[snd] || '');
+      el.classList.add('cur', 'pw'); el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      ctl.innerHTML = `<p class="cx-pwt">${battle ? '⚔️ ' + esc('Битва скороговорок!') : '⚡ ' + esc('Волшебные слова')} <b class="cx-snd">${Lspan(letter)}</b></p>
+        <div class="cx-btns">${mic ? '<button class="big cx-mic" id="cxMic"><span class="emo">🎤</span>Скажу!</button>' : ''}
+        <button class="big ${mic ? 'ghost' : ''}" id="cxDone" ${mic ? 'hidden' : ''}>${G('✓ Сказала!', '✓ Сказал!')}</button>
+        <button class="chip" id="cxHear"><span class="emo">🔊</span>Послушать</button>${hi >= 0 ? '<button class="chip how-b" id="cxHow"><span class="emo">👄</span>Как сказать?</button>' : ''}</div><p class="cx-heard" id="cxHeard" aria-live="polite"></p>`;
+      later(() => ctl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 350);
+      let done = false, tries = 0;
+      const win = async clean => {
+        if (done) return; done = true; el.classList.remove('cur'); el.classList.add('read', 'zap', 'power');
+        sfx.magic(); ctl.innerHTML = '';
+        await talk(clean ? (battle ? 'Победа! Язык не запутался!' : 'Сработало! Сила включилась!') : 'Потренируем ещё. А сейчас — дальше!');
+        if (t !== tok) return; res(clean);
+      };
+      $('#cxDone').onclick = () => win(true);
+      $('#cxHear').onclick = () => { sfx.pop(); hush(); say(line, { rate: .8 }); };
+      const hb = $('#cxHow'); if (hb) hb.onclick = () => { sfx.pop(); hush(); howOpen([hi], hi); };
+      const m = $('#cxMic'), heard = $('#cxHeard');
+      if (m) m.onclick = async () => {
+        if (m.disabled || done) return; m.disabled = true; m.classList.add('ear'); sfx.tick(); hush();
+        heard.textContent = gx('Я слушаю…');
+        const r = await hear(line, { maxMs: 6000 + line.length * 120, onHeard: h => { if (heard.isConnected) heard.textContent = `Слышу: «${h}»`; } }).catch(() => ({}));
+        if (t !== tok || done || !m.isConnected) return; m.disabled = false; m.classList.remove('ear');
+        if (r && r.ok) return win(true);
+        if (HEAR.off || !srOk()) { $('#cxDone').hidden = false; heard.textContent = ''; return; }
+        tries++;
+        if (r && r.slip) {
+          const how = ASR.HOW[r.slip];
+          heard.textContent = `${gx('Почти!')} Слышу «${r.heard}». Нужен звук ${(SND_L[snd] || r.slip).toUpperCase()}.`;
+          await talk(how ? `Почти! ${how} Послушай: ${line}` : `Почти! Послушай: ${line}`, { rate: .85 });
+        } else heard.textContent = r && r.heard ? `Слышу «${r.heard}». Скажи ещё раз чётко!` : 'Не слышно. Скажи громче!';
+        if (tries >= 3) { m.hidden = true; const d = $('#cxDone'); d.hidden = false; d.textContent = gx('Дальше') + ' →'; d.onclick = () => win(false); }
+      };
+      (async () => {
+        if (battle) {
+          await talk(`${rival ? nameOf(sid, rival) + ': ' : ''}${line.split(' ').slice(0, 3).join(' ')}… ой! Язык запутался!`); if (t !== tok || done) return;
+          talk(mic ? 'Твоя очередь! Скажи скороговорку чётко.' : 'Твоя очередь! Послушай и скажи скороговорку чётко.');
+        } else talk(mic ? `Скажи волшебные слова со звуком ${letter}!` : `Послушай и скажи волшебные слова со звуком ${letter}!`);
+      })();
+    });
+  }
+  
+  function askStep(q) {
+    return new Promise(res => {
+      const t = tok, ctl = $('#cxCtl'), [qq, a, ...o] = q;
+      ctl.innerHTML = `<div class="cx-q"><p class="cx-qq">❓ ${esc(qq)}</p><div class="cx-opts">${shuffle([a, ...o]).map(x => `<button class="cx-o" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div></div>`;
+      later(() => ctl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 300);
+      let miss = 0, done = false;
+      talk(qq);
+      ctl.querySelector('.cx-opts').onclick = async e => {
+        const b = e.target.closest('.cx-o'); if (!b || done || b.disabled) return;
+        if (b.dataset.v === a) { done = true; b.classList.add('right'); sfx.good(); await talk(pickOne(['Верно!', 'Точно!', 'Да!'])); if (t === tok) { ctl.innerHTML = ''; res(miss); } }
+        else { miss++; b.disabled = true; b.classList.add('wrong'); wiggle(b); sfx.oops(); talk('Почти! Посмотри на страницу ещё раз.'); }
+      };
+    });
+  }
+  function choiceStep(ask, opts, was) {
+    return new Promise(res => {
+      const ctl = $('#cxCtl');
+      ctl.innerHTML = `<div class="cx-q cx-choice"><p class="cx-qq">🔀 ${esc(ask)}</p><div class="cx-opts two">${opts.map((o, i) => `<button class="cx-o ${was === i ? 'was' : ''}" data-i="${i}">${esc(o.b)}</button>`).join('')}</div></div>`;
+      later(() => ctl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 300);
+      talk(`${ask} Выбирай!`);
+      ctl.querySelector('.cx-opts').onclick = e => { const b = e.target.closest('.cx-o'); if (!b) return; sfx.pop(); ctl.innerHTML = ''; res(+b.dataset.i); };
+    });
+  }
+
+  
+  async function episode(sid, k) {
+    if (!ready(() => episode(sid, k))) return;
+    const S = D()[sid]; if (!S || !S.eps[k]) return shelf();
+    const st0 = state(sid, k); if (st0 === 'lock' || st0 === 'soon') return shelf();
+    const E = S.eps[k], L = lvIdx(), t = newScreen(), snd = sndOf(k), again = st0 === 'done', sr = ser(sid);
+    const hi = howIdx(IS_RU ? SND_L[snd] : { r: RU('Р'), l: RU('Л'), sz: RU('С'), sh: RU('Ш') }[snd] || ''); HOW_CUR = hi >= 0 ? [hi] : null;
+    ST().last = sid; save();
+    shell(`${S.e} ${esc(S.t)}`, `<div class="cx">
+      <div class="cx-top"><span class="cx-ep">${esc(`Серия ${k + 1} из ${S.eps.length}`)}</span><b>${esc(E.t)}</b></div>
+      <div class="cx-page L${L}" id="cxPage"></div><div class="cx-ctl" id="cxCtl"></div></div>`, { back: () => shelf() });
+    const page = $('#cxPage');
+    const add = (o, cls = '') => { page.insertAdjacentHTML('beforeend', panelHTML({ ...o, L, cls })); return page.lastElementChild; };
+    let aloud = 0;
+    for (let i = 0; i < E.p.length; i++) {
+      const p = E.p[i], el = add({ ...p, text: T(p.x, L) });
+      if (await readStep(el, T(p.x, L), L, { first: i === 0 })) aloud++; if (t !== tok) return;
+    }
+    
+    const pw = E.pw || {}, battle = !!pw.battle, line = battle ? (S.tw || {})[snd] : ((S.pw || {})[snd] || [])[k % 3];
+    if (T(pw.x, L)) { const el = add({ bg: pw.bg, who: pw.who, sp: 'nar', text: T(pw.x, L) }); if (await readStep(el, T(pw.x, L), L)) aloud++; if (t !== tok) return; }
+    let clean = true;
+    if (line) {
+      const rival = (pw.who || []).find(w => w !== 'me');
+      const el = add({ bg: pw.bg, who: battle && rival ? ['me', rival] : ['me'], sp: 'me', text: line }, 'cx-power');
+      clean = await powerStep(el, line, snd, { battle, rival, sid }); if (t !== tok) return;
+    }
+    
+    const miss = E.q ? await askStep(T(E.q, L)) : 0; if (t !== tok) return;
+    
+    const ch = E.ch;
+    if (ch && ch.o && ch.o.length === 2) {
+      const i = await choiceStep(T(ch.x, L), ch.o, again ? sr.ch[k] : -1); if (t !== tok) return;
+      sr.ch[k] = i; save();
+      const o = ch.o[i], el = add({ bg: o.bg, who: o.who, sp: o.sp, text: T(o.x, L) });
+      if (await readStep(el, T(o.x, L), L)) aloud++; if (t !== tok) return;
+    }
+    
+    const last = k === S.eps.length - 1;
+    const endT = T(E.end, L), endEl = add({ bg: (E.p[E.p.length - 1] || {}).bg, who: [], sp: 'nar', text: endT }, 'cx-end');
+    endEl.insertAdjacentHTML('beforeend', `<b class="cx-stamp">${last ? esc('Конец первого сезона!') : esc('Продолжение завтра!')}</b>`);
+    endEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    await talk(`${endT} ${last ? 'Конец первого сезона!' : 'Продолжение завтра!'}`); if (t !== tok) return;
+    
+    let card = null;
+    if (!again) {
+      sr.n = Math.max(sr.n, k + 1); ST().day = dayKey();
+      const id = sid + ':' + k; if (E.card && !ST().cards.includes(id)) { ST().cards.push(id); card = id; }
+      save();
+    }
+    const stars = miss === 0 && clean ? 3 : 2;
+    const end = () => finish({ key: 'comic', stars, line: `${S.t}: ${E.t}.` + (aloud ? ` Вслух: ${aloud}.` : ''), again: () => episode(sid, k), next: () => shelf(), nextLabel: 'Мои комиксы', ev: { comic: sid, ep: k } });
+    if (card) cardWin(sid, k, end); else end();
+  }
+  function cardWin(sid, k, then) {
+    const ov = document.createElement('div'); ov.className = 'overlay';
+    ov.innerHTML = `<div class="winbox cx-win" role="dialog" aria-label="Новая карточка"><h2>${esc('Новая карточка героя!')}</h2>${cardHTML(sid, k, true)}<div class="win-btns"><button class="big" data-a="ok">${esc('Ура!')}</button></div></div>`;
+    $('.screen').append(ov); sfx.star(); confetti(40);
+    const c = D()[sid].eps[k].card || {};
+    say(`Новая карточка: ${c.n || ''}!`);
+    ov.querySelector('[data-a]').onclick = () => { sfx.pop(); ov.remove(); then(); };
+  }
+
+  
+  function shelf() {
+    if (!ready(shelf)) return;
+    newScreen(); HOW_CUR = null;
+    const L = lvIdx(), LN = ['Коротко', 'Средне', 'Длинно'];
+    const epBtn = (id, k) => {
+      const s = state(id, k);
+      return `<button class="cx-e ${s}" data-s="${id}" data-k="${k}" aria-label="${esc(`Серия ${k + 1}`)}">${s === 'done' ? '✓' : s === 'new' ? '▶' : s === 'soon' ? '⏳' : '🔒'}<small>${k + 1}</small></button>`;
+    };
+    const own = ownList();
+    shell('Комиксы', `<div class="cx-shelf">
+      <div class="cx-lv"><span>${esc('Текст в пузырях:')}</span>${LN.map((n, i) => `<button class="chip ${i === L ? 'on' : ''}" data-lv="${i}">${esc(n)}</button>`).join('')}</div>
+      ${list().map(id => { const S = D()[id], n = ser(id).n; return `<section class="cx-ser" data-s="${id}">
+        <button class="cx-go" data-s="${id}" aria-label="${esc(S.t)}">${coverHTML(id)}</button>
+        <div class="cx-sinfo"><h2>${S.e} ${esc(S.t)}</h2><p>${esc(S.about || '')}</p><small>${esc(`Прочитано ${Math.min(n, S.eps.length)} из ${S.eps.length}`)}</small>
+        <div class="cx-eps">${S.eps.map((_, k) => epBtn(id, k)).join('')}</div></div></section>`; }).join('')}
+      <h2 class="sec-h">${esc('Карточки героев')} <small>${ST().cards.length} / ${total()}</small></h2>
+      <div class="cx-cards">${list().map(id => D()[id].eps.map((_, k) => cardHTML(id, k, ST().cards.includes(id + ':' + k))).join('')).join('')}</div>
+      <h2 class="sec-h">${esc('Мои комиксы')}</h2>
+      <div class="cx-ownl"><button class="big" id="cxNew"><span class="emo">✏️</span>${esc('Нарисовать свой комикс')}</button>
+      ${own.map((c, i) => `<button class="chip cx-own" data-i="${i}"><span class="emo">📖</span>${esc(c.t || 'Мой комикс')}</button>`).join('')}</div></div>`);
+    const st = $('#stage');
+    st.onclick = e => {
+      const lv = e.target.closest('[data-lv]'); if (lv) { sfx.pop(); ST().lv = +lv.dataset.lv; save(); shelf(); return; }
+      const ep = e.target.closest('.cx-e');
+      if (ep) {
+        const s = state(ep.dataset.s, +ep.dataset.k); sfx.pop();
+        if (s === 'done' || s === 'new') { episode(ep.dataset.s, +ep.dataset.k); return; }
+        wiggle(ep); talk(s === 'soon' ? 'Новая серия — завтра! А прочитанные можно перечитать.' : 'Сначала прочитай серии по порядку.'); return;
+      }
+      const go = e.target.closest('.cx-go');
+      if (go) { const id = go.dataset.s, n = ser(id).n, S = D()[id]; sfx.pop(); if (n < S.eps.length && fresh()) episode(id, n); else { talk(n >= S.eps.length ? 'Этот сезон прочитан! Можно перечитать любую серию.' : 'Новая серия — завтра! А прочитанные можно перечитать.'); wiggle(go); } return; }
+      const o = e.target.closest('.cx-own'); if (o) { sfx.pop(); ownView(+o.dataset.i); return; }
+      if (e.target.closest('#cxNew')) { sfx.pop(); create(); }
+    };
+    const nw = list().find(id => state(id, ser(id).n) === 'new');
+    talk(readN() === 0 ? 'Это комиксы! Ты — герой. Выбери серию и читай, что говорят герои.' : nw ? 'Новая серия ждёт! Выбирай.' : 'Новая серия будет завтра. А сейчас можно перечитать или нарисовать свой комикс!');
+  }
+  
+  const isDay = (n = dayNo()) => { try { if (!forKid() || n % 2) return false; return !COMIC_EPS || ORDER.some(id => !D()[id] || ser(id).n < D()[id].eps.length) || ST().day === dayKey(); } catch (e) { return false; } };
+  function today() {
+    if (!ready(today)) return;
+    const c = ST(), pick = [c.last, ...list()].filter(Boolean).find(id => D()[id] && ser(id).n < D()[id].eps.length);
+    if (pick && fresh()) episode(pick, ser(pick).n); else shelf();
+  }
+  const step = () => ({ key: 'comic', kind: 'read', name: 'Комикс дня', run: () => today() });
+  const sub = () => { try { const id = ST().last || ORDER[0], S = D()[id]; return S ? `${S.e} ${S.t}: новая серия` : 'новая серия про тебя'; } catch (e) { return 'новая серия'; } };
+  
+  const chestBtn = () => { try { return forKid() && fresh() && (!COMIC_EPS || list().some(id => ser(id).n < D()[id].eps.length)) ? '<button class="big ghost" data-a="comic"><span class="emo">💥</span>Комикс дня</button>' : ''; } catch (e) { return ''; } };
+
+  
+  const ownKey = () => OWN_KEY + ':' + ROOT.cur;
+  function ownList() { try { return JSON.parse(localStorage.getItem(ownKey()) || '[]'); } catch (e) { return []; } }
+  function ownSave(l) { try { localStorage.setItem(ownKey(), JSON.stringify(l.slice(-30))); return true; } catch (e) { return false; } }
+  function create(edit) {
+    if (!ready(() => create(edit))) return;
+    newScreen(); HOW_CUR = null;
+    const all = ownList(), d = edit != null && all[edit] ? JSON.parse(JSON.stringify(all[edit])) : { t: '', p: [{ bg: 'park', who: ['me'], x: '' }, { bg: 'stadium', who: ['me'], x: '' }, { bg: 'space', who: ['me'], x: '' }] };
+    let cur = 0;
+    const heroes = ['me', ...list().flatMap(id => Object.keys(D()[id].cast || {}))].filter(w => w === 'me' || ART[w]);
+    shell('Мой комикс', `<div class="cx-mk">
+      <label class="cx-tt">${esc('Название:')} <input id="cxT" maxlength="40" value="${esc(d.t)}" placeholder="${esc('Мой комикс')}"></label>
+      <div class="cx-page L1" id="cxPrev"></div>
+      <div class="cx-tabs" id="cxTabs"></div>
+      <div class="cx-ed" id="cxEd"></div>
+      <div class="cx-btns"><button class="big" id="cxSave">💾 ${esc('Сохранить')}</button></div>
+      <p class="muted">${esc('Комикс сохраняется только на этом телефоне.')}</p></div>`, { back: () => shelf() });
+    const draw = () => {
+      $('#cxPrev').innerHTML = d.p.map((p, i) => panelHTML({ bg: p.bg, who: p.who, sp: p.who[0], text: p.x, L: 1, cls: i === cur ? 'cur' : '' })).join('');
+      $('#cxTabs').innerHTML = d.p.map((_, i) => `<button class="chip ${i === cur ? 'on' : ''}" data-p="${i}">${esc('Картинка')} ${i + 1}</button>`).join('') + (d.p.length < MAXP ? `<button class="chip" data-p="add">＋</button>` : '') + (d.p.length > 1 ? `<button class="chip" data-p="del">🗑</button>` : '');
+      const p = d.p[cur];
+      $('#cxEd').innerHTML = `<p class="cx-edh">${esc('Где?')}</p><div class="cx-row">${Object.keys(SC).map(k => `<button class="chip ${p.bg === k ? 'on' : ''}" data-bg="${k}" aria-label="${k}"><span class="emo">${SCENE_E[k]}</span></button>`).join('')}</div>
+        <p class="cx-edh">${esc('Кто? (до трёх, первый говорит)')}</p><div class="cx-row">${heroes.map(w => `<button class="chip cx-hb ${p.who.includes(w) ? 'on' : ''}" data-w="${w}"><span class="chip-face">${castSVG(w)}</span>${esc(w === 'me' ? friend().name : (castOf(w) || {}).n || '')}</button>`).join('')}</div>
+        <p class="cx-edh">${esc('Что говорит?')}</p><div class="cx-say"><input id="cxX" maxlength="90" value="${esc(p.x)}" placeholder="${esc('Напиши слова героя')}">${srOk() ? `<button class="chip" id="cxDict"><span class="emo">🎤</span>${esc('Скажу')}</button>` : ''}</div>`;
+      const x = $('#cxX'); x.oninput = () => { p.x = x.value; const b = $('#cxPrev .cx-pan.cur'); if (b) b.outerHTML = panelHTML({ bg: p.bg, who: p.who, sp: p.who[0], text: p.x, L: 1, cls: 'cur' }); };
+      const dict = $('#cxDict');
+      if (dict) dict.onclick = async () => {
+        if (dict.disabled) return; dict.disabled = true; dict.classList.add('ear'); hush();
+        const r = await hear('…', { maxMs: 7000, onHeard: h => { x.value = h.slice(0, 90); } }).catch(() => ({}));
+        if (!dict.isConnected) return; dict.disabled = false; dict.classList.remove('ear');
+        if (r && r.heard) { x.value = cap(r.heard).slice(0, 90); x.oninput(); }
+      };
+    };
+    $('#cxTabs').onclick = e => {
+      const b = e.target.closest('[data-p]'); if (!b) return; sfx.pop();
+      if (b.dataset.p === 'add') { d.p.push({ bg: d.p[cur].bg, who: ['me'], x: '' }); cur = d.p.length - 1; }
+      else if (b.dataset.p === 'del') { d.p.splice(cur, 1); cur = Math.max(0, cur - 1); }
+      else cur = +b.dataset.p;
+      draw();
+    };
+    $('#cxEd').onclick = e => {
+      const p = d.p[cur], bg = e.target.closest('[data-bg]'), w = e.target.closest('[data-w]');
+      if (bg) { sfx.tick(); p.bg = bg.dataset.bg; draw(); }
+      if (w) { sfx.tick(); const k = w.dataset.w; if (p.who.includes(k)) { if (p.who.length > 1) p.who = p.who.filter(x => x !== k); } else { p.who = [...p.who, k].slice(-3); } draw(); }
+    };
+    $('#cxSave').onclick = () => {
+      d.t = $('#cxT').value.trim(); d.at = Date.now();
+      const l = ownList(); if (edit != null && l[edit]) l[edit] = d; else l.push(d);
+      if (ownSave(l)) { sfx.good(); confetti(30); talk('Сохранено! Твой комикс на полке.'); later(() => ownView(edit != null ? edit : l.length - 1), 900); }
+      else { sfx.oops(); talk('Не получилось сохранить.'); }
+    };
+    draw();
+    talk('Выбери место, героев и напиши, что они говорят!');
+  }
+  function ownView(i) {
+    if (!ready(() => ownView(i))) return;
+    const c = ownList()[i]; if (!c) return shelf();
+    const t = newScreen(); HOW_CUR = null;
+    shell(esc(c.t || 'Мой комикс'), `<div class="cx"><div class="cx-page L1">${c.p.map(p => panelHTML({ bg: p.bg, who: p.who, sp: p.who[0], text: p.x, L: 1 })).join('')}</div>
+      <div class="cx-btns"><button class="big ghost" id="cxRead"><span class="emo">🔊</span>${esc('Прочитать вслух')}</button><button class="big ghost" id="cxEdit">✏️ ${esc('Изменить')}</button><button class="chip" id="cxDel">🗑 ${esc('Удалить')}</button></div></div>`, { back: () => shelf() });
+    $('#cxRead').onclick = async () => { sfx.pop(); for (const p of c.p) { if (p.x) await say(p.x); if (t !== tok) return; } };
+    $('#cxEdit').onclick = () => { sfx.pop(); create(i); };
+    $('#cxDel').onclick = () => { if (!confirm(gx('Удалить этот комикс?'))) return; const l = ownList(); l.splice(i, 1); ownSave(l); sfx.pop(); shelf(); };
+    talk('Твой комикс! Нажми «Прочитать вслух».');
+  }
+
+  GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'r-skill') + 1), 0, { id: 'comics', name: 'Комиксы', sub: 'ты — герой: читай и говори за героев', kw: 'комикс комиксы герои серия читать футбол космос детектив динозавры', ico: () => pic('💥'), bg: 'var(--t-yellow)', go: () => shelf(), grp: 2, also: [6], hide: () => !forKid(), prog: () => { try { return COMIC_EPS && readN() ? `${readN()} из ${total()} серий` : ''; } catch (e) { return ''; } } });
+  return { shelf, episode, create, ownView, ownList, isDay, today, step, sub, chestBtn, lvIdx, state, ST, ser, avail, forKid, panelHTML, ART, SC };
 })();
  
  
@@ -17061,7 +17703,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '161';
+const APP_VER = '162';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -24813,7 +25455,7 @@ const FUN = (() => {
 
 
 const BALLET_TALES = [{"id": "nutcracker", "t": "Щелкунчик", "by": "Пётр Чайковский", "y": 1892, "e": "🎄", "sub": "Рождество, игрушка-орехокол и страна сладостей", "ch": [{"t": "Подарок на Рождество", "e": "🎁🎄", "s": "В Рождественский вечер в доме Мари зажгли огни на ёлке. Пришёл гость — мастер Дроссельмейер, в большой шляпе и с таинственным свёртком. Он подарил Мари смешного деревянного человечка — Щелкунчика. Тот умел колоть орехи. Мари сразу полюбила его, но брат Фриц играл неосторожно и сломал игрушке челюсть. Мари бережно завязала ему повязку и уложила спать у ёлки. В оркестре звучит весёлый марш: так гости входят в дом."}, {"t": "Битва с мышами", "e": "🐭⚔️", "s": "Когда часы пробили полночь, ёлка стала расти, а игрушки ожили. Из-под пола выбежали мыши во главе с Мышиным королём. Щелкунчик вскочил, и его солдатики храбро выстроились в ряд. Мари испугалась за друга и бросила в Мышиного короля свою туфельку. Тот растерялся, и мыши разбежались. Щелкунчик превратился в красивого принца. Он взял Мари за руку и повёл в метель, где кружились снежинки, а детский хор пел им вслед."}, {"t": "Королевство сластей", "e": "🍬🏰", "s": "Принц привёл Мари в волшебную страну, где дороги из конфет, а реки из лимонада. Их встретила Фея Драже. Её музыку играет челеста: она звенит, будто падают капельки воды. Для гостей станцевали танцы со всего света: испанский шоколад, арабский кофе, китайский чай и русские пряники. Потом закружился большой вальс цветов. Когда танцы кончились, Мари проснулась у ёлки. Щелкунчик лежал рядом, а в кармане лежал сладкий леденец."}], "q": "Кто подарил Мари Щелкунчика?", "a": ["Мастер Дроссельмейер", "Мышиный король", "Фея Драже"]}, {"id": "swan", "t": "Лебединое озеро", "by": "Пётр Чайковский", "y": 1877, "e": "🦢", "sub": "Принц, девушка-лебедь и злой волшебник", "ch": [{"t": "Принц у озера", "e": "🏹🌙", "s": "Принцу Зигфриду исполнился двадцать один год. Мама сказала ему: пора выбрать невесту. Но грустному принцу не хотелось веселья. Вечером он взял арбалет и пошёл с друзьями к лесному озеру. На воде плыли белые лебеди. Вдруг один из них вышел на берег и стал девушкой в белых перьях. Её звали Одетта. Над озером плывёт нежная мелодия — тема лебедей. Её играет гобой, а арфа журчит, как вода."}, {"t": "Злой Ротбарт", "e": "🧙‍♂️🖤", "s": "Одетта рассказала Зигфриду свою тайну. Злой волшебник Ротбарт превратил её и подруг в лебедей. Только ночью они становятся девушками. Заклятие исчезнет, если кто-нибудь искренне полюбит Одетту. Принц обещал ей верность. Но на балу Ротбарт привёл свою дочь Одиллию, в чёрном платье. Она была так похожа на Одетту, что Зигфрид обманулся. Он пообещал любовь не той девушке. Одиллия засмеялась, а Одетта заплакала."}, {"t": "Любовь сильнее заклятия", "e": "💞✨", "s": "Зигфрид понял свою ошибку и поспешил к озеру. Он попросил у Одетты прощения и сказал, что любит только её. Ротбарт хотел помешать, но любовь принца была сильнее. Волшебник потерял силу, а заклятие рассыпалось. Лебеди снова стали девушками. Так заканчивается балет во многих театрах. В других театрах конец грустнее, но музыка Чайковского всегда прекрасна. Сначала она звучит тревожно, а потом светло и торжественно."}], "q": "В кого злой волшебник превратил Одетту?", "a": ["В лебедя", "В кошку", "В цветок"]}, {"id": "beauty", "t": "Спящая красавица", "by": "Пётр Чайковский", "y": 1890, "e": "👑", "sub": "Принцесса, злая фея и сто лет сна", "ch": [{"t": "Праздник для Авроры", "e": "👶🧚", "s": "В королевстве родилась дочка — принцесса Аврора. На крестины позвали добрых фей. Фея Сирени подарила ей доброе сердце, другие феи — красоту, смелость и голос. Но короля забыли пригласить фею Карабос. Она явилась в чёрной карете, запряжённой крысами, и рассердилась. Карабос сказала, что принцесса уколет палец о веретено и уснёт навеки. Тут вышла Фея Сирени. Она смягчила злое заклятие: Аврора проспит сто лет, пока её не разбудит поцелуй."}, {"t": "Сто лет сна", "e": "🌹💤", "s": "Аврора выросла красавицей. В день её шестнадцатилетия в саду устроили бал, и четыре принца подарили ей розы. Среди гостей была старушка с веретеном. Аврора впервые видела такую вещь и взяла её в руки. Тут она укололась и упала. Фея Сирени взмахнула палочкой, и весь дворец уснул. Вокруг вырос густой лес с колючками и цветами, и никто не мог пройти. Стояла тишина, и только звучала тихая колыбельная."}, {"t": "Поцелуй принца", "e": "🤴💫", "s": "Прошло сто лет. На охоте принц Дезире увидел Фею Сирени. Она показала ему сон о прекрасной Авроре, и принц влюбился. Фея провела его на лодке через реку до дворца. Лес расступился перед ним. Принц разбудил Аврору поцелуем, а вместе с ней проснулся весь дворец. Сыграли свадьбу. На ней танцевали сказочные герои: Кот в сапогах, Белая кошечка, Синяя птица и принцесса Флорина. Музыка там такая радостная, что хочется кружиться."}], "q": "Как зовут принцессу, которая уснула на сто лет?", "a": ["Аврора", "Одетта", "Мари"]}, {"id": "cinderella", "t": "Золушка", "by": "Сергей Прокофьев", "y": 1945, "e": "👠", "sub": "Хрустальная туфелька и полночь", "ch": [{"t": "Золушка и нищенка", "e": "🧹👵", "s": "Золушка жила в доме, где она мыла полы и топила печь, а злая мачеха и две сестры наряжались. Однажды в дверь постучала старушка-нищенка. Сёстры прогнали её. А Золушка накормила гостью и отдала ей хлеб. Старушка оказалась доброй феей. Она сказала, что завтра в королевском дворце будет бал. Золушка вздохнула и посмотрела на свою старую метлу. Но фея только улыбнулась, ведь у неё было припасено волшебство."}, {"t": "Бал и полночь", "e": "🕛✨", "s": "Ночью фея превратила платье Золушки в бальное, а башмаки в сверкающие туфельки. Но она предупредила: ровно в двенадцать волшебство кончится. На балу Золушка закружилась с принцем, и они не могли оторваться друг от друга. В музыке Прокофьева слышно, как часы бьют двенадцать раз: бом, бом, бом. Золушка вспомнила о предупреждении и убежала по ступеням. На бегу она потеряла одну туфельку. Принц поднял её и спрятал в ладони."}, {"t": "Туфелька", "e": "👸💍", "s": "Принц решил найти девушку, которой эта туфелька подойдёт. Он ходил по городам и деревням и примерял её на ножки. Сёстры тянули ногу и старались, но туфелька оставалась мала. Наконец принц пришёл в дом Золушки. Она тихо села и надела туфельку, и та подошла. Тогда Золушка достала из кармана вторую, и принц узнал её. Фея-нищенка улыбалась рядом. Золушка и принц стали жить вместе, а музыка в конце звучит весело и солнечно."}], "q": "Что потеряла Золушка на балу?", "a": ["Туфельку", "Корону", "Веер"]}, {"id": "giselle", "t": "Жизель", "by": "Адольф Адан", "y": 1841, "e": "🌲", "sub": "Лесная девушка и её любовь", "ch": [{"t": "Деревенская танцовщица", "e": "💃🍇", "s": "В тихой деревне жила девушка Жизель. Она любила танцевать так сильно, что мама за неё волновалась: у Жизели было слабое сердце. Однажды в деревню пришёл юноша Альберт. Он назвался простым крестьянином, а на самом деле был графом. Они подружились и вместе танцевали на празднике урожая. Жизель верила ему всем сердцем. Но лесничий Ханс заметил, что у Альберта на самом деле спрятана шпага, и решил открыть правду."}, {"t": "Тайна открылась", "e": "🎺💔", "s": "Приехала охота знатных гостей, и Жизель узнала правду: Альберт — граф, а не крестьянин. Ей стало так больно, что слабое сердце не выдержало. Она вдруг заплакала, закружилась, а потом тихо замерла. Деревня замолчала. Жизель стала лёгким духом леса. Люди проводили её на тихую лесную поляну, и Альберт остался у её цветов с грустью. Он понял, что не должен был обманывать такую добрую девушку, и ему было очень стыдно."}, {"t": "Рассвет в лесу", "e": "🌅🕊️", "s": "Ночью на поляну пришли виллисы — лесные духи в белых платьях и вуалях. Они заставляли ночных гостей танцевать до самого утра. Явился и Альберт со своими цветами. Королева виллис приказала ему танцевать. Но Жизель появилась рядом и стала его защищать: она поддерживала его, как лёгкий ветер. Танец продолжался до рассвета. Вдруг зазвонил колокол, и виллисы исчезли. Альберт остался жив, потому что любовь Жизели спасла его. Она мягко простилась и растаяла в утреннем тумане."}], "q": "Кто спас Альберта в лесу?", "a": ["Жизель", "Ханс", "Королева виллис"]}, {"id": "donq", "t": "Дон Кихот", "by": "Людвиг Минкус", "y": 1869, "e": "🗡️", "sub": "Смешной рыцарь и свадьба в Барселоне", "ch": [{"t": "Рыцарь и его оруженосец", "e": "🐴🛡️", "s": "В Испании жил старый добрый рыцарь Дон Кихот. Он начитался книг про подвиги и решил, что тоже должен совершать их. Верный оруженосец Санчо Панса поехал с ним на смешном ослике. Дон Кихоту мерещилось, что ветряная мельница — это великан, и он смело бросался на неё в бой. В музыке слышны звон шпор и бодрые испанские ритмы. Рыцарь искал даму сердца и вдруг приехал в солнечный город Барселону."}, {"t": "Китри и Базиль", "e": "💃🌹", "s": "В Барселоне на площади веселились люди. Хозяйка таверны Китри любила бедного цирюльника Базиля. Но отец хотел выдать её замуж за богатого господина Гамаша. Китри и Базиль танцевали, и в оркестре звенели кастаньеты и гитары. Пришёл Дон Кихот и увидел Китри. Ему показалось, что это его прекрасная Дульсинея. Он вышел вперёд и поклонился ей. Китри заговорщически улыбнулась и подмигнула Базилю: у них появился надёжный помощник."}, {"t": "Весёлая свадьба", "e": "🎉💍", "s": "Влюблённые придумали хитрый план. Базиль притворился, что ему плохо, и попросил у отца Китри благословения. Дон Кихот поверил и убедил отца согласиться. Базиль вскочил и весело засмеялся: он только пошутил! Все начали хохотать, а господин Гамаш остался ни с чем. Сыграли весёлую свадьбу. Китри кружилась в зажигательном танце с веером и сделала столько быстрых поворотов, что зрители ахнули. Дон Кихот улыбнулся и продолжил свой путь вместе с Санчо."}], "q": "За кого Китри хотела выйти замуж?", "a": ["За Базиля", "За Гамаша", "За Дон Кихота"]}, {"id": "petrushka", "t": "Петрушка", "by": "Игорь Стравинский", "y": 1911, "e": "🎪", "sub": "Три куклы на масленичной ярмарке", "ch": [{"t": "Ярмарка на Масленицу", "e": "🎡🥞", "s": "В Петербург пришла Масленица. На площади шумела ярмарка: люди ели блины, катались на каруселях, слушали шарманку и гармошку. В музыке Стравинского слышно, как гудит толпа. Вдруг появился Старый фокусник. Он заиграл на дудочке, и три куклы в его кукольном театре вдруг ожили. Это были Петрушка в яркой рубахе, нарядная Балерина и Мавр в тюрбане. Все они начали плясать так бойко, что зрители подпевали."}, {"t": "Три куклы", "e": "🎭💃", "s": "За ширмой кукол жили, как люди. Петрушка был добрый, грустный и немного неуклюжий. Он любил Балерину и хотел с ней подружиться. Но Балерина не обращала на него внимания: она играла на игрушечной трубе и весело танцевала с важным Мавром. Петрушка огорчился, ведь он был маленькой куклой, набитой опилками. Он топал, размахивал руками, а потом стучал кулаками в стенку, чтобы выбраться к людям. На сердце у него было и смешно, и грустно."}, {"t": "Дух на крыше", "e": "🌃🪄", "s": "Праздник на ярмарке продолжался, а за ширмой разыгралась суматоха: Петрушка и Мавр погнались друг за другом, и Петрушка выбежал на площадь. Потом всё стихло. Вечером наступили сумерки, и снег стал синим. Старый фокусник собрал кукол и понёс их домой. Вдруг над ширмой появился Дух Петрушки. Он помахал рукой и будто сказал: я не просто кукла. Фокусник испугался и убежал, а труба тихо замолчала. Так закончился ярмарочный день."}], "q": "Кто такой Петрушка в балете?", "a": ["Кукла", "Фокусник", "Король"]}, {"id": "romeo", "t": "Ромео и Джульетта", "by": "Сергей Прокофьев", "y": 1938, "e": "🌹", "sub": "Две семьи, бал и мир навсегда", "ch": [{"t": "Две семьи в Вероне", "e": "🏙️⚔️", "s": "В итальянском городе Вероне жили две семьи: Монтекки и Капулетти. Они давно поссорились, и даже слуги кричали друг на друга на улице. Никто уже не помнил, с чего всё началось. Ромео из семьи Монтекки был добрым и мечтательным юношей. А Джульетта из семьи Капулетти была ещё совсем юной девушкой, любила куклу и смеялась. В музыке Прокофьева слышно строгий и тяжёлый марш двух семей, и от него по всему городу эхо."}, {"t": "Бал у Капулетти", "e": "🎭🕯️", "s": "Капулетти устроили пышный бал. Ромео вместе с друзьями пробрался туда в маске. В зале играл величавый танец, и гости низко кланялись. Вдруг Ромео увидел Джульетту. Их взгляды встретились, и всё вокруг будто замерло. Они потанцевали и полюбили друг друга сразу. Потом выяснилось, что они из враждующих семей. Но влюблённые не захотели с этим мириться. Ночью Ромео пришёл в сад под балкон, и Джульетта вышла к нему. Они поклялись быть вместе."}, {"t": "Тайна брата Лоренцо", "e": "⛪🕊️", "s": "Ромео пришёл к доброму монаху — брату Лоренцо. Монах уважал обоих и надеялся, что любовь поможет двум семьям помириться. Он тайно обвенчал влюблённых в маленькой церкви. Но вражда стала сильнее, и история закончилась грустно. Мы не будем рассказывать об этом подробно. Главное: когда всё случилось, обе семьи поняли, какой глупой была их ссора. Они пожали друг другу руки и помирились навсегда. Музыка в конце звучит тихо и нежно, как прощание."}], "q": "Как называются две семьи в Вероне?", "a": ["Монтекки и Капулетти", "Дроссельмейеры и Гамаши", "Альберты и Хансы"]}];
-const BALLET_STORIES = LX('BALLET_STORIES', {"name": "Про балет", "sub": "пуанты, пачки, театры и великие танцовщики", "items": [{ "id": "bal-pointe", "e": "🩰", "t": "Пуанты", "q": "На что встаёт балерина в пуантах?", px: "st11" }, { "id": "bal-worn-out", "e": "👟", "t": "Сколько пар пуантов нужно балерине", "q": "Сколько спектаклей иногда служит одна пара пуантов?", px: "st11" }, { "id": "bal-tutu", "e": "👗", "t": "Пачка", "q": "Из какой ткани шьют пачку?", px: "st11" }, { "id": "bal-barre", "e": "🏋️", "t": "Балетный станок", "q": "Что такое станок в балетном классе?", px: "st11" }, { "id": "bal-french", "e": "🇫🇷", "t": "Почему в балете все слова французские", "q": "На каком языке названия движений в балете?", px: "st11" }, { "id": "bal-mariinsky", "e": "🏛️", "t": "Мариинский театр", "q": "В каком городе стоит Мариинский театр?", px: "st11" }, { "id": "bal-bolshoi", "e": "🐴", "t": "Большой театр", "q": "Сколько коней везут колесницу над входом в Большой театр?", px: "st11" }, { "id": "bal-vaganova", "e": "🎓", "t": "Школа Вагановой", "q": "В честь кого названа знаменитая балетная школа в Петербурге?", px: "st11" }, { "id": "bal-pavlova", "e": "🍰", "t": "Анна Павлова и десерт", "q": "В честь кого назвали десерт «Павлова»?", px: "st11" }, { "id": "bal-ulanova", "e": "🌟", "t": "Галина Уланова", "q": "В каком театре Галина Уланова была главной балериной?", px: "st11" }, { "id": "bal-plisetskaya", "e": "🦢", "t": "Майя Плисецкая", "q": "В каком городе родилась Майя Плисецкая?", px: "st11" }, { "id": "bal-nureyev", "e": "🚂", "t": "Рудольф Нуреев", "q": "Где родился Рудольф Нуреев?", px: "st11" }, { "id": "bal-baryshnikov", "e": "🤸", "t": "Михаил Барышников", "q": "В каком городе родился Михаил Барышников?", px: "st11" }, { "id": "bal-seasons", "e": "🎨", "t": "Русские сезоны в Париже", "q": "Кто организовал «Русские сезоны» в Париже?", px: "st11" }, { "id": "bal-pit", "e": "🎻", "t": "Оркестровая яма", "q": "Где сидят музыканты, которые играют для балета?", px: "st11" }, { "id": "bal-choreographer", "e": "✍️", "t": "Кто придумывает танцы", "q": "Как называют человека, который придумывает танцы для балета?", px: "st11" }, { "id": "bal-corps", "e": "👯", "t": "Кордебалет", "q": "Как называют артистов балета, которые танцуют все вместе?", px: "st11" }, { "id": "bal-dizzy", "e": "🌀", "t": "Почему у балерины не кружится голова", "q": "Что помогает балерине в пируэте не кружиться голове?", px: "st11" }, { "id": "bal-danseur", "e": "🦘", "t": "Танцовщик и прыжки", "q": "Как называется большой прыжок в шпагат?", px: "st11" }, { "id": "bal-mime", "e": "🤲", "t": "Балет без слов", "q": "Что значит в балете рука, прижатая к сердцу?", px: "st11" }, { "id": "bal-tchaikovsky", "e": "🎼", "t": "Чайковский и балет", "q": "Какой балет написал Чайковский?", px: "st11" }, { "id": "bal-court", "e": "👑", "t": "Первые балеты при дворе", "q": "Где танцевали первые балеты?", px: "st11" }, { "id": "bal-costume", "e": "💄", "t": "Костюмы и грим", "q": "Зачем артисту рисуют лицо перед спектаклем?", px: "st11" }, { "id": "bal-bow", "e": "🙇", "t": "Поклон и реверанс", "q": "Как называется поклон балерины, когда она слегка приседает?", px: "st11" }, { "id": "bal-nutcracker", "e": "🎄", "t": "Щелкунчик под Новый год", "q": "С кем сражаются ожившие игрушки в «Щелкунчике»?", px: "st11" }]});
+const BALLET_STORIES = LX('BALLET_STORIES', {"name": "Про балет", "sub": "пуанты, пачки, театры и великие танцовщики", "items": [{ "id": "bal-pointe", "e": "🩰", "t": "Пуанты", "q": "На что встаёт балерина в пуантах?", px: "st12" }, { "id": "bal-worn-out", "e": "👟", "t": "Сколько пар пуантов нужно балерине", "q": "Сколько спектаклей иногда служит одна пара пуантов?", px: "st12" }, { "id": "bal-tutu", "e": "👗", "t": "Пачка", "q": "Из какой ткани шьют пачку?", px: "st12" }, { "id": "bal-barre", "e": "🏋️", "t": "Балетный станок", "q": "Что такое станок в балетном классе?", px: "st12" }, { "id": "bal-french", "e": "🇫🇷", "t": "Почему в балете все слова французские", "q": "На каком языке названия движений в балете?", px: "st12" }, { "id": "bal-mariinsky", "e": "🏛️", "t": "Мариинский театр", "q": "В каком городе стоит Мариинский театр?", px: "st12" }, { "id": "bal-bolshoi", "e": "🐴", "t": "Большой театр", "q": "Сколько коней везут колесницу над входом в Большой театр?", px: "st12" }, { "id": "bal-vaganova", "e": "🎓", "t": "Школа Вагановой", "q": "В честь кого названа знаменитая балетная школа в Петербурге?", px: "st12" }, { "id": "bal-pavlova", "e": "🍰", "t": "Анна Павлова и десерт", "q": "В честь кого назвали десерт «Павлова»?", px: "st12" }, { "id": "bal-ulanova", "e": "🌟", "t": "Галина Уланова", "q": "В каком театре Галина Уланова была главной балериной?", px: "st12" }, { "id": "bal-plisetskaya", "e": "🦢", "t": "Майя Плисецкая", "q": "В каком городе родилась Майя Плисецкая?", px: "st12" }, { "id": "bal-nureyev", "e": "🚂", "t": "Рудольф Нуреев", "q": "Где родился Рудольф Нуреев?", px: "st12" }, { "id": "bal-baryshnikov", "e": "🤸", "t": "Михаил Барышников", "q": "В каком городе родился Михаил Барышников?", px: "st12" }, { "id": "bal-seasons", "e": "🎨", "t": "Русские сезоны в Париже", "q": "Кто организовал «Русские сезоны» в Париже?", px: "st12" }, { "id": "bal-pit", "e": "🎻", "t": "Оркестровая яма", "q": "Где сидят музыканты, которые играют для балета?", px: "st12" }, { "id": "bal-choreographer", "e": "✍️", "t": "Кто придумывает танцы", "q": "Как называют человека, который придумывает танцы для балета?", px: "st12" }, { "id": "bal-corps", "e": "👯", "t": "Кордебалет", "q": "Как называют артистов балета, которые танцуют все вместе?", px: "st12" }, { "id": "bal-dizzy", "e": "🌀", "t": "Почему у балерины не кружится голова", "q": "Что помогает балерине в пируэте не кружиться голове?", px: "st12" }, { "id": "bal-danseur", "e": "🦘", "t": "Танцовщик и прыжки", "q": "Как называется большой прыжок в шпагат?", px: "st12" }, { "id": "bal-mime", "e": "🤲", "t": "Балет без слов", "q": "Что значит в балете рука, прижатая к сердцу?", px: "st12" }, { "id": "bal-tchaikovsky", "e": "🎼", "t": "Чайковский и балет", "q": "Какой балет написал Чайковский?", px: "st12" }, { "id": "bal-court", "e": "👑", "t": "Первые балеты при дворе", "q": "Где танцевали первые балеты?", px: "st12" }, { "id": "bal-costume", "e": "💄", "t": "Костюмы и грим", "q": "Зачем артисту рисуют лицо перед спектаклем?", px: "st12" }, { "id": "bal-bow", "e": "🙇", "t": "Поклон и реверанс", "q": "Как называется поклон балерины, когда она слегка приседает?", px: "st12" }, { "id": "bal-nutcracker", "e": "🎄", "t": "Щелкунчик под Новый год", "q": "С кем сражаются ожившие игрушки в «Щелкунчике»?", px: "st12" }]});
 if (BALLET_STORIES.items) LEARN.ballet = { name: BALLET_STORIES.name, e: '🩰', bg: 'var(--t-pink)', sub: BALLET_STORIES.sub, items: BALLET_STORIES.items };
  
 const BALLET = (() => {
@@ -25319,9 +25961,9 @@ const PATH = (() => {
       <div class="win-stars">${Array.from({ length: CHEST }, (_, i) => `<span style="animation-delay:${.3 + i * .18}s">${ICON.star}</span>`).join('')}</div>
       <p class="win-line">${Q() ? 'Все миссии дня выполнены!' : 'Все занятия дня сделаны!'}</p>
       ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Новая наклейка!</div>` : ''}
-      <div class="win-btns"><button class="big" data-a="home">Ура!</button></div></div>`;
+      <div class="win-btns"><button class="big" data-a="home">Ура!</button>${(() => { try { return COMIX.chestBtn(); } catch (e) { return ''; } })()}</div></div>`;
     $('.screen').append(ov);
-    ov.onclick = e => { if (!e.target.closest('[data-a]')) return; sfx.pop(); goHome(); };
+    ov.onclick = e => { const a = e.target.closest('[data-a]'); if (!a) return; sfx.pop(); if (a.dataset.a === 'comic') COMIX.today(); else goHome(); };
     sfx.good(); confetti(80); later(sfx.star, 450); later(() => confetti(50), 900);
     say(`Ура${nameBit()}! В сундуке ${CHEST} звёздочек!${sticker ? ' И новая наклейка!' : ''}`);
     ov.querySelector('[data-a]').focus({ preventScroll: true });
