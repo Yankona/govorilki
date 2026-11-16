@@ -1,7 +1,9 @@
 // The child's own «Проект недели»: ≥20 projects by age, a card on «Сегодня» and a tile in «Творим» and «Узнаём»,
 // steps said by the friend, one swap a week, a diary project (a mark a day, «Готово!» after 4 days), a tally project,
 // a photo that stays on the phone (never in the family data), «Готово!» → stars and the badge «Мастер дела», and one
-// line in the grown-ups' «Отчёт». Invented children only (Тина 5, Тим 9).
+// line in the grown-ups' «Отчёт». The card on «Сегодня» takes its own place under the path and the chest (never over a
+// node) and its text is readable (≥4.5:1) in every look, both tracks, 4 and 5 path nodes, phone widths 320–430 and a laptop.
+// Invented children only (Тина 5, Тим 9).
 // node tests/kid_project.js [base] [phone|laptop] [langs=ru,en,pt,de]     screenshots: tests/shots/kproj-<lang>-<dev>-*.png
 const { chromium, devices } = require('playwright');
 const fs = require('fs');
@@ -35,14 +37,14 @@ const ev = (p, s) => p.evaluate(s => window.__T.run(s), s);
     if (bank.n < 20 || bank.g.some(x => x < 5) || !bank.steps) bad.push('bank: ' + JSON.stringify(bank));
     // «Сегодня»: the card; the tiles in «Творим» and «Узнаём»
     await ev(p, `switchKid('k1'); P.homeTab = 'today'; HOME_POS = null; goHome()`); await p.waitForTimeout(500);
-    if (!(await p.$('.kp-card'))) bad.push('no card on «Сегодня»');
+    if (!(await p.$('.kj-card'))) bad.push('no card on «Сегодня»');
     for (const t of ['create', 'discover']) { await ev(p, `P.homeTab = '${t}'; HOME_POS = null; goHome()`); await p.waitForTimeout(300); if (!(await p.$('#stage [data-id="kproj"]'))) bad.push('no tile in ' + t); }
     // Тина (5): her project fits her age; swap once
     const t0 = await ev(p, `(() => { const s = KPR.of(), x = KPR.byId(s.id); return { id: s.id, ok: 5 >= x[2] && 5 <= x[3] }; })()`);
     if (!t0.ok) bad.push('Тина: project not for her age: ' + t0.id);
     await ev(p, `P.homeTab = 'today'; HOME_POS = null; goHome()`); await p.waitForTimeout(300);
-    await p.click('.kp-card'); await p.waitForTimeout(400);
-    if (!(await p.$('.kp-step'))) bad.push('the project did not open');
+    await p.click('.kj-card'); await p.waitForTimeout(400);
+    if (!(await p.$('.kj-step'))) bad.push('the project did not open');
     if (!(await p.evaluate(() => window.__said.length))) bad.push('the friend said nothing');
     await p.screenshot({ path: shot('5-step') });
     await p.click('#kpSwap'); await p.waitForTimeout(300);
@@ -67,7 +69,7 @@ const ev = (p, s) => p.evaluate(s => window.__T.run(s), s);
     if (!fin.win.includes(fin.t)) bad.push('the report does not mention the project: ' + fin.win);
     await p.screenshot({ path: shot('5-done') });
     await ev(p, `P.homeTab = 'today'; HOME_POS = null; goHome()`); await p.waitForTimeout(300);
-    if (!(await p.$('.kp-card.done'))) bad.push('the card does not say done');
+    if (!(await p.$('.kj-card.done'))) bad.push('the card does not say done');
     // Тим (9): a diary project — «Готово!» after 4 marked days; a tally project counts
     await ev(p, `switchKid('k2'); KPR.of(); P.kproj.id = 'weather'; P.kproj.log = {}; save(); KPR.screen(4)`); await p.waitForTimeout(300);
     if (!(await p.$('#kpDone[disabled]'))) bad.push('diary: «Готово!» before 4 days');
@@ -81,6 +83,41 @@ const ev = (p, s) => p.evaluate(s => window.__T.run(s), s);
     for (let i = 0; i < 3; i++) { await p.click('[data-ktl="1"]'); await p.waitForTimeout(80); }
     if ((await ev(p, `P.kproj.tl[1]`)) !== 3) bad.push('tally: did not count');
     await p.screenshot({ path: shot('9-tally') });
+    // the card on «Сегодня»: in the flow under the chest, no overlap with any node, readable in every look
+    const LAY = () => {
+      const card = document.querySelector('#stage .kj-card'); if (!card) return { err: 'no card' };
+      const r = x => x.getBoundingClientRect(), c = r(card), cs = getComputedStyle(card), out = [];
+      if (/absolute|fixed/.test(cs.position)) out.push('position ' + cs.position);
+      const nodes = [...document.querySelectorAll('#stage .pd-n')], chest = document.querySelector('#pdChest');
+      for (const n of nodes) { const q = r(n); if (q.width && !(c.bottom <= q.top || c.top >= q.bottom || c.right <= q.left || c.left >= q.right)) out.push('covers ' + (n.textContent.trim().slice(0, 14))); }
+      if (!chest) out.push('no chest'); else if (c.top < r(chest).bottom) out.push('not below the chest');
+      if (c.left < -1 || c.right > innerWidth + 1) out.push('wider than the screen');
+      const parse = v => { const m = /rgba?\(([^)]+)\)/.exec(v || ''); if (!m) return null; const a = m[1].split(/[,\s/]+/).filter(Boolean).map(parseFloat); return { r: a[0], g: a[1], b: a[2], a: a.length > 3 ? a[3] : 1 }; };
+      const lum = ({ r, g, b }) => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); };
+      const mix = (t, b) => ({ r: t.r * t.a + b.r * (1 - t.a), g: t.g * t.a + b.g * (1 - t.a), b: t.b * t.a + b.b * (1 - t.a), a: 1 });
+      const bgOf = el => { const L = []; for (let e = el; e; e = e.parentElement) { const k = parse(getComputedStyle(e).backgroundColor); if (k && k.a > 0) { L.push(k); if (k.a >= 1) break; } } let b = { r: 255, g: 255, b: 255, a: 1 }; for (let i = L.length - 1; i >= 0; i--) b = mix(L[i], b); return b; };
+      for (const el of [card, ...card.querySelectorAll('*')]) {
+        const own = [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('').trim(); if (!own || !/[\p{L}\p{N}]/u.test(own)) continue;
+        const st = getComputedStyle(el), fg = parse(st.color), bg = bgOf(el), f = fg.a < 1 ? mix(fg, bg) : fg;
+        const L1 = lum(f), L2 = lum(bg), ratio = (Math.max(L1, L2) + .05) / (Math.min(L1, L2) + .05), size = parseFloat(st.fontSize), large = size >= 24 || (size >= 18.6 && +st.fontWeight >= 700);
+        if (ratio < (large ? 3 : 4.5)) out.push(`«${own.slice(0, 24)}» ${ratio.toFixed(2)}`);
+      }
+      return { out, nodes: nodes.length - (chest ? 1 : 0) };
+    };
+    const widths = DEV === 'laptop' ? [[1280, 800], [1024, 768]] : [[320, 640], [375, 812], [430, 932]], seenN = new Set();
+    for (const [w, h] of widths) {
+      await p.setViewportSize({ width: w, height: h });
+      for (const look of ['bright', 'calm', 'dark']) for (const [track, age] of [['r', 5], ['r', 9], ['l', 5], ['l', 9]]) {
+        await ev(p, `switchKid('k2'); P.settings.look = '${look}'; P.settings.track = '${track}'; P.settings.age = ${age}; P.homeTab = 'today'; HOME_POS = null; goHome()`); await p.waitForTimeout(250);
+        const L = await p.evaluate(LAY);
+        if (L.err) { bad.push(`${w} ${look} ${track}${age}: ${L.err}`); continue; }
+        seenN.add(L.nodes); if (L.out.length) bad.push(`${w} ${look} ${track}${age} (${L.nodes} nodes): ${L.out.join(', ')}`);
+        if (look === 'dark' && track === 'l' && age === 9 && w === widths[DEV === 'laptop' ? 0 : 1][0]) {
+          await p.evaluate(() => document.querySelector('#stage .kj-card').scrollIntoView({ block: 'center' })); await p.waitForTimeout(200); await p.screenshot({ path: shot('card-dark-l') }); }
+      }
+    }
+    if (!seenN.has(4) || !seenN.has(5)) bad.push('path nodes seen: ' + [...seenN]);
+    await ev(p, `switchKid('k2'); P.settings.look = ''; P.settings.track = 'l'; P.settings.age = 9; save()`);
     if (errs.length) bad.push('page errors: ' + [...new Set(errs)].join(' | '));
     await c.close();
     console.log(`${lang} ${DEV}: ${bank.n} projects (${bank.g.join('/')}), Тина ${t0.id}→${t1.id}${bad.length ? '\n  ' + bad.join('\n  ') : ' — ok'}`);

@@ -69,6 +69,9 @@ const AUDIT = () => {
   const cls = await p.evaluate(() => document.body.className);
   if (LOOK === 'dark' && !/look-dark/.test(cls)) miss.push('no look-dark class: ' + cls);
   await check('today', true);
+  // the «Проект недели» card under the path: scrolled into view so its text is checked too
+  if (await p.evaluate(() => { const k = document.querySelector('#stage .kj-card'); if (k) k.scrollIntoView({ block: 'center' }); return !!k; })) await check('today-project', true);
+  else miss.push('no «Проект недели» card on «Сегодня»');
   for (const t of ['speak', 'learn', 'create', 'discover']) {
     await run(`(P.homeTab='${t}', goHome())`); await check('tab-' + t, true);
     await p.evaluate(() => { const st = document.querySelector('#stage'); if (st) st.scrollTop = 900; }); await check('tab-' + t + '-2');
