@@ -28,7 +28,13 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       const t = await p.$(`.tile[data-id="${id}"]`), tx = t ? (await t.innerText()).replace(/\s+/g, ' ') : '-';
       ok(!!t && !cyr(tx), `tile ${id}: ${tx}`);
     }
+    // «Новое!»: fresh news not heard yet → a mark on the news tile and on the tile of its topic (Космос)
+    const dots = await p.$$eval('.tile .tile-new', x => x.map(e => e.closest('.tile').dataset.id));
+    ok(dots.includes('learn-news') && (!(await p.$('.tile[data-id="space"]')) || dots.includes('space')), '«Новое!» on the tiles: ' + dots.join(', '));
+    await p.screenshot({ path: D + `nj-${lang}-${DEV}-tiles.png` });
     await p.click('.tile[data-id="learn-news"]'); await p.waitForTimeout(700);
+    const arch = await p.evaluate(() => { const h = [...document.querySelectorAll('.sec-h')]; return { last: h.length ? h[h.length - 1].textContent : '', dates: [...document.querySelectorAll('.story-c .nw-d')].length }; });
+    ok(/🗄️/.test(arch.last) && arch.dates >= 30 && !cyr(arch.last), `old news in the archive: «${arch.last}», ${arch.dates} cards with a date`);
     // the news: months, cards, the badge
     const nw = await p.evaluate(() => ({ n: document.querySelectorAll('.story-c').length, h: [...document.querySelectorAll('.sec-h')].map(e => e.textContent), badge: (document.querySelector('.nw-badge') || {}).textContent || '' }));
     ok(nw.n >= 30 && nw.h.length >= 10 && nw.badge && !cyr(nw.h.join(' ') + nw.badge), `news: ${nw.n} stories, months ${nw.h.slice(0, 3).join(' | ')}…; badge «${nw.badge.trim()}»`);
@@ -49,6 +55,9 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     ok(await run('Object.keys(P.newsB || {}).length') === 1 && !cyr(wl), 'news badge earned: ' + wl);
     await run("screenLearn('news')"); await p.waitForTimeout(400);
     ok(await p.$('.nw-badge.got') !== null, 'news badge shown in the section');
+    await run('goHome()'); await p.waitForTimeout(500);
+    await p.evaluate(() => { const x = document.querySelector('[data-tab="discover"]'); if (x) x.click(); }); await p.waitForTimeout(600);
+    ok(!(await p.$('.tile[data-id="learn-news"] .tile-new')), '«Новое!» is gone once the fresh news are heard');
     // «Новое!» in the topic's own section (space is Russian-only)
     if (lang === 'ru') {
       await run("screenLearn('space')"); await p.waitForTimeout(400);

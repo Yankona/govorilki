@@ -1,5 +1,5 @@
 # «Что нового в мире» and «Профессии» → the NEWSJOBS-DATA block of game/govorilki.html (LEARN.news, LEARN.jobs):
-#  - stories/news/YYYY-MM.json: one batch of true news a month { "month", "news": [ {id, e, t, date, topic, place?, s, q, a, src} ],
+#  - stories/news/YYYY-MM.json or YYYY-MM-DD.json (a weekly batch, named by its Monday): true news { "month", "news": [ {id, e, t, date, topic, place?, s, q, a, src} ],
 #    "stress", "doubts" } — the newest month gives the news badge; src stays in the batch (for checking), not in the game;
 #  - stories/jobs/*.json: { "jobs": [ {id, e, t, sec, s, q, a, tools, clue, tags} ], "stress", "doubts" };
 #  - names' stress → build/say_manual.json (a name that is also a common word only when capitalised).
@@ -17,12 +17,14 @@ def check(x, lo, hi):
     assert len(x['a']) == 3 and all(x[k] for k in ('e', 't', 's', 'q')), x['id']
     if not lo <= len(x['s']) <= hi: warn.append(f"{x['id']}: {len(x['s'])} characters")
     if "'" in json.dumps({k: x[k] for k in ('t', 's', 'q', 'a')}, ensure_ascii=False): warn.append(x['id'] + ": straight apostrophe")
-for p in sorted(glob.glob(os.path.join(S, 'news', '[0-9][0-9][0-9][0-9]-[0-9][0-9].json'))):
-    d = json.load(open(p, encoding='utf-8')); m = os.path.basename(p)[:7]
+for p in sorted(glob.glob(os.path.join(S, 'news', '[0-9][0-9][0-9][0-9]-[0-9][0-9]*.json'))):
+    d = json.load(open(p, encoding='utf-8')); fm = os.path.basename(p)[:7]
     for x in d['news']:
         check(x, 300, 800)
-        assert x['date'][:7] == m and x['topic'] in TOPICS and x.get('src'), x['id']
-        news.append({**{k: x[k] for k in ('id', 'e', 't', 's', 'q', 'a')}, 'sec': m, 'topic': x['topic'], **({'place': x['place']} if x.get('place') else {}), '_d': x['date']})
+        # a monthly file holds that month's events; a weekly file may also hold the end of the month before
+        assert re.fullmatch(r'\d{4}-\d{2}(-\d{2})?', x['date']) and x['topic'] in TOPICS and len(x.get('src', [])) >= 2, x['id']
+        assert x['date'][:7] == fm or len(os.path.basename(p)) > 12, x['id'] + ': the date is not in the month of ' + os.path.basename(p)
+        news.append({**{k: x[k] for k in ('id', 'e', 't', 's', 'q', 'a')}, 'sec': x['date'][:7], 'date': x['date'], 'topic': x['topic'], **({'place': x['place']} if x.get('place') else {}), '_d': x['date']})
     stress.update(d.get('stress', {}))
 news.sort(key=lambda x: x['_d'], reverse=True)
 for x in news: del x['_d']
