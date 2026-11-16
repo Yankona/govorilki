@@ -38,22 +38,32 @@ const lit = n => {   // the value of a pure literal node, or undefined
 };
 const isLX = n => n && n.type === 'CallExpression' && n.callee.type === 'Identifier' && n.callee.name === 'LX' && n.arguments.length === 2 && n.arguments[0].type === 'Literal';
 
-// LANGDATA's names (other languages only)
-const LD = new Set();
-walk.simple(ast, { VariableDeclarator(d) { if (d.id.name === 'LANGDATA' && d.init && d.init.type === 'ObjectExpression') d.init.properties.forEach(p => LD.add(keyOf(p))); } });
+// LANGDATA's names (other languages only), and their values
+const LD = new Set(), LDV = {};
+walk.simple(ast, { VariableDeclarator(d) { if (d.id.name === 'LANGDATA' && d.init && d.init.type === 'ObjectExpression') d.init.properties.forEach(p => { LD.add(keyOf(p)); LDV[keyOf(p)] = p.value; }); } });
+const PACKED = (n, at) => code.slice(at - 12, at) === '/*__PACK__*/';
 
 const edits = [];   // [start, end, text] in code
 let stripped = 0;
 const targets = [], whole = {};
 walk.simple(ast, {
   CallExpression(c) {
-    if (!isLX(c)) return;
+    if (!isLX(c) || PACKED(c, c.start)) return;   // a whole LX marked /*__PACK__*/ is done below
     const name = c.arguments[0].value, def = c.arguments[1];
     if (LANG !== 'ru' && LD.has(name) && !(def.type === 'Literal' && def.value === null)) { edits.push([def.start, def.end, 'null']); stripped += def.end - def.start; return; }
     if (STORY_SETS.includes(name)) targets.push(def);
   },
   VariableDeclarator(d) {
     // a whole variable marked /*__PACK__*/ in the source (let NAME = /*__PACK__*/{…}): its data becomes the pack NAME
+    // let NAME = /*__PACK__*/LX('NAME', {…}): the language's own data (LANGDATA.NAME) or the Russian default; an empty one stays
+    if (d.init && isLX(d.init) && PACKED(d, d.init.start)) {
+      const n = d.init.arguments[0].value, own = LANG !== 'ru' && LDV[n], v = lit(own || d.init.arguments[1]);
+      if (v === undefined) throw new Error(n + ': /*__PACK__*/LX needs plain data');
+      if (!Object.keys(v).length) return;
+      whole[d.id.name] = v; edits.push([d.init.start, d.init.end, 'null']);
+      if (own) edits.push([own.start, own.end, 'null']);
+      return;
+    }
     if (d.init && code.slice(d.init.start - 12, d.init.start) === '/*__PACK__*/') {
       const v = lit(d.init); if (v === undefined) throw new Error(d.id.name + ': /*__PACK__*/ needs plain data');
       whole[d.id.name] = v; edits.push([d.init.start, d.init.end, 'null']); return;

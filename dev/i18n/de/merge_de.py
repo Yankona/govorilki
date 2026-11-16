@@ -22,5 +22,7 @@ ld = H + '/langdata_de.json'
 ldd = json.load(open(ld, encoding='utf-8')) if os.path.exists(ld) else {}
 sys.path.insert(0, T); import stories_ld
 ldd['MORE_STORIES'] = stories_ld.more('de')
+sys.path.insert(0, os.path.join(T, '..', 'build')); import gen_comics
+ldd['COMIC_EPS'] = gen_comics.load('de')   # comics: translated series only
 json.dump(ldd, open(T + '/langdata/de.json', 'w', encoding='utf-8'), ensure_ascii=False)
 print('de translated', done, 'missing', missing, '| langdata', 'yes' if os.path.exists(ld) else 'not yet')
