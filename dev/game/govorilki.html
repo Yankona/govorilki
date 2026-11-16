@@ -2259,6 +2259,13 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .ml-lr.on{box-shadow:inset 0 0 0 3px var(--sun)}.ml-ln{display:flex;align-items:center;gap:8px;font:800 17px var(--f-body)}.ml-seg{display:flex;gap:6px}.ml-seg .chip{padding:6px 12px;font-size:15px}
 .ml-seg .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}.ml-learn{font:800 13px var(--f-body);color:var(--plum);background:var(--t-lilac);border-radius:8px;padding:1px 7px;vertical-align:middle}
 .fe .lang-pick{margin:4px 0 6px}
+.ml-lr{flex-wrap:wrap}.ml-more summary{cursor:pointer;font:700 15px var(--f-body);color:var(--ink-soft);padding:4px 2px}.ml-more[open]{display:grid;gap:6px}
+.ml-main{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;font:700 15px var(--f-body)}.ml-main .chip{padding:6px 12px;font-size:15px}.ml-main .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.ml-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin:8px 0}.ml-strip-h{font-size:20px}
+.ml-sw{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:6px 12px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);font:800 16px var(--f-body);color:var(--ink);cursor:pointer}
+.mm-ask{display:grid;justify-items:center;gap:4px}.mm-hear{font-size:22px}.mm-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:560px;margin:8px auto}
+.mm-o{display:grid;justify-items:center;gap:4px;border:0;border-radius:18px;padding:12px 6px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line),0 3px 0 var(--line);font:800 18px var(--f-body);color:var(--ink);cursor:pointer;min-height:64px;align-content:center;overflow-wrap:anywhere}
+.mm-o .mm-pic .pic{width:64px;height:64px;font-size:52px}.mm-o.right{background:var(--t-green)}.mm-o:disabled:not(.right){opacity:.45}.mm-pair{display:grid;justify-items:center;gap:4px;margin-top:8px}.mm-pair .pic{width:72px;height:72px;font-size:60px}
 .hg-msg{margin:0;white-space:pre-wrap;font:600 15px/1.45 var(--f-body);background:#fff;border-radius:14px;padding:10px;max-height:260px;overflow:auto}
 .hg .big.ghost{margin-top:10px}
 .hg-steps{margin:0;padding:0;list-style:none;counter-reset:hg;display:flex;flex-direction:column;gap:12px}
@@ -3748,7 +3755,7 @@ const LS = () => {
   // a short day for the little ones (4–5): «Счёты» every day takes the place of «Задачка дня»
   if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
   // reading by skill: the reading node says the child's step (read-skill)
-  if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: keep ? b.read.name : IS_RU && RSK.early() ? 'Русское чтение' : 'Чтение', sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
+  if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: readLangToday() !== LANG ? mlInfo(readLangToday())[1] + ' ' + 'Чтение' : keep ? b.read.name : IS_RU && RSK.early() ? 'Русское чтение' : 'Чтение', sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -4715,9 +4722,11 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
   P.stars += stars; P.best[key] = Math.max(P.best[key] || 0, stars); P.plays[key] = (P.plays[key] || 0) + 1;
   // a finished game counts toward the lesson being walked through, or toward any lesson whose plan has it
   const td = todayState(); let doneLesson = null, medal = null;
+  // the reading round of a child of several languages is a step of its language (multilingual)
+  const lkey = key === 'r-skill' && readLangs().length > 1 ? 'r-skill@' + LANG : key;
   for (const id of (ACTIVE ? [ACTIVE] : LIDS())) {
-    if (td.done[id].includes(key) || !lessonPlan(id).some(x => x.key === key)) continue;
-    td.done[id].push(key);
+    if (td.done[id].includes(lkey) || !lessonPlan(id).some(x => x.key === lkey)) continue;
+    td.done[id].push(lkey);
     if (!nextStepOf(id)) {
       doneLesson = id; td.done[id] = [];
       const c = { ...dayCounts(td.date) }; c[id] = (c[id] || 0) + 1; P.days[td.date] = c;
@@ -4745,7 +4754,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
     ${fair.note ? `<p class="fair-note">${fair.note}</p>` : ''}
     ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Новая наклейка!</div>` : ''}
-    ${ns ? lessonTrailHTML(key) : extra}
+    ${ns ? lessonTrailHTML(lkey) : extra}
     <div class="win-btns win-main">
       ${again ? `<button class="big ${next ? 'ghost' : ''}" data-a="again">↻ Ещё раз</button>` : ''}
       ${next ? `<button class="big" data-a="next">${ns || !nextLabel ? 'Дальше' : esc(nextLabel)}</button>` : ''}
@@ -4758,7 +4767,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     if (a.dataset.a === 'again') again(); else if (a.dataset.a === 'next') next(); else (menu || goHome)();
   };
   sfx.good(); confetti(); later(sfx.star, 450);
-  say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? ' Смотри, у тебя новая наклейка!' : ''}${fair.note ? ' ' + fair.note : ''}`);
+  mlPraiseMaybe(say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? ' Смотри, у тебя новая наклейка!' : ''}${fair.note ? ' ' + fair.note : ''}`));
   const first = ov.querySelector('[data-a="next"]') || ov.querySelector('[data-a]');
   if (first) first.focus({ preventScroll: true });
 }
@@ -4959,6 +4968,8 @@ let LANG_CHECKED = false;
 function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Тест с нуля · <button id="demoAgain">заново</button> · <a href="${SITE_ROOT}">выйти</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
+  // a visit to another language's page: open its game; «Домой» there goes back to the main language (multilingual)
+  if (mlvRoute()) return;
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
   if (!PULT_BOOTED) { PULT_BOOTED = true; if (whoBoot()) return; }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
@@ -5047,7 +5058,7 @@ function goHome() {
   HOMEUX.apply(tab);
   const on = (sel, fn) => { const el = $(sel); if (el) el.onclick = fn; };
   lastLine = greet();
-  on('#heroRyz', () => { hopEl($('#heroRyz')); say(greet()); });
+  on('#heroRyz', () => { hopEl($('#heroRyz')); mlHelloMaybe(say(greet())); });
   on('#albumBtn', () => { sfx.pop(); screenAlbum(); });
   on('#voiceBtn', () => { sfx.pop(); screenParents('voice'); });
   on('#friendBtn', () => { sfx.pop(); screenFriends(); });
@@ -5670,7 +5681,7 @@ const LQ = (() => {
     // the maths level of «Математика по силам» lifts the small maths games too (math-skill)
     const m = /^math-/.test(key) && P.mskill && P.mskill.lv || 0;
     // and the reading step of «Чтение по силам» lifts the small letter and word games (read-skill)
-    const r = /^(abc-|read-)/.test(key) && P.rskill && P.rskill.lv || 0;
+    const r = /^(abc-|read-)/.test(key) && rskOf().lv || 0;
     return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0, r >= 4 ? 2 : r >= 2 ? 1 : 0);
   };
   function start(key, n = 6, train = false) {
@@ -9224,6 +9235,7 @@ function screenStory(k, i, o = {}) {
       <div class="story-q" id="stQ" hidden></div>
     </article>`, { back });
   const spans = $$('.ss');
+  { const h2 = $('.story h2'), ms = mlStripHTML(it.e); if (h2 && ms) { h2.insertAdjacentHTML('afterend', ms); mlStripBind($('.story')); } }
   // the sentence being read lights up; a new tap on «Послушать» starts again from the top
   async function readAloud() {
     const my = ++rd; reading++; hush();
@@ -10878,14 +10890,14 @@ function piperNote() {
   if (!n) { n = document.createElement('div'); n.id = 'pvNote'; n.className = 'pv-note'; document.body.append(n); }
   n.textContent = `🔊 Загружаю голос Рыжика (60 МБ, один раз): ${Math.round(PIPER.pct * 100)}%`;
 }
-function piperCall(text, fix) {
+function piperCall(text, fix, voiceAs) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
     PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
-  const voice = piperVoice();
+  const voice = voiceAs || piperVoice();
   return new Promise((res, rej) => {
     const id = ++PIPER.n;
     PIPER.wait[id] = d => {
@@ -12040,7 +12052,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     }).join('');
   };
   drawSnd(); drawLikes(); drawMods();
-  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('afterend', `<section class="psec">${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
+  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('beforebegin', `<section class="psec ks-langs"><h2>Языки</h2>${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
   const resuggest = () => { if (!modsTouched) { mods = suggestMods(track, snd, likes); drawMods(); } };
   $('#ksSnd').onclick = e => {
     const b = e.target.closest('[data-snd]'); if (!b) return; const k = b.dataset.snd; sfx.tick();
@@ -15965,11 +15977,13 @@ const RSK = (() => {
       return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: 'Прочитай текст и ответь на вопрос.', a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1, words: wordsIn(t) };
     } }
   ];
-  const S = () => (P.rskill = P.rskill && typeof P.rskill === 'object' ? P.rskill : {});
+  // one step per language: P.rskill[LANG] (multilingual)
+  const S = () => rskOf(P, LANG);
   const age = () => P.settings.age || (Q() ? 9 : 6);
-  const startLv = () => AGE_LV(age());
-  const has = () => !!(P.rskill && P.rskill.lv);
-  const lv = () => Math.max(1, Math.min(L.length, (P.rskill && P.rskill.lv) || startLv()));
+  // a language the child only learns starts from the letters
+  const startLv = () => mlLearns(LANG) ? 1 : AGE_LV(age());
+  const has = () => !!S().lv;
+  const lv = () => Math.max(1, Math.min(L.length, S().lv || startLv()));
   // an older child at an early step: grown-up looks and words
   const big = () => age() >= 8;
   const early = () => big() && lv() <= 5;
@@ -16038,7 +16052,7 @@ const RSK = (() => {
   function play() {
     if (!has()) { check(); return; }
     const t = newScreen(); let l = lv(), k = 0, task = null, tries = 0, streak = 0, missRun = 0, right = 0, busy = false;
-    const N = 8, l0 = l, UP = 4;
+    const N = 8, l0 = l, UP = 4; let mlShown = false;
     shell('Чтение по силам', `<div class="rk">${head(l)}<div id="rkBox"></div><button class="link-btn" id="rkRe">🔁 Проверить ещё раз</button></div>`);
     const q = strip(N);
     const reHead = () => { $('.rk-head').outerHTML = head(l); bindHead(); };
@@ -16063,6 +16077,13 @@ const RSK = (() => {
         if (streak >= UP && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + 'Отлично читаешь! Идём на ступень выше.'; }
         else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + 'Повторим ступень пониже.'; }
         await talk(line); if (t !== tok) return;
+        // once a round: the word of the picture in each of the child's languages (multilingual)
+        if (!mlShown && task.pics && mlStripHTML(task.a)) {
+          mlShown = true; const x = mlWord(task.a), bx = $('#rkBox');
+          bx.insertAdjacentHTML('beforeend', mlStripHTML(task.a)); mlStripBind(bx);
+          for (const c of myLangs().filter(c => c !== LANG && x.w[c])) { await mlSay(c, x.w[c]); if (t !== tok) return; }
+          await new Promise(r => later(r, 700)); if (t !== tok) return;
+        }
         return step();
       }
       tries++; streak = 0; sfx.oops(); if (el) { wiggle(el); el.disabled = true; }
@@ -16092,14 +16113,20 @@ const RSK = (() => {
       : l === 5 ? [o ? 'code-colw' : alt(['read-pick', 'code-colw'])]
       : l <= 7 ? [o ? 'l-word' : 'read-pick']
       : Q() ? ['l-syll', 'speed'] : ['speed'];
-    return [gameStep('r-skill', 'read'), ...G.filter(ok).map(id => gameStep(id, 'read'))];
+    // a child of several languages reads today in the language that needs it most (multilingual)
+    const rl = readLangToday(n);
+    const first = readLangs().length < 2 ? gameStep('r-skill', 'read')
+      : { key: 'r-skill@' + rl, kind: 'read', name: rl === LANG ? nm(GAMES.find(x => x.id === 'r-skill').name) : `${mlInfo(rl)[1]} Чтение ${LANG_READ[rl]}`, run: () => mlVisit(rl, 'r-skill') };
+    return [first, ...G.filter(ok).map(id => gameStep(id, 'read'))];
   }
   // the reading node of «Сегодня» says the step
-  const sub = () => !has() ? 'проверим, как ты читаешь' : early() ? train() : `ступень ${lv()}: ${L[lv() - 1].n.toLowerCase()}`;
+  const sub = () => readLangs().length > 1 && readLangToday() !== LANG ? `сегодня читаем ${LANG_READ[readLangToday()]}` : !has() ? 'проверим, как ты читаешь' : early() ? train() : `ступень ${lv()}: ${L[lv() - 1].n.toLowerCase()}`;
   // the grown-ups' panel
   function settingsRow() {
     const sec = $('#frSec') || $('#langSec'); if (!sec) return;
-    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="rkLvIn">📖 Чтение: ступень <select id="rkLvIn"><option value="">проверить при входе</option>${L.map((x, i) => `<option value="${i + 1}" ${P.rskill && P.rskill.lv === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)} (${esc(x.ex)})</option>`).join('')}</select></label>`);
+    const ml = readLangs().length > 1, lv0 = S().lv, oth = Object.entries(readLevels()).filter(([c]) => c !== LANG);
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="rkLvIn">📖 Чтение${ml ? ' ' + LANG_READ[LANG] : ''}: ступень <select id="rkLvIn"><option value="">проверить при входе</option>${L.map((x, i) => `<option value="${i + 1}" ${lv0 === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)} (${esc(x.ex)})</option>`).join('')}</select></label>`);
+    if (ml && oth.length) sec.insertAdjacentHTML('beforeend', `<p class="muted rk-oth">Другие языки: ${oth.map(([c, v]) => `${mlInfo(c)[1]} ${esc(mlInfo(c)[2])} — ступень ${v}`).join(', ')}</p>`);
     $('#rkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
   }
   GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'abc')), 0, { id: 'r-skill', name: 'Чтение по силам', sub: 'задания как раз для тебя: от слогов до текстов', kw: 'чтение читать уровень слоги слова текст', ico: () => pic('📖'), bg: 'var(--t-blue)', go: () => play(), grp: 2, also: [6], prog: () => has() ? stepTxt() : '' });
@@ -17186,21 +17213,187 @@ function sayIn(c, text, rate = .8) {
 }
 const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in window && !mlVoice(c)); return no.length ? `<p class="muted ml-nov">🔈 На этом телефоне нет голоса для: ${no.map(c => mlInfo(c)[2]).join(', ')}. Слова видны, а прослушать их можно, если добавить голос: на iPhone — Настройки → Универсальный доступ → Устный контент → Голоса.</p>` : ''; };
 // the parents' choice of the child's languages, in the settings and in the setup of a new child
-const mlLangsHTML = (id, pr) => { const on = myLangs(pr); return `<div class="ml-langs"><p class="prow">Какие языки знает или учит ${esc(pr.settings.name || '')}? Логопедия будет использовать все.</p><div class="ml-lrows" id="${id}">${ML_LANGS.map(([c, f, n]) => { const st = on.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : ''; return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg"><button class="chip ${st === 'speak' ? 'sel' : ''}" data-ml="${c}" data-st="speak">говорит</button><button class="chip ${st === 'learn' ? 'sel' : ''}" data-ml="${c}" data-st="learn">учит</button></span></div>`; }).join('')}</div></div>`; };
+// the parents' choice of the child's languages, in the settings and in the setup of a new child: each language is spoken
+// at home, at school (or the kindergarten) or being learnt; one of the four game languages is the main one, the game speaks it
+const ML_ROLE = [['home', 'дома'], ['school', 'в школе'], ['learn', 'учит']];
+const mlLangsHTML = (id, pr) => {
+  const on = myLangs(pr), main = mainLang(pr) || (READ_LANGS.includes(on[0]) ? on[0] : LANG);
+  const row = ([c, f, n]) => { const st = mlRole(c, pr); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
+  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])), more = ML_LANGS.filter(x => !top.includes(x));
+  const mains = READ_LANGS.filter(c => on.includes(c));
+  return `<div class="ml-langs" data-id="${id}"><p class="prow">На каких языках говорит ${esc(pr.settings.name || '')}? Дома, в школе или учит — игра будет использовать все.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
+    ${more.length ? `<details class="ml-more"><summary>другие языки…</summary>${more.map(row).join('')}</details>` : ''}
+    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Главный язык игры:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlInfo(c)[2]}</button>`).join('')}</div></div></div>`;
+};
 function bindMlLangs(id, pr) {
   const row = document.getElementById(id); if (!row) return;
   row.onclick = e => {
+    const m = e.target.closest('[data-mlmain]');
+    if (m) { pr.settings.lang = m.dataset.mlmain; save(); sfx.tick(); row.querySelectorAll('[data-mlmain]').forEach(x => x.classList.toggle('sel', x === m)); return; }
     const b = e.target.closest('[data-ml]'); if (!b) return;
-    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = cur.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : '';
+    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = mlRole(c, pr);
     const next = was === want ? cur.filter(x => x !== c) : cur.includes(c) ? cur : [...cur, c];
     if (!next.length) return;
     pr.settings.langs = ML_LANGS.map(x => x[0]).filter(x => next.includes(x));
-    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x)));
-    if (was !== want && want === 'learn') learn.add(c); else learn.delete(c);
-    pr.settings.learn = [...learn]; save(); sfx.tick();
-    row.querySelectorAll('.ml-lr').forEach(r => { const k = r.querySelector('[data-ml]').dataset.ml, st = pr.settings.langs.includes(k) ? (pr.settings.learn.includes(k) ? 'learn' : 'speak') : ''; r.classList.toggle('on', !!st); r.querySelectorAll('[data-st]').forEach(x => x.classList.toggle('sel', x.dataset.st === st)); });
+    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x))), school = new Set((pr.settings.school || []).filter(x => next.includes(x)));
+    learn.delete(c); school.delete(c);
+    if (was !== want && want === 'learn') learn.add(c);
+    if (was !== want && want === 'school') school.add(c);
+    pr.settings.learn = [...learn]; pr.settings.school = [...school];
+    if (pr.settings.lang && READ_LANGS.includes(pr.settings.lang) && !next.includes(pr.settings.lang)) delete pr.settings.lang;
+    save(); sfx.tick();
+    const box = row.closest('.ml-langs'), open = !!row.querySelector('.ml-more[open]');
+    box.outerHTML = mlLangsHTML(id, pr); if (open) { const d = document.querySelector(`#${id} .ml-more`); if (d) d.open = true; }
+    bindMlLangs(id, pr);
   };
 }
+/* MLANG-BEGIN ---------- children of three and four languages (the owner: «некоторые дети говорят не на двух языках, а на
+   трёх и четырёх с раннего детства, и это нужно использовать»). Each language of the child is spoken at home, at school
+   or being learnt (settings.langs, settings.school, settings.learn); the game speaks the main one (settings.lang).
+   Reading has its own step in each of the four game languages (P.rskill[lang]); «Сегодня» reads in the language that
+   needs it most — the weakest home language, every other day — and in the others on the days between, on that
+   language's own page: a short visit that comes home by itself. Maths, logic and chess keep one level. ---------- */
+const READ_LANGS = ['ru', 'en', 'pt', 'de'];
+const mlSchool = (c, pr = P) => (pr.settings.school || []).includes(c);
+function mlRole(c, pr = P) { return !myLangs(pr).includes(c) ? '' : mlLearns(c, pr) ? 'learn' : mlSchool(c, pr) ? 'school' : 'home'; }
+function mainLang(pr = P) { const l = pr && pr.settings && pr.settings.lang; return READ_LANGS.includes(l) ? l : null; }
+// the child's languages that have their own page (reading, letters, words in that language)
+function readLangs(pr = P) { const l = myLangs(pr).filter(c => READ_LANGS.includes(c)); return l.length ? l : [LANG]; }
+// the reading step of one language; the first version kept one step for all, it becomes the main language's
+function rskOf(pr = P, l = LANG) {
+  let r = pr.rskill; if (!r || typeof r !== 'object') r = pr.rskill = {};
+  if ('lv' in r || 'checked' in r || 'last' in r) {
+    const old = {}; ['lv', 'checked', 'last'].forEach(k => { if (k in r) { old[k] = r[k]; delete r[k]; } });
+    const f = myLangs(pr)[0], to = mainLang(pr) || (READ_LANGS.includes(f) ? f : LANG);
+    r[to] = Object.assign(old, r[to] || {});
+  }
+  if (!r[l] || typeof r[l] !== 'object') r[l] = {};
+  return r[l];
+}
+// for the parents' report: the reading step in each language read so far, e.g. { ru: 3, pt: 7 }
+function readLevels(pr = P) {
+  if (!pr) return {};
+  rskOf(pr); const o = {};
+  Object.keys(pr.rskill).forEach(l => { const v = pr.rskill[l]; if (READ_LANGS.includes(l) && v && +v.lv) o[l] = +v.lv; });
+  return o;
+}
+// the language of today's reading: the weakest home language every other day, the others in turn between
+function readLangToday(n = dayNo(), pr = P) {
+  const ls = readLangs(pr);
+  if (EMBEDDED || ls.length < 2) return LANG;
+  const first = mainLang(pr) || ls[0], ord = [first, ...ls.filter(c => c !== first)];
+  const lvl = readLevels(pr), rank = { home: 0, school: 1, learn: 2 };
+  const home = ord.filter(c => mlRole(c, pr) === 'home'), pool = home.length ? home : ord.filter(c => mlRole(c, pr) !== 'learn');
+  const weak = (pool.length ? pool : ord).reduce((a, c) => (lvl[c] || 0) < (lvl[a] || 0) ? c : a);
+  const rest = ord.filter(c => c !== weak).sort((a, b) => (rank[mlRole(a, pr)] || 0) - (rank[mlRole(b, pr)] || 0));
+  const d = ((n % 7) + 7) % 7;
+  return d % 2 === 0 || !rest.length ? weak : rest[((d - 1) / 2) % rest.length];
+}
+const LANG_READ = { ru: 'по-русски', en: 'по-английски', pt: 'по-португальски', de: 'по-немецки' };
+// a visit to another language's page for one game; «Домой» there brings the child back to the main language
+const MLV_KEY = 'govorilki-mlv';
+function mlvGet() { try { return JSON.parse(sessionStorage.getItem(MLV_KEY) || 'null'); } catch (e) { return null; } }
+function mlvSet(v) { try { if (v) sessionStorage.setItem(MLV_KEY, JSON.stringify(v)); else sessionStorage.removeItem(MLV_KEY); } catch (e) {} }
+function mlVisit(l, game = 'r-skill') {
+  const g = GAMES.find(x => x.id === game);
+  if (l === LANG || EMBEDDED || !READ_LANGS.includes(l)) { g.go(); return; }
+  mlvSet({ from: LANG, to: l, game, kid: ROOT.cur });
+  hush(); location.assign(SITE_ROOT + langPath(l) + location.search + '#mlv=' + game);
+}
+function mlvRoute() {
+  const v = mlvGet(); if (!v) return false;
+  if (v.to !== LANG) { mlvSet(null); return false; }
+  if (!v.started) {
+    const g = GAMES.find(x => x.id === v.game);
+    if (!/[#&]mlv=/.test(HASH0) || !g || !ROOT.profiles[v.kid]) { mlvSet(null); return false; }
+    v.started = 1; mlvSet(v);
+    ROOT.cur = v.kid; P = ROOT.profiles[v.kid];
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    document.body.classList.toggle('quest', Q()); g.go(); return true;
+  }
+  mlvSet(null); location.replace(SITE_ROOT + langPath(v.from) + location.search + '#kto=' + v.kid); return true;
+}
+const mlVisiting = () => { const v = mlvGet(); return !!(v && v.started && v.to === LANG); };
+// the same word in the child's languages: a small strip under a picture, each word said in its language
+function mlWord(e) { return ML_WORDS.find(x => x.e === e) || null; }
+function mlStripHTML(e) {
+  const x = mlWord(e), ls = myLangs().filter(c => x && x.w[c]);
+  if (!x || ls.length < 2) return '';
+  return `<div class="ml-strip" role="group" aria-label="На моих языках"><span class="ml-strip-h">🌍</span>${ls.map(c => `<button class="ml-sw" data-mls="${c}" data-w="${esc(x.w[c])}"><span class="lang-f">${mlInfo(c)[1]}</span>${esc(x.w[c])}</button>`).join('')}</div>`;
+}
+function mlStripBind(root) {
+  if (!root) return;
+  root.querySelectorAll('[data-mls]').forEach(b => b.onclick = ev => { ev.stopPropagation(); sfx.pop(); mlSay(b.dataset.mls, b.dataset.w); });
+}
+// a word in a language: the main language through the game's voice, the others through the phone's voice for that
+// language, or the app's voice of that language when the phone has none
+const ML_PIPER = { ru: 'ru_RU-ruslan-medium', en: 'en_GB-jenny_dioco-medium', pt: 'pt_PT-tugão-medium', de: 'de_DE-thorsten-medium' };
+async function mlSay(c, text) {
+  if (c === LANG) return say(text);
+  if (await sayIn(c, text, .85)) return true;
+  if (!ML_PIPER[c] || !piperOn()) return false;
+  try {
+    const buf = await Promise.race([piperCall(text, null, ML_PIPER[c]), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 20000))]);
+    const a = await ac().decodeAudioData(buf), src = ac().createBufferSource(); src.buffer = a; src.connect(ac().destination);
+    await new Promise(res => { src.onended = res; src.start(); });
+    return true;
+  } catch (e) { return false; }
+}
+// now and then the friend greets and praises in one of the child's other languages
+const ML_HELLO = { ru: RU('Привет!'), en: 'Hello!', pt: 'Olá!', de: 'Hallo!', uk: RU('Привіт!'), es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!' };
+const ML_PRAISE = { ru: [RU('Молодец!'), RU('Здорово!')], en: ['Well done!', 'Great job!'], pt: ['Muito bem!', 'Boa!'], de: ['Super gemacht!', 'Toll!'], uk: [RU('Молодець!')], es: ['¡Muy bien!'], fr: ['Bravo !'], it: ['Bravo!'] };
+function mlOther() { const o = myLangs().filter(c => c !== LANG && (ML_PRAISE[c] || ML_HELLO[c])); return o.length ? pickOne(o) : null; }
+function mlPraiseMaybe(after) {
+  if (!mlOn() || Math.random() > .25) return;
+  const c = mlOther(); if (!c || !ML_PRAISE[c]) return;
+  const t = tok; Promise.resolve(after).then(() => { if (t === tok) mlSay(c, pickOne(ML_PRAISE[c])); });
+}
+function mlHelloMaybe(after) {
+  if (!mlOn() || P.mlHello === dayKey()) return;
+  const c = mlOther(); if (!c || !ML_HELLO[c]) return;
+  P.mlHello = dayKey(); save();
+  const t = tok; Promise.resolve(after).then(() => { if (t === tok) mlSay(c, ML_HELLO[c]); });
+}
+/* «Мои языки»: hear a word in one of your languages, find it in another (pictures for those who do not read it yet) */
+function screenMlMatch() {
+  const t = newScreen(), langs = myLangs().filter(c => ML_WORDS[0].w[c]);
+  if (langs.length < 2) { shell('Мои языки', `<div class="ml"><p class="lead">Для этой игры нужны хотя бы два языка ребёнка — их отмечают в «Для взрослых».</p></div>`, { guide: false }); return; }
+  const lvl = readLevels(), age = P.settings.age || 6;
+  const reads = c => (lvl[c] || 0) >= 4 || (!lvl[c] && age >= 8);
+  const N = 8, deck = shuffle([...ML_WORDS]).slice(0, N).map((x, i) => {
+    const a = langs[i % langs.length], others = langs.filter(c => c !== a), b = others.includes(LANG) && i % 2 ? LANG : others[(i >> 1) % others.length];
+    return { x, a, b, opts: shuffle([x, ...sample(ML_WORDS.filter(y => y !== x && y.w[b] !== x.w[b]), 2)]) };
+  });
+  let k = 0, ok = 0, tries = 0, busy = false;
+  const draw = () => {
+    const d = deck[k], pics = !reads(d.b);
+    return `<p class="ml-step">${k + 1} / ${deck.length}</p>
+      <div class="mm-ask"><button class="big ghost mm-hear" id="mmHear">🔊 <span class="lang-f">${mlInfo(d.a)[1]}</span></button>
+      <p class="lead">Найди это слово: <span class="lang-f">${mlInfo(d.b)[1]}</span> ${esc(mlInfo(d.b)[2])}</p></div>
+      <div class="mm-opts ${pics ? 'pics' : ''}">${d.opts.map(y => `<button class="mm-o" data-e="${y.e}">${pics ? `<span class="mm-pic">${pic(y.e)}</span>` : ''}<b>${esc(y.w[d.b])}</b></button>`).join('')}</div>
+      <div id="mmOut"></div>`;
+  };
+  shell('Мои языки', `<div class="ml mm" id="mm">${draw()}</div>`, { guide: false });
+  const box = $('#mm'), play = () => mlSay(deck[k].a, deck[k].x.w[deck[k].a]);
+  talk('Послушай слово на одном языке и найди его на другом!').then(() => { if (t === tok) play(); });
+  box.onclick = async e => {
+    if (e.target.closest('#mmHear')) { sfx.pop(); play(); return; }
+    const o = e.target.closest('.mm-o'); if (!o || busy || o.disabled) return;
+    const d = deck[k];
+    if (o.dataset.e !== d.x.e) { sfx.oops(); wiggle(o); o.disabled = true; tries++; return; }
+    busy = true; if (!tries) ok++; sfx.good(); o.classList.add('right');
+    box.querySelectorAll('.mm-o').forEach(x => x.disabled = true);
+    $('#mmOut').innerHTML = `<div class="mm-pair">${pic(d.x.e)}${mlStripHTML(d.x.e)}</div><div class="prow-btns"><button class="big" id="mmNext">Дальше</button></div>`;
+    mlStripBind($('#mmOut'));
+    $('#mmNext').onclick = () => {
+      hush(); sfx.pop(); k++; tries = 0; busy = false;
+      if (k >= deck.length) { finish({ key: 'ml-match', stars: ok >= 7 ? 3 : ok >= 4 ? 2 : 1, line: `${ok} из ${deck.length} с первого раза! Одно слово — и на всех твоих языках.`, again: () => screenMlMatch() }); return; }
+      box.innerHTML = draw(); play();
+    };
+    mlSay(d.b, d.x.w[d.b]);
+  };
+}
+/* MLANG-END */
 // 1. one sound, different languages: how it is made in each of the child's languages, words to hear and say
 function screenMlSound(sndArg) {
   newScreen();
@@ -17284,6 +17477,7 @@ function screenMlGuess() {
 GAMES.push(
   { id: 'ml-sound', hide: () => !mlOn(), name: 'Один звук — разные языки', sub: 'как звук живёт в каждом твоём языке', ico: () => pic('🌍'), bg: 'var(--t-mint)', go: () => screenMlSound(), grp: 14 },
   { id: 'ml-say', hide: () => !mlOn(), name: 'Скажи на всех языках', sub: () => myLangs().map(c => mlText(ML_WORDS[0].w[c])).join(', '), ico: () => pic('🗣️'), bg: 'var(--t-yellow)', go: () => screenMlSay(), grp: 14 },
+  { id: 'ml-match', hide: () => !mlOn(), name: 'Мои языки', sub: 'услышь слово на одном языке — найди на другом', kw: 'языки слова перевод английский португальский немецкий русский', ico: () => pic('🌍'), bg: 'var(--t-blue)', go: () => screenMlMatch(), grp: 14 },
   { id: 'ml-guess', hide: () => !mlOn(), name: 'Угадай язык', sub: 'послушай слово — чей это язык?', ico: () => pic('👂'), bg: 'var(--t-lilac)', go: () => screenMlGuess(), grp: 14 }
 );
 SECTIONS.splice(1, 0, { g: 14, h: 'Мои языки', p: 'один звук в разных языках: почувствуй разницу' });
@@ -22888,7 +23082,7 @@ const GUIDE = (() => {
     return [0, 1, 5, 9].includes(g.grp) ? 'speech' : [2, 6].includes(g.grp) ? 'read' : g.grp === 3 ? 'math' : g.grp === 8 ? (/olymp|puzzle/.test(key) ? 'logic' : 'math') : g.grp === 4 ? 'art' : 'other';
   };
   const lv = pr => ({ m: (pr.mskill && pr.mskill.lv) || 0, so: (pr.soro && pr.soro.top) || 0, ol: ((pr.olymp && pr.olymp.solved) || []).length, oll: (pr.olymp && pr.olymp.lv) || 0,
-    w: Math.max(0, ...(pr.reads || []).map(r => +r.wpm || 0)), rl: (pr.rskill && +pr.rskill.lv) || 0,
+    w: Math.max(0, ...(pr.reads || []).map(r => +r.wpm || 0)), rl: +(readLevels(pr)[LANG] || 0),
     cs: Object.keys((pr.chessSchool || {}).done || {}).length, ai: (pr.chessAI && +pr.chessAI.top) || 0 });
   const prevWeek = () => { const d = new Date(weekId()); d.setDate(d.getDate() - 7); return dayKey(d); };
   // the week bucket; at a new week the old one is kept as «last week» with the levels it ended on
@@ -25919,7 +26113,7 @@ function langGo(l, hash = location.hash) {
 // before there were languages, stays Russian
 function langRedirect() {
   if (EMBEDDED) return false;
-  if (/[#&](sem=|login\b|voiti\b)/.test(HASH0)) return false;
+  if (/[#&](sem=|login\b|voiti\b|mlv=)/.test(HASH0)) return false;
   let want = langWant();
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
   const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';
