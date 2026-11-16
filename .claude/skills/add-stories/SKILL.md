@@ -35,3 +35,24 @@ mistake → add it to `REJECT` in gen_stories.py. New stories are Russian-only (
 ## Check
 `./build/build_all.sh`, `node tests/names141.js` (every capitalised word and its stress), `node tests/travel141.js`
 (sections and counts, a story read aloud, the quiz has no two answers from one country), smoke.
+
+## «Что нового в мире»: a monthly batch of true news (stories/news/YYYY-MM.json)
+Translated into en/pt/de (unlike the journey stories), so every new batch is also a translation job.
+1. Write `stories/news/<YYYY-MM>.json` (the month of the events; one file a month):
+   `{ "month": "2026-12", "news": [ { "id": "news-<slug>", "e": "🚀", "t": "…", "date": "2026-12-05" (or "2026-12"),
+   "topic": "space|animals|water|plants|tech|sport|places|old|art|music|ballet", "place": "<ISO country, optional>",
+   "s": "<6–10 sentences, 350–750 characters, starts with the date: «5 декабря 2026 года…»>", "q": "…", "a": [right, wrong, wrong],
+   "src": ["<reliable source url>", "<second>"] } ], "stress": {…} }`.
+   Real, recent, kind events only: check every fact and date with web search on reliable sources (agencies, NASA/ESA,
+   Reuters/AP/BBC, museums, universities); no politics, war, disasters with victims, nothing scary; a company name only when
+   it is the fact. A `content-writer` per topic group works well (brief: the topics, the month, this format).
+2. `RACCW=.cache/raccw python3 build/gen_news_jobs.py` → LEARN.news (newest first, a heading per month), names' stress →
+   say_manual.json (a writer's stress for a common word is often wrong: put it into `REJECT` there).
+   «Новое!» shows by itself in the section of the topic (space, water, plants, old…) and of the country (`place`).
+   The badge «Знаю новости» is for the five newest stories; a new batch makes a new badge.
+3. `./build/build_all.sh`, then `python3 i18n/fix_news_jobs.py --todo i18n/nj/todo-news-<YYYY-MM>.json` → give the todo
+   file and `i18n/nj/BRIEF.md` to the `translator` subagent (output `i18n/nj/news-<YYYY-MM>.json`), run fix_news_jobs.py
+   again, delete the todo file, build: «missing 8 in 3 groups».
+4. `node tests/news_jobs.js` (phone) and `… laptop`.
+«Профессии» work the same way from `stories/jobs/*.json` (brief: `stories/jobs/BRIEF.md`; sections help, build, move, make,
+learn, nature, digital; `tools` 3 emoji and `clue` feed «Угадай профессию», `tags` feed «Кем я буду?»).
