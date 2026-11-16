@@ -2528,16 +2528,32 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .pv-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}.pv-t b{font-size:17px}.pv-t small{font-size:14px;color:var(--ink-soft);line-height:1.3}
 .pv-ad{display:flex;flex-direction:column;gap:8px;border-radius:20px;padding:10px 12px;background:var(--t-lilac);box-shadow:0 4px 0 var(--line)}
 .pv-acts{display:flex;gap:8px;flex-wrap:wrap}
-/* GUIDE-CSS: «Гайд» cards for grown-ups */
-.gd-card{background:var(--card,#fff);border-radius:22px;padding:14px 16px;margin:0 0 14px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 6px 18px rgba(60,40,10,.08);display:flex;flex-direction:column;gap:6px}
+/* GUIDE-CSS: «Отчёт» cards for grown-ups */
+.gd-card{background:var(--surface,#fff);border-radius:22px;padding:14px 16px;margin:0 0 14px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 6px 18px rgba(60,40,10,.08);display:flex;flex-direction:column;gap:8px}
 .gd-h{display:flex;align-items:center;gap:10px}.gd-h .chip-face{width:44px;height:44px;flex:none}.gd-h b{font:800 20px/1.2 var(--f-head,inherit)}.gd-h small{margin-left:auto;color:var(--ink-soft)}
-.gd-s{margin:8px 0 0;font:800 16px/1.3 var(--f-body);color:var(--ink)}
-.gd-wk p,.gd-talk p,.gd-pj p,.gd-tip p{margin:2px 0;font:600 15px/1.45 var(--f-body);color:var(--ink)}
-.gd-tip{background:var(--t-yellow);border-radius:16px;padding:10px 12px}.gd-ar{display:block;font:700 12px/1.3 var(--f-body);color:var(--ink-soft)}
-.gd-talk{background:var(--t-blue);border-radius:16px;padding:10px 12px}.gd-talk small{display:flex;align-items:center;gap:6px;color:var(--ink-soft);font-size:13px}.gd-talk small .pic,.gd-talk small img,.gd-talk small svg{width:20px;height:20px}
-.gd-ans summary{cursor:pointer;font:700 14px/1.4 var(--f-body);color:var(--ink-soft)}
-.gd-pj{background:var(--t-mint);border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}.gd-pj .emo{font-size:22px}.gd-done{font-weight:800!important}
-.gd-next{align-self:flex-start}.gd-did{align-self:flex-start}
+.gd-act{margin:0;font:700 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.gd-s{margin:0 0 2px;font:800 15px/1.3 var(--f-body);color:var(--ink)}
+.gd-ok,.gd-hard{border-radius:16px;padding:10px 12px}.gd-ok{background:var(--t-mint)}.gd-hard{background:var(--t-yellow)}
+.gd-ok p,.gd-hard p,.gd-idea p{margin:2px 0;font:600 15px/1.45 var(--f-body);color:var(--ink)}
+.gd-wkr,.gd-idea{border-radius:16px;background:var(--t-blue);padding:8px 12px}.gd-idea{background:transparent;padding:2px 4px}
+.gd-wkr summary,.gd-idea summary{cursor:pointer;font:700 15px/1.5 var(--f-body);color:var(--ink)}.gd-idea summary{color:var(--ink-soft);font-weight:600}
+.gd-rows{display:flex;flex-direction:column;gap:2px;margin:6px 0}.gd-rows p{margin:0;display:grid;grid-template-columns:1fr auto;column-gap:10px;font:600 15px/1.35 var(--f-body);color:var(--ink)}
+.gd-rows b{font-size:18px;color:var(--ink-soft)}.gd-rows b.up{color:var(--leaf,#2e9e4f)}.gd-rows small{grid-column:1/-1;color:var(--ink-soft);font-size:13px}
+.gd-share{margin-top:4px}
+/* KPROJ-CSS: the child's «Проект недели» */
+.kp{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:0 auto;background:var(--surface,#fff);color:var(--ink);border-radius:26px;padding:16px}.kp .kp-step{background:var(--t-mint)}.kp .kp-day,.kp .kp-ic,.kp .kp-t{background:var(--bg,#F6F3EE)}
+.kp-head{display:flex;align-items:center;gap:12px}.kp-head .kp-e{width:64px;height:64px;flex:none;font-size:52px;line-height:1}.kp-head h2{margin:0;font:800 24px/1.2 var(--f-head,inherit)}.kp-head small{color:var(--ink-soft);font-weight:700}
+.kp-step{background:var(--surface,#fff);border-radius:24px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 2px 0 rgba(0,0,0,.06)}
+.kp-pic{font-size:96px;line-height:1.1;width:120px;height:120px;display:flex;align-items:center;justify-content:center}.kp-pic img,.kp-pic svg{width:110px;height:110px}
+.kp-step p{margin:0;text-align:center;font:700 20px/1.4 var(--f-body);color:var(--ink)}
+.kp-nav{display:flex;gap:10px;flex-wrap:wrap}.kp-nav .big{flex:1}
+.kp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.kp-day{background:var(--surface,#fff);border-radius:12px;text-align:center;padding:4px 0}.kp-day small{display:block;color:var(--ink-soft);font-size:12px}.kp-day b{font-size:24px;min-height:30px;display:block}.kp-day.now{outline:3px solid var(--sun,#ffc83d)}
+.kp-pick{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.kp-ic{font-size:36px;width:64px;height:64px;border-radius:18px;border:0;background:var(--surface,#fff);box-shadow:0 2px 0 rgba(0,0,0,.08)}.kp-ic.sel{outline:4px solid var(--leaf,#2e9e4f)}
+.kp-q{margin:0;text-align:center;font:700 16px/1.4 var(--f-body);color:var(--ink-soft)}
+.kp-tally{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kp-t{border:0;border-radius:20px;background:var(--surface,#fff);padding:12px;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 0 rgba(0,0,0,.08)}.kp-t .emo{font-size:40px}.kp-t b{font-size:28px}.kp-t small{color:var(--ink-soft);font-weight:700}
+.kp-end{display:flex;flex-direction:column;gap:12px}.kp-done{margin:0;font:800 20px/1.4 var(--f-body);text-align:center}.kp-ph{max-width:100%;border-radius:18px}.kp-cam{text-align:center}
+.kp-grown{margin:0;font:600 14px/1.4 var(--f-body);color:var(--ink-soft)}.kp-swap{align-self:center}
+.kp-card{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:22px;background:var(--t-mint);padding:12px 14px;margin:12px 0;text-align:left;box-shadow:0 2px 0 rgba(0,0,0,.06)}.kp-card .kp-e{font-size:40px;width:48px;height:48px;flex:none;line-height:1}.kp-card .kp-ct{display:flex;flex-direction:column;flex:1}.kp-card small{color:var(--ink-soft);font-weight:700}.kp-card b{font:800 18px/1.3 var(--f-body)}.kp-card i{font-style:normal;color:var(--tiger,#e4632a);font-weight:800}
 .pv-url{word-break:break-all;font-size:12px}
 .pult-gate{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,420px);margin:0 auto;padding-top:12px;text-align:center}
 .pg-t{margin:0;min-height:2.6em}
@@ -8500,11 +8516,11 @@ function screenGuest() {
       <button class="gh-t" data-gt="gChessH"><span class="emo">♟</span><b>Шахматы</b></button>
       <button class="gh-t" data-gt="tale"><span class="emo">📖</span><b>Сказка вместе</b></button>
       <button class="gh-t" data-gt="gGamesH"><span class="emo">🎮</span><b>Игры внуков</b></button>
-      <button class="gh-t" data-gt="gGuideH"><span class="emo">🧭</span><b>Гайд</b></button>
+      <button class="gh-t" data-gt="gGuideH"><span class="emo">📊</span><b>Отчёт</b></button>
     </div>
     ${hgTop ? `<div id="hgBox">${homeGuide(true)}</div>` : ''}
     <div class="fam-card"><h2 class="fam-h" id="gKidsH">Как дела у ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
-    <div class="fam-card gd-sec"><h2 class="fam-h" id="gGuideH">🧭 Гайд</h2><p class="lead">Что получилось за неделю, совет из жизни и о чём поговорить.</p><div id="gGuide"></div></div>
+    <div class="fam-card gd-sec"><h2 class="fam-h" id="gGuideH">📊 Отчёт</h2><p class="lead">Что у внуков получается и что пока трудно.</p><div id="gGuide"></div></div>
     <div class="fam-card gh-hello"><h2 class="fam-h" id="gHelloH">💌 Послать привет</h2><p class="lead">Выберите картинку и слова. Игра покажет привет с вашим портретом и прочитает его вслух, когда внук откроет игру.</p>
       <div class="gh-to" id="ghTo"></div>
       <div class="gh-st" id="ghSt">${HI_STICKERS.map((x, i) => `<button class="gh-s${i ? '' : ' on'}" data-st="${i}">${x}</button>`).join('')}</div>
@@ -10484,8 +10500,8 @@ function screenProfile() {
     ${pick('Бит', 'beat', c.beats, v => BEATS[v] ? BEATS[v].name : v)}
     ${pick('Рамка', 'frame', c.frames, v => FRAMES[v] || v)}
     ${pick('Байк на Л-трассе', 'bike', c.bikes, v => v === 'neon' ? 'Неоновый' : 'Золотой')}
-    <h3 class="pf-h">Ачивки ${(P.ach || []).length} из ${ACH.length}</h3>
-    <div class="ach">${ACH.map(a => { const on = (P.ach || []).includes(a.id); return `<div class="ac ${on ? 'on' : ''}" title="${esc(a.d)}"><span>${on ? a.e : '🔒'}</span><b>${esc(a.t)}</b><small>${esc(a.d)}</small></div>`; }).join('')}</div>
+    <h3 class="pf-h">Ачивки ${(P.ach || []).length} из ${ACH.filter(a => !a.hide || (P.ach || []).includes(a.id)).length}</h3>
+    <div class="ach">${ACH.filter(a => !a.hide || (P.ach || []).includes(a.id)).map(a => { const on = (P.ach || []).includes(a.id); return `<div class="ac ${on ? 'on' : ''}" title="${esc(a.d)}"><span>${on ? a.e : '🔒'}</span><b>${esc(a.t)}</b><small>${esc(a.d)}</small></div>`; }).join('')}</div>
     <p class="lead">Награды за сезон забирай в карточке «Сезон» на главной. Звания, микрофоны, биты и рамки остаются навсегда.</p></div>`);
   talk(`Это твой профиль. Уровень ${lv}, ${belt.name}. Выбирай звание, микрофон и бит!`);
   st.onclick = e => {
@@ -11193,7 +11209,7 @@ var PAR_BACK = null;
 function screenParents(focus) {
   newScreen();
   shell('Для взрослых', `<div class="parents">
-    <section class="psec gd-sec" id="guideSec"><h2>🧭 Гайд</h2><p class="muted">Игра учит, а вы направляете: что получилось за неделю, один совет из жизни и проект недели.</p><div id="guideBox"></div></section>
+    <section class="psec gd-sec" id="guideSec"><h2>📊 Отчёт</h2><p class="muted">Что получается и что пока трудно — коротко, по каждому ребёнку.</p><div id="guideBox"></div></section>
     <section class="psec"><h2>Семьи</h2>
       <p>Сейчас: <b>${esc(fam().name)}</b> — ${esc(KIDS.map(id => ROOT.profiles[id].settings.name).join(', '))}${fam().grands.length ? '; ' + esc(fam().grands.map(g => g.name).join(', ')) : ''}.</p>
       ${(() => { const lg = P.likeG || {}, up = Object.keys(lg).filter(k => lg[k] > 0).map(gameName).filter(Boolean), dn = Object.keys(lg).filter(k => lg[k] < 0).map(gameName).filter(Boolean);
@@ -14328,7 +14344,7 @@ function recentName(key) {
 }
 function noteRecent(key, stars) {
   const n = recentName(key); if (!n) return;
-  try { GUIDE.note(key); } catch (e) {}
+  try { GUIDE.note(key, stars); } catch (e) {}
   P.recent = [[n, stars, Date.now(), key], ...(P.recent || []).filter(x => Date.now() - x[2] < 7 * 864e5)].slice(0, 12);
 }
 // for the relatives: the last seven days (lessons finished each day), today's lessons by name, the last activities with their times
@@ -16565,7 +16581,7 @@ function pultKid(f, id) {
     <span class="pv-t"><b>${esc(st.name)}${st.age ? `, ${st.age} ${plural(st.age, ['год', 'года', 'лет'])}` : ''}</b>
       <small>⭐ ${pr.stars} · 🔥 ${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд · 📚 ${wl} ${plural(wl, ['занятие', 'занятия', 'занятий'])} за неделю</small>
       <small>${last ? `Последнее: ${esc(last[0])}, ${pultAgo(last[2])}` : she ? 'Ещё не играла' : 'Ещё не играл'}</small></span><span class="g-go">▶</span></button>
-    <div class="pv-acts"><button class="chip" data-kguide="${id}" data-fam="${f.id}">🧭 Гайд</button><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Настройки, интересы, голос</button></div></div>`;
+    <div class="pv-acts"><button class="chip" data-kguide="${id}" data-fam="${f.id}">📊 Отчёт</button><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Настройки, интересы, голос</button></div></div>`;
 }
 function pultAdult(f, g) {
   const at = (f.seen || {})[g.id], she = !!g.she, games = Object.values(gamesAll()).filter(x => x.opp === g.id).length;
@@ -22562,7 +22578,7 @@ const SETUI = (() => {
     if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид игры</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
-      ['guide', '🧭', 'Гайд', 'неделя, совет на сегодня, проект', [S.guide]],
+      ['guide', '📊', 'Отчёт', 'что получается и что пока трудно', [S.guide]],
       ['fam', '👪', 'Семья', '', [S.fam]],
       ['friends', '🤝', 'Друзья', '', [S.friends]],
       ['kid', '🧒', name, 'имя, языки, интересы, чтение', [S.kid, S.book]],
@@ -22592,15 +22608,147 @@ const SETUI = (() => {
   return { build, reset };
 })();
 /* SETUI-END */
+/* KPROJ-BEGIN */
+/* ---------- «Проект недели» for the child (the owner: «проект недели для ребёнка, с которым он может справиться
+   самостоятельно… там, где родителям нужно совсем минимум участия»). A new project each week, by age (4–5 / 6–8 / 9–12),
+   one swap a week; 3–5 steps with pictures, said by the friend; things every home has (paper, pencils, toys, the
+   window); nothing dangerous (no knives, stove, scissors for the little ones, no going out alone, no internet). Some
+   projects keep a diary or a tally right here in the game. «Готово!» → stars and the badge «Мастер дела»; a photo, if
+   taken, stays on this phone (its own key, never in the synced family data; none inside claude.ai). The grown-ups'
+   «Отчёт» only says the project was done. P.kproj = { w: week id, id, sw: swapped, log: {day: icon}, tl: [counts] };
+   the done ones in P.guide.pj = { week id: project id } (the badge reads them). ---------- */
+// [id, emoji, from age, to age, title, steps [[emoji, text]…], tool, grown-up line]
+// tools: ['days', icons] — one mark a day (Готово! after 4 days); ['tally', [[emoji, name]…]] — tap to count
+const KPROJ = [
+  ['tower', '🗼', 4, 8, 'Самая высокая башня', [['🧸', 'Собери десять разных вещей: кубики, книжки, коробочки, игрушки.'], ['🧱', 'Строй башню: большие вещи — вниз, маленькие — наверх.'], ['🔢', 'Сколько вещей удержалось? Посчитай вслух.'], ['🔁', 'Разбери и построй ещё раз. Получилось выше?']]],
+  ['colors', '🌈', 4, 6, 'Игрушки по цветам', [['🧸', 'Принеси свои игрушки на ковёр.'], ['🎨', 'Разложи их по цветам: красные к красным, синие к синим.'], ['👆', 'Посчитай каждую кучку: нажимай на цвет, когда считаешь игрушку.'], ['🏆', 'Какой цвет победил?']], ['tally', [['🔴', 'красные'], ['🔵', 'синие'], ['🟢', 'зелёные'], ['🟡', 'жёлтые']]]],
+  ['zoo', '🦁', 4, 7, 'Зоопарк из игрушек', [['🐻', 'Найди всех игрушечных зверей.'], ['📚', 'Построй каждому домик из книжек или кубиков.'], ['🏷️', 'Придумай каждому зверю имя.'], ['🎟️', 'Позови семью на экскурсию и расскажи про своих зверей.']]],
+  ['faces', '😀', 4, 7, 'Рожицы настроения', [['📄', 'Возьми лист бумаги и карандаши.'], ['😀', 'Нарисуй четыре рожицы: весёлую, грустную, сердитую и удивлённую.'], ['🪞', 'Покажи каждую рожицу перед зеркалом сам.'], ['🤔', 'Покажи рисунки семье: пусть угадают, где какое настроение.']]],
+  ['window', '🪟', 4, 6, 'Что за окном?', [['🪟', 'Сядь у окна.'], ['👀', 'Смотри внимательно: кто и что проходит мимо?'], ['👆', 'Нажимай на картинку каждый раз, когда видишь машину, человека, собаку или птицу.'], ['🏆', 'Кого было больше всех?']], ['tally', [['🚗', 'машины'], ['🚶', 'люди'], ['🐕', 'собаки'], ['🐦', 'птицы']]]],
+  ['animal', '🦄', 4, 9, 'Придумай нового зверя', [['✏️', 'Нарисуй зверя, которого никто никогда не видел.'], ['🐾', 'Сколько у него лап, ушей, хвостов? Где он живёт?'], ['🏷️', 'Придумай ему смешное имя.'], ['🗣️', 'За ужином расскажи семье историю про своего зверя.']]],
+  ['sizes', '📏', 4, 6, 'Выстрой по росту', [['🧸', 'Выбери семь игрушек.'], ['📏', 'Поставь их в ряд: от самой маленькой до самой большой.'], ['🔁', 'А теперь наоборот: от большой к маленькой.'], ['🔢', 'Какая игрушка стоит посередине?']]],
+  ['senses', '👂', 4, 9, 'Минута тишины', [['🪑', 'Сядь удобно у окна и закрой глаза.'], ['👂', 'Слушай целую минуту. Какие звуки ты слышишь?'], ['👆', 'Открой глаза и отметь, что ты услышал: машины, птиц, голоса, музыку.'], ['🔁', 'Попробуй ещё раз вечером. Звуки другие?']], ['tally', [['🚗', 'машины'], ['🐦', 'птицы'], ['🗣️', 'голоса'], ['🎵', 'музыка']]]],
+  ['alpha', '🔤', 5, 8, 'Азбука дома', [['🔤', 'Вспомни буквы своего имени.'], ['🏠', 'Для каждой буквы найди дома вещь, которая на неё начинается.'], ['🧺', 'Сложи все вещи в ряд — получится твоё имя из вещей!'], ['📸', 'Покажи семье: пусть прочитают твоё имя.']]],
+  ['count', '🔢', 5, 8, 'Сколько у меня?', [['📚', 'Посчитай свои книжки.'], ['🧦', 'Посчитай свои носки — парами!'], ['✏️', 'Посчитай карандаши и фломастеры.'], ['👆', 'Отмечай здесь каждую вещь, пока считаешь. Чего больше всего?']], ['tally', [['📚', 'книжки'], ['🧦', 'пары носков'], ['✏️', 'карандаши'], ['🧸', 'мягкие игрушки']]]],
+  ['weather', '🌦️', 4, 12, 'Дневник погоды', [['🪟', 'Каждый день смотри в окно утром.'], ['☀️', 'Отмечай здесь погоду: солнце, облака, дождь или снег.'], ['📅', 'Отметь хотя бы четыре дня.'], ['🏆', 'В конце недели посмотри: какой погоды было больше?']], ['days', ['☀️', '⛅', '☁️', '🌧️', '❄️']]],
+  ['seed', '🌱', 5, 12, 'Росток в стаканчике', [['🥤', 'Положи фасолину или горошину в стаканчик с землёй, чуть-чуть присыпь.'], ['💧', 'Полей немного водой и поставь на подоконник.'], ['👀', 'Каждый день смотри на стаканчик и отмечай здесь, что видишь.'], ['🌿', 'Отметь хотя бы четыре дня. Когда появится росток?']], ['days', ['🟫', '🌱', '🌿']], 'Попросите на минуту: стаканчик с землёй и одну фасолину или горошину.'],
+  ['birds', '🐦', 5, 12, 'Птицы за окном', [['🪟', 'Сядь у окна на десять минут.'], ['🐦', 'Каждый раз, когда видишь птицу, нажимай на похожую картинку.'], ['🔁', 'Посмотри ещё раз в другой день.'], ['🏆', 'Каких птиц прилетает больше всего?']], ['tally', [['🕊️', 'голуби'], ['🐦', 'маленькие птички'], ['🐦‍⬛', 'вороны и галки'], ['🦅', 'большие птицы']]]],
+  ['museum', '🏛️', 5, 12, 'Музей из пяти вещей', [['🔎', 'Выбери пять самых интересных вещей в доме.'], ['🏷️', 'Сделай к каждой табличку: название и одно предложение — или рисунок.'], ['🗄️', 'Расставь вещи на полке или столе.'], ['🎟️', 'Проведи для семьи экскурсию по своему музею.']]],
+  ['comic', '💬', 6, 12, 'Комикс про мой день', [['📄', 'Сложи лист бумаги пополам и ещё раз пополам — получится четыре окошка.'], ['🌅', 'Нарисуй утро, день и вечер — по картинке в окошко.'], ['⭐', 'В последнем окошке — самое лучшее за день.'], ['💬', 'Добавь героям облачка со словами.']]],
+  ['map', '🗺️', 6, 12, 'Карта комнаты', [['🦅', 'Представь, что ты птица и смотришь на свою комнату сверху.'], ['✏️', 'Нарисуй комнату: где кровать, стол, окно и дверь.'], ['❌', 'Спрячь игрушку и отметь место крестиком на карте.'], ['🔎', 'Дай карту кому-нибудь из семьи: найдут клад?']]],
+  ['mood', '😊', 6, 12, 'Дневник настроения', [['🌙', 'Каждый вечер вспоминай свой день.'], ['😊', 'Отмечай здесь, какое было настроение.'], ['📅', 'Отметь хотя бы четыре дня.'], ['🤔', 'В какой день было лучше всего? Почему?']], ['days', ['😀', '🙂', '😐', '😢', '😠']]],
+  ['shop', '🏪', 6, 9, 'Мой магазин', [['🧸', 'Выбери десять игрушек для своего магазина.'], ['🏷️', 'Сделай ценники: каждая игрушка стоит от 1 до 10 монеток.'], ['💰', 'Нарисуй бумажные монетки.'], ['🛍️', 'Поиграй с семьёй в магазин: считай покупки и сдачу.']]],
+  ['plane', '✈️', 6, 12, 'Бумажный самолётик', [['📄', 'Сложи самолётик из листа бумаги.'], ['🚀', 'Запусти его три раза и измерь шагами, как далеко он улетел.'], ['✏️', 'Загни кончики крыльев чуть вверх.'], ['🏆', 'Запусти ещё три раза. Стало лучше или хуже?']]],
+  ['bridge', '🌉', 7, 12, 'Мост из бумаги', [['📚', 'Положи две книжки на расстоянии ладони.'], ['📄', 'Положи на них лист бумаги — это мост.'], ['🪙', 'Сколько монеток или карандашей выдержит мост?'], ['🪗', 'Сложи лист гармошкой и попробуй снова. Какой мост сильнее?']]],
+  ['news', '📰', 8, 12, 'Семейная газета', [['📰', 'Придумай название своей газеты.'], ['✍️', 'Напиши три новости этой недели — самые интересные.'], ['🖍️', 'Нарисуй к каждой новости картинку.'], ['🧲', 'Повесь газету на холодильник.']]],
+  ['plan', '📅', 8, 12, 'План на выходной', [['📅', 'Напиши план на субботу: что делаем утром, днём и вечером.'], ['⏰', 'Поставь к каждому делу время.'], ['➕', 'Посчитай, сколько часов уйдёт на всё.'], ['✅', 'В субботу отмечай, что получилось по плану.']]],
+  ['quiz', '❓', 8, 12, 'Викторина для семьи', [['🎧', 'Вспомни истории, которые ты слушал в игре.'], ['✍️', 'Напиши пять вопросов по ним.'], ['🍽️', 'За ужином задай вопросы семье.'], ['🏆', 'Считай очки: кто знает больше?']]]
+];
+const KPR = (() => {
+  const H = s => [...String(s)].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
+  const byId = id => KPROJ.find(x => x[0] === id) || null;
+  const ageOf = pr => pr.settings.age || (pr.settings.track === 'l' ? 9 : 5);
+  const doneIds = pr => Object.values(((pr.guide || {}).pj) || {});
+  function pick(pr, kid, salt, not) {
+    const a = ageOf(pr), fit = KPROJ.filter(x => a >= x[2] && a <= x[3] && x[0] !== not), fresh = fit.filter(x => !doneIds(pr).includes(x[0]));
+    const ps = fresh.length ? fresh : fit.length ? fit : KPROJ;
+    return ps[H(weekId() + kid + salt) % ps.length][0];
+  }
+  // this week's project of a child (made at the first look of the week)
+  function of(pr = P, kid = ROOT.cur) {
+    if (!pr.kproj || pr.kproj.w !== weekId() || !byId(pr.kproj.id)) pr.kproj = { w: weekId(), id: pick(pr, kid, 0), sw: 0, log: {}, tl: [] };
+    return pr.kproj;
+  }
+  const doneNow = (pr = P) => ((pr.guide || {}).pj || {})[weekId()] || '';
+  const proj = () => byId(of().id);
+  const tool = p => p[6] || null;
+  const daysLeft = p => { const t = tool(p); return t && t[0] === 'days' ? Math.max(0, 4 - Object.keys(of().log || {}).length) : 0; };
+  // the photo stays on this phone: its own key, never in the family data that syncs
+  const PH = 'govorilki-kproj-ph';
+  const phGet = k => { try { return (JSON.parse(localStorage.getItem(PH) || '{}'))[k] || ''; } catch (e) { return ''; } };
+  function phSet(k, v) { try { const o = JSON.parse(localStorage.getItem(PH) || '{}'); o[k] = v; const ks = Object.keys(o); while (ks.length > 6) delete o[ks.shift()]; localStorage.setItem(PH, JSON.stringify(o)); } catch (e) {} }
+  const phKey = () => ROOT.cur + ':' + weekId();
+  function shrink(file, cb) {
+    const r = new FileReader();
+    r.onload = () => { const im = new Image(); im.onload = () => { const s = Math.min(1, 480 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', .7)); }; im.src = r.result; };
+    r.readAsDataURL(file);
+  }
+  // the tool of the project: a mark a day (this week) or counters
+  function toolHTML(p) {
+    const t = tool(p), st = of(); if (!t) return '';
+    if (t[0] === 'days') {
+      const w0 = new Date(weekId());
+      return `<div class="kp-days">${[...Array(7)].map((_, i) => { const d = new Date(w0); d.setDate(d.getDate() + i); const k = dayKey(d), v = st.log[k], now = k === dayKey(), fut = k > dayKey();
+        return `<div class="kp-day${now ? ' now' : ''}"><small>${WEEK[i]}</small><b>${v != null && t[1][v] ? t[1][v] : fut ? '' : '·'}</b></div>`; }).join('')}</div>
+        <p class="kp-q">${st.log[dayKey()] != null ? 'Сегодня отмечено. Можно поменять:' : 'Что сегодня?'}</p>
+        <div class="kp-pick">${t[1].map((e, i) => `<button class="kp-ic${st.log[dayKey()] === i ? ' sel' : ''}" data-kday="${i}">${e}</button>`).join('')}</div>`;
+    }
+    return `<div class="kp-tally">${t[1].map(([e, n], i) => `<button class="kp-t" data-ktl="${i}"><span class="emo">${e}</span><b>${(st.tl || [])[i] || 0}</b><small>${esc(n)}</small></button>`).join('')}</div>
+      <button class="link-btn kp-undo" data-kundo>↩️ Убрать последнее</button>`;
+  }
+  let lastTl = -1;
+  function screen(step) {
+    newScreen();
+    const p = proj(), st = of(), done = doneNow() === p[0], n = p[5].length, k = Math.max(0, Math.min(n, step == null ? (done ? n : 0) : step)), last = k >= n;
+    const s = last ? null : p[5][k], left = daysLeft(p), ph = phGet(phKey());
+    shell('Проект недели', `<div class="kp">
+      <div class="kp-head"><span class="kp-e">${pic(p[1])}</span><div><h2>${esc(p[4])}</h2><small>${last ? (done ? '✅ Сделано!' : 'Последний шаг') : `Шаг ${k + 1} из ${n}`}</small></div></div>
+      ${last ? `<div class="kp-end">${tool(p) ? toolHTML(p) : ''}
+          ${done ? `<p class="kp-done">✅ Проект сделан! Награда — в твоих наградах.</p>${ph ? `<img class="kp-ph" src="${ph}" alt="">` : ''}`
+            : `${!EMBEDDED ? `<label class="big ghost kp-cam">📷 Фото — останется на этом телефоне<input type="file" accept="image/*" capture="environment" id="kpCam" hidden></label>${ph ? `<img class="kp-ph" src="${ph}" alt="">` : ''}` : ''}
+               <button class="big kp-go" id="kpDone" ${left ? 'disabled' : ''}>🎉 Готово!</button>${left ? `<p class="kp-q">Отметь ещё ${left} ${plural(left, ['день', 'дня', 'дней'])} — и проект готов.</p>` : ''}`}
+        </div>`
+        : `<div class="kp-step"><span class="kp-pic">${pic(s[0])}</span><p>${esc(s[1])}</p></div>${k === n - 1 && tool(p) ? toolHTML(p) : ''}`}
+      ${p[7] && !done ? `<p class="kp-grown">👪 Для взрослых: ${esc(p[7])}</p>` : ''}
+      <div class="kp-nav">${k > 0 ? '<button class="big ghost" id="kpBack">◀ Назад</button>' : ''}${last ? '' : `<button class="big" id="kpNext">${k === n - 1 ? 'Всё сделал' + G('а', '') + '! ▶' : 'Дальше ▶'}</button>`}</div>
+      ${!st.sw && !done && !k ? '<button class="link-btn kp-swap" id="kpSwap">🔄 Хочу другой проект (можно один раз в неделю)</button>' : ''}
+    </div>`, { back: goHome });
+    talk(last ? (done ? `Проект «${p[4]}» сделан! Молодец!` : left ? `Отметь ещё ${left} ${plural(left, ['день', 'дня', 'дней'])}, и проект будет готов.` : 'Если всё получилось, нажми «Готово!»') : (k === 0 ? `Проект недели: ${p[4]}. ` : '') + s[1]);
+    const on = (id, f) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); f(); }; };
+    on('kpNext', () => screen(k + 1)); on('kpBack', () => screen(k - 1));
+    on('kpSwap', () => { st.id = pick(P, ROOT.cur, 1, st.id); st.sw = 1; st.log = {}; st.tl = []; save(); screen(0); });
+    on('kpDone', () => {
+      P.guide = P.guide || {}; P.guide.pj = { ...(P.guide.pj || {}), [weekId()]: p[0] };
+      // the badge for every child (the game's own badges are for the older ones only)
+      P.ach = P.ach || []; let got = null;
+      ['proj1', 'proj5'].forEach(id => { const A = ACH.find(x => x.id === id); if (A && !P.ach.includes(id) && A.test()) { P.ach.push(id); got = A; } });
+      finish({ key: 'kproj', stars: 3, line: `Проект «${p[4]}» готов! Ты всё сделал${G('а', '')} сам${G('а', '')}.` + (got ? ` Новая награда: ${got.e} «${got.t}»!` : ''), again: () => screen(n), menu: goHome });
+    });
+    const cam = $('#kpCam'); if (cam) cam.onchange = () => { const f = cam.files && cam.files[0]; if (f) shrink(f, u => { phSet(phKey(), u); screen(n); }); };
+    const box = $('.kp');
+    box.addEventListener('click', e => {
+      const d = e.target.closest('[data-kday]'), t = e.target.closest('[data-ktl]'), u = e.target.closest('[data-kundo]');
+      if (d) { sfx.tick(); st.log[dayKey()] = +d.dataset.kday; save(); screen(k); return; }
+      if (t) { sfx.tick(); const i = +t.dataset.ktl; st.tl = st.tl || []; st.tl[i] = (st.tl[i] || 0) + 1; lastTl = i; save(); t.querySelector('b').textContent = st.tl[i]; hopEl(t); return; }
+      if (u && lastTl >= 0 && (st.tl[lastTl] || 0) > 0) { sfx.tick(); st.tl[lastTl]--; save(); screen(k); }
+    });
+  }
+  // «Сегодня»: an optional card after the day's path (a diary project asks for today's mark)
+  function todayCard(stage) {
+    if (!stage || stage.querySelector('.kp-card') || GUEST && !GUEST_OFF) return;
+    const p = proj(); if (!p) return;
+    const done = doneNow() === p[0], t = tool(p), need = !done && t && t[0] === 'days' && of().log[dayKey()] == null;
+    const b = document.createElement('button'); b.className = 'kp-card' + (done ? ' done' : '');
+    b.innerHTML = `<span class="kp-e">${pic(p[1])}</span><span class="kp-ct"><small>🛠️ Проект недели${done ? ' · ✅ сделано' : ''}</small><b>${esc(p[4])}</b>${need ? '<i>Отметь сегодня!</i>' : ''}</span><span class="g-go">▶</span>`;
+    b.onclick = () => { sfx.pop(); homeLeave(); screen(); };
+    const plan = stage.querySelector('section.today'); if (plan) plan.after(b); else stage.append(b);
+  }
+  const titleOf = id => { const p = byId(id); return p ? p[4] : ''; };
+  return { of, proj, screen, todayCard, titleOf, pick, doneNow, byId };
+})();
+GAMES.push({ id: 'kproj', name: 'Проект недели', sub: () => { try { return KPR.proj()[4]; } catch (e) { return ''; } }, ico: () => pic('🛠️'), bg: 'var(--t-mint)', go: () => KPR.screen(), grp: 4, also: [13, 10] });
+/* KPROJ-END */
 /* GUIDE-BEGIN */
-/* ---------- «Гайд» for grown-ups (the app teaches, the adult guides: habits, character, real life). For each child, a
-   short card, 30 seconds to read: «Неделя» (what moved this week and where it is hard, from the data the game keeps),
-   «Совет на сегодня» (one small real-life thing matched to what the child works on now, from GUIDE_TIPS), «О чём
-   поговорить» (the question of the latest story the child heard) and «Проект недели» (a life-skills project; «Сделали!»
-   gives the child a badge; any photo stays on the phone, nothing is uploaded). The card is drawn from a small digest
-   (GUIDE.digest), which also travels in the family's progress note, so grandparents see the same card on their phone.
-   The week: P.gw = { w: week id, n: games, ls: stories heard, a: {area: games}, s0: levels when the week began };
-   P.gs = { skill: [level, day it last changed] } tells «держится N дней» (no blame: «не торопите»). ---------- */
+/* ---------- «Отчёт» for grown-ups (the owner: «не грузить родителей, а сократить их участие: рассказывать о результатах,
+   в чём успехи, а в чём нет»). For each child a short card, readable in 10 seconds: one line of activity (days this week,
+   minutes, stars), «Получается» (2–4 concrete things that moved: a new reading step or maths level, three-star games…) and
+   «Пока трудно» (1–2 calm lines, each with what the game already does about it). Below, folded: the weekly report, one line
+   per area with ↑ (a level rose) or = (practised), to open on Sunday or share (share sheet / copied text), and one optional
+   idea from GUIDE_TIPS. No buttons that ask the adult to do things. The card is drawn from a small digest (GUIDE.digest)
+   that also travels in the family's progress note, so grandparents see the same card on their phone.
+   The week: P.gw = { w: week id, n: games, min: minutes, ls: stories heard, a: {area: games}, b: {game: [best stars, weak
+   tries]}, s0: levels when the week began }; P.gwLast keeps the last full week; P.gs = { skill: [level, day it last
+   changed] } tells «N дней на этом уровне». ---------- */
 // the tips: [area, from, to, text]. Areas: math (maths level 1…16), r, l, sz, sh, speech (sounds), read (1 letters,
 // 2 syllables, 3 words, 4 fluent), logic (olympiad level 1…8), world (age), life (age). Original texts.
 const GUIDE_TIPS = [
@@ -22714,24 +22862,20 @@ const GUIDE_TIPS = [
   ['life', 5, 12, 'Когда что-то не получается, скажите: «Пока не получается» — и попробуйте ещё раз вместе.']
 ];
 // the weekly projects: [id, emoji, from age, to age, text]
-const GUIDE_PROJ = [
-  ['bean', '🌱', 4, 12, 'Посадите фасолину в стаканчик и каждый день мерьте росток линейкой. Записывайте сантиметры на листке.'],
-  ['shop', '🛒', 6, 12, 'Сходите в магазин с 5 евро: ребёнок сам выбирает покупки, считает и проверяет сдачу.'],
-  ['bake', '🧁', 7, 12, 'Испеките что-нибудь вместе: ребёнок читает рецепт и отмеряет половину и четверть стакана.'],
-  ['map', '🗺️', 5, 12, 'Нарисуйте вместе карту своей комнаты: где кровать, окно, стол. Спрячьте «клад» и найдите его по карте.'],
-  ['grand', '☎️', 5, 12, 'Пусть ребёнок расскажет бабушке или дедушке о стране из истории: где она, что там интересного.'],
-  ['weather', '🌦️', 5, 12, 'Неделю ведите дневник погоды: солнце, дождь или облака и сколько градусов. В конце — какой день был теплее всех?'],
-  ['feeder', '🐦', 4, 12, 'Сделайте кормушку из пакета от сока и записывайте, какие птицы прилетают.'],
-  ['height', '📏', 4, 8, 'Отметьте на двери рост всех в семье: кто выше всех, а кто на сколько ниже?'],
-  ['post', '✉️', 6, 12, 'Напишите и отправьте настоящую открытку родным: ребёнок пишет сам, вы только помогаете с адресом.'],
-  ['sun', '☀️', 7, 12, 'Сделайте солнечные часы: палка в земле и камешки там, где тень в 10, 12 и 14 часов.'],
-  ['trip', '🚲', 9, 12, 'Спланируйте прогулку выходного дня: маршрут по карте, время в пути и бюджет на перекус.'],
-  ['sort', '♻️', 4, 9, 'Разберите вместе мусор на бумагу, пластик и стекло и подпишите коробки.'],
-  ['show', '🎭', 4, 8, 'Устройте домашний театр по любимой сказке: билеты, роли и аплодисменты.'],
-  ['bank', '🐷', 6, 12, 'Заведите копилку с целью: что хотим купить, сколько стоит, сколько откладываем в неделю.']
+// «Мастер дела»: the child's own «Проект недели» (KPROJ) gives it; hidden in the list while not earned
+ACH.push({ id: 'proj1', e: '🛠️', t: 'Мастер дела', d: 'Проект недели', hide: 1, test: () => Object.keys((P.guide || {}).pj || {}).length >= 1 },
+  { id: 'proj5', e: '🏗️', t: 'Пять проектов', d: 'Пять проектов недели', hide: 1, test: () => Object.keys((P.guide || {}).pj || {}).length >= 5 });
+// the areas of the weekly report, one line each: how much this week (act), whether a level rose (up), the level now (lv).
+// A new area (e.g. a second language of a multilingual child) is one more entry: GUIDE.AREAS.push({ k, e, n, act, up, lv })
+const REPORT_AREAS = [
+  { k: 'speech', e: '🗣️', n: 'Речь', act: d => (d.ga.speech || 0) + d.sp, up: d => d.good.some(x => x[0] === 'speech'), lv: d => d.snd.length && d.a <= 9 ? 'звуки ' + d.snd.map(s => (SOUND_SET.find(z => z[0] === s) || [])[1]).filter(Boolean).join(', ') : '' },
+  { k: 'read', e: '📖', n: 'Чтение', act: d => (d.ga.read || 0) + d.rd, up: d => (d.rl > d.rl0 && d.rl0 > 0) || (d.wpm > d.w0 && d.w0 > 0), lv: d => d.rl && RSK.L[d.rl - 1] ? RSK.L[d.rl - 1].n : d.wpm ? `${d.wpm} слов в минуту` : '' },
+  { k: 'math', e: '🔢', n: 'Математика', act: d => (d.ga.math || 0) + d.mt, up: d => (d.m > d.m0 && d.m0 > 0) || (d.so > d.so0 && d.so0 > 0), lv: d => d.m && MSK.L[d.m - 1] ? MSK.L[d.m - 1].n : '' },
+  { k: 'logic', e: '🧩', n: 'Логика', act: d => d.ga.logic || 0, up: d => d.ol > d.ol0, lv: d => d.ol ? `решено задач: ${d.ol}` : '' },
+  { k: 'chess', e: '♟️', n: 'Шахматы', act: d => d.ga.chess || 0, up: d => d.cs > d.cs0 || (d.ai > d.ai0 && d.ai0 > 0), lv: d => d.cs ? `уроков пройдено: ${d.cs}` : '' },
+  { k: 'world', e: '🌍', n: 'Истории', act: d => d.ls, up: d => d.ls >= 3, lv: d => d.ls ? `историй: ${d.ls}` : '' },
+  { k: 'art', e: '🎨', n: 'Музыка и рисование', act: d => d.ga.art || 0, up: () => false, lv: () => '' }
 ];
-ACH.push({ id: 'proj1', e: '🛠️', t: 'Мастер дела', d: 'Проект недели вместе со взрослыми', test: () => Object.keys((P.guide || {}).pj || {}).length >= 1 },
-  { id: 'proj5', e: '🏗️', t: 'Пять проектов', d: 'Пять проектов недели', test: () => Object.keys((P.guide || {}).pj || {}).length >= 5 });
 const GUIDE = (() => {
   const H = s => [...String(s)].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
   const ageOf = pr => pr.settings.age || (pr.settings.track === 'l' ? 9 : 5);
@@ -22739,62 +22883,101 @@ const GUIDE = (() => {
     if (/^learn:/.test(key)) return 'world';
     if (/^(breath|artic):/.test(key)) return 'speech';
     if (/^piano:/.test(key)) return 'art';
+    if (/chess/.test(key)) return 'chess';
     const g = GAMES.find(x => x.id === key); if (!g) return '';
-    return [0, 1, 5, 9].includes(g.grp) ? 'speech' : [2, 6].includes(g.grp) ? 'read' : g.grp === 3 ? 'math' : g.grp === 8 ? (/olymp|puzzle|chess/.test(key) ? 'logic' : 'math') : g.grp === 4 ? 'art' : 'other';
+    return [0, 1, 5, 9].includes(g.grp) ? 'speech' : [2, 6].includes(g.grp) ? 'read' : g.grp === 3 ? 'math' : g.grp === 8 ? (/olymp|puzzle/.test(key) ? 'logic' : 'math') : g.grp === 4 ? 'art' : 'other';
   };
   const lv = pr => ({ m: (pr.mskill && pr.mskill.lv) || 0, so: (pr.soro && pr.soro.top) || 0, ol: ((pr.olymp && pr.olymp.solved) || []).length, oll: (pr.olymp && pr.olymp.lv) || 0,
-    w: Math.max(0, ...(pr.reads || []).map(r => +r.wpm || 0)), rl: (pr.rskill && +pr.rskill.lv) || 0 });
-  // the week bucket and the «since when» of each level; called after every finished game (noteRecent)
+    w: Math.max(0, ...(pr.reads || []).map(r => +r.wpm || 0)), rl: (pr.rskill && +pr.rskill.lv) || 0,
+    cs: Object.keys((pr.chessSchool || {}).done || {}).length, ai: (pr.chessAI && +pr.chessAI.top) || 0 });
+  const prevWeek = () => { const d = new Date(weekId()); d.setDate(d.getDate() - 7); return dayKey(d); };
+  // the week bucket; at a new week the old one is kept as «last week» with the levels it ended on
   function week(pr) {
     const w = weekId();
-    if (!pr.gw || pr.gw.w !== w) pr.gw = { w, n: 0, ls: [], a: {}, s0: lv(pr) };
+    if (!pr.gw || pr.gw.w !== w) {
+      if (pr.gw && pr.gw.w === prevWeek()) pr.gwLast = { ...pr.gw, end: lv(pr) };
+      else if (pr.gwLast && pr.gwLast.w !== prevWeek()) delete pr.gwLast;
+      pr.gw = { w, n: 0, min: 0, ls: [], a: {}, b: {}, s0: lv(pr) };
+    }
+    pr.gw.b = pr.gw.b || {}; pr.gw.min = pr.gw.min || 0;
     return pr.gw;
   }
-  function note(key) {
+  // after every finished game (noteRecent): the area, the stars, the stories, «since when» each level holds
+  function note(key, stars) {
     const pr = P, g = week(pr), a = areaOf(key), now = lv(pr), d = dayKey();
     g.n++; if (a) g.a[a] = (g.a[a] || 0) + 1;
     if (/^learn:/.test(key)) { const id = key.slice(6); g.ls = [...g.ls.filter(x => x !== id), id].slice(-20); }
+    else if (!/^(breath|artic):/.test(key)) {
+      const s = +stars || 0, b = g.b[key] || [0, 0];   // [best stars this week, tries with one star or less]
+      g.b[key] = [Math.max(b[0], s), b[1] + (s <= 1 ? 1 : 0)];
+      const ks = Object.keys(g.b); if (ks.length > 40) delete g.b[ks[0]];
+    }
     pr.gs = pr.gs || {};
     ['m', 'so', 'oll', 'rl'].forEach(k => { const s = pr.gs[k]; if (!s || s[0] !== now[k]) pr.gs[k] = [now[k], d]; });
   }
+  // minutes: a minute counts when the child touched the game in it (not the grown-ups' screens, not a grandparent)
+  let touched = 0;
+  try { addEventListener('pointerdown', () => { touched = Date.now(); }, true); addEventListener('keydown', () => { touched = Date.now(); }, true); } catch (e) {}
+  setInterval(() => {
+    try {
+      if (document.hidden || Date.now() - touched > 70e3 || PREVIEW || GPLAY || ADULT_HOME || (GUEST && !GUEST_OFF) || (fam() && fam().guest)) return;
+      if (document.querySelector('.parents, .pult, .guest')) return;
+      week(P).min++;
+    } catch (e) {}
+  }, 60e3);
   const daysSince = d => d ? Math.max(0, Math.round((new Date(dayKey()) - new Date(d)) / 864e5)) : 0;
-  // the digest: small numbers only (it also travels to the grandparents' phones)
+  const keyOk = k => /^[a-z0-9:_-]{2,40}$/i.test(k || '');
+  // the digest of one week bucket: small numbers only (it also travels to the grandparents' phones)
+  function dig(pr, g, now, last) {
+    const s0 = g.s0 || now, gs = pr.gs || {}, les = {}, w0 = new Date(g.w);
+    let dd = 0;
+    for (let i = 0; i < 7; i++) { const x = new Date(w0); x.setDate(x.getDate() + i); const v = pr.days[dayKey(x)];
+      if (v && v !== true) { let any = 0; Object.keys(v).forEach(k => { les[k] = (les[k] || 0) + (+v[k] || 0); any += +v[k] || 0; }); if (any) dd++; } else if (v === true) { les.speech = (les.speech || 0) + 1; dd++; } }
+    const b = g.b || {}, ks = Object.keys(b).filter(keyOk);
+    const good = ks.filter(k => b[k][0] >= 3).map(k => [areaOf(k), k]).slice(-4);
+    const hard = ks.filter(k => b[k][1] >= 2 && b[k][0] < 3).map(k => [areaOf(k), k]).slice(-2);
+    return { w: g.w, a: ageOf(pr), tr: pr.settings.track === 'l' ? 'l' : 'r', snd: soundsOf(pr).slice(0, 4), d: dd, min: g.min || 0, st: g.w === weekId() ? weekStars(pr) : 0, n: g.n || 0, ls: (g.ls || []).length,
+      ga: g.a || {}, good, hard, m: now.m, so: now.so, ol: now.ol, oll: now.oll, wpm: now.w, rl: now.rl, cs: now.cs, ai: now.ai,
+      m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0, cs0: s0.cs || 0, ai0: s0.ai || 0,
+      mS: last ? 0 : gs.m && now.m ? daysSince(gs.m[1]) : 0, rS: last ? 0 : gs.rl && now.rl ? daysSince(gs.rl[1]) : 0,
+      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
+  }
+  // this week and the last full week
   function digest(pr) {
-    const st = pr.settings, g = pr.gw && pr.gw.w === weekId() ? pr.gw : { n: 0, ls: [], a: {}, s0: lv(pr) }, now = lv(pr), s0 = g.s0 || now, gs = pr.gs || {};
-    const les = {}; [...Array(7)].forEach((_, i) => { const x = new Date(); x.setDate(x.getDate() - i); const v = pr.days[dayKey(x)]; if (v && v !== true) Object.keys(v).forEach(k => { les[k] = (les[k] || 0) + (+v[k] || 0); }); else if (v === true) les.speech = (les.speech || 0) + 1; });
-    const last = (pr.recent || []).find(x => /^learn:/.test(x[3] || ''));
-    const pj = (pr.guide || {}).pj || {};
-    return { a: ageOf(pr), tr: st.track === 'l' ? 'l' : 'r', snd: soundsOf(pr).slice(0, 4), d: weekOf(pr).filter(x => x > 0).length, st: weekStars(pr), n: g.n, ls: g.ls.length,
-      lt: g.ls.length ? g.ls[g.ls.length - 1] : last ? last[3].slice(6) : '', ga: g.a, ...now, m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0,
-      mS: gs.m && now.m ? daysSince(gs.m[1]) : 0, sy: pr.sylBest || 0, sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0),
-      pj: pj[weekId()] || '', pjn: Object.keys(pj).length };
+    const now = lv(pr), cur = pr.gw && pr.gw.w === weekId() ? pr.gw : { w: weekId(), n: 0, min: 0, ls: [], a: {}, b: {}, s0: now };
+    const lb = pr.gw && pr.gw.w === prevWeek() ? { ...pr.gw, end: now } : pr.gwLast && pr.gwLast.w === prevWeek() ? pr.gwLast : null;
+    const d = dig(pr, cur, now);
+    if (lb) d.last = dig(pr, lb, lb.end || now, true);
+    return d;
   }
   // cleaning a digest that came over the relay
-  function clean(x) {
+  function clean(x, deep) {
     if (!x || typeof x !== 'object') return null;
     const n = (k, m) => clampN(x[k], m), ga = {};
-    Object.keys(x.ga || {}).slice(0, 8).forEach(k => { if (/^[a-z]{2,8}$/.test(k)) ga[k] = clampN(x.ga[k], 999); });
-    return { a: n('a', 18), tr: x.tr === 'l' ? 'l' : 'r', snd: (Array.isArray(x.snd) ? x.snd : []).filter(s => SOUND_SET.some(z => z[0] === s)).slice(0, 4), d: n('d', 7), st: n('st', 1e5), n: n('n', 9999), ls: n('ls', 99),
-      lt: /^[a-z0-9_-]{1,40}$/i.test(x.lt || '') ? x.lt : '', ga, m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), w: n('w', 999), rl: n('rl', 9),
-      m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), mS: n('mS', 999), sy: n('sy', 9999), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99),
-      pj: /^[a-z]{2,10}$/.test(x.pj || '') ? x.pj : '', pjn: n('pjn', 999) };
+    Object.keys(x.ga || {}).slice(0, 10).forEach(k => { if (/^[a-z]{2,8}$/.test(k)) ga[k] = clampN(x.ga[k], 999); });
+    const pairs = (v, m) => (Array.isArray(v) ? v : []).slice(0, m).filter(p => Array.isArray(p) && /^[a-z]{0,8}$/.test(p[0] || '') && keyOk(p[1])).map(p => [p[0] || '', p[1]]);
+    const o = { w: /^\d{4}-\d\d-\d\d$/.test(x.w || '') ? x.w : weekId(), a: n('a', 18), tr: x.tr === 'l' ? 'l' : 'r', snd: (Array.isArray(x.snd) ? x.snd : []).filter(s => SOUND_SET.some(z => z[0] === s)).slice(0, 4),
+      d: n('d', 7), min: n('min', 9999), st: n('st', 1e5), n: n('n', 9999), ls: n('ls', 99), ga, good: pairs(x.good, 4), hard: pairs(x.hard, 2),
+      m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), wpm: n('wpm', 999), rl: n('rl', 9), cs: n('cs', 99), ai: n('ai', 99),
+      m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), cs0: n('cs0', 99), ai0: n('ai0', 99),
+      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
+    if (!deep && x.last) o.last = clean(x.last, true);
+    return o;
   }
   const mathLv = d => d.m || (d.a <= 4 ? 1 : d.a === 5 ? 2 : d.a === 6 ? 3 : d.a === 7 ? 5 : d.a === 8 ? 7 : d.a === 9 ? 9 : 11);
-  // reading: 1 letters, 2 syllables, 3 words and short texts, 4 fluent (the reading level of the game, when there is one)
-  // «Чтение по силам» has 9 steps (letters … long texts); the tips have 4 levels
-  const readLv = d => d.rl ? (d.rl <= 1 ? 1 : d.rl <= 3 ? 2 : d.rl <= 6 ? 3 : 4) : d.w >= 50 || (d.tr === 'l' && d.a >= 8) ? 4 : d.w > 0 ? 3 : d.sy || d.a >= 7 ? 2 : d.a >= 6 ? 2 : 1;
+  // reading: 1 letters, 2 syllables, 3 words and short texts, 4 fluent; the reading steps 1–9 of «Чтение по силам» map onto them
+  const readLv = d => d.rl ? (d.rl <= 1 ? 1 : d.rl <= 3 ? 2 : d.rl <= 6 ? 3 : 4) : d.wpm >= 50 || (d.tr === 'l' && d.a >= 8) ? 4 : d.wpm > 0 ? 3 : d.sy || d.a >= 7 ? 2 : d.a >= 6 ? 2 : 1;
   const logicLv = d => d.oll || Math.max(1, Math.min(8, d.a - 3));
+  const mStuck = d => d.m && d.mS >= 10 && d.m === d.m0 && ((d.ga || {}).math || d.mt) > 0;
+  const rStuck = d => d.rl && d.rS >= 10 && d.rl === d.rl0 && ((d.ga || {}).read || d.rd) > 0;
   // what the child works on now: the areas of this week, most played first; a child with no week yet — by age
   function areas(d) {
-    const ga = d.ga || {}, sc = {
-      math: (ga.math || 0) + d.mt, speech: (ga.speech || 0) + d.sp, read: (ga.read || 0) + d.rd, logic: ga.logic || 0, world: (ga.world || 0) + d.ls };
+    const ga = d.ga || {}, sc = { math: (ga.math || 0) + d.mt, speech: (ga.speech || 0) + d.sp, read: (ga.read || 0) + d.rd, logic: ga.logic || 0, world: (ga.world || 0) + d.ls };
     const on = Object.keys(sc).filter(k => sc[k] > 0).sort((a, b) => sc[b] - sc[a]);
-    if (stuck(d)) on.unshift('math');
+    if (mStuck(d)) on.unshift('math');
     if (on.length) return [...new Set(on)];
     return d.a <= 6 ? ['speech', 'read', 'math'] : ['math', 'read', 'world'];
   }
-  const stuck = d => d.m && d.mS >= 10 && d.m === d.m0 && ((d.ga || {}).math || d.mt) > 0;
-  // the tips that fit an area now
   function pool(d, area) {
     if (area === 'speech') {
       const ss = (d.snd || []).filter(s => GUIDE_TIPS.some(t => t[0] === s));
@@ -22805,116 +22988,103 @@ const GUIDE = (() => {
     const ok = GUIDE_TIPS.filter(t => t[0] === area && l >= t[1] && l <= t[2]);
     return ok.length ? ok : GUIDE_TIPS.filter(t => t[0] === 'life' && d.a >= t[1] && d.a <= t[2]);
   }
-  // today's tip: the same all day for this child; «Другой совет» moves on (k)
-  function tip(d, id, k = 0) {
-    const ar = areas(d), area = ar[((stuck(d) ? 0 : H(dayKey() + id)) + k) % Math.min(2, ar.length)], ps = pool(d, area);
-    const t = ps[(H(id + dayKey()) + Math.floor(k / 2)) % ps.length];
-    return { area, text: t[3] };
+  // the one optional idea (folded away): the same all day for this child
+  function tip(d, id) {
+    const ar = areas(d), area = ar[(mStuck(d) ? 0 : H(dayKey() + id)) % Math.min(2, ar.length)], ps = pool(d, area);
+    return { area, text: ps[H(id + dayKey()) % ps.length][3] };
   }
-  const AREA = { math: '🔢 Математика', speech: '🗣️ Речь', read: '📖 Чтение', logic: '🧩 Логика', world: '🌍 Мир вокруг', life: '🏡 Жизнь' };
-  function project(d) {
-    const ok = GUIDE_PROJ.filter(p => d.a >= p[2] && d.a <= p[3]), ps = ok.length ? ok : GUIDE_PROJ;
-    return ps[H(weekId()) % ps.length];
-  }
-  // the story the child heard last, from LEARN
-  function story(id) {
-    if (!id) return null;
-    for (const k of Object.keys(LEARN)) { const it = (LEARN[k].items || []).find(x => x.id === id); if (it) return it; }
-    return null;
-  }
-  // the week in 3–5 lines; no blame: a hard place is «пока трудно», with what helps
-  function weekLines(d, name) {
+  const gname = k => recentName(k) || '';
+  // «Получается»: 2–4 concrete things that moved this week
+  function wins(d) {
     const L = [];
-    if (!d.n && !d.d && !d.st) return [`🌱 Неделя только началась. Как только ${name} поиграет, здесь появятся успехи.`];
-    L.push(`🎯 Дней с занятиями: ${d.d} из 7${d.st ? ` · ⭐ ${d.st} за неделю` : ''}`);
-    const up = [];
-    if (d.m > d.m0 && d.m0) up.push(`математика — новый уровень «${MSK.L[d.m - 1].n}»`);
-    if (d.so > d.so0 && d.so0) up.push(`счёты — уровень ${d.so}`);
-    if (d.ol > d.ol0) up.push(`олимпиада — решено задач: ${d.ol - d.ol0}`);
-    if (d.w > d.w0 && d.w0) up.push(`чтение — ${d.w} слов в минуту`);
-    if (d.rl > d.rl0 && d.rl0) up.push('чтение — новый уровень');
-    if (up.length) L.push('✅ Освоено: ' + up.join('; '));
-    else if (d.m) L.push(`🔢 Математика: «${MSK.L[d.m - 1].n}»`);
-    const did = [];
-    if (d.ls) did.push(`историй: ${d.ls}`);
-    if (d.n) did.push(`игр: ${d.n}`);
-    if (d.sp) did.push(`занятий речью: ${d.sp}`);
-    if (d.rd) did.push(`чтений: ${d.rd}`);
-    if (did.length) L.push('🎧 За неделю — ' + did.join(', '));
-    if (stuck(d)) L.push(`🌱 Пока трудно: «${MSK.L[d.m - 1].n}» — уже ${d.mS} ${plural(d.mS, ['день', 'дня', 'дней'])} на этом уровне. Это нормально: помогут короткие примеры в жизни, без спешки.`);
-    else if (d.snd && d.snd.length && d.a <= 9) L.push(`🗣️ Звуки сейчас: ${d.snd.map(s => (SOUND_SET.find(z => z[0] === s) || [])[1]).filter(Boolean).join(', ')}`);
-    return L.slice(0, 5);
+    if (d.kp && KPR.titleOf(d.kp)) L.push(`проект недели сделан: «${KPR.titleOf(d.kp)}»`);
+    if (d.rl > d.rl0 && d.rl0 && RSK.L[d.rl - 1]) L.push(`чтение — новая ступень: «${RSK.L[d.rl - 1].n}»`);
+    if (d.m > d.m0 && d.m0 && MSK.L[d.m - 1]) L.push(`математика — новый уровень: «${MSK.L[d.m - 1].n}»`);
+    if (d.so > d.so0 && d.so0) L.push(`счёты — ступень ${d.so}`);
+    if (d.ol > d.ol0) L.push(`олимпиада — решено задач: ${d.ol - d.ol0}`);
+    if (d.cs > d.cs0) L.push(`шахматы — уроков пройдено: ${d.cs - d.cs0}`);
+    if (d.ai > d.ai0 && d.ai0) L.push(`шахматы — компьютер уровня ${d.ai}`);
+    if (d.wpm > d.w0 && d.w0) L.push(`скорость чтения — ${d.wpm} слов в минуту`);
+    d.good.forEach(x => { const n = gname(x[1]); if (n && L.length < 4) L.push(`на ⭐⭐⭐: ${n}`); });
+    if (d.ls && L.length < 4) L.push(`послушано историй: ${d.ls}`);
+    return L.slice(0, 4);
   }
-  // one child's card. kid: { id, n (name), face (HTML) }; own: the child's own phone (the «Сделали!» button works)
-  function card(d, kid, own) {
-    const t = tip(d, kid.id), it = story(d.lt), pj = project(d), done = d.pj === pj[0];
+  // «Пока трудно»: 1–2 calm lines, each with what the game already does about it
+  function hard(d) {
+    const L = [];
+    if (mStuck(d) && MSK.L[d.m - 1]) L.push(`математика, «${MSK.L[d.m - 1].n}» — ${d.mS} ${plural(d.mS, ['день', 'дня', 'дней'])} на этом уровне. Игра подсказывает и даёт задания чуть полегче, пока не станет легко.`);
+    if (rStuck(d) && RSK.L[d.rl - 1]) L.push(`чтение, «${RSK.L[d.rl - 1].n}» — ${d.rS} ${plural(d.rS, ['день', 'дня', 'дней'])} на этой ступени. Игра повторяет её и после ошибок возвращает на шаг назад.`);
+    d.hard.forEach(x => { const n = gname(x[1]); if (n && L.length < 2) L.push(`${n} — пока на одну звезду. Игра подсказывает и даёт попробовать ещё раз.`); });
+    return L.slice(0, 2);
+  }
+  const actLine = d => `🎯 ${d.d} ${plural(d.d, ['день', 'дня', 'дней'])} из 7${d.min ? ` · ⏱️ ${d.min} мин` : ''}${d.st ? ` · ⭐ ${d.st}` : ''}`;
+  // the weekly report: one line per area with ↑ (a level rose), = (practised, same level) — areas not touched are left out
+  const AREAS = REPORT_AREAS;
+  function rows(d) {
+    return AREAS.map(a => { let n = 0, up = false, l = ''; try { n = a.act(d); up = a.up(d); l = a.lv(d); } catch (e) {} return { a, n, up, l }; }).filter(r => r.n > 0 || r.up);
+  }
+  const arrow = r => r.up ? '↑' : '=';
+  function weekOfD(d) {
+    const sun = new Date().getDay() === 0;
+    return sun || !d.last ? { d, t: sun ? 'Итоги недели' : 'Неделя пока', open: sun } : { d: d.last, t: 'Итоги прошлой недели', open: new Date().getDay() === 1 };
+  }
+  const fmtW = w => { const a = new Date(w), b = new Date(w); b.setDate(b.getDate() + 6); return `${a.getDate()}.${String(a.getMonth() + 1).padStart(2, '0')}–${b.getDate()}.${String(b.getMonth() + 1).padStart(2, '0')}`; };
+  function reportText(d, name) {
+    const R = weekOfD(d), x = R.d, w = wins(x), h = hard(x);
+    return [`📊 ${name}: ${R.t} (${fmtW(x.w)})`, actLine(x), ...(w.length ? ['✅ Получается:', ...w.map(s => '• ' + s)] : []), ...(h.length ? ['🌱 Пока трудно:', ...h.map(s => '• ' + s)] : []),
+      ...rows(x).map(r => `${r.a.e} ${r.a.n} ${arrow(r)}${r.l ? ' — ' + r.l : ''}`), '— Говорилки'].join('\n');
+  }
+  // one child's card: results only, readable in 10 seconds; kid: { id, n (name), face (HTML) }
+  function card(d, kid) {
+    const w = wins(d), h = hard(d), t = tip(d, kid.id), R = weekOfD(d), rr = rows(R.d), empty = !d.n && !d.d && !d.min && !d.kp;
     return `<div class="gd-card" data-gk="${esc(kid.id)}">
       <div class="gd-h"><span class="chip-face">${kid.face}</span><b>${esc(kid.n)}</b><small>${d.a} ${plural(d.a, ['год', 'года', 'лет'])}</small></div>
-      <h3 class="gd-s">📅 Неделя</h3><div class="gd-wk">${weekLines(d, kid.n).map(x => `<p>${esc(x)}</p>`).join('')}</div>
-      <h3 class="gd-s">💡 Совет на сегодня</h3><div class="gd-tip"><small class="gd-ar">${AREA[t.area] || ''}</small><p>${esc(t.text)}</p></div>
-      <button class="chip gd-next" data-gnext="${esc(kid.id)}">🔄 Другой совет</button>
-      <h3 class="gd-s">💬 О чём поговорить</h3>${it ? `<div class="gd-talk"><p>${it.q ? `Спросите: «${esc(it.q)}»` : `Спросите, что запомнилось из истории «${esc(it.t)}»`}</p><small>${pic(it.e || '📖')} История «${esc(it.t)}»</small>${it.q ? `<details class="gd-ans" data-gst="${esc(it.id)}"><summary>Ответ из истории</summary><p></p></details>` : ''}</div>`
-        : `<div class="gd-talk"><p>На этой неделе историй ещё не было. Послушайте одну вместе в разделе «Узнаём», а потом спросите, что удивило больше всего.</p></div>`}
-      <h3 class="gd-s">🛠️ Проект недели</h3><div class="gd-pj"><p><span class="emo">${pj[1]}</span> ${esc(pj[4])}</p>
-        ${done ? `<p class="gd-done">✅ Сделали! Награда «Мастер дела» — в наградах ребёнка.</p>`
-          : own ? `<button class="big gd-did" data-gdid="${esc(kid.id)}" data-gpj="${pj[0]}">🎉 Сделали!</button><small class="muted">Фото, если снимете, остаются на вашем телефоне — в игру ничего не загружается.</small>`
-          : `<small class="muted">Отметить «Сделали!» можно на телефоне ребёнка, в «Для взрослых».</small>`}</div>
+      ${empty ? `<p class="gd-act">🌱 На этой неделе ещё не было занятий. Как только ${esc(kid.n)} поиграет, здесь появятся успехи.</p>` : `<p class="gd-act">${esc(actLine(d))}</p>`}
+      ${w.length ? `<div class="gd-ok"><h3 class="gd-s">✅ Получается</h3>${w.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : empty ? '' : '<div class="gd-ok"><h3 class="gd-s">✅ Получается</h3><p>Занятия идут, новых уровней на этой неделе пока нет — это нормально.</p></div>'}
+      ${h.length ? `<div class="gd-hard"><h3 class="gd-s">🌱 Пока трудно</h3>${h.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : ''}
+      ${empty && !d.last ? '' : `<details class="gd-wkr"${R.open ? ' open' : ''}><summary>📋 ${R.t} · ${fmtW(R.d.w)}</summary>
+        ${R.d !== d ? `<p class="gd-act">${esc(actLine(R.d))}</p>` : ''}
+        ${rr.length ? `<div class="gd-rows">${rr.map(r => `<p><span>${r.a.e} ${esc(r.a.n)}</span><b class="${r.up ? 'up' : ''}">${arrow(r)}</b><small>${esc(r.l)}</small></p>`).join('')}</div>` : '<p class="muted">Пока нечего показать.</p>'}
+        <button class="chip gd-share" data-gshare="${esc(kid.id)}">📤 Поделиться</button></details>`}
+      <details class="gd-idea"><summary>💡 Если хотите помочь — одна идея</summary><p>${esc(t.text)}</p></details>
     </div>`;
   }
-  // answers come from the story pack, when the card is on the screen
-  function answers(root) {
-    root.querySelectorAll('.gd-ans[data-gst]').forEach(el => {
-      const it = story(el.dataset.gst); if (!it) return;
-      PACK.story(it).then(x => { if (x && x.a && x.a[0]) el.querySelector('p').textContent = x.a[0]; else el.remove(); }, () => el.remove());
-    });
+  async function share(txt) {
+    try { if (navigator.share && !EMBEDDED) { await navigator.share({ text: txt }); return 'shared'; } } catch (e) { if (e && e.name === 'AbortError') return ''; }
+    try { await navigator.clipboard.writeText(txt); return 'copied'; } catch (e) { return ''; }
   }
-  // the clicks of the cards: another tip, «Сделали!» (own phone only)
-  function bind(root, get, redraw) {
-    const ks = {};
-    root.addEventListener('click', e => {
-      const nx = e.target.closest('[data-gnext]'), did = e.target.closest('[data-gdid]');
-      if (nx) {
-        sfx.tick(); const id = nx.dataset.gnext, d = get(id); if (!d) return;
-        ks[id] = (ks[id] || 0) + 1; let t = tip(d, id, ks[id]), n = 0;
-        const box = nx.closest('.gd-card').querySelector('.gd-tip'), was = box.querySelector('p').textContent;
-        while (t.text === was && n++ < 6) { ks[id]++; t = tip(d, id, ks[id]); }
-        box.innerHTML = `<small class="gd-ar">${AREA[t.area] || ''}</small><p>${esc(t.text)}</p>`;
-        return;
-      }
-      if (did) {
-        const pr = ROOT.profiles[did.dataset.gdid]; if (!pr) return;
-        pr.guide = pr.guide || {}; pr.guide.pj = pr.guide.pj || {}; pr.guide.pj[weekId()] = did.dataset.gpj;
-        pr.ach = pr.ach || [];
-        ['proj1', 'proj5'].forEach(a => { const A = ACH.find(x => x.id === a), o = P; P = pr; try { if (A && !pr.ach.includes(a) && A.test()) pr.ach.push(a); } finally { P = o; } });
-        save(); sfx.good(); try { postProg(true); } catch (er) {}
-        redraw();
-      }
+  function bind(root, get) {
+    root.addEventListener('click', async e => {
+      const b = e.target.closest('[data-gshare]'); if (!b) return;
+      sfx.tick(); const x = get(b.dataset.gshare); if (!x) return;
+      const r = await share(reportText(x.d, x.n));
+      if (r === 'copied') { b.textContent = '✅ Текст скопирован'; setTimeout(() => { b.textContent = '📤 Поделиться'; }, 2500); }
     });
   }
   // the family's cards on the children's phone (the current child first)
   function famHTML() {
     const f = fam(); if (!f) return '';
     const ids = f.kids.filter(id => ROOT.profiles[id]).sort((a, b) => (b === ROOT.cur) - (a === ROOT.cur));
-    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) }, true)).join('')
-      || '<p class="lead">Добавьте ребёнка в семью — и здесь появится гайд.</p>';
+    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) })).join('')
+      || '<p class="lead">Добавьте ребёнка в семью — и здесь появится отчёт.</p>';
   }
   function mountFam(box) {
     if (!box) return;
-    const draw = () => { box.innerHTML = famHTML(); answers(box); };
-    draw(); bind(box, id => ROOT.profiles[id] ? digest(ROOT.profiles[id]) : null, draw);
+    box.innerHTML = famHTML();
+    bind(box, id => ROOT.profiles[id] ? { d: digest(ROOT.profiles[id]), n: ROOT.profiles[id].settings.name || '' } : null);
   }
   // the grandparents' phone: the digest from the family's progress note
   function guestHTML(pg) {
     const ks = (pg && pg.kids || []).filter(k => k.gd);
-    return ks.length ? ks.map(k => card(k.gd, { id: k.id, n: k.n, face: friendSVG('', FRIENDS[k.e] ? k.e : 'tiger') }, false)).join('')
-      : '<p class="lead">Гайд появится, когда телефон детей пришлёт новости о неделе.</p>';
+    return ks.length ? ks.map(k => card(k.gd, { id: k.id, n: k.n, face: friendSVG('', FRIENDS[k.e] ? k.e : 'tiger') })).join('')
+      : '<p class="lead">Отчёт появится, когда телефон детей пришлёт новости о неделе.</p>';
   }
   function mountGuest(box, pg) {
     if (!box) return;
-    box.innerHTML = guestHTML(pg); answers(box);
-    if (!box.dataset.gb) { box.dataset.gb = 1; bind(box, id => { const k = ((gLoad(GPROG_KEY, null) || {}).kids || []).find(x => x.id === id); return k && k.gd; }, () => {}); }
+    box.innerHTML = guestHTML(pg);
+    if (!box.dataset.gb) { box.dataset.gb = 1; bind(box, id => { const k = ((gLoad(GPROG_KEY, null) || {}).kids || []).find(x => x.id === id); return k && k.gd ? { d: k.gd, n: k.n } : null; }); }
   }
-  return { note, digest, clean, card, tip, areas, pool, weekLines, project, mountFam, mountGuest, readLv, mathLv };
+  return { note, digest, clean, card, tip, areas, pool, wins, hard, rows, reportText, mountFam, mountGuest, readLv, mathLv, AREAS, week };
 })();
 /* GUIDE-END */
 /* HOMEUX-BEGIN */
@@ -22947,6 +23117,7 @@ const HOMEUX = (() => {
       PATH.today(st);
       const hero = st.querySelector('.hero'), plan = st.querySelector('section.today');
       if (hero && plan) hero.after(plan);
+      try { KPR.todayCard(st); } catch (e) {}
       const all = st.querySelector('.alltabs'); if (all) all.remove();
       // the older child's rank, season and garage: one card instead of three
       const qs = [st.querySelector('.rank'), st.querySelector('.season'), st.querySelector('.garage')].filter(Boolean);
