@@ -1,0 +1,167 @@
+{
+"id": "detective", "t": "Quem comeu o bolo?", "e": "🔍", "about": "O bolo sumiu! Três suspeitos e um mistério.",
+"cast": {
+ "sova": {"n": "Uhti", "d": "coruja, ajudante do Detetive"},
+ "ezh": {"n": "Tia Amora", "d": "ouriça, a padeira de toda a rua"},
+ "bublik": {"n": "Bolacha", "d": "cão com patas enormes"},
+ "pushok": {"n": "Fofinho", "d": "gato que adora natas"},
+ "shchek": {"n": "Bochechas", "d": "hamster, esconde tudo nas bochechas"}
+},
+"pw": {
+ "r": ["Rato ruivo, rua, rastos, rápido!", "Rasto a rasto, rrrresolvo o caso!", "O rasto reaparece rente ao rio, Uhti!"],
+ "l": ["Lupa, lupa, lê a luz!", "A lupa lê a lama, lá, lá, lá!", "Lenta e leve, a lupa lê pistas!"],
+ "sz": ["Já sei, sigo o sinal sem susto!", "Seis sinais, zás, já sabemos!", "Zeloso, sigo o som, sem pressa!"],
+ "sh": ["Chiu! Chegam passos chatos!", "Que chiado, que chave, que choque!", "O jovem xerife acha já a chave!"]
+},
+"tw": {
+ "r": "O rato Rui rói a rolha rente ao rio, ri e rodopia sem receio.",
+ "l": "A Lúcia lambe a lima, lava a lã e leva o leite para o lago.",
+ "sz": "Seis sapos saltaram do sofá, sentaram-se sobre a sopa e zumbiram.",
+ "sh": "O Chico acha a chave, chama o chefe e chega a chorar de achar."
+},
+"eps": [
+{
+ "t": "A janela vazia",
+ "p": [
+  {"bg": "kitchen", "who": ["ezh"], "sp": "ezh", "x": ["Onde está o bolo?", "O meu bolo de festa sumiu da janela!", "Fiz um bolo enorme para a rua toda e deixei-o a arrefecer na janela, e agora a janela está vazia!"]},
+  {"bg": "kitchen", "who": ["me", "sova"], "sp": "sova", "x": ["Sem migalhas!", "Olhem: na janela não há uma migalha.", "Apontado: o bolo era enorme e no parapeito não há uma única migalha. Isto é muito estranho!"]},
+  {"bg": "kitchen", "who": ["me", "ezh"], "sp": "me", "x": ["Quem passou aqui?", "Tia Amora, quem esteve aqui perto?", "Tia Amora, tente lembrar-se: quem passou hoje junto da sua janela? A Uhti vai apontar tudo."]},
+  {"bg": "street", "who": ["bublik", "pushok", "shchek"], "sp": "nar", "x": ["Três vizinhos!", "Junto da janela andaram três vizinhos.", "Junto da janela andaram três: o cão Bolacha, o gato Fofinho e o hamster Bochechas. Cada um escondia algo!"]}
+ ],
+ "pw": {"bg": "kitchen", "who": ["me", "sova"], "x": ["Diz a palavra!", "A lupa só liga com uma palavra!", "A lupa mágica da Uhti só liga com uma palavra especial. Di-la e ela mostra todas as pistas!"], "battle": false},
+ "q": [
+  ["O que não há na janela?", "Migalhas", "Flores", "Chávenas"],
+  ["O que é estranho no parapeito?", "Não há uma migalha", "Há muitas migalhas", "Está lá uma colher"],
+  ["O que surpreendeu a Uhti no parapeito?", "Não havia uma única migalha", "Ficou lá uma cauda", "Estava lá uma poça"]
+ ],
+ "ch": {
+  "x": ["Por onde começar?", "Por onde começamos a investigação?", "A investigação começa! Examinamos a janela limpa ou falamos primeiro com um vizinho suspeito?"],
+  "o": [
+   {"b": "Examinar a janela", "bg": "kitchen", "who": ["me", "sova"], "sp": "sova", "x": ["Um círculo vermelho!", "No calendário há um círculo vermelho.", "No parapeito há uma marca redonda do prato e, na parede, no calendário, um círculo vermelho. Um dia especial?"]},
+   {"b": "Interrogar o Bolacha", "bg": "street", "who": ["me", "bublik"], "sp": "bublik", "x": ["Eu? Cheirei margaridas!", "Só cheirei as margaridas junto à vedação!", "Só cheirei as margaridas junto à vedação, e porque olhas assim para as minhas patas, Detetive?"]}
+  ]
+ },
+ "end": ["De quem são as pegadas?", "No canteiro, debaixo da janela, há pegadas!", "Debaixo da janela, no canteiro molhado, há pegadas fundas! De quem serão? Continua amanhã!"],
+ "card": {"n": "Lupa da Uhti", "c": "sova", "d": "Acha tudo, até migalhas perdidas."}
+},
+{
+ "t": "Pegadas fundas",
+ "p": [
+  {"bg": "garden", "who": ["me", "sova"], "sp": "sova", "x": ["Eis as pegadas!", "No canteiro molhado há pegadas fundas.", "No canteiro molhado há pegadas fundas, cada uma do tamanho de um pires. Aponto: vão da janela até ao portão."]},
+  {"bg": "garden", "who": ["me", "sova"], "sp": "me", "x": ["Pegadas fundas!", "Pegadas fundas: alguém levou algo pesado.", "Um hamster leve deixaria pontinhos. Buracos fundos fazem-se quando se leva algo pesado, como um bolo enorme!"]},
+  {"bg": "garden", "who": ["me", "bublik"], "sp": "nar", "x": ["Patas do Bolacha!", "Pegadas de pires, como as patas do Bolacha.", "Pegadas do tamanho de um pires. O Bolacha tem patas de pires, o Fofinho de moeda e o Bochechas de botão."]},
+  {"bg": "garden", "who": ["me", "bublik"], "sp": "bublik", "x": ["Não fui eu!", "As pegadas são minhas, mas não comi o bolo!", "Sim, as pegadas são minhas, passei por aqui! Mas não comi o bolo, eu só gosto de ossos!"]}
+ ],
+ "pw": {"bg": "garden", "who": ["me", "sova"], "x": ["A lupa espera!", "A lupa mostra para onde vão as pegadas!", "A lupa pode mostrar para onde vão as pegadas, mas precisa de uma palavra mágica. Di-la bem alto!"], "battle": false},
+ "q": [
+  ["De quem são estas patas?", "Do Bolacha", "Do Fofinho", "Do Bochechas"],
+  ["Quem tem patas de pires?", "O Bolacha", "O Fofinho", "O Bochechas"],
+  ["De que gosta o Bolacha?", "De ossos", "De bolo doce", "De creme de framboesa"]
+ ],
+ "ch": {
+  "x": ["Para onde ir?", "As pegadas vão ao portão. Para onde vamos?", "As pegadas acabam no portão. Seguimos o rasto ou descobrimos quem esteve onde de manhã?"],
+  "o": [
+   {"b": "Seguir o rasto", "bg": "street", "who": ["me", "sova"], "sp": "sova", "x": ["Aqui há rodas!", "As pegadas acabam e depois veem-se rodas.", "No portão as pegadas acabam e a seguir há dois riscos de rodas. Alguém levou o bolo num carrinho!"]},
+   {"b": "Saber quem esteve onde", "bg": "street", "who": ["me", "pushok"], "sp": "pushok", "x": ["Fui buscar natas!", "Fui buscar natas de manhã, juro!", "Fui buscar natas logo de manhã! Mais não sei, bem, quase nada, miau!"]}
+  ]
+ },
+ "end": ["Quem esteve onde?", "Quem esteve onde às dez horas?", "Achámos pegadas, mas o bolo não! Quem esteve onde às dez da manhã? Continua amanhã!"],
+ "card": {"n": "Pegadas do Bolacha", "c": "bublik", "d": "Do tamanho de um pires inteiro!"}
+},
+{
+ "t": "Quem esteve onde?",
+ "p": [
+  {"bg": "street", "who": ["me", "sova"], "sp": "sova", "x": ["A hora conta!", "Às 10:20 havia bolo, às 10:50 já não.", "Passei às 10:20 e o bolo ainda lá estava; às 10:50 a Amora voltou à janela vazia. Sumiu em meia hora!"]},
+  {"bg": "street", "who": ["me", "bublik"], "sp": "bublik", "x": ["Estive no carpinteiro!", "Até às 10:20 no carpinteiro, desde as 10:30 na fonte.", "Até às 10:20 estive no carpinteiro e desde as 10:30 molhava as patas na fonte, perguntem aos patos!"]},
+  {"bg": "street", "who": ["me", "pushok"], "sp": "pushok", "x": ["Fui às natas.", "Até às 10:30 na leitaria, desde as 10:40 no telhado.", "Até às 10:30 ronronei na leitaria e desde as 10:40 dormitei no telhado. A leiteira confirma, miau!"]},
+  {"bg": "street", "who": ["me", "shchek"], "sp": "shchek", "x": ["Estive nas sementes.", "Até às 10:40 na loja das sementes, desde as 10:50 em casa.", "Até às 10:40 escolhi sementes e desde as 10:50 estava em casa. O vendedor confirma, sou o cliente mais frequente!"]}
+ ],
+ "pw": {"bg": "street", "who": ["me", "sova"], "x": ["Bloco fechado!", "O bloco da Uhti abre com uma palavra!", "O bloco de notas tem cadeado. Só abre se disseres a palavra especial!"], "battle": false},
+ "q": [
+  ["Quem esteve no carpinteiro?", "O Bolacha", "O Fofinho", "O Bochechas"],
+  ["Onde esteve o Fofinho até às 10:30?", "Na leitaria", "No telhado", "Na fonte"],
+  ["Quando voltou a Amora?", "Às 10:50", "Às 10:20", "Às 11:00"]
+ ],
+ "ch": {
+  "x": ["Quem levou o bolo?", "Quem teria tempo de levar o bolo sozinho?", "O bolo sumiu entre as 10:20 e as 10:50. Desenhamos o tempo numa régua: quem estava livre e quando?"],
+  "o": [
+   {"b": "Achar o tempo livre", "bg": "room", "who": ["me", "sova"], "sp": "sova", "x": ["Um de cada vez!", "Estão livres dez minutos, um a seguir ao outro!", "O Bolacha está livre das 10:20 às 10:30, depois o Fofinho até às 10:40, depois o Bochechas até às 10:50. Dez minutos cada, seguidos!"]},
+   {"b": "Perguntar aos patos", "bg": "park", "who": ["me", "sova"], "sp": "nar", "x": ["Quá! Às 10:30!", "Os patos grasnam: o Bolacha chegou às 10:30 certinhas!", "Os patos grasnaram em coro: o Bolacha chegou às 10:30 em ponto, nem um minuto antes! E às 10:20?"]}
+  ]
+ },
+ "end": ["É uma estafeta?", "Será que passaram o bolo em estafeta?", "Dez minutos cada um, um a seguir ao outro! Será que levaram o bolo juntos? Continua amanhã!"],
+ "card": {"n": "Bloco da Uhti", "c": "sova", "d": "Todas as horas apontadas, até o almoço."}
+},
+{
+ "t": "Batalha de trava-línguas",
+ "p": [
+  {"bg": "street", "who": ["me", "shchek"], "sp": "shchek", "x": ["Falo mais que todos!", "Ninguém fala mais do que eu, sou o maior tagarela!", "Eu, o Bochechas, falo mais do que qualquer um! Aposto que ninguém diz um trava-línguas tão depressa como eu!"]},
+  {"bg": "street", "who": ["me", "sova"], "sp": "sova", "x": ["Batalha de trava-línguas!", "Fazemos uma batalha de trava-línguas, Detetive?", "Fazemos uma batalha de trava-línguas: quem se enganar perde! Entretanto vou ver porque é que o Bochechas tem bochechas tão redondas."]},
+  {"bg": "street", "who": ["shchek", "sova"], "sp": "shchek", "x": ["Ui, atrapalha!", "Ui, tenho algo na boca!", "Ui, tenho algo na boca que atrapalha, brr, não, hoje não estou com voz, fica para outro dia!"]},
+  {"bg": "street", "who": ["me", "shchek"], "sp": "nar", "x": ["Da bochecha, uma vela!", "Da bochecha caiu uma vela de festa!", "Da bochecha do Bochechas rolou uma velinha de festa! Para que a quer, se o bolo sumiu?"]}
+ ],
+ "pw": {"bg": "street", "who": ["me", "shchek"], "x": ["Diz o trava-línguas!", "O Bochechas espera, diz o trava-línguas!", "O Bochechas tem a certeza de que vai ganhar. Diz o trava-línguas sem erros e mostra quem é o mestre da fala!"], "battle": true},
+ "q": [
+  ["O que caiu da bochecha?", "Uma vela", "Uma noz", "Uma colher"],
+  ["Quem queria falar mais do que todos?", "O Bochechas", "O Bolacha", "O Fofinho"],
+  ["O que rolou da bochecha do Bochechas?", "Uma vela de festa", "Uma semente", "Um pãozinho quente"]
+ ],
+ "ch": {
+  "x": ["O que fazer?", "Uma vela! O que fazemos agora?", "O Bochechas foge! Corremos atrás dele ou examinamos a vela: pode ter uma pista?"],
+  "o": [
+   {"b": "Examinar a vela", "bg": "street", "who": ["me", "sova"], "sp": "sova", "x": ["A vela é nova!", "A vela é novinha, nunca foi acesa.", "A vela é novinha: nem uma gota de cera, nunca foi acesa. Alguém prepara uma festa?"]},
+   {"b": "Seguir o Bochechas", "bg": "park", "who": ["me", "shchek"], "sp": "shchek", "x": ["Ui, outra vez aqui!", "Corro depressa, mas vim parar outra vez a vós!", "Corro mais depressa do que o vento! Ui, e onde vim parar? Outra vez a vós, Detetive?"]}
+  ]
+ },
+ "end": ["A festa é de quem?", "Vela, bolo, círculo: o que significam?", "Vela, bolo sumido, círculo vermelho no calendário... O que significam? Continua amanhã!"],
+ "card": {"n": "Bochechas Tagarela", "c": "shchek", "d": "Fala mais do que todos, até encher as bochechas."}
+},
+{
+ "t": "Mancha cor-de-rosa",
+ "p": [
+  {"bg": "kitchen", "who": ["me", "ezh"], "sp": "ezh", "x": ["Sem colher!", "Sumiu a minha grande colher de prata!", "E agora sumiu também a minha grande colher de prata, com que espalho o creme nos bolos! Ai, ai, ai!"]},
+  {"bg": "street", "who": ["me", "pushok"], "sp": "nar", "x": ["Mancha rosa!", "Na pata do Fofinho há uma mancha rosa de creme!", "Na pata do Fofinho há uma mancha rosa de creme. Mas os bigodes estão limpos: então não comeu o bolo!"]},
+  {"bg": "street", "who": ["me", "pushok"], "sp": "pushok", "x": ["É framboesa!", "É framboesa! Só cheirei, a sério!", "É doce de framboesa, juro! Ia a passar e, já agora, tenho de ir, prrr!"]},
+  {"bg": "garden", "who": ["me", "sova"], "sp": "sova", "x": ["É creme, não doce!", "A mancha é clara: é creme, não doce!", "O doce é escuro e a mancha é rosa-clara: é o creme da Amora! E pintas cor-de-rosa vão em fila até ao parque."]}
+ ],
+ "pw": {"bg": "garden", "who": ["me", "sova"], "x": ["Liga a lupa!", "A lupa vê as pintas rosa com a palavra!", "As pintas rosa quase não se veem na relva. Diz a palavra e a lupa acende-se como uma lanterna!"], "battle": false},
+ "q": [
+  ["De que cor é a mancha?", "Cor-de-rosa", "Azul", "Amarela"],
+  ["O que sumiu à Amora?", "A colher", "A tigela", "O rolo"],
+  ["Com que espalha a Amora o creme?", "Com uma grande colher", "Com uma espátula", "Com um pincel"]
+ ],
+ "ch": {
+  "x": ["Para onde agora?", "As pintas vão ao parque. O que fazemos?", "As pintas rosa vão ao parque, até ao velho coreto. Chegamos devagarinho ou batemos com força?"],
+  "o": [
+   {"b": "Chegar devagarinho", "bg": "park", "who": ["me", "sova"], "sp": "sova", "x": ["Chiu! Ouves?", "Do coreto vêm sussurros e ruídos.", "Do coreto vem um sussurro baixinho, o ruído de papel e um fiozinho de voz: «Chiu, ela vem aí!»"]},
+   {"b": "Bater com força", "bg": "park", "who": ["me", "shchek"], "sp": "shchek", "x": ["Fechado! Estamos ocupados!", "Fechado! Voltem daqui a cinco minutos!", "Fechado para limpeza, voltem daqui a cinco minutos, não, a dez! Ui, não esperamos ninguém!"]}
+  ]
+ },
+ "end": ["O que há atrás da porta?", "O que está escondido atrás da porta do coreto?", "Pintas rosa, vela, colher... Atrás da porta do coreto alguém sussurra! O que será? Continua amanhã!"],
+ "card": {"n": "Colher da Amora", "c": "ezh", "d": "De prata, grande e muito precisa."}
+},
+{
+ "t": "Surpresa!",
+ "p": [
+  {"bg": "park", "who": ["me", "sova"], "sp": "sova", "x": ["Sem migalhas!", "Sem migalhas, pegadas fundas, estafeta: tudo bate certo!", "Sem migalhas, pegadas fundas, dez minutos cada um, vela e creme rosa: tudo bate certo! Ninguém comeu o bolo."]},
+  {"bg": "park", "who": ["me", "ezh"], "sp": "me", "x": ["O bolo está inteiro!", "O bolo está inteiro! Levaram-no para uma festa!", "Ninguém comeu o bolo, levaram-no, e creio que para uma festa! O círculo vermelho no calendário não é por acaso."]},
+  {"bg": "park", "who": ["ezh", "me"], "sp": "ezh", "x": ["Que festa?", "Que festa? Não me lembro de nada!", "Que festa é essa? Tenho tanto que fazer que nem olho para o calendário!"]}
+ ],
+ "pw": {"bg": "park", "who": ["me", "sova"], "x": ["Diz a palavra!", "A porta só abre com a palavra-passe!", "A porta tem uma palavra-passe mágica. Diz-la bem alto e a fechadura estala, como num verdadeiro policial!"], "battle": false},
+ "q": [
+  ["Quem comeu o bolo?", "Ninguém", "O Bolacha", "O Fofinho"],
+  ["Porque levaram o bolo?", "Para uma festa", "Para o comer", "Para o perder"],
+  ["O que se descobriu sobre o bolo?", "Não o comeram, levaram-no", "Comeu-o o Fofinho", "Caiu ao lago"]
+ ],
+ "ch": {
+  "x": ["Como entrar?", "A porta abriu. Como entramos no coreto?", "A fechadura estalou! Entramos em bicos de pés ou abrimos a porta de rompante e dizemos «Toc-toc»?"],
+  "o": [
+   {"b": "Entrar em bicos de pés", "bg": "park", "who": ["me", "ezh", "bublik"], "sp": "bublik", "x": ["Surpresa!", "Surpresa! Parabéns, Tia Amora!", "Surpresa! Levámos o bolo para o enfeitar para o seu aniversário, Tia Amora!"]},
+   {"bg": "park", "b": "Abrir de rompante", "who": ["me", "pushok", "shchek"], "sp": "pushok", "x": ["Parabéns!", "Fomos nós que enfeitámos o bolo com creme, miau!", "Fui eu que escrevi os parabéns com creme, com a colher da Amora, e o Bochechas escondeu as velas nas bochechas, ah, ah!"]}
+  ]
+ },
+ "end": ["Bolo para todos!", "Bolo para todos! O maior pedaço é do Detetive!", "O bolo foi cortado para a rua toda, ninguém ficou sem fatia, e o Detetive ficou com a maior, com framboesa!"],
+ "card": {"n": "Bolo de festa", "c": "🎂", "d": "Inteiro, delicioso e para a rua toda!"}
+}
+]
+}

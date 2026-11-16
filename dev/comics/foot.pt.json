@@ -1,0 +1,169 @@
+{
+ "id": "foot",
+ "t": "A Bola Estrelada",
+ "e": "⚽",
+ "about": "A bola da sorte desapareceu antes do jogo com os robôs!",
+ "cast": {
+  "coach": { "n": "Ligeirinho", "d": "guaxinim, treinador da equipa" },
+  "bolt": { "n": "Parafuso", "d": "robô, capitão dos «Parafusos de Ferro»" },
+  "zhuk": { "n": "Zuzu", "d": "escaravelho, guarda-redes minúscula" }
+ },
+ "pw": {
+  "r": ["Rápido rato, rola o carro!", "Rrrrapidez, rrrrasteira, remate!", "Roda a bola, rebola, ri e remata!"],
+  "l": ["Bola leve, lá vai ela!", "Lança a bola, lindo lance!", "Lá lá lá, a bola é leal!"],
+  "sz": ["Sobe, sobe, bola, sem susto!", "Zás! Seis estrelas a zunir!", "Salta a bola, sai o som: zzz!"],
+  "sh": ["Chuta, chuta, chega o golo!", "Xeque-mate, chuta já, chefe!", "Jogada de genica, já chuto!"]
+ },
+ "tw": {
+  "r": "O rato Rui corre, rói a relva e rebola rente ao rio.",
+  "l": "A lebre Lalá lança a bola leve e lisa para o lado do lago.",
+  "sz": "Seis zebras saltam sobre a areia e sopram zumbidos de sol.",
+  "sh": "O chefe Chico chuta a bola, chega a chuva e xi, que choque!"
+ },
+ "eps": [
+  {
+   "t": "A bola desapareceu!",
+   "p": [
+    { "bg": "locker", "who": ["me", "coach"], "sp": "coach", "x": ["Jogo amanhã!", "Amanhã há jogo com os Parafusos de Ferro!", "Capitão, amanhã é o grande jogo com os robôs dos «Parafusos de Ferro»! Levamos a nossa bola estrelada!"] },
+    { "bg": "locker", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Sem bola!", "Ai! A bola estrelada não está na prateleira!", "Já voei por tudo: nem na prateleira, nem debaixo do banco! A bola desapareceu!"] },
+    { "bg": "locker", "who": ["coach", "me", "zhuk"], "sp": "coach", "x": ["Onde está?", "Ela dá-nos sorte!", "A nossa bola estrelada dá-nos sorte há três anos! Sem ela não dá. Vamos procurar!"] },
+    { "bg": "locker", "who": ["me"], "sp": "nar", "x": ["Uma semente.", "No chão está uma semente preta.", "O Capitão repara numa coisa pequenina no chão: uma semente preta a brilhar. De onde veio?"] }
+   ],
+   "pw": { "bg": "locker", "who": ["me"], "x": ["Cacifo fechado!", "O cacifo do treinador está trancado. Diz a palavra-passe!", "O cacifo do treinador tem palavra-passe e lá dentro pode haver uma pista! Diz a palavra-passe!"], "battle": false },
+   "q": [
+    ["O que desapareceu?", "A bola", "A taça", "O apito"],
+    ["O que estava no chão?", "Uma semente", "Um botão", "Uma pena"],
+    ["Com quem é o jogo amanhã?", "«Parafusos de Ferro»", "«Bolas Rápidas»", "«Corujas de Aço»"]
+   ],
+   "ch": {
+    "x": ["O que fazer?", "Onde vamos procurar a bola?", "A semente é só uma, mas há muitos caminhos. Seguimos as sementes ou perguntamos aos vizinhos?"],
+    "o": [
+     { "b": "Seguir as sementes", "bg": "park", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Mais sementes!", "Aqui há um rasto de sementes! Vamos!", "Olhem, um rasto de sementes pretas! Vai por todo o caminho fora!"] },
+     { "b": "Perguntar aos vizinhos", "bg": "street", "who": ["me", "coach"], "sp": "coach", "x": ["Cheira a melancia!", "Não viram a bola, mas cheira a melancia!", "Os vizinhos não viram a bola, mas a rua toda cheira a melancia. Estranho, não achas?"] }
+    ]
+   },
+   "end": ["Onde está a bola?", "Para onde levam estas sementes?", "Que sementes são estas e para onde levam? Fica a saber amanhã!"],
+   "card": { "n": "Bola Estrelada", "c": "⚽", "d": "Dá sorte. Mas agora está escondida!" }
+  },
+  {
+   "t": "O rasto de sementes",
+   "p": [
+    { "bg": "park", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Sementes em fila!", "As sementes seguem em fila até à rua.", "A Zuzu corre pelo caminho: as sementes estão em fila, como se alguém as fosse deixando cair."] },
+    { "bg": "park", "who": ["me", "coach"], "sp": "coach", "x": ["É melancia!", "São sementes de melancia! Passaram melancias!", "São sementes de melancia! Quer dizer que passou por aqui um carrinho com melancias."] },
+    { "bg": "street", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Vejo pegadas!", "Ficaram marcas de rodas no chão!", "Olhem: riscos de rodas e, ao lado, uma marca redonda. Parece a marca de uma bola!"] },
+    { "bg": "street", "who": ["me"], "sp": "nar", "x": ["Carrinho e caixa.", "Ao virar da esquina há um carrinho com uma caixa.", "Ao virar da esquina está um carrinho vazio, com uma caixa de cadeado. No cadeado lê-se: «Diz a palavra-passe»."] }
+   ],
+   "pw": { "bg": "street", "who": ["me"], "x": ["Caixa fechada!", "A caixa do carrinho está fechada. Diz a palavra!", "No carrinho há uma caixa com cadeado de código: abre se disseres a palavra-passe! Di-la."], "battle": false },
+   "q": [
+    ["O que está ao virar da esquina?", "Um carrinho", "Um barco", "Um escorrega"],
+    ["Que marcas ficaram?", "Marcas de rodas", "Marcas de patas", "Marcas de botas"],
+    ["De que eram as sementes?", "De melancia", "De abóbora", "De girassol"]
+   ],
+   "ch": {
+    "x": ["E agora?", "O que fazemos agora, Capitão?", "Na caixa há um bilhete: «Levamos melancias para o mercado». Corremos já para o mercado ou chamamos primeiro o treinador?"],
+    "o": [
+     { "b": "Correr para o mercado", "bg": "street", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Vamos ao mercado!", "Vamos ao mercado antes do almoço!", "Depressa para o mercado! Vendem melancias até ao almoço e temos de achar a bola a tempo!"] },
+     { "b": "Chamar o treinador", "bg": "stadium", "who": ["me", "coach"], "sp": "coach", "x": ["Vou convosco!", "Vou convosco! Mas primeiro, aquecimento!", "O treinador Ligeirinho já está a atar os sapatos. «Vou convosco! Mas primeiro aquecimento, senão as pernas ficam amuadas!»"] }
+    ]
+   },
+   "end": ["O que há no mercado?", "O que nos espera no mercado?", "O mercado é enorme e tem centenas de melancias. Como vamos achar a nossa bola no meio delas?"],
+   "card": { "n": "Carrinho de melancias", "c": "🍉", "d": "Anda devagar, mas larga sementes depressa." }
+  },
+  {
+   "t": "O treino do Ligeirinho",
+   "p": [
+    { "bg": "stadium", "who": ["me", "coach"], "sp": "coach", "x": ["A correr, equipa!", "Aquecimento! Corremos para o mercado!", "Aquecimento pelo caminho! Num jogo a sério jogam onze de cada equipa, por isso precisamos de força!"] },
+    { "bg": "street", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Sou rápida!", "Sou rápida! Tenho seis patas!", "Sou a mais pequena, mas tenho seis patas! Uma guarda-redes apanha a bola depressa e eu chego a tempo!"] },
+    { "bg": "street", "who": ["me", "coach"], "sp": "coach", "x": ["Passe, passe!", "Corremos e passamos uns aos outros!", "Passamos uma meia em vez da bola: passe, passe, passe! Uma boa equipa joga junta."] },
+    { "bg": "street", "who": ["me", "zhuk"], "sp": "zhuk", "x": ["Vejo a bola!", "Vejo a bola estrelada entre as melancias!", "Alto! No meio das melancias verdes está uma coisa redonda com uma estrela. É a nossa bola!"] }
+   ],
+   "pw": { "bg": "street", "who": ["me"], "x": ["Bola na rede!", "As melancias estão atrás da rede. Diz a palavra!", "As melancias estão cobertas por uma rede com cadeado mágico. Diz a palavra-passe para tirar a bola!"], "battle": false },
+   "q": [
+    ["O que acharam?", "A bola", "O cachecol", "O bolo"],
+    ["Onde estava a bola?", "Entre as melancias", "Nos arbustos", "Na caixa"],
+    ["Quantas patas tem a Zuzu?", "Seis", "Quatro", "Oito"]
+   ],
+   "ch": {
+    "x": ["O que dizer?", "Como vamos ter a bola de volta?", "A bola rolou sem querer para o carrinho e foi levada para o mercado. O que fazemos?"],
+    "o": [
+     { "b": "Explicar com educação", "bg": "street", "who": ["me", "zhuk"], "sp": "me", "x": ["É a nossa bola!", "Desculpe, esta é a nossa bola estrelada!", "Desculpe, esta é a nossa bola estrelada e não uma melancia! Rolou sem querer para o carrinho."] },
+     { "b": "Comprar uma melancia", "bg": "street", "who": ["me", "coach"], "sp": "nar", "x": ["Bola e melancia!", "O treinador compra uma melancia e nós levamos a bola!", "O treinador Ligeirinho ri-se e compra uma melancia para a equipa: a bola foi achada, já se pode festejar!"] }
+    ]
+   },
+   "end": ["Quem faz barulho?", "Quem faz barulho junto ao estádio?", "A bola foi achada! Mas chega ao estádio alguém enorme, a fazer barulho como cem panelas. Quem será?"],
+   "card": { "n": "As seis patas da Zuzu", "c": "zhuk", "d": "Seis patas e todas correm atrás da bola." }
+  },
+  {
+   "t": "A batalha de trava-línguas",
+   "p": [
+    { "bg": "stadium", "who": ["me", "bolt"], "sp": "bolt", "x": ["Eu sou o Parafuso!", "Sou o Parafuso! Vamos ganhar! Bip-bop!", "Eu sou o PARAFUSO, capitão dos «Parafusos de Ferro». Probabilidade de vitória: cem por cento. Bip!"] },
+    { "bg": "stadium", "who": ["me", "coach"], "sp": "coach", "x": ["Sem medo!", "Calma! Ele só se gaba um bocadinho!", "Calma, Capitão! O Parafuso gaba-se, mas joga limpo. Vamos responder-lhe com um trava-línguas!"] },
+    { "bg": "stadium", "who": ["bolt", "me"], "sp": "bolt", "x": ["Batalha de palavras!", "Proponho uma batalha de trava-línguas! Bip!", "Proponho um duelo de trava-línguas. Quem disser mais depressa e mais limpo escolhe metade do campo. Bip-bop!"] },
+    { "bg": "stadium", "who": ["me", "bolt", "zhuk"], "sp": "zhuk", "x": ["Um, dois, três!", "Sou a árbitra! Um, dois, três, já!", "Sou a árbitra! Falamos à vez e quem errar perde um ponto. Um, dois, três, já!"] }
+   ],
+   "pw": { "bg": "stadium", "who": ["me", "bolt"], "x": ["Diz depressa!", "Batalha! Diz o trava-línguas sem errar!", "A batalha de trava-línguas começou! Diz o trava-línguas limpinho e depressa e o Parafuso vai ver com quem joga."], "battle": true },
+   "q": [
+    ["Quem se gaba?", "O Parafuso", "A Zuzu", "O treinador"],
+    ["O que propõe o Parafuso?", "Uma batalha de trava-línguas", "Um jogo de damas", "Uma corrida"],
+    ["Quem é a árbitra da batalha?", "A Zuzu", "O treinador", "O Parafuso"]
+   ],
+   "ch": {
+    "x": ["Como responder?", "Como respondemos ao Parafuso?", "O Parafuso fala muito depressa, como um robô. Respondemos mais depressa ou mais limpo?"],
+    "o": [
+     { "b": "Falar limpinho", "bg": "stadium", "who": ["me", "bolt"], "sp": "bolt", "x": ["Limpinho! Bip!", "Muito limpo! As minhas peças zumbem!", "Limpo e claro! Os meus circuitos adoram. Mas o jogo vamos ganhá-lo na mesma! Bip-bop!"] },
+     { "b": "Falar depressa", "bg": "stadium", "who": ["me", "bolt"], "sp": "bolt", "x": ["Ui! Bip?", "Depressa! As minhas rodas ficaram presas!", "Depressa! O meu processador atrapalhou-se com os chs. Ch-ch-bip! Está bem, foi giro."] }
+    ]
+   },
+   "end": ["O que vai ser?", "O que vai acontecer no jogo?", "A batalha acabou e, de repente, juntam-se nuvens no céu. O que nos trará o jogo?"],
+   "card": { "n": "Parafuso Gabarola", "c": "bolt", "d": "Diz «bip», mas gaba-se com um «bip-bop» inteiro." }
+  },
+  {
+   "t": "Chuva no campo",
+   "p": [
+    { "bg": "stadium", "who": ["me", "coach"], "sp": "coach", "x": ["Começou o jogo!", "Apito! Começa o grande jogo!", "Apito! Onze dos nossos e onze robôs entram em campo e a bola rola para o meio."] },
+    { "bg": "stadium", "who": ["me", "zhuk"], "sp": "nar", "x": ["Está a chover!", "Caem do céu as primeiras gotas!", "Caem do céu as primeiras gotas grossas e a relva do campo fica depressa escorregadia."] },
+    { "bg": "stadium", "who": ["bolt", "me"], "sp": "bolt", "x": ["Rangi! Rangi!", "Bip! As minhas juntas rangem com a água!", "Bip-bip! A água entrou nas juntas e elas rangem como uma porta velha. É difícil correr."] },
+    { "bg": "stadium", "who": ["zhuk", "coach", "me"], "sp": "coach", "x": ["Jogo parado!", "Pára o jogo! Os robôs precisam de ajuda!", "Pára o jogo! Os robôs precisam de óleo, senão as juntas enferrujam. Vamos ajudar!"] }
+   ],
+   "pw": { "bg": "stadium", "who": ["me"], "x": ["Guarda-chuva, abre!", "Precisamos de um guarda-chuva enorme! Diz a palavra!", "O guarda-chuva enorme sobre o campo só abre com a palavra-passe! Di-la antes que chova mais!"], "battle": false },
+   "q": [
+    ["O que cai do céu?", "Chuva", "Neve", "Granizo"],
+    ["O que range no Parafuso?", "As juntas", "As rodas", "As asas"],
+    ["Quantos jogadores tem cada equipa em campo?", "Onze", "Nove", "Sete"]
+   ],
+   "ch": {
+    "x": ["O que primeiro?", "O que fazemos primeiro?", "O que é mais importante primeiro: cobrir o campo com o guarda-chuva ou pôr óleo nos robôs?"],
+    "o": [
+     { "b": "Cobrir o campo", "bg": "stadium", "who": ["me", "coach"], "sp": "coach", "x": ["Abriu!", "O guarda-chuva abriu! Que tamanho!", "O guarda-chuva enorme abriu sobre o campo e todos riem: debaixo dele está seco, até nas balizas mais longe!"] },
+     { "b": "Oleiar os robôs", "bg": "stadium", "who": ["zhuk", "bolt"], "sp": "zhuk", "x": ["Eu oleio!", "Já oleio! Com patinhas, num instante!", "Voo de robô em robô e ponho óleo nas juntas num instante. O ranger acalma! O próximo!"] }
+    ]
+   },
+   "end": ["Quem vai ganhar?", "O jogo vai recomeçar?", "A chuva abranda, os robôs brilham e a bola espera no meio. Quem vai marcar o primeiro golo?"],
+   "card": { "n": "Guarda-chuva mágico", "c": "☂️", "d": "Cobre o campo todo e nunca pinga." }
+  },
+  {
+   "t": "Jogo limpo",
+   "p": [
+    { "bg": "stadium", "who": ["me", "bolt"], "sp": "bolt", "x": ["Jogo! Bip!", "Bip-bop! Jogamos limpo, Capitão!", "Bip-bop! Os Parafusos de Ferro jogam limpo. O jogo é pelas regras e o golo é pela justiça!"] },
+    { "bg": "stadium", "who": ["zhuk", "bolt"], "sp": "zhuk", "x": ["Apanho a bola!", "Apanho a bola! A guarda-redes pode usar as mãos!", "Apanhei! Só a guarda-redes pode pegar na bola com as mãos, e só na sua área!"] },
+    { "bg": "stadium", "who": ["me", "bolt", "coach"], "sp": "nar", "x": ["Nós ajudamos!", "Bola fora! Ajudamos o Parafuso a levantar-se!", "O Parafuso escorregou e caiu. O Capitão manda a bola para fora pela linha lateral e todos correm a ajudar."] },
+    { "bg": "stadium", "who": ["bolt", "coach", "me"], "sp": "bolt", "x": ["Obrigado! Bip!", "Bip! Obrigado pelo jogo limpo!", "Bip-bip! Pararam o jogo por mim. Isto é jogo limpo. Vou guardar na memória!"] }
+   ],
+   "pw": { "bg": "stadium", "who": ["me"], "x": ["Diz e remata!", "Força para o remate! Diz a palavra!", "A bola está diante da baliza: diz a palavra-passe para rematar como um verdadeiro campeão!"], "battle": false },
+   "q": [
+    ["Quem caiu?", "O Parafuso", "A Zuzu", "O treinador"],
+    ["Para onde foi a bola?", "Para fora da linha", "Para a baliza", "Para a poça"],
+    ["Quem pode pegar na bola com as mãos?", "A guarda-redes", "O capitão", "O treinador"]
+   ],
+   "ch": {
+    "x": ["Como acabar?", "Como acabamos o jogo?", "O marcador está empatado. Jogamos até alguém ganhar ou chamamos todos para jogar juntos?"],
+    "o": [
+     { "b": "Jogar até ao fim", "bg": "stadium", "who": ["me", "bolt"], "sp": "bolt", "x": ["Empate! Bip!", "Empate! Três a três! É justo!", "Apito! Três a três, empate. O Parafuso dá uma palmada no ombro: «Resultado justo! Bip-bop!»"] },
+     { "b": "Jogar todos juntos", "bg": "stadium", "who": ["me", "bolt", "zhuk"], "sp": "bolt", "x": ["Todos juntos!", "Todos juntos! Ferro e patas!", "Os robôs e os nossos jogadores misturam-se e jogam juntos! A bola voa e ninguém conta os golos."] }
+    ]
+   },
+   "end": ["Somos amigos!", "Agora os robôs são nossos amigos!", "A bola estrelada voltou à equipa e os «Parafusos de Ferro» tornaram-se amigos a sério. Que campeões!"],
+   "card": { "n": "Taça da Amizade", "c": "🏆", "d": "Uma taça para duas equipas. Empatar também é bom!" }
+  }
+ ]
+}
