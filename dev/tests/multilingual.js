@@ -82,7 +82,8 @@ async function open(b, lang, path, who, { day = DAY1, extra = {} } = {}) {
       ok(week.every(([d, l]) => d % 2 || l === 'ru') && new Set(week.map(x => x[1])).size === 4, `${tag}: a week of reading — ${week.map(x => x[1]).join()}`);
       const d1 = await run(`readLangToday()`);
       const plan = await run(`lessonPlan('read').map(s => s.key).join()`);
-      ok(plan.split(',')[0] === 'r-skill@' + d1 && plan.split(',').length <= 3, `${tag}: today's reading in ${d1}: ${plan}`);
+      // a child of 8–14 with Russian at home: on the Russian days «Русский для меня» takes the reading's place (ru-bilingual)
+      ok((d1 === 'ru' ? plan === 'rume-day' : plan.split(',')[0] === 'r-skill@' + d1) && plan.split(',').length <= 3, `${tag}: today's reading in ${d1}: ${plan}`);
       // Тоша reads Russian at step 3 and German not yet checked: German has no step → it is not «weakest», he only learns it
       ok(d1 === 'ru', `${tag}: Monday — Russian, the weakest home language`);
       await run(`goHome()`); await p.waitForTimeout(500); await p.click('.tb[data-tab="today"]').catch(() => {}); await p.waitForTimeout(700);
