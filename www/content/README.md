@@ -1,6 +1,8 @@
 # Texts of the website
 
-One file per language: `ru.json`, `en.json`, `pt.json`. Shape:
+One file per language: `ru.json`, `en.json`, `pt.json`, `de.json` (German: only the home page so far; `ART` in
+`www/build.py` lists the languages with articles). `root.json` is govorilki.com/ itself: a short text per language,
+written by hand in that language, never a word-for-word translation. Shape:
 
 ```
 { "lang": "ru", "brand": "Говорилки",
