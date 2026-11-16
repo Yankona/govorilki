@@ -1489,6 +1489,30 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .mk-in{min-width:140px;padding:4px 18px;border-radius:18px;background:var(--paper);text-align:center;font:900 38px/1.2 var(--f-body);color:var(--plum);box-shadow:inset 0 0 0 3px var(--line-strong)}
 .mk-pics{display:inline-flex;flex-wrap:wrap;gap:2px;max-width:150px;justify-content:center}.mk-pics .pic{font-size:30px}.mk-op{font-style:normal}
 .mk-pie{width:120px;height:120px}.mk-t{flex-basis:100%;font:700 19px/1.3 var(--f-body)}
+.rk{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.rk-step{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+#rkBox{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.rk-q{max-width:600px;padding:16px 20px;border-radius:24px;background:var(--paper);text-align:center;color:var(--ink)}
+.rk-q.long{text-align:left}
+.rk-w{font:900 clamp(34px,9vw,54px)/1.15 var(--f-body);letter-spacing:.04em;word-break:break-word}
+.rk-p{font:900 clamp(28px,7vw,40px)/1.2 var(--f-body)}
+.rk-s{font:800 clamp(22px,5.4vw,30px)/1.4 var(--f-body)}
+.rk-t{display:block;font:600 clamp(18px,4.4vw,22px)/1.55 var(--f-body)}
+.rk-qq{display:block;margin-top:10px;font:900 clamp(18px,4.4vw,22px)/1.35 var(--f-body);color:var(--plum)}
+.rk-gap{display:inline-block;min-width:2.4em;border-bottom:3px solid var(--plum);color:var(--plum)}
+.rk-ask{margin:0;font:700 17px/1.3 var(--f-body);color:var(--ink-soft);text-align:center}
+.rk-hear{display:flex;align-items:center;gap:10px;border:0;border-radius:20px;padding:12px 18px;background:var(--t-blue);color:var(--ink);font:800 18px var(--f-body);cursor:pointer}
+.rk-hear svg{width:28px;height:28px}
+.rk-opts{display:grid;gap:12px;width:min(100%,560px)}
+.rk-opts.lets,.rk-opts.pics{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rk-o{min-height:64px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);font:800 clamp(18px,4.4vw,22px)/1.25 var(--f-body);padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 var(--line-strong)}
+.rk-opts.lets .rk-o{aspect-ratio:1.2;font:900 clamp(34px,10vmin,64px)/1 var(--f-body)}
+.rk-opts.pics .rk-o{aspect-ratio:1}.rk-opts.pics .rk-o .pic{font-size:clamp(46px,13vmin,72px)}
+.rk-o.right{background:var(--t-green);box-shadow:0 6px 0 var(--leaf)}.rk-o.wrong{opacity:.45}
+.rk-o:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line-strong)}
+.rk-mic.ear{animation:pdRing 1.2s ease-out infinite}
+.rk-bar{display:flex;gap:6px;width:min(100%,560px);margin:4px auto 0}.rk-bar i{flex:1;height:10px;border-radius:6px;background:var(--line-strong)}.rk-bar i.on{background:var(--leaf)}
+.rk-head small{max-width:46vw}.rk-head .mk-rank b{white-space:nowrap;font-size:16px}
 .mk-opts .num-b{width:auto;min-width:clamp(80px,19vmin,120px);padding:0 14px;font-size:clamp(34px,8vmin,52px)}
 .keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
 .kp-k{height:58px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:900 26px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
@@ -2275,6 +2299,13 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .ml-lr.on{box-shadow:inset 0 0 0 3px var(--sun)}.ml-ln{display:flex;align-items:center;gap:8px;font:800 17px var(--f-body)}.ml-seg{display:flex;gap:6px}.ml-seg .chip{padding:6px 12px;font-size:15px}
 .ml-seg .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}.ml-learn{font:800 13px var(--f-body);color:var(--plum);background:var(--t-lilac);border-radius:8px;padding:1px 7px;vertical-align:middle}
 .fe .lang-pick{margin:4px 0 6px}
+.ml-lr{flex-wrap:wrap}.ml-more summary{cursor:pointer;font:700 15px var(--f-body);color:var(--ink-soft);padding:4px 2px}.ml-more[open]{display:grid;gap:6px}
+.ml-main{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;font:700 15px var(--f-body)}.ml-main .chip{padding:6px 12px;font-size:15px}.ml-main .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.ml-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin:8px 0}.ml-strip-h{font-size:20px}
+.ml-sw{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:6px 12px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);font:800 16px var(--f-body);color:var(--ink);cursor:pointer}
+.mm-ask{display:grid;justify-items:center;gap:4px}.mm-hear{font-size:22px}.mm-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:560px;margin:8px auto}
+.mm-o{display:grid;justify-items:center;gap:4px;border:0;border-radius:18px;padding:12px 6px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line),0 3px 0 var(--line);font:800 18px var(--f-body);color:var(--ink);cursor:pointer;min-height:64px;align-content:center;overflow-wrap:anywhere}
+.mm-o .mm-pic .pic{width:64px;height:64px;font-size:52px}.mm-o.right{background:var(--t-green)}.mm-o:disabled:not(.right){opacity:.45}.mm-pair{display:grid;justify-items:center;gap:4px;margin-top:8px}.mm-pair .pic{width:72px;height:72px;font-size:60px}
 .hg-msg{margin:0;white-space:pre-wrap;font:600 15px/1.45 var(--f-body);background:#fff;border-radius:14px;padding:10px;max-height:260px;overflow:auto}
 .hg .big.ghost{margin-top:10px}
 .hg-steps{margin:0;padding:0;list-style:none;counter-reset:hg;display:flex;flex-direction:column;gap:12px}
@@ -2543,7 +2574,34 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .pv-face{flex:none;width:52px;height:52px;border-radius:50%;background:var(--t-yellow);display:grid;place-items:center;overflow:hidden}.pv-face svg{width:46px;height:46px}.pv-face.e{font-size:30px}
 .pv-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}.pv-t b{font-size:17px}.pv-t small{font-size:14px;color:var(--ink-soft);line-height:1.3}
 .pv-ad{display:flex;flex-direction:column;gap:8px;border-radius:20px;padding:10px 12px;background:var(--t-lilac);box-shadow:0 4px 0 var(--line)}
-.pv-acts{display:flex;gap:8px;flex-wrap:wrap}.pv-url{word-break:break-all;font-size:12px}
+.pv-acts{display:flex;gap:8px;flex-wrap:wrap}
+/* GUIDE-CSS: «Отчёт» cards for grown-ups */
+.gd-card{background:var(--surface,#fff);border-radius:22px;padding:14px 16px;margin:0 0 14px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 6px 18px rgba(60,40,10,.08);display:flex;flex-direction:column;gap:8px}
+.gd-h{display:flex;align-items:center;gap:10px}.gd-h .chip-face{width:44px;height:44px;flex:none}.gd-h b{font:800 20px/1.2 var(--f-head,inherit)}.gd-h small{margin-left:auto;color:var(--ink-soft)}
+.gd-act{margin:0;font:700 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.gd-s{margin:0 0 2px;font:800 15px/1.3 var(--f-body);color:var(--ink)}
+.gd-ok,.gd-hard{border-radius:16px;padding:10px 12px}.gd-ok{background:var(--t-mint)}.gd-hard{background:var(--t-yellow)}
+.gd-ok p,.gd-hard p,.gd-idea p{margin:2px 0;font:600 15px/1.45 var(--f-body);color:var(--ink)}
+.gd-wkr,.gd-idea{border-radius:16px;background:var(--t-blue);padding:8px 12px}.gd-idea{background:transparent;padding:2px 4px}
+.gd-wkr summary,.gd-idea summary{cursor:pointer;font:700 15px/1.5 var(--f-body);color:var(--ink)}.gd-idea summary{color:var(--ink-soft);font-weight:600}
+.gd-rows{display:flex;flex-direction:column;gap:2px;margin:6px 0}.gd-rows p{margin:0;display:grid;grid-template-columns:1fr auto;column-gap:10px;font:600 15px/1.35 var(--f-body);color:var(--ink)}
+.gd-rows b{font-size:18px;color:var(--ink-soft)}.gd-rows b.up{color:var(--leaf,#2e9e4f)}.gd-rows small{grid-column:1/-1;color:var(--ink-soft);font-size:13px}
+.gd-share{margin-top:4px}
+/* KPROJ-CSS: the child's «Проект недели» */
+.kp{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:0 auto;background:var(--surface,#fff);color:var(--ink);border-radius:26px;padding:16px}.kp .kp-step{background:var(--t-mint)}.kp .kp-day,.kp .kp-ic,.kp .kp-t{background:var(--bg,#F6F3EE)}
+.kp-head{display:flex;align-items:center;gap:12px}.kp-head .kp-e{width:64px;height:64px;flex:none;font-size:52px;line-height:1}.kp-head h2{margin:0;font:800 24px/1.2 var(--f-head,inherit)}.kp-head small{color:var(--ink-soft);font-weight:700}
+.kp-step{background:var(--surface,#fff);border-radius:24px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 2px 0 rgba(0,0,0,.06)}
+.kp-pic{font-size:96px;line-height:1.1;width:120px;height:120px;display:flex;align-items:center;justify-content:center}.kp-pic img,.kp-pic svg{width:110px;height:110px}
+.kp-step p{margin:0;text-align:center;font:700 20px/1.4 var(--f-body);color:var(--ink)}
+.kp-nav{display:flex;gap:10px;flex-wrap:wrap}.kp-nav .big{flex:1}
+.kp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.kp-day{background:var(--surface,#fff);border-radius:12px;text-align:center;padding:4px 0}.kp-day small{display:block;color:var(--ink-soft);font-size:12px}.kp-day b{font-size:24px;min-height:30px;display:block}.kp-day.now{outline:3px solid var(--sun,#ffc83d)}
+.kp-pick{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.kp-ic{font-size:36px;width:64px;height:64px;border-radius:18px;border:0;background:var(--surface,#fff);box-shadow:0 2px 0 rgba(0,0,0,.08)}.kp-ic.sel{outline:4px solid var(--leaf,#2e9e4f)}
+.kp-q{margin:0;text-align:center;font:700 16px/1.4 var(--f-body);color:var(--ink-soft)}
+.kp-tally{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kp-t{border:0;border-radius:20px;background:var(--surface,#fff);padding:12px;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 0 rgba(0,0,0,.08)}.kp-t .emo{font-size:40px}.kp-t b{font-size:28px}.kp-t small{color:var(--ink-soft);font-weight:700}
+.kp-end{display:flex;flex-direction:column;gap:12px}.kp-done{margin:0;font:800 20px/1.4 var(--f-body);text-align:center}.kp-ph{max-width:100%;border-radius:18px}.kp-cam{text-align:center}
+.kp-grown{margin:0;font:600 14px/1.4 var(--f-body);color:var(--ink-soft)}.kp-swap{align-self:center}
+.kp-card{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:22px;background:var(--t-mint);padding:12px 14px;margin:12px 0;text-align:left;box-shadow:0 2px 0 rgba(0,0,0,.06)}.kp-card .kp-e{font-size:40px;width:48px;height:48px;flex:none;line-height:1}.kp-card .kp-ct{display:flex;flex-direction:column;flex:1}.kp-card small{color:var(--ink-soft);font-weight:700}.kp-card b{font:800 18px/1.3 var(--f-body)}.kp-card i{font-style:normal;color:var(--tiger,#e4632a);font-weight:800}
+.pv-url{word-break:break-all;font-size:12px}
 .pult-gate{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,420px);margin:0 auto;padding-top:12px;text-align:center}
 .pg-t{margin:0;min-height:2.6em}
 .pg-dots{display:flex;gap:18px;justify-content:center}.pg-dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--ink-soft);transition:background .15s}.pg-dots i.on{background:var(--ink);border-color:var(--ink)}
@@ -3732,6 +3790,8 @@ const LS = () => {
   let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
   
   if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
+  
+  if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: readLangToday() !== LANG ? mlInfo(readLangToday())[1] + ' ' + "Leitura" : keep ? b.read.name : IS_RU && RSK.early() ? "Leitura em russo" : "Leitura", sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
   return customSounds() ? { ...b, speech: { ...b.speech, name: "Fala", sub: "respiração, língua, " + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3770,7 +3830,7 @@ function lessonPlan(id) {
       { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
       if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
-    } else if (id === 'read') ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read')));
+    } else if (id === 'read') { try { return RSK.plan(n, s); } catch (e) { ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read'))); } }
     else steps.push(gameStep('book', 'book'));
     return steps;
   }
@@ -3788,6 +3848,8 @@ function lessonPlan(id) {
     if (IS_RU && modOnG(16) && !gp) { const h = LOGO.daily(n + s); if (h) steps.push(gameStep(h, 'game')); }
     if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   } else if (id === 'read') {
+    
+    try { return RSK.plan(n, s); } catch (e) {}
     if (IS_RU && (P.settings.age || 6) <= 7 && prState().at < PRIMER.length) ['primer', ['read-words', 'abc-first', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
     else ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
@@ -4663,9 +4725,11 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
   P.stars += stars; P.best[key] = Math.max(P.best[key] || 0, stars); P.plays[key] = (P.plays[key] || 0) + 1;
   
   const td = todayState(); let doneLesson = null, medal = null;
+  
+  const lkey = key === 'r-skill' && readLangs().length > 1 ? 'r-skill@' + LANG : key;
   for (const id of (ACTIVE ? [ACTIVE] : LIDS())) {
-    if (td.done[id].includes(key) || !lessonPlan(id).some(x => x.key === key)) continue;
-    td.done[id].push(key);
+    if (td.done[id].includes(lkey) || !lessonPlan(id).some(x => x.key === lkey)) continue;
+    td.done[id].push(lkey);
     if (!nextStepOf(id)) {
       doneLesson = id; td.done[id] = [];
       const c = { ...dayCounts(td.date) }; c[id] = (c[id] || 0) + 1; P.days[td.date] = c;
@@ -4693,7 +4757,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
     ${fair.note ? `<p class="fair-note">${fair.note}</p>` : ''}
     ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>Novo autocolante!</div>` : ''}
-    ${ns ? lessonTrailHTML(key) : extra}
+    ${ns ? lessonTrailHTML(lkey) : extra}
     <div class="win-btns win-main">
       ${again ? `<button class="big ${next ? 'ghost' : ''}" data-a="again">↻ Outra vez</button>` : ''}
       ${next ? `<button class="big" data-a="next">${ns || !nextLabel ? "Seguinte" : esc(nextLabel)}</button>` : ''}
@@ -4706,7 +4770,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     if (a.dataset.a === 'again') again(); else if (a.dataset.a === 'next') next(); else (menu || goHome)();
   };
   sfx.good(); confetti(); later(sfx.star, 450);
-  say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? " Olha, tens um autocolante novo!" : ''}${fair.note ? ' ' + fair.note : ''}`);
+  mlPraiseMaybe(say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? " Olha, tens um autocolante novo!" : ''}${fair.note ? ' ' + fair.note : ''}`));
   const first = ov.querySelector('[data-a="next"]') || ov.querySelector('[data-a]');
   if (first) first.focus({ preventScroll: true });
 }
@@ -4907,6 +4971,8 @@ let LANG_CHECKED = false;
 function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Teste do zero · <button id="demoAgain">de novo</button> · <a href="${SITE_ROOT}">sair</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
+  
+  if (mlvRoute()) return;
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
   if (!PULT_BOOTED) { PULT_BOOTED = true; if (whoBoot()) return; }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
@@ -4995,7 +5061,7 @@ function goHome() {
   HOMEUX.apply(tab);
   const on = (sel, fn) => { const el = $(sel); if (el) el.onclick = fn; };
   lastLine = greet();
-  on('#heroRyz', () => { hopEl($('#heroRyz')); say(greet()); });
+  on('#heroRyz', () => { hopEl($('#heroRyz')); mlHelloMaybe(say(greet())); });
   on('#albumBtn', () => { sfx.pop(); screenAlbum(); });
   on('#voiceBtn', () => { sfx.pop(); screenParents('voice'); });
   on('#friendBtn', () => { sfx.pop(); screenFriends(); });
@@ -5607,7 +5673,9 @@ const LQ = (() => {
     const n = (P.plays || {})[key] || 0, a = P.settings.age || 0, own = Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0));
     
     const m = /^math-/.test(key) && P.mskill && P.mskill.lv || 0;
-    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0);
+    
+    const r = /^(abc-|read-)/.test(key) && rskOf().lv || 0;
+    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0, r >= 4 ? 2 : r >= 2 ? 1 : 0);
   };
   function start(key, n = 6, train = false) {
     let last = (P.lqLast || {})[key];
@@ -8295,35 +8363,37 @@ function screenGuest() {
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
     <header class="g-hero"><span id="gHeroFace">${avaOk(g.av) ? kinFace(g, 'g-face') : pic(g.e)}</span><div><h1>${g.hi}</h1></div></header>
     <div class="gh-tiles" id="ghTiles">
-      <button class="gh-t" data-gt="gKidsH"><span class="emo">⭐</span><b id="ghKidsT">Como estão ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</b></button>
-      <button class="gh-t" data-gt="gHelloH"><span class="emo">💌</span><b>Mandar um olá</b></button>
+      <button class="gh-t" data-gt="gKidsH"><span class="emo">⭐</span><b id="ghKidsT">Como está ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</b></button>
+      <button class="gh-t" data-gt="gHelloH"><span class="emo">💌</span><b>Enviar um olá</b></button>
       <button class="gh-t" data-gt="gChessH"><span class="emo">♟</span><b>Xadrez</b></button>
-      <button class="gh-t" data-gt="tale"><span class="emo">📖</span><b>Uma história juntos</b></button>
-      <button class="gh-t" data-gt="gGamesH"><span class="emo">🎮</span><b>Os jogos dos netos</b></button>
+      <button class="gh-t" data-gt="tale"><span class="emo">📖</span><b>Conto em conjunto</b></button>
+      <button class="gh-t" data-gt="gGamesH"><span class="emo">🎮</span><b>Jogos dos netos</b></button>
+      <button class="gh-t" data-gt="gGuideH"><span class="emo">📊</span><b>Relatório</b></button>
     </div>
     ${hgTop ? `<div id="hgBox">${homeGuide(true)}</div>` : ''}
-    <div class="fam-card"><h2 class="fam-h" id="gKidsH">Como estão ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
-    <div class="fam-card gh-hello"><h2 class="fam-h" id="gHelloH">💌 Mandar um olá</h2><p class="lead">Escolha uma imagem e as palavras. O jogo mostra o olá com o seu retrato e lê-o em voz alta quando o neto abrir o jogo.</p>
+    <div class="fam-card"><h2 class="fam-h" id="gKidsH">Como está ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
+    <div class="fam-card gd-sec"><h2 class="fam-h" id="gGuideH">📊 Relatório</h2><p class="lead">O que os netos já conseguem e o que ainda é difícil.</p><div id="gGuide"></div></div>
+    <div class="fam-card gh-hello"><h2 class="fam-h" id="gHelloH">💌 Enviar um olá</h2><p class="lead">Escolham uma imagem e algumas palavras. O jogo mostra o olá com o vosso retrato e lê-o em voz alta quando o neto abrir o jogo.</p>
       <div class="gh-to" id="ghTo"></div>
       <div class="gh-st" id="ghSt">${HI_STICKERS.map((x, i) => `<button class="gh-s${i ? '' : ' on'}" data-st="${i}">${x}</button>`).join('')}</div>
       <div class="gh-ph" id="ghPh">${HELLO.map((x, i) => `<button class="big ghost gh-p" data-hp="${i}">${x}</button>`).join('')}</div>
       <p class="fam-out" id="ghOut"></p></div>
-    <div class="fam-card"><h2 class="fam-h" id="gGamesH">🎮 Os jogos dos netos</h2><p class="lead">Os mesmos jogos dos netos: jogue também e depois conversem sobre eles ou joguem juntos. Os netos vão ver o que jogou.</p><div class="g-games" id="gGames">${guestGamesBtns(gLoad(GPROG_KEY, null))}</div></div>
+    <div class="fam-card"><h2 class="fam-h" id="gGamesH">🎮 Jogos dos netos</h2><p class="lead">Os mesmos jogos dos netos: joguem sozinhos e depois conversem ou joguem em conjunto. Os netos vão ver o que jogaram.</p><div class="g-games" id="gGames">${guestGamesBtns(gLoad(GPROG_KEY, null))}</div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Convites</h2><div id="gInv" class="g-inv"><p class="lead">A verificar…</p></div></div>
     <div class="fam-card"><h2 class="fam-h" id="gChessH">♟ Convidar para jogar</h2>
-      <h3 class="fam-s">Eu jogo</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
+      <h3 class="fam-s">Eu jogo com</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
       <div class="fam-who" id="gWho"></div><p class="fam-out" id="gOut"></p></div>
     ${gamesHTML()}
     <div class="fam-card"><h2 class="fam-h">Como jogar</h2><ol class="g-steps">
-      <li>Toque em «Jogar» ou «Começar partida» — o tabuleiro abre aqui mesmo.</li>
-      <li>Para jogar: toque na sua peça e depois na casa com o ponto.</li>
-      <li>O lance de ${KID.gen} aparece sozinho e o telemóvel avisa. Não há relógio — pense com calma.</li>
-      <li>Pode fechar a página e voltar mais tarde: a partida fica guardada.</li>
-      <li>${KID.name} está a aprender a falar com clareza — façam uma chamada e peçam-lhe que diga os lances em voz alta: «bispo», «torre», «rei».</li></ol></div>
+      <li>Toquem em «Jogar» ou «Começar uma partida» e o tabuleiro abre aqui mesmo.</li>
+      <li>Para jogar, toquem na vossa peça e depois numa casa com um ponto.</li>
+      <li>A jogada de ${KID.gen} aparece sozinha e o telemóvel avisa. Não há relógio: pensem com calma.</li>
+      <li>Podem fechar a página e voltar mais tarde: a partida fica guardada.</li>
+      <li>${KID.name} está a aprender a falar com clareza. Liguem um ao outro e peçam para dizer as jogadas em voz alta: «bispo», «torre», «rei».</li></ol></div>
     ${hgTop ? '' : homeGuide()}
     <div class="fam-card lang-pick" id="gLang"><h2 class="fam-h">🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</div>
-    <button class="link-btn" id="gKids">Abrir o jogo para ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</button>
-    <button class="link-btn" id="gExit">Este é o telemóvel das crianças — sair desta entrada</button>
+    <button class="link-btn" id="gKids">Abrir o jogo de ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</button>
+    <button class="link-btn" id="gExit">Este é o telemóvel das crianças: terminar sessão</button>
   </div></main></div>`;
   bindGames($('.fam'));
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = b.dataset.s; $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
@@ -8378,6 +8448,7 @@ function screenGuest() {
   };
   const drawKids = () => {
     const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg);
+    GUIDE.mountGuest($('#gGuide'), pg);
     const gg = $('#gGames'); if (gg && pg) gg.innerHTML = guestGamesBtns(pg);
     if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = "Notícias de " + w.gen; if (k) k.textContent = "Abrir o jogo de " + w.gen; const kt = $('#ghKidsT'); if (kt) kt.textContent = "Notícias de " + w.gen; }
   };
@@ -8405,7 +8476,7 @@ function screenGuest() {
   relaySub(m => {
     if (t !== tok) return;
     if (m.k === 'prog' && Array.isArray(m.kids) && (!pg || m.at > pg.at)) {
-      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6), ...(avaOk(k.a) ? { a: k.a } : {}) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), tr: k.tr === 'l' ? 'l' : 'r', cf: cleanCf(k.cf), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9), /^[a-z]{2,8}$/.test(x && x[2] || '') ? x[2] : '']).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13), /^[a-z0-9:_-]{2,40}$/i.test(x && x[3] || '') ? x[3] : '']).filter(x => x[0]) })) };
+      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6), ...(avaOk(k.a) ? { a: k.a } : {}) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), tr: k.tr === 'l' ? 'l' : 'r', cf: cleanCf(k.cf), gd: GUIDE.clean(k.gd), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9), /^[a-z]{2,8}$/.test(x && x[2] || '') ? x[2] : '']).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13), /^[a-z0-9:_-]{2,40}$/i.test(x && x[3] || '') ? x[3] : '']).filter(x => x[0]) })) };
       gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); helloKids(); return;
     }
     if (m.k === 'cheer' && m.to === GUEST.who && m.i && !hearts.has(m.i)) {
@@ -8857,6 +8928,7 @@ function screenStory(k, i, o = {}) {
       <div class="story-q" id="stQ" hidden></div>
     </article>`, { back });
   const spans = $$('.ss');
+  { const h2 = $('.story h2'), ms = mlStripHTML(it.e); if (h2 && ms) { h2.insertAdjacentHTML('afterend', ms); mlStripBind($('.story')); } }
   
   async function readAloud() {
     const my = ++rd; reading++; hush();
@@ -10123,8 +10195,8 @@ function screenProfile() {
     ${pick("Batida", 'beat', c.beats, v => BEATS[v] ? BEATS[v].name : v)}
     ${pick("Moldura", 'frame', c.frames, v => FRAMES[v] || v)}
     ${pick("Mota na pista L", 'bike', c.bikes, v => v === 'neon' ? "Néon" : "Dourado")}
-    <h3 class="pf-h">Conquistas ${(P.ach || []).length} de ${ACH.length}</h3>
-    <div class="ach">${ACH.map(a => { const on = (P.ach || []).includes(a.id); return `<div class="ac ${on ? 'on' : ''}" title="${esc(a.d)}"><span>${on ? a.e : '🔒'}</span><b>${esc(a.t)}</b><small>${esc(a.d)}</small></div>`; }).join('')}</div>
+    <h3 class="pf-h">Conquistas ${(P.ach || []).length} de ${ACH.filter(a => !a.hide || (P.ach || []).includes(a.id)).length}</h3>
+    <div class="ach">${ACH.filter(a => !a.hide || (P.ach || []).includes(a.id)).map(a => { const on = (P.ach || []).includes(a.id); return `<div class="ac ${on ? 'on' : ''}" title="${esc(a.d)}"><span>${on ? a.e : '🔒'}</span><b>${esc(a.t)}</b><small>${esc(a.d)}</small></div>`; }).join('')}</div>
     <p class="lead">Recolhe os prémios da temporada no cartão «Temporada» do ecrã principal. Títulos, microfones, batidas e molduras ficam para sempre.</p></div>`);
   talk(`Este é o teu perfil. Nível ${lv}, ${belt.name}. Escolhe um título, um microfone e uma batida!`);
   st.onclick = e => {
@@ -10495,14 +10567,14 @@ function piperNote() {
   if (!n) { n = document.createElement('div'); n.id = 'pvNote'; n.className = 'pv-note'; document.body.append(n); }
   n.textContent = `🔊 A descarregar a voz do amigo (60 MB, só uma vez): ${Math.round(PIPER.pct * 100)}%`;
 }
-function piperCall(text, fix) {
+function piperCall(text, fix, voiceAs) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
     PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
-  const voice = piperVoice();
+  const voice = voiceAs || piperVoice();
   return new Promise((res, rej) => {
     const id = ++PIPER.n;
     PIPER.wait[id] = d => {
@@ -10819,6 +10891,7 @@ var PAR_BACK = null;
 function screenParents(focus) {
   newScreen();
   shell("Para adultos", `<div class="parents">
+    <section class="psec gd-sec" id="guideSec"><h2>📊 Relatório</h2><p class="muted">O que está a correr bem e o que ainda é difícil — em resumo, para cada criança.</p><div id="guideBox"></div></section>
     <section class="psec"><h2>Famílias</h2>
       <p>Agora: <b>${esc(fam().name)}</b> — ${esc(KIDS.map(id => ROOT.profiles[id].settings.name).join(', '))}${fam().grands.length ? '; ' + esc(fam().grands.map(g => g.name).join(', ')) : ''}.</p>
       ${(() => { const lg = P.likeG || {}, up = Object.keys(lg).filter(k => lg[k] > 0).map(gameName).filter(Boolean), dn = Object.keys(lg).filter(k => lg[k] < 0).map(gameName).filter(Boolean);
@@ -10829,14 +10902,14 @@ function screenParents(focus) {
     <section class="psec lang-pick" id="langSec"><h2>🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</section>
     <section class="psec"><h2>Definições: ${esc(P.settings.name)}</h2>
       <label class="prow" for="nameIn">Nome da criança (o amigo vai tratá-la pelo nome)
-        <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="por exemplo, Masha" value="${esc(P.settings.name || '')}"></label>
+        <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="por exemplo, Maria" value="${esc(P.settings.name || '')}"></label>
       <label class="sw" for="voiceIn"><input id="voiceIn" type="checkbox" ${P.settings.voice ? 'checked' : ''}>O amigo fala em voz alta</label>
       <label class="sw" for="slowIn"><input id="slowIn" type="checkbox" ${P.settings.rate < 1 ? 'checked' : ''}>Falar ainda mais devagar</label>
       <label class="prow" for="piperSel">Voz da aplicação (gratuita, funciona sem internet) <select id="piperSel">${PIPER_VOICES.map(([v, n]) => `<option value="${v}" ${engineNow() === 'piper' && piperVoice() === v ? 'selected' : ''}>${n}</option>`).join('')}<option value="device" ${engineNow() === 'device' ? 'selected' : ''}>voz do telemóvel</option></select></label>
       <p class="muted" id="piperState"></p>
       <label class="prow" for="devVoice">Voz do telemóvel (gratuita) <select id="devVoice"><option value="">— automática —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Sons do jogo</label>
-      <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>Um dia sem leitura custa 10 estrelas (uma lição de leitura, o livro ou um jogo de leitura contam para o dia)</label>
+      <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>Um dia sem leitura custa 10 estrelas (leitura, um livro ou um jogo de leitura, e o dia conta)</label>
       ${readFinesHTML()}
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>O microfone verifica se a criança falou em voz alta e soprou</label>
       <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Verificar que palavra foi dita (reconhecimento de voz do navegador: o som é processado pela Google no Chrome ou pela Apple no Safari)</label>${srHelpHTML()}${warmSetHTML()}
@@ -10850,7 +10923,7 @@ function screenParents(focus) {
       <p class="muted">Os dias contam-se a partir de ${fmtDate(P.goal.start || dayKey())}. O jogo só mostra o caminho até ao objetivo; a decisão sobre a prenda cabe a si.</p>` : ''}
     </section>` : ''}
     ${tripSetHTML()}
-    <section class="psec" id="elSec"><h2>A voz do amigo: ElevenLabs</h2>
+    <section class="psec" id="elSec"><h2>Voz do amigo: ElevenLabs</h2>
       ${EMBEDDED ? "<p>Aqui, dentro do claude.ai, não é possível ligar a voz da ElevenLabs. Abra a aplicação em <a href=\"https://govorilki.com/play/\" target=\"_blank\" rel=\"noopener\">govorilki.com/play</a> e toque no botão «Voz» no ecrã principal.</p>" : `<p class="muted">Uma voz natural em vez da voz do telemóvel, partilhada por todas as crianças neste telemóvel. É preciso uma chave API da sua conta ElevenLabs (Profile → API Keys). A chave fica guardada apenas neste dispositivo e é enviada apenas para a ElevenLabs. As frases ditas ficam guardadas no telemóvel: as repetições são gratuitas e ouvem-se sem internet.</p>
       <label class="prow" for="elKey">Chave API <input id="elKey" type="password" autocomplete="off" value="${esc(ROOT.eleven.key)}"></label>
       <label class="prow" for="elFind">Procurar uma voz pelo nome <input id="elFind" type="text" maxlength="40" autocomplete="off" value="Hope"></label>
@@ -10863,12 +10936,12 @@ function screenParents(focus) {
     <section class="psec"><h2>Progresso</h2>
       <p>Estrelas: <b>${P.stars}</b>. Autocolantes: <b>${stickerCount()}</b> de ${STK().length}. O progresso fica guardado apenas neste dispositivo.</p>
       <div class="prow-btns"><button class="big ghost" id="expBtn">Copiar o progresso</button><button class="big ghost" id="impBtn">Colar o progresso</button></div>
-      <div id="impBox" hidden><textarea id="impTxt" rows="3" placeholder="Cole aqui o progresso copiado"></textarea><div class="prow-btns"><button class="big" id="impGo">Importar</button></div></div>
-      <p class="muted" id="expState">Copia-se a família toda: crianças e avós. Útil para mudar de dispositivo: copie aqui e cole lá.</p>
+      <div id="impBox" hidden><textarea id="impTxt" rows="3" placeholder="Cole aqui o progresso copiado"></textarea><div class="prow-btns"><button class="big" id="impGo">Carregar</button></div></div>
+      <p class="muted" id="expState">Copia-se a família toda: crianças, avós e avôs. É útil ao mudar de dispositivo: copiam aqui e colam lá.</p>
       <div class="prow-btns" id="resetRow"><button class="big ghost danger" id="resetBtn">Recomeçar</button></div>
       <div id="resetAsk" hidden><p>Apagar todas as estrelas e autocolantes?</p><div class="prow-btns"><button class="big danger" id="resetYes">Sim, apagar</button><button class="big ghost" id="resetNo">Cancelar</button></div></div>
     </section>
-    <section class="psec"><h2>Como treinar: ${esc(P.settings.name)}</h2><p class="muted">O perfil muda-se no topo do ecrã principal. Cada criança tem as suas próprias estrelas, calendário e definições.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
+    <section class="psec"><h2>Como praticar: ${esc(P.settings.name)}</h2><p class="muted">O perfil muda-se no topo do ecrã principal. Cada criança tem as suas estrelas, calendário e definições.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
       <li>Neste momento a prioridade são os sons CH, J e X e o R no fim da palavra: em «Fala» há todos os dias exercícios para os sons CH, J e X e um jogo com eles ou com o R no fim da palavra.</li>
       <li>O ecrã principal tem três lições para hoje. «Fala»: 2 exercícios de respiração, toda a ginástica da língua e 2 jogos com o som do R, cerca de 15 minutos. «Leitura» e «Matemática»: 4 jogos cada, cerca de 10 minutos. Cada lição pode ser feita outra vez: os exercícios serão diferentes.</li>
       <li>As letras são coloridas como numa cartilha: as vogais a vermelho, as consoantes a azul. Lemos por sílabas: «Letras Amigas» (M + A = MA) e depois palavras.</li>
@@ -10921,7 +10994,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); SB.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); RSK.settingsRow(); SB.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11014,6 +11087,7 @@ function screenParents(focus) {
     };
     $('#elOff').onclick = () => { ROOT.eleven = { key: '', voice: '', voiceName: '' }; save(); screenParents(); };
   }
+  GUIDE.mountFam($('#guideBox'));
   SETUI.build(focus);
   LETTERS.row();
 }
@@ -11645,7 +11719,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     }).join('');
   };
   drawSnd(); drawLikes(); drawMods();
-  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('afterend', `<section class="psec">${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
+  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('beforebegin', `<section class="psec ks-langs"><h2>Línguas</h2>${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
   const resuggest = () => { if (!modsTouched) { mods = suggestMods(track, snd, likes); drawMods(); } };
   $('#ksSnd').onclick = e => {
     const b = e.target.closest('[data-snd]'); if (!b) return; const k = b.dataset.snd; sfx.tick();
@@ -13883,18 +13957,19 @@ function recentName(key) {
 }
 function noteRecent(key, stars) {
   const n = recentName(key); if (!n) return;
+  try { GUIDE.note(key, stars); } catch (e) {}
   P.recent = [[n, stars, Date.now(), key], ...(P.recent || []).filter(x => Date.now() - x[2] < 7 * 864e5)].slice(0, 12);
 }
 
 const weekOf = pr => [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return dayTotalOf(pr, dayKey(d)); });
 const todayLessons = pr => { const v = pr.days[dayKey()], c = v === true ? { speech: 1 } : (v || {}), L = pr.settings.track === 'l' ? LESSONS_L : LESSONS_R; return Object.keys(c).filter(k => c[k] > 0 && L[k]).map(k => [L[k].name, c[k], k]); };
-const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, tr: pr.settings.track === 'l' ? 'l' : 'r', w7: weekOf(pr), ls: todayLessons(pr), last: (pr.recent || []).slice(0, 8).map(x => [String(x[0]).slice(0, 40), x[1], x[2], x[3] || '']), cf: { a: st.age || 0, md: st.mods || null, off: st.off || [], so: st.sounds || null, lk: (st.likes || []).slice(0, 30) } }; });
+const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, tr: pr.settings.track === 'l' ? 'l' : 'r', w7: weekOf(pr), ls: todayLessons(pr), last: (pr.recent || []).slice(0, 8).map(x => [String(x[0]).slice(0, 40), x[1], x[2], x[3] || '']), cf: { a: st.age || 0, md: st.mods || null, off: st.off || [], so: st.sounds || null, lk: (st.likes || []).slice(0, 30) }, gd: (() => { try { return GUIDE.digest(pr); } catch (e) { return null; } })() }; });
 const kinOn = () => { const f = fam(); return !!(f && f.grands.length && !guestOn()); };
 function postProg(force) {
   if (!kinOn()) return;
   ROOT.progSent = ROOT.progSent || {};
   const f = fam(), kids = progSnap(), kin = f.grands.map(g => ({ id: g.id, n: g.name, s: g.she ? 1 : 0, r: roleOf(g)[0], ...(avaOk(g.av) ? { a: g.av } : {}) }));
-  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n, (k.last[0] || [])[2]]), kin]), ps = ROOT.progSent[f.id] || {};
+  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n, (k.last[0] || [])[2], k.gd]), kin]), ps = ROOT.progSent[f.id] || {};
   if (!force && sig === ps.sig && Date.now() - (ps.at || 0) < 3 * 3600e3) return;
   relayPost({ k: 'prog', by: 'kids', kids, kin }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
 }
@@ -15383,6 +15458,257 @@ const MSK = (() => {
  
 
 
+const RSK = (() => {
+  
+  const LONGW = [["crocodilo", '🐊'], ["helicóptero", '🚁'], ["tartaruga", '🐢'], ["boneco de neve", '⛄'], ["semáforo", '🚦'], ["pinguim", '🐧'],
+    ["morango", '🍓'], ["trator", '🚜'], ["avião", '✈️'], ["borboleta", '🦋'], ["uvas", '🍇'], ["cenoura", '🥕'], ["girassol", '🌻'],
+    ["bicicleta", '🚲'], ["computador", '💻'], ["telemóvel", '📱'], ["guitarra", '🎸'], ["chocolate", '🍫'], ["canguru", '🦘'], ["polvo", '🐙'],
+    ["flamingo", '🦩'], ["laranja", '🍊'], ["tambor", '🥁'], ["violino", '🎻'], ["vulcão", '🌋'], ["microscópio", '🔬'], ["astronauta", '🧑‍🚀'], ["desportista", '🏃']];
+  const PHR = [["maçã vermelha", '🍎'], ["maçã verde", '🍏'], ["lua cheia", '🌕'], ["lua crescente fininha", '🌙'], ["carro vermelho", '🚗'],
+    ["carro azul", '🚙'], ["chá quente", '☕'], ["pedaço de gelo", '🧊'], ["melancia madura", '🍉'], ["banana amarela", '🍌'], ["carro de bombeiros", '🚒'],
+    ["ambulância", '🚑'], ["bola de futebol", '⚽'], ["bola de basquetebol", '🏀'], ["montanha com neve", '🏔️'], ["vulcão em chamas", '🌋'],
+    ["onda do mar", '🌊'], ["céu da noite", '🌌'], ["castelo antigo", '🏰'], ["prédio alto", '🏢'], ["guarda-chuva à chuva", '☔'], ["relógio com despertador", '⏰'],
+    ["livro na estante", '📚'], ["carta num envelope", '✉️']];
+  
+  const SENT = [["Os peixes nadam …", "na água", "no armário", "no céu"], ["No inverno, na rua, há …", "neve", "sopa", "mesa"], ["O pássaro está no ramo e … alto.", "canta", "cozinha", "assa"],
+    ["Cortamos o pão com uma … afiada.", "faca", "nuvem", "meia"], ["De noite, no céu, brilham …", "as estrelas", "as colheres", "as botas"], ["Para não te molhares, leva …", "o guarda-chuva", "a bola", "o queijo"],
+    ["A vaca dá-nos …", "leite", "gasolina", "papel"], ["No verão, no jardim, amadurecem …", "as maçãs", "os gorros", "os sapatos"], ["O avião voa alto …", "no céu", "no tacho", "no bolso"],
+    ["De manhã, eu lavo …", "os dentes", "os arco-íris", "as nuvens"], ["As abelhas recolhem …", "néctar", "pedras", "pregos"], ["O futebolista deu um pontapé …", "na bola", "na lua", "na sopa"],
+    ["Sem água, as flores …", "murcham", "cantam", "correm"], ["O comboio anda …", "nos carris", "nas nuvens", "nos telhados"], ["Na biblioteca podes pedir emprestado …", "um livro", "uma vaca", "chuva"],
+    ["O cozinheiro faz o almoço …", "na cozinha", "na lua", "no telhado"], ["No outono, caem das árvores …", "as folhas", "os peixes", "os tachos"], ["O médico trata …", "as pessoas", "os sapatos", "as nuvens"],
+    ["O gato apanha …", "os ratos", "os autocarros", "as estrelas"], ["Para ligar à avó, uso o …", "telemóvel", "garfo", "cobertor"], ["Com a chave abre-se …", "a porta", "o céu", "a maçã"],
+    ["De manhã, o sol nasce …", "no leste", "na cozinha", "na prateleira"], ["No inverno, o urso … bem.", "dorme", "canta", "nada"], ["O pintor pinta …", "um quadro", "papa", "chuva"],
+    ["A mãe pôs a sopa …", "no prato", "no sapato", "no envelope"], ["O músico toca …", "o violino", "o prato", "a almofada"]];
+  
+  const TXT = [
+    ["Pela manhã, a Misha levou um guarda-chuva. À tarde caiu uma chuva forte, mas a Misha não se molhou.", "Porque é que a Misha não se molhou?", "Ela tinha um guarda-chuva.", "Não choveu.", "Ela ficou em casa."],
+    ["A Anya plantou uma semente num vaso. Regou-a todos os dias. Uma semana depois, apareceu um rebento verde.", "O que apareceu uma semana depois?", "Um rebento.", "Uma maçã.", "O gatinho."],
+    ["O gato Barsik trepou a uma árvore alta. Não conseguia descer e miava alto. O pai trouxe uma escada.", "Para que é que o pai trouxe a escada?", "Para tirar o gato da árvore.", "Para pintar a casa.", "Para apanhar maçãs."],
+    ["No sábado, as crianças foram à pista de gelo. O gelo era liso e brilhante. O Petya caiu, mas levantou-se depressa e riu-se.", "Para onde foram as crianças?", "À pista de gelo.", "Ao rio.", "Ao cinema."],
+    ["É o aniversário da Lena. A mãe fez um bolo e os amigos trouxeram prendas. A Lena soprou oito velas.", "Quantos anos fez a Lena?", "Oito.", "Cinco.", "Dez."],
+    ["Um ouriço encontrou um cogumelo na floresta. Espetou-o nos espinhos e levou-o para casa. Em casa, o ouriço pôs o cogumelo a secar.", "Como é que o ouriço levou o cogumelo?", "Nos espinhos.", "Num cesto.", "Nos dentes."],
+    ["O Dima esqueceu-se do caderno em casa. A professora disse que ele o podia trazer no dia seguinte. À noite, o Dima pôs logo o caderno na mochila.", "O que fez o Dima à noite?", "Pôs o caderno na mochila.", "Foi brincar.", "Perdeu a mochila."],
+    ["Estava calor na praia. O Sasha construía um castelo de areia. De repente, uma onda grande levou a torre.", "O que aconteceu à torre?", "Foi levada por uma onda.", "O vento levou-a.", "Um cão estragou-a."],
+    ["A avó fazia uma écharpe de malha. O gatinho brincou com o novelo e embaraçou todos os fios. A avó não se zangou, riu-se.", "Quem embaraçou os fios?", "O gatinho.", "A avó.", "O cachorrinho."],
+    ["À noite, a floresta escureceu. As corujas acordaram e saíram a caçar. E as lebres esconderam-se nos arbustos.", "Quem saiu a caçar?", "As corujas.", "As lebres.", "As andorinhas."],
+    ["A Masha e o Kolya construíam uma cabana. O Kolya trouxe paus compridos e a Masha, ramos de abeto. À hora do almoço, a cabana estava pronta.", "O que trouxe a Masha?", "Ramos de abeto.", "Paus compridos.", "O almoço."],
+    ["O Igor pratica natação. Três vezes por semana vai à piscina. Ontem nadou cem metros sem parar.", "Quantos metros nadou o Igor ontem?", "Cem.", "Dez.", "Mil."]
+  ];
+  const BIG = [
+    ["Um farol ergue-se numa falésia alta, mesmo junto ao mar. À noite, a sua luz forte vê-se de longe. Os capitães dos navios olham para essa luz e percebem onde está a costa e onde estão as rochas perigosas. Antigamente, vivia no farol um faroleiro: todas as noites ele subia a escada íngreme e acendia o lume. Agora a lâmpada acende-se sozinha.", "Para que precisam os capitães da luz do farol?", "Para saber onde estão a costa e as rochas.", "Para apanhar peixe.", "Para ler de noite."],
+    ["O polvo é um animal marinho espantoso. Tem oito braços flexíveis e cada um tem muitas ventosas. O polvo sabe mudar de cor e esconder-se entre as rochas. Se um inimigo se aproximar demais, o polvo solta uma nuvem de tinta e foge depressa.", "O que faz o polvo quando um inimigo está perto?", "Solta tinta e foge.", "Grita muito alto.", "Enterra-se na areia."],
+    ["Abriu uma biblioteca nova na nossa cidade. Tem uma sala com cadeirões macios, onde se pode ler o tempo que se quiser. Aos sábados há encontros com escritores. Ontem, eu e a minha turma ouvimos um escritor falar do seu novo livro sobre uma viagem de balão.", "Sobre o que era o novo livro do escritor?", "Sobre uma viagem de balão.", "Sobre a escola.", "Sobre futebol."],
+    ["As abelhas vivem em famílias grandes nas colmeias. Cada família tem uma rainha, que põe os ovos. As abelhas operárias voam em busca de néctar, constroem favos de cera e guardam a colmeia. Quando encontra muitas flores, a abelha volta e faz uma dança especial: assim mostra às outras para onde voar.", "Porque é que a abelha dança?", "Mostra para onde voar à procura de néctar.", "Está contente com o sol.", "Chama a rainha para passear."],
+    ["No inverno, muitas aves voam para o sul, onde está calor e há muita comida. Mas os pardais, os chapins e os dom-fafes ficam. É difícil encontrarem comida debaixo da neve. Por isso, as crianças da nossa escola fizeram comedouros e todas as manhãs enchem-nos de sementes. Agora, junto às janelas da sala, há sempre alegria e barulho.", "O que fizeram as crianças pelas aves?", "Comedouros.", "Caixas-ninho no sul.", "Um escorrega de neve."],
+    ["Um vulcão é uma montanha com rocha derretida muito quente lá dentro. Às vezes, ela sobe e sai da cratera. A este rio de fogo chama-se lava. Ao arrefecer, a lava torna-se pedra dura. Algumas ilhas do oceano surgiram precisamente assim, da lava solidificada.", "Como surgiram algumas ilhas?", "Da lava solidificada.", "De areia e conchas.", "Foram construídas por pessoas."]
+  ];
+  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a === 7 ? 3 : a === 8 ? 4 : a === 9 ? 5 : 6;
+  const NOCAP = s => s.toUpperCase();
+  const opt = (v, html) => ({ v, html: html || esc(v) });
+  const near = (pool, right, key, n = 2) => sample(pool.filter(x => key(x) !== key(right)), n);
+  
+  const L = [
+    { n: "Letras e sons", ex: "A, M, S", g: () => {
+      const pool = ABC.filter(a => !RU('ЪЬ').includes(a[0])), x = pickOne(pool);
+      return { hear: `Encontra a letra ${lsay(x[0])}.`, a: x[0], opts: shuffle([x, ...near(pool, x, y => y[0])]).map(y => opt(y[0], Lspan(y[0]))), after: `${cap(lsay(x[0]))}. ${cap(x[1])}.`, big: 1 };
+    } },
+    { n: "Sílabas abertas", ex: "MA, PO, LU", g: () => {
+      if (M_LIST) { const s = pickOne(M_LIST); return { hear: `Encontra: ${sylSay(s)}.`, a: s, opts: shuffle([s, ...sample(M_LIST.filter(x => x !== s), 2)]).map(x => opt(x)), after: sylSay(s), big: 1 }; }
+      let c, s; do { c = pickOne(M_CONS); s = c + pickOne(M_VOW); } while (M_BAD.includes(s));
+      const others = shuffle(M_VOW.map(v => c + v).filter(x => x !== s && !M_BAD.includes(x))).slice(0, 2);
+      return { hear: `Encontra a sílaba ${sylSay(s)}.`, a: s, opts: shuffle([s, ...others]).map(x => opt(x, [...x].map(Lspan).join(''))), after: sylSay(s), big: 1 };
+    } },
+    { n: "Sílabas fechadas", ex: "AM, ON, SOL", g: () => {
+      if (M_LIST) { const pool = [...LROWS[3], ...LROWS[4]].map(NOCAP), s = pickOne(pool); return { hear: `Encontra: ${sylSay(s)}.`, a: s, opts: shuffle([s, ...sample(pool.filter(x => x !== s), 2)]).map(x => opt(x)), after: sylSay(s), big: 1 }; }
+      const v = pickOne(M_VOW), c = pickOne(M_CONS), c2 = pickOne(M_CONS.filter(x => x !== c)), v2 = pickOne(M_VOW.filter(x => x !== v));
+      const set = Math.random() < .5 ? [v + c, c + v, v + c2] : [c + v + c2, c2 + v + c, c + v2 + c2];
+      return { hear: `Encontra a sílaba ${sylSay(set[0])}.`, a: set[0], opts: shuffle(set).map(x => opt(x, [...x].map(Lspan).join(''))), after: sylSay(set[0]), big: 1 };
+    } },
+    { n: "Palavras curtas", ex: "GATO, PEIXE", g: () => {
+      const x = pickOne(RWORDS), w = x[0].replace(/-/g, '');
+      return { show: `<b class="rk-w">${esc(w)}</b>`, ask: "Lê a palavra e encontra a imagem.", a: x[1], opts: shuffle([x, ...near(RWORDS, x, y => y[1])]).map(y => opt(y[1], pic(y[1]))), after: cap(w.toLowerCase()) + '!', aloud: w.toLowerCase(), pics: 1 };
+    } },
+    { n: "Palavras compridas", ex: "CROCODILO, HELICÓPTERO", g: () => {
+      const x = pickOne(LONGW);
+      return { show: `<b class="rk-w">${esc(NOCAP(x[0]))}</b>`, ask: "Lê a palavra e encontra a imagem.", a: x[1], opts: shuffle([x, ...near(LONGW, x, y => y[1])]).map(y => opt(y[1], pic(y[1]))), after: cap(x[0]) + '!', aloud: x[0], pics: 1 };
+    } },
+    { n: "Expressões", ex: "maçã verde", g: () => {
+      const i = ri(0, PHR.length - 1), x = PHR[i], pair = i < 6 ? PHR[i ^ 1] : null;
+      const others = pair ? [pair, pickOne(PHR.filter(y => y !== x && y !== pair))] : near(PHR, x, y => y[1]);
+      return { show: `<b class="rk-p">${esc(cap(x[0]))}</b>`, ask: "Lê e encontra a imagem.", a: x[1], opts: shuffle([x, ...others]).map(y => opt(y[1], pic(y[1]))), after: cap(x[0]) + '.', aloud: x[0], pics: 1 };
+    } },
+    { n: "Frases", ex: "Os peixes nadam na água.", g: () => {
+      const [s, a, ...o] = pickOne(SENT);
+      return { show: `<span class="rk-s">${esc(s).replace('…', '<b class="rk-gap">…</b>')}</span>`, ask: "Lê e escolhe a palavra que encaixa.", a, opts: shuffle([a, ...o]).map(x => opt(x)), after: s.replace('…', a) + '.' };
+    } },
+    { n: "Texto e pergunta", ex: "2–3 frases", g: () => {
+      const [t, q, a, ...o] = pickOne(TXT);
+      return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: "Lê o texto e responde à pergunta.", a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1 };
+    } },
+    { n: "Textos grandes", ex: "ler, perceber, mais depressa", g: () => {
+      const [t, q, a, ...o] = pickOne(BIG);
+      return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: "Lê o texto e responde à pergunta.", a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1, words: wordsIn(t) };
+    } }
+  ];
+  
+  const S = () => rskOf(P, LANG);
+  const age = () => P.settings.age || (Q() ? 9 : 6);
+  
+  const startLv = () => mlLearns(LANG) ? 1 : AGE_LV(age());
+  const has = () => !!S().lv;
+  const lv = () => Math.max(1, Math.min(L.length, S().lv || startLv()));
+  
+  const big = () => age() >= 8;
+  const early = () => big() && lv() <= 5;
+  const train = () => IS_RU ? "Treinar a leitura em russo" : "Treinar a leitura";
+  const stepTxt = (l = lv()) => `Nível ${l} de ${L.length} · ${L[l - 1].n}`;
+  function setLv(n) { S().lv = Math.max(1, Math.min(L.length, n)); save(); }
+  function make(l) { const t = L[l - 1].g(); t.lv = l; return t; }
+  
+  function strip(n) {
+    if (!big()) return LQ.start('r-skill', n);
+    const box = document.createElement('div'); box.className = 'rk-bar'; box.innerHTML = Array.from({ length: n }, () => '<i></i>').join('');
+    const stage = $('#stage'); if (stage) stage.prepend(box);
+    let k = 0;
+    return { intro: '', end: "Pronto!", hit() { const i = box.children[k++]; if (i) i.classList.add('on'); }, miss() {} };
+  }
+  
+  function ask(t, cb) {
+    const b = $('#rkBox'); b.dataset.a = t.a; b.dataset.k = +(b.dataset.k || 0) + 1; b.dataset.lv = t.lv;
+    const mic = t.aloud && srOk();
+    b.innerHTML = `${t.show ? `<div class="rk-q ${t.long ? 'long' : ''}">${t.show}</div>` : `<button class="rk-hear" id="rkHear">${ICON.speaker}<span>Ouvir outra vez</span></button>`}
+      ${t.ask ? `<p class="rk-ask">${t.ask}</p>` : ''}
+      <div class="rk-opts ${t.pics ? 'pics' : t.big ? 'lets' : 'txt'}">${t.opts.map(o => `<button class="rk-o" data-v="${esc(o.v)}">${o.html}</button>`).join('')}</div>
+      ${mic ? "<button class=\"chip rk-mic\" id=\"rkMic\"><span class=\"emo\">🎤</span>Vou ler em voz alta</button>" : ''}`;
+    b.querySelector('.rk-opts').onclick = e => { const o = e.target.closest('.rk-o'); if (o) cb(o.dataset.v, o); };
+    const h = $('#rkHear'); if (h) h.onclick = () => talk(t.hear);
+    const m = $('#rkMic');
+    if (m) m.onclick = async () => {
+      if (m.disabled) return; m.disabled = true; m.classList.add('ear'); sfx.tick(); hush();
+      const r = await hear(t.aloud, { maxMs: 6000 }).catch(() => ({}));
+      if (!m.isConnected) return; m.classList.remove('ear'); m.disabled = false;
+      if (r && r.ok) cb(t.a, b.querySelector(`.rk-o[data-v="${CSS.escape(t.a)}"]`), true);
+      else talk("Não consegui ouvir. Escolhe uma resposta.");
+    };
+    return t.hear || t.ask;
+  }
+  const mark = (el, good) => { if (el) el.classList.add(good ? 'right' : 'wrong'); };
+  
+  function check() {
+    const t = newScreen(); let l = startLv(), k = 0, task = null, busy = false;
+    const N = 8, hit = {}, miss = {};
+    shell("Leitura ao teu nível", `<div class="rk"><p class="rk-step" id="rkStep"></p><div id="rkBox"></div></div>`);
+    const q = strip(N);
+    function next() {
+      busy = false; task = make(l); $('#rkStep').textContent = `Tarefa ${k + 1} de ${N}`;
+      const line = ask(task, answer);
+      talk((k === 0 ? (big() ? `${IS_RU ? "Vamos ver como lês em russo." : "Vamos ver como lês."} Oito tarefas, não é um teste: assim encontramos as tarefas certas para ti. ` : "Vamos ver como lês! Oito tarefas: errar não faz mal, é assim que encontramos o teu nível. ") : '') + line);
+    }
+    async function answer(v, el) {
+      if (busy) return; busy = true;
+      const good = String(v) === String(task.a);
+      (good ? hit : miss)[l] = ((good ? hit : miss)[l] || 0) + 1;
+      if (good) { sfx.good(); mark(el, 1); l = Math.min(L.length, l + (k < 2 ? 2 : 1)); }
+      else { sfx.pop(); mark(el, 0); mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); l = Math.max(1, l - 1); }
+      q.hit(el, '');
+      await talk(good ? pickOne(["Certo!", "Sim!", "Isso mesmo!"]) : "Não faz mal! Vamos em frente."); if (t !== tok) return;
+      k++;
+      if (k < N) { later(next, 300); return; }
+      const ok = Object.keys(hit).map(Number).filter(x => hit[x] > (miss[x] || 0));
+      setLv(ok.length ? Math.max(...ok) : 1); S().checked = dayKey(); save();
+      finish({ key: 'r-skill', stars: 3, line: `${q.end} ${stepTxt()}. Agora as tarefas vão ser as certas para ti.`, again: () => play() });
+    }
+    next();
+  }
+  const head = l => `<div class="mk-head rk-head"><button class="chip" id="rkDown">🐢 Mais fácil</button><span class="mk-rank"><b>Nível ${l} de ${L.length}</b><small>${esc(L[l - 1].n)}${big() && l <= 5 ? ' · ' + train() : ''}</small></span><button class="chip" id="rkUp">🚀 Mais difícil</button></div>`;
+  
+  function play() {
+    if (!has()) { check(); return; }
+    const t = newScreen(); let l = lv(), k = 0, task = null, tries = 0, streak = 0, missRun = 0, right = 0, busy = false;
+    const N = 8, l0 = l, UP = 4; let mlShown = false;
+    shell("Leitura ao teu nível", `<div class="rk">${head(l)}<div id="rkBox"></div><button class="link-btn" id="rkRe">🔁 Verificar outra vez</button></div>`);
+    const q = strip(N);
+    const reHead = () => { $('.rk-head').outerHTML = head(l); bindHead(); };
+    function bindHead() {
+      $('#rkDown').onclick = () => { if (l <= 1) return; sfx.pop(); setLv(l - 1); play(); };
+      $('#rkUp').onclick = () => { if (l >= L.length) return; sfx.pop(); setLv(l + 1); play(); };
+    }
+    bindHead();
+    $('#rkRe').onclick = () => { sfx.pop(); delete S().lv; check(); };
+    function next() {
+      busy = false; tries = 0; task = make(l);
+      const line = ask(task, answer);
+      talk((k === 0 && q.intro ? q.intro + ' ' : '') + line);
+    }
+    async function answer(v, el) {
+      if (busy) return;
+      if (String(v) === String(task.a)) {
+        busy = true; sfx.good(); mark(el, 1); q.hit(el, '');
+        if (tries === 0) { right++; missRun = 0; streak++; } else { streak = 0; missRun++; }
+        let line = pickOne(["Certo!", "Sim!", "Isso mesmo!", "Está certo!"]);
+        if (task.after && !task.long) line += ' ' + task.after;
+        if (streak >= UP && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + "Lês muito bem! Vamos para o nível acima."; }
+        else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + "Vamos repetir o nível abaixo."; }
+        await talk(line); if (t !== tok) return;
+        
+        if (!mlShown && task.pics && mlStripHTML(task.a)) {
+          mlShown = true; const x = mlWord(task.a), bx = $('#rkBox');
+          bx.insertAdjacentHTML('beforeend', mlStripHTML(task.a)); mlStripBind(bx);
+          for (const c of myLangs().filter(c => c !== LANG && x.w[c])) { await mlSay(c, x.w[c]); if (t !== tok) return; }
+          await new Promise(r => later(r, 700)); if (t !== tok) return;
+        }
+        return step();
+      }
+      tries++; streak = 0; sfx.oops(); if (el) { wiggle(el); el.disabled = true; }
+      if (tries === 1) { q.miss(null); talk(task.show ? "Quase! Lê outra vez, sem pressa." : "Quase! Ouve outra vez. " + task.hear); return; }
+      busy = true; missRun++; mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); q.hit(null, '');
+      await talk("Aqui está a resposta certa. Não faz mal, vamos em frente!"); if (t !== tok) return;
+      if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); await talk("Vamos repetir o nível abaixo."); if (t !== tok) return; }
+      return step();
+    }
+    function step() {
+      k++;
+      if (k < N) { later(next, 350); return; }
+      S().last = dayKey(); save();
+      finish({ key: 'r-skill', stars: right >= 7 ? 3 : right >= 5 ? 2 : 1, line: `${q.end} ${stepTxt(l)}.` + (l > l0 ? ' ' + "Novo nível!" : ''), again: () => play() });
+    }
+    next();
+  }
+  
+  function plan(n, s) {
+    const l = lv(), o = big(), alt = a => a[(n + s) % a.length];
+    const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()); };
+    const pr = IS_RU && prState().at < PRIMER.length ? 'primer' : 'read-merge';
+    const G = l === 1 ? (o ? ['abc-find'] : ['abc-find', 'abc-first'])
+      : l === 2 ? [o ? 'l-syll' : pr]
+      : l === 3 ? [o ? 'l-syll' : ok('syl-clap') ? alt(['syl-clap', 'read-merge']) : 'read-merge']
+      : l === 4 ? [o ? 'code-colw' : alt(['read-words', 'read-pick'])]
+      : l === 5 ? [o ? 'code-colw' : alt(['read-pick', 'code-colw'])]
+      : l <= 7 ? [o ? 'l-word' : 'read-pick']
+      : Q() ? ['l-syll', 'speed'] : ['speed'];
+    
+    const rl = readLangToday(n);
+    const first = readLangs().length < 2 ? gameStep('r-skill', 'read')
+      : { key: 'r-skill@' + rl, kind: 'read', name: rl === LANG ? nm(GAMES.find(x => x.id === 'r-skill').name) : `${mlInfo(rl)[1]} Leitura ${LANG_READ[rl]}`, run: () => mlVisit(rl, 'r-skill') };
+    return [first, ...G.filter(ok).map(id => gameStep(id, 'read'))];
+  }
+  
+  const sub = () => readLangs().length > 1 && readLangToday() !== LANG ? `hoje lemos ${LANG_READ[readLangToday()]}` : !has() ? "vamos ver como lês" : early() ? train() : `nível ${lv()}: ${L[lv() - 1].n.toLowerCase()}`;
+  
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    const ml = readLangs().length > 1, lv0 = S().lv, oth = Object.entries(readLevels()).filter(([c]) => c !== LANG);
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="rkLvIn">📖 Leitura${ml ? ' ' + LANG_READ[LANG] : ''}: nível <select id="rkLvIn"><option value="">verificar ao entrar</option>${L.map((x, i) => `<option value="${i + 1}" ${lv0 === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)} (${esc(x.ex)})</option>`).join('')}</select></label>`);
+    if (ml && oth.length) sec.insertAdjacentHTML('beforeend', `<p class="muted rk-oth">Outras línguas: ${oth.map(([c, v]) => `${mlInfo(c)[1]} ${esc(mlInfo(c)[2])} — nível ${v}`).join(', ')}</p>`);
+    $('#rkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
+  }
+  GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'abc')), 0, { id: 'r-skill', name: "Leitura ao teu nível", sub: "tarefas à tua medida: das sílabas aos textos", kw: "leitura ler nível sílabas palavras texto", ico: () => pic('📖'), bg: 'var(--t-blue)', go: () => play(), grp: 2, also: [6], prog: () => has() ? stepTxt() : '' });
+  return { play, check, lv, has, setLv, plan, sub, early, settingsRow, L, make, startLv, stepTxt };
+})();
+ 
+ 
+
+
 const OLY = (() => {
   const LV = [['🐣', "Pintainho Matreiro"], ['🐥', "Passarinho Esperto"], ['🦊', "Raposinho Astuto"], ['🦉', "Corujinha Sábia"], ['🐯', "Tigre Corajoso"], ['🦁', "Rei dos Desafios"], ['🚀', "Conquistador de Cumes"], ['🏆', "Olímpico"]];
   const PRAISE = ["Boa tentativa!", "Ideia corajosa! Vamos pensar mais um pouco.", "Quase! Estás no bom caminho.", "Errar faz parte de resolver. Tenta outra vez!"];
@@ -15850,7 +16176,7 @@ function pultKid(f, id) {
     <span class="pv-t"><b>${esc(st.name)}${st.age ? `, ${st.age} ${plural(st.age, ["ano", "anos", "anos"])}` : ''}</b>
       <small>⭐ ${pr.stars} · 🔥 ${sk} ${plural(sk, ["dia", "dias", "dias"])} seguidos · 📚 ${wl} ${plural(wl, ["lição", "lições", "lições"])} esta semana</small>
       <small>${last ? `Última: ${esc(last[0])}, ${pultAgo(last[2])}` : she ? "Ainda não jogou" : "Ainda não jogou"}</small></span><span class="g-go">▶</span></button>
-    <div class="pv-acts"><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Definições, interesses, voz</button></div></div>`;
+    <div class="pv-acts"><button class="chip" data-kguide="${id}" data-fam="${f.id}">📊 Relatório</button><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Definições, interesses, voz</button></div></div>`;
 }
 function pultAdult(f, g) {
   const at = (f.seen || {})[g.id], she = !!g.she, games = Object.values(gamesAll()).filter(x => x.opp === g.id).length;
@@ -15918,6 +16244,8 @@ function screenPult() {
     if (sl) { sfx.pop(); semShare(ROOT.families[sl.dataset.semlink], document.getElementById('pvsem-' + sl.dataset.semlink)); return; }
     if (sa) { sfx.tick(); ROOT.startAt = sa.dataset.start; save(); $$('[data-start]').forEach(x => { x.classList.toggle('sel', x === sa); x.setAttribute('aria-pressed', x === sa); }); return; }
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents(); return; }
+    const kg = e.target.closest('[data-kguide]');
+    if (kg) { sfx.pop(); useFamily(kg.dataset.fam); ROOT.cur = kg.dataset.kguide; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents('guide'); return; }
     if (k) { sfx.pop(); ADULT_HOME = true; useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
     const po = e.target.closest('[data-por]'); if (po) { sfx.pop(); screenPortrait(po.dataset.fam, po.dataset.por, screenPult); return; }
@@ -15937,7 +16265,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '157';
+const APP_VER = '158';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 
@@ -16453,21 +16781,183 @@ function sayIn(c, text, rate = .8) {
 }
 const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in window && !mlVoice(c)); return no.length ? `<p class="muted ml-nov">🔈 Este telemóvel não tem voz para: ${no.map(c => mlInfo(c)[2]).join(', ')}. As palavras aparecem, e pode ouvi-las se adicionar uma voz: no iPhone — Definições → Acessibilidade → Conteúdo falado → Vozes.</p>` : ''; };
 
-const mlLangsHTML = (id, pr) => { const on = myLangs(pr); return `<div class="ml-langs"><p class="prow">Que línguas ${esc(pr.settings.name || '')} fala ou aprende? A terapia da fala vai usar todas.</p><div class="ml-lrows" id="${id}">${ML_LANGS.map(([c, f, n]) => { const st = on.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : ''; return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg"><button class="chip ${st === 'speak' ? 'sel' : ''}" data-ml="${c}" data-st="speak">fala</button><button class="chip ${st === 'learn' ? 'sel' : ''}" data-ml="${c}" data-st="learn">aprende</button></span></div>`; }).join('')}</div></div>`; };
+
+
+const ML_ROLE = [['home', "em casa"], ['school', "na escola"], ['learn', "a aprender"]];
+const mlLangsHTML = (id, pr) => {
+  const on = myLangs(pr), main = mainLang(pr) || (READ_LANGS.includes(on[0]) ? on[0] : LANG);
+  const row = ([c, f, n]) => { const st = mlRole(c, pr); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
+  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])), more = ML_LANGS.filter(x => !top.includes(x));
+  const mains = READ_LANGS.filter(c => on.includes(c));
+  return `<div class="ml-langs" data-id="${id}"><p class="prow">Que línguas fala ${esc(pr.settings.name || '')}? Em casa, na escola ou a aprender: o jogo vai usar todas.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
+    ${more.length ? `<details class="ml-more"><summary>outras línguas…</summary>${more.map(row).join('')}</details>` : ''}
+    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Língua principal do jogo:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlInfo(c)[2]}</button>`).join('')}</div></div></div>`;
+};
 function bindMlLangs(id, pr) {
   const row = document.getElementById(id); if (!row) return;
   row.onclick = e => {
+    const m = e.target.closest('[data-mlmain]');
+    if (m) { pr.settings.lang = m.dataset.mlmain; save(); sfx.tick(); row.querySelectorAll('[data-mlmain]').forEach(x => x.classList.toggle('sel', x === m)); return; }
     const b = e.target.closest('[data-ml]'); if (!b) return;
-    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = cur.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : '';
+    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = mlRole(c, pr);
     const next = was === want ? cur.filter(x => x !== c) : cur.includes(c) ? cur : [...cur, c];
     if (!next.length) return;
     pr.settings.langs = ML_LANGS.map(x => x[0]).filter(x => next.includes(x));
-    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x)));
-    if (was !== want && want === 'learn') learn.add(c); else learn.delete(c);
-    pr.settings.learn = [...learn]; save(); sfx.tick();
-    row.querySelectorAll('.ml-lr').forEach(r => { const k = r.querySelector('[data-ml]').dataset.ml, st = pr.settings.langs.includes(k) ? (pr.settings.learn.includes(k) ? 'learn' : 'speak') : ''; r.classList.toggle('on', !!st); r.querySelectorAll('[data-st]').forEach(x => x.classList.toggle('sel', x.dataset.st === st)); });
+    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x))), school = new Set((pr.settings.school || []).filter(x => next.includes(x)));
+    learn.delete(c); school.delete(c);
+    if (was !== want && want === 'learn') learn.add(c);
+    if (was !== want && want === 'school') school.add(c);
+    pr.settings.learn = [...learn]; pr.settings.school = [...school];
+    if (pr.settings.lang && READ_LANGS.includes(pr.settings.lang) && !next.includes(pr.settings.lang)) delete pr.settings.lang;
+    save(); sfx.tick();
+    const box = row.closest('.ml-langs'), open = !!row.querySelector('.ml-more[open]');
+    box.outerHTML = mlLangsHTML(id, pr); if (open) { const d = document.querySelector(`#${id} .ml-more`); if (d) d.open = true; }
+    bindMlLangs(id, pr);
   };
 }
+
+
+const READ_LANGS = ['ru', 'en', 'pt', 'de'];
+const mlSchool = (c, pr = P) => (pr.settings.school || []).includes(c);
+function mlRole(c, pr = P) { return !myLangs(pr).includes(c) ? '' : mlLearns(c, pr) ? 'learn' : mlSchool(c, pr) ? 'school' : 'home'; }
+function mainLang(pr = P) { const l = pr && pr.settings && pr.settings.lang; return READ_LANGS.includes(l) ? l : null; }
+
+function readLangs(pr = P) { const l = myLangs(pr).filter(c => READ_LANGS.includes(c)); return l.length ? l : [LANG]; }
+
+function rskOf(pr = P, l = LANG) {
+  let r = pr.rskill; if (!r || typeof r !== 'object') r = pr.rskill = {};
+  if ('lv' in r || 'checked' in r || 'last' in r) {
+    const old = {}; ['lv', 'checked', 'last'].forEach(k => { if (k in r) { old[k] = r[k]; delete r[k]; } });
+    const f = myLangs(pr)[0], to = mainLang(pr) || (READ_LANGS.includes(f) ? f : LANG);
+    r[to] = Object.assign(old, r[to] || {});
+  }
+  if (!r[l] || typeof r[l] !== 'object') r[l] = {};
+  return r[l];
+}
+
+function readLevels(pr = P) {
+  if (!pr) return {};
+  rskOf(pr); const o = {};
+  Object.keys(pr.rskill).forEach(l => { const v = pr.rskill[l]; if (READ_LANGS.includes(l) && v && +v.lv) o[l] = +v.lv; });
+  return o;
+}
+
+function readLangToday(n = dayNo(), pr = P) {
+  const ls = readLangs(pr);
+  if (EMBEDDED || ls.length < 2) return LANG;
+  const first = mainLang(pr) || ls[0], ord = [first, ...ls.filter(c => c !== first)];
+  const lvl = readLevels(pr), rank = { home: 0, school: 1, learn: 2 };
+  const home = ord.filter(c => mlRole(c, pr) === 'home'), pool = home.length ? home : ord.filter(c => mlRole(c, pr) !== 'learn');
+  const weak = (pool.length ? pool : ord).reduce((a, c) => (lvl[c] || 0) < (lvl[a] || 0) ? c : a);
+  const rest = ord.filter(c => c !== weak).sort((a, b) => (rank[mlRole(a, pr)] || 0) - (rank[mlRole(b, pr)] || 0));
+  const d = ((n % 7) + 7) % 7;
+  return d % 2 === 0 || !rest.length ? weak : rest[((d - 1) / 2) % rest.length];
+}
+const LANG_READ = { ru: "em russo", en: "em inglês", pt: "em português", de: "em alemão" };
+
+const MLV_KEY = 'govorilki-mlv';
+function mlvGet() { try { return JSON.parse(sessionStorage.getItem(MLV_KEY) || 'null'); } catch (e) { return null; } }
+function mlvSet(v) { try { if (v) sessionStorage.setItem(MLV_KEY, JSON.stringify(v)); else sessionStorage.removeItem(MLV_KEY); } catch (e) {} }
+function mlVisit(l, game = 'r-skill') {
+  const g = GAMES.find(x => x.id === game);
+  if (l === LANG || EMBEDDED || !READ_LANGS.includes(l)) { g.go(); return; }
+  mlvSet({ from: LANG, to: l, game, kid: ROOT.cur });
+  hush(); location.assign(SITE_ROOT + langPath(l) + location.search + '#mlv=' + game);
+}
+function mlvRoute() {
+  const v = mlvGet(); if (!v) return false;
+  if (v.to !== LANG) { mlvSet(null); return false; }
+  if (!v.started) {
+    const g = GAMES.find(x => x.id === v.game);
+    if (!/[#&]mlv=/.test(HASH0) || !g || !ROOT.profiles[v.kid]) { mlvSet(null); return false; }
+    v.started = 1; mlvSet(v);
+    ROOT.cur = v.kid; P = ROOT.profiles[v.kid];
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    document.body.classList.toggle('quest', Q()); g.go(); return true;
+  }
+  mlvSet(null); location.replace(SITE_ROOT + langPath(v.from) + location.search + '#kto=' + v.kid); return true;
+}
+const mlVisiting = () => { const v = mlvGet(); return !!(v && v.started && v.to === LANG); };
+
+function mlWord(e) { return ML_WORDS.find(x => x.e === e) || null; }
+function mlStripHTML(e) {
+  const x = mlWord(e), ls = myLangs().filter(c => x && x.w[c]);
+  if (!x || ls.length < 2) return '';
+  return `<div class="ml-strip" role="group" aria-label="Nas minhas línguas"><span class="ml-strip-h">🌍</span>${ls.map(c => `<button class="ml-sw" data-mls="${c}" data-w="${esc(x.w[c])}"><span class="lang-f">${mlInfo(c)[1]}</span>${esc(x.w[c])}</button>`).join('')}</div>`;
+}
+function mlStripBind(root) {
+  if (!root) return;
+  root.querySelectorAll('[data-mls]').forEach(b => b.onclick = ev => { ev.stopPropagation(); sfx.pop(); mlSay(b.dataset.mls, b.dataset.w); });
+}
+
+
+const ML_PIPER = { ru: 'ru_RU-ruslan-medium', en: 'en_GB-jenny_dioco-medium', pt: 'pt_PT-tugão-medium', de: 'de_DE-thorsten-medium' };
+async function mlSay(c, text) {
+  if (c === LANG) return say(text);
+  if (await sayIn(c, text, .85)) return true;
+  if (!ML_PIPER[c] || !piperOn()) return false;
+  try {
+    const buf = await Promise.race([piperCall(text, null, ML_PIPER[c]), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 20000))]);
+    const a = await ac().decodeAudioData(buf), src = ac().createBufferSource(); src.buffer = a; src.connect(ac().destination);
+    await new Promise(res => { src.onended = res; src.start(); });
+    return true;
+  } catch (e) { return false; }
+}
+
+const ML_HELLO = { ru: RU('Привет!'), en: 'Hello!', pt: 'Olá!', de: 'Hallo!', uk: RU('Привіт!'), es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!' };
+const ML_PRAISE = { ru: [RU('Молодец!'), RU('Здорово!')], en: ['Well done!', 'Great job!'], pt: ['Muito bem!', 'Boa!'], de: ['Super gemacht!', 'Toll!'], uk: [RU('Молодець!')], es: ['¡Muy bien!'], fr: ['Bravo !'], it: ['Bravo!'] };
+function mlOther() { const o = myLangs().filter(c => c !== LANG && (ML_PRAISE[c] || ML_HELLO[c])); return o.length ? pickOne(o) : null; }
+function mlPraiseMaybe(after) {
+  if (!mlOn() || Math.random() > .25) return;
+  const c = mlOther(); if (!c || !ML_PRAISE[c]) return;
+  const t = tok; Promise.resolve(after).then(() => { if (t === tok) mlSay(c, pickOne(ML_PRAISE[c])); });
+}
+function mlHelloMaybe(after) {
+  if (!mlOn() || P.mlHello === dayKey()) return;
+  const c = mlOther(); if (!c || !ML_HELLO[c]) return;
+  P.mlHello = dayKey(); save();
+  const t = tok; Promise.resolve(after).then(() => { if (t === tok) mlSay(c, ML_HELLO[c]); });
+}
+ 
+function screenMlMatch() {
+  const t = newScreen(), langs = myLangs().filter(c => ML_WORDS[0].w[c]);
+  if (langs.length < 2) { shell("As minhas línguas", `<div class="ml"><p class="lead">Este jogo precisa de pelo menos duas línguas da criança. Escolhem-se em «Para adultos».</p></div>`, { guide: false }); return; }
+  const lvl = readLevels(), age = P.settings.age || 6;
+  const reads = c => (lvl[c] || 0) >= 4 || (!lvl[c] && age >= 8);
+  const N = 8, deck = shuffle([...ML_WORDS]).slice(0, N).map((x, i) => {
+    const a = langs[i % langs.length], others = langs.filter(c => c !== a), b = others.includes(LANG) && i % 2 ? LANG : others[(i >> 1) % others.length];
+    return { x, a, b, opts: shuffle([x, ...sample(ML_WORDS.filter(y => y !== x && y.w[b] !== x.w[b]), 2)]) };
+  });
+  let k = 0, ok = 0, tries = 0, busy = false;
+  const draw = () => {
+    const d = deck[k], pics = !reads(d.b);
+    return `<p class="ml-step">${k + 1} / ${deck.length}</p>
+      <div class="mm-ask"><button class="big ghost mm-hear" id="mmHear">🔊 <span class="lang-f">${mlInfo(d.a)[1]}</span></button>
+      <p class="lead">Encontra esta palavra: <span class="lang-f">${mlInfo(d.b)[1]}</span> ${esc(mlInfo(d.b)[2])}</p></div>
+      <div class="mm-opts ${pics ? 'pics' : ''}">${d.opts.map(y => `<button class="mm-o" data-e="${y.e}">${pics ? `<span class="mm-pic">${pic(y.e)}</span>` : ''}<b>${esc(y.w[d.b])}</b></button>`).join('')}</div>
+      <div id="mmOut"></div>`;
+  };
+  shell("As minhas línguas", `<div class="ml mm" id="mm">${draw()}</div>`, { guide: false });
+  const box = $('#mm'), play = () => mlSay(deck[k].a, deck[k].x.w[deck[k].a]);
+  talk("Ouve uma palavra numa língua e encontra-a noutra!").then(() => { if (t === tok) play(); });
+  box.onclick = async e => {
+    if (e.target.closest('#mmHear')) { sfx.pop(); play(); return; }
+    const o = e.target.closest('.mm-o'); if (!o || busy || o.disabled) return;
+    const d = deck[k];
+    if (o.dataset.e !== d.x.e) { sfx.oops(); wiggle(o); o.disabled = true; tries++; return; }
+    busy = true; if (!tries) ok++; sfx.good(); o.classList.add('right');
+    box.querySelectorAll('.mm-o').forEach(x => x.disabled = true);
+    $('#mmOut').innerHTML = `<div class="mm-pair">${pic(d.x.e)}${mlStripHTML(d.x.e)}</div><div class="prow-btns"><button class="big" id="mmNext">Seguinte</button></div>`;
+    mlStripBind($('#mmOut'));
+    $('#mmNext').onclick = () => {
+      hush(); sfx.pop(); k++; tries = 0; busy = false;
+      if (k >= deck.length) { finish({ key: 'ml-match', stars: ok >= 7 ? 3 : ok >= 4 ? 2 : 1, line: `${ok} de ${deck.length} à primeira! Uma palavra em todas as tuas línguas.`, again: () => screenMlMatch() }); return; }
+      box.innerHTML = draw(); play();
+    };
+    mlSay(d.b, d.x.w[d.b]);
+  };
+}
+ 
 
 function screenMlSound(sndArg) {
   newScreen();
@@ -16551,6 +17041,7 @@ function screenMlGuess() {
 GAMES.push(
   { id: 'ml-sound', hide: () => !mlOn(), name: "Um som, várias línguas", sub: "como um som vive em cada uma das tuas línguas", ico: () => pic('🌍'), bg: 'var(--t-mint)', go: () => screenMlSound(), grp: 14 },
   { id: 'ml-say', hide: () => !mlOn(), name: "Diz em todas as línguas", sub: () => myLangs().map(c => mlText(ML_WORDS[0].w[c])).join(', '), ico: () => pic('🗣️'), bg: 'var(--t-yellow)', go: () => screenMlSay(), grp: 14 },
+  { id: 'ml-match', hide: () => !mlOn(), name: "As minhas línguas", sub: "ouve uma palavra numa língua, encontra-a noutra", kw: "línguas palavras tradução inglês português alemão russo", ico: () => pic('🌍'), bg: 'var(--t-blue)', go: () => screenMlMatch(), grp: 14 },
   { id: 'ml-guess', hide: () => !mlOn(), name: "Adivinha a língua", sub: "ouve uma palavra — de que língua é?", ico: () => pic('👂'), bg: 'var(--t-lilac)', go: () => screenMlGuess(), grp: 14 }
 );
 SECTIONS.splice(1, 0, { g: 14, h: "As minhas línguas", p: "um som em várias línguas: sente a diferença" });
@@ -21712,7 +22203,7 @@ const SETUI = (() => {
     const root = $('.parents'); if (!root || !fam()) return;
     const secs = [...root.children].filter(x => x.matches('section.psec'));
     const find = sel => secs.find(s => s.matches(sel) || s.querySelector(sel)) || null;
-    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
+    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), guide: find('#guideSec'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
 
     
     if (S.fam) {
@@ -21773,6 +22264,7 @@ const SETUI = (() => {
     if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Aspeto do jogo</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || "Criança", lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
+      ['guide', '📊', "Relatório", "o que corre bem e o que ainda é difícil", [S.guide]],
       ['fam', '👪', "Família", '', [S.fam]],
       ['friends', '🤝', "Amigos", '', [S.friends]],
       ['kid', '🧒', name, "nome, línguas, interesses, leitura", [S.kid, S.book]],
@@ -21797,9 +22289,474 @@ const SETUI = (() => {
     }
     menu.onclick = e => { const b = e.target.closest('[data-page]'); if (b) { sfx.pop(); show(b.dataset.page); } };
     $('#backBtn').onclick = e => { if (open) { sfx.pop(); show(null); } else { open = null; back0(e); } };
-    show(focus === 'voice' ? 'voice' : open, true);
+    show(focus === 'voice' || focus === 'guide' ? focus : open, true);
   }
   return { build, reset };
+})();
+ 
+ 
+
+
+
+
+const KPROJ = [
+  ['tower', '🗼', 4, 8, "A torre mais alta", [['🧸', "Junta dez coisas diferentes: cubos, livros, caixinhas, brinquedos."], ['🧱', "Constrói uma torre: as coisas grandes em baixo, as pequenas em cima."], ['🔢', "Quantas coisas ficaram de pé? Conta em voz alta."], ['🔁', "Desfaz e constrói outra vez. Ficou mais alta?"]]],
+  ['colors', '🌈', 4, 6, "Brinquedos por cores", [['🧸', "Traz os teus brinquedos para o tapete."], ['🎨', "Separa-os por cores: os vermelhos com os vermelhos, os azuis com os azuis."], ['👆', "Conta cada monte: toca na cor sempre que contares um brinquedo."], ['🏆', "Que cor ganhou?"]], ['tally', [['🔴', "vermelhos"], ['🔵', "azuis"], ['🟢', "verdes"], ['🟡', "amarelos"]]]],
+  ['zoo', '🦁', 4, 7, "Um jardim zoológico de brinquedos", [['🐻', "Encontra todos os animais de brincar."], ['📚', "Constrói para cada um uma casinha de livros ou de cubos."], ['🏷️', "Inventa um nome para cada animal."], ['🎟️', "Chama a família para uma visita e conta-lhe sobre os teus animais."]]],
+  ['faces', '😀', 4, 7, "Carinhas de humor", [['📄', "Pega numa folha de papel e em lápis."], ['😀', "Desenha quatro carinhas: uma alegre, uma triste, uma zangada e uma surpreendida."], ['🪞', "Faz cada carinha em frente ao espelho."], ['🤔', "Mostra os desenhos à família: eles têm de adivinhar qual é cada humor."]]],
+  ['window', '🪟', 4, 6, "O que há lá fora, à janela?", [['🪟', "Senta-te à janela."], ['👀', "Olha com atenção: quem e o que passa por ali?"], ['👆', "Toca na imagem sempre que vires um carro, uma pessoa, um cão ou uma ave."], ['🏆', "Quais foram os mais numerosos?"]], ['tally', [['🚗', "carros"], ['🚶', "pessoas"], ['🐕', "cães"], ['🐦', "aves"]]]],
+  ['animal', '🦄', 4, 9, "Inventa um animal novo", [['✏️', "Desenha um animal que ninguém nunca viu."], ['🐾', "Quantas patas, orelhas e caudas tem? Onde é que vive?"], ['🏷️', "Inventa-lhe um nome engraçado."], ['🗣️', "Ao jantar, conta à família uma história sobre o teu animal."]]],
+  ['sizes', '📏', 4, 6, "Põe por ordem de tamanho", [['🧸', "Escolhe sete brinquedos."], ['📏', "Põe-nos em fila: do mais pequeno ao maior."], ['🔁', "Agora ao contrário: do maior ao mais pequeno."], ['🔢', "Que brinquedo está no meio?"]]],
+  ['senses', '👂', 4, 9, "Um minuto de silêncio", [['🪑', "Senta-te confortavelmente à janela e fecha os olhos."], ['👂', "Ouve durante um minuto inteiro. Que sons ouves?"], ['👆', "Abre os olhos e assinala o que ouviste: carros, aves, vozes, música."], ['🔁', "Tenta outra vez à noite. Os sons são diferentes?"]], ['tally', [['🚗', "carros"], ['🐦', "aves"], ['🗣️', "vozes"], ['🎵', "música"]]]],
+  ['alpha', '🔤', 5, 8, "O abecedário lá de casa", [['🔤', "Pensa nas letras do teu nome."], ['🏠', "Para cada letra, encontra em casa uma coisa que comece por ela."], ['🧺', "Põe todas as coisas em fila e fica o teu nome feito de coisas!"], ['📸', "Mostra à família: eles têm de ler o teu nome."]]],
+  ['count', '🔢', 5, 8, "Quantos tenho eu?", [['📚', "Conta os teus livros."], ['🧦', "Conta as tuas meias, aos pares!"], ['✏️', "Conta os lápis e os marcadores."], ['👆', "Toca aqui por cada coisa enquanto contas. De que tens mais?"]], ['tally', [['📚', "livros"], ['🧦', "pares de meias"], ['✏️', "lápis"], ['🧸', "peluches"]]]],
+  ['weather', '🌦️', 4, 12, "Diário do tempo", [['🪟', "Olha pela janela todas as manhãs."], ['☀️', "Assinala aqui o tempo: sol, nuvens, chuva ou neve."], ['📅', "Assinala pelo menos quatro dias."], ['🏆', "No fim da semana, vê: que tempo houve mais vezes?"]], ['days', ['☀️', '⛅', '☁️', '🌧️', '❄️']]],
+  ['seed', '🌱', 5, 12, "Um rebento num copo", [['🥤', "Põe um feijão ou uma ervilha num copo com terra e cobre com um pouco de terra."], ['💧', "Rega com um bocadinho de água e põe no parapeito da janela."], ['👀', "Olha para o copo todos os dias e assinala aqui o que vês."], ['🌿', "Assinala pelo menos quatro dias. Quando é que vai aparecer o rebento?"]], ['days', ['🟫', '🌱', '🌿']], "Peçam-lhe, por favor, só por um minuto: um copo com terra e um feijão ou uma ervilha."],
+  ['birds', '🐦', 5, 12, "Aves à janela", [['🪟', "Senta-te à janela durante dez minutos."], ['🐦', "Sempre que vires uma ave, toca na imagem parecida."], ['🔁', "Olha outra vez noutro dia."], ['🏆', "Que aves aparecem mais vezes?"]], ['tally', [['🕊️', "pombos"], ['🐦', "passarinhos"], ['🐦‍⬛', "corvos e gralhas"], ['🦅', "aves grandes"]]]],
+  ['museum', '🏛️', 5, 12, "Um museu de cinco coisas", [['🔎', "Escolhe as cinco coisas mais interessantes lá de casa."], ['🏷️', "Faz para cada uma uma etiqueta: o nome e uma frase, ou um desenho."], ['🗄️', "Arruma as coisas numa prateleira ou numa mesa."], ['🎟️', "Faz à família uma visita guiada ao teu museu."]]],
+  ['comic', '💬', 6, 12, "Uma banda desenhada sobre o meu dia", [['📄', "Dobra uma folha de papel ao meio e outra vez ao meio. Ficas com quatro quadrados."], ['🌅', "Desenha a manhã, a tarde e a noite, um desenho em cada quadrado."], ['⭐', "No último quadrado, desenha o melhor do dia."], ['💬', "Põe nas personagens balões com palavras."]]],
+  ['map', '🗺️', 6, 12, "O mapa do quarto", [['🦅', "Imagina que és uma ave a olhar para o teu quarto lá de cima."], ['✏️', "Desenha o quarto: onde ficam a cama, a mesa, a janela e a porta."], ['❌', "Esconde um brinquedo e marca o sítio com uma cruz no mapa."], ['🔎', "Dá o mapa a alguém da família. Será que encontra o tesouro?"]]],
+  ['mood', '😊', 6, 12, "Diário de humor", [['🌙', "Todas as noites, lembra-te do teu dia."], ['😊', "Assinala aqui o teu humor."], ['📅', "Assinala pelo menos quatro dias."], ['🤔', "Qual foi o melhor dia? Porquê?"]], ['days', ['😀', '🙂', '😐', '😢', '😠']]],
+  ['shop', '🏪', 6, 9, "A minha loja", [['🧸', "Escolhe dez brinquedos para a tua loja."], ['🏷️', "Faz etiquetas de preço: cada brinquedo custa de 1 a 10 moedas."], ['💰', "Desenha moedas de papel."], ['🛍️', "Brinca às lojas com a família: conta as compras e o troco."]]],
+  ['plane', '✈️', 6, 12, "Avião de papel", [['📄', "Dobra um avião com uma folha de papel."], ['🚀', "Lança-o três vezes e mede aos passos até onde ele voou."], ['✏️', "Dobra as pontas das asas um pouco para cima."], ['🏆', "Lança-o mais três vezes. Ficou melhor ou pior?"]]],
+  ['bridge', '🌉', 7, 12, "Uma ponte de papel", [['📚', "Põe dois livros à distância de uma mão."], ['📄', "Põe uma folha de papel por cima deles. Essa é a ponte."], ['🪙', "Quantas moedas ou lápis aguenta a ponte?"], ['🪗', "Dobra a folha em harmónio e tenta outra vez. Qual das pontes é mais forte?"]]],
+  ['news', '📰', 8, 12, "Um jornal da família", [['📰', "Inventa um nome para o teu jornal."], ['✍️', "Escreve três notícias desta semana, as mais interessantes."], ['🖍️', "Desenha uma imagem para cada notícia."], ['🧲', "Pendura o jornal no frigorífico."]]],
+  ['plan', '📅', 8, 12, "Um plano para o fim de semana", [['📅', "Escreve um plano para sábado: o que fazemos de manhã, à tarde e à noite."], ['⏰', "Escreve a hora ao lado de cada coisa."], ['➕', "Calcula quantas horas vai demorar tudo."], ['✅', "No sábado, assinala o que correu como planeado."]]],
+  ['quiz', '❓', 8, 12, "Um questionário para a família", [['🎧', "Lembra-te das histórias que ouviste no jogo."], ['✍️', "Escreve cinco perguntas sobre elas."], ['🍽️', "Ao jantar, faz as perguntas à família."], ['🏆', "Conta os pontos: quem sabe mais?"]]]
+];
+const KPR = (() => {
+  const H = s => [...String(s)].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
+  const byId = id => KPROJ.find(x => x[0] === id) || null;
+  const ageOf = pr => pr.settings.age || (pr.settings.track === 'l' ? 9 : 5);
+  const doneIds = pr => Object.values(((pr.guide || {}).pj) || {});
+  function pick(pr, kid, salt, not) {
+    const a = ageOf(pr), fit = KPROJ.filter(x => a >= x[2] && a <= x[3] && x[0] !== not), fresh = fit.filter(x => !doneIds(pr).includes(x[0]));
+    const ps = fresh.length ? fresh : fit.length ? fit : KPROJ;
+    return ps[H(weekId() + kid + salt) % ps.length][0];
+  }
+  
+  function of(pr = P, kid = ROOT.cur) {
+    if (!pr.kproj || pr.kproj.w !== weekId() || !byId(pr.kproj.id)) pr.kproj = { w: weekId(), id: pick(pr, kid, 0), sw: 0, log: {}, tl: [] };
+    return pr.kproj;
+  }
+  const doneNow = (pr = P) => ((pr.guide || {}).pj || {})[weekId()] || '';
+  const proj = () => byId(of().id);
+  const tool = p => p[6] || null;
+  const daysLeft = p => { const t = tool(p); return t && t[0] === 'days' ? Math.max(0, 4 - Object.keys(of().log || {}).length) : 0; };
+  
+  const PH = 'govorilki-kproj-ph';
+  const phGet = k => { try { return (JSON.parse(localStorage.getItem(PH) || '{}'))[k] || ''; } catch (e) { return ''; } };
+  function phSet(k, v) { try { const o = JSON.parse(localStorage.getItem(PH) || '{}'); o[k] = v; const ks = Object.keys(o); while (ks.length > 6) delete o[ks.shift()]; localStorage.setItem(PH, JSON.stringify(o)); } catch (e) {} }
+  const phKey = () => ROOT.cur + ':' + weekId();
+  function shrink(file, cb) {
+    const r = new FileReader();
+    r.onload = () => { const im = new Image(); im.onload = () => { const s = Math.min(1, 480 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', .7)); }; im.src = r.result; };
+    r.readAsDataURL(file);
+  }
+  
+  function toolHTML(p) {
+    const t = tool(p), st = of(); if (!t) return '';
+    if (t[0] === 'days') {
+      const w0 = new Date(weekId());
+      return `<div class="kp-days">${[...Array(7)].map((_, i) => { const d = new Date(w0); d.setDate(d.getDate() + i); const k = dayKey(d), v = st.log[k], now = k === dayKey(), fut = k > dayKey();
+        return `<div class="kp-day${now ? ' now' : ''}"><small>${WEEK[i]}</small><b>${v != null && t[1][v] ? t[1][v] : fut ? '' : '·'}</b></div>`; }).join('')}</div>
+        <p class="kp-q">${st.log[dayKey()] != null ? "Hoje já está assinalado. Podes mudar:" : "Como está hoje?"}</p>
+        <div class="kp-pick">${t[1].map((e, i) => `<button class="kp-ic${st.log[dayKey()] === i ? ' sel' : ''}" data-kday="${i}">${e}</button>`).join('')}</div>`;
+    }
+    return `<div class="kp-tally">${t[1].map(([e, n], i) => `<button class="kp-t" data-ktl="${i}"><span class="emo">${e}</span><b>${(st.tl || [])[i] || 0}</b><small>${esc(n)}</small></button>`).join('')}</div>
+      <button class="link-btn kp-undo" data-kundo>↩️ Tirar o último</button>`;
+  }
+  let lastTl = -1;
+  function screen(step) {
+    newScreen();
+    const p = proj(), st = of(), done = doneNow() === p[0], n = p[5].length, k = Math.max(0, Math.min(n, step == null ? (done ? n : 0) : step)), last = k >= n;
+    const s = last ? null : p[5][k], left = daysLeft(p), ph = phGet(phKey());
+    shell("Projeto da semana", `<div class="kp">
+      <div class="kp-head"><span class="kp-e">${pic(p[1])}</span><div><h2>${esc(p[4])}</h2><small>${last ? (done ? "✅ Feito!" : "Último passo") : `Passo ${k + 1} de ${n}`}</small></div></div>
+      ${last ? `<div class="kp-end">${tool(p) ? toolHTML(p) : ''}
+          ${done ? `<p class="kp-done">✅ Projeto feito! O prémio está nos teus prémios.</p>${ph ? `<img class="kp-ph" src="${ph}" alt="">` : ''}`
+            : `${!EMBEDDED ? `<label class="big ghost kp-cam">📷 Foto: fica só neste telemóvel<input type="file" accept="image/*" capture="environment" id="kpCam" hidden></label>${ph ? `<img class="kp-ph" src="${ph}" alt="">` : ''}` : ''}
+               <button class="big kp-go" id="kpDone" ${left ? 'disabled' : ''}>🎉 Pronto!</button>${left ? `<p class="kp-q">Assinala mais ${left} ${plural(left, ["dia", "dias", "dias"])} e o projeto fica pronto.</p>` : ''}`}
+        </div>`
+        : `<div class="kp-step"><span class="kp-pic">${pic(s[0])}</span><p>${esc(s[1])}</p></div>${k === n - 1 && tool(p) ? toolHTML(p) : ''}`}
+      ${p[7] && !done ? `<p class="kp-grown">👪 Para adultos: ${esc(p[7])}</p>` : ''}
+      <div class="kp-nav">${k > 0 ? "<button class=\"big ghost\" id=\"kpBack\">◀ Voltar</button>" : ''}${last ? '' : `<button class="big" id="kpNext">${k === n - 1 ? "Tudo feito" + G("", '') + '! ▶' : "Seguinte ▶"}</button>`}</div>
+      ${!st.sw && !done && !k ? "<button class=\"link-btn kp-swap\" id=\"kpSwap\">🔄 Quero outro projeto (uma vez por semana)</button>" : ''}
+    </div>`, { back: goHome });
+    talk(last ? (done ? `O projeto «${p[4]}» está feito! Muito bem!` : left ? `Assinala mais ${left} ${plural(left, ["dia", "dias", "dias"])} e o projeto fica pronto.` : "Se correu tudo bem, toca em «Pronto!»") : (k === 0 ? `Projeto da semana: ${p[4]}. ` : '') + s[1]);
+    const on = (id, f) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); f(); }; };
+    on('kpNext', () => screen(k + 1)); on('kpBack', () => screen(k - 1));
+    on('kpSwap', () => { st.id = pick(P, ROOT.cur, 1, st.id); st.sw = 1; st.log = {}; st.tl = []; save(); screen(0); });
+    on('kpDone', () => {
+      P.guide = P.guide || {}; P.guide.pj = { ...(P.guide.pj || {}), [weekId()]: p[0] };
+      
+      P.ach = P.ach || []; let got = null;
+      ['proj1', 'proj5'].forEach(id => { const A = ACH.find(x => x.id === id); if (A && !P.ach.includes(id) && A.test()) { P.ach.push(id); got = A; } });
+      finish({ key: 'kproj', stars: 3, line: `O projeto «${p[4]}» está pronto! Fizeste tudo por ti${G("", '')}${G("", '')}.` + (got ? ` Novo prémio: ${got.e} «${got.t}»!` : ''), again: () => screen(n), menu: goHome });
+    });
+    const cam = $('#kpCam'); if (cam) cam.onchange = () => { const f = cam.files && cam.files[0]; if (f) shrink(f, u => { phSet(phKey(), u); screen(n); }); };
+    const box = $('.kp');
+    box.addEventListener('click', e => {
+      const d = e.target.closest('[data-kday]'), t = e.target.closest('[data-ktl]'), u = e.target.closest('[data-kundo]');
+      if (d) { sfx.tick(); st.log[dayKey()] = +d.dataset.kday; save(); screen(k); return; }
+      if (t) { sfx.tick(); const i = +t.dataset.ktl; st.tl = st.tl || []; st.tl[i] = (st.tl[i] || 0) + 1; lastTl = i; save(); t.querySelector('b').textContent = st.tl[i]; hopEl(t); return; }
+      if (u && lastTl >= 0 && (st.tl[lastTl] || 0) > 0) { sfx.tick(); st.tl[lastTl]--; save(); screen(k); }
+    });
+  }
+  
+  function todayCard(stage) {
+    if (!stage || stage.querySelector('.kp-card') || GUEST && !GUEST_OFF) return;
+    const p = proj(); if (!p) return;
+    const done = doneNow() === p[0], t = tool(p), need = !done && t && t[0] === 'days' && of().log[dayKey()] == null;
+    const b = document.createElement('button'); b.className = 'kp-card' + (done ? ' done' : '');
+    b.innerHTML = `<span class="kp-e">${pic(p[1])}</span><span class="kp-ct"><small>🛠️ Projeto da semana${done ? " · ✅ feito" : ''}</small><b>${esc(p[4])}</b>${need ? "<i>Assinala hoje!</i>" : ''}</span><span class="g-go">▶</span>`;
+    b.onclick = () => { sfx.pop(); homeLeave(); screen(); };
+    const plan = stage.querySelector('section.today'); if (plan) plan.after(b); else stage.append(b);
+  }
+  const titleOf = id => { const p = byId(id); return p ? p[4] : ''; };
+  return { of, proj, screen, todayCard, titleOf, pick, doneNow, byId };
+})();
+GAMES.push({ id: 'kproj', name: "Projeto da semana", sub: () => { try { return KPR.proj()[4]; } catch (e) { return ''; } }, ico: () => pic('🛠️'), bg: 'var(--t-mint)', go: () => KPR.screen(), grp: 4, also: [13, 10] });
+ 
+ 
+
+
+
+
+const GUIDE_TIPS = [
+  ['math', 1, 2, "Ao almoço, peçam à criança que ponha as colheres na mesa: «Somos quatro. Quantas colheres são precisas?»"],
+  ['math', 1, 3, "Num passeio, contem juntos: quantos cães, quantos carros vermelhos até à esquina?"],
+  ['math', 1, 3, "Contem os degraus em voz alta ao subir as escadas, e ao descer também."],
+  ['math', 1, 2, "Mostrem um número pelos dedos e peçam à criança que mostre o mesmo nos dela."],
+  ['math', 1, 3, "Há 5 maçãs na taça e uma foi comida. Perguntem: «Quantas ficaram?» e confirmem contando."],
+  ['math', 2, 4, "Brinquem aos «quantos estão escondidos»: 7 botões, alguns debaixo da mão. Quantos estão lá?"],
+  ['math', 3, 5, "Na loja, perguntem: «Tínhamos 10 euros e o pão custa 3. Quanto sobra?»"],
+  ['math', 2, 5, "Lancem dois dados e somem os pontos: quem chega primeiro a 30?"],
+  ['math', 3, 6, "Enquanto lavam as mãos, contem juntos de 20 até zero."],
+  ['math', 4, 6, "Brinquem aos «pares até dez»: vocês dizem 7 e a criança responde 3; vocês dizem 4 e ela diz 6."],
+  ['math', 3, 6, "No autocarro: «Entraram quatro pessoas na paragem e saíram duas. Quantas ficaram?» Inventem à vez."],
+  ['math', 5, 6, "Ponham 8 e 5 moedas na mesa: primeiro completem dez, depois somem o que sobra."],
+  ['math', 6, 7, "Digam: «Pensei num número, somei 3 e deu 9.» A criança que adivinhe, e depois trocam."],
+  ['math', 7, 8, "Vejam as etiquetas de preços na loja: o que custa mais e quanto mais?"],
+  ['math', 7, 8, "Passeiem na rua a ler os números das portas: qual é o seguinte? Porque é que de um lado só há números pares?"],
+  ['math', 7, 9, "Contem as moedas do mealheiro: primeiro as dezenas, depois as unidades."],
+  ['math', 7, 10, "Meçam a altura de toda a família com uma fita métrica: quem é mais alto e por quantos centímetros?"],
+  ['math', 9, 10, "Procurem a multiplicação à vossa volta: quantas pernas têm três cadeiras? Quantas rodas têm cinco bicicletas?"],
+  ['math', 9, 10, "Os ovos na caixa estão em filas: 2 filas de 5, quantos ao todo? Procurem os mesmos «retângulos» em azulejos e janelas."],
+  ['math', 9, 11, "Na estrada, treinem a tabuada: um diz a conta, o outro a resposta, e depois trocam."],
+  ['math', 10, 12, "Dividam as bolachas por todos à mesa: quantas cabem a cada um e quantas sobram?"],
+  ['math', 11, 13, "Peçam à criança que invente um problema sobre a vossa família e resolvam-no juntos ao jantar."],
+  ['math', 11, 13, "Deixem a criança pagar uma compra e conferir o troco."],
+  ['math', 12, 13, "Pelo relógio: «Agora são 17:40 e saímos às 18:15. Quantos minutos temos para nos preparar?»"],
+  ['math', 12, 14, "Planeiem a noite juntos: jantar às 19:00 durante meia hora, um livro durante 20 minutos. A que horas é deitar?"],
+  ['math', 13, 14, "Ao cozinhar, peçam à criança que meça meia chávena de farinha e um quarto de colher de sal."],
+  ['math', 13, 15, "Cortem uma maçã em 4 partes e comam uma: que parte sobrou?"],
+  ['math', 13, 16, "Uma tablete de chocolate tem 12 quadrados: quantos há num terço? E num quarto?"],
+  ['math', 14, 16, "Somem a conta das compras de cabeça, arredondando cada preço para o inteiro mais próximo, e depois confiram na caixa."],
+  ['math', 14, 16, "Vejam num mapa quantos quilómetros são até casa da avó e estimem quantas horas dura a viagem."],
+  ['math', 14, 16, "Comparem duas embalagens: qual compensa mais se calcularem o preço por quilo?"],
+  ['math', 15, 16, "Somem uma compra: 3 pacotes de leite a 2 euros cada e um pão a 1 euro. Quanto dá ao todo?"],
+  ['math', 15, 16, "Um desafio ao jantar: «Quantas pontas têm três paus? E três paus e meio?»"],
+  ['math', 16, 16, "Um quebra-cabeças: como medir 4 litros de água se têm um balde de 3 litros e outro de 5?"],
+  ['r', 0, 9, "No carro, digam juntos um trava-línguas: «O rato roeu a roupa do rei de Roma.» Devagar, não há vergonha nenhuma."],
+  ['r', 0, 9, "Rosnem juntos como tigres: quem aguenta o «rrr» durante mais tempo?"],
+  ['r', 0, 9, "Brinquem a «ligar o motor»: «d-d-d-rrr», e lá vão pela sala."],
+  ['r', 0, 9, "Encontrem em casa cinco coisas com o som R: rato, roupa, rádio, rolha…"],
+  ['r', 0, 9, "Peçam à criança que ensine um brinquedo a dizer «R»: explicar é a melhor maneira de aprender."],
+  ['r', 0, 9, "Um trava-línguas para o passeio: «Três pratos de trigo para três tigres tristes.»"],
+  ['r', 0, 9, "Não corrijam cada palavra: elogiem quando o R sair bem e, perante uma palavra difícil, limitem-se a repeti-la corretamente."],
+  ['l', 0, 9, "Um trava-línguas para a viagem: «A lula lambeu a lua cheia.»"],
+  ['l', 0, 9, "Deixem a língua «pintar o teto»: a ponta larga vai atrás dos dentes de cima, para a frente e para trás."],
+  ['l', 0, 9, "Brinquem ao barco a vapor: «uuu-lll», o barco apita e navega pela banheira."],
+  ['l', 0, 9, "Na loja, procurem palavras com o som L: leite, limão, luvas. A criança que as diga."],
+  ['l', 0, 9, "Cantem uma canção preferida só com «lá-lá-lá», bem alto e bem comprido."],
+  ['l', 0, 9, "Um trava-línguas: «O lobo lava a louça e a Lola lê no sol.»"],
+  ['sz', 0, 9, "Encham a «bomba»: «sss» enche o balão e «zzz» é um mosquito a voar."],
+  ['sz', 0, 9, "Um trava-línguas: «Sete sapos sentados no sofá.»"],
+  ['sz', 0, 9, "Procurem na sala coisas com o som S: sapato, sopa, sofá, sabonete."],
+  ['sz', 0, 9, "Sorriam ao espelho e digam «sss»: a língua esconde-se atrás dos dentes de baixo."],
+  ['sz', 0, 9, "Brinquem ao «mosquito e vespa»: no «z» a criança agita os braços, no «s» fica quieta."],
+  ['sh', 0, 9, "Um trava-línguas: «A chuva chove, chove, chove sem parar.»"],
+  ['sh', 0, 9, "Esvaziem juntos o «balão»: «chhh». Quem aguenta mais tempo?"],
+  ['sh', 0, 9, "Sejam um comboio: «tch-tch-tch» são as rodas, «chhh» é o vapor."],
+  ['sh', 0, 9, "Na cozinha, procurem palavras com Ch e J: chávena, chá, jarro, laranja."],
+  ['sh', 0, 9, "Um besouro zumbe: «zzz». Voem pela sala e pousem numa «flor»."],
+  ['sh', 0, 9, "Um trava-línguas: «O chefe chama o Chico para a chávena de chá.»"],
+  ['speech', 0, 12, "Apaguem uma vela à distância ou soprem um barquinho na banheira: um sopro comprido ajuda os sons."],
+  ['speech', 0, 12, "Façam bolas de sabão: um sopro longo e constante faz uma bola grande."],
+  ['speech', 0, 12, "Contem um ao outro como foi o dia: três frases cada um, à vez."],
+  ['speech', 0, 12, "Façam caretas ao espelho: um sorriso, uma «palhinha», dez vezes cada. Quem fica mais engraçado?"],
+  ['speech', 0, 12, "Peçam à criança que conte um desenho animado inteiro: vocês só acenam e perguntam: «E depois?»"],
+  ['read', 1, 1, "Num passeio, procurem letras nas tabuletas: quem vê primeiro um «M»?"],
+  ['read', 1, 1, "Façam uma letra com plasticina ou formem-na com massa."],
+  ['read', 1, 1, "Escrevam o nome da criança em letras grandes e pendurem-no na porta do quarto dela."],
+  ['read', 1, 2, "Brinquem ao «primeiro som»: «Mãe», qual é o primeiro som? E na palavra «gato»?"],
+  ['read', 1, 1, "Desenhem uma letra com o dedo nas costas da criança e peçam-lhe que adivinhe qual é."],
+  ['read', 2, 2, "Leiam juntos a tabuleta de uma loja, sílaba a sílaba, sem pressas."],
+  ['read', 2, 2, "Batam palmas às sílabas das palavras: «ba-na-na» são três palmas. E «pé»?"],
+  ['read', 2, 3, "Encontrem uma palavra curta numa embalagem e leiam-na juntos."],
+  ['read', 2, 3, "Escrevam um bilhete com três palavras e ponham-no no bolso: «És o meu herói.»"],
+  ['read', 3, 3, "Deixem a criança ler a lista de compras mesmo na loja."],
+  ['read', 3, 4, "À hora de deitar, leiam à vez: uma linha vocês, uma linha a criança."],
+  ['read', 3, 4, "Leiam juntos a ementa de um café e deixem a criança escolher o prato."],
+  ['read', 3, 3, "Escrevam juntos as etiquetas das caixas dos brinquedos: «carros», «cubos», «bonecas»."],
+  ['read', 3, 4, "Na estrada, leiam juntos os nomes das ruas e das paragens."],
+  ['read', 4, 4, "Peçam à criança que leia a receita em voz alta enquanto cozinham juntos."],
+  ['read', 4, 4, "Ao jantar, peçam à criança que conte o capítulo do livro que está a ler agora."],
+  ['read', 4, 4, "Vão à biblioteca e deixem a criança escolher um livro sozinha."],
+  ['read', 4, 4, "Conversem sobre uma personagem de um livro: «O que farias no lugar dela?»"],
+  ['read', 4, 4, "Peçam à criança que leia um conto aos mais pequenos, com expressão e várias vozes."],
+  ['read', 3, 4, "Leiam em voz alta por papéis: cada um lê a sua personagem."],
+  ['logic', 1, 3, "Juntem as meias aos pares: quem é mais rápido? Depois escondam uma: qual desapareceu?"],
+  ['logic', 1, 4, "Brinquem ao «o que mudou»: a criança vira-se de costas e vocês tiram uma coisa da mesa."],
+  ['logic', 1, 4, "Uma adivinha ao jantar: «O que pesa mais, um quilo de penas ou um quilo de ferro?»"],
+  ['logic', 2, 6, "Construam com peças o que está desenhado numa imagem e depois ao contrário: desenhem o que construíram."],
+  ['logic', 3, 8, "Planeiem juntos o caminho até ao parque: onde viramos, quantos cruzamentos há?"],
+  ['logic', 4, 8, "Joguem aos «20 perguntas»: pensem num objeto e só se pode responder «sim» ou «não»."],
+  ['logic', 4, 8, "Peçam à criança que invente um problema-armadilha para a mãe ou para o pai."],
+  ['logic', 5, 8, "Joguem uma partida de damas ou de xadrez e falem em voz alta sobre uma jogada: «Porque aí?»"],
+  ['logic', 6, 8, "Um problema: um pai tem três filhas e cada filha tem um irmão. Quantos filhos há ao todo?"],
+  ['world', 4, 12, "Procurem num mapa ou num globo um lugar da última história."],
+  ['world', 4, 12, "Desenhem juntos o herói da história que a criança ouviu esta semana."],
+  ['world', 6, 12, "Peçam à criança que conte a um adulto, pelas suas palavras, uma história do jogo."],
+  ['world', 4, 12, "Montem um «museu» numa prateleira: três objetos de países diferentes, e a criança é o guia."],
+  ['world', 4, 12, "Olhem pela janela para o tempo e perguntem: «De onde vem a chuva?» Descubram a resposta juntos."],
+  ['life', 4, 12, "Deem à criança uma tarefa de casa para a semana inteira: regar as plantas ou dar comida ao gato."],
+  ['life', 4, 8, "Deixem a criança preparar a sua mochila para amanhã a partir de uma lista de imagens."],
+  ['life', 7, 12, "Deixem a criança acertar o seu despertador e conferir à noite que tudo está pronto para a manhã."],
+  ['life', 4, 12, "À noite, perguntem: «O que foi difícil hoje? E o que correu bem?» Elogiem o esforço, não o resultado."],
+  ['life', 4, 12, "Contem à criança o que vocês estão a aprender agora e onde erram: assim é mais fácil experimentar coisas novas."],
+  ['life', 5, 12, "Preparem o jantar juntos: lavar os legumes, cortar os mais moles, pôr a mesa."],
+  ['life', 6, 12, "Combinem um pequeno objetivo para a semana e marquem-no no frigorífico."],
+  ['life', 4, 12, "Liguem juntos à avó ou ao avô: a criança conta o que aprendeu de novo."],
+  ['life', 8, 12, "Deem à criança um orçamento para o lanche da família e peçam-lhe que não o ultrapasse."],
+  ['life', 4, 12, "Antes de dormir, agradeçam um ao outro por uma coisa de hoje."],
+  ['life', 5, 12, "Quando algo não sai bem, digam: «Ainda não está a sair» e tentem outra vez juntos."]
+];
+
+
+ACH.push({ id: 'proj1', e: '🛠️', t: "Mestre de Projetos", d: "Projeto da semana", hide: 1, test: () => Object.keys((P.guide || {}).pj || {}).length >= 1 },
+  { id: 'proj5', e: '🏗️', t: "Cinco projetos", d: "Cinco projetos da semana", hide: 1, test: () => Object.keys((P.guide || {}).pj || {}).length >= 5 });
+
+
+const REPORT_AREAS = [
+  { k: 'speech', e: '🗣️', n: "Fala", act: d => (d.ga.speech || 0) + d.sp, up: d => d.good.some(x => x[0] === 'speech'), lv: d => d.snd.length && d.a <= 9 ? "sons " + d.snd.map(s => (SOUND_SET.find(z => z[0] === s) || [])[1]).filter(Boolean).join(', ') : '' },
+  { k: 'read', e: '📖', n: "Leitura", act: d => (d.ga.read || 0) + d.rd, up: d => (d.rl > d.rl0 && d.rl0 > 0) || (d.wpm > d.w0 && d.w0 > 0), lv: d => d.rl && RSK.L[d.rl - 1] ? RSK.L[d.rl - 1].n : d.wpm ? `${d.wpm} palavras por minuto` : '' },
+  { k: 'math', e: '🔢', n: "Matemática", act: d => (d.ga.math || 0) + d.mt, up: d => (d.m > d.m0 && d.m0 > 0) || (d.so > d.so0 && d.so0 > 0), lv: d => d.m && MSK.L[d.m - 1] ? MSK.L[d.m - 1].n : '' },
+  { k: 'logic', e: '🧩', n: "Lógica", act: d => d.ga.logic || 0, up: d => d.ol > d.ol0, lv: d => d.ol ? `problemas resolvidos: ${d.ol}` : '' },
+  { k: 'chess', e: '♟️', n: "Xadrez", act: d => d.ga.chess || 0, up: d => d.cs > d.cs0 || (d.ai > d.ai0 && d.ai0 > 0), lv: d => d.cs ? `lições feitas: ${d.cs}` : '' },
+  { k: 'world', e: '🌍', n: "Histórias", act: d => d.ls, up: d => d.ls >= 3, lv: d => d.ls ? `histórias: ${d.ls}` : '' },
+  { k: 'art', e: '🎨', n: "Música e desenho", act: d => d.ga.art || 0, up: () => false, lv: () => '' }
+];
+const GUIDE = (() => {
+  const H = s => [...String(s)].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
+  const ageOf = pr => pr.settings.age || (pr.settings.track === 'l' ? 9 : 5);
+  const areaOf = key => {
+    if (/^learn:/.test(key)) return 'world';
+    if (/^(breath|artic):/.test(key)) return 'speech';
+    if (/^piano:/.test(key)) return 'art';
+    if (/chess/.test(key)) return 'chess';
+    const g = GAMES.find(x => x.id === key); if (!g) return '';
+    return [0, 1, 5, 9].includes(g.grp) ? 'speech' : [2, 6].includes(g.grp) ? 'read' : g.grp === 3 ? 'math' : g.grp === 8 ? (/olymp|puzzle/.test(key) ? 'logic' : 'math') : g.grp === 4 ? 'art' : 'other';
+  };
+  const lv = pr => ({ m: (pr.mskill && pr.mskill.lv) || 0, so: (pr.soro && pr.soro.top) || 0, ol: ((pr.olymp && pr.olymp.solved) || []).length, oll: (pr.olymp && pr.olymp.lv) || 0,
+    w: Math.max(0, ...(pr.reads || []).map(r => +r.wpm || 0)), rl: +(readLevels(pr)[LANG] || 0),
+    cs: Object.keys((pr.chessSchool || {}).done || {}).length, ai: (pr.chessAI && +pr.chessAI.top) || 0 });
+  const prevWeek = () => { const d = new Date(weekId()); d.setDate(d.getDate() - 7); return dayKey(d); };
+  
+  function week(pr) {
+    const w = weekId();
+    if (!pr.gw || pr.gw.w !== w) {
+      if (pr.gw && pr.gw.w === prevWeek()) pr.gwLast = { ...pr.gw, end: lv(pr) };
+      else if (pr.gwLast && pr.gwLast.w !== prevWeek()) delete pr.gwLast;
+      pr.gw = { w, n: 0, min: 0, ls: [], a: {}, b: {}, s0: lv(pr) };
+    }
+    pr.gw.b = pr.gw.b || {}; pr.gw.min = pr.gw.min || 0;
+    return pr.gw;
+  }
+  
+  function note(key, stars) {
+    const pr = P, g = week(pr), a = areaOf(key), now = lv(pr), d = dayKey();
+    g.n++; if (a) g.a[a] = (g.a[a] || 0) + 1;
+    if (/^learn:/.test(key)) { const id = key.slice(6); g.ls = [...g.ls.filter(x => x !== id), id].slice(-20); }
+    else if (!/^(breath|artic):/.test(key)) {
+      const s = +stars || 0, b = g.b[key] || [0, 0];   
+      g.b[key] = [Math.max(b[0], s), b[1] + (s <= 1 ? 1 : 0)];
+      const ks = Object.keys(g.b); if (ks.length > 40) delete g.b[ks[0]];
+    }
+    pr.gs = pr.gs || {};
+    ['m', 'so', 'oll', 'rl'].forEach(k => { const s = pr.gs[k]; if (!s || s[0] !== now[k]) pr.gs[k] = [now[k], d]; });
+  }
+  
+  let touched = 0;
+  try { addEventListener('pointerdown', () => { touched = Date.now(); }, true); addEventListener('keydown', () => { touched = Date.now(); }, true); } catch (e) {}
+  setInterval(() => {
+    try {
+      if (document.hidden || Date.now() - touched > 70e3 || PREVIEW || GPLAY || ADULT_HOME || (GUEST && !GUEST_OFF) || (fam() && fam().guest)) return;
+      if (document.querySelector('.parents, .pult, .guest')) return;
+      week(P).min++;
+    } catch (e) {}
+  }, 60e3);
+  const daysSince = d => d ? Math.max(0, Math.round((new Date(dayKey()) - new Date(d)) / 864e5)) : 0;
+  const keyOk = k => /^[a-z0-9:_-]{2,40}$/i.test(k || '');
+  
+  function dig(pr, g, now, last) {
+    const s0 = g.s0 || now, gs = pr.gs || {}, les = {}, w0 = new Date(g.w);
+    let dd = 0;
+    for (let i = 0; i < 7; i++) { const x = new Date(w0); x.setDate(x.getDate() + i); const v = pr.days[dayKey(x)];
+      if (v && v !== true) { let any = 0; Object.keys(v).forEach(k => { les[k] = (les[k] || 0) + (+v[k] || 0); any += +v[k] || 0; }); if (any) dd++; } else if (v === true) { les.speech = (les.speech || 0) + 1; dd++; } }
+    const b = g.b || {}, ks = Object.keys(b).filter(keyOk);
+    const good = ks.filter(k => b[k][0] >= 3).map(k => [areaOf(k), k]).slice(-4);
+    const hard = ks.filter(k => b[k][1] >= 2 && b[k][0] < 3).map(k => [areaOf(k), k]).slice(-2);
+    return { w: g.w, a: ageOf(pr), tr: pr.settings.track === 'l' ? 'l' : 'r', snd: soundsOf(pr).slice(0, 4), d: dd, min: g.min || 0, st: g.w === weekId() ? weekStars(pr) : 0, n: g.n || 0, ls: (g.ls || []).length,
+      ga: g.a || {}, good, hard, m: now.m, so: now.so, ol: now.ol, oll: now.oll, wpm: now.w, rl: now.rl, cs: now.cs, ai: now.ai,
+      m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0, cs0: s0.cs || 0, ai0: s0.ai || 0,
+      mS: last ? 0 : gs.m && now.m ? daysSince(gs.m[1]) : 0, rS: last ? 0 : gs.rl && now.rl ? daysSince(gs.rl[1]) : 0,
+      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
+  }
+  
+  function digest(pr) {
+    const now = lv(pr), cur = pr.gw && pr.gw.w === weekId() ? pr.gw : { w: weekId(), n: 0, min: 0, ls: [], a: {}, b: {}, s0: now };
+    const lb = pr.gw && pr.gw.w === prevWeek() ? { ...pr.gw, end: now } : pr.gwLast && pr.gwLast.w === prevWeek() ? pr.gwLast : null;
+    const d = dig(pr, cur, now);
+    if (lb) d.last = dig(pr, lb, lb.end || now, true);
+    return d;
+  }
+  
+  function clean(x, deep) {
+    if (!x || typeof x !== 'object') return null;
+    const n = (k, m) => clampN(x[k], m), ga = {};
+    Object.keys(x.ga || {}).slice(0, 10).forEach(k => { if (/^[a-z]{2,8}$/.test(k)) ga[k] = clampN(x.ga[k], 999); });
+    const pairs = (v, m) => (Array.isArray(v) ? v : []).slice(0, m).filter(p => Array.isArray(p) && /^[a-z]{0,8}$/.test(p[0] || '') && keyOk(p[1])).map(p => [p[0] || '', p[1]]);
+    const o = { w: /^\d{4}-\d\d-\d\d$/.test(x.w || '') ? x.w : weekId(), a: n('a', 18), tr: x.tr === 'l' ? 'l' : 'r', snd: (Array.isArray(x.snd) ? x.snd : []).filter(s => SOUND_SET.some(z => z[0] === s)).slice(0, 4),
+      d: n('d', 7), min: n('min', 9999), st: n('st', 1e5), n: n('n', 9999), ls: n('ls', 99), ga, good: pairs(x.good, 4), hard: pairs(x.hard, 2),
+      m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), wpm: n('wpm', 999), rl: n('rl', 9), cs: n('cs', 99), ai: n('ai', 99),
+      m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), cs0: n('cs0', 99), ai0: n('ai0', 99),
+      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
+    if (!deep && x.last) o.last = clean(x.last, true);
+    return o;
+  }
+  const mathLv = d => d.m || (d.a <= 4 ? 1 : d.a === 5 ? 2 : d.a === 6 ? 3 : d.a === 7 ? 5 : d.a === 8 ? 7 : d.a === 9 ? 9 : 11);
+  
+  const readLv = d => d.rl ? (d.rl <= 1 ? 1 : d.rl <= 3 ? 2 : d.rl <= 6 ? 3 : 4) : d.wpm >= 50 || (d.tr === 'l' && d.a >= 8) ? 4 : d.wpm > 0 ? 3 : d.sy || d.a >= 7 ? 2 : d.a >= 6 ? 2 : 1;
+  const logicLv = d => d.oll || Math.max(1, Math.min(8, d.a - 3));
+  const mStuck = d => d.m && d.mS >= 10 && d.m === d.m0 && ((d.ga || {}).math || d.mt) > 0;
+  const rStuck = d => d.rl && d.rS >= 10 && d.rl === d.rl0 && ((d.ga || {}).read || d.rd) > 0;
+  
+  function areas(d) {
+    const ga = d.ga || {}, sc = { math: (ga.math || 0) + d.mt, speech: (ga.speech || 0) + d.sp, read: (ga.read || 0) + d.rd, logic: ga.logic || 0, world: (ga.world || 0) + d.ls };
+    const on = Object.keys(sc).filter(k => sc[k] > 0).sort((a, b) => sc[b] - sc[a]);
+    if (mStuck(d)) on.unshift('math');
+    if (on.length) return [...new Set(on)];
+    return d.a <= 6 ? ['speech', 'read', 'math'] : ['math', 'read', 'world'];
+  }
+  function pool(d, area) {
+    if (area === 'speech') {
+      const ss = (d.snd || []).filter(s => GUIDE_TIPS.some(t => t[0] === s));
+      const s = ss.length ? ss[H(dayKey()) % ss.length] : 'speech';
+      return GUIDE_TIPS.filter(t => t[0] === s || (t[0] === 'speech' && !ss.length));
+    }
+    const l = area === 'math' ? mathLv(d) : area === 'read' ? readLv(d) : area === 'logic' ? logicLv(d) : d.a;
+    const ok = GUIDE_TIPS.filter(t => t[0] === area && l >= t[1] && l <= t[2]);
+    return ok.length ? ok : GUIDE_TIPS.filter(t => t[0] === 'life' && d.a >= t[1] && d.a <= t[2]);
+  }
+  
+  function tip(d, id) {
+    const ar = areas(d), area = ar[(mStuck(d) ? 0 : H(dayKey() + id)) % Math.min(2, ar.length)], ps = pool(d, area);
+    return { area, text: ps[H(id + dayKey()) % ps.length][3] };
+  }
+  const gname = k => recentName(k) || '';
+  
+  function wins(d) {
+    const L = [];
+    if (d.kp && KPR.titleOf(d.kp)) L.push(`projeto da semana feito: «${KPR.titleOf(d.kp)}»`);
+    if (d.rl > d.rl0 && d.rl0 && RSK.L[d.rl - 1]) L.push(`leitura — novo degrau: «${RSK.L[d.rl - 1].n}»`);
+    if (d.m > d.m0 && d.m0 && MSK.L[d.m - 1]) L.push(`matemática — novo nível: «${MSK.L[d.m - 1].n}»`);
+    if (d.so > d.so0 && d.so0) L.push(`ábaco — degrau ${d.so}`);
+    if (d.ol > d.ol0) L.push(`olimpíada — problemas resolvidos: ${d.ol - d.ol0}`);
+    if (d.cs > d.cs0) L.push(`xadrez — lições feitas: ${d.cs - d.cs0}`);
+    if (d.ai > d.ai0 && d.ai0) L.push(`xadrez — computador de nível ${d.ai}`);
+    if (d.wpm > d.w0 && d.w0) L.push(`velocidade de leitura — ${d.wpm} palavras por minuto`);
+    d.good.forEach(x => { const n = gname(x[1]); if (n && L.length < 4) L.push(`⭐⭐⭐ em: ${n}`); });
+    if (d.ls && L.length < 4) L.push(`histórias ouvidas: ${d.ls}`);
+    return L.slice(0, 4);
+  }
+  
+  function hard(d) {
+    const L = [];
+    if (mStuck(d) && MSK.L[d.m - 1]) L.push(`matemática, «${MSK.L[d.m - 1].n}» — ${d.mS} ${plural(d.mS, ["dia", "dias", "dias"])} neste nível. O jogo dá pistas e tarefas um pouco mais fáceis até ficar fácil.`);
+    if (rStuck(d) && RSK.L[d.rl - 1]) L.push(`leitura, «${RSK.L[d.rl - 1].n}» — ${d.rS} ${plural(d.rS, ["dia", "dias", "dias"])} neste degrau. O jogo repete-o e, depois de erros, volta um degrau para rever.`);
+    d.hard.forEach(x => { const n = gname(x[1]); if (n && L.length < 2) L.push(`${n} — por agora com uma estrela. O jogo dá pistas e deixa tentar outra vez.`); });
+    return L.slice(0, 2);
+  }
+  const actLine = d => `🎯 ${d.d} ${plural(d.d, ["dia", "dias", "dias"])} de 7${d.min ? ` · ⏱️ ${d.min} min` : ''}${d.st ? ` · ⭐ ${d.st}` : ''}`;
+  
+  const AREAS = REPORT_AREAS;
+  function rows(d) {
+    return AREAS.map(a => { let n = 0, up = false, l = ''; try { n = a.act(d); up = a.up(d); l = a.lv(d); } catch (e) {} return { a, n, up, l }; }).filter(r => r.n > 0 || r.up);
+  }
+  const arrow = r => r.up ? '↑' : '=';
+  function weekOfD(d) {
+    const sun = new Date().getDay() === 0;
+    return sun || !d.last ? { d, t: sun ? "Resumo da semana" : "A semana até agora", open: sun } : { d: d.last, t: "Resumo da semana passada", open: new Date().getDay() === 1 };
+  }
+  const fmtW = w => { const a = new Date(w), b = new Date(w); b.setDate(b.getDate() + 6); return `${a.getDate()}.${String(a.getMonth() + 1).padStart(2, '0')}–${b.getDate()}.${String(b.getMonth() + 1).padStart(2, '0')}`; };
+  function reportText(d, name) {
+    const R = weekOfD(d), x = R.d, w = wins(x), h = hard(x);
+    return [`📊 ${name}: ${R.t} (${fmtW(x.w)})`, actLine(x), ...(w.length ? ["✅ Corre bem:", ...w.map(s => '• ' + s)] : []), ...(h.length ? ["🌱 Ainda difícil:", ...h.map(s => '• ' + s)] : []),
+      ...rows(x).map(r => `${r.a.e} ${r.a.n} ${arrow(r)}${r.l ? ' — ' + r.l : ''}`), "— Govorilki"].join('\n');
+  }
+  
+  function card(d, kid) {
+    const w = wins(d), h = hard(d), t = tip(d, kid.id), R = weekOfD(d), rr = rows(R.d), empty = !d.n && !d.d && !d.min && !d.kp;
+    return `<div class="gd-card" data-gk="${esc(kid.id)}">
+      <div class="gd-h"><span class="chip-face">${kid.face}</span><b>${esc(kid.n)}</b><small>${d.a} ${plural(d.a, ["ano", "anos", "anos"])}</small></div>
+      ${empty ? `<p class="gd-act">🌱 Ainda não houve atividades esta semana. Assim que ${esc(kid.n)} jogar, os progressos aparecem aqui.</p>` : `<p class="gd-act">${esc(actLine(d))}</p>`}
+      ${w.length ? `<div class="gd-ok"><h3 class="gd-s">✅ Corre bem</h3>${w.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : empty ? '' : "<div class=\"gd-ok\"><h3 class=\"gd-s\">✅ Corre bem</h3><p>As atividades continuam; ainda não há novos níveis esta semana — é normal.</p></div>"}
+      ${h.length ? `<div class="gd-hard"><h3 class="gd-s">🌱 Ainda difícil</h3>${h.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : ''}
+      ${empty && !d.last ? '' : `<details class="gd-wkr"${R.open ? ' open' : ''}><summary>📋 ${R.t} · ${fmtW(R.d.w)}</summary>
+        ${R.d !== d ? `<p class="gd-act">${esc(actLine(R.d))}</p>` : ''}
+        ${rr.length ? `<div class="gd-rows">${rr.map(r => `<p><span>${r.a.e} ${esc(r.a.n)}</span><b class="${r.up ? 'up' : ''}">${arrow(r)}</b><small>${esc(r.l)}</small></p>`).join('')}</div>` : "<p class=\"muted\">Ainda não há nada para mostrar.</p>"}
+        <button class="chip gd-share" data-gshare="${esc(kid.id)}">📤 Partilhar</button></details>`}
+      <details class="gd-idea"><summary>💡 Se quiserem ajudar — uma ideia</summary><p>${esc(t.text)}</p></details>
+    </div>`;
+  }
+  async function share(txt) {
+    try { if (navigator.share && !EMBEDDED) { await navigator.share({ text: txt }); return 'shared'; } } catch (e) { if (e && e.name === 'AbortError') return ''; }
+    try { await navigator.clipboard.writeText(txt); return 'copied'; } catch (e) { return ''; }
+  }
+  function bind(root, get) {
+    root.addEventListener('click', async e => {
+      const b = e.target.closest('[data-gshare]'); if (!b) return;
+      sfx.tick(); const x = get(b.dataset.gshare); if (!x) return;
+      const r = await share(reportText(x.d, x.n));
+      if (r === 'copied') { b.textContent = "✅ Texto copiado"; setTimeout(() => { b.textContent = "📤 Partilhar"; }, 2500); }
+    });
+  }
+  
+  function famHTML() {
+    const f = fam(); if (!f) return '';
+    const ids = f.kids.filter(id => ROOT.profiles[id]).sort((a, b) => (b === ROOT.cur) - (a === ROOT.cur));
+    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) })).join('')
+      || "<p class=\"lead\">Adicionem uma criança à família e o relatório aparece aqui.</p>";
+  }
+  function mountFam(box) {
+    if (!box) return;
+    box.innerHTML = famHTML();
+    bind(box, id => ROOT.profiles[id] ? { d: digest(ROOT.profiles[id]), n: ROOT.profiles[id].settings.name || '' } : null);
+  }
+  
+  function guestHTML(pg) {
+    const ks = (pg && pg.kids || []).filter(k => k.gd);
+    return ks.length ? ks.map(k => card(k.gd, { id: k.id, n: k.n, face: friendSVG('', FRIENDS[k.e] ? k.e : 'tiger') })).join('')
+      : "<p class=\"lead\">O relatório aparece quando o telemóvel das crianças enviar notícias da semana.</p>";
+  }
+  function mountGuest(box, pg) {
+    if (!box) return;
+    box.innerHTML = guestHTML(pg);
+    if (!box.dataset.gb) { box.dataset.gb = 1; bind(box, id => { const k = ((gLoad(GPROG_KEY, null) || {}).kids || []).find(x => x.id === id); return k && k.gd ? { d: k.gd, n: k.n } : null; }); }
+  }
+  return { note, digest, clean, card, tip, areas, pool, wins, hard, rows, reportText, mountFam, mountGuest, readLv, mathLv, AREAS, week };
 })();
  
  
@@ -21828,6 +22785,7 @@ const HOMEUX = (() => {
       PATH.today(st);
       const hero = st.querySelector('.hero'), plan = st.querySelector('section.today');
       if (hero && plan) hero.after(plan);
+      try { KPR.todayCard(st); } catch (e) {}
       const all = st.querySelector('.alltabs'); if (all) all.remove();
       
       const qs = [st.querySelector('.rank'), st.querySelector('.season'), st.querySelector('.garage')].filter(Boolean);
@@ -24567,7 +25525,7 @@ function langGo(l, hash = location.hash) {
 
 function langRedirect() {
   if (EMBEDDED) return false;
-  if (/[#&](sem=|login\b|voiti\b)/.test(HASH0)) return false;
+  if (/[#&](sem=|login\b|voiti\b|mlv=)/.test(HASH0)) return false;
   let want = langWant();
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
   const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';

@@ -1489,6 +1489,30 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .mk-in{min-width:140px;padding:4px 18px;border-radius:18px;background:var(--paper);text-align:center;font:900 38px/1.2 var(--f-body);color:var(--plum);box-shadow:inset 0 0 0 3px var(--line-strong)}
 .mk-pics{display:inline-flex;flex-wrap:wrap;gap:2px;max-width:150px;justify-content:center}.mk-pics .pic{font-size:30px}.mk-op{font-style:normal}
 .mk-pie{width:120px;height:120px}.mk-t{flex-basis:100%;font:700 19px/1.3 var(--f-body)}
+.rk{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.rk-step{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+#rkBox{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.rk-q{max-width:600px;padding:16px 20px;border-radius:24px;background:var(--paper);text-align:center;color:var(--ink)}
+.rk-q.long{text-align:left}
+.rk-w{font:900 clamp(34px,9vw,54px)/1.15 var(--f-body);letter-spacing:.04em;word-break:break-word}
+.rk-p{font:900 clamp(28px,7vw,40px)/1.2 var(--f-body)}
+.rk-s{font:800 clamp(22px,5.4vw,30px)/1.4 var(--f-body)}
+.rk-t{display:block;font:600 clamp(18px,4.4vw,22px)/1.55 var(--f-body)}
+.rk-qq{display:block;margin-top:10px;font:900 clamp(18px,4.4vw,22px)/1.35 var(--f-body);color:var(--plum)}
+.rk-gap{display:inline-block;min-width:2.4em;border-bottom:3px solid var(--plum);color:var(--plum)}
+.rk-ask{margin:0;font:700 17px/1.3 var(--f-body);color:var(--ink-soft);text-align:center}
+.rk-hear{display:flex;align-items:center;gap:10px;border:0;border-radius:20px;padding:12px 18px;background:var(--t-blue);color:var(--ink);font:800 18px var(--f-body);cursor:pointer}
+.rk-hear svg{width:28px;height:28px}
+.rk-opts{display:grid;gap:12px;width:min(100%,560px)}
+.rk-opts.lets,.rk-opts.pics{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rk-o{min-height:64px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);font:800 clamp(18px,4.4vw,22px)/1.25 var(--f-body);padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 var(--line-strong)}
+.rk-opts.lets .rk-o{aspect-ratio:1.2;font:900 clamp(34px,10vmin,64px)/1 var(--f-body)}
+.rk-opts.pics .rk-o{aspect-ratio:1}.rk-opts.pics .rk-o .pic{font-size:clamp(46px,13vmin,72px)}
+.rk-o.right{background:var(--t-green);box-shadow:0 6px 0 var(--leaf)}.rk-o.wrong{opacity:.45}
+.rk-o:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line-strong)}
+.rk-mic.ear{animation:pdRing 1.2s ease-out infinite}
+.rk-bar{display:flex;gap:6px;width:min(100%,560px);margin:4px auto 0}.rk-bar i{flex:1;height:10px;border-radius:6px;background:var(--line-strong)}.rk-bar i.on{background:var(--leaf)}
+.rk-head small{max-width:46vw}.rk-head .mk-rank b{white-space:nowrap;font-size:16px}
 .mk-opts .num-b{width:auto;min-width:clamp(80px,19vmin,120px);padding:0 14px;font-size:clamp(34px,8vmin,52px)}
 .keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
 .kp-k{height:58px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:900 26px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
@@ -2275,6 +2299,13 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .ml-lr.on{box-shadow:inset 0 0 0 3px var(--sun)}.ml-ln{display:flex;align-items:center;gap:8px;font:800 17px var(--f-body)}.ml-seg{display:flex;gap:6px}.ml-seg .chip{padding:6px 12px;font-size:15px}
 .ml-seg .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}.ml-learn{font:800 13px var(--f-body);color:var(--plum);background:var(--t-lilac);border-radius:8px;padding:1px 7px;vertical-align:middle}
 .fe .lang-pick{margin:4px 0 6px}
+.ml-lr{flex-wrap:wrap}.ml-more summary{cursor:pointer;font:700 15px var(--f-body);color:var(--ink-soft);padding:4px 2px}.ml-more[open]{display:grid;gap:6px}
+.ml-main{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;font:700 15px var(--f-body)}.ml-main .chip{padding:6px 12px;font-size:15px}.ml-main .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+.ml-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin:8px 0}.ml-strip-h{font-size:20px}
+.ml-sw{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:6px 12px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line);font:800 16px var(--f-body);color:var(--ink);cursor:pointer}
+.mm-ask{display:grid;justify-items:center;gap:4px}.mm-hear{font-size:22px}.mm-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:560px;margin:8px auto}
+.mm-o{display:grid;justify-items:center;gap:4px;border:0;border-radius:18px;padding:12px 6px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line),0 3px 0 var(--line);font:800 18px var(--f-body);color:var(--ink);cursor:pointer;min-height:64px;align-content:center;overflow-wrap:anywhere}
+.mm-o .mm-pic .pic{width:64px;height:64px;font-size:52px}.mm-o.right{background:var(--t-green)}.mm-o:disabled:not(.right){opacity:.45}.mm-pair{display:grid;justify-items:center;gap:4px;margin-top:8px}.mm-pair .pic{width:72px;height:72px;font-size:60px}
 .hg-msg{margin:0;white-space:pre-wrap;font:600 15px/1.45 var(--f-body);background:#fff;border-radius:14px;padding:10px;max-height:260px;overflow:auto}
 .hg .big.ghost{margin-top:10px}
 .hg-steps{margin:0;padding:0;list-style:none;counter-reset:hg;display:flex;flex-direction:column;gap:12px}
@@ -2543,7 +2574,34 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .pv-face{flex:none;width:52px;height:52px;border-radius:50%;background:var(--t-yellow);display:grid;place-items:center;overflow:hidden}.pv-face svg{width:46px;height:46px}.pv-face.e{font-size:30px}
 .pv-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}.pv-t b{font-size:17px}.pv-t small{font-size:14px;color:var(--ink-soft);line-height:1.3}
 .pv-ad{display:flex;flex-direction:column;gap:8px;border-radius:20px;padding:10px 12px;background:var(--t-lilac);box-shadow:0 4px 0 var(--line)}
-.pv-acts{display:flex;gap:8px;flex-wrap:wrap}.pv-url{word-break:break-all;font-size:12px}
+.pv-acts{display:flex;gap:8px;flex-wrap:wrap}
+/* GUIDE-CSS: «Отчёт» cards for grown-ups */
+.gd-card{background:var(--surface,#fff);border-radius:22px;padding:14px 16px;margin:0 0 14px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 6px 18px rgba(60,40,10,.08);display:flex;flex-direction:column;gap:8px}
+.gd-h{display:flex;align-items:center;gap:10px}.gd-h .chip-face{width:44px;height:44px;flex:none}.gd-h b{font:800 20px/1.2 var(--f-head,inherit)}.gd-h small{margin-left:auto;color:var(--ink-soft)}
+.gd-act{margin:0;font:700 15px/1.4 var(--f-body);color:var(--ink-soft)}
+.gd-s{margin:0 0 2px;font:800 15px/1.3 var(--f-body);color:var(--ink)}
+.gd-ok,.gd-hard{border-radius:16px;padding:10px 12px}.gd-ok{background:var(--t-mint)}.gd-hard{background:var(--t-yellow)}
+.gd-ok p,.gd-hard p,.gd-idea p{margin:2px 0;font:600 15px/1.45 var(--f-body);color:var(--ink)}
+.gd-wkr,.gd-idea{border-radius:16px;background:var(--t-blue);padding:8px 12px}.gd-idea{background:transparent;padding:2px 4px}
+.gd-wkr summary,.gd-idea summary{cursor:pointer;font:700 15px/1.5 var(--f-body);color:var(--ink)}.gd-idea summary{color:var(--ink-soft);font-weight:600}
+.gd-rows{display:flex;flex-direction:column;gap:2px;margin:6px 0}.gd-rows p{margin:0;display:grid;grid-template-columns:1fr auto;column-gap:10px;font:600 15px/1.35 var(--f-body);color:var(--ink)}
+.gd-rows b{font-size:18px;color:var(--ink-soft)}.gd-rows b.up{color:var(--leaf,#2e9e4f)}.gd-rows small{grid-column:1/-1;color:var(--ink-soft);font-size:13px}
+.gd-share{margin-top:4px}
+/* KPROJ-CSS: the child's «Проект недели» */
+.kp{display:flex;flex-direction:column;gap:14px;max-width:640px;margin:0 auto;background:var(--surface,#fff);color:var(--ink);border-radius:26px;padding:16px}.kp .kp-step{background:var(--t-mint)}.kp .kp-day,.kp .kp-ic,.kp .kp-t{background:var(--bg,#F6F3EE)}
+.kp-head{display:flex;align-items:center;gap:12px}.kp-head .kp-e{width:64px;height:64px;flex:none;font-size:52px;line-height:1}.kp-head h2{margin:0;font:800 24px/1.2 var(--f-head,inherit)}.kp-head small{color:var(--ink-soft);font-weight:700}
+.kp-step{background:var(--surface,#fff);border-radius:24px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 2px 0 rgba(0,0,0,.06)}
+.kp-pic{font-size:96px;line-height:1.1;width:120px;height:120px;display:flex;align-items:center;justify-content:center}.kp-pic img,.kp-pic svg{width:110px;height:110px}
+.kp-step p{margin:0;text-align:center;font:700 20px/1.4 var(--f-body);color:var(--ink)}
+.kp-nav{display:flex;gap:10px;flex-wrap:wrap}.kp-nav .big{flex:1}
+.kp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.kp-day{background:var(--surface,#fff);border-radius:12px;text-align:center;padding:4px 0}.kp-day small{display:block;color:var(--ink-soft);font-size:12px}.kp-day b{font-size:24px;min-height:30px;display:block}.kp-day.now{outline:3px solid var(--sun,#ffc83d)}
+.kp-pick{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.kp-ic{font-size:36px;width:64px;height:64px;border-radius:18px;border:0;background:var(--surface,#fff);box-shadow:0 2px 0 rgba(0,0,0,.08)}.kp-ic.sel{outline:4px solid var(--leaf,#2e9e4f)}
+.kp-q{margin:0;text-align:center;font:700 16px/1.4 var(--f-body);color:var(--ink-soft)}
+.kp-tally{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.kp-t{border:0;border-radius:20px;background:var(--surface,#fff);padding:12px;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 0 rgba(0,0,0,.08)}.kp-t .emo{font-size:40px}.kp-t b{font-size:28px}.kp-t small{color:var(--ink-soft);font-weight:700}
+.kp-end{display:flex;flex-direction:column;gap:12px}.kp-done{margin:0;font:800 20px/1.4 var(--f-body);text-align:center}.kp-ph{max-width:100%;border-radius:18px}.kp-cam{text-align:center}
+.kp-grown{margin:0;font:600 14px/1.4 var(--f-body);color:var(--ink-soft)}.kp-swap{align-self:center}
+.kp-card{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:22px;background:var(--t-mint);padding:12px 14px;margin:12px 0;text-align:left;box-shadow:0 2px 0 rgba(0,0,0,.06)}.kp-card .kp-e{font-size:40px;width:48px;height:48px;flex:none;line-height:1}.kp-card .kp-ct{display:flex;flex-direction:column;flex:1}.kp-card small{color:var(--ink-soft);font-weight:700}.kp-card b{font:800 18px/1.3 var(--f-body)}.kp-card i{font-style:normal;color:var(--tiger,#e4632a);font-weight:800}
+.pv-url{word-break:break-all;font-size:12px}
 .pult-gate{display:flex;flex-direction:column;align-items:center;gap:14px;width:min(100%,420px);margin:0 auto;padding-top:12px;text-align:center}
 .pg-t{margin:0;min-height:2.6em}
 .pg-dots{display:flex;gap:18px;justify-content:center}.pg-dots i{width:22px;height:22px;border-radius:50%;border:3px solid var(--ink-soft);transition:background .15s}.pg-dots i.on{background:var(--ink);border-color:var(--ink)}
@@ -3732,6 +3790,8 @@ const LS = () => {
   let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
   
   if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
+  
+  if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: readLangToday() !== LANG ? mlInfo(readLangToday())[1] + ' ' + "Reading" : keep ? b.read.name : IS_RU && RSK.early() ? "Russian reading" : "Reading", sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
   return customSounds() ? { ...b, speech: { ...b.speech, name: "Speech", sub: "breathing, tongue, " + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3770,7 +3830,7 @@ function lessonPlan(id) {
       { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
       if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
-    } else if (id === 'read') ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read')));
+    } else if (id === 'read') { try { return RSK.plan(n, s); } catch (e) { ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read'))); } }
     else steps.push(gameStep('book', 'book'));
     return steps;
   }
@@ -3788,6 +3848,8 @@ function lessonPlan(id) {
     if (IS_RU && modOnG(16) && !gp) { const h = LOGO.daily(n + s); if (h) steps.push(gameStep(h, 'game')); }
     if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   } else if (id === 'read') {
+    
+    try { return RSK.plan(n, s); } catch (e) {}
     if (IS_RU && (P.settings.age || 6) <= 7 && prState().at < PRIMER.length) ['primer', ['read-words', 'abc-first', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
     else ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
@@ -4663,9 +4725,11 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
   P.stars += stars; P.best[key] = Math.max(P.best[key] || 0, stars); P.plays[key] = (P.plays[key] || 0) + 1;
   
   const td = todayState(); let doneLesson = null, medal = null;
+  
+  const lkey = key === 'r-skill' && readLangs().length > 1 ? 'r-skill@' + LANG : key;
   for (const id of (ACTIVE ? [ACTIVE] : LIDS())) {
-    if (td.done[id].includes(key) || !lessonPlan(id).some(x => x.key === key)) continue;
-    td.done[id].push(key);
+    if (td.done[id].includes(lkey) || !lessonPlan(id).some(x => x.key === lkey)) continue;
+    td.done[id].push(lkey);
     if (!nextStepOf(id)) {
       doneLesson = id; td.done[id] = [];
       const c = { ...dayCounts(td.date) }; c[id] = (c[id] || 0) + 1; P.days[td.date] = c;
@@ -4693,7 +4757,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     ${line ? `<p class="win-line">${esc(gx(line))}</p>` : ''}${bv}
     ${fair.note ? `<p class="fair-note">${fair.note}</p>` : ''}
     ${sticker ? `<div class="new-sticker"><span class="emo">${stickerHTML(sticker)}</span>New sticker!</div>` : ''}
-    ${ns ? lessonTrailHTML(key) : extra}
+    ${ns ? lessonTrailHTML(lkey) : extra}
     <div class="win-btns win-main">
       ${again ? `<button class="big ${next ? 'ghost' : ''}" data-a="again">↻ Again</button>` : ''}
       ${next ? `<button class="big" data-a="next">${ns || !nextLabel ? "Next" : esc(nextLabel)}</button>` : ''}
@@ -4706,7 +4770,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     if (a.dataset.a === 'again') again(); else if (a.dataset.a === 'next') next(); else (menu || goHome)();
   };
   sfx.good(); confetti(); later(sfx.star, 450);
-  say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? " Look, you've got a new sticker!" : ''}${fair.note ? ' ' + fair.note : ''}`);
+  mlPraiseMaybe(say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? " Look, you've got a new sticker!" : ''}${fair.note ? ' ' + fair.note : ''}`));
   const first = ov.querySelector('[data-a="next"]') || ov.querySelector('[data-a]');
   if (first) first.focus({ preventScroll: true });
 }
@@ -4907,6 +4971,8 @@ let LANG_CHECKED = false;
 function goHome() {
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Test from scratch · <button id="demoAgain">again</button> · <a href="${SITE_ROOT}">exit</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
+  
+  if (mlvRoute()) return;
   if (HASH_GAME) { const h = HASH_GAME; HASH_GAME = null; openGameFromLink(h); return; }
   if (!PULT_BOOTED) { PULT_BOOTED = true; if (whoBoot()) return; }
   if (PULT_HASH) { const w = PULT_HASH; PULT_HASH = null; if (w === 'new') { delete ROOT.pultPin; save(); try { sessionStorage.removeItem('govorilki-pult'); } catch (e) {} } screenPult(); return; }
@@ -4995,7 +5061,7 @@ function goHome() {
   HOMEUX.apply(tab);
   const on = (sel, fn) => { const el = $(sel); if (el) el.onclick = fn; };
   lastLine = greet();
-  on('#heroRyz', () => { hopEl($('#heroRyz')); say(greet()); });
+  on('#heroRyz', () => { hopEl($('#heroRyz')); mlHelloMaybe(say(greet())); });
   on('#albumBtn', () => { sfx.pop(); screenAlbum(); });
   on('#voiceBtn', () => { sfx.pop(); screenParents('voice'); });
   on('#friendBtn', () => { sfx.pop(); screenFriends(); });
@@ -5607,7 +5673,9 @@ const LQ = (() => {
     const n = (P.plays || {})[key] || 0, a = P.settings.age || 0, own = Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0));
     
     const m = /^math-/.test(key) && P.mskill && P.mskill.lv || 0;
-    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0);
+    
+    const r = /^(abc-|read-)/.test(key) && rskOf().lv || 0;
+    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0, r >= 4 ? 2 : r >= 2 ? 1 : 0);
   };
   function start(key, n = 6, train = false) {
     let last = (P.lqLast || {})[key];
@@ -8295,35 +8363,37 @@ function screenGuest() {
   app.innerHTML = `<div class="screen guest"><main class="stage scroll" id="stage"><div class="fam">
     <header class="g-hero"><span id="gHeroFace">${avaOk(g.av) ? kinFace(g, 'g-face') : pic(g.e)}</span><div><h1>${g.hi}</h1></div></header>
     <div class="gh-tiles" id="ghTiles">
-      <button class="gh-t" data-gt="gKidsH"><span class="emo">⭐</span><b id="ghKidsT">How things are with ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</b></button>
+      <button class="gh-t" data-gt="gKidsH"><span class="emo">⭐</span><b id="ghKidsT">How is ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)} doing</b></button>
       <button class="gh-t" data-gt="gHelloH"><span class="emo">💌</span><b>Send a hello</b></button>
       <button class="gh-t" data-gt="gChessH"><span class="emo">♟</span><b>Chess</b></button>
-      <button class="gh-t" data-gt="tale"><span class="emo">📖</span><b>A tale together</b></button>
-      <button class="gh-t" data-gt="gGamesH"><span class="emo">🎮</span><b>The grandchildren's games</b></button>
+      <button class="gh-t" data-gt="tale"><span class="emo">📖</span><b>Story together</b></button>
+      <button class="gh-t" data-gt="gGamesH"><span class="emo">🎮</span><b>Grandchildren’s games</b></button>
+      <button class="gh-t" data-gt="gGuideH"><span class="emo">📊</span><b>Report</b></button>
     </div>
     ${hgTop ? `<div id="hgBox">${homeGuide(true)}</div>` : ''}
-    <div class="fam-card"><h2 class="fam-h" id="gKidsH">How things are with ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
-    <div class="fam-card gh-hello"><h2 class="fam-h" id="gHelloH">💌 Send a hello</h2><p class="lead">Choose a picture and the words. The game will show your hello with your portrait and read it aloud when your grandchild opens the game.</p>
+    <div class="fam-card"><h2 class="fam-h" id="gKidsH">How is ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)} doing</h2><div id="gKidsBox" class="gk-box"></div><p class="fam-out" id="gPrOut"></p><div id="gHearts" class="g-hearts"></div></div>
+    <div class="fam-card gd-sec"><h2 class="fam-h" id="gGuideH">📊 Report</h2><p class="lead">What the grandchildren are getting right and what is still hard.</p><div id="gGuide"></div></div>
+    <div class="fam-card gh-hello"><h2 class="fam-h" id="gHelloH">💌 Send a hello</h2><p class="lead">Choose a picture and some words. The game will show your hello with your portrait and read it out loud when your grandchild opens the game.</p>
       <div class="gh-to" id="ghTo"></div>
       <div class="gh-st" id="ghSt">${HI_STICKERS.map((x, i) => `<button class="gh-s${i ? '' : ' on'}" data-st="${i}">${x}</button>`).join('')}</div>
       <div class="gh-ph" id="ghPh">${HELLO.map((x, i) => `<button class="big ghost gh-p" data-hp="${i}">${x}</button>`).join('')}</div>
       <p class="fam-out" id="ghOut"></p></div>
-    <div class="fam-card"><h2 class="fam-h" id="gGamesH">🎮 The grandchildren's games</h2><p class="lead">The same games the grandchildren play: play them yourself, then talk about them or play together. The grandchildren will see what you played.</p><div class="g-games" id="gGames">${guestGamesBtns(gLoad(GPROG_KEY, null))}</div></div>
+    <div class="fam-card"><h2 class="fam-h" id="gGamesH">🎮 Grandchildren’s games</h2><p class="lead">The same games as your grandchildren have: play them yourself, then talk about them or play together. The grandchildren will see what you played.</p><div class="g-games" id="gGames">${guestGamesBtns(gLoad(GPROG_KEY, null))}</div></div>
     <div class="fam-card"><h2 class="fam-h">♟ Invitations</h2><div id="gInv" class="g-inv"><p class="lead">Checking…</p></div></div>
-    <div class="fam-card"><h2 class="fam-h" id="gChessH">♟ Invite to play</h2>
+    <div class="fam-card"><h2 class="fam-h" id="gChessH">♟ Ask for a game</h2>
       <h3 class="fam-s">I play</h3><div class="fam-row" id="famSide">${sideChips(side)}</div>
       <div class="fam-who" id="gWho"></div><p class="fam-out" id="gOut"></p></div>
     ${gamesHTML()}
     <div class="fam-card"><h2 class="fam-h">How to play</h2><ol class="g-steps">
-      <li>Press “Play” or “Start game” — the board opens right here.</li>
-      <li>To move: press your piece, then the square with a dot.</li>
-      <li>${KID.gen}'s move will appear by itself and the phone will ping. There is no clock — take your time.</li>
+      <li>Tap “Play” or “Start a game” and the board opens right here.</li>
+      <li>To move, tap your piece, then a square with a dot.</li>
+      <li>${KID.gen}’s move will appear by itself and your phone will ping. There is no clock, so take your time.</li>
       <li>You can close the page and come back later: the game is saved.</li>
-      <li>${KID.name} is learning to speak clearly — call each other and ask the little one to say the moves out loud: “bishop”, “rook”, “king”.</li></ol></div>
+      <li>${KID.name} is learning to speak clearly. Call each other and ask them to say the moves out loud: “bishop”, “rook”, “king”.</li></ol></div>
     ${hgTop ? '' : homeGuide()}
     <div class="fam-card lang-pick" id="gLang"><h2 class="fam-h">🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</div>
     <button class="link-btn" id="gKids">Open the game for ${esc(kinWords(g.role, (gLoad(GPROG_KEY, null) || {}).kids).gen)}</button>
-    <button class="link-btn" id="gExit">This is the children's phone — leave this entry</button>
+    <button class="link-btn" id="gExit">This is the children’s phone: sign out</button>
   </div></main></div>`;
   bindGames($('.fam'));
   $('#famSide').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; side = b.dataset.s; $$('#famSide .chip').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
@@ -8378,6 +8448,7 @@ function screenGuest() {
   };
   const drawKids = () => {
     const b = $('#gKidsBox'); if (b) b.innerHTML = guestKidsHTML(pg);
+    GUIDE.mountGuest($('#gGuide'), pg);
     const gg = $('#gGames'); if (gg && pg) gg.innerHTML = guestGamesBtns(pg);
     if (pg) { const w = kinWords(g.role, pg.kids), h = $('#gKidsH'), k = $('#gKids'); if (h) h.textContent = "News of " + w.gen; if (k) k.textContent = "Open the game of " + w.gen; const kt = $('#ghKidsT'); if (kt) kt.textContent = "News of " + w.gen; }
   };
@@ -8405,7 +8476,7 @@ function screenGuest() {
   relaySub(m => {
     if (t !== tok) return;
     if (m.k === 'prog' && Array.isArray(m.kids) && (!pg || m.at > pg.at)) {
-      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6), ...(avaOk(k.a) ? { a: k.a } : {}) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), tr: k.tr === 'l' ? 'l' : 'r', cf: cleanCf(k.cf), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9), /^[a-z]{2,8}$/.test(x && x[2] || '') ? x[2] : '']).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13), /^[a-z0-9:_-]{2,40}$/i.test(x && x[3] || '') ? x[3] : '']).filter(x => x[0]) })) };
+      pg = { at: m.at, kin: (Array.isArray(m.kin) ? m.kin : []).slice(0, 12).map(k => ({ id: cleanS(k.id, 12), n: cleanS(k.n, 30), s: k.s ? 1 : 0, r: cleanS(k.r, 6), ...(avaOk(k.a) ? { a: k.a } : {}) })), kids: m.kids.slice(0, 8).map(k => ({ id: cleanS(k.id, 16), n: cleanS(k.n, 20), s: k.s ? 1 : 0, e: cleanS(k.e, 16), st: clampN(k.st), sk: clampN(k.sk, 9999), td: clampN(k.td, 99), wk: clampN(k.wk, 1e5), lv: clampN(k.lv, 999), hol: clampN(k.hol, 999), w7: (Array.isArray(k.w7) ? k.w7 : []).slice(0, 7).map(x => clampN(x, 99)), tr: k.tr === 'l' ? 'l' : 'r', cf: cleanCf(k.cf), gd: GUIDE.clean(k.gd), ls: (Array.isArray(k.ls) ? k.ls : []).slice(0, 5).map(x => [cleanS(x && x[0], 20), clampN(x && x[1], 9), /^[a-z]{2,8}$/.test(x && x[2] || '') ? x[2] : '']).filter(x => x[0]), last: (Array.isArray(k.last) ? k.last : []).slice(0, 8).map(x => [cleanS(x && x[0], 40), clampN(x && x[1], 3), clampN(x && x[2], 1e13), /^[a-z0-9:_-]{2,40}$/i.test(x && x[3] || '') ? x[3] : '']).filter(x => x[0]) })) };
       gStore(GPROG_KEY, pg); learnKids(pg); drawKids(); helloKids(); return;
     }
     if (m.k === 'cheer' && m.to === GUEST.who && m.i && !hearts.has(m.i)) {
@@ -8857,6 +8928,7 @@ function screenStory(k, i, o = {}) {
       <div class="story-q" id="stQ" hidden></div>
     </article>`, { back });
   const spans = $$('.ss');
+  { const h2 = $('.story h2'), ms = mlStripHTML(it.e); if (h2 && ms) { h2.insertAdjacentHTML('afterend', ms); mlStripBind($('.story')); } }
   
   async function readAloud() {
     const my = ++rd; reading++; hush();
@@ -10123,8 +10195,8 @@ function screenProfile() {
     ${pick("Beat", 'beat', c.beats, v => BEATS[v] ? BEATS[v].name : v)}
     ${pick("Frame", 'frame', c.frames, v => FRAMES[v] || v)}
     ${pick("Bike on the L-track", 'bike', c.bikes, v => v === 'neon' ? "Neon" : "Golden")}
-    <h3 class="pf-h">Badges ${(P.ach || []).length} of ${ACH.length}</h3>
-    <div class="ach">${ACH.map(a => { const on = (P.ach || []).includes(a.id); return `<div class="ac ${on ? 'on' : ''}" title="${esc(a.d)}"><span>${on ? a.e : '🔒'}</span><b>${esc(a.t)}</b><small>${esc(a.d)}</small></div>`; }).join('')}</div>
+    <h3 class="pf-h">Badges ${(P.ach || []).length} of ${ACH.filter(a => !a.hide || (P.ach || []).includes(a.id)).length}</h3>
+    <div class="ach">${ACH.filter(a => !a.hide || (P.ach || []).includes(a.id)).map(a => { const on = (P.ach || []).includes(a.id); return `<div class="ac ${on ? 'on' : ''}" title="${esc(a.d)}"><span>${on ? a.e : '🔒'}</span><b>${esc(a.t)}</b><small>${esc(a.d)}</small></div>`; }).join('')}</div>
     <p class="lead">Collect your season rewards on the “Season” card on the home screen. Titles, microphones, beats and frames stay yours forever.</p></div>`);
   talk(`This is your profile. Level ${lv}, ${belt.name}. Choose a title, a microphone and a beat!`);
   st.onclick = e => {
@@ -10495,14 +10567,14 @@ function piperNote() {
   if (!n) { n = document.createElement('div'); n.id = 'pvNote'; n.className = 'pv-note'; document.body.append(n); }
   n.textContent = `🔊 Downloading the friend's voice (60 MB, only once): ${Math.round(PIPER.pct * 100)}%`;
 }
-function piperCall(text, fix) {
+function piperCall(text, fix, voiceAs) {
   if (!PIPER.w) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
     PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
-  const voice = piperVoice();
+  const voice = voiceAs || piperVoice();
   return new Promise((res, rej) => {
     const id = ++PIPER.n;
     PIPER.wait[id] = d => {
@@ -10819,27 +10891,28 @@ var PAR_BACK = null;
 function screenParents(focus) {
   newScreen();
   shell("For grown-ups", `<div class="parents">
+    <section class="psec gd-sec" id="guideSec"><h2>📊 Report</h2><p class="muted">What is going well and what is still hard — briefly, for each child.</p><div id="guideBox"></div></section>
     <section class="psec"><h2>Families</h2>
       <p>Now: <b>${esc(fam().name)}</b> — ${esc(KIDS.map(id => ROOT.profiles[id].settings.name).join(', '))}${fam().grands.length ? '; ' + esc(fam().grands.map(g => g.name).join(', ')) : ''}.</p>
       ${(() => { const lg = P.likeG || {}, up = Object.keys(lg).filter(k => lg[k] > 0).map(gameName).filter(Boolean), dn = Object.keys(lg).filter(k => lg[k] < 0).map(gameName).filter(Boolean);
         return up.length || dn.length ? `<p class="muted">${up.length ? "👍 Likes: " + esc(up.join(', ')) + '. ' : ''}${dn.length ? "👎 Doesn't like: " + esc(dn.join(', ')) + '.' : ''}</p>` : ''; })()}
       ${(P.battles || []).length ? `<p class="muted">⚔️ Battles: ${P.battles.filter(b => b.win).length} wins out of ${P.battles.length}.</p>` : ''}
-      <div class="prow-btns"><button class="big" id="pultBtn">👑 Family control panel: all accounts</button><button class="big ghost" id="kidSetup">💛 Interests and games: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Invite relatives</button><button class="big ghost" id="famInvF">👪 Invite another family</button><button class="big ghost" id="famEdit">Edit family</button><button class="big ghost" id="famAll">All families</button><button class="big ghost" id="famLg">🏆 Family league</button></div>
+      <div class="prow-btns"><button class="big" id="pultBtn">👑 Family control panel: all accounts</button><button class="big ghost" id="kidSetup">💛 Interests and games: ${esc(P.settings.name)}</button><button class="big ghost" id="famInvP">📨 Invite relatives</button><button class="big ghost" id="famInvF">👪 Invite another family</button><button class="big ghost" id="famEdit">Edit the family</button><button class="big ghost" id="famAll">All families</button><button class="big ghost" id="famLg">🏆 Family league</button></div>
     </section>
     <section class="psec lang-pick" id="langSec"><h2>🌐 ${RU('Язык · Language · Língua')}</h2>${langChips()}</section>
     <section class="psec"><h2>Settings: ${esc(P.settings.name)}</h2>
-      <label class="prow" for="nameIn">Child's name (the friend will use it to talk to them)
-        <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="for example, Masha" value="${esc(P.settings.name || '')}"></label>
-      <label class="sw" for="voiceIn"><input id="voiceIn" type="checkbox" ${P.settings.voice ? 'checked' : ''}>The friend talks out loud</label>
-      <label class="sw" for="slowIn"><input id="slowIn" type="checkbox" ${P.settings.rate < 1 ? 'checked' : ''}>Speak even slower</label>
+      <label class="prow" for="nameIn">Child’s name (the friend will use it)
+        <input id="nameIn" type="text" maxlength="20" autocomplete="off" placeholder="for example, Maisie" value="${esc(P.settings.name || '')}"></label>
+      <label class="sw" for="voiceIn"><input id="voiceIn" type="checkbox" ${P.settings.voice ? 'checked' : ''}>The friend speaks out loud</label>
+      <label class="sw" for="slowIn"><input id="slowIn" type="checkbox" ${P.settings.rate < 1 ? 'checked' : ''}>Speak even more slowly</label>
       <label class="prow" for="piperSel">App voice (free, works without internet) <select id="piperSel">${PIPER_VOICES.map(([v, n]) => `<option value="${v}" ${engineNow() === 'piper' && piperVoice() === v ? 'selected' : ''}>${n}</option>`).join('')}<option value="device" ${engineNow() === 'device' ? 'selected' : ''}>phone voice</option></select></label>
       <p class="muted" id="piperState"></p>
       <label class="prow" for="devVoice">Phone voice (free) <select id="devVoice"><option value="">— automatic —</option></select></label>
       <label class="sw" for="sfxIn"><input id="sfxIn" type="checkbox" ${P.settings.sfx ? 'checked' : ''}>Game sounds</label>
-      <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>A day without reading costs 10 stars (a reading lesson, the book or a reading game counts for the day)</label>
+      <label class="sw" for="rfIn"><input id="rfIn" type="checkbox" ${P.settings.readFine === false ? '' : 'checked'}>A day without reading costs 10 stars (reading, a book or a reading game, and the day counts)</label>
       ${readFinesHTML()}
       <label class="sw" for="micIn"><input id="micIn" type="checkbox" ${ROOT.micOff ? '' : 'checked'}>The microphone checks that the child spoke out loud and blew</label>
-      <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Check which word was said (the browser's speech recognition: the sound is processed by Google in Chrome or by Apple in Safari)</label>${srHelpHTML()}${warmSetHTML()}
+      <label class="sw" for="srIn"><input id="srIn" type="checkbox" ${ROOT.srOff ? '' : 'checked'}>Check which word was said (the browser’s speech recognition: the sound is processed by Google in Chrome or Apple in Safari)</label>${srHelpHTML()}${warmSetHTML()}
       <p class="muted" id="voiceState"></p>
       <div class="prow-btns"><button class="big ghost" id="testVoice">Test the voice</button></div>
     </section>
@@ -10850,7 +10923,7 @@ function screenParents(focus) {
       <p class="muted">Days are counted from ${fmtDate(P.goal.start || dayKey())}. The game only shows the way to the goal; the decision about the gift is yours.</p>` : ''}
     </section>` : ''}
     ${tripSetHTML()}
-    <section class="psec" id="elSec"><h2>The friend's voice: ElevenLabs</h2>
+    <section class="psec" id="elSec"><h2>Friend’s voice: ElevenLabs</h2>
       ${EMBEDDED ? "<p>Here, inside claude.ai, the ElevenLabs voice cannot be connected. Open the app at <a href=\"https://govorilki.com/play/\" target=\"_blank\" rel=\"noopener\">govorilki.com/play</a> and tap the “Voice” button on the home screen.</p>" : `<p class="muted">A natural voice instead of the phone’s voice, shared by all the children on this phone. You need an API key from your ElevenLabs account (Profile → API Keys). The key is kept only on this device and is sent only to ElevenLabs. Phrases that have been spoken are saved on the phone: repeats are free and play without internet.</p>
       <label class="prow" for="elKey">API key <input id="elKey" type="password" autocomplete="off" value="${esc(ROOT.eleven.key)}"></label>
       <label class="prow" for="elFind">Find a voice by name <input id="elFind" type="text" maxlength="40" autocomplete="off" value="Hope"></label>
@@ -10861,14 +10934,14 @@ function screenParents(focus) {
       <div class="prow-btns"><button class="big ghost" id="elTest">Test</button><button class="big ghost danger" id="elOff">Turn off</button></div>`}
     </section>
     <section class="psec"><h2>Progress</h2>
-      <p>Stars: <b>${P.stars}</b>. Stickers: <b>${stickerCount()}</b> of ${STK().length}. Progress is stored only on this device.</p>
+      <p>Stars: <b>${P.stars}</b>. Stickers: <b>${stickerCount()}</b> of ${STK().length}. Progress is kept only on this device.</p>
       <div class="prow-btns"><button class="big ghost" id="expBtn">Copy progress</button><button class="big ghost" id="impBtn">Paste progress</button></div>
       <div id="impBox" hidden><textarea id="impTxt" rows="3" placeholder="Paste the copied progress here"></textarea><div class="prow-btns"><button class="big" id="impGo">Load</button></div></div>
-      <p class="muted" id="expState">The whole family is copied: children and grandparents. Handy when moving to another device: copy here, paste there.</p>
-      <div class="prow-btns" id="resetRow"><button class="big ghost danger" id="resetBtn">Start over</button></div>
-      <div id="resetAsk" hidden><p>Erase all the stars and stickers?</p><div class="prow-btns"><button class="big danger" id="resetYes">Yes, erase</button><button class="big ghost" id="resetNo">Cancel</button></div></div>
+      <p class="muted" id="expState">The whole family is copied: children, grandmas and grandpas. Useful when you move to another device: copy here, paste there.</p>
+      <div class="prow-btns" id="resetRow"><button class="big ghost danger" id="resetBtn">Start again</button></div>
+      <div id="resetAsk" hidden><p>Wipe all the stars and stickers?</p><div class="prow-btns"><button class="big danger" id="resetYes">Yes, wipe them</button><button class="big ghost" id="resetNo">Cancel</button></div></div>
     </section>
-    <section class="psec"><h2>How to practise: ${esc(P.settings.name)}</h2><p class="muted">The profile is switched at the top of the home screen. Each child has their own stars, calendar and settings.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
+    <section class="psec"><h2>How to practise: ${esc(P.settings.name)}</h2><p class="muted">The profile is switched at the top of the main screen. Each child has their own stars, calendar and settings.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
       <li>The priority right now is the SH, CH and J sounds and the R at the end of a word: every day “Speech” has exercises for the SH, CH and J sounds and one game on them or on the R at the end of a word.</li>
       <li>The home screen has three lessons for today. “Speech”: 2 breathing exercises, the whole tongue workout and 2 games with the R sound, about 15 minutes. “Reading” and “Maths”: 4 games each, about 10 minutes. Each lesson can be done again: the tasks will be different.</li>
       <li>The letters are coloured like in a first reading book: vowels are red, consonants are blue. We read by syllables: “Letter Friends” (M + A = MA), then words.</li>
@@ -10921,7 +10994,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); SB.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); RSK.settingsRow(); SB.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -11014,6 +11087,7 @@ function screenParents(focus) {
     };
     $('#elOff').onclick = () => { ROOT.eleven = { key: '', voice: '', voiceName: '' }; save(); screenParents(); };
   }
+  GUIDE.mountFam($('#guideBox'));
   SETUI.build(focus);
   LETTERS.row();
 }
@@ -11645,7 +11719,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
     }).join('');
   };
   drawSnd(); drawLikes(); drawMods();
-  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('afterend', `<section class="psec">${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
+  const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('beforebegin', `<section class="psec ks-langs"><h2>Languages</h2>${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
   const resuggest = () => { if (!modsTouched) { mods = suggestMods(track, snd, likes); drawMods(); } };
   $('#ksSnd').onclick = e => {
     const b = e.target.closest('[data-snd]'); if (!b) return; const k = b.dataset.snd; sfx.tick();
@@ -13883,18 +13957,19 @@ function recentName(key) {
 }
 function noteRecent(key, stars) {
   const n = recentName(key); if (!n) return;
+  try { GUIDE.note(key, stars); } catch (e) {}
   P.recent = [[n, stars, Date.now(), key], ...(P.recent || []).filter(x => Date.now() - x[2] < 7 * 864e5)].slice(0, 12);
 }
 
 const weekOf = pr => [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return dayTotalOf(pr, dayKey(d)); });
 const todayLessons = pr => { const v = pr.days[dayKey()], c = v === true ? { speech: 1 } : (v || {}), L = pr.settings.track === 'l' ? LESSONS_L : LESSONS_R; return Object.keys(c).filter(k => c[k] > 0 && L[k]).map(k => [L[k].name, c[k], k]); };
-const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, tr: pr.settings.track === 'l' ? 'l' : 'r', w7: weekOf(pr), ls: todayLessons(pr), last: (pr.recent || []).slice(0, 8).map(x => [String(x[0]).slice(0, 40), x[1], x[2], x[3] || '']), cf: { a: st.age || 0, md: st.mods || null, off: st.off || [], so: st.sounds || null, lk: (st.likes || []).slice(0, 30) } }; });
+const progSnap = () => KIDS.map(id => { const pr = ROOT.profiles[id], st = pr.settings; return { id, n: st.name, s: st.gender === 'f' ? 1 : 0, e: st.friend || 'tiger', st: pr.stars, sk: streakOf(pr), td: dayTotalOf(pr, dayKey()), wk: weekStars(pr), lv: lvlOf(pr.stars), hol: Object.keys(pr.hol || {}).filter(k => { const p = pr.hol[k]; return p.story && p.words && p.draw; }).length, tr: pr.settings.track === 'l' ? 'l' : 'r', w7: weekOf(pr), ls: todayLessons(pr), last: (pr.recent || []).slice(0, 8).map(x => [String(x[0]).slice(0, 40), x[1], x[2], x[3] || '']), cf: { a: st.age || 0, md: st.mods || null, off: st.off || [], so: st.sounds || null, lk: (st.likes || []).slice(0, 30) }, gd: (() => { try { return GUIDE.digest(pr); } catch (e) { return null; } })() }; });
 const kinOn = () => { const f = fam(); return !!(f && f.grands.length && !guestOn()); };
 function postProg(force) {
   if (!kinOn()) return;
   ROOT.progSent = ROOT.progSent || {};
   const f = fam(), kids = progSnap(), kin = f.grands.map(g => ({ id: g.id, n: g.name, s: g.she ? 1 : 0, r: roleOf(g)[0], ...(avaOk(g.av) ? { a: g.av } : {}) }));
-  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n, (k.last[0] || [])[2]]), kin]), ps = ROOT.progSent[f.id] || {};
+  const sig = JSON.stringify([kids.map(k => [k.st, k.sk, k.td, k.wk, k.hol, k.e, k.n, (k.last[0] || [])[2], k.gd]), kin]), ps = ROOT.progSent[f.id] || {};
   if (!force && sig === ps.sig && Date.now() - (ps.at || 0) < 3 * 3600e3) return;
   relayPost({ k: 'prog', by: 'kids', kids, kin }).then(ok => { if (ok) { ROOT.progSent[f.id] = { sig, at: Date.now() }; save(); } });
 }
@@ -15383,6 +15458,257 @@ const MSK = (() => {
  
 
 
+const RSK = (() => {
+  
+  const LONGW = [["crocodile", '🐊'], ["helicopter", '🚁'], ["tortoise", '🐢'], ["snowman", '⛄'], ["traffic light", '🚦'], ["penguin", '🐧'],
+    ["strawberry", '🍓'], ["tractor", '🚜'], ["aeroplane", '✈️'], ["butterfly", '🦋'], ["grapes", '🍇'], ["carrot", '🥕'], ["sunflower", '🌻'],
+    ["bicycle", '🚲'], ["computer", '💻'], ["phone", '📱'], ["guitar", '🎸'], ["chocolate", '🍫'], ["kangaroo", '🦘'], ["octopus", '🐙'],
+    ["flamingo", '🦩'], ["orange", '🍊'], ["drum", '🥁'], ["violin", '🎻'], ["volcano", '🌋'], ["microscope", '🔬'], ["astronaut", '🧑‍🚀'], ["athlete", '🏃']];
+  const PHR = [["red apple", '🍎'], ["green apple", '🍏'], ["full moon", '🌕'], ["thin crescent moon", '🌙'], ["red car", '🚗'],
+    ["blue car", '🚙'], ["hot tea", '☕'], ["piece of ice", '🧊'], ["ripe watermelon", '🍉'], ["yellow banana", '🍌'], ["fire engine", '🚒'],
+    ["ambulance", '🚑'], ["football", '⚽'], ["basketball", '🏀'], ["snowy mountain", '🏔️'], ["fiery volcano", '🌋'],
+    ["sea wave", '🌊'], ["night sky", '🌌'], ["old castle", '🏰'], ["tall house", '🏢'], ["umbrella in the rain", '☔'], ["clock with an alarm", '⏰'],
+    ["book on a shelf", '📚'], ["letter in an envelope", '✉️']];
+  
+  const SENT = [["Fish swim in the …", "water", "wardrobe", "sky"], ["In winter, white … lies on the ground.", "snow", "soup", "table"], ["A bird sits on a branch and … loudly.", "sings", "cooks", "bakes"],
+    ["We cut bread with a sharp …", "knife", "cloud", "sock"], ["At night, … shine in the sky.", "stars", "spoons", "boots"], ["To keep dry, take your …", "umbrella", "ball", "cheese"],
+    ["A cow gives us …", "milk", "petrol", "paper"], ["In summer, … ripen in the garden.", "apples", "hats", "shoes"], ["A plane flies high in the …", "sky", "saucepan", "pocket"],
+    ["In the morning I brush my …", "teeth", "rainbows", "clouds"], ["Bees collect …", "nectar", "stones", "nails"], ["The footballer kicked the …", "ball", "moon", "soup"],
+    ["Without water, flowers …", "wilt", "sing", "run"], ["A train goes along the …", "rails", "clouds", "roofs"], ["In a library you can borrow …", "a book", "a cow", "rain"],
+    ["The cook makes lunch in the …", "kitchen", "moon", "roof"], ["In autumn, … fall from the trees.", "leaves", "fish", "saucepans"], ["A doctor treats …", "people", "shoes", "clouds"],
+    ["A cat catches …", "mice", "buses", "stars"], ["To call Grandma, I take the …", "phone", "fork", "pillow"], ["We open … with a key.", "the door", "the sky", "an apple"],
+    ["In the morning the sun rises in the …", "east", "kitchen", "shelf"], ["In winter the bear … soundly.", "sleeps", "sings", "swims"], ["An artist paints …", "a picture", "porridge", "rain"],
+    ["Mum put the soup in the …", "bowl", "boot", "envelope"], ["A musician plays the …", "violin", "plate", "pillow"]];
+  
+  const TXT = [
+    ["In the morning Misha took an umbrella with him. In the afternoon it rained heavily, but Misha stayed dry.", "Why did Misha not get wet?", "He had an umbrella.", "It did not rain.", "He stayed at home."],
+    ["Anya planted a seed in a pot. She watered it every day. A week later a green shoot appeared.", "What appeared a week later?", "A shoot.", "An apple.", "The kitten."],
+    ["Barsik the cat climbed a tall tree. He could not get down and mewed loudly. Dad brought a ladder.", "Why did Dad bring a ladder?", "To get the cat down from the tree.", "To paint the house.", "To pick apples."],
+    ["On Saturday the children went to the ice rink. The ice was smooth and shiny. Petya fell, but got up quickly and laughed.", "Where did the children go?", "To the ice rink.", "To the river.", "To the cinema."],
+    ["It is Lena's birthday. Mum baked a cake, and her friends brought presents. Lena blew out eight candles.", "How old did Lena turn?", "Eight.", "Five.", "Ten."],
+    ["A hedgehog found a mushroom in the forest. He stuck it on his spines and carried it home. At home the hedgehog put the mushroom out to dry.", "How did the hedgehog carry the mushroom?", "On his spines.", "In a basket.", "In his teeth."],
+    ["Dima forgot his exercise book at home. The teacher said he could bring it tomorrow. In the evening Dima put the book straight into his rucksack.", "What did Dima do in the evening?", "He put the book in his rucksack.", "He went out to play.", "He lost his rucksack."],
+    ["It was hot on the beach. Sasha was building a sandcastle. Suddenly a big wave washed the tower away.", "What happened to the tower?", "A wave washed it away.", "The wind carried it off.", "A dog broke it."],
+    ["Grandma was knitting a scarf. The kitten played with the ball of wool and tangled all the threads. Grandma was not cross, she laughed.", "Who tangled the threads?", "The kitten.", "Grandma.", "The puppy."],
+    ["In the evening it got dark in the forest. The owls woke up and flew out to hunt. And the hares hid in the bushes.", "Who flew out to hunt?", "The owls.", "The hares.", "The swallows."],
+    ["Masha and Kolya were building a den. Kolya brought long sticks, and Masha brought fir branches. By lunchtime the den was ready.", "What did Masha bring?", "Fir branches.", "Long sticks.", "Lunch."],
+    ["Igor does swimming. Three times a week he goes to the swimming pool. Yesterday he swam a hundred metres without stopping.", "How many metres did Igor swim yesterday?", "A hundred.", "Ten.", "A thousand."]
+  ];
+  const BIG = [
+    ["A lighthouse stands on a tall cliff right by the sea. At night its bright light can be seen from far away. Ship captains look at this light and understand where the shore is and where the dangerous rocks are. In the old days a keeper lived in the lighthouse: every evening he climbed the steep stairs and lit the fire. Now the lamp switches on by itself.", "Why do ship captains need the light of the lighthouse?", "To know where the shore and the rocks are.", "To catch fish.", "To read at night."],
+    ["The octopus is an amazing sea animal. It has eight flexible arms, and each one has many suckers. The octopus can change colour and hide among the rocks. If an enemy swims too close, the octopus lets out a cloud of ink and swims away quickly.", "What does the octopus do when an enemy is near?", "It lets out ink and swims away.", "It shouts loudly.", "It buries itself in the sand."],
+    ["A new library has opened in our town. It has a hall with soft armchairs, where you can read as long as you like. On Saturdays there are meetings with writers. Yesterday my class and I listened to a writer telling us about his new book about a journey in a hot-air balloon.", "What was the writer's new book about?", "About a journey in a hot-air balloon.", "About school.", "About football."],
+    ["Bees live in big families in hives. Each family has one queen, who lays eggs. Worker bees fly out for nectar, build honeycomb from wax and guard the hive. When a bee finds lots of flowers, she comes back and dances a special dance: this is how she shows the others where to fly.", "Why does the bee dance?", "She shows where to fly for nectar.", "She is happy about the sun.", "She asks the queen to go for a walk."],
+    ["In winter many birds fly away to the south, where it is warm and there is plenty of food. But sparrows, tits and bullfinches stay. It is hard for them to find food under the snow. So the children from our school made bird feeders and every morning they fill them with seeds. Now it is always cheerful and noisy by the classroom windows.", "What did the children do for the birds?", "Bird feeders.", "Nesting boxes in the south.", "A snow slide."],
+    ["A volcano is a mountain with very hot melted rock inside it. Sometimes it rises up and pours out of the crater. This fiery river is called lava. As it cools, lava turns into hard stone. Some islands in the ocean appeared exactly like this, from cooled lava.", "How did some islands appear?", "From cooled lava.", "From sand and shells.", "People built them."]
+  ];
+  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a === 7 ? 3 : a === 8 ? 4 : a === 9 ? 5 : 6;
+  const NOCAP = s => s.toUpperCase();
+  const opt = (v, html) => ({ v, html: html || esc(v) });
+  const near = (pool, right, key, n = 2) => sample(pool.filter(x => key(x) !== key(right)), n);
+  
+  const L = [
+    { n: "Letters and sounds", ex: "A, M, S", g: () => {
+      const pool = ABC.filter(a => !RU('ЪЬ').includes(a[0])), x = pickOne(pool);
+      return { hear: `Find the letter ${lsay(x[0])}.`, a: x[0], opts: shuffle([x, ...near(pool, x, y => y[0])]).map(y => opt(y[0], Lspan(y[0]))), after: `${cap(lsay(x[0]))}. ${cap(x[1])}.`, big: 1 };
+    } },
+    { n: "Open syllables", ex: "MA, PO, LU", g: () => {
+      if (M_LIST) { const s = pickOne(M_LIST); return { hear: `Find: ${sylSay(s)}.`, a: s, opts: shuffle([s, ...sample(M_LIST.filter(x => x !== s), 2)]).map(x => opt(x)), after: sylSay(s), big: 1 }; }
+      let c, s; do { c = pickOne(M_CONS); s = c + pickOne(M_VOW); } while (M_BAD.includes(s));
+      const others = shuffle(M_VOW.map(v => c + v).filter(x => x !== s && !M_BAD.includes(x))).slice(0, 2);
+      return { hear: `Find the syllable ${sylSay(s)}.`, a: s, opts: shuffle([s, ...others]).map(x => opt(x, [...x].map(Lspan).join(''))), after: sylSay(s), big: 1 };
+    } },
+    { n: "Closed syllables", ex: "AM, ON, CAT", g: () => {
+      if (M_LIST) { const pool = [...LROWS[3], ...LROWS[4]].map(NOCAP), s = pickOne(pool); return { hear: `Find: ${sylSay(s)}.`, a: s, opts: shuffle([s, ...sample(pool.filter(x => x !== s), 2)]).map(x => opt(x)), after: sylSay(s), big: 1 }; }
+      const v = pickOne(M_VOW), c = pickOne(M_CONS), c2 = pickOne(M_CONS.filter(x => x !== c)), v2 = pickOne(M_VOW.filter(x => x !== v));
+      const set = Math.random() < .5 ? [v + c, c + v, v + c2] : [c + v + c2, c2 + v + c, c + v2 + c2];
+      return { hear: `Find the syllable ${sylSay(set[0])}.`, a: set[0], opts: shuffle(set).map(x => opt(x, [...x].map(Lspan).join(''))), after: sylSay(set[0]), big: 1 };
+    } },
+    { n: "Short words", ex: "CAT, FISH", g: () => {
+      const x = pickOne(RWORDS), w = x[0].replace(/-/g, '');
+      return { show: `<b class="rk-w">${esc(w)}</b>`, ask: "Read the word and find the picture.", a: x[1], opts: shuffle([x, ...near(RWORDS, x, y => y[1])]).map(y => opt(y[1], pic(y[1]))), after: cap(w.toLowerCase()) + '!', aloud: w.toLowerCase(), pics: 1 };
+    } },
+    { n: "Long words", ex: "CROCODILE, HELICOPTER", g: () => {
+      const x = pickOne(LONGW);
+      return { show: `<b class="rk-w">${esc(NOCAP(x[0]))}</b>`, ask: "Read the word and find the picture.", a: x[1], opts: shuffle([x, ...near(LONGW, x, y => y[1])]).map(y => opt(y[1], pic(y[1]))), after: cap(x[0]) + '!', aloud: x[0], pics: 1 };
+    } },
+    { n: "Phrases", ex: "green apple", g: () => {
+      const i = ri(0, PHR.length - 1), x = PHR[i], pair = i < 6 ? PHR[i ^ 1] : null;
+      const others = pair ? [pair, pickOne(PHR.filter(y => y !== x && y !== pair))] : near(PHR, x, y => y[1]);
+      return { show: `<b class="rk-p">${esc(cap(x[0]))}</b>`, ask: "Read it and find the picture.", a: x[1], opts: shuffle([x, ...others]).map(y => opt(y[1], pic(y[1]))), after: cap(x[0]) + '.', aloud: x[0], pics: 1 };
+    } },
+    { n: "Sentences", ex: "Fish swim in water.", g: () => {
+      const [s, a, ...o] = pickOne(SENT);
+      return { show: `<span class="rk-s">${esc(s).replace('…', '<b class="rk-gap">…</b>')}</span>`, ask: "Read it and choose the word that fits.", a, opts: shuffle([a, ...o]).map(x => opt(x)), after: s.replace('…', a) + '.' };
+    } },
+    { n: "Text and question", ex: "2–3 sentences", g: () => {
+      const [t, q, a, ...o] = pickOne(TXT);
+      return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: "Read the text and answer the question.", a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1 };
+    } },
+    { n: "Big texts", ex: "reading, understanding, faster", g: () => {
+      const [t, q, a, ...o] = pickOne(BIG);
+      return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: "Read the text and answer the question.", a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1, words: wordsIn(t) };
+    } }
+  ];
+  
+  const S = () => rskOf(P, LANG);
+  const age = () => P.settings.age || (Q() ? 9 : 6);
+  
+  const startLv = () => mlLearns(LANG) ? 1 : AGE_LV(age());
+  const has = () => !!S().lv;
+  const lv = () => Math.max(1, Math.min(L.length, S().lv || startLv()));
+  
+  const big = () => age() >= 8;
+  const early = () => big() && lv() <= 5;
+  const train = () => IS_RU ? "Practising Russian reading" : "Practising reading";
+  const stepTxt = (l = lv()) => `Step ${l} of ${L.length} · ${L[l - 1].n}`;
+  function setLv(n) { S().lv = Math.max(1, Math.min(L.length, n)); save(); }
+  function make(l) { const t = L[l - 1].g(); t.lv = l; return t; }
+  
+  function strip(n) {
+    if (!big()) return LQ.start('r-skill', n);
+    const box = document.createElement('div'); box.className = 'rk-bar'; box.innerHTML = Array.from({ length: n }, () => '<i></i>').join('');
+    const stage = $('#stage'); if (stage) stage.prepend(box);
+    let k = 0;
+    return { intro: '', end: "Done!", hit() { const i = box.children[k++]; if (i) i.classList.add('on'); }, miss() {} };
+  }
+  
+  function ask(t, cb) {
+    const b = $('#rkBox'); b.dataset.a = t.a; b.dataset.k = +(b.dataset.k || 0) + 1; b.dataset.lv = t.lv;
+    const mic = t.aloud && srOk();
+    b.innerHTML = `${t.show ? `<div class="rk-q ${t.long ? 'long' : ''}">${t.show}</div>` : `<button class="rk-hear" id="rkHear">${ICON.speaker}<span>Hear it again</span></button>`}
+      ${t.ask ? `<p class="rk-ask">${t.ask}</p>` : ''}
+      <div class="rk-opts ${t.pics ? 'pics' : t.big ? 'lets' : 'txt'}">${t.opts.map(o => `<button class="rk-o" data-v="${esc(o.v)}">${o.html}</button>`).join('')}</div>
+      ${mic ? "<button class=\"chip rk-mic\" id=\"rkMic\"><span class=\"emo\">🎤</span>I'll read it aloud</button>" : ''}`;
+    b.querySelector('.rk-opts').onclick = e => { const o = e.target.closest('.rk-o'); if (o) cb(o.dataset.v, o); };
+    const h = $('#rkHear'); if (h) h.onclick = () => talk(t.hear);
+    const m = $('#rkMic');
+    if (m) m.onclick = async () => {
+      if (m.disabled) return; m.disabled = true; m.classList.add('ear'); sfx.tick(); hush();
+      const r = await hear(t.aloud, { maxMs: 6000 }).catch(() => ({}));
+      if (!m.isConnected) return; m.classList.remove('ear'); m.disabled = false;
+      if (r && r.ok) cb(t.a, b.querySelector(`.rk-o[data-v="${CSS.escape(t.a)}"]`), true);
+      else talk("Couldn't hear you. Choose an answer.");
+    };
+    return t.hear || t.ask;
+  }
+  const mark = (el, good) => { if (el) el.classList.add(good ? 'right' : 'wrong'); };
+  
+  function check() {
+    const t = newScreen(); let l = startLv(), k = 0, task = null, busy = false;
+    const N = 8, hit = {}, miss = {};
+    shell("Reading at your level", `<div class="rk"><p class="rk-step" id="rkStep"></p><div id="rkBox"></div></div>`);
+    const q = strip(N);
+    function next() {
+      busy = false; task = make(l); $('#rkStep').textContent = `Task ${k + 1} of ${N}`;
+      const line = ask(task, answer);
+      talk((k === 0 ? (big() ? `${IS_RU ? "Let's see how you read Russian." : "Let's see how you read."} Eight tasks, it isn't an exam: this is how we find tasks just right for you. ` : "Let's see how you read! Eight tasks: mistakes are fine, that's how we find your level. ") : '') + line);
+    }
+    async function answer(v, el) {
+      if (busy) return; busy = true;
+      const good = String(v) === String(task.a);
+      (good ? hit : miss)[l] = ((good ? hit : miss)[l] || 0) + 1;
+      if (good) { sfx.good(); mark(el, 1); l = Math.min(L.length, l + (k < 2 ? 2 : 1)); }
+      else { sfx.pop(); mark(el, 0); mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); l = Math.max(1, l - 1); }
+      q.hit(el, '');
+      await talk(good ? pickOne(["Correct!", "Yes!", "Exactly!"]) : "Never mind! On we go."); if (t !== tok) return;
+      k++;
+      if (k < N) { later(next, 300); return; }
+      const ok = Object.keys(hit).map(Number).filter(x => hit[x] > (miss[x] || 0));
+      setLv(ok.length ? Math.max(...ok) : 1); S().checked = dayKey(); save();
+      finish({ key: 'r-skill', stars: 3, line: `${q.end} ${stepTxt()}. Now the tasks will be just right for you.`, again: () => play() });
+    }
+    next();
+  }
+  const head = l => `<div class="mk-head rk-head"><button class="chip" id="rkDown">🐢 Easier</button><span class="mk-rank"><b>Step ${l} of ${L.length}</b><small>${esc(L[l - 1].n)}${big() && l <= 5 ? ' · ' + train() : ''}</small></span><button class="chip" id="rkUp">🚀 Harder</button></div>`;
+  
+  function play() {
+    if (!has()) { check(); return; }
+    const t = newScreen(); let l = lv(), k = 0, task = null, tries = 0, streak = 0, missRun = 0, right = 0, busy = false;
+    const N = 8, l0 = l, UP = 4; let mlShown = false;
+    shell("Reading at your level", `<div class="rk">${head(l)}<div id="rkBox"></div><button class="link-btn" id="rkRe">🔁 Check again</button></div>`);
+    const q = strip(N);
+    const reHead = () => { $('.rk-head').outerHTML = head(l); bindHead(); };
+    function bindHead() {
+      $('#rkDown').onclick = () => { if (l <= 1) return; sfx.pop(); setLv(l - 1); play(); };
+      $('#rkUp').onclick = () => { if (l >= L.length) return; sfx.pop(); setLv(l + 1); play(); };
+    }
+    bindHead();
+    $('#rkRe').onclick = () => { sfx.pop(); delete S().lv; check(); };
+    function next() {
+      busy = false; tries = 0; task = make(l);
+      const line = ask(task, answer);
+      talk((k === 0 && q.intro ? q.intro + ' ' : '') + line);
+    }
+    async function answer(v, el) {
+      if (busy) return;
+      if (String(v) === String(task.a)) {
+        busy = true; sfx.good(); mark(el, 1); q.hit(el, '');
+        if (tries === 0) { right++; missRun = 0; streak++; } else { streak = 0; missRun++; }
+        let line = pickOne(["Correct!", "Yes!", "Exactly!", "That's right!"]);
+        if (task.after && !task.long) line += ' ' + task.after;
+        if (streak >= UP && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + "You read brilliantly! On to the next step up."; }
+        else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + "Let's go over the step below again."; }
+        await talk(line); if (t !== tok) return;
+        
+        if (!mlShown && task.pics && mlStripHTML(task.a)) {
+          mlShown = true; const x = mlWord(task.a), bx = $('#rkBox');
+          bx.insertAdjacentHTML('beforeend', mlStripHTML(task.a)); mlStripBind(bx);
+          for (const c of myLangs().filter(c => c !== LANG && x.w[c])) { await mlSay(c, x.w[c]); if (t !== tok) return; }
+          await new Promise(r => later(r, 700)); if (t !== tok) return;
+        }
+        return step();
+      }
+      tries++; streak = 0; sfx.oops(); if (el) { wiggle(el); el.disabled = true; }
+      if (tries === 1) { q.miss(null); talk(task.show ? "Almost! Read it again, don't rush." : "Almost! Listen again. " + task.hear); return; }
+      busy = true; missRun++; mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); q.hit(null, '');
+      await talk("Here is the right answer. Never mind, on we go!"); if (t !== tok) return;
+      if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); await talk("Let's go over the step below again."); if (t !== tok) return; }
+      return step();
+    }
+    function step() {
+      k++;
+      if (k < N) { later(next, 350); return; }
+      S().last = dayKey(); save();
+      finish({ key: 'r-skill', stars: right >= 7 ? 3 : right >= 5 ? 2 : 1, line: `${q.end} ${stepTxt(l)}.` + (l > l0 ? ' ' + "New step!" : ''), again: () => play() });
+    }
+    next();
+  }
+  
+  function plan(n, s) {
+    const l = lv(), o = big(), alt = a => a[(n + s) % a.length];
+    const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()); };
+    const pr = IS_RU && prState().at < PRIMER.length ? 'primer' : 'read-merge';
+    const G = l === 1 ? (o ? ['abc-find'] : ['abc-find', 'abc-first'])
+      : l === 2 ? [o ? 'l-syll' : pr]
+      : l === 3 ? [o ? 'l-syll' : ok('syl-clap') ? alt(['syl-clap', 'read-merge']) : 'read-merge']
+      : l === 4 ? [o ? 'code-colw' : alt(['read-words', 'read-pick'])]
+      : l === 5 ? [o ? 'code-colw' : alt(['read-pick', 'code-colw'])]
+      : l <= 7 ? [o ? 'l-word' : 'read-pick']
+      : Q() ? ['l-syll', 'speed'] : ['speed'];
+    
+    const rl = readLangToday(n);
+    const first = readLangs().length < 2 ? gameStep('r-skill', 'read')
+      : { key: 'r-skill@' + rl, kind: 'read', name: rl === LANG ? nm(GAMES.find(x => x.id === 'r-skill').name) : `${mlInfo(rl)[1]} Reading ${LANG_READ[rl]}`, run: () => mlVisit(rl, 'r-skill') };
+    return [first, ...G.filter(ok).map(id => gameStep(id, 'read'))];
+  }
+  
+  const sub = () => readLangs().length > 1 && readLangToday() !== LANG ? `today we read ${LANG_READ[readLangToday()]}` : !has() ? "let's see how you read" : early() ? train() : `step ${lv()}: ${L[lv() - 1].n.toLowerCase()}`;
+  
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    const ml = readLangs().length > 1, lv0 = S().lv, oth = Object.entries(readLevels()).filter(([c]) => c !== LANG);
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="rkLvIn">📖 Reading${ml ? ' ' + LANG_READ[LANG] : ''}: step <select id="rkLvIn"><option value="">check at sign-in</option>${L.map((x, i) => `<option value="${i + 1}" ${lv0 === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)} (${esc(x.ex)})</option>`).join('')}</select></label>`);
+    if (ml && oth.length) sec.insertAdjacentHTML('beforeend', `<p class="muted rk-oth">Other languages: ${oth.map(([c, v]) => `${mlInfo(c)[1]} ${esc(mlInfo(c)[2])} — step ${v}`).join(', ')}</p>`);
+    $('#rkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
+  }
+  GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'abc')), 0, { id: 'r-skill', name: "Reading at your level", sub: "tasks just right for you: from syllables to texts", kw: "reading read level syllables words text", ico: () => pic('📖'), bg: 'var(--t-blue)', go: () => play(), grp: 2, also: [6], prog: () => has() ? stepTxt() : '' });
+  return { play, check, lv, has, setLv, plan, sub, early, settingsRow, L, make, startLv, stepTxt };
+})();
+ 
+ 
+
+
 const OLY = (() => {
   const LV = [['🐣', "Sly Chick"], ['🐥', "Bright Hatchling"], ['🦊', "Cunning Fox Cub"], ['🦉', "Wise Owlet"], ['🐯', "Brave Tiger"], ['🦁', "King of Puzzles"], ['🚀', "Peak Climber"], ['🏆', "Olympian"]];
   const PRAISE = ["Good try!", "Brave thought! Let's think some more.", "Almost! You're on the right track.", "Making mistakes is part of solving. Try again!"];
@@ -15850,7 +16176,7 @@ function pultKid(f, id) {
     <span class="pv-t"><b>${esc(st.name)}${st.age ? `, ${st.age} ${plural(st.age, ["year", "years", "years"])}` : ''}</b>
       <small>⭐ ${pr.stars} · 🔥 ${sk} ${plural(sk, ["day", "days", "days"])} in a row · 📚 ${wl} ${plural(wl, ["lesson", "lessons", "lessons"])} this week</small>
       <small>${last ? `Last: ${esc(last[0])}, ${pultAgo(last[2])}` : she ? "Has not played yet" : "Has not played yet"}</small></span><span class="g-go">▶</span></button>
-    <div class="pv-acts"><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Settings, interests, voice</button></div></div>`;
+    <div class="pv-acts"><button class="chip" data-kguide="${id}" data-fam="${f.id}">📊 Report</button><button class="chip" data-kset="${id}" data-fam="${f.id}">⚙️ Settings, interests, voice</button></div></div>`;
 }
 function pultAdult(f, g) {
   const at = (f.seen || {})[g.id], she = !!g.she, games = Object.values(gamesAll()).filter(x => x.opp === g.id).length;
@@ -15918,6 +16244,8 @@ function screenPult() {
     if (sl) { sfx.pop(); semShare(ROOT.families[sl.dataset.semlink], document.getElementById('pvsem-' + sl.dataset.semlink)); return; }
     if (sa) { sfx.tick(); ROOT.startAt = sa.dataset.start; save(); $$('[data-start]').forEach(x => { x.classList.toggle('sel', x === sa); x.setAttribute('aria-pressed', x === sa); }); return; }
     if (ks) { sfx.pop(); useFamily(ks.dataset.fam); ROOT.cur = ks.dataset.kset; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents(); return; }
+    const kg = e.target.closest('[data-kguide]');
+    if (kg) { sfx.pop(); useFamily(kg.dataset.fam); ROOT.cur = kg.dataset.kguide; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); PAR_BACK = screenPult; SETUI.reset(); screenParents('guide'); return; }
     if (k) { sfx.pop(); ADULT_HOME = true; useFamily(k.dataset.fam); ROOT.cur = k.dataset.kid; P = ROOT.profiles[ROOT.cur]; famPeople(); save(); goHome(); return; }
     if (v) { sfx.pop(); pultView(v.dataset.fam, v.dataset.view); return; }
     const po = e.target.closest('[data-por]'); if (po) { sfx.pop(); screenPortrait(po.dataset.fam, po.dataset.por, screenPult); return; }
@@ -15937,7 +16265,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '157';
+const APP_VER = '158';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 I am the app’s author: create a key</button></div>`;
 
@@ -16453,21 +16781,183 @@ function sayIn(c, text, rate = .8) {
 }
 const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in window && !mlVoice(c)); return no.length ? `<p class="muted ml-nov">🔈 This phone has no voice for: ${no.map(c => mlInfo(c)[2]).join(', ')}. The words are shown, and you can hear them once you add a voice: on iPhone — Settings → Accessibility → Spoken Content → Voices.</p>` : ''; };
 
-const mlLangsHTML = (id, pr) => { const on = myLangs(pr); return `<div class="ml-langs"><p class="prow">Which languages does ${esc(pr.settings.name || '')} speak or learn? Speech practice will use them all.</p><div class="ml-lrows" id="${id}">${ML_LANGS.map(([c, f, n]) => { const st = on.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : ''; return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg"><button class="chip ${st === 'speak' ? 'sel' : ''}" data-ml="${c}" data-st="speak">speaks</button><button class="chip ${st === 'learn' ? 'sel' : ''}" data-ml="${c}" data-st="learn">learns</button></span></div>`; }).join('')}</div></div>`; };
+
+
+const ML_ROLE = [['home', "at home"], ['school', "at school"], ['learn', "learning"]];
+const mlLangsHTML = (id, pr) => {
+  const on = myLangs(pr), main = mainLang(pr) || (READ_LANGS.includes(on[0]) ? on[0] : LANG);
+  const row = ([c, f, n]) => { const st = mlRole(c, pr); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
+  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])), more = ML_LANGS.filter(x => !top.includes(x));
+  const mains = READ_LANGS.filter(c => on.includes(c));
+  return `<div class="ml-langs" data-id="${id}"><p class="prow">Which languages does ${esc(pr.settings.name || '')} speak? At home, at school or learning: the game will use them all.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
+    ${more.length ? `<details class="ml-more"><summary>other languages…</summary>${more.map(row).join('')}</details>` : ''}
+    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Main game language:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlInfo(c)[2]}</button>`).join('')}</div></div></div>`;
+};
 function bindMlLangs(id, pr) {
   const row = document.getElementById(id); if (!row) return;
   row.onclick = e => {
+    const m = e.target.closest('[data-mlmain]');
+    if (m) { pr.settings.lang = m.dataset.mlmain; save(); sfx.tick(); row.querySelectorAll('[data-mlmain]').forEach(x => x.classList.toggle('sel', x === m)); return; }
     const b = e.target.closest('[data-ml]'); if (!b) return;
-    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = cur.includes(c) ? (mlLearns(c, pr) ? 'learn' : 'speak') : '';
+    const c = b.dataset.ml, want = b.dataset.st, cur = myLangs(pr), was = mlRole(c, pr);
     const next = was === want ? cur.filter(x => x !== c) : cur.includes(c) ? cur : [...cur, c];
     if (!next.length) return;
     pr.settings.langs = ML_LANGS.map(x => x[0]).filter(x => next.includes(x));
-    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x)));
-    if (was !== want && want === 'learn') learn.add(c); else learn.delete(c);
-    pr.settings.learn = [...learn]; save(); sfx.tick();
-    row.querySelectorAll('.ml-lr').forEach(r => { const k = r.querySelector('[data-ml]').dataset.ml, st = pr.settings.langs.includes(k) ? (pr.settings.learn.includes(k) ? 'learn' : 'speak') : ''; r.classList.toggle('on', !!st); r.querySelectorAll('[data-st]').forEach(x => x.classList.toggle('sel', x.dataset.st === st)); });
+    const learn = new Set((pr.settings.learn || []).filter(x => next.includes(x))), school = new Set((pr.settings.school || []).filter(x => next.includes(x)));
+    learn.delete(c); school.delete(c);
+    if (was !== want && want === 'learn') learn.add(c);
+    if (was !== want && want === 'school') school.add(c);
+    pr.settings.learn = [...learn]; pr.settings.school = [...school];
+    if (pr.settings.lang && READ_LANGS.includes(pr.settings.lang) && !next.includes(pr.settings.lang)) delete pr.settings.lang;
+    save(); sfx.tick();
+    const box = row.closest('.ml-langs'), open = !!row.querySelector('.ml-more[open]');
+    box.outerHTML = mlLangsHTML(id, pr); if (open) { const d = document.querySelector(`#${id} .ml-more`); if (d) d.open = true; }
+    bindMlLangs(id, pr);
   };
 }
+
+
+const READ_LANGS = ['ru', 'en', 'pt', 'de'];
+const mlSchool = (c, pr = P) => (pr.settings.school || []).includes(c);
+function mlRole(c, pr = P) { return !myLangs(pr).includes(c) ? '' : mlLearns(c, pr) ? 'learn' : mlSchool(c, pr) ? 'school' : 'home'; }
+function mainLang(pr = P) { const l = pr && pr.settings && pr.settings.lang; return READ_LANGS.includes(l) ? l : null; }
+
+function readLangs(pr = P) { const l = myLangs(pr).filter(c => READ_LANGS.includes(c)); return l.length ? l : [LANG]; }
+
+function rskOf(pr = P, l = LANG) {
+  let r = pr.rskill; if (!r || typeof r !== 'object') r = pr.rskill = {};
+  if ('lv' in r || 'checked' in r || 'last' in r) {
+    const old = {}; ['lv', 'checked', 'last'].forEach(k => { if (k in r) { old[k] = r[k]; delete r[k]; } });
+    const f = myLangs(pr)[0], to = mainLang(pr) || (READ_LANGS.includes(f) ? f : LANG);
+    r[to] = Object.assign(old, r[to] || {});
+  }
+  if (!r[l] || typeof r[l] !== 'object') r[l] = {};
+  return r[l];
+}
+
+function readLevels(pr = P) {
+  if (!pr) return {};
+  rskOf(pr); const o = {};
+  Object.keys(pr.rskill).forEach(l => { const v = pr.rskill[l]; if (READ_LANGS.includes(l) && v && +v.lv) o[l] = +v.lv; });
+  return o;
+}
+
+function readLangToday(n = dayNo(), pr = P) {
+  const ls = readLangs(pr);
+  if (EMBEDDED || ls.length < 2) return LANG;
+  const first = mainLang(pr) || ls[0], ord = [first, ...ls.filter(c => c !== first)];
+  const lvl = readLevels(pr), rank = { home: 0, school: 1, learn: 2 };
+  const home = ord.filter(c => mlRole(c, pr) === 'home'), pool = home.length ? home : ord.filter(c => mlRole(c, pr) !== 'learn');
+  const weak = (pool.length ? pool : ord).reduce((a, c) => (lvl[c] || 0) < (lvl[a] || 0) ? c : a);
+  const rest = ord.filter(c => c !== weak).sort((a, b) => (rank[mlRole(a, pr)] || 0) - (rank[mlRole(b, pr)] || 0));
+  const d = ((n % 7) + 7) % 7;
+  return d % 2 === 0 || !rest.length ? weak : rest[((d - 1) / 2) % rest.length];
+}
+const LANG_READ = { ru: "in Russian", en: "in English", pt: "in Portuguese", de: "in German" };
+
+const MLV_KEY = 'govorilki-mlv';
+function mlvGet() { try { return JSON.parse(sessionStorage.getItem(MLV_KEY) || 'null'); } catch (e) { return null; } }
+function mlvSet(v) { try { if (v) sessionStorage.setItem(MLV_KEY, JSON.stringify(v)); else sessionStorage.removeItem(MLV_KEY); } catch (e) {} }
+function mlVisit(l, game = 'r-skill') {
+  const g = GAMES.find(x => x.id === game);
+  if (l === LANG || EMBEDDED || !READ_LANGS.includes(l)) { g.go(); return; }
+  mlvSet({ from: LANG, to: l, game, kid: ROOT.cur });
+  hush(); location.assign(SITE_ROOT + langPath(l) + location.search + '#mlv=' + game);
+}
+function mlvRoute() {
+  const v = mlvGet(); if (!v) return false;
+  if (v.to !== LANG) { mlvSet(null); return false; }
+  if (!v.started) {
+    const g = GAMES.find(x => x.id === v.game);
+    if (!/[#&]mlv=/.test(HASH0) || !g || !ROOT.profiles[v.kid]) { mlvSet(null); return false; }
+    v.started = 1; mlvSet(v);
+    ROOT.cur = v.kid; P = ROOT.profiles[v.kid];
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    document.body.classList.toggle('quest', Q()); g.go(); return true;
+  }
+  mlvSet(null); location.replace(SITE_ROOT + langPath(v.from) + location.search + '#kto=' + v.kid); return true;
+}
+const mlVisiting = () => { const v = mlvGet(); return !!(v && v.started && v.to === LANG); };
+
+function mlWord(e) { return ML_WORDS.find(x => x.e === e) || null; }
+function mlStripHTML(e) {
+  const x = mlWord(e), ls = myLangs().filter(c => x && x.w[c]);
+  if (!x || ls.length < 2) return '';
+  return `<div class="ml-strip" role="group" aria-label="In my languages"><span class="ml-strip-h">🌍</span>${ls.map(c => `<button class="ml-sw" data-mls="${c}" data-w="${esc(x.w[c])}"><span class="lang-f">${mlInfo(c)[1]}</span>${esc(x.w[c])}</button>`).join('')}</div>`;
+}
+function mlStripBind(root) {
+  if (!root) return;
+  root.querySelectorAll('[data-mls]').forEach(b => b.onclick = ev => { ev.stopPropagation(); sfx.pop(); mlSay(b.dataset.mls, b.dataset.w); });
+}
+
+
+const ML_PIPER = { ru: 'ru_RU-ruslan-medium', en: 'en_GB-jenny_dioco-medium', pt: 'pt_PT-tugão-medium', de: 'de_DE-thorsten-medium' };
+async function mlSay(c, text) {
+  if (c === LANG) return say(text);
+  if (await sayIn(c, text, .85)) return true;
+  if (!ML_PIPER[c] || !piperOn()) return false;
+  try {
+    const buf = await Promise.race([piperCall(text, null, ML_PIPER[c]), new Promise((_, no) => setTimeout(() => no(new Error('slow')), 20000))]);
+    const a = await ac().decodeAudioData(buf), src = ac().createBufferSource(); src.buffer = a; src.connect(ac().destination);
+    await new Promise(res => { src.onended = res; src.start(); });
+    return true;
+  } catch (e) { return false; }
+}
+
+const ML_HELLO = { ru: RU('Привет!'), en: 'Hello!', pt: 'Olá!', de: 'Hallo!', uk: RU('Привіт!'), es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!' };
+const ML_PRAISE = { ru: [RU('Молодец!'), RU('Здорово!')], en: ['Well done!', 'Great job!'], pt: ['Muito bem!', 'Boa!'], de: ['Super gemacht!', 'Toll!'], uk: [RU('Молодець!')], es: ['¡Muy bien!'], fr: ['Bravo !'], it: ['Bravo!'] };
+function mlOther() { const o = myLangs().filter(c => c !== LANG && (ML_PRAISE[c] || ML_HELLO[c])); return o.length ? pickOne(o) : null; }
+function mlPraiseMaybe(after) {
+  if (!mlOn() || Math.random() > .25) return;
+  const c = mlOther(); if (!c || !ML_PRAISE[c]) return;
+  const t = tok; Promise.resolve(after).then(() => { if (t === tok) mlSay(c, pickOne(ML_PRAISE[c])); });
+}
+function mlHelloMaybe(after) {
+  if (!mlOn() || P.mlHello === dayKey()) return;
+  const c = mlOther(); if (!c || !ML_HELLO[c]) return;
+  P.mlHello = dayKey(); save();
+  const t = tok; Promise.resolve(after).then(() => { if (t === tok) mlSay(c, ML_HELLO[c]); });
+}
+ 
+function screenMlMatch() {
+  const t = newScreen(), langs = myLangs().filter(c => ML_WORDS[0].w[c]);
+  if (langs.length < 2) { shell("My languages", `<div class="ml"><p class="lead">This game needs at least two of the child's languages. They are set in «For adults».</p></div>`, { guide: false }); return; }
+  const lvl = readLevels(), age = P.settings.age || 6;
+  const reads = c => (lvl[c] || 0) >= 4 || (!lvl[c] && age >= 8);
+  const N = 8, deck = shuffle([...ML_WORDS]).slice(0, N).map((x, i) => {
+    const a = langs[i % langs.length], others = langs.filter(c => c !== a), b = others.includes(LANG) && i % 2 ? LANG : others[(i >> 1) % others.length];
+    return { x, a, b, opts: shuffle([x, ...sample(ML_WORDS.filter(y => y !== x && y.w[b] !== x.w[b]), 2)]) };
+  });
+  let k = 0, ok = 0, tries = 0, busy = false;
+  const draw = () => {
+    const d = deck[k], pics = !reads(d.b);
+    return `<p class="ml-step">${k + 1} / ${deck.length}</p>
+      <div class="mm-ask"><button class="big ghost mm-hear" id="mmHear">🔊 <span class="lang-f">${mlInfo(d.a)[1]}</span></button>
+      <p class="lead">Find this word: <span class="lang-f">${mlInfo(d.b)[1]}</span> ${esc(mlInfo(d.b)[2])}</p></div>
+      <div class="mm-opts ${pics ? 'pics' : ''}">${d.opts.map(y => `<button class="mm-o" data-e="${y.e}">${pics ? `<span class="mm-pic">${pic(y.e)}</span>` : ''}<b>${esc(y.w[d.b])}</b></button>`).join('')}</div>
+      <div id="mmOut"></div>`;
+  };
+  shell("My languages", `<div class="ml mm" id="mm">${draw()}</div>`, { guide: false });
+  const box = $('#mm'), play = () => mlSay(deck[k].a, deck[k].x.w[deck[k].a]);
+  talk("Listen to a word in one language and find it in another!").then(() => { if (t === tok) play(); });
+  box.onclick = async e => {
+    if (e.target.closest('#mmHear')) { sfx.pop(); play(); return; }
+    const o = e.target.closest('.mm-o'); if (!o || busy || o.disabled) return;
+    const d = deck[k];
+    if (o.dataset.e !== d.x.e) { sfx.oops(); wiggle(o); o.disabled = true; tries++; return; }
+    busy = true; if (!tries) ok++; sfx.good(); o.classList.add('right');
+    box.querySelectorAll('.mm-o').forEach(x => x.disabled = true);
+    $('#mmOut').innerHTML = `<div class="mm-pair">${pic(d.x.e)}${mlStripHTML(d.x.e)}</div><div class="prow-btns"><button class="big" id="mmNext">Next</button></div>`;
+    mlStripBind($('#mmOut'));
+    $('#mmNext').onclick = () => {
+      hush(); sfx.pop(); k++; tries = 0; busy = false;
+      if (k >= deck.length) { finish({ key: 'ml-match', stars: ok >= 7 ? 3 : ok >= 4 ? 2 : 1, line: `${ok} of ${deck.length} on the first try! One word, in all your languages.`, again: () => screenMlMatch() }); return; }
+      box.innerHTML = draw(); play();
+    };
+    mlSay(d.b, d.x.w[d.b]);
+  };
+}
+ 
 
 function screenMlSound(sndArg) {
   newScreen();
@@ -16551,6 +17041,7 @@ function screenMlGuess() {
 GAMES.push(
   { id: 'ml-sound', hide: () => !mlOn(), name: "One sound, many languages", sub: "how a sound lives in each of your languages", ico: () => pic('🌍'), bg: 'var(--t-mint)', go: () => screenMlSound(), grp: 14 },
   { id: 'ml-say', hide: () => !mlOn(), name: "Say it in all your languages", sub: () => myLangs().map(c => mlText(ML_WORDS[0].w[c])).join(', '), ico: () => pic('🗣️'), bg: 'var(--t-yellow)', go: () => screenMlSay(), grp: 14 },
+  { id: 'ml-match', hide: () => !mlOn(), name: "My languages", sub: "hear a word in one language, find it in another", kw: "languages words translation English Portuguese German Russian", ico: () => pic('🌍'), bg: 'var(--t-blue)', go: () => screenMlMatch(), grp: 14 },
   { id: 'ml-guess', hide: () => !mlOn(), name: "Guess the language", sub: "listen to a word — which language is it?", ico: () => pic('👂'), bg: 'var(--t-lilac)', go: () => screenMlGuess(), grp: 14 }
 );
 SECTIONS.splice(1, 0, { g: 14, h: "My languages", p: "one sound in different languages: feel the difference" });
@@ -21712,7 +22203,7 @@ const SETUI = (() => {
     const root = $('.parents'); if (!root || !fam()) return;
     const secs = [...root.children].filter(x => x.matches('section.psec'));
     const find = sel => secs.find(s => s.matches(sel) || s.querySelector(sel)) || null;
-    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
+    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), guide: find('#guideSec'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
 
     
     if (S.fam) {
@@ -21773,6 +22264,7 @@ const SETUI = (() => {
     if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">How the game looks</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || "Child", lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     const PAGES = [
+      ['guide', '📊', "Report", "what is going well and what is still hard", [S.guide]],
       ['fam', '👪', "Family", '', [S.fam]],
       ['friends', '🤝', "Friends", '', [S.friends]],
       ['kid', '🧒', name, "name, languages, interests, reading", [S.kid, S.book]],
@@ -21797,9 +22289,474 @@ const SETUI = (() => {
     }
     menu.onclick = e => { const b = e.target.closest('[data-page]'); if (b) { sfx.pop(); show(b.dataset.page); } };
     $('#backBtn').onclick = e => { if (open) { sfx.pop(); show(null); } else { open = null; back0(e); } };
-    show(focus === 'voice' ? 'voice' : open, true);
+    show(focus === 'voice' || focus === 'guide' ? focus : open, true);
   }
   return { build, reset };
+})();
+ 
+ 
+
+
+
+
+const KPROJ = [
+  ['tower', '🗼', 4, 8, "The tallest tower", [['🧸', "Collect ten different things: blocks, books, little boxes, toys."], ['🧱', "Build a tower: big things at the bottom, small things at the top."], ['🔢', "How many things stayed up? Count out loud."], ['🔁', "Take it apart and build it again. Is it taller now?"]]],
+  ['colors', '🌈', 4, 6, "Toys by colour", [['🧸', "Bring your toys to the rug."], ['🎨', "Sort them by colour: red with red, blue with blue."], ['👆', "Count each pile: tap the colour each time you count a toy."], ['🏆', "Which colour won?"]], ['tally', [['🔴', "red"], ['🔵', "blue"], ['🟢', "green"], ['🟡', "yellow"]]]],
+  ['zoo', '🦁', 4, 7, "A toy zoo", [['🐻', "Find all the toy animals."], ['📚', "Build each one a little house from books or blocks."], ['🏷️', "Give every animal a name."], ['🎟️', "Invite your family for a tour and tell them about your animals."]]],
+  ['faces', '😀', 4, 7, "Mood faces", [['📄', "Get a sheet of paper and some pencils."], ['😀', "Draw four faces: a happy one, a sad one, a cross one and a surprised one."], ['🪞', "Make each face yourself in front of the mirror."], ['🤔', "Show the drawings to your family: let them guess which mood is which."]]],
+  ['window', '🪟', 4, 6, "What is outside the window?", [['🪟', "Sit by the window."], ['👀', "Look carefully: who and what goes past?"], ['👆', "Tap the picture each time you see a car, a person, a dog or a bird."], ['🏆', "Which were there most?"]], ['tally', [['🚗', "cars"], ['🚶', "people"], ['🐕', "dogs"], ['🐦', "birds"]]]],
+  ['animal', '🦄', 4, 9, "Invent a new animal", [['✏️', "Draw an animal that nobody has ever seen."], ['🐾', "How many paws, ears and tails does it have? Where does it live?"], ['🏷️', "Think of a funny name for it."], ['🗣️', "At dinner, tell your family a story about your animal."]]],
+  ['sizes', '📏', 4, 6, "Line up by size", [['🧸', "Pick seven toys."], ['📏', "Put them in a row: from the smallest to the biggest."], ['🔁', "Now the other way round: from the biggest to the smallest."], ['🔢', "Which toy is in the middle?"]]],
+  ['senses', '👂', 4, 9, "A minute of quiet", [['🪑', "Sit comfortably by the window and close your eyes."], ['👂', "Listen for a whole minute. What sounds do you hear?"], ['👆', "Open your eyes and mark what you heard: cars, birds, voices, music."], ['🔁', "Try again in the evening. Are the sounds different?"]], ['tally', [['🚗', "cars"], ['🐦', "birds"], ['🗣️', "voices"], ['🎵', "music"]]]],
+  ['alpha', '🔤', 5, 8, "Letters at home", [['🔤', "Think of the letters in your name."], ['🏠', "For each letter, find something at home that starts with it."], ['🧺', "Put all the things in a row, and you get your name made of things!"], ['📸', "Show your family: let them read your name."]]],
+  ['count', '🔢', 5, 8, "How many do I have?", [['📚', "Count your books."], ['🧦', "Count your socks, in pairs!"], ['✏️', "Count your pencils and felt-tip pens."], ['👆', "Tap here for each thing as you count. Which are the most?"]], ['tally', [['📚', "books"], ['🧦', "pairs of socks"], ['✏️', "pencils"], ['🧸', "soft toys"]]]],
+  ['weather', '🌦️', 4, 12, "Weather diary", [['🪟', "Look out of the window every morning."], ['☀️', "Mark the weather here: sun, clouds, rain or snow."], ['📅', "Mark at least four days."], ['🏆', "At the end of the week, look: which weather was there most?"]], ['days', ['☀️', '⛅', '☁️', '🌧️', '❄️']]],
+  ['seed', '🌱', 5, 12, "A sprout in a cup", [['🥤', "Put a bean or a pea in a cup of soil and cover it with a little more soil."], ['💧', "Give it a little water and put it on the windowsill."], ['👀', "Look at the cup every day and mark here what you see."], ['🌿', "Mark at least four days. When will the sprout come up?"]], ['days', ['🟫', '🌱', '🌿']], "Please help for a minute: a cup of soil and one bean or pea."],
+  ['birds', '🐦', 5, 12, "Birds outside the window", [['🪟', "Sit by the window for ten minutes."], ['🐦', "Each time you see a bird, tap the picture that looks like it."], ['🔁', "Look again on another day."], ['🏆', "Which birds come the most?"]], ['tally', [['🕊️', "pigeons"], ['🐦', "little birds"], ['🐦‍⬛', "crows and jackdaws"], ['🦅', "big birds"]]]],
+  ['museum', '🏛️', 5, 12, "A museum of five things", [['🔎', "Pick the five most interesting things in your home."], ['🏷️', "Make a little sign for each one: a name and one sentence, or a drawing."], ['🗄️', "Put the things on a shelf or a table."], ['🎟️', "Give your family a tour of your museum."]]],
+  ['comic', '💬', 6, 12, "A comic about my day", [['📄', "Fold a sheet of paper in half, then in half again. You get four boxes."], ['🌅', "Draw the morning, the afternoon and the evening, one picture in each box."], ['⭐', "In the last box, draw the best thing of the day."], ['💬', "Give your characters speech bubbles with words."]]],
+  ['map', '🗺️', 6, 12, "A map of the room", [['🦅', "Imagine you are a bird looking down at your room from above."], ['✏️', "Draw the room: where the bed, the table, the window and the door are."], ['❌', "Hide a toy and mark the spot with a cross on the map."], ['🔎', "Give the map to someone in your family. Will they find the treasure?"]]],
+  ['mood', '😊', 6, 12, "Mood diary", [['🌙', "Every evening, think back over your day."], ['😊', "Mark here what mood you were in."], ['📅', "Mark at least four days."], ['🤔', "Which day was the best? Why?"]], ['days', ['😀', '🙂', '😐', '😢', '😠']]],
+  ['shop', '🏪', 6, 9, "My shop", [['🧸', "Pick ten toys for your shop."], ['🏷️', "Make price tags: each toy costs from 1 to 10 coins."], ['💰', "Draw paper coins."], ['🛍️', "Play shops with your family: count the shopping and the change."]]],
+  ['plane', '✈️', 6, 12, "Paper aeroplane", [['📄', "Fold an aeroplane from a sheet of paper."], ['🚀', "Throw it three times and measure in steps how far it flew."], ['✏️', "Bend the tips of the wings up a little."], ['🏆', "Throw it three more times. Is it better or worse?"]]],
+  ['bridge', '🌉', 7, 12, "A paper bridge", [['📚', "Put two books a hand apart."], ['📄', "Lay a sheet of paper across them. That is your bridge."], ['🪙', "How many coins or pencils can the bridge hold?"], ['🪗', "Fold the paper like a concertina and try again. Which bridge is stronger?"]]],
+  ['news', '📰', 8, 12, "A family newspaper", [['📰', "Think of a name for your newspaper."], ['✍️', "Write three pieces of news from this week, the most interesting ones."], ['🖍️', "Draw a picture for each piece of news."], ['🧲', "Stick the newspaper on the fridge."]]],
+  ['plan', '📅', 8, 12, "A plan for the weekend", [['📅', "Write a plan for Saturday: what we do in the morning, in the afternoon and in the evening."], ['⏰', "Write a time next to each thing."], ['➕', "Work out how many hours it will all take."], ['✅', "On Saturday, mark what went to plan."]]],
+  ['quiz', '❓', 8, 12, "A quiz for the family", [['🎧', "Remember the stories you listened to in the game."], ['✍️', "Write five questions about them."], ['🍽️', "Ask your family the questions at dinner."], ['🏆', "Count the points: who knows more?"]]]
+];
+const KPR = (() => {
+  const H = s => [...String(s)].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
+  const byId = id => KPROJ.find(x => x[0] === id) || null;
+  const ageOf = pr => pr.settings.age || (pr.settings.track === 'l' ? 9 : 5);
+  const doneIds = pr => Object.values(((pr.guide || {}).pj) || {});
+  function pick(pr, kid, salt, not) {
+    const a = ageOf(pr), fit = KPROJ.filter(x => a >= x[2] && a <= x[3] && x[0] !== not), fresh = fit.filter(x => !doneIds(pr).includes(x[0]));
+    const ps = fresh.length ? fresh : fit.length ? fit : KPROJ;
+    return ps[H(weekId() + kid + salt) % ps.length][0];
+  }
+  
+  function of(pr = P, kid = ROOT.cur) {
+    if (!pr.kproj || pr.kproj.w !== weekId() || !byId(pr.kproj.id)) pr.kproj = { w: weekId(), id: pick(pr, kid, 0), sw: 0, log: {}, tl: [] };
+    return pr.kproj;
+  }
+  const doneNow = (pr = P) => ((pr.guide || {}).pj || {})[weekId()] || '';
+  const proj = () => byId(of().id);
+  const tool = p => p[6] || null;
+  const daysLeft = p => { const t = tool(p); return t && t[0] === 'days' ? Math.max(0, 4 - Object.keys(of().log || {}).length) : 0; };
+  
+  const PH = 'govorilki-kproj-ph';
+  const phGet = k => { try { return (JSON.parse(localStorage.getItem(PH) || '{}'))[k] || ''; } catch (e) { return ''; } };
+  function phSet(k, v) { try { const o = JSON.parse(localStorage.getItem(PH) || '{}'); o[k] = v; const ks = Object.keys(o); while (ks.length > 6) delete o[ks.shift()]; localStorage.setItem(PH, JSON.stringify(o)); } catch (e) {} }
+  const phKey = () => ROOT.cur + ':' + weekId();
+  function shrink(file, cb) {
+    const r = new FileReader();
+    r.onload = () => { const im = new Image(); im.onload = () => { const s = Math.min(1, 480 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * s); c.height = Math.round(im.height * s); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); cb(c.toDataURL('image/jpeg', .7)); }; im.src = r.result; };
+    r.readAsDataURL(file);
+  }
+  
+  function toolHTML(p) {
+    const t = tool(p), st = of(); if (!t) return '';
+    if (t[0] === 'days') {
+      const w0 = new Date(weekId());
+      return `<div class="kp-days">${[...Array(7)].map((_, i) => { const d = new Date(w0); d.setDate(d.getDate() + i); const k = dayKey(d), v = st.log[k], now = k === dayKey(), fut = k > dayKey();
+        return `<div class="kp-day${now ? ' now' : ''}"><small>${WEEK[i]}</small><b>${v != null && t[1][v] ? t[1][v] : fut ? '' : '·'}</b></div>`; }).join('')}</div>
+        <p class="kp-q">${st.log[dayKey()] != null ? "Marked for today. You can change it:" : "How is today?"}</p>
+        <div class="kp-pick">${t[1].map((e, i) => `<button class="kp-ic${st.log[dayKey()] === i ? ' sel' : ''}" data-kday="${i}">${e}</button>`).join('')}</div>`;
+    }
+    return `<div class="kp-tally">${t[1].map(([e, n], i) => `<button class="kp-t" data-ktl="${i}"><span class="emo">${e}</span><b>${(st.tl || [])[i] || 0}</b><small>${esc(n)}</small></button>`).join('')}</div>
+      <button class="link-btn kp-undo" data-kundo>↩️ Take away the last one</button>`;
+  }
+  let lastTl = -1;
+  function screen(step) {
+    newScreen();
+    const p = proj(), st = of(), done = doneNow() === p[0], n = p[5].length, k = Math.max(0, Math.min(n, step == null ? (done ? n : 0) : step)), last = k >= n;
+    const s = last ? null : p[5][k], left = daysLeft(p), ph = phGet(phKey());
+    shell("Project of the week", `<div class="kp">
+      <div class="kp-head"><span class="kp-e">${pic(p[1])}</span><div><h2>${esc(p[4])}</h2><small>${last ? (done ? "✅ Done!" : "Last step") : `Step ${k + 1} of ${n}`}</small></div></div>
+      ${last ? `<div class="kp-end">${tool(p) ? toolHTML(p) : ''}
+          ${done ? `<p class="kp-done">✅ Project done! Your reward is in your awards.</p>${ph ? `<img class="kp-ph" src="${ph}" alt="">` : ''}`
+            : `${!EMBEDDED ? `<label class="big ghost kp-cam">📷 Photo: it stays on this phone<input type="file" accept="image/*" capture="environment" id="kpCam" hidden></label>${ph ? `<img class="kp-ph" src="${ph}" alt="">` : ''}` : ''}
+               <button class="big kp-go" id="kpDone" ${left ? 'disabled' : ''}>🎉 Done!</button>${left ? `<p class="kp-q">Mark ${left} more ${plural(left, ["day", "days", "days"])} and the project is done.</p>` : ''}`}
+        </div>`
+        : `<div class="kp-step"><span class="kp-pic">${pic(s[0])}</span><p>${esc(s[1])}</p></div>${k === n - 1 && tool(p) ? toolHTML(p) : ''}`}
+      ${p[7] && !done ? `<p class="kp-grown">👪 For grown-ups: ${esc(p[7])}</p>` : ''}
+      <div class="kp-nav">${k > 0 ? "<button class=\"big ghost\" id=\"kpBack\">◀ Back</button>" : ''}${last ? '' : `<button class="big" id="kpNext">${k === n - 1 ? "All done" + G("", '') + '! ▶' : "Next ▶"}</button>`}</div>
+      ${!st.sw && !done && !k ? "<button class=\"link-btn kp-swap\" id=\"kpSwap\">🔄 I want a different project (once a week)</button>" : ''}
+    </div>`, { back: goHome });
+    talk(last ? (done ? `Project “${p[4]}” is done! Well done!` : left ? `Mark ${left} more ${plural(left, ["day", "days", "days"])} and the project will be done.` : "If it all worked out, tap “Done!”") : (k === 0 ? `Project of the week: ${p[4]}. ` : '') + s[1]);
+    const on = (id, f) => { const el = document.getElementById(id); if (el) el.onclick = () => { sfx.pop(); f(); }; };
+    on('kpNext', () => screen(k + 1)); on('kpBack', () => screen(k - 1));
+    on('kpSwap', () => { st.id = pick(P, ROOT.cur, 1, st.id); st.sw = 1; st.log = {}; st.tl = []; save(); screen(0); });
+    on('kpDone', () => {
+      P.guide = P.guide || {}; P.guide.pj = { ...(P.guide.pj || {}), [weekId()]: p[0] };
+      
+      P.ach = P.ach || []; let got = null;
+      ['proj1', 'proj5'].forEach(id => { const A = ACH.find(x => x.id === id); if (A && !P.ach.includes(id) && A.test()) { P.ach.push(id); got = A; } });
+      finish({ key: 'kproj', stars: 3, line: `Project “${p[4]}” is ready! You did it all by yourself${G("", '')}${G("", '')}.` + (got ? ` New award: ${got.e} “${got.t}”!` : ''), again: () => screen(n), menu: goHome });
+    });
+    const cam = $('#kpCam'); if (cam) cam.onchange = () => { const f = cam.files && cam.files[0]; if (f) shrink(f, u => { phSet(phKey(), u); screen(n); }); };
+    const box = $('.kp');
+    box.addEventListener('click', e => {
+      const d = e.target.closest('[data-kday]'), t = e.target.closest('[data-ktl]'), u = e.target.closest('[data-kundo]');
+      if (d) { sfx.tick(); st.log[dayKey()] = +d.dataset.kday; save(); screen(k); return; }
+      if (t) { sfx.tick(); const i = +t.dataset.ktl; st.tl = st.tl || []; st.tl[i] = (st.tl[i] || 0) + 1; lastTl = i; save(); t.querySelector('b').textContent = st.tl[i]; hopEl(t); return; }
+      if (u && lastTl >= 0 && (st.tl[lastTl] || 0) > 0) { sfx.tick(); st.tl[lastTl]--; save(); screen(k); }
+    });
+  }
+  
+  function todayCard(stage) {
+    if (!stage || stage.querySelector('.kp-card') || GUEST && !GUEST_OFF) return;
+    const p = proj(); if (!p) return;
+    const done = doneNow() === p[0], t = tool(p), need = !done && t && t[0] === 'days' && of().log[dayKey()] == null;
+    const b = document.createElement('button'); b.className = 'kp-card' + (done ? ' done' : '');
+    b.innerHTML = `<span class="kp-e">${pic(p[1])}</span><span class="kp-ct"><small>🛠️ Project of the week${done ? " · ✅ done" : ''}</small><b>${esc(p[4])}</b>${need ? "<i>Mark today!</i>" : ''}</span><span class="g-go">▶</span>`;
+    b.onclick = () => { sfx.pop(); homeLeave(); screen(); };
+    const plan = stage.querySelector('section.today'); if (plan) plan.after(b); else stage.append(b);
+  }
+  const titleOf = id => { const p = byId(id); return p ? p[4] : ''; };
+  return { of, proj, screen, todayCard, titleOf, pick, doneNow, byId };
+})();
+GAMES.push({ id: 'kproj', name: "Project of the week", sub: () => { try { return KPR.proj()[4]; } catch (e) { return ''; } }, ico: () => pic('🛠️'), bg: 'var(--t-mint)', go: () => KPR.screen(), grp: 4, also: [13, 10] });
+ 
+ 
+
+
+
+
+const GUIDE_TIPS = [
+  ['math', 1, 2, "At lunch, ask your child to lay out the spoons: “There are four of us. How many spoons do we need?”"],
+  ['math', 1, 3, "On a walk, count together: how many dogs, how many red cars before the corner?"],
+  ['math', 1, 3, "Count the steps out loud on the way up the stairs, and back down again."],
+  ['math', 1, 2, "Show a number on your fingers and let your child show the same on theirs."],
+  ['math', 1, 3, "There are 5 apples in the bowl and one was eaten. Ask, “How many are left?” and check by counting."],
+  ['math', 2, 4, "Play “how many are hiding”: 7 buttons, some under your hand. How many are under it?"],
+  ['math', 3, 5, "In the shop, ask: “We had $10 and the bread costs $3. How much is left?”"],
+  ['math', 2, 5, "Roll two dice and add up the dots: who gets to 30 first?"],
+  ['math', 3, 6, "While you wash your hands, count backwards together from 20 to zero."],
+  ['math', 4, 6, "Play “pairs to ten”: you say 7 and your child answers 3; you say 4 and they say 6."],
+  ['math', 3, 6, "On the bus: “Four people got on at the stop and two got off. How many now?” Take turns making them up."],
+  ['math', 5, 6, "Put 8 and 5 coins on the table: first top up to ten, then add what is left."],
+  ['math', 6, 7, "Say, “I thought of a number, added 3 and got 9.” Let your child guess it, then swap."],
+  ['math', 7, 8, "Look at the price tags in the shop: which costs more, and by how much?"],
+  ['math', 7, 8, "Walk down the street reading the house numbers: which one comes next? Why are there only even numbers on one side?"],
+  ['math', 7, 9, "Count the coins in the piggy bank: first the tens, then the ones."],
+  ['math', 7, 10, "Measure everyone’s height with a tape measure: who is taller, and by how many centimetres?"],
+  ['math', 9, 10, "Look for multiplying all around: how many legs do three chairs have? How many wheels do five bicycles have?"],
+  ['math', 9, 10, "Eggs in a box lie in rows: 2 rows of 5, how many in all? Find the same “rectangles” in tiles and windows."],
+  ['math', 9, 11, "On the road, practise the times tables: one says a sum, the other the answer, then swap."],
+  ['math', 10, 12, "Share the biscuits equally among everyone at the table: how many does each person get, and how many are left over?"],
+  ['math', 11, 13, "Ask your child to make up a problem about your family, and solve it together at supper."],
+  ['math', 11, 13, "Let your child pay for something and check the change."],
+  ['math', 12, 13, "By the clock: “It is 5:40 now and we leave at 6:15. How many minutes do we have to get ready?”"],
+  ['math', 12, 14, "Plan the evening together: supper at 7:00 for half an hour, a book for 20 minutes. What time is bedtime?"],
+  ['math', 13, 14, "When you cook, ask your child to measure out half a cup of flour and a quarter of a spoon of salt."],
+  ['math', 13, 15, "Cut an apple into 4 parts and eat one: what part is left?"],
+  ['math', 13, 16, "A chocolate bar has 12 squares: how many squares are in a third? And in a quarter?"],
+  ['math', 14, 16, "Add up the shopping bill in your head, rounding each price to a whole number, then check it at the till."],
+  ['math', 14, 16, "Look at a map to see how many kilometres it is to Grandma’s, and guess how many hours the drive will take."],
+  ['math', 14, 16, "Compare two packs: which is better value when you work out the price per kilo?"],
+  ['math', 15, 16, "Add up a shop: 3 cartons of milk at $2 each and a loaf for $1. How much is that altogether?"],
+  ['math', 15, 16, "A puzzle for supper: “How many ends do three sticks have? And three and a half?”"],
+  ['math', 16, 16, "A brain teaser: how do you measure out 4 litres of water if you have a 3-litre bucket and a 5-litre bucket?"],
+  ['r', 0, 9, "In the car, say a tongue-twister together: “Red lorry, yellow lorry.” Go slowly. There is nothing to be shy about."],
+  ['r', 0, 9, "Growl together like tigers: who can hold the “rrr” longest?"],
+  ['r', 0, 9, "Play “start the engine”: “d-d-d-rrr”, and off you go round the room."],
+  ['r', 0, 9, "Find five things at home with the R sound: rug, ribbon, rabbit…"],
+  ['r', 0, 9, "Ask your child to teach a toy to say “R”: explaining is the best way to learn it yourself."],
+  ['r', 0, 9, "A tongue-twister for a walk: “Round the rugged rock the ragged rascal ran.”"],
+  ['r', 0, 9, "Don’t correct every word: praise your child when the R comes out, and just say the hard word correctly yourself."],
+  ['l', 0, 9, "A tongue-twister for the road: “Red leather, yellow leather.”"],
+  ['l', 0, 9, "Let your tongue “paint the ceiling”: the wide tip goes behind the top teeth, forwards and backwards."],
+  ['l', 0, 9, "Play steamboat: “ooo-lll”, the steamboat hoots and sails across the bath."],
+  ['l', 0, 9, "In the shop, look for words with the L sound: lemon, milk, lolly. Let your child say them."],
+  ['l', 0, 9, "Sing a favourite song to “la-la-la”, loud and long."],
+  ['l', 0, 9, "A tongue-twister: “Lucy lit a little lamp, and Larry lit a lantern.”"],
+  ['sz', 0, 9, "Pump up the “pump”: “sss” blows up the balloon, and “zzz” is a mosquito flying."],
+  ['sz', 0, 9, "A tongue-twister: “Sister Susie sat sewing shirts for soldiers.”"],
+  ['sz', 0, 9, "Look for things with the S sound in the room: sock, spoon, sofa, soap."],
+  ['sz', 0, 9, "Smile in the mirror and say “sss”: the tongue hides behind the bottom teeth."],
+  ['sz', 0, 9, "Play “mosquito and wasp”: on “z” your child waves their arms, on “s” they freeze."],
+  ['sh', 0, 9, "A tongue-twister: “She sells seashells on the seashore.”"],
+  ['sh', 0, 9, "Let the “balloon” down together: “shhh”. Who can go on longest?"],
+  ['sh', 0, 9, "Be a train: “ch-ch-ch” for the wheels, “shhh” for the steam."],
+  ['sh', 0, 9, "In the kitchen, look for words with Sh and Zh: dish, fish, squash, measure."],
+  ['sh', 0, 9, "A beetle buzzes: “zzz”. Fly round the room and land on a “flower”."],
+  ['sh', 0, 9, "A tongue-twister: “Fresh fried fish, fresh fried fish, fresh fried fish.”"],
+  ['speech', 0, 12, "Blow out a candle from far away, or blow a little boat across the bath: one long breath helps the sounds."],
+  ['speech', 0, 12, "Blow soap bubbles: one steady, long breath makes a big bubble."],
+  ['speech', 0, 12, "Tell each other about your day, three sentences each, taking turns."],
+  ['speech', 0, 12, "Pull faces in the mirror: a smile, a pretend straw, ten times each. Who is funnier?"],
+  ['speech', 0, 12, "Ask your child to retell a whole cartoon: you only nod and ask, “And then?”"],
+  ['read', 1, 1, "On a walk, look for letters on the signs: who spots an “M” first?"],
+  ['read', 1, 1, "Make a letter out of plasticine, or lay it out in pasta."],
+  ['read', 1, 1, "Write your child’s name in big letters and hang it on their bedroom door."],
+  ['read', 1, 2, "Play “first sound”: “Mum”, which sound comes first? And in the word “cat”?"],
+  ['read', 1, 1, "Draw a letter with your finger on your child’s back and let them guess which one it is."],
+  ['read', 2, 2, "Read the sign outside a shop together, one syllable at a time, without rushing."],
+  ['read', 2, 2, "Clap out words in syllables: “ba-na-na” is three claps. And “cat”?"],
+  ['read', 2, 3, "Find a short word on a packet and read it together."],
+  ['read', 2, 3, "Write a note of three words and slip it in a pocket: “You are my hero.”"],
+  ['read', 3, 3, "Let your child read you the shopping list right in the shop."],
+  ['read', 3, 4, "At bedtime, take turns reading: a line from you, a line from your child."],
+  ['read', 3, 4, "Read the menu in a café together and let your child choose the dish."],
+  ['read', 3, 3, "Label the toy boxes together: “cars”, “bricks”, “dolls”."],
+  ['read', 3, 4, "On the road, read the street names and stops together."],
+  ['read', 4, 4, "Ask your child to read the recipe out loud while you cook together."],
+  ['read', 4, 4, "At supper, ask your child to retell the chapter of the book they are reading now."],
+  ['read', 4, 4, "Go to the library and let your child choose a book by themselves."],
+  ['read', 4, 4, "Talk about a character in a book: “What would you have done in their place?”"],
+  ['read', 4, 4, "Let your child read a story to younger children, with expression and different voices."],
+  ['read', 3, 4, "Read aloud in parts: everyone reads for their own character."],
+  ['logic', 1, 3, "Sort the socks into pairs: who is faster? Then hide one: which one has gone missing?"],
+  ['logic', 1, 4, "Play “what has changed”: your child turns away and you take one thing off the table."],
+  ['logic', 1, 4, "A riddle for supper: “Which is heavier, a kilo of feathers or a kilo of iron?”"],
+  ['logic', 2, 6, "Build with bricks what is drawn in a picture, and then the other way round: draw what you built."],
+  ['logic', 3, 8, "Plan the route to the park together: where do we turn, how many crossings are there?"],
+  ['logic', 4, 8, "Play “20 questions”: think of an object, and the only answers allowed are “yes” or “no”."],
+  ['logic', 4, 8, "Ask your child to invent a trick puzzle for Mum or Dad."],
+  ['logic', 5, 8, "Play a game of draughts or chess and talk through one move out loud: “Why there?”"],
+  ['logic', 6, 8, "A puzzle: a father has three daughters and each daughter has a brother. How many children are there in all?"],
+  ['world', 4, 12, "Find on a map or globe a place from the last story."],
+  ['world', 4, 12, "Draw together the hero of the story your child listened to this week."],
+  ['world', 6, 12, "Let your child retell a story from the game to one of the grown-ups in their own words."],
+  ['world', 4, 12, "Set up a “museum” on a shelf: three things from different countries, and your child is the guide."],
+  ['world', 4, 12, "Look out of the window at the weather and ask, “Where does rain come from?” Find the answer together."],
+  ['life', 4, 12, "Give your child one household job for the whole week: watering the plants or feeding the cat."],
+  ['life', 4, 8, "Let your child pack their own bag for tomorrow from a list of pictures."],
+  ['life', 7, 12, "Let your child set their own alarm clock and check in the evening that all is ready for the morning."],
+  ['life', 4, 12, "In the evening, ask, “What was hard today? And what went well?” Praise the effort, not the result."],
+  ['life', 4, 12, "Tell your child what you are learning right now and where you make mistakes: it makes trying new things easier."],
+  ['life', 5, 12, "Cook supper together: washing the vegetables, cutting the soft ones, laying the table."],
+  ['life', 6, 12, "Agree on a small goal for the week and mark it on the fridge."],
+  ['life', 4, 12, "Ring Grandma or Grandad together: let your child tell them what they learnt that is new."],
+  ['life', 8, 12, "Give your child a budget for the family snack and ask them to stay within it."],
+  ['life', 4, 12, "At bedtime, thank each other for one thing from today."],
+  ['life', 5, 12, "When something doesn’t work, say, “It’s not working yet”, and try again together."]
+];
+
+
+ACH.push({ id: 'proj1', e: '🛠️', t: "Master of Doing", d: "Project of the week", hide: 1, test: () => Object.keys((P.guide || {}).pj || {}).length >= 1 },
+  { id: 'proj5', e: '🏗️', t: "Five projects", d: "Five projects of the week", hide: 1, test: () => Object.keys((P.guide || {}).pj || {}).length >= 5 });
+
+
+const REPORT_AREAS = [
+  { k: 'speech', e: '🗣️', n: "Speech", act: d => (d.ga.speech || 0) + d.sp, up: d => d.good.some(x => x[0] === 'speech'), lv: d => d.snd.length && d.a <= 9 ? "sounds " + d.snd.map(s => (SOUND_SET.find(z => z[0] === s) || [])[1]).filter(Boolean).join(', ') : '' },
+  { k: 'read', e: '📖', n: "Reading", act: d => (d.ga.read || 0) + d.rd, up: d => (d.rl > d.rl0 && d.rl0 > 0) || (d.wpm > d.w0 && d.w0 > 0), lv: d => d.rl && RSK.L[d.rl - 1] ? RSK.L[d.rl - 1].n : d.wpm ? `${d.wpm} words a minute` : '' },
+  { k: 'math', e: '🔢', n: "Maths", act: d => (d.ga.math || 0) + d.mt, up: d => (d.m > d.m0 && d.m0 > 0) || (d.so > d.so0 && d.so0 > 0), lv: d => d.m && MSK.L[d.m - 1] ? MSK.L[d.m - 1].n : '' },
+  { k: 'logic', e: '🧩', n: "Logic", act: d => d.ga.logic || 0, up: d => d.ol > d.ol0, lv: d => d.ol ? `puzzles solved: ${d.ol}` : '' },
+  { k: 'chess', e: '♟️', n: "Chess", act: d => d.ga.chess || 0, up: d => d.cs > d.cs0 || (d.ai > d.ai0 && d.ai0 > 0), lv: d => d.cs ? `lessons done: ${d.cs}` : '' },
+  { k: 'world', e: '🌍', n: "Stories", act: d => d.ls, up: d => d.ls >= 3, lv: d => d.ls ? `stories: ${d.ls}` : '' },
+  { k: 'art', e: '🎨', n: "Music and drawing", act: d => d.ga.art || 0, up: () => false, lv: () => '' }
+];
+const GUIDE = (() => {
+  const H = s => [...String(s)].reduce((a, c) => a * 31 + c.charCodeAt(0) >>> 0, 7);
+  const ageOf = pr => pr.settings.age || (pr.settings.track === 'l' ? 9 : 5);
+  const areaOf = key => {
+    if (/^learn:/.test(key)) return 'world';
+    if (/^(breath|artic):/.test(key)) return 'speech';
+    if (/^piano:/.test(key)) return 'art';
+    if (/chess/.test(key)) return 'chess';
+    const g = GAMES.find(x => x.id === key); if (!g) return '';
+    return [0, 1, 5, 9].includes(g.grp) ? 'speech' : [2, 6].includes(g.grp) ? 'read' : g.grp === 3 ? 'math' : g.grp === 8 ? (/olymp|puzzle/.test(key) ? 'logic' : 'math') : g.grp === 4 ? 'art' : 'other';
+  };
+  const lv = pr => ({ m: (pr.mskill && pr.mskill.lv) || 0, so: (pr.soro && pr.soro.top) || 0, ol: ((pr.olymp && pr.olymp.solved) || []).length, oll: (pr.olymp && pr.olymp.lv) || 0,
+    w: Math.max(0, ...(pr.reads || []).map(r => +r.wpm || 0)), rl: +(readLevels(pr)[LANG] || 0),
+    cs: Object.keys((pr.chessSchool || {}).done || {}).length, ai: (pr.chessAI && +pr.chessAI.top) || 0 });
+  const prevWeek = () => { const d = new Date(weekId()); d.setDate(d.getDate() - 7); return dayKey(d); };
+  
+  function week(pr) {
+    const w = weekId();
+    if (!pr.gw || pr.gw.w !== w) {
+      if (pr.gw && pr.gw.w === prevWeek()) pr.gwLast = { ...pr.gw, end: lv(pr) };
+      else if (pr.gwLast && pr.gwLast.w !== prevWeek()) delete pr.gwLast;
+      pr.gw = { w, n: 0, min: 0, ls: [], a: {}, b: {}, s0: lv(pr) };
+    }
+    pr.gw.b = pr.gw.b || {}; pr.gw.min = pr.gw.min || 0;
+    return pr.gw;
+  }
+  
+  function note(key, stars) {
+    const pr = P, g = week(pr), a = areaOf(key), now = lv(pr), d = dayKey();
+    g.n++; if (a) g.a[a] = (g.a[a] || 0) + 1;
+    if (/^learn:/.test(key)) { const id = key.slice(6); g.ls = [...g.ls.filter(x => x !== id), id].slice(-20); }
+    else if (!/^(breath|artic):/.test(key)) {
+      const s = +stars || 0, b = g.b[key] || [0, 0];   
+      g.b[key] = [Math.max(b[0], s), b[1] + (s <= 1 ? 1 : 0)];
+      const ks = Object.keys(g.b); if (ks.length > 40) delete g.b[ks[0]];
+    }
+    pr.gs = pr.gs || {};
+    ['m', 'so', 'oll', 'rl'].forEach(k => { const s = pr.gs[k]; if (!s || s[0] !== now[k]) pr.gs[k] = [now[k], d]; });
+  }
+  
+  let touched = 0;
+  try { addEventListener('pointerdown', () => { touched = Date.now(); }, true); addEventListener('keydown', () => { touched = Date.now(); }, true); } catch (e) {}
+  setInterval(() => {
+    try {
+      if (document.hidden || Date.now() - touched > 70e3 || PREVIEW || GPLAY || ADULT_HOME || (GUEST && !GUEST_OFF) || (fam() && fam().guest)) return;
+      if (document.querySelector('.parents, .pult, .guest')) return;
+      week(P).min++;
+    } catch (e) {}
+  }, 60e3);
+  const daysSince = d => d ? Math.max(0, Math.round((new Date(dayKey()) - new Date(d)) / 864e5)) : 0;
+  const keyOk = k => /^[a-z0-9:_-]{2,40}$/i.test(k || '');
+  
+  function dig(pr, g, now, last) {
+    const s0 = g.s0 || now, gs = pr.gs || {}, les = {}, w0 = new Date(g.w);
+    let dd = 0;
+    for (let i = 0; i < 7; i++) { const x = new Date(w0); x.setDate(x.getDate() + i); const v = pr.days[dayKey(x)];
+      if (v && v !== true) { let any = 0; Object.keys(v).forEach(k => { les[k] = (les[k] || 0) + (+v[k] || 0); any += +v[k] || 0; }); if (any) dd++; } else if (v === true) { les.speech = (les.speech || 0) + 1; dd++; } }
+    const b = g.b || {}, ks = Object.keys(b).filter(keyOk);
+    const good = ks.filter(k => b[k][0] >= 3).map(k => [areaOf(k), k]).slice(-4);
+    const hard = ks.filter(k => b[k][1] >= 2 && b[k][0] < 3).map(k => [areaOf(k), k]).slice(-2);
+    return { w: g.w, a: ageOf(pr), tr: pr.settings.track === 'l' ? 'l' : 'r', snd: soundsOf(pr).slice(0, 4), d: dd, min: g.min || 0, st: g.w === weekId() ? weekStars(pr) : 0, n: g.n || 0, ls: (g.ls || []).length,
+      ga: g.a || {}, good, hard, m: now.m, so: now.so, ol: now.ol, oll: now.oll, wpm: now.w, rl: now.rl, cs: now.cs, ai: now.ai,
+      m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0, cs0: s0.cs || 0, ai0: s0.ai || 0,
+      mS: last ? 0 : gs.m && now.m ? daysSince(gs.m[1]) : 0, rS: last ? 0 : gs.rl && now.rl ? daysSince(gs.rl[1]) : 0,
+      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
+  }
+  
+  function digest(pr) {
+    const now = lv(pr), cur = pr.gw && pr.gw.w === weekId() ? pr.gw : { w: weekId(), n: 0, min: 0, ls: [], a: {}, b: {}, s0: now };
+    const lb = pr.gw && pr.gw.w === prevWeek() ? { ...pr.gw, end: now } : pr.gwLast && pr.gwLast.w === prevWeek() ? pr.gwLast : null;
+    const d = dig(pr, cur, now);
+    if (lb) d.last = dig(pr, lb, lb.end || now, true);
+    return d;
+  }
+  
+  function clean(x, deep) {
+    if (!x || typeof x !== 'object') return null;
+    const n = (k, m) => clampN(x[k], m), ga = {};
+    Object.keys(x.ga || {}).slice(0, 10).forEach(k => { if (/^[a-z]{2,8}$/.test(k)) ga[k] = clampN(x.ga[k], 999); });
+    const pairs = (v, m) => (Array.isArray(v) ? v : []).slice(0, m).filter(p => Array.isArray(p) && /^[a-z]{0,8}$/.test(p[0] || '') && keyOk(p[1])).map(p => [p[0] || '', p[1]]);
+    const o = { w: /^\d{4}-\d\d-\d\d$/.test(x.w || '') ? x.w : weekId(), a: n('a', 18), tr: x.tr === 'l' ? 'l' : 'r', snd: (Array.isArray(x.snd) ? x.snd : []).filter(s => SOUND_SET.some(z => z[0] === s)).slice(0, 4),
+      d: n('d', 7), min: n('min', 9999), st: n('st', 1e5), n: n('n', 9999), ls: n('ls', 99), ga, good: pairs(x.good, 4), hard: pairs(x.hard, 2),
+      m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), wpm: n('wpm', 999), rl: n('rl', 9), cs: n('cs', 99), ai: n('ai', 99),
+      m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), cs0: n('cs0', 99), ai0: n('ai0', 99),
+      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
+    if (!deep && x.last) o.last = clean(x.last, true);
+    return o;
+  }
+  const mathLv = d => d.m || (d.a <= 4 ? 1 : d.a === 5 ? 2 : d.a === 6 ? 3 : d.a === 7 ? 5 : d.a === 8 ? 7 : d.a === 9 ? 9 : 11);
+  
+  const readLv = d => d.rl ? (d.rl <= 1 ? 1 : d.rl <= 3 ? 2 : d.rl <= 6 ? 3 : 4) : d.wpm >= 50 || (d.tr === 'l' && d.a >= 8) ? 4 : d.wpm > 0 ? 3 : d.sy || d.a >= 7 ? 2 : d.a >= 6 ? 2 : 1;
+  const logicLv = d => d.oll || Math.max(1, Math.min(8, d.a - 3));
+  const mStuck = d => d.m && d.mS >= 10 && d.m === d.m0 && ((d.ga || {}).math || d.mt) > 0;
+  const rStuck = d => d.rl && d.rS >= 10 && d.rl === d.rl0 && ((d.ga || {}).read || d.rd) > 0;
+  
+  function areas(d) {
+    const ga = d.ga || {}, sc = { math: (ga.math || 0) + d.mt, speech: (ga.speech || 0) + d.sp, read: (ga.read || 0) + d.rd, logic: ga.logic || 0, world: (ga.world || 0) + d.ls };
+    const on = Object.keys(sc).filter(k => sc[k] > 0).sort((a, b) => sc[b] - sc[a]);
+    if (mStuck(d)) on.unshift('math');
+    if (on.length) return [...new Set(on)];
+    return d.a <= 6 ? ['speech', 'read', 'math'] : ['math', 'read', 'world'];
+  }
+  function pool(d, area) {
+    if (area === 'speech') {
+      const ss = (d.snd || []).filter(s => GUIDE_TIPS.some(t => t[0] === s));
+      const s = ss.length ? ss[H(dayKey()) % ss.length] : 'speech';
+      return GUIDE_TIPS.filter(t => t[0] === s || (t[0] === 'speech' && !ss.length));
+    }
+    const l = area === 'math' ? mathLv(d) : area === 'read' ? readLv(d) : area === 'logic' ? logicLv(d) : d.a;
+    const ok = GUIDE_TIPS.filter(t => t[0] === area && l >= t[1] && l <= t[2]);
+    return ok.length ? ok : GUIDE_TIPS.filter(t => t[0] === 'life' && d.a >= t[1] && d.a <= t[2]);
+  }
+  
+  function tip(d, id) {
+    const ar = areas(d), area = ar[(mStuck(d) ? 0 : H(dayKey() + id)) % Math.min(2, ar.length)], ps = pool(d, area);
+    return { area, text: ps[H(id + dayKey()) % ps.length][3] };
+  }
+  const gname = k => recentName(k) || '';
+  
+  function wins(d) {
+    const L = [];
+    if (d.kp && KPR.titleOf(d.kp)) L.push(`project of the week done: “${KPR.titleOf(d.kp)}”`);
+    if (d.rl > d.rl0 && d.rl0 && RSK.L[d.rl - 1]) L.push(`reading — new step: “${RSK.L[d.rl - 1].n}”`);
+    if (d.m > d.m0 && d.m0 && MSK.L[d.m - 1]) L.push(`maths — new level: “${MSK.L[d.m - 1].n}”`);
+    if (d.so > d.so0 && d.so0) L.push(`abacus — step ${d.so}`);
+    if (d.ol > d.ol0) L.push(`olympiad — problems solved: ${d.ol - d.ol0}`);
+    if (d.cs > d.cs0) L.push(`chess — lessons done: ${d.cs - d.cs0}`);
+    if (d.ai > d.ai0 && d.ai0) L.push(`chess — computer at level ${d.ai}`);
+    if (d.wpm > d.w0 && d.w0) L.push(`reading speed — ${d.wpm} words a minute`);
+    d.good.forEach(x => { const n = gname(x[1]); if (n && L.length < 4) L.push(`⭐⭐⭐ in: ${n}`); });
+    if (d.ls && L.length < 4) L.push(`stories listened to: ${d.ls}`);
+    return L.slice(0, 4);
+  }
+  
+  function hard(d) {
+    const L = [];
+    if (mStuck(d) && MSK.L[d.m - 1]) L.push(`maths, “${MSK.L[d.m - 1].n}” — ${d.mS} ${plural(d.mS, ["day", "days", "days"])} at this level. The game gives hints and slightly easier tasks until it feels easy.`);
+    if (rStuck(d) && RSK.L[d.rl - 1]) L.push(`reading, “${RSK.L[d.rl - 1].n}” — ${d.rS} ${plural(d.rS, ["day", "days", "days"])} on this step. The game repeats it and steps back for review after mistakes.`);
+    d.hard.forEach(x => { const n = gname(x[1]); if (n && L.length < 2) L.push(`${n} — one star so far. The game gives hints and lets them try again.`); });
+    return L.slice(0, 2);
+  }
+  const actLine = d => `🎯 ${d.d} ${plural(d.d, ["day", "days", "days"])} of 7${d.min ? ` · ⏱️ ${d.min} min` : ''}${d.st ? ` · ⭐ ${d.st}` : ''}`;
+  
+  const AREAS = REPORT_AREAS;
+  function rows(d) {
+    return AREAS.map(a => { let n = 0, up = false, l = ''; try { n = a.act(d); up = a.up(d); l = a.lv(d); } catch (e) {} return { a, n, up, l }; }).filter(r => r.n > 0 || r.up);
+  }
+  const arrow = r => r.up ? '↑' : '=';
+  function weekOfD(d) {
+    const sun = new Date().getDay() === 0;
+    return sun || !d.last ? { d, t: sun ? "The week in short" : "The week so far", open: sun } : { d: d.last, t: "Last week in short", open: new Date().getDay() === 1 };
+  }
+  const fmtW = w => { const a = new Date(w), b = new Date(w); b.setDate(b.getDate() + 6); return `${a.getDate()}.${String(a.getMonth() + 1).padStart(2, '0')}–${b.getDate()}.${String(b.getMonth() + 1).padStart(2, '0')}`; };
+  function reportText(d, name) {
+    const R = weekOfD(d), x = R.d, w = wins(x), h = hard(x);
+    return [`📊 ${name}: ${R.t} (${fmtW(x.w)})`, actLine(x), ...(w.length ? ["✅ Going well:", ...w.map(s => '• ' + s)] : []), ...(h.length ? ["🌱 Still hard:", ...h.map(s => '• ' + s)] : []),
+      ...rows(x).map(r => `${r.a.e} ${r.a.n} ${arrow(r)}${r.l ? ' — ' + r.l : ''}`), "— Govorilki"].join('\n');
+  }
+  
+  function card(d, kid) {
+    const w = wins(d), h = hard(d), t = tip(d, kid.id), R = weekOfD(d), rr = rows(R.d), empty = !d.n && !d.d && !d.min && !d.kp;
+    return `<div class="gd-card" data-gk="${esc(kid.id)}">
+      <div class="gd-h"><span class="chip-face">${kid.face}</span><b>${esc(kid.n)}</b><small>${d.a} ${plural(d.a, ["year", "years", "years"])}</small></div>
+      ${empty ? `<p class="gd-act">🌱 No practice yet this week. As soon as ${esc(kid.n)} plays, the progress will show up here.</p>` : `<p class="gd-act">${esc(actLine(d))}</p>`}
+      ${w.length ? `<div class="gd-ok"><h3 class="gd-s">✅ Going well</h3>${w.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : empty ? '' : "<div class=\"gd-ok\"><h3 class=\"gd-s\">✅ Going well</h3><p>Practice is going on; no new levels this week yet — that is normal.</p></div>"}
+      ${h.length ? `<div class="gd-hard"><h3 class="gd-s">🌱 Still hard</h3>${h.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : ''}
+      ${empty && !d.last ? '' : `<details class="gd-wkr"${R.open ? ' open' : ''}><summary>📋 ${R.t} · ${fmtW(R.d.w)}</summary>
+        ${R.d !== d ? `<p class="gd-act">${esc(actLine(R.d))}</p>` : ''}
+        ${rr.length ? `<div class="gd-rows">${rr.map(r => `<p><span>${r.a.e} ${esc(r.a.n)}</span><b class="${r.up ? 'up' : ''}">${arrow(r)}</b><small>${esc(r.l)}</small></p>`).join('')}</div>` : "<p class=\"muted\">Nothing to show yet.</p>"}
+        <button class="chip gd-share" data-gshare="${esc(kid.id)}">📤 Share</button></details>`}
+      <details class="gd-idea"><summary>💡 If you would like to help — one idea</summary><p>${esc(t.text)}</p></details>
+    </div>`;
+  }
+  async function share(txt) {
+    try { if (navigator.share && !EMBEDDED) { await navigator.share({ text: txt }); return 'shared'; } } catch (e) { if (e && e.name === 'AbortError') return ''; }
+    try { await navigator.clipboard.writeText(txt); return 'copied'; } catch (e) { return ''; }
+  }
+  function bind(root, get) {
+    root.addEventListener('click', async e => {
+      const b = e.target.closest('[data-gshare]'); if (!b) return;
+      sfx.tick(); const x = get(b.dataset.gshare); if (!x) return;
+      const r = await share(reportText(x.d, x.n));
+      if (r === 'copied') { b.textContent = "✅ Text copied"; setTimeout(() => { b.textContent = "📤 Share"; }, 2500); }
+    });
+  }
+  
+  function famHTML() {
+    const f = fam(); if (!f) return '';
+    const ids = f.kids.filter(id => ROOT.profiles[id]).sort((a, b) => (b === ROOT.cur) - (a === ROOT.cur));
+    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) })).join('')
+      || "<p class=\"lead\">Add a child to the family and the report will appear here.</p>";
+  }
+  function mountFam(box) {
+    if (!box) return;
+    box.innerHTML = famHTML();
+    bind(box, id => ROOT.profiles[id] ? { d: digest(ROOT.profiles[id]), n: ROOT.profiles[id].settings.name || '' } : null);
+  }
+  
+  function guestHTML(pg) {
+    const ks = (pg && pg.kids || []).filter(k => k.gd);
+    return ks.length ? ks.map(k => card(k.gd, { id: k.id, n: k.n, face: friendSVG('', FRIENDS[k.e] ? k.e : 'tiger') })).join('')
+      : "<p class=\"lead\">The report will appear when the children's phone sends news about the week.</p>";
+  }
+  function mountGuest(box, pg) {
+    if (!box) return;
+    box.innerHTML = guestHTML(pg);
+    if (!box.dataset.gb) { box.dataset.gb = 1; bind(box, id => { const k = ((gLoad(GPROG_KEY, null) || {}).kids || []).find(x => x.id === id); return k && k.gd ? { d: k.gd, n: k.n } : null; }); }
+  }
+  return { note, digest, clean, card, tip, areas, pool, wins, hard, rows, reportText, mountFam, mountGuest, readLv, mathLv, AREAS, week };
 })();
  
  
@@ -21828,6 +22785,7 @@ const HOMEUX = (() => {
       PATH.today(st);
       const hero = st.querySelector('.hero'), plan = st.querySelector('section.today');
       if (hero && plan) hero.after(plan);
+      try { KPR.todayCard(st); } catch (e) {}
       const all = st.querySelector('.alltabs'); if (all) all.remove();
       
       const qs = [st.querySelector('.rank'), st.querySelector('.season'), st.querySelector('.garage')].filter(Boolean);
@@ -24567,7 +25525,7 @@ function langGo(l, hash = location.hash) {
 
 function langRedirect() {
   if (EMBEDDED) return false;
-  if (/[#&](sem=|login\b|voiti\b)/.test(HASH0)) return false;
+  if (/[#&](sem=|login\b|voiti\b|mlv=)/.test(HASH0)) return false;
   let want = langWant();
   const fams = !!(ROOT.families && Object.keys(ROOT.families).length);
   const onMain = location.pathname === SITE_ROOT || location.pathname === SITE_ROOT + 'index.html';
