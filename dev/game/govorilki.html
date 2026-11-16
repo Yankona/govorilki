@@ -1449,6 +1449,30 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .mk-in{min-width:140px;padding:4px 18px;border-radius:18px;background:var(--paper);text-align:center;font:900 38px/1.2 var(--f-body);color:var(--plum);box-shadow:inset 0 0 0 3px var(--line-strong)}
 .mk-pics{display:inline-flex;flex-wrap:wrap;gap:2px;max-width:150px;justify-content:center}.mk-pics .pic{font-size:30px}.mk-op{font-style:normal}
 .mk-pie{width:120px;height:120px}.mk-t{flex-basis:100%;font:700 19px/1.3 var(--f-body)}
+.rk{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.rk-step{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}
+#rkBox{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.rk-q{max-width:600px;padding:16px 20px;border-radius:24px;background:var(--paper);text-align:center;color:var(--ink)}
+.rk-q.long{text-align:left}
+.rk-w{font:900 clamp(34px,9vw,54px)/1.15 var(--f-body);letter-spacing:.04em;word-break:break-word}
+.rk-p{font:900 clamp(28px,7vw,40px)/1.2 var(--f-body)}
+.rk-s{font:800 clamp(22px,5.4vw,30px)/1.4 var(--f-body)}
+.rk-t{display:block;font:600 clamp(18px,4.4vw,22px)/1.55 var(--f-body)}
+.rk-qq{display:block;margin-top:10px;font:900 clamp(18px,4.4vw,22px)/1.35 var(--f-body);color:var(--plum)}
+.rk-gap{display:inline-block;min-width:2.4em;border-bottom:3px solid var(--plum);color:var(--plum)}
+.rk-ask{margin:0;font:700 17px/1.3 var(--f-body);color:var(--ink-soft);text-align:center}
+.rk-hear{display:flex;align-items:center;gap:10px;border:0;border-radius:20px;padding:12px 18px;background:var(--t-blue);color:var(--ink);font:800 18px var(--f-body);cursor:pointer}
+.rk-hear svg{width:28px;height:28px}
+.rk-opts{display:grid;gap:12px;width:min(100%,560px)}
+.rk-opts.lets,.rk-opts.pics{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rk-o{min-height:64px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);font:800 clamp(18px,4.4vw,22px)/1.25 var(--f-body);padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 var(--line-strong)}
+.rk-opts.lets .rk-o{aspect-ratio:1.2;font:900 clamp(34px,10vmin,64px)/1 var(--f-body)}
+.rk-opts.pics .rk-o{aspect-ratio:1}.rk-opts.pics .rk-o .pic{font-size:clamp(46px,13vmin,72px)}
+.rk-o.right{background:var(--t-green);box-shadow:0 6px 0 var(--leaf)}.rk-o.wrong{opacity:.45}
+.rk-o:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line-strong)}
+.rk-mic.ear{animation:pdRing 1.2s ease-out infinite}
+.rk-bar{display:flex;gap:6px;width:min(100%,560px);margin:4px auto 0}.rk-bar i{flex:1;height:10px;border-radius:6px;background:var(--line-strong)}.rk-bar i.on{background:var(--leaf)}
+.rk-head small{max-width:46vw}.rk-head .mk-rank b{white-space:nowrap;font-size:16px}
 .mk-opts .num-b{width:auto;min-width:clamp(80px,19vmin,120px);padding:0 14px;font-size:clamp(34px,8vmin,52px)}
 .keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,320px)}
 .kp-k{height:58px;border:0;border-radius:16px;background:var(--paper);color:var(--ink);font:900 26px var(--f-body);cursor:pointer;box-shadow:0 4px 0 var(--line-strong)}
@@ -3696,6 +3720,8 @@ const LS = () => {
   let b = P.settings.track === 'l' ? LESSONS_L : LESSONS_R;
   // a short day for the little ones (4–5): «Счёты» every day takes the place of «Задачка дня»
   if ((P.settings.age || 6) <= 5) { const { puzzle, ...rest } = b; b = rest; }
+  // reading by skill: the reading node says the child's step (read-skill)
+  if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: keep ? b.read.name : IS_RU && RSK.early() ? 'Русское чтение' : 'Чтение', sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3734,7 +3760,7 @@ function lessonPlan(id) {
       { const sw = s === 0 ? SWAB.step(n) : null; if (sw) steps.push(sw); } const gp = s === 0 ? GRAM.step() : null; if (gp) steps.push(gp);
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
       if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
-    } else if (id === 'read') ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read')));
+    } else if (id === 'read') { try { return RSK.plan(n, s); } catch (e) { ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read'))); } }
     else steps.push(gameStep('book', 'book'));
     return steps;
   }
@@ -3752,6 +3778,8 @@ function lessonPlan(id) {
     if (IS_RU && modOnG(16) && !gp) { const h = LOGO.daily(n + s); if (h) steps.push(gameStep(h, 'game')); }
     if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
   } else if (id === 'read') {
+    // reading by skill: the round of «Чтение по силам» and a game of the child's step (read-skill)
+    try { return RSK.plan(n, s); } catch (e) {}
     if (IS_RU && (P.settings.age || 6) <= 7 && prState().at < PRIMER.length) ['primer', ['read-words', 'abc-first', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
     else ['abc-find', 'abc-first', 'read-merge', ['read-words', 'code-col', 'read-pick', 'code-colw'][(n + s) % 4]].forEach(g => steps.push(gameStep(g, 'read')));
   } else {
@@ -5614,7 +5642,9 @@ const LQ = (() => {
     const n = (P.plays || {})[key] || 0, a = P.settings.age || 0, own = Math.max(0, (n >= 5 ? 2 : n >= 2 ? 1 : 0) - (a && a <= 4 ? 1 : 0));
     // the maths level of «Математика по силам» lifts the small maths games too (math-skill)
     const m = /^math-/.test(key) && P.mskill && P.mskill.lv || 0;
-    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0);
+    // and the reading step of «Чтение по силам» lifts the small letter and word games (read-skill)
+    const r = /^(abc-|read-)/.test(key) && P.rskill && P.rskill.lv || 0;
+    return Math.max(own, m >= 3 ? 2 : m >= 2 ? 1 : 0, r >= 4 ? 2 : r >= 2 ? 1 : 0);
   };
   function start(key, n = 6, train = false) {
     let last = (P.lqLast || {})[key];
@@ -11251,7 +11281,7 @@ function screenParents(focus) {
   $('#srIn').onchange = e => { ROOT.srOff = !e.target.checked; save(); };
   $('#testVoice').onclick = () => say(greet());
   if (IS_RU) { const tv = $('#testVoice'); if (tv) { tv.closest('.prow-btns').insertAdjacentHTML('afterend', sayOwnHTML()); bindSayOwn(); } }
-  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); SB.settingsRow();
+  HIKE.settings(); CHESSMM.settingsRow(); CHS.settingsRow(); MSK.settingsRow(); RSK.settingsRow(); SB.settingsRow();
   $('#famEdit').onclick = () => { sfx.pop(); screenFamilyEdit(ROOT.curFam, { back: () => screenParents() }); };
   $('#famInvP').onclick = () => { sfx.pop(); screenInvite(screenParents); };
   $('#famInvF').onclick = () => { sfx.pop(); screenInviteFamily(screenParents); };
@@ -15801,6 +15831,248 @@ const MSK = (() => {
   return { play, check, lv, has, setLv, rank, rankTxt, sprintTask, settingsRow, L, pick, startLv };
 })();
 /* MSKILL-END */
+/* RSKILL-BEGIN */
+/* ---------- reading by skill, not by age (the owner: «Чтение должно быть тоже по силам, т.к. 2–3-линго не всегда хорошо
+   успевают на своём родном языке»). One reading step per child (P.rskill.lv, 1…9): letters → open syllables → closed
+   syllables → short words → long words → phrases → sentences → a short text with a question → longer texts. The first
+   time, a short playful check of 8 tasks sets it (age only picks where it starts); then «Чтение по силам» gives rounds
+   of 8 tasks at that step: four clean answers in a row — a step up, two tasks in a row with mistakes — a step back for
+   review. Where the phone hears speech, a word or a phrase can be read aloud instead of tapped. The step chooses the
+   reading node of «Сегодня» (the round plus an old game of that step); a child of 8+ at an early step gets the same
+   steps with no baby strip and words that respect them. The grown-ups can set the step in «Для взрослых». ---------- */
+const RSK = (() => {
+  // language content: letters, syllables and short words come from each language's phonics data; the rest is text
+  const LONGW = [['крокодил', '🐊'], ['вертолёт', '🚁'], ['черепаха', '🐢'], ['снеговик', '⛄'], ['светофор', '🚦'], ['пингвин', '🐧'],
+    ['клубника', '🍓'], ['трактор', '🚜'], ['самолёт', '✈️'], ['бабочка', '🦋'], ['виноград', '🍇'], ['морковка', '🥕'], ['подсолнух', '🌻'],
+    ['велосипед', '🚲'], ['компьютер', '💻'], ['телефон', '📱'], ['гитара', '🎸'], ['шоколад', '🍫'], ['кенгуру', '🦘'], ['осьминог', '🐙'],
+    ['фламинго', '🦩'], ['апельсин', '🍊'], ['барабан', '🥁'], ['скрипка', '🎻'], ['вулкан', '🌋'], ['микроскоп', '🔬'], ['космонавт', '🧑‍🚀'], ['спортсмен', '🏃']];
+  const PHR = [['красное яблоко', '🍎'], ['зелёное яблоко', '🍏'], ['полная луна', '🌕'], ['тонкий месяц', '🌙'], ['красная машина', '🚗'],
+    ['синяя машина', '🚙'], ['горячий чай', '☕'], ['кусок льда', '🧊'], ['спелый арбуз', '🍉'], ['жёлтый банан', '🍌'], ['пожарная машина', '🚒'],
+    ['скорая помощь', '🚑'], ['футбольный мяч', '⚽'], ['баскетбольный мяч', '🏀'], ['снежная гора', '🏔️'], ['огненный вулкан', '🌋'],
+    ['морская волна', '🌊'], ['ночное небо', '🌌'], ['старый замок', '🏰'], ['высокий дом', '🏢'], ['зонт под дождём', '☔'], ['часы с будильником', '⏰'],
+    ['книга на полке', '📚'], ['письмо в конверте', '✉️']];
+  // a sentence with a gap: the right word and two that make no sense
+  const SENT = [['Рыбы плавают в …', 'воде', 'шкафу', 'небе'], ['Зимой на улице лежит белый …', 'снег', 'суп', 'стол'], ['Птица сидит на ветке и громко …', 'поёт', 'варит', 'читает'],
+    ['Мы режем хлеб острым …', 'ножом', 'облаком', 'носком'], ['Ночью на небе светят …', 'звёзды', 'ложки', 'сапоги'], ['Чтобы не промокнуть, возьми …', 'зонт', 'мяч', 'сыр'],
+    ['Корова даёт нам …', 'молоко', 'бензин', 'бумагу'], ['Летом в саду созревают …', 'яблоки', 'шапки', 'ботинки'], ['Самолёт летит высоко в …', 'небе', 'кастрюле', 'кармане'],
+    ['Утром я чищу …', 'зубы', 'облака', 'тучи'], ['Пчёлы собирают …', 'нектар', 'камни', 'гвозди'], ['Футболист ударил по …', 'мячу', 'луне', 'супу'],
+    ['Без воды цветы …', 'вянут', 'поют', 'бегают'], ['Поезд едет по …', 'рельсам', 'облакам', 'крышам'], ['В библиотеке можно взять …', 'книгу', 'корову', 'дождь'],
+    ['Повар готовит обед на …', 'кухне', 'луне', 'крыше'], ['Осенью с деревьев падают …', 'листья', 'рыбы', 'кастрюли'], ['Врач лечит …', 'людей', 'ботинки', 'тучи'],
+    ['Кошка ловит …', 'мышей', 'автобусы', 'звёзды'], ['Чтобы позвонить бабушке, я беру …', 'телефон', 'вилку', 'подушку'], ['Ключом открывают …', 'дверь', 'небо', 'яблоко'],
+    ['Солнце встаёт утром на …', 'востоке', 'кухне', 'полке'], ['Медведь зимой крепко …', 'спит', 'поёт', 'плавает'], ['Художник рисует …', 'картину', 'кашу', 'дождь'],
+    ['Мама положила суп в …', 'тарелку', 'ботинок', 'конверт'], ['Музыкант играет на …', 'скрипке', 'тарелке', 'подушке']];
+  // a short text and a question with three answers, the right one first
+  const TXT = [
+    ['Утром Миша взял с собой зонт. Днём пошёл сильный дождь, но Миша остался сухим.', 'Почему Миша не промок?', 'У него был зонт.', 'Дождя не было.', 'Он сидел дома.'],
+    ['Аня посадила в горшок семечко. Каждый день она его поливала. Через неделю появился зелёный росток.', 'Что появилось через неделю?', 'Росток.', 'Яблоко.', 'Котёнок.'],
+    ['Кот Барсик забрался на высокое дерево. Спуститься он не мог и громко мяукал. Папа принёс лестницу.', 'Зачем папа принёс лестницу?', 'Снять кота с дерева.', 'Покрасить дом.', 'Собрать яблоки.'],
+    ['В субботу ребята пошли на каток. Лёд был гладкий и блестящий. Петя упал, но быстро встал и засмеялся.', 'Куда пошли ребята?', 'На каток.', 'На речку.', 'В кино.'],
+    ['У Лены день рождения. Мама испекла торт, а друзья принесли подарки. Лена задула восемь свечей.', 'Сколько лет исполнилось Лене?', 'Восемь.', 'Пять.', 'Десять.'],
+    ['Ёжик нашёл в лесу гриб. Он наколол его на иголки и понёс домой. Дома ёжик положил гриб сушиться.', 'Как ёжик нёс гриб?', 'На иголках.', 'В корзинке.', 'В зубах.'],
+    ['Дима забыл дома тетрадь. Учительница сказала, что он принесёт её завтра. Вечером Дима сразу положил тетрадь в рюкзак.', 'Что Дима сделал вечером?', 'Положил тетрадь в рюкзак.', 'Пошёл гулять.', 'Потерял рюкзак.'],
+    ['На пляже было жарко. Саша строил замок из песка. Вдруг большая волна смыла башню.', 'Что случилось с башней?', 'Её смыла волна.', 'Её унёс ветер.', 'Её сломала собака.'],
+    ['Бабушка вязала шарф. Котёнок играл с клубком и запутал все нитки. Бабушка не рассердилась, а засмеялась.', 'Кто запутал нитки?', 'Котёнок.', 'Бабушка.', 'Щенок.'],
+    ['Вечером в лесу стало темно. Совы проснулись и вылетели на охоту. А зайцы спрятались в кустах.', 'Кто вылетел на охоту?', 'Совы.', 'Зайцы.', 'Ласточки.'],
+    ['Маша и Коля строили шалаш. Коля принёс длинные палки, а Маша — еловые ветки. К обеду шалаш был готов.', 'Что принесла Маша?', 'Еловые ветки.', 'Длинные палки.', 'Обед.'],
+    ['Игорь занимается плаванием. Три раза в неделю он ходит в бассейн. Вчера он проплыл сто метров без остановки.', 'Сколько метров проплыл Игорь вчера?', 'Сто.', 'Десять.', 'Тысячу.']
+  ];
+  const BIG = [
+    ['Маяк стоит на высокой скале у самого моря. Ночью его яркий свет видно издалека. Капитаны кораблей смотрят на этот свет и понимают, где берег и где опасные камни. Раньше на маяке жил смотритель: каждый вечер он поднимался по крутой лестнице и зажигал огонь. Теперь лампа включается сама.', 'Зачем капитанам нужен свет маяка?', 'Чтобы знать, где берег и камни.', 'Чтобы ловить рыбу.', 'Чтобы читать ночью.'],
+    ['Осьминог — удивительное морское животное. У него восемь гибких рук, и на каждой много присосок. Осьминог умеет менять цвет и прятаться среди камней. Если враг подплывёт слишком близко, осьминог выпустит облако чернил и быстро уплывёт.', 'Что делает осьминог, когда враг рядом?', 'Выпускает чернила и уплывает.', 'Громко кричит.', 'Зарывается в песок.'],
+    ['В нашем городе открыли новую библиотеку. В ней есть зал с мягкими креслами, где можно читать сколько хочешь. По субботам там проходят встречи с писателями. Вчера мы с классом слушали, как писатель рассказывал о своей новой книге про путешествие на воздушном шаре.', 'О чём была новая книга писателя?', 'О путешествии на воздушном шаре.', 'О школе.', 'О футболе.'],
+    ['Пчёлы живут большими семьями в ульях. В каждой семье есть одна матка, которая откладывает яйца. Рабочие пчёлы летают за нектаром, строят соты из воска и охраняют улей. Найдя много цветов, пчела возвращается и танцует особый танец: так она показывает другим, куда лететь.', 'Зачем пчела танцует?', 'Показывает, куда лететь за нектаром.', 'Радуется солнцу.', 'Зовёт матку гулять.'],
+    ['Зимой многие птицы улетают на юг, где тепло и много еды. Но воробьи, синицы и снегири остаются. Им трудно найти корм под снегом. Поэтому ребята из нашей школы сделали кормушки и каждое утро насыпают в них семечки. Теперь у окон класса всегда весело и шумно.', 'Что сделали ребята для птиц?', 'Кормушки.', 'Скворечники на юге.', 'Снежную горку.'],
+    ['Вулкан — это гора, внутри которой есть очень горячая расплавленная порода. Иногда она поднимается наверх и выливается из кратера. Эту огненную реку называют лавой. Остывая, лава становится твёрдым камнем. Некоторые острова в океане появились именно так — из застывшей лавы.', 'Как появились некоторые острова?', 'Из застывшей лавы.', 'Из песка и ракушек.', 'Их построили люди.']
+  ];
+  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a === 7 ? 3 : a === 8 ? 4 : a === 9 ? 5 : 6;
+  const NOCAP = s => s.toUpperCase();
+  const opt = (v, html) => ({ v, html: html || esc(v) });
+  const near = (pool, right, key, n = 2) => sample(pool.filter(x => key(x) !== key(right)), n);
+  // the steps; g() makes one task: { hear: what the voice says to find, show: the text to read, ask, opts, a, after, aloud }
+  const L = [
+    { n: 'Буквы и звуки', ex: 'А, М, С', g: () => {
+      const pool = ABC.filter(a => !RU('ЪЬ').includes(a[0])), x = pickOne(pool);
+      return { hear: `Найди букву ${lsay(x[0])}.`, a: x[0], opts: shuffle([x, ...near(pool, x, y => y[0])]).map(y => opt(y[0], Lspan(y[0]))), after: `${cap(lsay(x[0]))}. ${cap(x[1])}.`, big: 1 };
+    } },
+    { n: 'Открытые слоги', ex: 'МА, ПО, ЛУ', g: () => {
+      if (M_LIST) { const s = pickOne(M_LIST); return { hear: `Найди: ${sylSay(s)}.`, a: s, opts: shuffle([s, ...sample(M_LIST.filter(x => x !== s), 2)]).map(x => opt(x)), after: sylSay(s), big: 1 }; }
+      let c, s; do { c = pickOne(M_CONS); s = c + pickOne(M_VOW); } while (M_BAD.includes(s));
+      const others = shuffle(M_VOW.map(v => c + v).filter(x => x !== s && !M_BAD.includes(x))).slice(0, 2);
+      return { hear: `Найди слог ${sylSay(s)}.`, a: s, opts: shuffle([s, ...others]).map(x => opt(x, [...x].map(Lspan).join(''))), after: sylSay(s), big: 1 };
+    } },
+    { n: 'Закрытые слоги', ex: 'АМ, ОН, КОТ', g: () => {
+      if (M_LIST) { const pool = [...LROWS[3], ...LROWS[4]].map(NOCAP), s = pickOne(pool); return { hear: `Найди: ${sylSay(s)}.`, a: s, opts: shuffle([s, ...sample(pool.filter(x => x !== s), 2)]).map(x => opt(x)), after: sylSay(s), big: 1 }; }
+      const v = pickOne(M_VOW), c = pickOne(M_CONS), c2 = pickOne(M_CONS.filter(x => x !== c)), v2 = pickOne(M_VOW.filter(x => x !== v));
+      const set = Math.random() < .5 ? [v + c, c + v, v + c2] : [c + v + c2, c2 + v + c, c + v2 + c2];
+      return { hear: `Найди слог ${sylSay(set[0])}.`, a: set[0], opts: shuffle(set).map(x => opt(x, [...x].map(Lspan).join(''))), after: sylSay(set[0]), big: 1 };
+    } },
+    { n: 'Короткие слова', ex: 'КОТ, РЫБА', g: () => {
+      const x = pickOne(RWORDS), w = x[0].replace(/-/g, '');
+      return { show: `<b class="rk-w">${esc(w)}</b>`, ask: 'Прочитай слово и найди картинку.', a: x[1], opts: shuffle([x, ...near(RWORDS, x, y => y[1])]).map(y => opt(y[1], pic(y[1]))), after: cap(w.toLowerCase()) + '!', aloud: w.toLowerCase(), pics: 1 };
+    } },
+    { n: 'Длинные слова', ex: 'КРОКОДИЛ, ВЕРТОЛЁТ', g: () => {
+      const x = pickOne(LONGW);
+      return { show: `<b class="rk-w">${esc(NOCAP(x[0]))}</b>`, ask: 'Прочитай слово и найди картинку.', a: x[1], opts: shuffle([x, ...near(LONGW, x, y => y[1])]).map(y => opt(y[1], pic(y[1]))), after: cap(x[0]) + '!', aloud: x[0], pics: 1 };
+    } },
+    { n: 'Фразы', ex: 'зелёное яблоко', g: () => {
+      const i = ri(0, PHR.length - 1), x = PHR[i], pair = i < 6 ? PHR[i ^ 1] : null;
+      const others = pair ? [pair, pickOne(PHR.filter(y => y !== x && y !== pair))] : near(PHR, x, y => y[1]);
+      return { show: `<b class="rk-p">${esc(cap(x[0]))}</b>`, ask: 'Прочитай и найди картинку.', a: x[1], opts: shuffle([x, ...others]).map(y => opt(y[1], pic(y[1]))), after: cap(x[0]) + '.', aloud: x[0], pics: 1 };
+    } },
+    { n: 'Предложения', ex: 'Рыбы плавают в воде.', g: () => {
+      const [s, a, ...o] = pickOne(SENT);
+      return { show: `<span class="rk-s">${esc(s).replace('…', '<b class="rk-gap">…</b>')}</span>`, ask: 'Прочитай и выбери слово, которое подходит.', a, opts: shuffle([a, ...o]).map(x => opt(x)), after: s.replace('…', a) + '.' };
+    } },
+    { n: 'Текст и вопрос', ex: '2–3 предложения', g: () => {
+      const [t, q, a, ...o] = pickOne(TXT);
+      return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: 'Прочитай текст и ответь на вопрос.', a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1 };
+    } },
+    { n: 'Большие тексты', ex: 'читаем, понимаем, быстрее', g: () => {
+      const [t, q, a, ...o] = pickOne(BIG);
+      return { show: `<span class="rk-t">${esc(t)}</span><b class="rk-qq">${esc(q)}</b>`, ask: 'Прочитай текст и ответь на вопрос.', a, opts: shuffle([a, ...o]).map(x => opt(x)), after: a, long: 1, words: wordsIn(t) };
+    } }
+  ];
+  const S = () => (P.rskill = P.rskill && typeof P.rskill === 'object' ? P.rskill : {});
+  const age = () => P.settings.age || (Q() ? 9 : 6);
+  const startLv = () => AGE_LV(age());
+  const has = () => !!(P.rskill && P.rskill.lv);
+  const lv = () => Math.max(1, Math.min(L.length, (P.rskill && P.rskill.lv) || startLv()));
+  // an older child at an early step: grown-up looks and words
+  const big = () => age() >= 8;
+  const early = () => big() && lv() <= 5;
+  const train = () => IS_RU ? 'Тренируем русское чтение' : 'Тренируем чтение';
+  const stepTxt = (l = lv()) => `Ступень ${l} из ${L.length} · ${L[l - 1].n}`;
+  function setLv(n) { S().lv = Math.max(1, Math.min(L.length, n)); save(); }
+  function make(l) { const t = L[l - 1].g(); t.lv = l; return t; }
+  // the progress of a round: the little story strip for the young, a quiet bar for the older ones
+  function strip(n) {
+    if (!big()) return LQ.start('r-skill', n);
+    const box = document.createElement('div'); box.className = 'rk-bar'; box.innerHTML = Array.from({ length: n }, () => '<i></i>').join('');
+    const stage = $('#stage'); if (stage) stage.prepend(box);
+    let k = 0;
+    return { intro: '', end: 'Готово!', hit() { const i = box.children[k++]; if (i) i.classList.add('on'); }, miss() {} };
+  }
+  // one task on the screen; cb(value, button) on every tap; returns the voice line that asks for it
+  function ask(t, cb) {
+    const b = $('#rkBox'); b.dataset.a = t.a; b.dataset.k = +(b.dataset.k || 0) + 1; b.dataset.lv = t.lv;
+    const mic = t.aloud && srOk();
+    b.innerHTML = `${t.show ? `<div class="rk-q ${t.long ? 'long' : ''}">${t.show}</div>` : `<button class="rk-hear" id="rkHear">${ICON.speaker}<span>Послушать ещё</span></button>`}
+      ${t.ask ? `<p class="rk-ask">${t.ask}</p>` : ''}
+      <div class="rk-opts ${t.pics ? 'pics' : t.big ? 'lets' : 'txt'}">${t.opts.map(o => `<button class="rk-o" data-v="${esc(o.v)}">${o.html}</button>`).join('')}</div>
+      ${mic ? '<button class="chip rk-mic" id="rkMic"><span class="emo">🎤</span>Прочитаю вслух</button>' : ''}`;
+    b.querySelector('.rk-opts').onclick = e => { const o = e.target.closest('.rk-o'); if (o) cb(o.dataset.v, o); };
+    const h = $('#rkHear'); if (h) h.onclick = () => talk(t.hear);
+    const m = $('#rkMic');
+    if (m) m.onclick = async () => {
+      if (m.disabled) return; m.disabled = true; m.classList.add('ear'); sfx.tick(); hush();
+      const r = await hear(t.aloud, { maxMs: 6000 }).catch(() => ({}));
+      if (!m.isConnected) return; m.classList.remove('ear'); m.disabled = false;
+      if (r && r.ok) cb(t.a, b.querySelector(`.rk-o[data-v="${CSS.escape(t.a)}"]`), true);
+      else talk('Не получилось расслышать. Выбери ответ.');
+    };
+    return t.hear || t.ask;
+  }
+  const mark = (el, good) => { if (el) el.classList.add(good ? 'right' : 'wrong'); };
+  // the first time: eight tasks that climb and fall; the step is the highest one read right more often than wrong
+  function check() {
+    const t = newScreen(); let l = startLv(), k = 0, task = null, busy = false;
+    const N = 8, hit = {}, miss = {};
+    shell('Чтение по силам', `<div class="rk"><p class="rk-step" id="rkStep"></p><div id="rkBox"></div></div>`);
+    const q = strip(N);
+    function next() {
+      busy = false; task = make(l); $('#rkStep').textContent = `Задание ${k + 1} из ${N}`;
+      const line = ask(task, answer);
+      talk((k === 0 ? (big() ? `${IS_RU ? 'Проверим, как ты читаешь по-русски.' : 'Проверим, как ты читаешь.'} Восемь заданий, это не экзамен: так мы найдём задания как раз для тебя. ` : 'Проверим, как ты читаешь! Восемь заданий: ошибаться не страшно — так мы найдём твой уровень. ') : '') + line);
+    }
+    async function answer(v, el) {
+      if (busy) return; busy = true;
+      const good = String(v) === String(task.a);
+      (good ? hit : miss)[l] = ((good ? hit : miss)[l] || 0) + 1;
+      if (good) { sfx.good(); mark(el, 1); l = Math.min(L.length, l + (k < 2 ? 2 : 1)); }
+      else { sfx.pop(); mark(el, 0); mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); l = Math.max(1, l - 1); }
+      q.hit(el, '');
+      await talk(good ? pickOne(['Верно!', 'Да!', 'Точно!']) : 'Ничего! Идём дальше.'); if (t !== tok) return;
+      k++;
+      if (k < N) { later(next, 300); return; }
+      const ok = Object.keys(hit).map(Number).filter(x => hit[x] > (miss[x] || 0));
+      setLv(ok.length ? Math.max(...ok) : 1); S().checked = dayKey(); save();
+      finish({ key: 'r-skill', stars: 3, line: `${q.end} ${stepTxt()}. Теперь задания будут как раз для тебя.`, again: () => play() });
+    }
+    next();
+  }
+  const head = l => `<div class="mk-head rk-head"><button class="chip" id="rkDown">🐢 Полегче</button><span class="mk-rank"><b>Ступень ${l} из ${L.length}</b><small>${esc(L[l - 1].n)}${big() && l <= 5 ? ' · ' + train() : ''}</small></span><button class="chip" id="rkUp">🚀 Посложнее</button></div>`;
+  // a round of eight at the child's step, the step moving with the answers
+  function play() {
+    if (!has()) { check(); return; }
+    const t = newScreen(); let l = lv(), k = 0, task = null, tries = 0, streak = 0, missRun = 0, right = 0, busy = false;
+    const N = 8, l0 = l, UP = 4;
+    shell('Чтение по силам', `<div class="rk">${head(l)}<div id="rkBox"></div><button class="link-btn" id="rkRe">🔁 Проверить ещё раз</button></div>`);
+    const q = strip(N);
+    const reHead = () => { $('.rk-head').outerHTML = head(l); bindHead(); };
+    function bindHead() {
+      $('#rkDown').onclick = () => { if (l <= 1) return; sfx.pop(); setLv(l - 1); play(); };
+      $('#rkUp').onclick = () => { if (l >= L.length) return; sfx.pop(); setLv(l + 1); play(); };
+    }
+    bindHead();
+    $('#rkRe').onclick = () => { sfx.pop(); delete S().lv; check(); };
+    function next() {
+      busy = false; tries = 0; task = make(l);
+      const line = ask(task, answer);
+      talk((k === 0 && q.intro ? q.intro + ' ' : '') + line);
+    }
+    async function answer(v, el) {
+      if (busy) return;
+      if (String(v) === String(task.a)) {
+        busy = true; sfx.good(); mark(el, 1); q.hit(el, '');
+        if (tries === 0) { right++; missRun = 0; streak++; } else { streak = 0; missRun++; }
+        let line = pickOne(['Верно!', 'Да!', 'Точно!', 'Правильно!']);
+        if (task.after && !task.long) line += ' ' + task.after;
+        if (streak >= UP && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + 'Отлично читаешь! Идём на ступень выше.'; }
+        else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + 'Повторим ступень пониже.'; }
+        await talk(line); if (t !== tok) return;
+        return step();
+      }
+      tries++; streak = 0; sfx.oops(); if (el) { wiggle(el); el.disabled = true; }
+      if (tries === 1) { q.miss(null); talk(task.show ? 'Почти! Прочитай ещё раз, не спеши.' : 'Почти! Послушай ещё раз. ' + task.hear); return; }
+      busy = true; missRun++; mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); q.hit(null, '');
+      await talk('Вот правильный ответ. Ничего, идём дальше!'); if (t !== tok) return;
+      if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); await talk('Повторим ступень пониже.'); if (t !== tok) return; }
+      return step();
+    }
+    function step() {
+      k++;
+      if (k < N) { later(next, 350); return; }
+      S().last = dayKey(); save();
+      finish({ key: 'r-skill', stars: right >= 7 ? 3 : right >= 5 ? 2 : 1, line: `${q.end} ${stepTxt(l)}.` + (l > l0 ? ' ' + 'Новая ступень!' : ''), again: () => play() });
+    }
+    next();
+  }
+  // «Сегодня»: the round first, then an old game of the same step (young and older children get different ones)
+  function plan(n, s) {
+    const l = lv(), o = big(), alt = a => a[(n + s) % a.length];
+    const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()); };
+    const pr = IS_RU && prState().at < PRIMER.length ? 'primer' : 'read-merge';
+    const G = l === 1 ? (o ? ['abc-find'] : ['abc-find', 'abc-first'])
+      : l === 2 ? [o ? 'l-syll' : pr]
+      : l === 3 ? [o ? 'l-syll' : ok('syl-clap') ? alt(['syl-clap', 'read-merge']) : 'read-merge']
+      : l === 4 ? [o ? 'code-colw' : alt(['read-words', 'read-pick'])]
+      : l === 5 ? [o ? 'code-colw' : alt(['read-pick', 'code-colw'])]
+      : l <= 7 ? [o ? 'l-word' : 'read-pick']
+      : Q() ? ['l-syll', 'speed'] : ['speed'];
+    return [gameStep('r-skill', 'read'), ...G.filter(ok).map(id => gameStep(id, 'read'))];
+  }
+  // the reading node of «Сегодня» says the step
+  const sub = () => !has() ? 'проверим, как ты читаешь' : early() ? train() : `ступень ${lv()}: ${L[lv() - 1].n.toLowerCase()}`;
+  // the grown-ups' panel
+  function settingsRow() {
+    const sec = $('#frSec') || $('#langSec'); if (!sec) return;
+    sec.insertAdjacentHTML('beforeend', `<label class="prow" for="rkLvIn">📖 Чтение: ступень <select id="rkLvIn"><option value="">проверить при входе</option>${L.map((x, i) => `<option value="${i + 1}" ${P.rskill && P.rskill.lv === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)} (${esc(x.ex)})</option>`).join('')}</select></label>`);
+    $('#rkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
+  }
+  GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'abc')), 0, { id: 'r-skill', name: 'Чтение по силам', sub: 'задания как раз для тебя: от слогов до текстов', kw: 'чтение читать уровень слоги слова текст', ico: () => pic('📖'), bg: 'var(--t-blue)', go: () => play(), grp: 2, also: [6], prog: () => has() ? stepTxt() : '' });
+  return { play, check, lv, has, setLv, plan, sub, early, settingsRow, L, make, startLv, stepTxt };
+})();
+/* RSKILL-END */
 /* OLYPLAY-BEGIN */
 /* ---------- «Олимпиада» by skill: five problems at the child's level (the last one a «трудная задача» from the level
    above), no penalty for a miss — praise for trying, hint 1, hint 2, and after the third miss the answer with its
