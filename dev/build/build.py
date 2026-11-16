@@ -4,16 +4,18 @@ lang = sys.argv[3] if len(sys.argv) > 3 else 'ru'
 import os.path
 SITE = os.environ.get('SITE') or os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 up = '' if os.path.abspath(out) == os.path.abspath(SITE) else '../'   # the main page sits at the top; the others one folder down share icons and the worker
+# desc: the search snippet and the link card, at most 155 characters (checked below)
 META = {
-  'ru': dict(desc='Логопедия, чтение, математика, шахматы, живопись и музыка для детей 4–12 лет. На русском, английском, португальском и немецком; бабушки и дедушки играют вместе с внуками.', short='Говорилки', name='Говорилки с Рыжиком', title='Говорилки с Рыжиком — игры для детей 4–12 лет', loc='ru_RU', path='ru/',
+  'ru': dict(desc='Логопедия, чтение, математика, шахматы, живопись и музыка для детей 4–12 лет. Бесплатно и без рекламы; бабушки и дедушки играют вместе с внуками.', short='Говорилки', name='Говорилки с Рыжиком', title='Говорилки с Рыжиком — игры для детей 4–12 лет', loc='ru_RU', path='ru/',
              mdesc='Логопедическая игра: дыхание, зарядка для язычка и игры со звуком Р.', saved='Прогресс хранится только на этом устройстве.'),
-  'en': dict(desc='Speech, reading, maths, chess, art and music games for children aged 4–12. In English, German, Portuguese and Russian; grandparents can play along with their grandchildren.', short='Chatterbox', name='Chatterbox with Ginger', title='Chatterbox with Ginger — games for children aged 4–12', loc='en_GB', path='',
+  'en': dict(desc='Speech, reading, maths, chess, art and music games for children aged 4–12. Free, with no ads; grandparents can play along with their grandchildren.', short='Chatterbox', name='Chatterbox with Ginger', title='Chatterbox with Ginger — games for children aged 4–12', loc='en_GB', path='',
              mdesc='Speech and learning game: breathing, tongue workouts, sounds, reading and maths.', saved=None),
-  'pt': dict(desc='Fala, leitura, matemática, xadrez, arte e música para crianças dos 4 aos 12 anos. Em português, inglês, alemão e russo; os avós também podem jogar com os netos.', short='Tagarelas', name='Tagarelas com o Ruivinho', title='Tagarelas com o Ruivinho — jogos para crianças dos 4 aos 12 anos', loc='pt_PT', path='pt/',
+  'pt': dict(desc='Fala, leitura, matemática, xadrez, arte e música para crianças dos 4 aos 12 anos. Grátis e sem anúncios; os avós também podem jogar com os netos.', short='Tagarelas', name='Tagarelas com o Ruivinho', title='Tagarelas com o Ruivinho — jogos para crianças dos 4 aos 12 anos', loc='pt_PT', path='pt/',
              mdesc='Jogo de fala e aprendizagem: respiração, ginástica da língua, sons, leitura e matemática.', saved=None),
-  'de': dict(desc='Sprechen, Lesen, Mathe, Schach, Kunst und Musik für Kinder von 4 bis 12 Jahren. Auf Deutsch, Englisch, Portugiesisch und Russisch; Oma und Opa spielen mit den Enkeln mit.', short='Plaudertaschen', name='Plaudertaschen mit Rotschopf', title='Plaudertaschen mit Rotschopf — Spiele für Kinder von 4 bis 12', loc='de_DE', path='de/',
+  'de': dict(desc='Sprechen, Lesen, Mathe, Schach, Kunst und Musik für Kinder von 4 bis 12 Jahren. Kostenlos und ohne Werbung; Oma und Opa spielen mit den Enkeln mit.', short='Plaudertaschen', name='Plaudertaschen mit Rotschopf', title='Plaudertaschen mit Rotschopf — Spiele für Kinder von 4 bis 12', loc='de_DE', path='de/',
              mdesc='Sprach- und Lernspiel: Atmen, Zungengymnastik, Laute, Lesen und Mathe.', saved=None),
 }[lang]
+assert len(META['desc']) <= 155, (lang, len(META['desc']))
 import os
 os.makedirs(out, exist_ok=True)
 s = open(src, encoding='utf8').read()
@@ -27,7 +29,7 @@ SHARE = f'''<title>{META['title']}</title>
 <link rel="canonical" href="{URL}">
 <link rel="alternate" hreflang="en" href="{BASE}">
 <link rel="alternate" hreflang="ru" href="{BASE}ru/">
-<link rel="alternate" hreflang="pt" href="{BASE}pt/">
+<link rel="alternate" hreflang="pt-PT" href="{BASE}pt/">
 <link rel="alternate" hreflang="de" href="{BASE}de/">
 <link rel="alternate" hreflang="x-default" href="{BASE}">
 <meta property="og:type" content="website">
@@ -63,7 +65,7 @@ def make_page(script):
 <html lang="{lang}">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="{META['desc']}">
 {SHARE}
 <meta name="theme-color" content="#CDEEF6">
@@ -75,7 +77,9 @@ def make_page(script):
 <meta name="apple-mobile-web-app-title" content="{META['short']}">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
+/* people can pinch-zoom (no maximum-scale); manipulation keeps quick double taps on buttons from zooming, inputs are ≥16px */
 :root{{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}}
+html{{touch-action:manipulation}}
 body{{margin:0;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}}
 input{{-webkit-user-select:text;user-select:text}}
 img{{max-width:100%}}

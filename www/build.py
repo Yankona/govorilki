@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """The website of «Говорилки» (Chatterbox, Tagarelas): static pages for search, in Russian, English and Portuguese.
 
-content/{ru,en,pt}.json hold the texts (see the shape in content/README.md); this script writes dist/:
-  /                      the three languages (x-default)
-  /{lang}/               the home page of each language
-  /{lang}/{slug}/        the articles
+content/{ru,en,pt,de}.json hold the texts (see the shape in content/README.md), content/root.json the first page; this script writes dist/:
+  /                      govorilki.com itself: Рыжик, a short text in each language, «Играть», every article (x-default of the homes)
+  /{lang}/               the home page of each language (ru, en, pt, de)
+  /{lang}/{slug}/        the articles (ru, en, pt so far; x-default: the English one)
   /sitemap.xml, /robots.txt, /404.html, /assets/…
 SITE_URL (env) is the address the pages are served from; the game is copied to /play/ from APP_DIR (yankona.github.io/govorilki moves there).
 Run: python3 www/build.py  (writes www/dist)
@@ -14,21 +14,27 @@ import html, json, os, re, shutil, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'dist')
 SITE = os.environ.get('SITE_URL', 'https://govorilki.com').rstrip('/')
-LANGS = ['ru', 'en', 'pt']
+LANGS = ['ru', 'en', 'pt', 'de']
+ART = ['ru', 'en', 'pt']   # the languages with articles; de has its home only (for now)
 KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq']
-APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/'}
+APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/', 'de': SITE + '/play/de/'}
 # the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
 APP_DIR = os.environ.get('APP_DIR', '')
 APP_FILES = ['index.html', 'ru', 'en', 'pt', 'de', 'art', 'music', 'img', 'trips', 'engine', 'icons', 'tales', 'data', 'sw.js', 'manifest.webmanifest']
-HL = {'ru': 'ru', 'en': 'en', 'pt': 'pt-PT'}
-OG_LOCALE = {'ru': 'ru_RU', 'en': 'en_GB', 'pt': 'pt_PT'}
-SHORT = {'ru': 'RU', 'en': 'EN', 'pt': 'PT'}
+HL = {'ru': 'ru', 'en': 'en', 'pt': 'pt-PT', 'de': 'de'}   # the one set of hreflang codes (the game's pages use the same)
+OG_LOCALE = {'ru': 'ru_RU', 'en': 'en_GB', 'pt': 'pt_PT', 'de': 'de_DE'}
+SHORT = {'ru': 'RU', 'en': 'EN', 'pt': 'PT', 'de': 'DE'}
 TODAY = datetime.date.today().isoformat()
 FRIENDS = ['tiger', 'kitty', 'panda', 'unicorn', 'ghost']
 
 C = {l: json.load(open(os.path.join(HERE, 'content', l + '.json'), encoding='utf-8')) for l in LANGS}
+PAGES = {l: KEYS if l in ART else ['home'] for l in LANGS}
 for l in LANGS:
-    assert set(C[l]['pages']) >= set(KEYS), (l, set(KEYS) - set(C[l]['pages']))
+    assert set(C[l]['pages']) >= set(PAGES[l]), (l, set(PAGES[l]) - set(C[l]['pages']))
+ROOT = json.load(open(os.path.join(HERE, 'content', 'root.json'), encoding='utf-8'))
+def alts_for(k):
+    """the hreflang set of a page: every language that has it, and x-default (the first page for the homes, English for articles)"""
+    return {a: url(a, k) for a in LANGS if k in PAGES[a]}, (SITE + '/' if k == 'home' else url('en', k))
 
 esc = lambda s: html.escape(str(s), quote=True)
 def path(l, k):
@@ -58,9 +64,9 @@ CSS = open(os.path.join(HERE, 'site.css'), encoding='utf-8').read()
 VERIFY = json.load(open(os.path.join(HERE, 'verify.json'))) if os.path.exists(os.path.join(HERE, 'verify.json')) else {}
 VERIFY_META = ''.join(f'<meta name="{n}" content="{html.escape(VERIFY[k], quote=True)}">' for k, n in (('google', 'google-site-verification'), ('yandex', 'yandex-verification'), ('bing', 'msvalidate.01')) if VERIFY.get(k))
 
-def head(l, k, title, desc, canonical, alts, ld, og_type='website'):
+def head(l, k, title, desc, canonical, alts, ld, og_type='website', xdef=None):
     links = ''.join(f'<link rel="alternate" hreflang="{HL[a]}" href="{u}">' for a, u in alts.items())
-    links += f'<link rel="alternate" hreflang="x-default" href="{alts.get("en", canonical)}">'
+    links += f'<link rel="alternate" hreflang="x-default" href="{xdef or alts.get("en", canonical)}">'
     og_alt = ''.join(f'<meta property="og:locale:alternate" content="{OG_LOCALE[a]}">' for a in alts if a != l)
     return f'''<!doctype html>
 <html lang="{HL[l] if l else 'ru'}">
@@ -93,7 +99,8 @@ def head(l, k, title, desc, canonical, alts, ld, og_type='website'):
 def topbar(l, k, alts):
     u = C[l]['ui']
     cur = ' aria-current="true"'
-    langs = ''.join(f'<a href="{alts[a]}" hreflang="{HL[a]}" lang="{HL[a]}"{cur if a == l else ""}>{SHORT[a]}</a>' for a in LANGS if a in alts)
+    # a language without this article leads to its home (de)
+    langs = ''.join(f'<a href="{alts.get(a) or SITE + path(a, "home")}" hreflang="{HL[a]}" lang="{HL[a]}"{cur if a == l else ""}>{SHORT[a]}</a>' for a in LANGS)
     return f'''<header class="top"><div class="wrap">
 <a class="brand" href="{path(l, 'home')}"><img src="/assets/tiger.svg" alt="" width="40" height="40"><span>{esc(C[l]['brand'])}</span></a>
 <nav class="langs" aria-label="Language">{langs}</nav>
@@ -112,13 +119,14 @@ def faq_html(l, items):
 
 def more(l, k):
     u = C[l]['ui']
-    items = ''.join(f'<li><a href="{path(l, x)}">{esc(C[l]["pages"][x]["nav"])}</a></li>' for x in KEYS if x not in (k, 'home'))
+    items = ''.join(f'<li><a href="{path(l, x)}">{esc(C[l]["pages"][x]["nav"])}</a></li>' for x in PAGES[l] if x not in (k, 'home'))
+    if not items: return ''
     return f'<nav class="more" aria-label="{esc(u["articles"])}"><h2>{esc(u["articles"])}</h2><ul>{items}</ul></nav>'
 
 def footer(l):
     u = C[l]['ui']
-    pages = ''.join(f'<a href="{path(l, x)}">{esc(C[l]["pages"][x]["nav"])}</a>' for x in KEYS)
-    langs = ''.join(f'<a href="{path(a, "home")}" hreflang="{HL[a]}" lang="{HL[a]}">{esc(C[a]["ui"]["lang_name"])}</a>' for a in LANGS)
+    pages = ''.join(f'<a href="{path(l, x)}">{esc(C[l]["pages"][x]["nav"])}</a>' for x in PAGES[l])
+    langs = '<a href="/">govorilki.com</a>' + ''.join(f'<a href="{path(a, "home")}" hreflang="{HL[a]}" lang="{HL[a]}">{esc(C[a]["ui"]["lang_name"])}</a>' for a in LANGS)
     return f'''<footer><div class="wrap"><nav>{pages}</nav><nav class="fl">{langs}</nav>
 <p>{esc(u['footer'])}</p><p class="disc">{esc(u['disclaimer'])}</p></div></footer>
 </body></html>'''
@@ -144,7 +152,7 @@ def ld_for(l, k, pg, canonical):
 def page(l, k):
     pg = C[l]['pages'][k]; u = C[l]['ui']
     canonical = url(l, k)
-    alts = {a: url(a, k) for a in LANGS}
+    alts, xdef = alts_for(k)
     secs = pg['sections']
     ids = [f's{i + 1}' for i in range(len(secs))]
     toc = '' if k == 'home' or len(secs) < 3 else f'<nav class="toc" aria-label="{esc(u["toc"])}"><b>{esc(u["toc"])}</b><ol>' + ''.join(f'<li><a href="#{i}">{esc(s["h2"])}</a></li>' for i, s in zip(ids, secs)) + '</ol></nav>'
@@ -153,7 +161,7 @@ def page(l, k):
     imgs = ''.join(f'<img src="/assets/{f}.svg" alt="" width="84" height="84">' for f in FRIENDS)
     hero = f'<div class="hero-f">{imgs}</div>' if k == 'home' else ''
     top_cta = f'<p class="hero-cta"><a class="btn" href="{APP[l]}">{esc(u["play"])}</a></p><p class="sub center">{esc(u["play_sub"])}</p>' if k == 'home' else ''
-    html_ = (head(l, k, pg['title'], pg['description'], canonical, alts, ld_for(l, k, pg, canonical), 'website' if k == 'home' else 'article')
+    html_ = (head(l, k, pg['title'], pg['description'], canonical, alts, ld_for(l, k, pg, canonical), 'website' if k == 'home' else 'article', xdef)
              + topbar(l, k, alts)
              + f'<main class="wrap{" home" if k == "home" else ""}"><article>{crumbs}{hero}<h1>{esc(pg["h1"])}</h1><p class="lead">{esc(pg["lead"])}</p>{top_cta}{toc}{body}{cta(l)}{faq_html(l, pg.get("faq"))}</article>{more(l, k)}</main>'
              + footer(l))
@@ -162,29 +170,50 @@ def page(l, k):
     open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(html_)
 
 def hub():
-    alts = {a: url(a, 'home') for a in LANGS}
-    ld = {'@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Говорилки · Chatterbox · Tagarelas', 'url': SITE + '/'}
-    title = 'Говорилки · Chatterbox · Tagarelas — игры для речи, чтения и счёта'
-    cards = ''.join(f'''<a class="lang-card" href="{path(a, 'home')}" hreflang="{HL[a]}" lang="{HL[a]}" data-l="{a}"><b>{esc(C[a]['brand'])}</b><span>{esc(C[a]['ui']['lang_name'])}</span><small>{esc(C[a]['pages']['home']['lead'])}</small></a>''' for a in LANGS)
-    h = head('ru', None, title, C['ru']['pages']['home']['description'], SITE + '/', alts, ld)
-    h += f'''<main class="wrap hub"><div class="hero-f">{"".join(f'<img src="/assets/{f}.svg" alt="" width="84" height="84">' for f in FRIENDS)}</div>
-<h1>Говорилки · Chatterbox · Tagarelas</h1><div class="lang-cards">{cards}</div></main>
-<script>try{{var n=(navigator.language||'').slice(0,2),c=document.querySelector('[data-l="'+n+'"]');if(c)c.classList.add('mine')}}catch(e){{}}</script>
+    """govorilki.com/: an indexable page (it used to be a 302 to /play/) — Рыжик, a short hand-written text per language,
+    «Играть» (the game picks the phone's language itself; the script only says «Play» in that language), every article"""
+    alts, _ = alts_for('home')
+    R = ROOT
+    ld = {'@context': 'https://schema.org', '@graph': [
+        {'@type': 'WebSite', 'name': 'Говорилки · Chatterbox · Tagarelas · Plaudertaschen', 'url': SITE + '/', 'inLanguage': [HL[a] for a in LANGS]},
+        {'@type': 'WebApplication', 'name': 'Говорилки', 'alternateName': [C[a]['brand'] for a in LANGS if a != 'ru'], 'url': SITE + '/play/',
+         'applicationCategory': 'EducationalApplication', 'operatingSystem': 'Web, iOS, Android', 'inLanguage': [HL[a] for a in LANGS],
+         'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'EUR'}, 'isAccessibleForFree': True,
+         'audience': {'@type': 'PeopleAudience', 'suggestedMinAge': 4, 'suggestedMaxAge': 12}}]}
+    def card(a):
+        c = R['cards'][a]
+        arts = ''.join(f'<li><a href="{path(a, x)}">{esc(C[a]["pages"][x]["nav"])}</a></li>' for x in PAGES[a] if x != 'home')
+        arts = f'<h3>{esc(c["articles"])}</h3><ul class="arts">{arts}</ul>' if arts else f'<p class="sub">{esc(c["articles"])}</p>'
+        return f'''<section class="lang-card" lang="{HL[a]}" data-l="{a}" id="{a}"><h2><a href="{path(a, 'home')}">{esc(C[a]['brand'])}</a> <span>{esc(C[a]['ui']['lang_name'])}</span></h2>
+<p>{esc(c['text'])}</p><p class="row"><a class="btn sm" href="{APP[a]}">{esc(c['play'])}</a> <a href="{path(a, 'home')}">{esc(c['about'])}</a></p>{arts}</section>'''
+    pick = ''.join(f'<a href="#{a}" hreflang="{HL[a]}" lang="{HL[a]}">{esc(C[a]["ui"]["lang_name"])}</a>' for a in LANGS)
+    h = head('ru', None, R['title'], R['description'], SITE + '/', alts, ld, xdef=SITE + '/')
+    h += f'''<main class="wrap hub"><img class="ryzhik" src="/assets/tiger.svg" alt="{esc(R['friend'])}" width="150" height="150">
+<p class="friend">{esc(R['friend'])}</p>
+<h1>{esc(R['h1'])}</h1>
+<p class="hero-cta"><a class="btn big" id="play" href="/play/">{esc(R['play']['ru'])}</a></p><p class="sub center" id="playSub">{esc(R['play_sub']['ru'])}</p>
+<nav class="langs pick" aria-label="Language">{pick}</nav>
+<div class="lang-cards">{''.join(card(a) for a in LANGS)}</div></main>
+<footer class="hub-foot"><div class="wrap">{''.join(f'<p lang="{HL[a]}">{esc(C[a]["ui"]["disclaimer"])}</p>' for a in LANGS)}</div></footer>
+<script>try{{var P={json.dumps(R['play'], ensure_ascii=False)},S={json.dumps(R['play_sub'], ensure_ascii=False)},n=(navigator.language||'').slice(0,2).toLowerCase(),c=document.querySelector('[data-l="'+n+'"]');
+if(c){{c.classList.add('mine');document.getElementById('play').textContent=P[n];document.getElementById('playSub').textContent=S[n]}}}}catch(e){{}}</script>
 </body></html>'''
     open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write(h)
 
 def extras():
     urls = []
+    def xl(k):
+        alts, xdef = alts_for(k)
+        return ''.join(f'<xhtml:link rel="alternate" hreflang="{HL[a]}" href="{u}"/>' for a, u in alts.items()) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{xdef}"/>'
+    urls.append(f'<url><loc>{SITE}/</loc><lastmod>{TODAY}</lastmod>{xl("home")}</url>')
     for k in KEYS:
         for l in LANGS:
-            alts = ''.join(f'<xhtml:link rel="alternate" hreflang="{HL[a]}" href="{url(a, k)}"/>' for a in LANGS)
-            urls.append(f'<url><loc>{url(l, k)}</loc><lastmod>{TODAY}</lastmod>{alts}</url>')
+            if k in PAGES[l]: urls.append(f'<url><loc>{url(l, k)}</loc><lastmod>{TODAY}</lastmod>{xl(k)}</url>')
     open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(urls) + '\n</urlset>\n')
     open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /play/\n\nSitemap: {SITE}/sitemap.xml\n')
-    # govorilki.com opens the game straight away (it picks the phone's language itself); the articles stay for search
-    open(os.path.join(OUT, '_redirects'), 'w').write('/ /play/ 302\n/index.html /play/ 302\n')
+    # no redirect of «/» any more: govorilki.com is a page of its own (hub), so search engines can see it
     open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n')
-    nf = head('ru', None, 'Говорилки · Chatterbox · Tagarelas', C['ru']['pages']['home']['description'], SITE + '/', {a: url(a, 'home') for a in LANGS}, {'@context': 'https://schema.org', '@type': 'WebPage'})
+    nf = head('ru', None, 'Говорилки · Chatterbox · Tagarelas', C['ru']['pages']['home']['description'], SITE + '/', alts_for('home')[0], {'@context': 'https://schema.org', '@type': 'WebPage'}, xdef=SITE + '/')
     nf = nf.replace('<head>', '<head>\n<meta name="robots" content="noindex">')
     nf += f'<main class="wrap hub"><div class="hero-f"><img src="/assets/ghost.svg" alt="" width="96" height="96"></div><h1>404</h1><div class="lang-cards">' + ''.join(f'<a class="lang-card" href="{path(a, "home")}"><b>{esc(C[a]["brand"])}</b><span>{esc(C[a]["ui"]["lang_name"])}</span></a>' for a in LANGS) + '</div></main></body></html>'
     open(os.path.join(OUT, '404.html'), 'w', encoding='utf-8').write(nf)
@@ -193,7 +222,8 @@ if __name__ == '__main__':
     shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
     shutil.copytree(os.path.join(HERE, 'assets'), os.path.join(OUT, 'assets'))
     for l in LANGS:
-        for k in KEYS: page(l, k)
+        for k in PAGES[l]: page(l, k)
+    hub()
     extras()
     if APP_DIR:
         for f in APP_FILES:
@@ -201,4 +231,4 @@ if __name__ == '__main__':
             if os.path.isdir(src): shutil.copytree(src, dst)
             elif os.path.exists(src): os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy2(src, dst)
     n = sum(len(fs) for _, _, fs in os.walk(OUT))
-    print(f'built {len(LANGS) * len(KEYS) + 1} pages, {n} files → {OUT} for {SITE}')
+    print(f'built {sum(len(PAGES[l]) for l in LANGS) + 1} pages, {n} files → {OUT} for {SITE}')
