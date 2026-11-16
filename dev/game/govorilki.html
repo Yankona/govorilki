@@ -22781,7 +22781,8 @@ const GUIDE = (() => {
   }
   const mathLv = d => d.m || (d.a <= 4 ? 1 : d.a === 5 ? 2 : d.a === 6 ? 3 : d.a === 7 ? 5 : d.a === 8 ? 7 : d.a === 9 ? 9 : 11);
   // reading: 1 letters, 2 syllables, 3 words and short texts, 4 fluent (the reading level of the game, when there is one)
-  const readLv = d => d.rl ? Math.max(1, Math.min(4, d.rl)) : d.w >= 50 || (d.tr === 'l' && d.a >= 8) ? 4 : d.w > 0 ? 3 : d.sy || d.a >= 7 ? 2 : d.a >= 6 ? 2 : 1;
+  // «Чтение по силам» has 9 steps (letters … long texts); the tips have 4 levels
+  const readLv = d => d.rl ? (d.rl <= 1 ? 1 : d.rl <= 3 ? 2 : d.rl <= 6 ? 3 : 4) : d.w >= 50 || (d.tr === 'l' && d.a >= 8) ? 4 : d.w > 0 ? 3 : d.sy || d.a >= 7 ? 2 : d.a >= 6 ? 2 : 1;
   const logicLv = d => d.oll || Math.max(1, Math.min(8, d.a - 3));
   // what the child works on now: the areas of this week, most played first; a child with no week yet — by age
   function areas(d) {
