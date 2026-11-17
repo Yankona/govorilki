@@ -22,6 +22,11 @@ s = open(src, encoding='utf8').read()
 head, rest = s.split('<div id="app"></div>', 1)
 head = head.replace('<meta name="claude:viewport-fit-sides" content="cover">\n', '')
 head = re.sub(r'<title>.*?</title>\s*', '', head)
+# fonts: the site serves its own copy (fonts/, from site-add); no request to Google. The claude.ai copy keeps Google
+# Fonts, the only font host its page rules allow.
+GFONTS = re.search(r'<link rel="preconnect" href="https://fonts.googleapis.com">.*?display=swap">\n', head, re.S)
+assert GFONTS, 'the Google Fonts links moved: update build.py'
+head_site = head.replace(GFONTS.group(0), f'<link rel="stylesheet" href="{up}fonts/fonts.css">\n')
 # what messengers and search show for a link: the language's own title, text and card (absolute addresses)
 BASE = 'https://govorilki.com/play/'
 URL = BASE + META['path']
@@ -60,7 +65,7 @@ if (hot && typeof hot.ready === 'function') { try { hot.ready(() => goHome()); }
 else goHome();""", "goHome();")
 if META['saved']: script = script.replace('Прогресс хранится только в этом браузере.', META['saved'])
 assert 'goHome();\n})();' in script
-def make_page(script):
+def make_page(script, head=head_site):
   return f'''<!doctype html>
 <html lang="{lang}">
 <head>
@@ -106,7 +111,7 @@ DEV = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 if lang == 'ru':
   os.makedirs(os.path.join(DEV, 'artifact'), exist_ok=True)
   full = script.replace('/*__SAYRU__*/null', open(SAYRU, encoding='utf8').read().strip()) if SAYRU else script
-  open(os.path.join(DEV, 'artifact', 'ru.html'), 'w', encoding='utf8').write(make_page(full))
+  open(os.path.join(DEV, 'artifact', 'ru.html'), 'w', encoding='utf8').write(make_page(full, head))
 # the site's page: big data the first screen does not need goes to data/<lang>/*.json (build/packs.js)
 import subprocess, tempfile
 with tempfile.TemporaryDirectory() as tmp:

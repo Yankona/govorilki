@@ -5,6 +5,7 @@
 const ORIGINS = ['https://govorilki.com', 'https://www.govorilki.com', 'https://yankona.github.io', 'http://localhost:8765'];
 const LOCK_AFTER = 5, LOCK_MS = 15 * 60e3, LOCK_MAX = 24 * 3600e3, IP_MAX = 40, IP_WINDOW = 60 * 60e3, TOKEN_DAYS = 400;
 const MAX_IDEA = 12e3, IDEA_IP_MAX = 20, IDEA_KEEP = 3000;
+const CH_TTL = 12 * 3600e3, CH_MAX = 48e3, CH_IP_MAX = 3000, CH_LIST = 500;
 const MAX_PROFILE = 600e3, MAX_META = 40e3, MAX_KIDS = 12, MAX_MOVE = 1.9e6, MOVE_TTL = 24 * 3600e3, MOVE_IP_MAX = 30;
 
 const now = () => Date.now();
@@ -99,6 +100,29 @@ async function route(req, env) {
     if (!r || now() - r.created > MOVE_TTL) return json({ ok: false, error: 'gone' }, 404);
     await env.DB.prepare('DELETE FROM moves WHERE id = ?').bind(mv[1]).run();
     return json({ ok: true, data: r.data });
+  }
+
+  // the family channel: phones post sealed notes to a channel named by a hash; the key is the channel's name (the family,
+  // league or game code), which stays on the phones, so the server keeps only ciphertext, and only for 12 hours.
+  // Reading needs nothing but the hash: it is useless without the name. No names, no addresses are kept with a note.
+  const ch = path.match(/^\/v1\/ch\/([0-9a-f]{32})$/);
+  if (ch && M === 'POST') {
+    const r = await env.DB.prepare('SELECT n, since FROM ipfails WHERE ip = ?').bind('ch:' + ip).first();
+    if (r && now() - r.since < IP_WINDOW && r.n >= CH_IP_MAX) return json({ ok: false, error: 'slow' }, 429);
+    const b = await body(req, CH_MAX + 200), B64 = /^[A-Za-z0-9_-]+$/;
+    if (typeof b.iv !== 'string' || typeof b.ct !== 'string' || !B64.test(b.iv) || !B64.test(b.ct) || b.iv.length > 24 || b.ct.length > CH_MAX) return json({ ok: false, error: 'note' }, 400);
+    const at = now(), q = [env.DB.prepare('INSERT INTO relay (t, at, iv, ct) VALUES (?, ?, ?, ?)').bind(ch[1], at, b.iv, b.ct),
+      !r || now() - r.since >= IP_WINDOW ? env.DB.prepare('INSERT OR REPLACE INTO ipfails (ip, n, since) VALUES (?, 1, ?)').bind('ch:' + ip, now()) : env.DB.prepare('UPDATE ipfails SET n = n + 1 WHERE ip = ?').bind('ch:' + ip)];
+    if (Math.random() < 0.05) q.push(env.DB.prepare('DELETE FROM relay WHERE at < ?').bind(at - CH_TTL), env.DB.prepare('DELETE FROM ipfails WHERE since < ?').bind(at - 24 * 3600e3));
+    const res = await env.DB.batch(q);
+    return json({ ok: true, id: res[0].meta.last_row_id, time: Math.floor(at / 1000) });
+  }
+  if (ch && M === 'GET') {
+    // since: unix seconds or «12h»; after: the last id this phone has
+    const sp = url.searchParams.get('since') || '12h', after = Math.max(0, parseInt(url.searchParams.get('after') || '0', 10) || 0);
+    const h = sp.match(/^(\d+)h$/), from = Math.max(now() - CH_TTL, h ? now() - +h[1] * 3600e3 : (parseInt(sp, 10) || 0) * 1000);
+    const r = await env.DB.prepare('SELECT id, at, iv, ct FROM relay WHERE t = ? AND id > ? AND at >= ? ORDER BY id LIMIT ?').bind(ch[1], after, from, CH_LIST).all();
+    return json({ ok: true, time: Math.floor(now() / 1000), msgs: r.results || [] });
   }
 
   // ideas and feedback for the author: a sealed letter (only the author's phone can open it); anyone may read the
