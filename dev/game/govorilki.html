@@ -9348,7 +9348,7 @@ function screenStory(k, i, o = {}) {
       ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">источник</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
       <p class="story-t" id="stT">${parts.map((p, j) => `<span class="ss" data-j="${j}">${esc(p)}</span>`).join('')}</p>
-      ${it.try ? `<p class="story-try"><b>🧪 Попробуй сам</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
+      ${it.try ? `<p class="story-try"><b>🧪 ${k === 'jobs' ? 'Опыт дома' : 'Попробуй сам'}</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
       <div class="prow-btns"><button class="big ghost" id="stListen">${ICON.speaker}Послушать</button>
         ${it.listen ? `<a class="chip" href="https://www.youtube.com/results?search_query=${encodeURIComponent(it.listen)}" target="_blank" rel="noopener">▶ Музыка — вместе со взрослыми</a>` : ''}
         ${it.look ? `<a class="chip" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(it.look)}" target="_blank" rel="noopener">🖼 Посмотреть картину</a>` : ''}</div>
@@ -9569,7 +9569,7 @@ if (LEARN.news) {
   };
 }
 const JOB_SECS = [['help', 'Спасают и лечат', '🚑'], ['build', 'Строят и чинят', '🏗️'], ['move', 'Водят, летают, плавают', '✈️'], ['make', 'Творят и выступают', '🎨'],
-  ['learn', 'Изучают и учат', '🔭'], ['nature', 'Земля, звери и растения', '🌱'], ['digital', 'Цифровые профессии', '💻'], ['own', 'Своё дело', '💡']];
+  ['learn', 'Учат и рассказывают', '📚'], ['sci', 'Учёные', '🔬'], ['nature', 'Земля, звери и растения', '🌱'], ['digital', 'Цифровые профессии', '💻'], ['ai', 'Профессии с ИИ', '🤖'], ['own', 'Своё дело', '💡']];
 if (LEARN.jobs) {
   const J = LEARN.jobs;
   J.secs = JOB_SECS;

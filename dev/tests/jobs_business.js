@@ -28,6 +28,18 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     const g = await p.evaluate(() => { const h = [...document.querySelectorAll('.sec-h')]; const own = h.find(e => /💡/.test(e.textContent)); let n = 0, el = own && own.nextElementSibling; if (el) n = el.querySelectorAll('.story-c').length; return { h: own ? own.textContent : '', n, top: document.querySelector('.jb-top').innerText }; });
     ok(g.n >= 15 && !cyr(g.h + g.top) && /🍪/.test(g.top) && /💡/.test(g.top), `group «${g.h}»: ${g.n} stories; buttons ${g.top.replace(/\s+/g, ' ')}`);
     await p.screenshot({ path: D + `jb-${lang}-${DEV}-top.png` });
+    // the scientists (each with «Опыт дома») and the jobs with AI
+    for (const [sec, e, min] of [['sci', '🔬', 12], ['ai', '🤖', 10]]) {
+      const h = await p.evaluate(e => { const s = [...document.querySelectorAll('.sec-h')].find(x => x.textContent.includes(e)); return s ? [s.textContent, s.nextElementSibling.querySelectorAll('.story-c').length] : ['', 0]; }, e);
+      ok(h[1] >= min && !cyr(h[0]), `group «${h[0]}»: ${h[1]} stories`);
+      const k = await run(`LEARN.jobs.items.findIndex(x => x.sec === '${sec}' && /^job-(sci|ai)-/.test(x.id))`);
+      await run(`screenStory('jobs', ${k})`); await p.waitForTimeout(1200);
+      const t = await p.evaluate(() => ({ h: document.querySelector('.story h2').textContent, t: document.querySelector('#stT').textContent, tr: (document.querySelector('.story-try') || {}).textContent || '' }));
+      ok(t.t.length > 500 && !cyr(t.h + t.t + t.tr) && (sec !== 'sci' || t.tr.length > 30), `${sec}: «${t.h}» ${sec === 'sci' ? '| ' + t.tr.slice(0, 90) : t.t.slice(0, 90)}`);
+      if (sec === 'sci') await p.screenshot({ path: D + `jb-${lang}-${DEV}-sci.png` });
+    }
+    ok(await run("LEARN.jobs.items.filter(x => x.sec === 'sci').every(x => x.try)"), 'every scientist has «Опыт дома»');
+    await run("screenLearn('jobs')"); await p.waitForTimeout(300);
     const i = await run("LEARN.jobs.items.findIndex(x => x.sec === 'own')");
     await run(`screenStory('jobs', ${i})`); await p.waitForSelector('#stQ:not([hidden])', { timeout: 40000 }).catch(() => {});
     const st = await p.evaluate(() => ({ h: document.querySelector('.story h2').textContent, t: document.querySelector('#stT').textContent }));

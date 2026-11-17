@@ -8,9 +8,9 @@
 import json, os, re, glob, gzip
 B = os.path.dirname(os.path.abspath(__file__)); S = os.path.join(B, '..', 'stories')
 TOPICS = {'space', 'animals', 'water', 'plants', 'tech', 'sport', 'places', 'old', 'art', 'music', 'ballet'}
-SECS = ['help', 'build', 'move', 'make', 'learn', 'nature', 'digital', 'own']
+SECS = ['help', 'build', 'move', 'make', 'learn', 'sci', 'nature', 'digital', 'ai', 'own']
 TAGS = {'help', 'animals', 'nature', 'tech', 'build', 'art', 'music', 'stage', 'sport', 'science', 'computers', 'words', 'travel', 'food', 'ideas'}
-ids, warn, stress, news, jobs = set(), [], {}, [], []
+ids, warn, stress, news, jobs, TRY = set(), [], {}, [], [], {}
 def check(x, lo, hi):
     assert re.fullmatch(r'[a-z0-9-]+', x['id']) and x['id'] not in ids, x['id']
     ids.add(x['id'])
@@ -30,11 +30,16 @@ news.sort(key=lambda x: x['_d'], reverse=True)
 for x in news: del x['_d']
 for p in sorted(glob.glob(os.path.join(S, 'jobs', '*.json'))):
     d = json.load(open(p, encoding='utf-8'))
+    TRY.update(d.get('try_existing', {}))
     for x in d['jobs']:
         check(x, 400, 1000)
         assert x['sec'] in SECS and set(x['tags']) <= TAGS and x['tools'] and x['clue'], x['id']
-        jobs.append({k: x[k] for k in ('id', 'e', 't', 'sec', 's', 'q', 'a', 'tools', 'clue', 'tags')})
+        jobs.append({k: x[k] for k in ('id', 'e', 't', 'sec', 's', 'q', 'a', 'tools', 'clue', 'tags', 'try') if k in x})
     stress.update(d.get('stress', {}))
+# «Опыт дома» for scientists written in another batch: { id: try }
+for x in jobs:
+    if x['id'] in TRY: x['try'] = TRY.pop(x['id'])
+assert not TRY, 'try_existing for unknown ids: ' + ', '.join(TRY)
 jobs.sort(key=lambda x: SECS.index(x['sec']))
 G = os.path.join(B, '..', 'game', 'govorilki.html'); g = open(G, encoding='utf-8').read()
 part = ("LEARN.news = { name: 'Что нового в мире', e: '🗞️', bg: 'var(--t-blue)', sub: 'настоящие новости: космос, звери, открытия', items: "

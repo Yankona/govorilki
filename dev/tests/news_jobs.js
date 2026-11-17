@@ -70,7 +70,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     // the jobs: sections, buttons, a story → a sticker
     await run("screenLearn('jobs')"); await p.waitForTimeout(500);
     const jb = await p.evaluate(() => ({ n: document.querySelectorAll('.story-c').length, h: [...document.querySelectorAll('.sec-h')].map(e => e.textContent), top: document.querySelector('.jb-top').innerText }));
-    ok(jb.n >= 60 && jb.h.length === 8 && !cyr(jb.h.join(' ') + jb.top), `jobs: ${jb.n} stories, ${jb.h.join(' | ')}; ${jb.top.replace(/\s+/g, ' ')}`);
+    ok(jb.n >= 60 && jb.h.length === 10 && !cyr(jb.h.join(' ') + jb.top), `jobs: ${jb.n} stories, ${jb.h.join(' | ')}; ${jb.top.replace(/\s+/g, ' ')}`);
     await p.screenshot({ path: D + `nj-${lang}-${DEV}-jobs.png` });
     await p.click('.story-c'); await p.waitForSelector('#stQ:not([hidden])', { timeout: 30000 }).catch(() => {});
     const js = await p.evaluate(() => ({ h: document.querySelector('.story h2').textContent, t: document.querySelector('#stT').textContent }));
