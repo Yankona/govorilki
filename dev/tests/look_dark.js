@@ -96,6 +96,20 @@ const AUDIT = () => {
     const secs = await p.evaluate(() => window.__T.run('Object.keys(LEARN).slice(0, 40)'));
     for (const k of secs) { await run(`screenLearn('${k}')`).catch(() => {}); await check('learn-' + k, k === 'spb'); }
   }
+  // the line the voice is reading (kid-feedback-1: white on yellow was hard to read): a story the 5-year-old listens to,
+  // and every other reading highlight (read-skill, songs' syllables, «Мама читает» tales, the primer words)
+  {
+    const sec = await run("Object.keys(LEARN).find(k => learnItems(k).length > 3 && learnItems(k)[0].q)");
+    await run(`(ROOT.cur='k1', P=ROOT.profiles['k1'], lookApply(), screenStory('${sec}', 0))`); await wait(2200);
+    await p.evaluate(() => {
+      document.querySelectorAll('.ss').forEach(e => { e.style.transition = 'none'; });
+      if (!document.querySelector('.ss.on')) { const s = document.querySelector('.ss'); if (s) s.classList.add('on'); }
+      const st = document.querySelector('.story-t'); if (st) st.insertAdjacentHTML('afterend', `<div><p class="fr-text"><span class="ss on">Кот спит.</span></p><p><span class="sy on">ко</span></p><div class="bl-tale"><span class="ss bl-on">Жила-была</span></div><p><span class="rw on">мама</span></p></div>`);
+      const h = document.querySelector('.ss.on'); if (h) h.scrollIntoView({ block: 'center' });
+    });
+    await check('story-highlight', true);
+    await run("(hush(), ROOT.cur='k2', P=ROOT.profiles['k2'], lookApply())");
+  }
   // the finish card
   await run("GAMES.find(g=>g.id==='count').go()"); await wait(600);
   await run("finish({ key: 'count', stars: 3, line: 'Все нашли!', again: () => {}, menu: () => goHome() })"); await wait(1500); await check('finish', true);
