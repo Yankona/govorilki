@@ -2621,7 +2621,13 @@ body.pv-on #app{padding-top:52px}
 .pv-demo{display:flex;flex-direction:column;gap:8px}.pv-demo .big{text-align:left}
 .pv-test{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--plum)}
 .adm-k{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px dashed var(--line)}.adm-k small{color:var(--ink-soft);font:700 14px/1.3 var(--f-body)}
-.adm-f{gap:6px}.share-box{display:flex;flex-direction:column;gap:4px;margin:4px 0}.pv-adm{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
+.adm-f{gap:6px}.share-box{display:flex;flex-direction:column;gap:4px;margin:4px 0}
+/* the author's dashboard (v164) and the journal's week in «Отчёт» */
+.adm-ts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.adm-t{display:flex;flex-direction:column;background:var(--card,#fff);border:2px solid var(--line);border-radius:14px;padding:10px 12px}.adm-t b{font:900 26px/1.1 var(--font-h,inherit)}.adm-t small{color:var(--ink-soft);font-weight:700}
+.adm-ch{width:100%;height:auto;max-height:140px;color:var(--sky-d,#3b82c4)}
+.adm-tb{width:100%;border-collapse:collapse;font-size:15px;display:block;overflow-x:auto}.adm-tb th,.adm-tb td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line)}.adm-tb th{color:var(--ink-soft);font-weight:800}
+.gd-ev ul{margin:4px 0 0;padding-left:20px;display:grid;gap:4px}.pv-adm{box-shadow:0 5px 0 var(--line),inset 0 0 0 3px var(--sun)}
 .ml{display:flex;flex-direction:column;gap:14px;width:min(100%,720px);margin:0 auto}
 .ml-card{background:var(--paper);color:var(--ink);border-radius:22px;padding:14px 16px;box-shadow:0 5px 0 var(--line);display:flex;flex-direction:column;gap:8px}.ml-card h3{margin:0;font:800 19px/1.2 var(--f-body)}.ml-card p{margin:0;font:600 16px/1.4 var(--f-body)}
 .ml-words{display:flex;flex-wrap:wrap;gap:8px}.ml-hl{color:var(--berry)}.ml-wd{display:inline;white-space:nowrap}
@@ -3873,7 +3879,7 @@ function useFamily(fid) {
 useFamily(ROOT.curFam);
 // before any family exists (a new phone, until the family is created) the screens still need a profile to read
 let P = ROOT.profiles[ROOT.cur] || blankProfile('', 'f', 'r', '');
-const save = () => { try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P && !Object.values(ROOT.families || {}).some(f => f.cloud && !f.cloud.off && !f.guest && f.kids.includes(ROOT.cur))) P.upd = Date.now(); try { cloudStamp(); } catch (e) {} localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} try { cloudSoon(); } catch (e) {} };
+const save = () => { if (window.GOV_WIPED) return; try { if (P && ROOT.cur && ROOT.profiles[ROOT.cur] === P && !Object.values(ROOT.families || {}).some(f => f.cloud && !f.cloud.off && !f.guest && f.kids.includes(ROOT.cur))) P.upd = Date.now(); try { cloudStamp(); } catch (e) {} localStorage.setItem(KEY2, JSON.stringify(ROOT)); } catch (e) {} try { cloudSoon(); } catch (e) {} };
 /* names in Russian: «Сава» → Савы, Саве, Саву, Савой; each word of «Бабушка Нина» too */
 function declWord(w, she) {
   const low = w.toLowerCase(), last = low.slice(-1), prev = low.slice(-2, -1), base = w.slice(0, -1);
@@ -4678,6 +4684,7 @@ let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
   if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
+  try { EVT.next(); } catch (e) {}
   tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
@@ -4910,7 +4917,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     td.done[id].push(lkey);
     if (!nextStepOf(id)) {
       doneLesson = id; td.done[id] = [];
-      const c = { ...dayCounts(td.date) }; c[id] = (c[id] || 0) + 1; P.days[td.date] = c;
+      const c = { ...dayCounts(td.date) }; c[id] = (c[id] || 0) + 1; P.days[td.date] = c; EVT.log('step', id);
       P.stars += 3;
       const s = streak();
       MEDALS.forEach(m => { if (s >= m.n && !P.medals.includes(m.n)) { P.medals.push(m.n); medal = m; } });
@@ -4918,7 +4925,7 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     break;
   }
   const toasts = gameHook({ ...ev, key, stars, xp0, lesson: doneLesson });
-  weekAdd(P, P.stars - xp0); noteRecent(key, stars); save(); showToasts(toasts); leagueSoon(); progSoon(); guestPlayed(key, stars); gplayPlayed(key, stars); readMark(key);
+  EVT.done(key, stars); weekAdd(P, P.stars - xp0); noteRecent(key, stars); save(); showToasts(toasts); leagueSoon(); progSoon(); guestPlayed(key, stars); gplayPlayed(key, stars); readMark(key);
   const after = stickerCount(), sticker = after > before ? STK()[after - 1] : null;
   const n = $('#starN'); if (n) n.textContent = P.stars;
   $$('.said, .said-card').forEach(x => x.remove());
@@ -5102,6 +5109,171 @@ const GAMES = [
   { id: 'sh-sort', name: 'Змейка или жук?', sub: 'Ш, Ж, Ч или Щ', ico: () => pic('🐍'), bg: 'var(--t-green)', go: () => screenSort(), grp: 9 },
   { id: 'sh-house', name: 'Где живёт звук Ш', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse(RU('Ш')), grp: 9 }
 ];
+/* EVENTS-BEGIN ---------- the journal (v164): what happened in the game, kept on this phone only, for 90 days.
+   It feeds the grown-ups' «Отчёт» and, only with the parents' tick «Помочь улучшать игру» (ROOT.consent.stats), the
+   anonymous counters of each finished day, sent once a day (EVT.send): how many, never who. An entry is
+   [minute, kind, profile, id, number, seconds]: no text a person typed, no names (the profile is the random id of a
+   child inside the family; 'g' is a grown-up), no place, nothing about the device. Kinds: open / close (app_open and
+   app_close: close has the session's seconds and how it ended, 3 hidden, 4 closed), po / pc (page_open and page_close
+   of every screen: its id — a named section, game:<id>, or s:<the function that drew it> — and for pc how it closed,
+   WHY below, and its seconds), gs / ge (a game started / finished, its stars and seconds), step (a step of
+   «Сегодня»), door, story (a story heard), err (js@line, voice, asr-<code>, mic). Older journals have scr (= pc).
+   Its own localStorage key: not in progress codes, not in the family sync; «Удалить всё» erases it. ---------- */
+const EVT = (() => {
+  const KEY = DEMO ? 'govorilki-demo-ev' : 'govorilki-ev', KEEP = 90 * 864e5, MAX = 20000, ID = /^[A-Za-z0-9:._-]{1,48}$/;
+  let L = null, T = 0, scr = null, back = null, ses = 0, gm = null, errs = 0, why = null;
+  // how a page closed: 0 the next screen, 1 «назад», 2 home, 3 the app hidden, 4 the app closed
+  const WHY = { next: 0, back: 1, home: 2, hidden: 3, closed: 4 };
+  const now = () => Date.now();
+  const read = () => {
+    if (L) return L;
+    try { L = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { L = []; }
+    if (!Array.isArray(L)) L = [];
+    return L;
+  };
+  function write() {
+    clearTimeout(T); T = 0;
+    if (window.GOV_WIPED) return;
+    const a = read(), min = Math.floor((now() - KEEP) / 6e4); let i = 0;
+    while (i < a.length && a[i][0] < min) i++;
+    if (i) a.splice(0, i);
+    if (a.length > MAX) a.splice(0, a.length - MAX);
+    try { localStorage.setItem(KEY, JSON.stringify(a)); } catch (e) {}
+  }
+  // who: the child on screen; 'g' while a grown-up plays (a relative's phone, «бабушка хочет поиграть»)
+  const who = () => {
+    try { if (GPLAY || guestOn()) return 'g'; } catch (e) {}
+    try { return ROOT.cur && ROOT.profiles[ROOT.cur] ? ROOT.cur : '-'; } catch (e) { return '-'; }
+  };
+  function log(k, id, n, s) {
+    if (window.GOV_WIPED) return;
+    try { if (PREVIEW) return; } catch (e) {}
+    const e = [Math.floor(now() / 6e4), k, who()];
+    if (id !== undefined || n !== undefined || s !== undefined) e.push(id === undefined || id === '' ? '' : ID.test(String(id)) ? String(id) : '?');
+    if (n !== undefined || s !== undefined) e.push(Math.max(0, Math.round(+n || 0)));
+    if (s !== undefined) e.push(Math.max(0, Math.min(3 * 3600, Math.round(+s || 0))));
+    read().push(e);
+    if (!T) T = setTimeout(write, 3000);
+  }
+  // pages: an entry point names its screen (page_open); the next screen, «назад», home or the app leaving the screen
+  // closes it (page_close) with how and its seconds. A screen nobody named gets the name of the function that drew it.
+  function setWhy(w, soft) { if (soft && why && now() - why.at < 1500) return; why = { w: WHY[w] || 0, at: now() }; }
+  function leave(w) {
+    if (!scr) return;
+    const how = w !== undefined ? WHY[w] : why && now() - why.at < 1500 ? why.w : 0;
+    log('pc', scr.id, how, (now() - scr.at) / 1000); scr = null; why = null;
+  }
+  function enter(id) { if (scr && scr.id === id && now() - scr.at < 400) return; leave(); scr = { id, at: now() }; log('po', id); }
+  // newScreen(): close the page on screen; if no entry point names the new one in this turn, name it by its function
+  function next() {
+    leave();
+    let fn = '';
+    try {
+      // the stack: next ← newScreen ← the function that draws the screen (Chrome «at name (», Safari/Firefox «name@»)
+      for (const l of (new Error().stack || '').split('\n').slice(1)) {
+        const m = l.match(/at (?:async )?(?:[\w$]+\.)*([\w$]+) \(/) || l.match(/^(?:[\w$]+\/)*([\w$]+)@/);
+        if (m && !['next', 'newScreen'].includes(m[1])) { fn = m[1]; break; }
+      }
+    } catch (e) {}
+    setTimeout(() => { if (!scr && ses) enter('s:' + (fn || 'screen').slice(0, 40)); }, 0);
+  }
+  // the app on screen: a session from showing to hiding (app_open / app_close); the page on screen goes on after a pause
+  function shown() { if (ses) return; ses = now(); log('open'); if (back) { enter(back); back = null; } }
+  function hidden(w = 'hidden') {
+    if (!ses) { if (w === 'closed') log('quit'); write(); return; }
+    back = scr && scr.id; leave(w);
+    log('close', '', WHY[w], (now() - ses) / 1000); ses = 0; write();
+  }
+  // games: every tile's go() says which game started; finish() says how it ended
+  function wrap(list) {
+    (list || []).forEach(g => {
+      if (!g || g.evW || typeof g.go !== 'function') return;
+      const go = g.go; g.evW = 1;
+      g.go = function (...a) { const r = go.apply(this, a); gm = { id: g.id, at: now() }; log('gs', g.id); enter('game:' + g.id); return r; };
+    });
+  }
+  function done(key, stars) {
+    const s = gm && (key === gm.id || String(key).startsWith(gm.id)) ? (now() - gm.at) / 1000 : 0;
+    log('ge', key, stars, s); gm = null;
+  }
+  function err(code) { if (errs++ < 40) log('err', code); }
+  const dayOf = e => dayKey(new Date(e[0] * 6e4));
+  // a page for the counters: home:<tab>, game:<id>, learn:<set>, story:<set>, travel, parents, s:<function>
+  const pageKey = id => String(id).slice(0, 44);
+  // the areas of «Отчёт»
+  const AREA = id => /^game:/.test(id) ? 'games' : /^(story|learn):/.test(id) ? 'stories' : id === 'travel' ? 'travel' : /^home:/.test(id) ? 'home' : id === 'parents' ? 'grown' : 'other';
+  const base = id => String(id || '').startsWith('learn:') ? 'learn' : String(id || '');
+  // the counters of one day, from `from` (ms) on: how many, never who or when
+  function day(d, from = 0) {
+    const c = {}, kids = new Set(), add = (k, v = 1) => { if (v > 0 && /^[a-z0-9:._-]{1,48}$/i.test(k)) c[k] = (c[k] || 0) + v; };
+    let sec = 0; const scrSec = {};
+    for (const e of read()) {
+      if (e[0] * 6e4 < from || dayOf(e) !== d) continue;
+      const [, k, p, id, n, s] = e;
+      if (p && p !== '-' && p !== 'g') kids.add(p);
+      if (k === 'open') add('open');
+      else if (k === 'close') sec += s || 0;
+      else if ((k === 'pc' || k === 'scr') && id) { const sc = pageKey(id); scrSec[sc] = (scrSec[sc] || 0) + (k === 'pc' ? s || 0 : s || 0); }
+      else if (k === 'po' && id) add('po:' + pageKey(id));
+      else if (k === 'gs') add('g:' + id + ':s');
+      else if (k === 'ge') { const b = base(id); add('g:' + b + ':e'); add('g:' + b + ':st', n || 0); add('g:' + b + ':sec', s || 0); }
+      else if (k === 'step') add('step:' + id);
+      else if (k === 'door') add('door:' + id);
+      else if (k === 'story') { add('story'); add('story:' + id); }
+      else if (k === 'err') add('err:' + String(id).split('@')[0]);
+      else if (k === 'grown') add('grown');
+    }
+    if (kids.size) add('kids', kids.size);
+    const m5 = s => Math.round(s / 300) * 5;
+    add('min', m5(sec));
+    Object.entries(scrSec).forEach(([k, s]) => add('scr:' + k, Math.round(s / 60)));
+    const keys = Object.keys(c);
+    if (!keys.length) return null;
+    if (keys.length > 300) keys.sort((a, b) => c[a] - c[b]).slice(0, keys.length - 300).forEach(k => delete c[k]);
+    return c;
+  }
+  const devKind = () => { const m = Math.min(screen.width || 0, screen.height || 0); return m < 600 ? 'phone' : m < 900 ? 'tablet' : 'laptop'; };
+  const nextDay = d => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + 1); return dayKey(x); };
+  // once a day, with the parents' tick only: the finished days since the last sending (at most 14), never today
+  let sending = false;
+  async function send() {
+    const cs = ROOT.consent;
+    if (sending || !cs || !cs.stats || EMBEDDED || DEMO || !CLOUD || !navigator.onLine) return false;
+    try { if (PREVIEW) return false; } catch (e) {}
+    const today = dayKey(); let d = ROOT.evNext || dayKey(new Date(cs.at)); const days = [];
+    for (let i = 0; d < today && i < 30; i++, d = nextDay(d)) { const c = day(d, cs.at); if (c) days.push({ d, c }); }
+    if (d === (ROOT.evNext || '')) return false;
+    sending = true;
+    try {
+      if (days.length) {
+        const r = await fetch(`${CLOUD}/v1/stats`, { method: 'POST', body: JSON.stringify({ v: 1, lang: LANG, ver: String(APP_VER || ''), dev: devKind(), days: days.slice(-14) }) });
+        if (!r.ok) return false;
+      }
+      ROOT.evNext = today; save(); return true;
+    } catch (e) { return false; } finally { sending = false; }
+  }
+  // for the grown-ups' «Отчёт»: one child's last days from the journal
+  function week(p, n = 7) {
+    const from = Math.floor((now() - n * 864e5) / 6e4); let sec = 0, games = 0, stories = 0; const days = new Set(), area = {};
+    for (const e of read()) {
+      if (e[0] < from || e[2] !== p) continue;
+      if (e[1] === 'pc' || e[1] === 'scr') { sec += e[5] || 0; days.add(dayOf(e)); const a = AREA(e[3] || ''); area[a] = (area[a] || 0) + (e[5] || 0); }
+      else if (e[1] === 'ge') games++; else if (e[1] === 'story') stories++;
+    }
+    Object.keys(area).forEach(a => { area[a] = Math.round(area[a] / 60); if (!area[a]) delete area[a]; });
+    return { min: Math.round(sec / 60), games, stories, days: days.size, area };
+  }
+  function wipe() { L = []; clearTimeout(T); T = 0; try { localStorage.removeItem(KEY); } catch (e) {} }
+  addEventListener('error', e => err('js@' + (+e.lineno || 0)));
+  addEventListener('unhandledrejection', () => err('js-p'));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) hidden(); else { shown(); send(); } });
+  addEventListener('pagehide', () => hidden('closed'));
+  // «назад»: the button of every screen, and the phone's own back
+  document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#backBtn, .back, [data-back]')) setWhy('back'); }, true);
+  addEventListener('popstate', () => setWhy('back'));
+  return { log, enter, leave, next, why: setWhy, shown, hidden, wrap, done, err, day, send, week, wipe, all: () => read().slice(), size: () => read().length, KEY };
+})();
+/* EVENTS-END */
 // the home screen in five tabs; each holds sections of tiles
 const HOME_TABS = [
   { id: 'today', e: '⭐', n: 'Сегодня' },
@@ -5147,6 +5319,7 @@ window.addEventListener('popstate', () => {
 });
 let LANG_CHECKED = false;
 function goHome() {
+  try { EVT.why('home', true); } catch (e) {}
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Тест с нуля · <button id="demoAgain">заново</button> · <a href="${SITE_ROOT}">выйти</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
   // a visit to another language's page: open its game; «Домой» there goes back to the main language (multilingual)
@@ -5160,6 +5333,7 @@ function goHome() {
   newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
+  srDefault(); EVT.wrap(GAMES); EVT.shown(); EVT.enter('home:' + (P.homeTab || 'today')); EVT.send();
   const RF = readFineCheck();
   navHome();
   document.body.classList.toggle('quest', Q()); lookApply();
@@ -8058,7 +8232,7 @@ function micOn() {
       const an = a.createAnalyser(); an.fftSize = 1024; a.createMediaStreamSource(s).connect(an);
       Object.assign(MIC, { stream: s, an, buf: new Float32Array(an.fftSize) });
       return true;
-    } catch (e) { MIC.denied = true; return false; } finally { MIC.pending = null; }
+    } catch (e) { MIC.denied = true; EVT.err('mic'); return false; } finally { MIC.pending = null; }
   })();
   return MIC.pending;
 }
@@ -9447,10 +9621,10 @@ const hookHTML = h => h ? `<button class="lr-hook" data-hk="${h.k}" data-hi="${h
 // the stories behind the tiles of «Узнаём» that are on for this family
 const discHookKs = () => ['space', 'water', 'plants', 'phys', 'old', ...PLACES().filter(placeOn)].filter(k => LEARN[k] && !gameOff(k === 'phys' ? 'phys-lab' : k === 'old' ? 'learn-old' : k === 'space' ? 'space' : k));
 function hookBind(root, before) {
-  root.querySelectorAll('.lr-hook').forEach(b => b.onclick = e => { e.stopPropagation(); sfx.magic(); if (before) before(); screenStory(b.dataset.hk, +b.dataset.hi); });
+  root.querySelectorAll('.lr-hook').forEach(b => b.onclick = e => { e.stopPropagation(); sfx.magic(); EVT.log('door', 'know'); if (before) before(); screenStory(b.dataset.hk, +b.dataset.hi); });
 }
 function screenLearn(k) {
-  newScreen();
+  newScreen(); EVT.enter('learn:' + k);
   const T = LEARN[k], items = learnItems(k);
   const nx = items.findIndex(x => !learnDone(x.id)), nDone = items.filter(x => learnDone(x.id)).length;
   const cardOf = (x, i) => `<button class="card story-c ${learnDone(x.id) ? 'seen' : ''} ${learnImg(x.id) ? 'has-img' : ''} ${i === nx && nDone ? 'nx' : ''}" data-i="${i}" style="--bg:${T.bg}">${i === nx && nDone ? '<i class="nx-b">▶</i>' : ''}${learnImg(x.id) ? `<img class="story-th" src="${esc(learnImg(x.id)[4] || `${SITE_ROOT}img/learn/${x.id}-s.webp`)}" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(x.e))}" alt="" loading="lazy">` : pic(x.e)}<span>${esc(x.t)}</span>${k === 'news' && x.date ? `<small class="nw-d">${newsDate(x.date)}</small>` : ''}${learnDone(x.id) ? `<i class="done">${ICON.star}</i>` : ''}</button>`;
@@ -9469,6 +9643,7 @@ function screenStory(k, i, o = {}) {
   // a story whose words live in a data pack (PACK): open it once they are here
   { const it0 = learnItems(k)[i]; if (it0 && it0.px && it0.s == null) { const t0 = tok; PACK.story(it0).then(() => { if (tok === t0) screenStory(k, i, o); }, () => { if (tok === t0) sfx.oops(); }); return; } }
   const t = newScreen(), T = LEARN[k], items = learnItems(k), it = items[i], parts = sentences(it.s), back = o.back || (() => screenLearn(k));
+  EVT.enter('story:' + k);
   let miss = 0, rd = 0, reading = 0;
   shell(T.name, `<article class="story">
       ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">источник</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
@@ -9514,7 +9689,7 @@ function screenStory(k, i, o = {}) {
       sfx.good(); b.classList.add('right'); hopEl(b);
       { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); }
       const stamp0 = T.place && TRAVEL.stamped(k);
-      P.learn = { ...(P.learn || {}), [it.id]: 1 }; save(); if (o.done) o.done();
+      P.learn = { ...(P.learn || {}), [it.id]: 1 }; EVT.log('story', it.id); save(); if (o.done) o.done();
       const xl = T.onDone ? T.onDone(it) || '' : '';
       // the next story: the next one not heard yet (after this one, then from the top), shown with its picture and its question
       const order = items.map((x, j) => (i + 1 + j) % items.length).filter(j => j !== i), nj = o.back ? -1 : (order.find(j => !learnDone(items[j].id)) ?? (i + 1 < items.length ? i + 1 : -1));
@@ -11453,7 +11628,7 @@ function piperCall(text, fix, voiceAs) {
     try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC.replace("'__ENG__'", JSON.stringify(EMBEDDED ? '' : new URL(SITE_ROOT + 'engine/piper/', location.href).href))], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
-    PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
+    PIPER.w.onerror = () => { EVT.err('voice'); PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
   }
   const voice = voiceAs || piperVoice();
   return new Promise((res, rej) => {
@@ -11470,7 +11645,7 @@ function piperWarm() {
   const v = piperVoice();
   if (PIPER.ready && PIPER.readyVoice === v && !PIPER.failed) return PIPER.ready;
   PIPER.readyVoice = v; PIPER.isReady = false; PIPER.pct = 0; PIPER.failed = false;
-  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { PIPER.failed = true; PIPER.failedAt = performance.now(); piperNote(); return false; });
+  PIPER.ready = piperCall('').then(() => { if (PIPER.readyVoice === v) PIPER.isReady = true; piperNote(); return true; }, () => { EVT.err('voice'); PIPER.failed = true; PIPER.failedAt = performance.now(); piperNote(); return false; });
   return PIPER.ready;
 }
 async function piperAudio(text) {
@@ -11651,6 +11826,7 @@ function hear(expect, { times = 1, onHeard, maxMs = 7000, loose = false } = {}) 
       if (got.lvl && !got.slip) end();
     };
     r.onerror = e => {
+      if (e.error !== 'no-speech' && e.error !== 'aborted') EVT.err('asr-' + String(e.error || '').slice(0, 24));
       if (['not-allowed', 'service-not-allowed', 'audio-capture', 'language-not-supported'].includes(e.error)) HEAR.off = true;
       if (e.error === 'network') HEAR.netAt = Date.now();
       end();
@@ -11706,6 +11882,7 @@ function hearLive(onText, { onStart, onFail, onLost } = {}) {
     };
     r.onerror = e => {
       if (me !== r) return;
+      if (e.error !== 'no-speech' && e.error !== 'aborted') EVT.err('asr-' + String(e.error || '').slice(0, 24));
       const hard = ['not-allowed', 'service-not-allowed', 'language-not-supported', 'audio-capture', 'network'].includes(e.error);
       if (!hard) return;
       if (e.error === 'network') HEAR.netAt = Date.now();
@@ -11777,7 +11954,7 @@ function screenAlbum() {
 /* ---------- for grown-ups ---------- */
 var PAR_BACK = null;
 function screenParents(focus) {
-  newScreen();
+  newScreen(); EVT.enter('parents');
   shell('Для взрослых', `<div class="parents">
     <section class="psec gd-sec" id="guideSec"><h2>📊 Отчёт</h2><p class="muted">Что получается и что пока трудно — коротко, по каждому ребёнку.</p><div id="guideBox"></div></section>
     <section class="psec"><h2>Семьи</h2>
@@ -11829,6 +12006,7 @@ function screenParents(focus) {
       <div class="prow-btns" id="resetRow"><button class="big ghost danger" id="resetBtn">Начать заново</button></div>
       <div id="resetAsk" hidden><p>Стереть все звёздочки и наклейки?</p><div class="prow-btns"><button class="big danger" id="resetYes">Да, стереть</button><button class="big ghost" id="resetNo">Отмена</button></div></div>
     </section>
+    ${dataSecHTML()}
     <section class="psec"><h2>Как заниматься: ${esc(P.settings.name)}</h2><p class="muted">Профиль переключается вверху главного экрана. У каждого ребёнка свои звёздочки, календарь и настройки.</p><ul>${P.settings.track === 'l' ? HOWTO_L : `
       <li>Сейчас в приоритете шипящие (Ш, Ж, Ч, Щ) и Р в конце слова: в «Логопеде» каждый день есть упражнения для шипящих и одна игра на шипящие или на Р в конце.</li>
       <li>На главном экране три занятия на сегодня. «Логопед»: 2 дыхательных упражнения, весь комплекс зарядки для язычка и 2 игры со звуком Р, около 15 минут. «Чтение» и «Математика» — по 4 игры, около 10 минут. Каждое занятие можно пройти ещё раз: задания будут другими.</li>
@@ -11904,6 +12082,7 @@ function screenParents(focus) {
   $('#resetBtn').onclick = () => { $('#resetRow').hidden = true; $('#resetAsk').hidden = false; };
   $('#resetNo').onclick = () => { $('#resetRow').hidden = false; $('#resetAsk').hidden = true; };
   $('#resetYes').onclick = () => { Object.assign(P, { stars: 0, best: {}, plays: {} }); save(); screenParents(); };
+  bindDataSec();
   if ($('#bookIn')) $('#bookIn').addEventListener('change', e => { P.book.title = e.target.value.trim() || P.book.title; save(); });
   if (P.goal) {
     $('#goalIn').addEventListener('change', e => { P.goal.title = e.target.value.trim(); if (!P.goal.start) P.goal.start = dayKey(); save(); });
@@ -12687,6 +12866,7 @@ function screenObDone({ liga = '' } = {}) {
     ${f.grands.length ? '<button class="big ghost" id="obChess">📨 Пригласить родных</button>' : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
+  $('#obGo').insertAdjacentHTML('beforebegin', consentHTML('obStats')); bindConsent('obStats');
   $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
   if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenInvite(goHome); };
 }
@@ -18570,28 +18750,17 @@ async function openForAdmin(m, prv) {
 async function adminPoll() { if (ROOT.adminSeen || 'share' in ROOT || ROOT.sid) { delete ROOT.adminSeen; delete ROOT.share; delete ROOT.sid; delete ROOT.stAt; save(); } return 0; }
 function screenAdmin() {
   if (!ROOT.adminKey) { goHome(); return; }
-  const t = newScreen();
-  const lastOf = s => Math.max(s.at || 0, ...s.fams.flatMap(f => f.kids.map(k => k.last || 0)));
-  const draw = () => {
-    const all = [];
-    const kids = all.flatMap(s => s.fams.flatMap(f => f.kids)), day = dayKey();
-    const today = all.filter(s => s.fams.some(f => f.kids.some(k => k.last && dayKey(new Date(k.last)) === day))).length;
-    const week = all.filter(s => s.fams.some(f => f.kids.some(k => k.wl > 0))).length;
-    const L = { ru: 'русский', en: 'English', pt: 'português' };
-    const kidRow = k => `<div class="adm-k"><b>${esc(k.n || 'Ребёнок')}${k.a ? `, ${k.a} ${plural(k.a, ['год', 'года', 'лет'])}` : ''}</b>
-      <small>⭐ ${k.st} · 🔥 ${k.sk} ${plural(k.sk, ['день', 'дня', 'дней'])} подряд · 📚 ${k.wl} ${plural(k.wl, ['занятие', 'занятия', 'занятий'])} за неделю${k.last ? ` · последняя игра ${pultAgo(k.last)}` : ''}</small>
-      ${(k.top || []).length ? `<small>Чаще всего: ${esc(k.top.map(x => recentName(x) || x).join(', '))}</small>` : ''}</div>`;
-    return `<section class="psec"><h2>👑 Все семьи</h2><p>Установок: <b>${all.length}</b> · детей: <b>${kids.length}</b> · играли сегодня: <b>${today}</b> · занимались на этой неделе: <b>${week}</b></p>
-      <p class="muted">Сводки от семей выключены: они уходили без согласия родителей. Скоро здесь будет анонимная статистика — только у семей, которые разрешили.</p>
-      <div class="prow-btns"><button class="big ghost" id="admRe">🔄 Обновить</button></div><p class="muted" id="admOut"></p></section>
-      ${all.map(s => s.fams.map(f => `<section class="psec adm-f"><h2>${f.n ? esc(f.n) : 'Семья без имени'}</h2>
-        <p class="muted">${FLAG(f.cc || 'PT')} ${L[s.lang] || esc(s.lang || '')} · с нами с ${s.made ? new Date(s.made).toLocaleDateString(LOC) : '—'} · сводка ${pultAgo(s.at)} · версия ${esc(String(s.ver || '—'))}${f.gr ? ` · родных: ${f.gr}` : ''}${f.lg ? ' · в лиге' : ''}</p>
-        ${f.kids.map(kidRow).join('') || '<p class="muted">Пока без детей.</p>'}</section>`).join('')).join('') || '<p class="lead">Пока ни одной сводки. Они появятся, когда семьи откроют приложение.</p>'}`;
-  };
-  shell('Все семьи', `<div class="pult" id="adm">${draw()}</div>`, { back: () => screenPult(), guide: false, raw: true });
-  const bind = () => { const b = $('#admRe'); if (b) b.onclick = () => { sfx.pop(); $('#admOut').textContent = 'Обновляю…'; run(); }; };
-  const run = () => adminPoll().then(n => { if (t !== tok) return; $('#adm').innerHTML = draw(); bind(); $('#admOut').textContent = n ? `Новых сводок: ${n}` : 'Новых сводок нет'; }, () => { if (t === tok) $('#admOut').textContent = 'Не получилось открыть сводки'; });
-  bind(); run();
+  const t = newScreen(); let days = 35;
+  adminPoll();
+  shell('Все семьи', `<div class="pult" id="adm"><section class="psec"><h2>👑 Как играют</h2>
+    <p class="muted">Анонимные счётчики от семей, которые разрешили: сколько, а не кто. Сервер складывает их по дням и отдаёт зашифрованными: открыть может только этот телефон.</p>
+    <div class="prow-btns"><button class="big ghost" id="admRe">🔄 Обновить</button><button class="big ghost" id="admMore">📅 120 дней</button></div><p class="muted" id="admOut">Загружаю…</p></section>
+    <div id="admBox"></div></div>`, { back: () => screenPult(), guide: false, raw: true });
+  const run = () => statsPull(days).then(S => { if (t !== tok) return; $('#admBox').innerHTML = statsHTML(S); $('#admOut').textContent = `Обновлено ${new Date().toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' })}`; },
+    () => { if (t === tok) $('#admOut').textContent = 'Не получилось загрузить: нет связи с сервером.'; });
+  $('#admRe').onclick = () => { sfx.pop(); $('#admOut').textContent = 'Загружаю…'; run(); };
+  $('#admMore').onclick = () => { sfx.pop(); days = 120; $('#admMore').hidden = true; $('#admOut').textContent = 'Загружаю…'; run(); };
+  run();
 }
 
 /* ---------- «Мои языки»: speech practice that uses every language a child speaks ---------- */
@@ -23082,7 +23251,7 @@ const TRAVEL = (() => {
     return `<button class="tv-c ${stamped(k) ? 'got' : ''}" data-k="${k}" style="--bg:${LEARN[k].bg}"><span class="tv-e">${LEARN[k].e}</span><span class="tv-f">${flag(k)}</span><b>${esc(LEARN[k].name)}</b><small>${n ? `${n} из ${all}` : `${all} ${plural(all, ['история', 'истории', 'историй'])}`}</small>${stamped(k) ? '<i class="tv-st">🛂</i>' : ''}</button>`; };
 
   function screen() {
-    newScreen();
+    newScreen(); EVT.enter('travel');
     const ps = places(), own = ownPlaces().filter(k => ps.includes(k)), rest = ps.filter(k => !own.includes(k)), got = ps.filter(stamped);
     shell('Путешествие по миру', `<div class="tv">
       <div class="tv-pass"><div class="tv-ph"><b>🛂 Мой паспорт</b><span>штампов: ${got.length} из ${ps.length}</span></div>
@@ -24222,7 +24391,7 @@ const SETUI = (() => {
     const root = $('.parents'); if (!root || !fam()) return;
     const secs = [...root.children].filter(x => x.matches('section.psec'));
     const find = sel => secs.find(s => s.matches(sel) || s.querySelector(sel)) || null;
-    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), guide: find('#guideSec'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
+    const S = { fam: find('#pultBtn'), friends: find('#frSec'), lang: find('#langSec'), kid: find('#nameIn'), book: find('#bookIn'), trip: find('#tripSetBtn'), el: find('#elSec'), prog: find('#expBtn'), data: find('#dataSec'), guide: find('#guideSec'), how: secs.filter(s => s.querySelector('ul')).pop() || null };
 
     // «Семья»: the faces, then even rows; «другая семья» only when this phone has more than one
     if (S.fam) {
@@ -24293,6 +24462,7 @@ const SETUI = (() => {
       ['lang', '🌐', 'Язык игры', ln || '', [S.lang]],
       ['trip', '✈️', 'Поездка', '', [S.trip]],
       ['prog', '💾', 'Прогресс', 'перенос на другой телефон', [S.prog]],
+      ['data', '🔒', 'Ваши данные', 'статистика, скачать, удалить всё', [S.data]],
       ['how', '📖', 'Как заниматься', '', [S.how]],
     ].map(([k, i, t, s, ss]) => ({ k, i, t, s, ss: ss.filter(Boolean) })).filter(p => p.ss.length);
     const menu = document.createElement('div'); menu.className = 'set-menu';
@@ -24801,8 +24971,16 @@ const GUIDE = (() => {
   }
   function mountFam(box) {
     if (!box) return;
-    box.innerHTML = famHTML();
+    box.innerHTML = famHTML() + evWeekHTML();
     bind(box, id => ROOT.profiles[id] ? { d: digest(ROOT.profiles[id]), n: ROOT.profiles[id].settings.name || '' } : null);
+  }
+  // from the journal on this phone (EVT): time in the game, days, finished games and stories of each child this week
+  function evWeekHTML() {
+    const rows = KIDS.filter(id => ROOT.profiles[id]).map(id => { const w = EVT.week(id); if (!w.min && !w.games) return '';
+      const AN = { games: 'игры', stories: 'истории', travel: 'путешествие', home: 'главный экран', grown: 'для взрослых', other: 'занятия и другое' };
+      const ar = Object.entries(w.area).sort((a, b) => b[1] - a[1]).map(([k, m]) => `${AN[k] || k} ${m} мин`).join(' · ');
+      return `<li><b>${esc(ROOT.profiles[id].settings.name || '')}</b>: ${w.min} мин · ${w.days} ${plural(w.days, ['день', 'дня', 'дней'])} · игр: ${w.games}${w.stories ? ` · историй: ${w.stories}` : ''}${ar ? `<br><small>${ar}</small>` : ''}</li>`; }).join('');
+    return rows ? `<div class="gd-ev"><h3 class="fam-s">⏱ За 7 дней на этом телефоне</h3><ul>${rows}</ul></div>` : '';
   }
   // the grandparents' phone: the digest from the family's progress note
   function guestHTML(pg) {
@@ -27586,6 +27764,7 @@ function screenCloudMake(f) {
     ${padHTML('clPad')}
     <div class="prow-btns"><button class="chip" id="clRnd">🎲 Придумать</button></div>
     <label class="cl-ok"><input type="checkbox" id="clAgree"> <span>Имена детей, их настройки и успехи будут храниться на сервере приложения (Cloudflare), чтобы заходить с любого телефона. Рисунки остаются на телефоне. Удалить всё можно здесь, в пульте.</span></label>
+    <p class="muted">${privLink('Конфиденциальность: что хранится и где')}</p>
     <p class="fe-err" id="clErr" role="alert"></p>
     <div class="prow-btns"><button class="big" id="clGo">Создать вход</button></div>
   </div>`, { back: screenPult, guide: false, raw: true });
@@ -27666,6 +27845,115 @@ function screenCloudDel(f) {
   };
 }
 /* CLOUD-END */
+/* PRIVACY-BEGIN ---------- the grown-ups' data (v164): the parents' tick for the anonymous statistics (off until they
+   tick it), the family's data as a file, «Удалить всё», the privacy page; speech recognition (the child's voice goes to
+   Google in Chrome) starts off in the EU and its neighbours. The author's dashboard: the day counters, added up by the
+   server and sealed with the author's open key, so only her phone can read them. ---------- */
+const PRIVACY_URL = () => `https://govorilki.com/${LANG}/privacy/`;
+const EU_CC = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'CH', 'GB'];
+function inEU() {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (/^(Europe\/(?!Moscow|Minsk|Kirov|Volgograd|Samara|Saratov|Ulyanovsk|Astrakhan|Simferopol|Istanbul|Kaliningrad)|Atlantic\/(Azores|Madeira|Canary|Reykjavik|Faroe))/.test(tz)) return true;
+  } catch (e) {}
+  return Object.values(ROOT.families || {}).some(f => EU_CC.includes(f.cc));
+}
+// once on each phone: in the EU speech recognition waits for the parents' tick (the microphone's own checks stay on)
+function srDefault() { if (ROOT.srDef) return; ROOT.srDef = 1; if (ROOT.srOff === undefined && inEU()) ROOT.srOff = true; save(); }
+const statsOn = () => !!(ROOT.consent && ROOT.consent.stats);
+function setStats(on) { ROOT.consent = { stats: on ? 1 : 0, at: Date.now(), v: 1 }; if (on) ROOT.evNext = dayKey(); else delete ROOT.evNext; save(); }
+const privLink = t => `<a href="${PRIVACY_URL()}" target="_blank" rel="noopener">${t}</a>`;
+const consentHTML = id => EMBEDDED ? '' : `<div class="share-box"><label class="sw" for="${id}"><input id="${id}" type="checkbox" ${statsOn() ? 'checked' : ''}>Помогать улучшать игру анонимной статистикой</label><p class="muted">Раз в день телефон отправляет счётчики за прошлый день: какие игры открывали, сколько минут играли, что сломалось. Без имён и номеров детей. Выключить можно здесь в любой момент. ${privLink('Конфиденциальность')}</p></div>`;
+function bindConsent(id) { const el = document.getElementById(id); if (el) el.onchange = () => { sfx.tick(); setStats(el.checked); }; }
+function dataSecHTML() {
+  const n = EVT.size(), cf = cloudFams();
+  return `<section class="psec" id="dataSec"><h2>🔒 Ваши данные</h2>
+    <p class="muted">Всё хранится на этом телефоне. Журнал занятий для «Отчёта» (${n} ${plural(n, ['запись', 'записи', 'записей'])} за 90 дней) никуда не отправляется. Рекламы, cookies и чужих счётчиков нет.</p>
+    ${consentHTML('stIn')}
+    <p class="muted">Синхронизация семьи: ${cf.length ? 'включена, прогресс детей хранится на нашем сервере (Cloudflare)' : 'выключена'}. ${ROOT.srOff ? 'Распознавание речи Google выключено.' : 'Распознавание речи включено: голос ребёнка обрабатывает Google.'}</p>
+    <div class="prow-btns"><button class="big ghost" id="dataGet">⬇️ Скачать данные семьи</button><button class="big ghost danger" id="dataDel">Удалить всё</button></div>
+    <p class="muted" id="dataOut"></p>
+    <p class="muted">${privLink('Конфиденциальность: что хранится, где и сколько')}</p></section>`;
+}
+function bindDataSec() {
+  bindConsent('stIn');
+  const g = $('#dataGet'), d = $('#dataDel');
+  if (g) g.onclick = async () => { sfx.pop(); $('#dataOut').textContent = 'Собираю…'; const ok = await dataExport(); if ($('#dataOut')) $('#dataOut').textContent = ok ? 'Готово: файл сохранён в «Загрузки».' : 'Не получилось сохранить файл.'; };
+  if (d) d.onclick = () => { sfx.pop(); screenDataDel(); };
+}
+// everything about the family on this phone and on the server, as one JSON file (keys and passwords left out)
+async function dataExport() {
+  try {
+    const dev = JSON.parse(JSON.stringify(ROOT));
+    delete dev.adminKey; if (dev.eleven) delete dev.eleven.key;
+    Object.values(dev.families || {}).forEach(f => { if (f.cloud) delete f.cloud.token; });
+    const other = {};
+    try { Object.keys(localStorage).filter(k => k.startsWith('govorilki') && k !== KEY2 && k !== EVT.KEY).forEach(k => { other[k] = localStorage.getItem(k); }); } catch (e) {}
+    const out = { app: 'Govorilki', version: String(APP_VER || ''), made: new Date().toISOString(), device: dev, journal: EVT.all(), other, server: {} };
+    for (const f of cloudFams()) { try { out.server[f.cloud.login] = await cloudApi('GET', '/v1/family', null, f.cloud.token); } catch (e) { out.server[f.cloud.login] = { error: 'no connection' }; } }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], { type: 'application/json' }));
+    a.download = `govorilki-${dayKey()}.json`; document.body.append(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    return true;
+  } catch (e) { return false; }
+}
+function screenDataDel() {
+  newScreen(); EVT.enter('parents');
+  const fams = cloudFams();
+  shell('Удалить всё', `<div class="cl">
+    <p class="lead">С этого телефона сотрутся все семьи, дети, звёздочки, настройки, рисунки, записи голоса и журнал занятий.</p>
+    ${fams.length ? `<p>Сначала удалите семью с сервера, там нужен пароль семьи:</p><div class="prow-btns">${fams.map(f => `<button class="big ghost" data-dfam="${f.id}">🗑 Семья «${esc(f.cloud.login)}» на сервере</button>`).join('')}</div>` : '<p class="muted">На сервере семьи с этого телефона нет.</p>'}
+    <p class="muted">Анонимные счётчики удалять не нужно: в них нет ни семьи, ни детей. Новости для родных исчезают с сервера сами через 12 часов.</p>
+    ${ROOT.adminKey ? '<p class="fe-err">На этом телефоне ключ автора: после удаления письма и статистику открыть будет нечем.</p>' : ''}
+    <div class="prow-btns"><button class="big danger" id="wipeGo">Стереть этот телефон</button><button class="big ghost" id="wipeNo">Отмена</button></div>
+    <p class="fe-err" id="wipeOut" role="alert"></p></div>`, { back: () => screenParents(), guide: false, raw: true });
+  $$('[data-dfam]').forEach(b => b.onclick = () => { sfx.pop(); screenCloudDel(ROOT.families[b.dataset.dfam]); });
+  $('#wipeNo').onclick = () => { sfx.pop(); screenParents(); };
+  $('#wipeGo').onclick = async () => {
+    const b = $('#wipeGo');
+    if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Точно стереть? Вернуть будет нельзя'; if (cloudFams().length) $('#wipeOut').textContent = 'Семья ещё есть на сервере: так сотрётся только этот телефон.'; return; }
+    await wipeAll();
+  };
+}
+async function wipeAll() {
+  window.GOV_WIPED = true; EVT.wipe();
+  try { Object.keys(localStorage).filter(k => k.startsWith('govorilki')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  try { sessionStorage.clear(); } catch (e) {}
+  try { if (indexedDB.databases) for (const d of await indexedDB.databases()) if (d.name) indexedDB.deleteDatabase(d.name); } catch (e) {}
+  location.replace(location.pathname);
+}
+// the author's dashboard: the last weeks of the day counters, opened with the key on her phone
+async function statsPull(days) {
+  const r = await fetch(`${CLOUD}/v1/stats?days=${days}`).then(x => x.ok ? x.json() : null);
+  if (!r || !r.ct) throw new Error('net');
+  return openForAdmin(r, await adminPrivate(ROOT.adminKey));
+}
+function statsHTML(S) {
+  const D = S.days || {}, ds = Object.keys(D).sort(), last = ds.slice(-7), sum = (k, set = ds) => set.reduce((a, d) => a + (D[d][k] || 0), 0);
+  const few = n => n > 0 && n < 5 ? '<5' : String(n);
+  const tile = (n, t) => `<div class="adm-t"><b>${few(n)}</b><small>${t}</small></div>`;
+  const kidsMax = Math.max(1, ...ds.map(d => D[d].kids || 0)), W = Math.max(ds.length, 1);
+  const bars = ds.map((d, i) => { const v = D[d].kids || 0, h = Math.round(v / kidsMax * 80); return `<rect x="${i * 300 / W + 1}" y="${90 - h}" width="${Math.max(1, 300 / W - 2)}" height="${h}" rx="1" fill="currentColor"><title>${d}: ${few(v)}</title></rect>`; }).join('');
+  const keysOf = re => { const o = {}; ds.forEach(d => Object.entries(D[d]).forEach(([k, n]) => { const m = k.match(re); if (m) o[m[1]] = (o[m[1]] || 0) + n; })); return o; };
+  const g = {}; ds.forEach(d => Object.entries(D[d]).forEach(([k, n]) => { const m = k.match(/^g:(.+):(s|e|st|sec)$/); if (m) { (g[m[1]] = g[m[1]] || { s: 0, e: 0, st: 0, sec: 0 })[m[2]] += n; } }));
+  const games = Object.entries(g).sort((a, b) => (b[1].s + b[1].e) - (a[1].s + a[1].e)).slice(0, 25);
+  const list = (o, name) => { const e = Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, 15); return e.length ? `<table class="adm-tb"><tr><th>${name}</th><th>раз</th></tr>${e.map(([k, n]) => `<tr><td>${esc(k)}</td><td>${few(n)}</td></tr>`).join('')}</table>` : '<p class="muted">Пока нет.</p>'; };
+  return `<section class="psec"><h2>📈 Статистика за ${ds.length} ${plural(ds.length, ['день', 'дня', 'дней'])}</h2>
+    <p class="muted">Только семьи, которые разрешили. Числа меньше 5 не показываются.</p>
+    <div class="adm-ts">${tile(sum('kids', last), 'детей за 7 дней (по дням)')}${tile(sum('phones', last), 'устройств за 7 дней')}${tile(sum('open', last), 'запусков')}${tile(sum('min', last), 'минут в игре')}</div>
+    <h3 class="fam-s">Дети в игре по дням</h3><svg class="adm-ch" viewBox="0 0 300 92" role="img" aria-label="Дети в игре по дням">${bars}</svg>
+    <h3 class="fam-s">Игры</h3>${games.length ? `<table class="adm-tb"><tr><th>игра</th><th>начали</th><th>закончили</th><th>⭐ в среднем</th><th>мин</th></tr>${games.map(([k, v]) => `<tr><td>${esc(gameName(k) || k)}</td><td>${few(v.s)}</td><td>${few(v.e)}</td><td>${v.e ? (v.st / v.e).toFixed(1) : '—'}</td><td>${Math.round(v.sec / 60)}</td></tr>`).join('')}</table>` : '<p class="muted">Пока нет.</p>'}
+    <h3 class="fam-s">Страницы</h3>${(() => { const po = keysOf(/^po:(.+)$/), mn = keysOf(/^scr:(.+)$/), ks = [...new Set([...Object.keys(po), ...Object.keys(mn)])].sort((a, b) => (mn[b] || 0) - (mn[a] || 0)).slice(0, 30);
+      return ks.length ? `<table class="adm-tb"><tr><th>страница</th><th>открыли</th><th>мин</th></tr>${ks.map(k => `<tr><td>${esc(k)}</td><td>${few(po[k] || 0)}</td><td>${mn[k] || 0}</td></tr>`).join('')}</table>` : '<p class="muted">Пока нет.</p>'; })()}
+    <h3 class="fam-s">Шаги «Сегодня»</h3>${list(keysOf(/^step:(.+)$/), 'шаг')}
+    <h3 class="fam-s">Двери</h3>${list(keysOf(/^door:(.+)$/), 'дверь')}
+    <h3 class="fam-s">Истории</h3><p>Дослушали: <b>${few(sum('story'))}</b></p>${list(keysOf(/^story:(.+)$/), 'история')}
+    <h3 class="fam-s">Сбои</h3>${list(keysOf(/^err:(.+)$/), 'сбой')}
+    <h3 class="fam-s">Языки и экраны</h3>${list({ ...keysOf(/^(lang:.+)$/), ...keysOf(/^(dev:.+)$/) }, 'что')}
+    ${Object.keys(S.months || {}).length ? `<h3 class="fam-s">По месяцам (старше 13 месяцев)</h3>${list(Object.fromEntries(Object.entries(S.months).map(([m, o]) => [m, o.kids || 0])), 'месяц · дети')}` : ''}</section>`;
+}
+/* PRIVACY-END */
 /* LAND-BEGIN */
 /* ---------- the page for new people: what the game is, for whom, how to start, the family's sign-in right on it.
    A phone with no family opens here from any address; #login (or #voiti) scrolls to the sign-in. ---------- */

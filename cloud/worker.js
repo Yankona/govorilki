@@ -5,6 +5,10 @@
 const ORIGINS = ['https://govorilki.com', 'https://www.govorilki.com', 'https://yankona.github.io', 'http://localhost:8765'];
 const LOCK_AFTER = 5, LOCK_MS = 15 * 60e3, LOCK_MAX = 24 * 3600e3, IP_MAX = 40, IP_WINDOW = 60 * 60e3, TOKEN_DAYS = 400;
 const MAX_IDEA = 12e3, IDEA_IP_MAX = 20, IDEA_KEEP = 3000;
+// anonymous statistics: a phone sends its finished days (at most 14) once a day; days are kept 13 months, then months
+const STATS_IP_MAX = 40, STATS_KEEP_DAYS = 396, STATS_KEYS = 320, STATS_MAX = 100000, KEY_RE = /^[A-Za-z0-9:._-]{1,48}$/;
+// the author's open key (the same as ADMIN_PUB in the game): the dashboard's numbers go out sealed with it
+const ADMIN_PUB = { x: 'Er9pozD45o7szpWBRZ0S_oB2qYm1Y5IXKJuhxRPVbq0', y: 'EmhA4ssBWuyIvZtgKoamHyO7ySBGF_9ghtF5A4nsETc' };
 const CH_TTL = 12 * 3600e3, CH_MAX = 48e3, CH_IP_MAX = 3000, CH_LIST = 500;
 const MAX_PROFILE = 600e3, MAX_META = 40e3, MAX_KIDS = 12, MAX_MOVE = 1.9e6, MOVE_TTL = 24 * 3600e3, MOVE_IP_MAX = 30;
 
@@ -12,6 +16,25 @@ const now = () => Date.now();
 const enc = new TextEncoder();
 const hex = buf => [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
 const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+const ymd = t => new Date(t).toISOString().slice(0, 10);
+async function sealForAdmin(obj) {
+  const S = crypto.subtle, EC = { name: 'ECDH', namedCurve: 'P-256' };
+  const pub = await S.importKey('jwk', { kty: 'EC', crv: 'P-256', x: ADMIN_PUB.x, y: ADMIN_PUB.y, ext: true }, EC, false, []);
+  const eph = await S.generateKey(EC, true, ['deriveKey']);
+  const key = await S.deriveKey({ name: 'ECDH', public: pub }, eph.privateKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(12)), ct = await S.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(obj)));
+  const e = await S.exportKey('jwk', eph.publicKey);
+  return { k: 'st', ex: e.x, ey: e.y, iv: b64u(iv), ct: b64u(new Uint8Array(ct)) };
+}
+// the daily job: notes of the channel older than 12 hours, counters of guessing addresses, statistics older than 13 months
+async function daily(env) {
+  const cut = ymd(now() - STATS_KEEP_DAYS * 864e5);
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM relay WHERE at < ?').bind(now() - CH_TTL),
+    env.DB.prepare('DELETE FROM ipfails WHERE since < ?').bind(now() - 24 * 3600e3),
+    env.DB.prepare('INSERT INTO stats_month (month, k, n) SELECT substr(day, 1, 7), k, SUM(n) FROM stats_day WHERE day < ? GROUP BY substr(day, 1, 7), k ON CONFLICT (month, k) DO UPDATE SET n = n + excluded.n').bind(cut),
+    env.DB.prepare('DELETE FROM stats_day WHERE day < ?').bind(cut)]);
+}
 const rand = n => crypto.getRandomValues(new Uint8Array(n));
 const sha = async s => hex(await crypto.subtle.digest('SHA-256', enc.encode(s)));
 // «Вера-Сава», «вера сава», «ВЕРАСАВА» are one login
@@ -123,6 +146,37 @@ async function route(req, env) {
     const h = sp.match(/^(\d+)h$/), from = Math.max(now() - CH_TTL, h ? now() - +h[1] * 3600e3 : (parseInt(sp, 10) || 0) * 1000);
     const r = await env.DB.prepare('SELECT id, at, iv, ct FROM relay WHERE t = ? AND id > ? AND at >= ? ORDER BY id LIMIT ?').bind(ch[1], after, from, CH_LIST).all();
     return json({ ok: true, time: Math.floor(now() / 1000), msgs: r.results || [] });
+  }
+
+  // anonymous statistics: only counters (how many), from phones whose parents agreed; nothing about who sent them is kept
+  if (path === '/v1/stats' && M === 'POST') {
+    const r = await env.DB.prepare('SELECT n, since FROM ipfails WHERE ip = ?').bind('st:' + ip).first();
+    if (r && now() - r.since < IP_WINDOW && r.n >= STATS_IP_MAX) return json({ ok: false, error: 'slow' }, 429);
+    const b = await body(req, 120e3);
+    const lang = ['ru', 'en', 'pt', 'de'].includes(b.lang) ? b.lang : 'other', dev = ['phone', 'tablet', 'laptop'].includes(b.dev) ? b.dev : 'other';
+    const ver = /^\d{1,5}$/.test(String(b.ver || '')) ? String(b.ver) : 'other', lo = ymd(now() - 31 * 864e5), hi = ymd(now());
+    if (b.v !== 1 || !Array.isArray(b.days) || b.days.length > 14) return json({ ok: false, error: 'days' }, 400);
+    const q = [];
+    for (const x of b.days) {
+      if (!x || typeof x.d !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(x.d) || x.d < lo || x.d > hi || !x.c || typeof x.c !== 'object') continue;
+      const c = {};
+      for (const [k, n] of Object.entries(x.c).slice(0, STATS_KEYS)) if (KEY_RE.test(k) && Number.isInteger(n) && n > 0 && n <= STATS_MAX) c[k] = n;
+      if (!Object.keys(c).length) continue;
+      Object.assign(c, { phones: 1, ['lang:' + lang]: 1, ['dev:' + dev]: 1, ['ver:' + ver]: 1 });
+      q.push(env.DB.prepare('INSERT INTO stats_day (day, k, n) SELECT ?1, key, value FROM json_each(?2) WHERE true ON CONFLICT (day, k) DO UPDATE SET n = n + excluded.n').bind(x.d, JSON.stringify(c)));
+    }
+    q.push(!r || now() - r.since >= IP_WINDOW ? env.DB.prepare('INSERT OR REPLACE INTO ipfails (ip, n, since) VALUES (?, 1, ?)').bind('st:' + ip, now()) : env.DB.prepare('UPDATE ipfails SET n = n + 1 WHERE ip = ?').bind('st:' + ip));
+    await env.DB.batch(q);
+    return json({ ok: true, days: q.length - 1 });
+  }
+  // the author's dashboard: the sums of the last days (and the months), sealed, so only her phone can read them
+  if (path === '/v1/stats' && M === 'GET') {
+    const days = Math.min(400, Math.max(1, parseInt(url.searchParams.get('days') || '35', 10) || 35));
+    const d = await env.DB.prepare('SELECT day, k, n FROM stats_day WHERE day >= ?').bind(ymd(now() - days * 864e5)).all();
+    const m = await env.DB.prepare('SELECT month, k, n FROM stats_month').all(), out = { days: {}, months: {}, at: now() };
+    (d.results || []).forEach(x => { (out.days[x.day] = out.days[x.day] || {})[x.k] = x.n; });
+    (m.results || []).forEach(x => { (out.months[x.month] = out.months[x.month] || {})[x.k] = x.n; });
+    return json({ ok: true, ...(await sealForAdmin(out)) });
   }
 
   // ideas and feedback for the author: a sealed letter (only the author's phone can open it); anyone may read the
@@ -245,5 +299,6 @@ export default {
     catch (e) { res = json({ ok: false, error: e.status ? e.message : 'server' }, e.status || 500); }
     const h = new Headers(res.headers); Object.entries(cors).forEach(([k, v]) => h.set(k, v));
     return new Response(res.body, { status: res.status, headers: h });
-  }
+  },
+  async scheduled(ev, env, ctx) { ctx.waitUntil(daily(env)); }
 };

@@ -16,7 +16,7 @@ OUT = os.path.join(HERE, 'dist')
 SITE = os.environ.get('SITE_URL', 'https://govorilki.com').rstrip('/')
 LANGS = ['ru', 'en', 'pt', 'de']
 ART = ['ru', 'en', 'pt']   # the languages with articles; de has its home only (for now)
-KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq']
+KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq', 'privacy']
 APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/', 'de': SITE + '/play/de/'}
 # the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
 APP_DIR = os.environ.get('APP_DIR', '')
@@ -28,7 +28,7 @@ TODAY = datetime.date.today().isoformat()
 FRIENDS = ['tiger', 'kitty', 'panda', 'unicorn', 'ghost']
 
 C = {l: json.load(open(os.path.join(HERE, 'content', l + '.json'), encoding='utf-8')) for l in LANGS}
-PAGES = {l: KEYS if l in ART else ['home'] for l in LANGS}
+PAGES = {l: KEYS if l in ART else ['home', 'privacy'] for l in LANGS}   # the privacy page is in every language
 for l in LANGS:
     assert set(C[l]['pages']) >= set(PAGES[l]), (l, set(PAGES[l]) - set(C[l]['pages']))
 ROOT = json.load(open(os.path.join(HERE, 'content', 'root.json'), encoding='utf-8'))

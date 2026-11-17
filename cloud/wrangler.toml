@@ -11,3 +11,7 @@ binding = "DB"
 database_name = "govorilki"
 database_id = "__DB_ID__"
 migrations_dir = "migrations"
+
+# the daily job (scheduled() in worker.js): old channel notes, address counters, statistics older than 13 months
+[triggers]
+crons = ["23 3 * * *"]
