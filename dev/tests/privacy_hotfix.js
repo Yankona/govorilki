@@ -13,7 +13,7 @@ const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = proces
 const ONLY = (process.argv[4] || 'ru,en,pt,de').split(',');
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const LANGS = { ru: 'ru/', en: '', pt: 'pt/', de: 'de/' };
-const ADD = path.join(__dirname, '..', 'site-add');      // fonts/ and engine/piper/ before the release copies them
+const ADD = path.join(__dirname, '..', 'site-add');      // fonts/ and engine/piper/ before the release copies them; after it, the repository root
 const FAMCODE = 'tinafam0123456';
 const BAD = /ntfy|fonts\.googleapis|fonts\.gstatic|cdn\.jsdelivr/;
 const kid = (name, g, age, fr, lang) => ({ stars: 37, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: 'r', age, friend: fr, onboarded: true, lang } });
@@ -47,7 +47,7 @@ const MIME = { '.css': 'text/css', '.woff2': 'font/woff2', '.js': 'text/javascri
         return r.fulfill({ status: 200, headers: H, body: JSON.stringify({ ok: true, time: Math.floor(Date.now() / 1000), msgs: list.filter(x => x.id > after) }) });
       });
       await c.route(u => /\/govorilki\/(fonts|engine\/piper)\//.test(u.pathname), r => {
-        const rel = new URL(r.request().url()).pathname.replace(/^\/govorilki\//, ''), f = path.join(ADD, rel);
+        const rel = new URL(r.request().url()).pathname.replace(/^\/govorilki\//, ''), f0 = path.join(ADD, rel), f = fs.existsSync(f0) ? f0 : path.join(__dirname, '..', '..', rel);
         if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
         local.add(rel); return r.fulfill({ status: 200, headers: { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream' }, body: fs.readFileSync(f) });
       });
