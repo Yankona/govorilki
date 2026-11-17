@@ -44,7 +44,9 @@ const SLIP = { ru: s => s.replace(/р/g, 'л').replace(/Р/g, 'Л'), en: s => s.
       await run('GUARD.free = 1');
       // «Сегодня»: an even day is a comic day, an odd one is not
       const even = await run(`(() => { const n = dayNo(), e = n - n % 2; return [RSK.plan(e, 0).map(s => s.key).join(), RSK.plan(e + 1, 0).map(s => s.key).join()]; })()`);
-      ok(even[0] === 'comic' && even[1] !== 'comic', `${tag}: «Сегодня» reading: even day «${even[0]}», odd day «${even[1]}»`);
+      // little ones who don't read yet (≤6, reading step < 4: task little-ones) get no comic as their reading step
+      const little = age <= 6 && lv < 4;
+      ok(little ? even[0] !== 'comic' && even[1] !== 'comic' : even[0] === 'comic' && even[1] !== 'comic', `${tag}: «Сегодня» reading: even day «${even[0]}», odd day «${even[1]}»`);
       // the tile and the shelf
       await run('goHome()'); await p.waitForTimeout(500);
       ok(await run(`GAMES.some(g => g.id === 'comics' && !(g.hide && g.hide()))`), `${tag}: the game «Комиксы» is there`);
