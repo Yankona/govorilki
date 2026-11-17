@@ -56,7 +56,7 @@ acc = json.load(gzip.open((os.environ.get('RACCW') or os.path.join(B, '..', '.ca
 texts = ' '.join(x[k] if isinstance(x[k], str) else ' '.join(x[k]) for x in news + jobs for k in ('t', 's', 'q', 'a', 'clue') if k in x)
 names = {m.group(1).lower() for m in re.finditer(r'(?<=[^.!?…\s«»—–-])\s+«?([А-ЯЁ][а-яё]+)', texts)}
 man = json.load(open(B + '/say_manual.json', encoding='utf-8')); nw = nc = 0; conflicts = []
-REJECT = {'луксор', 'аделаида', 'олимпиаде', 'орион', 'штаты', 'гренландии'}  # writers' stress wrong (dictionary right)
+REJECT = {'луксор', 'аделаида', 'олимпиаде', 'орион', 'штаты', 'гренландии', 'ключевская'}  # writers' stress wrong (dictionary right)
 for w, f in stress.items():
     w, f = w.lower().strip(), f.lower().strip()
     if ' ' in w or not re.fullmatch(r'[а-яё+-]+', f) or f.replace('+', '') != w or f.count('+') < 1: continue
