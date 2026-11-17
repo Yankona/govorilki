@@ -28,6 +28,7 @@ for L in ('en', 'pt'):
         f = H + f'/phonics/{part}.{L}.json'
         if os.path.exists(f): data.update(json.load(open(f)))
     data['MORE_STORIES'] = stories_ld.more(L)
-    data['COMIC_EPS'] = gen_comics.load(L)   # comics: translated series only, never the Russian ones
+    data['COMIC_EPS'] = gen_comics.load(L)
+    data['COMIC_ME'] = gen_comics.load_me(L)   # comics: translated series only, never the Russian ones
     json.dump(data, open(H + f'/langdata/{L}.json', 'w'), ensure_ascii=False)
 print('translated', done, 'missing', missing)
