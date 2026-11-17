@@ -69,5 +69,5 @@ What the child sees: «Новое!» on the tile «Что нового в мир
 days not heard yet; inside a topic's section the latest news of that topic sit on top. The badge «Знаю новости» is for
 the five newest stories; a new batch brings a new badge (P.newsB by month).
 
-«Профессии» work the same way from `stories/jobs/*.json` (brief: `stories/jobs/BRIEF.md`; sections help, build, move, make,
+«Профессии» work the same way from `stories/jobs/*.json` (brief: `stories/jobs/BRIEF.md`; sections help, build, move, make, own («Своё дело», tag `ideas`),
 learn, nature, digital; `tools` 3 emoji and `clue` feed «Угадай профессию», `tags` feed «Кем я буду?»).

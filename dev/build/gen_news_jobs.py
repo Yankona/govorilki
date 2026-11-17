@@ -8,9 +8,9 @@
 import json, os, re, glob, gzip
 B = os.path.dirname(os.path.abspath(__file__)); S = os.path.join(B, '..', 'stories')
 TOPICS = {'space', 'animals', 'water', 'plants', 'tech', 'sport', 'places', 'old', 'art', 'music', 'ballet'}
-SECS = ['help', 'build', 'move', 'make', 'learn', 'nature', 'digital']
-TAGS = {'help', 'animals', 'nature', 'tech', 'build', 'art', 'music', 'stage', 'sport', 'science', 'computers', 'words', 'travel', 'food'}
-ids, warn, stress, news, jobs = set(), [], {}, [], []
+SECS = ['help', 'build', 'move', 'make', 'learn', 'sci', 'nature', 'digital', 'ai', 'own']
+TAGS = {'help', 'animals', 'nature', 'tech', 'build', 'art', 'music', 'stage', 'sport', 'science', 'computers', 'words', 'travel', 'food', 'ideas'}
+ids, warn, stress, news, jobs, TRY = set(), [], {}, [], [], {}
 def check(x, lo, hi):
     assert re.fullmatch(r'[a-z0-9-]+', x['id']) and x['id'] not in ids, x['id']
     ids.add(x['id'])
@@ -30,11 +30,16 @@ news.sort(key=lambda x: x['_d'], reverse=True)
 for x in news: del x['_d']
 for p in sorted(glob.glob(os.path.join(S, 'jobs', '*.json'))):
     d = json.load(open(p, encoding='utf-8'))
+    TRY.update(d.get('try_existing', {}))
     for x in d['jobs']:
-        check(x, 400, 900)
+        check(x, 400, 1000)
         assert x['sec'] in SECS and set(x['tags']) <= TAGS and x['tools'] and x['clue'], x['id']
-        jobs.append({k: x[k] for k in ('id', 'e', 't', 'sec', 's', 'q', 'a', 'tools', 'clue', 'tags')})
+        jobs.append({k: x[k] for k in ('id', 'e', 't', 'sec', 's', 'q', 'a', 'tools', 'clue', 'tags', 'try') if k in x})
     stress.update(d.get('stress', {}))
+# «Опыт дома» for scientists written in another batch: { id: try }
+for x in jobs:
+    if x['id'] in TRY: x['try'] = TRY.pop(x['id'])
+assert not TRY, 'try_existing for unknown ids: ' + ', '.join(TRY)
 jobs.sort(key=lambda x: SECS.index(x['sec']))
 G = os.path.join(B, '..', 'game', 'govorilki.html'); g = open(G, encoding='utf-8').read()
 part = ("LEARN.news = { name: 'Что нового в мире', e: '🗞️', bg: 'var(--t-blue)', sub: 'настоящие новости: космос, звери, открытия', items: "
@@ -51,7 +56,7 @@ acc = json.load(gzip.open((os.environ.get('RACCW') or os.path.join(B, '..', '.ca
 texts = ' '.join(x[k] if isinstance(x[k], str) else ' '.join(x[k]) for x in news + jobs for k in ('t', 's', 'q', 'a', 'clue') if k in x)
 names = {m.group(1).lower() for m in re.finditer(r'(?<=[^.!?…\s«»—–-])\s+«?([А-ЯЁ][а-яё]+)', texts)}
 man = json.load(open(B + '/say_manual.json', encoding='utf-8')); nw = nc = 0; conflicts = []
-REJECT = {'луксор', 'аделаида', 'олимпиаде', 'орион', 'штаты', 'гренландии'}  # writers' stress wrong (dictionary right)
+REJECT = {'луксор', 'аделаида', 'олимпиаде', 'орион', 'штаты', 'гренландии', 'ключевская'}  # writers' stress wrong (dictionary right)
 for w, f in stress.items():
     w, f = w.lower().strip(), f.lower().strip()
     if ' ' in w or not re.fullmatch(r'[а-яё+-]+', f) or f.replace('+', '') != w or f.count('+') < 1: continue
