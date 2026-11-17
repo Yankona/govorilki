@@ -3425,6 +3425,21 @@ body.simple .home-t .stage{padding-bottom:110px}
 .tk-chips{display:flex;flex-wrap:wrap;gap:8px}
 .tk-form{display:flex;gap:8px}.tk-form input{flex:1;min-width:0;padding:11px 14px;border-radius:14px;border:2px solid var(--line-strong);font:700 16px var(--f-body);background:var(--paper);color:var(--ink)}
 /* TALK-CSS-END */
+/* LITTLE-CSS: the little ones' rewards and the sticker to colour */
+.lt-day{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;font-size:30px}
+.lt-dance svg{animation:ltDance 1s ease-in-out 3}
+@keyframes ltDance{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-12deg) translateY(-10px)}75%{transform:rotate(12deg) translateY(-10px)}}
+.lt-hop svg{animation:ltDance 1.2s ease-in-out 2}
+.lt-stk{font-size:72px;line-height:1;animation:ltPop .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes ltPop{from{transform:scale(.2) rotate(-30deg);opacity:0}}
+.lt-col{display:flex;flex-direction:column;align-items:center;gap:18px}
+.lt-svg{width:min(80vw,320px);height:auto;background:var(--paper);border-radius:24px;box-shadow:0 5px 0 var(--line-strong)}
+.lt-svg path{cursor:pointer}
+.lt-pal{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.lt-c{width:52px;height:52px;border-radius:50%;border:4px solid var(--paper);box-shadow:0 3px 0 var(--line-strong);cursor:pointer}
+.lt-c.sel{outline:4px solid var(--ink);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.lt-dance svg,.lt-hop svg,.lt-stk{animation:none}}
+/* LITTLE-CSS-END */
 /* LAND2-CSS */
 .ld-day-in{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:center}
 .ld-demo{pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.15));border-radius:28px;padding:14px 12px 4px}
@@ -3941,8 +3956,8 @@ const LS = () => {
   // reading by skill: the reading node says the child's step (read-skill)
   if (b.read && (() => { try { return RUME.isDay(); } catch (e) { return false; } })()) b = { ...b, read: { ...b.read, name: 'Русский для меня', sub: RUME_UI.sub() } };
   // every other day a new comic episode is the reading (comics)
-  else if (b.read && (() => { try { return COMIX.isDay(); } catch (e) { return false; } })()) b = { ...b, read: { ...b.read, name: 'Комикс дня', sub: COMIX.sub() } };
-  else if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: readLangToday() !== LANG ? mlInfo(readLangToday())[1] + ' ' + 'Чтение' : keep ? b.read.name : IS_RU && RSK.early() ? 'Русское чтение' : 'Чтение', sub: keep ? b.read.sub : RSK.sub() } }; } catch (e) {}
+  else if (b.read && (() => { try { return !LITTLE.listen() && COMIX.isDay(); } catch (e) { return false; } })()) b = { ...b, read: { ...b.read, name: 'Комикс дня', sub: COMIX.sub() } };
+  else if (b.read) try { const keep = Q() && RSK.has() && RSK.lv() >= 8; b = { ...b, read: { ...b.read, name: readLangToday() !== LANG ? mlInfo(readLangToday())[1] + ' ' + 'Чтение' : keep ? b.read.name : LITTLE.listen() ? 'Звуки и буквы' : IS_RU && RSK.early() ? 'Русское чтение' : 'Чтение', sub: keep ? b.read.sub : LITTLE.listen() ? 'слушаем и находим' : RSK.sub() } }; } catch (e) {}
   return customSounds() ? { ...b, speech: { ...b.speech, name: 'Логопед', sub: 'дыхание, язык, ' + sndLabel() } } : b;
 };
 const LIDS = () => Object.keys(LS());
@@ -3966,7 +3981,9 @@ function todayState() {
 }
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
 // the plan depends on the date and on how many times this lesson was already done today
-function lessonPlan(id) {
+// the plan of a step; the little ones get a short one with nothing to read (little-ones)
+function lessonPlan(id) { return LITTLE_PLAN(id, lessonPlan0(id)); }
+function lessonPlan0(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
   // «Счёты» every day, for every age: one short round at the child's level (soroban)
   if (id === 'soro') return [{ key: 'soroban', kind: 'math', name: 'Счёты', run: () => SB.daily() }];
@@ -4960,6 +4977,8 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
   if (first) first.focus({ preventScroll: true });
 }
 function lessonDoneOverlay(id, sticker, medal) {
+  // a little one: the friend dances, a sticker of the day (little-ones)
+  try { if (LITTLE.on()) { LITTLE.stepDone(id); return; } } catch (e) {}
   const L = LS()[id], s = streak(), days = `${s} ${plural(s, ['день', 'дня', 'дней'])}`, cnt = dayCounts(dayKey())[id] || 1;
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="Занятие выполнено">
@@ -5330,6 +5349,8 @@ function goHome() {
   if (GUEST && !GUEST_OFF) { screenGuest(); return; }
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
+  // a step left halfway: the little ones get a gentle offer (little-ones)
+  if (ACTIVE) { try { LITTLE.skipped(ACTIVE); } catch (e) {} }
   newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
@@ -16719,7 +16740,9 @@ const RSK = (() => {
   // a language the child only learns starts from the letters
   const startLv = () => mlLearns(LANG) ? 1 : AGE_LV(age());
   const has = () => !!S().lv;
-  const lv = () => Math.max(1, Math.min(L.length, S().lv || startLv()));
+  // a little one who does not read yet stays on the steps heard, not read (little-ones)
+  const capL = () => { try { return LITTLE.listen() ? 3 : L.length; } catch (e) { return L.length; } };
+  const lv = () => Math.max(1, Math.min(capL(), S().lv || startLv()));
   // an older child at an early step: grown-up looks and words
   const big = () => age() >= 8;
   const early = () => big() && lv() <= 5;
@@ -16765,13 +16788,13 @@ const RSK = (() => {
     function next() {
       busy = false; task = make(l); $('#rkStep').textContent = `Задание ${k + 1} из ${N}`;
       const line = ask(task, answer);
-      talk((k === 0 ? (big() ? `${IS_RU ? 'Проверим, как ты читаешь по-русски.' : 'Проверим, как ты читаешь.'} Восемь заданий, это не экзамен: так мы найдём задания как раз для тебя. ` : 'Проверим, как ты читаешь! Восемь заданий: ошибаться не страшно — так мы найдём твой уровень. ') : '') + line);
+      talk((k === 0 ? (big() ? `${IS_RU ? 'Проверим, как ты читаешь по-русски.' : 'Проверим, как ты читаешь.'} Восемь заданий, это не экзамен: так мы найдём задания как раз для тебя. ` : (() => { try { return LITTLE.listen(); } catch (e) { return false; } })() ? 'Поиграем со звуками! Слушай и находи. ' : 'Проверим, как ты читаешь! Восемь заданий: ошибаться не страшно — так мы найдём твой уровень. ') : '') + line);
     }
     async function answer(v, el) {
       if (busy) return; busy = true;
       const good = String(v) === String(task.a);
       (good ? hit : miss)[l] = ((good ? hit : miss)[l] || 0) + 1;
-      if (good) { sfx.good(); mark(el, 1); l = Math.min(L.length, l + (k < 2 ? 2 : 1)); }
+      if (good) { sfx.good(); mark(el, 1); l = Math.min(capL(), l + (k < 2 ? 2 : 1)); }
       else { sfx.pop(); mark(el, 0); mark($(`#rkBox .rk-o[data-v="${CSS.escape(task.a)}"]`), 1); l = Math.max(1, l - 1); }
       q.hit(el, '');
       await talk(good ? pickOne(['Верно!', 'Да!', 'Точно!']) : 'Ничего! Идём дальше.'); if (t !== tok) return;
@@ -16810,7 +16833,7 @@ const RSK = (() => {
         if (tries === 0) { right++; missRun = 0; streak++; } else { streak = 0; missRun++; }
         let line = pickOne(['Верно!', 'Да!', 'Точно!', 'Правильно!']);
         if (task.after && !task.long) line += ' ' + task.after;
-        if (streak >= UP && l < L.length) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + 'Отлично читаешь! Идём на ступень выше.'; }
+        if (streak >= UP && l < capL()) { streak = 0; l++; setLv(l); reHead(); sfx.magic(); line += ' ' + 'Отлично читаешь! Идём на ступень выше.'; }
         else if (missRun >= 2 && l > 1) { missRun = 0; l--; setLv(l); reHead(); line += ' ' + 'Повторим ступень пониже.'; }
         await talk(line); if (t !== tok) return;
         // once a round: the word of the picture in each of the child's languages (multilingual)
@@ -16842,7 +16865,7 @@ const RSK = (() => {
     // a child of 8–14 with Russian: on the days of Russian reading, «Русский для меня» instead, and only it (ru-bilingual)
     try { if (RUME.isDay(n)) return [RUME_UI.step()]; } catch (e) {}
     // every other day: a new comic episode (comics)
-    try { if (COMIX.isDay(n)) return [COMIX.step()]; } catch (e) {}
+    try { if (!LITTLE.listen() && COMIX.isDay(n)) return [COMIX.step()]; } catch (e) {}
     const l = lv(), o = big(), alt = a => a[(n + s) % a.length];
     const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()); };
     const pr = IS_RU && prState().at < PRIMER.length ? 'primer' : 'read-merge';
@@ -16867,7 +16890,7 @@ const RSK = (() => {
     const ml = readLangs().length > 1, lv0 = S().lv, oth = Object.entries(readLevels()).filter(([c]) => c !== LANG);
     sec.insertAdjacentHTML('beforeend', `<label class="prow" for="rkLvIn">📖 Чтение${ml ? ' ' + LANG_READ[LANG] : ''}: ступень <select id="rkLvIn"><option value="">проверить при входе</option>${L.map((x, i) => `<option value="${i + 1}" ${lv0 === i + 1 ? 'selected' : ''}>${i + 1}. ${esc(x.n)} (${esc(x.ex)})</option>`).join('')}</select></label>`);
     if (ml && oth.length) sec.insertAdjacentHTML('beforeend', `<p class="muted rk-oth">Другие языки: ${oth.map(([c, v]) => `${mlInfo(c)[1]} ${esc(mlInfo(c)[2])} — ступень ${v}`).join(', ')}</p>`);
-    $('#rkLvIn').onchange = e => { if (e.target.value) setLv(+e.target.value); else { delete S().lv; save(); } sfx.tick(); };
+    $('#rkLvIn').onchange = e => { if (e.target.value) { setLv(+e.target.value); S().byParent = 1; } else { delete S().lv; save(); } sfx.tick(); };
   }
   GAMES.splice(Math.max(0, GAMES.findIndex(x => x.id === 'abc')), 0, { id: 'r-skill', name: 'Чтение по силам', sub: 'задания как раз для тебя: от слогов до текстов', kw: 'чтение читать уровень слоги слова текст', ico: () => pic('📖'), bg: 'var(--t-blue)', go: () => play(), grp: 2, also: [6], prog: () => has() ? stepTxt() : '' });
   return { play, check, lv, has, setLv, plan, sub, early, settingsRow, L, make, startLv, stepTxt };
@@ -26896,7 +26919,9 @@ const SIMPLE = (() => {
   // the lessons that make the path, in order, and the ones «по желанию»
   function must() {
     const L = LS(), ids = Object.keys(L), m = cfg().must, by = id => ORDER.includes(id) ? ORDER.indexOf(id) : 99;
-    const ms = ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
+    // the little ones: three steps by default (little-ones); a grown-up's choice wins
+    let lil = false; try { lil = LITTLE.on() && !Object.keys(m).length; } catch (e) {}
+    const ms = lil ? LITTLE.must(ids) : ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
     return ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
   }
   const opt = () => { const ms = must(); return Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); };
@@ -26914,13 +26939,15 @@ const SIMPLE = (() => {
   const gamesOf = (a, V) => [...a.ids, ...(a.id === 'world' ? GAMES.filter(g => g.id.startsWith('learn-') && !claimed.has(g.id)).map(g => g.id) : [])].filter(id => V.has(id));
   const area = id => AREAS.find(a => a.id === id);
   const likes = () => [...new Set((P.settings.likes || []).map(l => LIKE_AREA[l]).filter(Boolean))];
-  function pool() { const V = vis(), c = cfg(), age = P.settings.age || 6; return AREAS.filter(a => age >= (a.age || 0) && !c.off.includes(a.id) && gamesOf(a, V).length); }
+  const listens = () => { try { return LITTLE.listen(); } catch (e) { return false; } };
+  function pool() { const V = vis(), c = cfg(), age = P.settings.age || 6, ls = listens(); return AREAS.filter(a => age >= (a.age || 0) && !c.off.includes(a.id) && !(ls && a.id === 'comics') && gamesOf(a, V).length); }
   function rng(seed) { let h = 2166136261; for (const ch of String(seed)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); h = h >>> 0 || 1; return () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return (h % 1e6) / 1e6; }; }
   // the doors of each day from EPOCH to `upto`: highest score wins; a long wait (9+ days) comes first; liked areas
   // wait less; never the door of yesterday; doors of one day from different groups when there is a choice
   function plan(upto, opts = {}) {
     const c = { ...cfg(), ...opts }, A = opts.pool || pool(), lk = opts.likes || likes(), kid = opts.kid || ROOT.cur || 'k', k = Math.min(c.k, A.length);
-    const key = [kid, upto, c.k, A.map(a => a.id).join(), lk.join()].join('|');
+    const lil = opts.little !== undefined ? opts.little : (() => { try { return LITTLE.on(); } catch (e) { return false; } })();
+    const key = [kid, upto, c.k, A.map(a => a.id).join(), lk.join(), lil].join('|');
     if (!opts.pool && CACHE && CACHE.key === key) return CACHE.out;
     const start = Math.min(EPOCH, upto - 40), last = {}, out = {}, r0 = rng(kid);
     A.map(a => [a, r0()]).sort((x, y) => x[1] - y[1]).forEach(([a], i) => { last[a.id] = start - 1 - i; });
@@ -26930,6 +26957,8 @@ const SIMPLE = (() => {
       const cand = A.filter(a => !y.includes(a.id)).map(a => ({ a, s: sc(a) })).sort((p, q) => q.s - p.s), pick = [];
       for (const x of cand) { if (pick.length >= k) break; if (pick.some(p => p.g === x.a.g) && cand.some(o => o !== x && !pick.includes(o.a) && !pick.some(p => p.g === o.a.g))) continue; pick.push(x.a); }
       for (const x of cand) { if (pick.length >= k) break; if (!pick.includes(x.a)) pick.push(x.a); }
+      // up to 6: one creative door every day (drawing, music, theatre) — little-ones
+      if (lil && pick.length && !pick.some(a => a.g === 'c')) { const cc = cand.find(x => x.a.g === 'c' && !pick.includes(x.a)); if (cc) pick[pick.length - 1] = cc.a; }
       pick.forEach(a => { last[a.id] = d; }); y = pick.map(a => a.id); out[d] = y;
     }
     if (!opts.pool) CACHE = { key, out };
@@ -26952,6 +26981,7 @@ const SIMPLE = (() => {
     return 'скоро';
   }
   const pathDone = () => { const c = dayCounts(dayKey()); return must().every(id => c[id]); };
+  const doorOpen = a => pathDone() || (a.g === 'c' && (() => { try { return LITTLE.rescue(); } catch (e) { return false; } })());
   const chestOpen = () => P.chest === dayKey();
 
   // the passport of the month: a stamp for every door visited
@@ -26992,6 +27022,7 @@ const SIMPLE = (() => {
   function favGame() {
     const c = cfg(), V = vis(), inLesson = new Set(['breath', 'artic', 'soroban', 'olymp-day', 'r-skill', 'm-skill', 'book']);
     if (c.favGame && V.has(c.favGame)) return GAMES.find(g => g.id === c.favGame);
+    try { if (LITTLE.on() && (P.settings.likes || []).some(l => ['draw', 'art', 'unicorn', 'beauty'].includes(l)) && V.has('draw')) return GAMES.find(g => g.id === 'draw'); } catch (e) {}
     let best = '', n = 0;
     Object.entries(P.plays || {}).forEach(([k, v]) => { if (V.has(k) && !inLesson.has(k) && v > n) { best = k; n = v; } });
     if (!best) best = [Q() ? 'chess-ai' : 'draw', 'draw', 'color', 'museum'].find(id => V.has(id)) || [...V][0];
@@ -27025,8 +27056,8 @@ const SIMPLE = (() => {
     const ds = today(), done = pathDone(), chest = chestOpen(), fg = favGame(), m = cfg().fav, left = favLeft();
     const n = dayNo(), tm = (plan(n + 15)[n + 1] || []).map(area).filter(Boolean), lk = likes().filter(id => !ds.some(a => a.id === id) && !tm.some(a => a.id === id) && pool().some(a => a.id === id)).map(area);
     const ms = must().length, dn = must().filter(id => dayCounts(dayKey())[id]).length;
-    const door = a => `<button class="sd-door ${done ? 'open' : 'shut'} ${stamped(a.id) ? 'seen' : ''}" data-door="${a.id}" style="--a:${a.a}" aria-label="${esc(a.n)}">
-        <span class="sd-dc">${pic(a.e)}${done ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b></button>`;
+    const door = a => { const op = doorOpen(a); return `<button class="sd-door ${op ? 'open' : 'shut'} ${stamped(a.id) ? 'seen' : ''}" data-door="${a.id}" style="--a:${a.a}" aria-label="${esc(a.n)}">
+        <span class="sd-dc">${pic(a.e)}${op ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b></button>`; };
     const favSub = !chest ? 'после сундука' : left <= 0 ? 'на сегодня всё, завтра снова' : !m ? 'играй сколько хочешь' : favState() ? `осталось ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ['минута', 'минуты', 'минут'])}` : `${m} ${plural(m, ['минута', 'минуты', 'минут'])}`;
     return `<section class="sd" id="sdBox">
       <div class="sd-head"><h2>Двери дня</h2><small>${done ? 'открыты — выбирай!' : `откроются после тропы · ещё ${ms - dn} ${plural(ms - dn, ['шаг', 'шага', 'шагов'])}`}</small></div>
@@ -27040,7 +27071,7 @@ const SIMPLE = (() => {
     FAV_ON = false;
     box.querySelectorAll('[data-door]').forEach(b => b.onclick = () => {
       const a = area(b.dataset.door); sfx.pop();
-      if (!pathDone()) { const left = must().filter(id => !dayCounts(dayKey())[id]).length; wiggle(b.querySelector('.sd-dc')); say(`${a.n} откроется после тропы. Осталось ${left} ${plural(left, ['шаг', 'шага', 'шагов'])}.`); return; }
+      if (!doorOpen(a)) { const left = must().filter(id => !dayCounts(dayKey())[id]).length; wiggle(b.querySelector('.sd-dc')); say(`${a.n} откроется после тропы. Осталось ${left} ${plural(left, ['шаг', 'шага', 'шагов'])}.`); return; }
       homeLeave(); room(a);
     });
     box.querySelectorAll('[data-soon]').forEach(b => b.onclick = () => { sfx.pop(); const a = area(b.dataset.soon); say(`${a.n} откроется ${whenOpens(a.id)}.`); });
@@ -27097,6 +27128,7 @@ const SIMPLE = (() => {
       hero.after(t);
       t.onclick = () => { sfx.pop(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     }
+    try { LITTLE.home(box); } catch (e) {}
     if (mine && !mine.querySelector('#passBtn')) {
       mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Паспорт</button>`);
       mine.querySelector('#passBtn').onclick = () => { sfx.pop(); homeLeave(); screenPassport(); };
@@ -27109,7 +27141,7 @@ const SIMPLE = (() => {
     const c = cfg(), L = LS(), ids = Object.keys(L).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)), V = vis(), fg = favGame();
     const favList = [...V].map(id => GAMES.find(g => g.id === id)).filter(g => g && !g.info).sort((a, b) => nm(a.name).localeCompare(nm(b.name)));
     sec = sec || document.createElement('section'); sec.className = 'psec'; sec.id = 'dayPar';
-    sec.innerHTML = `<h2>🗺️ День</h2>
+    sec.innerHTML = `<h2>🗺️ День</h2>${(() => { try { return LITTLE.parentLine(); } catch (e) { return ''; } })()}
       <button class="big" id="sdAll">🎮 Все игры</button>
       <label class="sw" for="sdOn"><input id="sdOn" type="checkbox" ${c.on ? 'checked' : ''}><span class="set-t"><b>Простой день</b><small>тропа и двери дня; если выключить — у ребёнка снова все вкладки</small></span></label>
       <h3 class="fam-s">Обязательно каждый день</h3>
@@ -27139,7 +27171,7 @@ const SIMPLE = (() => {
     sec.querySelector('#sdFavG').onchange = e => { setCfg('favGame', e.target.value); sfx.tick(); };
     return sec;
   }
-  return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+  return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
 /* SIMPLE-END */
 /* TALK-BEGIN */
@@ -27209,7 +27241,7 @@ const TALK = (() => {
       if (!gs.length) return { say: `${a.n} сейчас закрыто. Спроси взрослых.` };
       if (!simple) return { say: `Открываю: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
       if (!td.some(y => y.id === a.id)) return { say: `${a.n} откроется ${SIMPLE.whenOpens(a.id)}. А сегодня: ${listJoin(td.map(y => y.n))}.` };
-      if (!done) return { say: afterPath(a.n) };
+      if (!SIMPLE.doorOpen(a)) return { say: afterPath(a.n) };
       return { say: `Открываю дверь: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
     }
     if (x && x.startsWith('g:')) {
@@ -27219,7 +27251,7 @@ const TALK = (() => {
       const a = areaOf(g.id);
       if (!a) return { say: `${nm(g.name)} — внутри занятий дня. Пройди тропу!` };
       if (!td.some(y => y.id === a.id)) return { say: `${nm(g.name)} живёт за дверью «${a.n}». Она откроется ${SIMPLE.whenOpens(a.id)}.` };
-      if (!done) return { say: afterPath(nm(g.name)) };
+      if (!SIMPLE.doorOpen(a)) return { say: afterPath(nm(g.name)) };
       return { say: `Открываю: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
     }
     if (W.stars.test(t)) return { say: `У тебя ${P.stars} ${plural(P.stars, ['звёздочка', 'звёздочки', 'звёздочек'])}!` };
@@ -27289,6 +27321,132 @@ const TALK = (() => {
   return { answer, open, fab, target, norm };
 })();
 /* TALK-END */
+/* LITTLE-BEGIN */
+/* ---------- the little ones (4–6) who do not read yet (a family: «она не читает, все задания скипает, плакала, что не
+   было рисовалок»):
+   - nothing to read: up to 6 the reading step is listening only (hear a sound, find the letter or the picture), the
+     placement never climbs into «прочитай», the comic of the day is not the reading step; a grown-up who sets the
+     reading step to 4 or more says the child reads;
+   - a short warm path: three steps (speech, reading, maths or soroban by turns), each of 2–3 short games; every step
+     ends with the friend dancing and a sticker for the day;
+   - skipping is gentle: a step left halfway brings the friend once — «Давай только одну!» — one game and the step counts;
+     two steps left on one day and the creative door opens anyway, so the day never ends in tears; the grown-ups see it;
+   - a creative door every day, the favourite game is drawing for a child who likes drawing, and after the path a
+     sticker to colour. ---------- */
+const LITTLE = (() => {
+  const on = () => { try { return !Q() && (P.settings.age || 6) <= 6; } catch (e) { return false; } };
+  // reads: a grown-up set the reading step to 4 (short words) or higher
+  const reads = () => { try { const s = rskOf(P, LANG); return !!(s.byParent && s.lv >= 4); } catch (e) { return false; } };
+  const listen = () => on() && !reads();
+  // games that ask to read text: never on the path of a child who listens
+  const TEXT = new Set(['primer', 'read-merge', 'read-words', 'read-pick', 'code-colw', 'code-col', 'speed', 'l-syll', 'comics', 'rume-day', 'book', 'dict']);
+  // games that teach letters and sounds by ear
+  const EAR = ['abc-find', 'abc-first', 'syl-clap', 'hear-pairs'];
+  const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()) && !gameOff(g.id); };
+  const td = () => todayState();
+  // the plan of a step for a little one: a few short games, nothing to read; «только одну» keeps one game
+  function plan(id, full) {
+    if (!on()) return full;
+    const t = td(), short = t.short && t.short[id];
+    let p = listen() ? full.filter(x => !TEXT.has(x.key) && !String(x.key).startsWith('comix')) : full;
+    if (id === 'speech') {
+      const b = p.find(x => x.kind === 'breath'), a = p.find(x => x.kind === 'artic'), g = p.find(x => x.kind === 'game');
+      p = [b, a, g].filter(Boolean);
+    } else if (id === 'read') {
+      const ear = EAR.filter(ok), n = dayNo();
+      const r = p.find(x => String(x.key).startsWith('r-skill')) || (ok('r-skill') ? gameStep('r-skill', 'read') : null);
+      const e = ear.length ? gameStep(ear[n % ear.length], 'read') : null;
+      p = listen() ? [r, e].filter(Boolean) : p.slice(0, 2);
+    } else p = p.slice(0, 2);
+    if (!p.length) p = full.slice(0, 1);
+    if (short) { const one = p.filter(x => x.key === short); if (one.length) return one; }
+    return p;
+  }
+  // the path: three steps by default (a grown-up's «обязательно» wins)
+  function must(ids) {
+    const c = dayNo() % 2 ? 'math' : 'soro', m = ['speech', 'read', ids.includes(c) ? c : ids.includes('math') ? 'math' : 'soro'];
+    return m.filter(id => ids.includes(id));
+  }
+  // a step left halfway: once a day per step the friend offers one game; two left → the creative door opens
+  function skipped(id) {
+    if (!on() || !LS()[id]) return;
+    const t = td(); t.skips = (t.skips || 0) + 1;
+    t.offered = t.offered || {};
+    if (!t.offered[id] && nextStepOf(id)) { t.offered[id] = 1; t.offer = id; }
+    if (t.skips === 2) { try { EVT.log('rescue', id); } catch (e) {} }
+    save();
+  }
+  const rescue = () => on() && (td().skips || 0) >= 2;
+  function offer() {
+    const t = td(), id = t.offer; if (!id || !on() || $('.lt-offer')) return;
+    delete t.offer; save();
+    const s = nextStepOf(id); if (!s) return;
+    const ov = document.createElement('div'); ov.className = 'overlay lt-offer';
+    ov.innerHTML = `<div class="winbox" role="dialog"><div class="ryz-w lt-hop">${friendSVG()}</div>
+      <h2>Давай только одну!</h2><p class="win-line">${esc(LS()[id].name)}: одна маленькая игра — и шаг готов.</p>
+      <div class="win-btns"><button class="big" data-a="one">Одну!</button><button class="big ghost" data-a="later">Потом</button></div></div>`;
+    $('.screen').append(ov);
+    say(`Давай только одну игру! И шаг ${LS()[id].name} готов.`);
+    ov.onclick = e => {
+      const a = e.target.closest('[data-a]'); if (!a) return; sfx.pop(); ov.remove();
+      if (a.dataset.a === 'one') { t.short = { ...(t.short || {}), [id]: s.key }; save(); homeLeave(); startLesson(id); }
+      else say('Хорошо! Я подожду.');
+    };
+  }
+  // the end of a step: the friend dances, a sticker of the day lands on the path
+  const STK_DAY = ['🌟', '🦄', '🐞', '🌈', '🍓', '🐠', '🦋', '🌻', '🐣', '🍭', '🎈', '🐬', '🦊', '🐼', '🍉', '🚀'];
+  function dayStickers() { const k = dayKey(); return P.lilStk && P.lilStk.d === k ? P.lilStk.s : []; }
+  function stepDone(id) {
+    const k = dayKey(); if (!P.lilStk || P.lilStk.d !== k) P.lilStk = { d: k, s: [] };
+    const e = STK_DAY[(dayNo() * 3 + P.lilStk.s.length) % STK_DAY.length]; P.lilStk.s.push(e); save();
+    const ov = document.createElement('div'); ov.className = 'overlay';
+    ov.innerHTML = `<div class="winbox lt-win" role="dialog" aria-label="Шаг готов"><div class="ryz-w lt-dance">${friendSVG()}</div>
+      <h2>Ура! Шаг готов!</h2><div class="lt-stk"><span class="emo">${e}</span></div><p class="win-line">Наклейка дня — на тропу!</p>
+      <div class="win-btns"><button class="big" data-a="home">Дальше!</button></div></div>`;
+    $('.screen').append(ov);
+    sfx.good(); confetti(70); later(sfx.star, 450);
+    say(`Ура${nameBit()}! Шаг готов! Вот тебе наклейка!`);
+    ov.onclick = e2 => { if (!e2.target.closest('[data-a]')) return; sfx.pop(); goHome(); };
+    ov.querySelector('[data-a]').focus({ preventScroll: true });
+  }
+  // a sticker to colour after the path: tap a part, then a colour
+  const SHAPES = [
+    ['🌼', [['M46 30a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z', 'p'], ['M18 54a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z', 'p'], ['M74 54a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z', 'p'], ['M29 82a13 13 0 1 0 26 0a13 13 0 1 0 -26 0Z', 'p'], ['M65 82a13 13 0 1 0 26 0a13 13 0 1 0 -26 0Z', 'p'], ['M47 60a13 13 0 1 0 26 0a13 13 0 1 0 -26 0Z', 'c'], ['M57 92h6v24h-6Z', 's']]],
+    ['🐟', [['M20 60C40 30 80 30 96 60C80 90 40 90 20 60Z', 'b'], ['M96 60L116 40V80Z', 't'], ['M32 56a6 6 0 1 0 12 0a6 6 0 1 0 -12 0Z', 'e'], ['M58 44l10 -14l6 16Z', 'f']]],
+    ['⭐', [['M60 10L74 46L112 46L82 70L94 108L60 85L26 108L38 70L8 46L46 46Z', 'a'], ['M50 62a10 10 0 1 0 20 0a10 10 0 1 0 -20 0Z', 'b']]]
+  ];
+  const COLS = ['#FF6FA3', '#FFC83A', '#38CF86', '#3D8BFD', '#8C6CF2', '#FF8A2A'];
+  function colour() {
+    newScreen();
+    const sh = SHAPES[dayNo() % SHAPES.length], k = dayKey(); let cur = COLS[0];
+    if (!P.lilCol || P.lilCol.d !== k) P.lilCol = { d: k, f: {} };
+    shell('Раскрась наклейку', `<div class="lt-col"><svg viewBox="0 0 120 120" class="lt-svg" id="ltSvg">${sh[1].map((x, i) => `<path d="${x[0]}" data-i="${i}" fill="${P.lilCol.f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="2.5"/>`).join('')}</svg>
+      <div class="lt-pal">${COLS.map((c, i) => `<button class="lt-c ${i ? '' : 'sel'}" data-c="${c}" style="background:${c}" aria-label="Цвет ${i + 1}"></button>`).join('')}</div>
+      <button class="big" id="ltDone">Готово!</button></div>`);
+    say('Раскрась наклейку! Нажми на цвет, потом на кусочек.');
+    $$('.lt-c').forEach(b => b.onclick = () => { sfx.tick(); cur = b.dataset.c; $$('.lt-c').forEach(x => x.classList.toggle('sel', x === b)); });
+    $('#ltSvg').onclick = e => { const p = e.target.closest('path'); if (!p) return; sfx.pop(); p.setAttribute('fill', cur); P.lilCol.f[p.dataset.i] = cur; save(); };
+    $('#ltDone').onclick = () => { sfx.good(); confetti(50); P.lilCol.done = 1; save(); say('Какая красивая наклейка!'); later(goHome, 1200); };
+  }
+  const colourHTML = () => {
+    const sh = SHAPES[dayNo() % SHAPES.length], f = (P.lilCol && P.lilCol.d === dayKey() && P.lilCol.f) || {};
+    return `<button class="sd-fav open lt-colb" id="ltCol"><span class="sd-fi"><svg viewBox="0 0 120 120" width="48" height="48">${sh[1].map((x, i) => `<path d="${x[0]}" fill="${f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="3"/>`).join('')}</svg></span><span class="sd-ft"><b>Раскрась наклейку</b><small>подарок за тропу</small></span></button>`;
+  };
+  // on the home: the stickers of the day under the bubble, the offer, the sticker to colour after the path
+  function home(box) {
+    if (!on()) return;
+    const ss = dayStickers(), hero = box.querySelector('.pd-hero');
+    if (hero && ss.length) hero.insertAdjacentHTML('afterend', `<div class="lt-day" aria-label="Наклейки дня">${ss.map(e => `<span class="emo">${e}</span>`).join('')}</div>`);
+    const doors = box.querySelector('.sd-doors');
+    if (doors && SIMPLE.pathDone()) { doors.insertAdjacentHTML('afterend', colourHTML()); box.querySelector('#ltCol').onclick = () => { sfx.pop(); homeLeave(); colour(); }; }
+    later(offer, 900);
+  }
+  // for the grown-ups' «День»: a calm line about today
+  const parentLine = () => on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc(P.settings.name || '')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '';
+  return { on, listen, reads, plan, must, skipped, rescue, offer, stepDone, home, colour, parentLine, TEXT, EAR, dayStickers };
+})();
+function LITTLE_PLAN(id, full) { try { return LITTLE.plan(id, full); } catch (e) { return full; } }
+/* LITTLE-END */
 /* FUNSPEAK-BEGIN */
 /* ---------- The speech games feel like a walk with the friend, not a drill:
    - during a lesson of «Сегодня» a trail of stones under a game's header shows every step of it: a done step is a star,
