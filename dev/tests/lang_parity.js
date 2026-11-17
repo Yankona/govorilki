@@ -18,7 +18,7 @@ const RU_ONLY = new Set(['primer', 'sz-sort', 'sz-syll', 'sz-house', 'speech-che
 const NAMES = /Тина|Тим|Тоша|Т\b/g;
 // buttons that answer a round, the first one found is tapped
 const ANSWER = '.opt, .lt-b, .num-b, .cmp-g, .lg-opt, .lg-pic, .lg-fb, .card, .chip, .og-btns .big, button.big';
-const kid = (name, g, age, track, lang) => ({ stars: 5, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: 'kitty', onboarded: true, lang } });
+const kid = (name, g, age, track, lang) => ({ stars: 5, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: 'kitty', onboarded: true, lang, day: { on: false } } });   // the old tabs: this test walks them (simple-day hides them from the child)
 let bad = 0; const fail = m => { console.log('  FAIL ' + m); bad++; };
 async function open(b, lang, sub, k) {
   const seed = { engine: 'device', micOff: true, srOff: true, parentPhone: true, cur: 'k1', curFam: 'f1',
