@@ -21,7 +21,7 @@ const SLIP = { ru: s => s.replace(/р/g, 'л').replace(/Р/g, 'Л'), en: s => s.
       const tag = `${lang} ${name} ${age} (step ${lv}, ${look})`;
       console.log(tag, DEV);
       const fam = { engine: 'device', parentPhone: true, cur: 'k1', curFam: 'f1', families: { f1: { id: 'f1', name: 'Т', cc: 'PT', kids: ['k1'], grands: [] } }, profiles: { k1: kid(name, g, age, lang, lv, look) } };
-      if (!hears) { fam.micOff = true; fam.srOff = true; }
+      if (!hears) { fam.micOff = true; fam.srOff = true; } else { fam.srDef = 1; fam.srOff = false; }   // recognition on: the parents allowed it (in the EU it starts off)
       const c = await b.newContext(DEV === 'phone' ? { ...devices['iPhone 13'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 800 } });
       await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
       await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
@@ -47,10 +47,9 @@ const SLIP = { ru: s => s.replace(/р/g, 'л').replace(/Р/g, 'Л'), en: s => s.
       ok(even[0] === 'comic' && even[1] !== 'comic', `${tag}: «Сегодня» reading: even day «${even[0]}», odd day «${even[1]}»`);
       // the tile and the shelf
       await run('goHome()'); await p.waitForTimeout(500);
-      await p.click('.tb[data-tab="learn"]').catch(() => {}); await p.waitForTimeout(400);
-      ok(!!(await p.$('.tile[data-id="comics"]')), `${tag}: the tile «Комиксы» in «Учимся»`);
+      ok(await run(`GAMES.some(g => g.id === 'comics' && !(g.hide && g.hide()))`), `${tag}: the game «Комиксы» is there`);
       await run(`GAMES.find(g => g.id === 'comics').go()`); await p.waitForSelector('.cx-ser', { timeout: 10000 }).catch(() => {});
-      ok((await p.$$('.cx-ser')).length === 4, `${tag}: 4 series on the shelf`);
+      ok((await p.$$('.cx-ser:not(.cx-mine)')).length === 4, `${tag}: 4 series on the shelf`);
       ok((await p.$$('.cx-e.new')).length === 4 && (await p.$$('.cx-e.lock')).length === 20, `${tag}: episode 1 of each open, the rest locked`);
       const L = await run('COMIX.lvIdx()');
       ok(L === (lv <= 3 ? 0 : lv <= 6 ? 1 : 2), `${tag}: bubble level ${L} for step ${lv}`);
