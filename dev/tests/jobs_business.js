@@ -30,6 +30,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     await p.screenshot({ path: D + `jb-${lang}-${DEV}-top.png` });
     // the scientists (each with «Опыт дома») and the jobs with AI
     for (const [sec, e, min] of [['sci', '🔬', 12], ['ai', '🤖', 10]]) {
+      await run("screenLearn('jobs')"); await p.waitForTimeout(400);
       const h = await p.evaluate(e => { const s = [...document.querySelectorAll('.sec-h')].find(x => x.textContent.includes(e)); return s ? [s.textContent, s.nextElementSibling.querySelectorAll('.story-c').length] : ['', 0]; }, e);
       ok(h[1] >= min && !cyr(h[0]), `group «${h[0]}»: ${h[1]} stories`);
       const k = await run(`LEARN.jobs.items.findIndex(x => x.sec === '${sec}' && /^job-(sci|ai)-/.test(x.id))`);
