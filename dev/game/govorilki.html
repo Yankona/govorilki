@@ -26937,7 +26937,7 @@ const SIMPLE = (() => {
    recorded or kept. The friend answers aloud and opens the thing if it is open today; if not, it says when it opens.
    The words it listens for are language data (regular expressions in four languages), never translated. ---------- */
 const TALK = (() => {
-  const norm = s => String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim();
+  const norm = s => String(s || '').toLowerCase().replace(/ё/g, RU('е')).replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim();
   // wishes: words of ru / en / pt / de, after norm() (no accents, е for ё, й as и)
   const W = {
     stars: /звезд|star|estrel|stern/,
@@ -26957,7 +26957,7 @@ const TALK = (() => {
     [/головолом|задачк|загадк|puzzle|riddle|quebra|enigma|ratsel/, 'a:logic'], [/язык|language|lingua|idioma|sprache/, 'a:langs'],
     [/картин|музе|художн|museum|paint|museu|pintur|bild|maler/, 'g:museum'], [/любим|favou?rite|favorit|lieblings/, 'fav']
   ];
-  const STOP = new Set(['открои', 'открыть', 'хочу', 'давай', 'играть', 'игра', 'игру', 'поиграть', 'включи', 'покажи', 'пожалуиста', 'open', 'want', 'play', 'please', 'show', 'game', 'quero', 'abre', 'abrir', 'jogar', 'jogo', 'mostra', 'offne', 'mochte', 'spielen', 'spiel', 'bitte', 'zeig']);
+  const STOP = new Set([...RU('открои открыть хочу давай играть игра игру поиграть включи покажи пожалуиста').split(' '), 'open', 'want', 'play', 'please', 'show', 'game', 'quero', 'abre', 'abrir', 'jogar', 'jogo', 'mostra', 'offne', 'mochte', 'spielen', 'spiel', 'bitte', 'zeig']);
   const stem = w => w.slice(0, Math.max(4, Math.min(6, w.length - 1)));
   // what the words point to: a lesson of the path, a door, a game (by its name, as this language writes it)
   const syn = t => { for (const [re, x] of SYN) if (re.test(t)) return x; return null; };
