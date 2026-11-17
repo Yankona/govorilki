@@ -26974,6 +26974,7 @@ const SIMPLE = (() => {
   }
   function room(a) {
     if (!P.doorSeen) P.doorSeen = {};
+    try { EVT.log('door', a.id); } catch (e) {}
     const first = stamp(a.id);
     if (first) P.doorSeen[a.id] = (P.doorSeen[a.id] || 0) + 1;
     save();
