@@ -1,6 +1,6 @@
 // v164 phase 2: the journal, the parents' consent, the anonymous day counters, «Ваши данные», «Удалить всё».
 // For ru/en/pt/de on a phone or a laptop, an invented family (Тина 5, Тим 9):
-//  1) playing writes the journal on the phone (open, a section, a game, a step of «Сегодня»);
+//  1) playing writes the journal on the phone (app_open/close, page_open/close with how and seconds, games, steps);
 //  2) without the parents' tick nothing goes to /v1/stats, even when sending is asked for;
 //  3) the tick in «Для взрослых» → «Ваши данные» turns it on; the finished days go out as counters only:
 //     no profile ids, no names, no times; today is never sent;
@@ -48,15 +48,33 @@ const seedOf = (lang, extra) => ({ engine: 'device', micOff: true, srOff: true, 
     const steps = await A.p.$$('.pd-n'); if (steps.length) { await steps[0].click(); await A.p.waitForTimeout(1500); }
     await A.ev("finish({ key: 'breath', stars: 3 })").catch(e => out.push('finish: ' + e.message)); await A.p.waitForTimeout(500);
     await A.ev('goHome()'); await A.p.waitForTimeout(600);
+    // page_open / page_close: travel → home, the grown-ups' page → «назад», travel → the app hidden
+    await A.ev('screenPult()'); await A.p.waitForTimeout(500);   // a screen without a name of its own: s:<function>
+    await A.ev('TRAVEL.screen()'); await A.p.waitForTimeout(2200); await A.ev('goHome()'); await A.p.waitForTimeout(300);
+    await A.ev('screenParents()'); await A.p.waitForTimeout(1200); await A.p.click('#backBtn'); await A.p.waitForTimeout(400);
+    await A.ev('TRAVEL.screen()'); await A.p.waitForTimeout(1100);
+    await A.p.evaluate(() => { Object.defineProperty(document, 'hidden', { value: true, configurable: true }); document.dispatchEvent(new Event('visibilitychange')); });
+    await A.p.waitForTimeout(200);
+    const J = JSON.parse(await A.ev('JSON.stringify(EVT.all())')), pcs = J.filter(e => e[1] === 'pc'), pos = J.filter(e => e[1] === 'po');
+    const pc = (id, how) => pcs.filter(e => e[3] === id && e[4] === how);
+    const t1 = pc('travel', 2)[0], t2 = pc('travel', 3).pop(), pb = pc('parents', 1)[0], cl = J.filter(e => e[1] === 'close').pop();
+    if (!pos.some(e => e[3] === 'travel') || !pos.some(e => e[3] === 'parents')) out.push('no page_open: ' + JSON.stringify(pos.map(e => e[3])));
+    if (!t1 || t1[5] < 1 || t1[5] > 5) out.push('page_close travel→home wrong: ' + JSON.stringify(t1));
+    if (!pb) out.push('page_close by «назад» missing: ' + JSON.stringify(pcs.filter(e => e[3] === 'parents')));
+    if (!t2 || t2[5] > 4) out.push('page_close when the app is hidden wrong: ' + JSON.stringify(t2));
+    if (!cl || cl[4] !== 3 || !(cl[5] > 1)) out.push('app_close wrong: ' + JSON.stringify(cl));
+    if (!pos.some(e => e[3] === 's:screenPult')) out.push('an unnamed screen has no function name: ' + JSON.stringify(pos.map(e => e[3])));
+    if (pos.some(e => /Тина|Тим/.test(e[3]))) out.push('a name in a page id');
+    await A.p.evaluate(() => { Object.defineProperty(document, 'hidden', { value: false, configurable: true }); document.dispatchEvent(new Event('visibilitychange')); });
     const kinds = await A.ev("[...new Set(EVT.all().map(e => e[1]))].join(',')");
-    for (const k of ['open', 'scr', 'ge']) if (!kinds.split(',').includes(k)) out.push(`journal has no ${k} (${kinds})`);
+    for (const k of ['open', 'close', 'po', 'pc', 'ge']) if (!kinds.split(',').includes(k)) out.push(`journal has no ${k} (${kinds})`);
     const saved = await A.p.evaluate(() => (localStorage.getItem('govorilki-ev') || '').length);
     // 2) no tick: nothing goes out (yesterday's entries are there)
     if (A.errs.length) out.push('page errors: ' + A.errs.join(' | '));
     await A.c.close();
     // a phone with yesterday in its journal
     const y = Math.floor((Date.now() - 864e5) / 6e4);
-    const B = await ctx(seedOf(lang), false, [[y, 'open', 'k1'], [y, 'scr', 'k1', 'travel', 0, 600], [y, 'ge', 'k1', 'breath', 3, 120], [y, 'close', 'k1', '', 0, 900]]);
+    const B = await ctx(seedOf(lang), false, [[y, 'open', 'k1'], [y, 'po', 'k1', 'travel'], [y, 'pc', 'k1', 'travel', 2, 600], [y, 'ge', 'k1', 'breath', 3, 120], [y, 'close', 'k1', '', 0, 900]]);
     Object.assign(A, B);   // the rest runs on this phone
     await A.ev('EVT.send()'); await A.p.waitForTimeout(600);
     if (stats.length) out.push('sent without the tick');
@@ -76,6 +94,7 @@ const seedOf = (lang, extra) => ({ engine: 'device', micOff: true, srOff: true, 
       const body = stats[0], j = JSON.parse(body), y = await A.ev('dayKey(new Date(Date.now() - 864e5))'), td = await A.ev('dayKey()');
       if (/k1|k2|Тина|Тим/.test(body)) out.push('the counters carry a child: ' + body.slice(0, 120));
       if (!j.days.some(d => d.d === y && d.c.open >= 1 && d.c.kids === 1 && d.c['g:breath:e'] === 1)) out.push('yesterday missing or wrong: ' + body.slice(0, 200));
+      if (!j.days.some(d => d.d === y && d.c['po:travel'] === 1 && d.c['scr:travel'] === 10)) out.push('page counters missing: ' + body.slice(0, 300));
       if (j.days.some(d => d.d === td)) out.push('today was sent');
       if (Object.keys(j).sort().join() !== 'days,dev,lang,v,ver') out.push('extra fields: ' + Object.keys(j));
     }

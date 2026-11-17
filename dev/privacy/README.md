@@ -3,12 +3,12 @@
 The owner's decisions of 17.11.2026 (all in `proposal.html`): stop the author summary; family channel off public ntfy;
 own fonts and voice engine; 90-day journal on the phone; anonymous day counters only with the parents' tick, kept
 13 months by day, then by month; second parent equal; errors only with the tick; Google speech recognition off by
-default in the EU; contact privacy@govorilki.com (the mailbox must exist); controller = the owner; therapist role later.
+default in the EU; contact privacy@govorilki.com (a draft address: the owner creates the mailbox before the policy goes live); controller = the owner; therapist role later.
 
 | What | Where | How long | Basis | Code |
 |---|---|---|---|---|
 | Profiles, stars, settings, drawings, voice recordings | the phone (`govorilki-v2`, IndexedDB) | until «Удалить всё» | needed for the game | — |
-| Journal (open/close, sections, games, steps, doors, stories, errors) | the phone (`govorilki-ev`) | 90 days | needed for «Отчёт» | `EVENTS-BEGIN` |
+| Journal (app open/close, page open/close with how and seconds, games, steps, doors, stories, errors) | the phone (`govorilki-ev`) | 90 days | needed for «Отчёт» | `EVENTS-BEGIN` |
 | Family login, kids' profiles | Worker + D1 (`families`, `kids`, `tokens`) | until deleted | contract | `cloud/worker.js` |
 | Family channel (relatives, chess, leagues, lobby) | D1 `relay`, sealed on the phone (key from the channel name) | 12 hours | contract | `RCH`, `/v1/ch` |
 | Anonymous day counters | D1 `stats_day` → `stats_month` | 13 months by day | consent (`ROOT.consent.stats`) | `EVT.send`, `/v1/stats` |

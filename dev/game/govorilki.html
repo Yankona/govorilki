@@ -4622,7 +4622,7 @@ let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
   if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
-  try { EVT.leave(); } catch (e) {}
+  try { EVT.next(); } catch (e) {}
   tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
@@ -5051,13 +5051,17 @@ const GAMES = [
    It feeds the grown-ups' «Отчёт» and, only with the parents' tick «Помочь улучшать игру» (ROOT.consent.stats), the
    anonymous counters of each finished day, sent once a day (EVT.send): how many, never who. An entry is
    [minute, kind, profile, id, number, seconds]: no text a person typed, no names (the profile is the random id of a
-   child inside the family; 'g' is a grown-up), no place, nothing about the device. Kinds: open / close (the app on the
-   screen; close has the session's seconds), scr (a section and its seconds), gs / ge (a game started / finished, its
-   stars and seconds), step (a step of «Сегодня»), door, story (a story heard), err (js@line, voice, asr-<code>, mic).
+   child inside the family; 'g' is a grown-up), no place, nothing about the device. Kinds: open / close (app_open and
+   app_close: close has the session's seconds and how it ended, 3 hidden, 4 closed), po / pc (page_open and page_close
+   of every screen: its id — a named section, game:<id>, or s:<the function that drew it> — and for pc how it closed,
+   WHY below, and its seconds), gs / ge (a game started / finished, its stars and seconds), step (a step of
+   «Сегодня»), door, story (a story heard), err (js@line, voice, asr-<code>, mic). Older journals have scr (= pc).
    Its own localStorage key: not in progress codes, not in the family sync; «Удалить всё» erases it. ---------- */
 const EVT = (() => {
   const KEY = DEMO ? 'govorilki-demo-ev' : 'govorilki-ev', KEEP = 90 * 864e5, MAX = 20000, ID = /^[A-Za-z0-9:._-]{1,48}$/;
-  let L = null, T = 0, scr = null, back = null, ses = 0, gm = null, errs = 0;
+  let L = null, T = 0, scr = null, back = null, ses = 0, gm = null, errs = 0, why = null;
+  // how a page closed: 0 the next screen, 1 «назад», 2 home, 3 the app hidden, 4 the app closed
+  const WHY = { next: 0, back: 1, home: 2, hidden: 3, closed: 4 };
   const now = () => Date.now();
   const read = () => {
     if (L) return L;
@@ -5067,6 +5071,7 @@ const EVT = (() => {
   };
   function write() {
     clearTimeout(T); T = 0;
+    if (window.GOV_WIPED) return;
     const a = read(), min = Math.floor((now() - KEEP) / 6e4); let i = 0;
     while (i < a.length && a[i][0] < min) i++;
     if (i) a.splice(0, i);
@@ -5079,6 +5084,7 @@ const EVT = (() => {
     try { return ROOT.cur && ROOT.profiles[ROOT.cur] ? ROOT.cur : '-'; } catch (e) { return '-'; }
   };
   function log(k, id, n, s) {
+    if (window.GOV_WIPED) return;
     try { if (PREVIEW) return; } catch (e) {}
     const e = [Math.floor(now() / 6e4), k, who()];
     if (id !== undefined || n !== undefined || s !== undefined) e.push(id === undefined || id === '' ? '' : ID.test(String(id)) ? String(id) : '?');
@@ -5087,15 +5093,34 @@ const EVT = (() => {
     read().push(e);
     if (!T) T = setTimeout(write, 3000);
   }
-  // sections: an entry point names its screen; the next screen (or the app leaving the screen) closes it with its seconds
-  function leave() { if (scr) { const s = (now() - scr.at) / 1000; if (s >= 1) log('scr', scr.id, 0, s); scr = null; } }
-  function enter(id) { leave(); scr = { id, at: now() }; }
-  // the app on screen: a session from showing to hiding; the section on screen goes on after a pause
+  // pages: an entry point names its screen (page_open); the next screen, «назад», home or the app leaving the screen
+  // closes it (page_close) with how and its seconds. A screen nobody named gets the name of the function that drew it.
+  function setWhy(w, soft) { if (soft && why && now() - why.at < 1500) return; why = { w: WHY[w] || 0, at: now() }; }
+  function leave(w) {
+    if (!scr) return;
+    const how = w !== undefined ? WHY[w] : why && now() - why.at < 1500 ? why.w : 0;
+    log('pc', scr.id, how, (now() - scr.at) / 1000); scr = null; why = null;
+  }
+  function enter(id) { if (scr && scr.id === id && now() - scr.at < 400) return; leave(); scr = { id, at: now() }; log('po', id); }
+  // newScreen(): close the page on screen; if no entry point names the new one in this turn, name it by its function
+  function next() {
+    leave();
+    let fn = '';
+    try {
+      // the stack: next ← newScreen ← the function that draws the screen (Chrome «at name (», Safari/Firefox «name@»)
+      for (const l of (new Error().stack || '').split('\n').slice(1)) {
+        const m = l.match(/at (?:async )?(?:[\w$]+\.)*([\w$]+) \(/) || l.match(/^(?:[\w$]+\/)*([\w$]+)@/);
+        if (m && !['next', 'newScreen'].includes(m[1])) { fn = m[1]; break; }
+      }
+    } catch (e) {}
+    setTimeout(() => { if (!scr && ses) enter('s:' + (fn || 'screen').slice(0, 40)); }, 0);
+  }
+  // the app on screen: a session from showing to hiding (app_open / app_close); the page on screen goes on after a pause
   function shown() { if (ses) return; ses = now(); log('open'); if (back) { enter(back); back = null; } }
-  function hidden() {
-    if (!ses) return;
-    back = scr && scr.id; leave();
-    log('close', '', 0, (now() - ses) / 1000); ses = 0; write();
+  function hidden(w = 'hidden') {
+    if (!ses) { if (w === 'closed') log('quit'); write(); return; }
+    back = scr && scr.id; leave(w);
+    log('close', '', WHY[w], (now() - ses) / 1000); ses = 0; write();
   }
   // games: every tile's go() says which game started; finish() says how it ended
   function wrap(list) {
@@ -5111,6 +5136,10 @@ const EVT = (() => {
   }
   function err(code) { if (errs++ < 40) log('err', code); }
   const dayOf = e => dayKey(new Date(e[0] * 6e4));
+  // a page for the counters: home:<tab>, game:<id>, learn:<set>, story:<set>, travel, parents, s:<function>
+  const pageKey = id => String(id).slice(0, 44);
+  // the areas of «Отчёт»
+  const AREA = id => /^game:/.test(id) ? 'games' : /^(story|learn):/.test(id) ? 'stories' : id === 'travel' ? 'travel' : /^home:/.test(id) ? 'home' : id === 'parents' ? 'grown' : 'other';
   const base = id => String(id || '').startsWith('learn:') ? 'learn' : String(id || '');
   // the counters of one day, from `from` (ms) on: how many, never who or when
   function day(d, from = 0) {
@@ -5122,7 +5151,8 @@ const EVT = (() => {
       if (p && p !== '-' && p !== 'g') kids.add(p);
       if (k === 'open') add('open');
       else if (k === 'close') sec += s || 0;
-      else if (k === 'scr' && id && !id.startsWith('game:')) { const sc = id.split(':')[0] === 'home' ? id : id.split(':')[0]; scrSec[sc] = (scrSec[sc] || 0) + (s || 0); }
+      else if ((k === 'pc' || k === 'scr') && id) { const sc = pageKey(id); scrSec[sc] = (scrSec[sc] || 0) + (k === 'pc' ? s || 0 : s || 0); }
+      else if (k === 'po' && id) add('po:' + pageKey(id));
       else if (k === 'gs') add('g:' + id + ':s');
       else if (k === 'ge') { const b = base(id); add('g:' + b + ':e'); add('g:' + b + ':st', n || 0); add('g:' + b + ':sec', s || 0); }
       else if (k === 'step') add('step:' + id);
@@ -5134,7 +5164,7 @@ const EVT = (() => {
     if (kids.size) add('kids', kids.size);
     const m5 = s => Math.round(s / 300) * 5;
     add('min', m5(sec));
-    Object.entries(scrSec).forEach(([k, s]) => add('scr:' + k, m5(s)));
+    Object.entries(scrSec).forEach(([k, s]) => add('scr:' + k, Math.round(s / 60)));
     const keys = Object.keys(c);
     if (!keys.length) return null;
     if (keys.length > 300) keys.sort((a, b) => c[a] - c[b]).slice(0, keys.length - 300).forEach(k => delete c[k]);
@@ -5162,19 +5192,24 @@ const EVT = (() => {
   }
   // for the grown-ups' «Отчёт»: one child's last days from the journal
   function week(p, n = 7) {
-    const from = Math.floor((now() - n * 864e5) / 6e4); let sec = 0, games = 0, stories = 0; const days = new Set();
+    const from = Math.floor((now() - n * 864e5) / 6e4); let sec = 0, games = 0, stories = 0; const days = new Set(), area = {};
     for (const e of read()) {
       if (e[0] < from || e[2] !== p) continue;
-      if (e[1] === 'scr') { sec += e[5] || 0; days.add(dayOf(e)); } else if (e[1] === 'ge') games++; else if (e[1] === 'story') stories++;
+      if (e[1] === 'pc' || e[1] === 'scr') { sec += e[5] || 0; days.add(dayOf(e)); const a = AREA(e[3] || ''); area[a] = (area[a] || 0) + (e[5] || 0); }
+      else if (e[1] === 'ge') games++; else if (e[1] === 'story') stories++;
     }
-    return { min: Math.round(sec / 60), games, stories, days: days.size };
+    Object.keys(area).forEach(a => { area[a] = Math.round(area[a] / 60); if (!area[a]) delete area[a]; });
+    return { min: Math.round(sec / 60), games, stories, days: days.size, area };
   }
   function wipe() { L = []; clearTimeout(T); T = 0; try { localStorage.removeItem(KEY); } catch (e) {} }
   addEventListener('error', e => err('js@' + (+e.lineno || 0)));
   addEventListener('unhandledrejection', () => err('js-p'));
   document.addEventListener('visibilitychange', () => { if (document.hidden) hidden(); else { shown(); send(); } });
-  addEventListener('pagehide', hidden);
-  return { log, enter, leave, shown, hidden, wrap, done, err, day, send, week, wipe, all: () => read().slice(), size: () => read().length, KEY };
+  addEventListener('pagehide', () => hidden('closed'));
+  // «назад»: the button of every screen, and the phone's own back
+  document.addEventListener('click', e => { if (e.target.closest && e.target.closest('#backBtn, .back, [data-back]')) setWhy('back'); }, true);
+  addEventListener('popstate', () => setWhy('back'));
+  return { log, enter, leave, next, why: setWhy, shown, hidden, wrap, done, err, day, send, week, wipe, all: () => read().slice(), size: () => read().length, KEY };
 })();
 /* EVENTS-END */
 // the home screen in five tabs; each holds sections of tiles
@@ -5222,6 +5257,7 @@ window.addEventListener('popstate', () => {
 });
 let LANG_CHECKED = false;
 function goHome() {
+  try { EVT.why('home', true); } catch (e) {}
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
     if (DEMO) { document.body.insertAdjacentHTML('beforeend', `<div class="demo-b">🧪 Тест с нуля · <button id="demoAgain">заново</button> · <a href="${SITE_ROOT}">выйти</a></div>`); $('#demoAgain').onclick = () => demoStart(); } }
   // a visit to another language's page: open its game; «Домой» there goes back to the main language (multilingual)
@@ -24877,7 +24913,9 @@ const GUIDE = (() => {
   // from the journal on this phone (EVT): time in the game, days, finished games and stories of each child this week
   function evWeekHTML() {
     const rows = KIDS.filter(id => ROOT.profiles[id]).map(id => { const w = EVT.week(id); if (!w.min && !w.games) return '';
-      return `<li><b>${esc(ROOT.profiles[id].settings.name || '')}</b>: ${w.min} мин · ${w.days} ${plural(w.days, ['день', 'дня', 'дней'])} · игр: ${w.games}${w.stories ? ` · историй: ${w.stories}` : ''}</li>`; }).join('');
+      const AN = { games: 'игры', stories: 'истории', travel: 'путешествие', home: 'главный экран', grown: 'для взрослых', other: 'занятия и другое' };
+      const ar = Object.entries(w.area).sort((a, b) => b[1] - a[1]).map(([k, m]) => `${AN[k] || k} ${m} мин`).join(' · ');
+      return `<li><b>${esc(ROOT.profiles[id].settings.name || '')}</b>: ${w.min} мин · ${w.days} ${plural(w.days, ['день', 'дня', 'дней'])} · игр: ${w.games}${w.stories ? ` · историй: ${w.stories}` : ''}${ar ? `<br><small>${ar}</small>` : ''}</li>`; }).join('');
     return rows ? `<div class="gd-ev"><h3 class="fam-s">⏱ За 7 дней на этом телефоне</h3><ul>${rows}</ul></div>` : '';
   }
   // the grandparents' phone: the digest from the family's progress note
@@ -27401,6 +27439,8 @@ function statsHTML(S) {
     <div class="adm-ts">${tile(sum('kids', last), 'детей за 7 дней (по дням)')}${tile(sum('phones', last), 'устройств за 7 дней')}${tile(sum('open', last), 'запусков')}${tile(sum('min', last), 'минут в игре')}</div>
     <h3 class="fam-s">Дети в игре по дням</h3><svg class="adm-ch" viewBox="0 0 300 92" role="img" aria-label="Дети в игре по дням">${bars}</svg>
     <h3 class="fam-s">Игры</h3>${games.length ? `<table class="adm-tb"><tr><th>игра</th><th>начали</th><th>закончили</th><th>⭐ в среднем</th><th>мин</th></tr>${games.map(([k, v]) => `<tr><td>${esc(gameName(k) || k)}</td><td>${few(v.s)}</td><td>${few(v.e)}</td><td>${v.e ? (v.st / v.e).toFixed(1) : '—'}</td><td>${Math.round(v.sec / 60)}</td></tr>`).join('')}</table>` : '<p class="muted">Пока нет.</p>'}
+    <h3 class="fam-s">Страницы</h3>${(() => { const po = keysOf(/^po:(.+)$/), mn = keysOf(/^scr:(.+)$/), ks = [...new Set([...Object.keys(po), ...Object.keys(mn)])].sort((a, b) => (mn[b] || 0) - (mn[a] || 0)).slice(0, 30);
+      return ks.length ? `<table class="adm-tb"><tr><th>страница</th><th>открыли</th><th>мин</th></tr>${ks.map(k => `<tr><td>${esc(k)}</td><td>${few(po[k] || 0)}</td><td>${mn[k] || 0}</td></tr>`).join('')}</table>` : '<p class="muted">Пока нет.</p>'; })()}
     <h3 class="fam-s">Шаги «Сегодня»</h3>${list(keysOf(/^step:(.+)$/), 'шаг')}
     <h3 class="fam-s">Двери</h3>${list(keysOf(/^door:(.+)$/), 'дверь')}
     <h3 class="fam-s">Истории</h3><p>Дослушали: <b>${few(sum('story'))}</b></p>${list(keysOf(/^story:(.+)$/), 'история')}
