@@ -3357,6 +3357,68 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
   .pd-fm .pd-bar{height:10px}.pd-fm small{font:800 13px var(--f-body);color:var(--ink-soft);text-align:right}
 }
 /* PATH-CSS-END */
+/* SIMPLE-CSS: the doors of the day, the room, the passport, the grown-ups' «День» */
+body.simple .home-t .stage{padding-bottom:110px}
+.sd{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.sd-tease{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;border:2px dashed var(--line-strong);background:none;border-radius:16px;padding:8px 12px;font:800 14px var(--f-body);color:var(--ink-soft);cursor:pointer;text-align:left}
+.sd-tease b{color:var(--ink);font-weight:900}.sd-tease.open{border-style:solid;border-color:var(--sun);background:color-mix(in srgb,var(--sun) 18%,transparent)}
+.sd-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sd-head h2{margin:0;font:900 24px var(--f-head);color:var(--ink)}.sd-head small{font:800 14px var(--f-body);color:var(--ink-soft)}
+.sd-doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px}
+.sd-door{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;background:var(--paper);border-radius:22px;padding:14px 8px 12px;box-shadow:0 5px 0 var(--line-strong);cursor:pointer;color:var(--ink);font:inherit}
+.sd-door b{font:900 16px/1.15 var(--f-body);text-align:center}
+.sd-dc{position:relative;width:72px;height:80px;border-radius:36px 36px 12px 12px;background:var(--a);display:grid;place-items:center;box-shadow:inset 0 -6px 0 rgba(0,0,0,.18)}
+.sd-dc .emo,.sd-dc svg{width:42px;height:42px;font-size:38px}
+.sd-door.shut .sd-dc{filter:grayscale(.6) brightness(.95)}
+.sd-door.open .sd-dc{animation:sdGlow 1.6s ease-in-out infinite}
+.sd-door.open.seen .sd-dc{animation:none}
+@keyframes sdGlow{50%{box-shadow:inset 0 -6px 0 rgba(0,0,0,.18),0 0 0 8px rgba(255,200,58,.45)}}
+.sd-lk,.sd-ck{position:absolute;right:-8px;top:-8px;width:30px;height:30px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:16px;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.sd-ck{color:var(--leaf);font:900 17px var(--f-body);top:auto;bottom:-6px}
+.sd-fav{display:flex;align-items:center;gap:12px;border:0;background:var(--paper);border-radius:22px;padding:12px 16px;box-shadow:0 5px 0 var(--line-strong);text-align:left;cursor:pointer;color:var(--ink);font:inherit}
+.sd-fav.open{background:#FFE3EE;color:#2A2346}.sd-fav.shut .sd-fi{filter:grayscale(.7)}
+.sd-fi{width:52px;height:52px;flex:none;display:grid;place-items:center}.sd-fi svg,.sd-fi .emo{width:48px;height:48px;font-size:40px}
+.sd-ft b{display:block;font:900 17px/1.2 var(--f-body)}.sd-ft small{font:800 14px var(--f-body);opacity:.75}
+.sd-soon p{margin:4px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font:800 14px var(--f-body);color:var(--ink-soft)}
+.sd-gh{border:2px dashed var(--line-strong);background:none;border-radius:14px;padding:5px 10px;font:800 14px var(--f-body);color:var(--ink);cursor:pointer}
+.sd-gh em{font-style:normal;color:var(--ink-soft);font-weight:700}
+.pd-n.pd-opt .pd-c{opacity:.8}
+.sd-room .sd-feat{outline:4px solid var(--sun);outline-offset:-2px}
+.sd-stamp{display:flex;align-items:center;gap:10px;justify-content:center;font:900 18px var(--f-body);background:#FFF6D6;color:#4A3700;border-radius:16px;padding:10px 14px;margin:0 0 14px}
+.sd-sand{font-size:72px;text-align:center}
+.sd-stamps{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px;margin:14px 0 20px}
+.sd-st{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:none;cursor:pointer;color:var(--ink);font:inherit}
+.sd-sc{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;border:3px dashed var(--line-strong);background:var(--paper)}
+.sd-sc svg,.sd-sc .emo{width:40px;height:40px;font-size:34px}
+.sd-st:not(.on) .sd-sc{filter:grayscale(1);opacity:.55}
+.sd-st.on .sd-sc{border:4px solid var(--a);background:color-mix(in srgb,var(--a) 22%,var(--paper))}
+.sd-st b{font:900 14px/1.15 var(--f-body);text-align:center}.sd-st small{font:800 12px var(--f-body);color:var(--ink-soft)}
+.sd-allbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#FFF1D6;color:#2A2346;border-radius:16px;padding:10px 14px;margin:8px 0}
+.sd-allbar small{flex:1;min-width:160px;font:700 13px var(--f-body)}
+.sd-note{margin:4px 0 8px;font:700 14px/1.35 var(--f-body);color:var(--ink-soft)}
+.sd-must{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.sd-seg,.sd-areas{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.sd-seg .chip.sel,.sd-areas .chip.sel{outline:3px solid var(--tiger)}
+.sd-areas .chip:not(.sel){opacity:.5;text-decoration:line-through}
+.sd-sel{width:100%;max-width:420px;padding:10px;border-radius:12px;border:2px solid var(--line-strong);font:700 15px var(--f-body);background:var(--paper);color:var(--ink);margin:4px 0 10px}
+#dayPar .big{margin:4px 0 14px}
+@media (prefers-reduced-motion:reduce){.sd-door.open .sd-dc{animation:none}}
+/* SIMPLE-CSS-END */
+/* TALK-CSS: the friend in the corner and the little talk */
+.tk-fab{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:68px;height:68px;border-radius:50%;border:0;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),0 6px 18px rgba(0,0,0,.18);padding:6px;cursor:pointer}
+.tk-fab .tk-face svg{width:56px;height:56px;display:block}
+.tk-dot{position:absolute;right:-4px;top:-6px;font-size:22px}
+.screen:has(.guide) .tk-fab{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+.tk{position:fixed;inset:0;z-index:90;background:rgba(20,15,50,.45);display:flex;align-items:flex-end;justify-content:center}
+.tk-box{position:relative;width:min(100%,560px);background:var(--paper);color:var(--ink);border-radius:26px 26px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
+.tk-x{position:absolute;right:12px;top:12px}
+.tk-top{display:flex;gap:12px;align-items:center;padding-right:48px}
+.tk-face svg{width:72px;height:72px;display:block}
+.tk-say{margin:0;font:800 19px/1.3 var(--f-body)}
+.tk-you{margin:0;min-height:22px;font:700 16px var(--f-body);color:var(--ink-soft)}
+.tk-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tk-form{display:flex;gap:8px}.tk-form input{flex:1;min-width:0;padding:11px 14px;border-radius:14px;border:2px solid var(--line-strong);font:700 16px var(--f-body);background:var(--paper);color:var(--ink)}
+/* TALK-CSS-END */
 /* LAND2-CSS */
 .ld-day-in{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:center}
 .ld-demo{pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.15));border-radius:28px;padding:14px 12px 4px}
@@ -5049,7 +5111,7 @@ const HOME_TABS = [
   { id: 'discover', e: '🌍', n: 'Узнаём', g: [10] }
 ];
 let HOME_POS = null;
-function homeLeave() { const st = $('#stage'); if (st && $('#tabBar')) HOME_POS = { tab: P.homeTab || 'today', y: st.scrollTop, kid: ROOT.cur }; }
+function homeLeave() { const st = $('#stage'); if (st && $('.home-t')) HOME_POS = { tab: P.homeTab || 'today', y: st.scrollTop, kid: ROOT.cur }; }
 // every game the child can open, found by a part of its name
 function homeSearch() {
   const all = [...new Set(SECTIONS.filter(x => x.g === 13 || modOnG(x.g)).flatMap(x => GAMES.filter(g => (g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id) && !(g.place && !placeOn(g.place)) && (!x.only || x.only === P.settings.track || P.settings.allGames))))];
@@ -5103,7 +5165,7 @@ function goHome() {
   setTimeout(() => statPing(), 4000);
   document.body.classList.toggle('quest', Q()); lookApply();
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
-  const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
+  const tab = SIMPLE.on() ? 'today' : HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
   const mineP = ownPlaces(), plOrder = x => !x.place ? 1 : mineP.includes(x.place) ? 0 : 2;
   const vis = g => GAMES.filter(x => (x.grp === g || (x.also || []).includes(g)) && !x.inside && !(x.hide && x.hide()) && !gameOff(x.id) && !(x.place && !placeOn(x.place))).sort((a, b) => plOrder(a) - plOrder(b) || (a.ord ? a.ord() : 0) - (b.ord ? b.ord() : 0));
   const tileHTML = x => `<button class="tile" data-id="${x.id}" style="--bg:${x.bg}">${newsDot(x.id) ? '<i class="tile-new">Новое!</i>' : ''}
@@ -5209,7 +5271,7 @@ function goHome() {
   $$('.at-card').forEach(b => b.onclick = () => { const tb = $(`.tb[data-tab="${b.dataset.at}"]`); if (tb) tb.click(); });
   if (GUEST) on('#guestBtn', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
   if (GUEST) on('#guestTop', () => { sfx.pop(); GUEST_OFF = false; screenGuest(); });
-  $('#tabBar').onclick = e => {
+  if ($('#tabBar')) $('#tabBar').onclick = e => {
     const b = e.target.closest('[data-tab]'); if (!b) return;
     const T = HOME_TABS.find(x => x.id === b.dataset.tab);
     // a tab says its name; «Сегодня» says what is left in today's plan
@@ -24186,7 +24248,9 @@ const SETUI = (() => {
 
     if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид игры</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
+    let daySec = null; try { daySec = SIMPLE.parentSec(); root.append(daySec); } catch (e) {}
     const PAGES = [
+      ['day', '🗺️', 'День и все игры', 'обязательные занятия, двери дня, любимая игра', [daySec]],
       ['guide', '📊', 'Отчёт', 'что получается и что пока трудно', [S.guide]],
       ['fam', '👪', 'Семья', '', [S.fam]],
       ['friends', '🤝', 'Друзья', '', [S.friends]],
@@ -24212,7 +24276,7 @@ const SETUI = (() => {
     }
     menu.onclick = e => { const b = e.target.closest('[data-page]'); if (b) { sfx.pop(); show(b.dataset.page); } };
     $('#backBtn').onclick = e => { if (open) { sfx.pop(); show(null); } else { open = null; back0(e); } };
-    show(focus === 'voice' || focus === 'guide' ? focus : open, true);
+    show(focus === 'voice' || focus === 'guide' || focus === 'day' ? focus : open, true);
   }
   return { build, reset };
 })();
@@ -24733,6 +24797,7 @@ const HOMEUX = (() => {
     const st = $('#stage'); if (!st) return;
     POLISH.home(st);
     PATH.rail();
+    SIMPLE.home(st);
     // the header: one row
     const fr = st.querySelector('.kids-fam'); if (fr) fr.remove();
     const pult = $('#homePult');
@@ -26444,8 +26509,10 @@ const PATH = (() => {
   const ICO = { speech: '👂', read: '📖', math: '🔢', book: '📚', puzzle: '🧩', soro: '🧮' };
   const ico = id => id === 'read' && P.settings.track === 'l' ? pic('⏱️') : pic(ICO[id] || '⭐');
   function state() {
-    const ids = LIDS(), c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;
-    return { ids, c, td, done, now, all: !now, opened: P.chest === dayKey() };
+    // the path: the lessons marked «обязательно», in order; the others after the chest, «по желанию» (simple-day)
+    let ids = LIDS(), opt = []; try { ids = SIMPLE.must(); opt = SIMPLE.opt(); } catch (e) {}
+    const c = dayCounts(dayKey()), td = todayState(), done = ids.filter(id => c[id]), now = ids.find(id => !c[id]) || null;
+    return { ids, opt, c, td, done, now, all: !now, opened: P.chest === dayKey() };
   }
   function line(s) {
     const N = s.ids.length, d = s.done.length;
@@ -26453,17 +26520,17 @@ const PATH = (() => {
     if (!d) t = Q() ? `Миссия дня: ${N} ${plural(N, ['шаг', 'шага', 'шагов'])}. Погнали!` : `Привет${nameBit()}! Сегодня ${N} ${plural(N, ['занятие', 'занятия', 'занятий'])}. Начнём?`;
     else if (!s.all) t = `Уже ${d} из ${N}! Дальше: ${LS()[s.now].name}.`;
     else if (!s.opened) t = 'Всё сделано! Открывай сундук!';
-    else t = Q() ? 'Миссия выполнена! Теперь играй во что хочешь.' : `Сегодня всё сделано${nameBit()}! Молодец!`;
+    else t = Q() ? 'Миссия выполнена! Двери дня открыты.' : `Тропа пройдена${nameBit()}! Двери дня открыты.`;
     return gx(t + holGreet());
   }
   function node(s, id) {
     const L = LS()[id], n = s.c[id] || 0, plan = lessonPlan(id), dn = s.td.done[id].length;
-    const st = n ? 'done' : id === s.now ? 'now' : 'next';
+    const st = n ? 'done' : id === s.now ? 'now' : 'next', op = s.opt && s.opt.includes(id);
     const go = dn ? `Дальше ${dn}/${plan.length}` : id === 'book' ? 'Отметить' : 'Начать';
     const sub = st === 'done' ? `<small>готово ${ICON.star.repeat(3)}${n > 1 ? ` ×${n}` : ''}</small>`
       : st === 'now' ? `<span class="pd-cta">${ICON.play}${go}</span>`
-      : dn ? `<small>${dn} из ${plan.length}</small>` : '';
-    return `<button class="pd-n ${st}" data-l="${id}" aria-label="${esc(L.name)}: ${st === 'done' ? 'готово' : go}">
+      : dn ? `<small>${dn} из ${plan.length}</small>` : op ? '<small>по желанию</small>' : '';
+    return `<button class="pd-n ${st}${op ? ' pd-opt' : ''}" data-l="${id}" aria-label="${esc(L.name)}: ${st === 'done' ? 'готово' : go}">
       <span class="pd-c${dn && st !== 'done' ? ' pd-part' : ''}"${dn && st !== 'done' ? ` style="--p:${Math.round(dn / plan.length * 100)}%"` : ''}><span class="pd-i">${ico(id)}</span>${st === 'done' ? '<span class="pd-ck">✓</span>' : ''}</span>
       <span class="pd-lb"><b>${L.name}</b>${sub}</span></button>`;
   }
@@ -26519,7 +26586,7 @@ const PATH = (() => {
         <button class="pd-fr guide-ryz${Q() && P.cos && P.cos.frame ? ' frame-' + P.cos.frame : ''}" id="pdFriend" aria-label="Поздороваться">${friendSVG()}</button>
         <div class="pd-bub"><div class="pd-say">${esc(line(s))}</div>
           <div class="pd-prog"><span class="pd-bar"><i style="width:${Math.round(d / N * 100)}%"></i></span><small>${d} из ${N}</small><span class="pd-pi">${pic('📦')}</span></div></div></div>
-      <div class="pd-path" id="pdPath"><svg class="pd-svg" aria-hidden="true"></svg>${s.ids.map(id => node(s, id)).join('')}${chest(s)}</div>
+      <div class="pd-path" id="pdPath"><svg class="pd-svg" aria-hidden="true"></svg>${s.ids.map(id => node(s, id)).join('')}${chest(s)}${(s.opt || []).map(id => node(s, id)).join('')}</div>
       <div class="pd-mine">
         <button class="chip" id="albumBtn"><span class="emo">${sc ? stickerHTML(STK()[sc - 1]) : '🎁'}</span>${Q() ? 'Трофеи' : 'Наклейки'}</button>
         <button class="chip" id="likeBtn"><span class="emo">💛</span>Я люблю</button>
@@ -26537,6 +26604,7 @@ const PATH = (() => {
       else if (t.all) openChest();
       else { const left = t.ids.length - t.done.length; say(`Сундук откроется, когда всё будет сделано. Осталось ${left} ${plural(left, Q() ? ['миссия', 'миссии', 'миссий'] : ['занятие', 'занятия', 'занятий'])}.`); wiggle(box.querySelector('#pdChest .pd-c')); }
     };
+    try { SIMPLE.path(box); } catch (e) {}
     const pb = box.querySelector('#pdPath'); lay(pb);
     if (window.ResizeObserver) new ResizeObserver(() => lay(pb)).observe(pb); else addEventListener('resize', () => lay(pb));
   }
@@ -26571,6 +26639,442 @@ const PATH = (() => {
   return { today, side, rail, lay, fresh };
 })();
 /* PATH-END */
+/* SIMPLE-BEGIN */
+/* ---------- «Простой день» (simple-day): one home for the child, simpler and wider.
+   - the day's path holds the lessons a grown-up marked «обязательно», in a fixed order (speech, reading, maths, soroban,
+     puzzle, book); the other lessons come after the chest, «по желанию»;
+   - after the path, 2 (up to 6 years) or 3 «двери дня» open: areas of the whole game in turn, always from different
+     groups (create / discover / think); a door never comes two days running, each one at least every ~9 days, the
+     child's likes more often; before the path is done the doors are a teaser;
+   - a door is a small room: the game of the day of that area and two more;
+   - after the chest, the favourite game for 10 minutes of the clock (grown-ups set the time or turn the limit off);
+   - each door visited stamps the month's «паспорт дверей»;
+   - the five tabs and the search are gone for the child; grown-ups have the switches and «Все игры» in
+     «Для взрослых» → «День». ---------- */
+const SIMPLE = (() => {
+  const AREAS = [
+    { id: 'art', g: 'c', e: '🎨', a: '#F07AA8', n: 'Мастерская', ids: ['museum', 'draw', 'color', 'art-quiz', 'learn-art', 'code-syl', 'code-abc', 'code-math', 'dots', 'dots-abc', 'kpop-color', 'kproj'] },
+    { id: 'music', g: 'c', e: '🎻', a: '#8C6CF2', n: 'Концертный зал', ids: ['composers', 'conductor', 'guess-composer', 'learn-music', 'piano', 'songs', 'xylo', 'kpop'] },
+    { id: 'ballet', g: 'c', e: '🩰', a: '#E58BD6', n: 'Театр', ids: ['ballet'] },
+    { id: 'comics', g: 'c', e: '💬', a: '#FF8A2A', n: 'Комиксы', ids: ['comics'] },
+    { id: 'world', g: 'k', e: '🧭', a: '#3D8BFD', n: 'Путешествия', ids: ['travel', 'flag-memory', 'trip'] },
+    { id: 'space', g: 'k', e: '🔭', a: '#4B5BD6', n: 'Космос', ids: ['space', 'learn-space'] },
+    { id: 'lab', g: 'k', e: '🧪', a: '#2FA8A0', n: 'Лаборатория', ids: ['phys-lab', 'how', 'learn-phys'] },
+    { id: 'body', g: 'k', e: '🫀', a: '#E2574C', n: 'Тело человека', ids: ['body'] },
+    { id: 'nature', g: 'k', e: '🌿', a: '#2FA865', n: 'Природа и океан', ids: ['plants', 'water', 'learn-plants'] },
+    { id: 'jobs', g: 'k', e: '🧑‍🔧', a: '#E0A21A', n: 'Профессии', ids: ['learn-jobs'] },
+    { id: 'news', g: 'k', e: '🗞️', a: '#5C6F86', n: 'Новости мира', age: 6, ids: ['learn-news'] },
+    { id: 'books', g: 'k', e: '📚', a: '#A0703A', n: 'Сказки и книги', ids: ['tales', 'bookshelf', 'books', 'dict'] },
+    { id: 'chess', g: 't', e: '♟️', a: '#6B5B4B', n: 'Шахматы', ids: ['chess-school', 'chess', 'chess-ai', 'chess-mm', 'chess-online'] },
+    { id: 'logic', g: 't', e: '🧩', a: '#D9862B', n: 'Головоломки', ids: ['olymp', 'flash', 'cube', 'm-sprint', 'story-seq', 'cmp-tf', 'steps'] },
+    { id: 'langs', g: 't', e: '🗣️', a: '#3AA0D8', n: 'Языки мира', ids: ['ml-say', 'ml-guess', 'ml-sound', 'ml-match', 'world-say', 'world-roles', 'ml-phr'] }
+  ];
+  // what the child loves («Я люблю») → the door that comes more often
+  const LIKE_AREA = { draw: 'art', art: 'art', beauty: 'art', unicorn: 'books', music: 'music', kpop: 'music', rap: 'music', chess: 'chess', math: 'logic', games: 'logic',
+    space: 'space', animals: 'nature', dino: 'nature', fish: 'nature', cities: 'world', books: 'books', build: 'lab', cook: 'lab', sport: 'body', fight: 'body', football: 'body', race: 'lab' };
+  // the lessons of the path in their order: the first things first
+  const ORDER = ['speech', 'read', 'math', 'soro', 'puzzle', 'book'];
+  const EPOCH = 20393;   // 2026-11-01: the rotation is one long sequence from here, the same on every phone
+  const DAYS_IN = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу'];
+  let ALLG = false, FAV_ON = false, FT = null, CACHE = null;
+
+  const cfg = () => { const d = (P && P.settings.day) || {}; return { on: d.on !== false, k: d.k || ((P.settings.age || 6) <= 6 ? 2 : 3), fav: d.fav === undefined ? 10 : d.fav, off: d.off || [], must: d.must || {}, favGame: d.favGame || '' }; };
+  const setCfg = (k, v) => { P.settings.day = { ...(P.settings.day || {}), [k]: v }; CACHE = null; save(); };
+  const on = () => { try { return cfg().on && !ALLG && !GPLAY; } catch (e) { return false; } };
+  // the lessons that make the path, in order, and the ones «по желанию»
+  function must() {
+    const L = LS(), ids = Object.keys(L), m = cfg().must, by = id => ORDER.includes(id) ? ORDER.indexOf(id) : 99;
+    const ms = ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
+    return ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
+  }
+  const opt = () => { const ms = must(); return Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); };
+
+  // the games the child can open (what the search finds)
+  function vis() {
+    const S = new Set();
+    SECTIONS.filter(x => x.g === 13 || modOnG(x.g)).forEach(x => GAMES.forEach(g => {
+      if ((g.grp === x.g || (g.also || []).includes(x.g)) && !(g.hide && g.hide()) && !gameOff(g.id) && !(g.place && !placeOn(g.place)) && (!x.only || x.only === P.settings.track || P.settings.allGames)) S.add(g.id);
+    }));
+    return S;
+  }
+  const claimed = new Set(AREAS.flatMap(a => a.ids));
+  // the stories of cities and countries belong to «Путешествия»
+  const gamesOf = (a, V) => [...a.ids, ...(a.id === 'world' ? GAMES.filter(g => g.id.startsWith('learn-') && !claimed.has(g.id)).map(g => g.id) : [])].filter(id => V.has(id));
+  const area = id => AREAS.find(a => a.id === id);
+  const likes = () => [...new Set((P.settings.likes || []).map(l => LIKE_AREA[l]).filter(Boolean))];
+  function pool() { const V = vis(), c = cfg(), age = P.settings.age || 6; return AREAS.filter(a => age >= (a.age || 0) && !c.off.includes(a.id) && gamesOf(a, V).length); }
+  function rng(seed) { let h = 2166136261; for (const ch of String(seed)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); h = h >>> 0 || 1; return () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return (h % 1e6) / 1e6; }; }
+  // the doors of each day from EPOCH to `upto`: highest score wins; a long wait (9+ days) comes first; liked areas
+  // wait less; never the door of yesterday; doors of one day from different groups when there is a choice
+  function plan(upto, opts = {}) {
+    const c = { ...cfg(), ...opts }, A = opts.pool || pool(), lk = opts.likes || likes(), kid = opts.kid || ROOT.cur || 'k', k = Math.min(c.k, A.length);
+    const key = [kid, upto, c.k, A.map(a => a.id).join(), lk.join()].join('|');
+    if (!opts.pool && CACHE && CACHE.key === key) return CACHE.out;
+    const start = Math.min(EPOCH, upto - 40), last = {}, out = {}, r0 = rng(kid);
+    A.map(a => [a, r0()]).sort((x, y) => x[1] - y[1]).forEach(([a], i) => { last[a.id] = start - 1 - i; });
+    let y = [];
+    for (let d = start; d <= upto; d++) {
+      const r = rng(kid + ':' + d), sc = a => { const gap = d - last[a.id]; return (gap >= 9 ? 100 : 0) + gap * (lk.includes(a.id) ? 1.7 : 1) + r() * 2; };
+      const cand = A.filter(a => !y.includes(a.id)).map(a => ({ a, s: sc(a) })).sort((p, q) => q.s - p.s), pick = [];
+      for (const x of cand) { if (pick.length >= k) break; if (pick.some(p => p.g === x.a.g) && cand.some(o => o !== x && !pick.includes(o.a) && !pick.some(p => p.g === o.a.g))) continue; pick.push(x.a); }
+      for (const x of cand) { if (pick.length >= k) break; if (!pick.includes(x.a)) pick.push(x.a); }
+      pick.forEach(a => { last[a.id] = d; }); y = pick.map(a => a.id); out[d] = y;
+    }
+    if (!opts.pool) CACHE = { key, out };
+    return out;
+  }
+  // today's doors stay the same all day, whatever changes; a grown-up can add one
+  function today() {
+    const k = dayKey(), t = P.doorsToday;
+    if (!t || t.d !== k) { const ids = plan(dayNo() + 15)[dayNo()] || []; P.doorsToday = { d: k, ids, extra: [] }; save(); }
+    const V = vis();
+    return [...new Set([...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
+  }
+  function whenOpens(id) {
+    const n = dayNo(), p = plan(n + 15);
+    for (let d = n + 1; d <= n + 15; d++) if ((p[d] || []).includes(id)) {
+      const k = d - n; if (k === 1) return 'завтра'; if (k === 2) return 'послезавтра';
+      if (k < 7) { const dt = new Date(); dt.setDate(dt.getDate() + k); return DAYS_IN[dt.getDay()]; }
+      return k === 7 ? 'через неделю' : `через ${k} дней`;
+    }
+    return 'скоро';
+  }
+  const pathDone = () => { const c = dayCounts(dayKey()); return must().every(id => c[id]); };
+  const chestOpen = () => P.chest === dayKey();
+
+  // the passport of the month: a stamp for every door visited
+  function stamp(id) {
+    const m = dayKey().slice(0, 7);
+    if (!P.passport || P.passport.m !== m) P.passport = { m, a: {} };
+    if (P.passport.a[id]) return false;
+    P.passport.a[id] = 1;
+    const all = pool().every(a => P.passport.a[a.id]);
+    if (all && !P.passport.full) { P.passport.full = 1; P.stars += 5; try { weekAdd(P, 5); } catch (e) {} later(() => { confetti(60); say('Все печати месяца собраны! Плюс пять звёздочек!'); }, 600); }
+    save(); return true;
+  }
+  const stamped = id => !!(P.passport && P.passport.m === dayKey().slice(0, 7) && P.passport.a[id]);
+
+  // a door: the game of the day of its area and two more
+  function roomGames(a) {
+    const V = vis(), gs = gamesOf(a, V).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
+    const n = (P.doorSeen && P.doorSeen[a.id]) || 0, o = gs.length ? n % gs.length : 0;
+    return [...gs.slice(o), ...gs.slice(0, o)].slice(0, 3);
+  }
+  function room(a) {
+    if (!P.doorSeen) P.doorSeen = {};
+    const first = stamp(a.id);
+    if (first) P.doorSeen[a.id] = (P.doorSeen[a.id] || 0) + 1;
+    save();
+    const gs = roomGames(a);
+    newScreen();
+    shell(`${a.e} ${a.n}`, `<div class="sd-room">
+      ${first ? `<p class="sd-stamp"><span class="emo">${a.e}</span>Новая печать в паспорт!</p>` : ''}
+      <div class="tiles">${gs.map((g, i) => `<button class="tile ${i ? '' : 'sd-feat'}" data-id="${g.id}" style="--bg:${g.bg}">${i ? '' : '<i class="tile-new">Игра дня</i>'}<span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b><small>${esc(typeof g.sub === 'function' ? g.sub() : g.sub)}</small></button>`).join('')}</div></div>`, { back: goHome });
+    $$('.sd-room .tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
+    try { TALK.fab(); } catch (e) {}
+    say(`${a.n}! Игра дня: ${nm(gs[0].name)}.`);
+  }
+
+  // the favourite game: the one a grown-up chose, or the one played most
+  function favGame() {
+    const c = cfg(), V = vis(), inLesson = new Set(['breath', 'artic', 'soroban', 'olymp-day', 'r-skill', 'm-skill', 'book']);
+    if (c.favGame && V.has(c.favGame)) return GAMES.find(g => g.id === c.favGame);
+    let best = '', n = 0;
+    Object.entries(P.plays || {}).forEach(([k, v]) => { if (V.has(k) && !inLesson.has(k) && v > n) { best = k; n = v; } });
+    if (!best) best = [Q() ? 'chess-ai' : 'draw', 'draw', 'color', 'museum'].find(id => V.has(id)) || [...V][0];
+    return GAMES.find(g => g.id === best) || null;
+  }
+  const favState = () => (P.fav && P.fav.d === dayKey()) ? P.fav : null;
+  function favLeft() { const m = cfg().fav, f = favState(); if (!m) return Infinity; return f ? Math.max(0, f.t + m * 60e3 - Date.now()) : m * 60e3; }
+  function favGo() {
+    const g = favGame(); if (!g) return;
+    if (favLeft() <= 0) { say('Время любимой игры на сегодня вышло. Завтра снова!'); return; }
+    if (!favState()) { P.fav = { d: dayKey(), t: Date.now() }; save(); }
+    FAV_ON = true; tick(); homeLeave(); g.go();
+  }
+  // a gentle stop: the sand ran out, home with a word, no lost progress
+  function tick() {
+    clearInterval(FT); if (!cfg().fav) return;
+    FT = setInterval(() => {
+      if (favLeft() > 0) return; clearInterval(FT);
+      if (!FAV_ON || $('#pdBox')) { FAV_ON = false; return; }
+      FAV_ON = false;
+      const ov = document.createElement('div'); ov.className = 'overlay';
+      ov.innerHTML = `<div class="winbox" role="dialog"><div class="sd-sand">⌛</div><h2>Время вышло!</h2><p class="win-line">Любимая игра на сегодня всё. Завтра снова — и новые двери!</p><div class="win-btns"><button class="big" id="sdHome">Домой</button></div></div>`;
+      document.body.append(ov);
+      say('Время любимой игры вышло. Завтра снова!');
+      ov.querySelector('#sdHome').onclick = () => { sfx.pop(); ov.remove(); goHome(); };
+    }, 4000);
+  }
+
+  // the doors under the path; before the path is done, a teaser
+  function sectionHTML() {
+    const ds = today(), done = pathDone(), chest = chestOpen(), fg = favGame(), m = cfg().fav, left = favLeft();
+    const n = dayNo(), tm = (plan(n + 15)[n + 1] || []).map(area).filter(Boolean), lk = likes().filter(id => !ds.some(a => a.id === id) && !tm.some(a => a.id === id) && pool().some(a => a.id === id)).map(area);
+    const ms = must().length, dn = must().filter(id => dayCounts(dayKey())[id]).length;
+    const door = a => `<button class="sd-door ${done ? 'open' : 'shut'} ${stamped(a.id) ? 'seen' : ''}" data-door="${a.id}" style="--a:${a.a}" aria-label="${esc(a.n)}">
+        <span class="sd-dc">${pic(a.e)}${done ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b></button>`;
+    const favSub = !chest ? 'после сундука' : left <= 0 ? 'на сегодня всё, завтра снова' : !m ? 'играй сколько хочешь' : favState() ? `осталось ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ['минута', 'минуты', 'минут'])}` : `${m} ${plural(m, ['минута', 'минуты', 'минут'])}`;
+    return `<section class="sd" id="sdBox">
+      <div class="sd-head"><h2>Двери дня</h2><small>${done ? 'открыты — выбирай!' : `откроются после тропы · ещё ${ms - dn} ${plural(ms - dn, ['шаг', 'шага', 'шагов'])}`}</small></div>
+      <div class="sd-doors">${ds.map(door).join('')}</div>
+      ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Любимая игра: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button>` : ''}
+      <div class="sd-soon">${tm.length ? `<p><b>Завтра:</b> ${tm.map(a => `<button class="sd-gh" data-soon="${a.id}">${a.e} ${esc(a.n)}</button>`).join('')}</p>` : ''}
+        ${lk.length ? `<p><b>Твои любимые:</b> ${lk.map(a => `<button class="sd-gh" data-soon="${a.id}">${a.e} ${esc(a.n)} <em>${whenOpens(a.id)}</em></button>`).join('')}</p>` : ''}</div>
+    </section>`;
+  }
+  function bind(box) {
+    FAV_ON = false;
+    box.querySelectorAll('[data-door]').forEach(b => b.onclick = () => {
+      const a = area(b.dataset.door); sfx.pop();
+      if (!pathDone()) { const left = must().filter(id => !dayCounts(dayKey())[id]).length; wiggle(b.querySelector('.sd-dc')); say(`${a.n} откроется после тропы. Осталось ${left} ${plural(left, ['шаг', 'шага', 'шагов'])}.`); return; }
+      homeLeave(); room(a);
+    });
+    box.querySelectorAll('[data-soon]').forEach(b => b.onclick = () => { sfx.pop(); const a = area(b.dataset.soon); say(`${a.n} откроется ${whenOpens(a.id)}.`); });
+    const f = box.querySelector('#sdFav');
+    if (f) f.onclick = () => {
+      sfx.pop();
+      if (!chestOpen()) { wiggle(f); say(pathDone() ? 'Сначала открой сундук!' : 'Любимая игра откроется после сундука. Сначала тропа дня!'); return; }
+      favGo();
+    };
+  }
+
+  // «Паспорт дверей»: the stamps of the month and when the others open
+  function screenPassport() {
+    newScreen();
+    const A = pool(), got = A.filter(a => stamped(a.id)).length, td = today().map(a => a.id);
+    shell('Паспорт дверей', `<div class="sd-pass">
+      <p class="lead">${got} из ${A.length} печатей в этом месяце. Все печати — плюс 5 звёздочек.</p>
+      <div class="sd-stamps">${A.map(a => `<button class="sd-st ${stamped(a.id) ? 'on' : ''}" data-st="${a.id}" style="--a:${a.a}"><span class="sd-sc">${pic(a.e)}</span><b>${esc(a.n)}</b><small>${stamped(a.id) ? '✓' : td.includes(a.id) ? 'сегодня' : whenOpens(a.id)}</small></button>`).join('')}</div>
+      <button class="big" id="sdAlbum">${Q() ? 'Мои трофеи' : 'Мои наклейки'}</button></div>`);
+    $$('[data-st]').forEach(b => b.onclick = () => { sfx.pop(); const a = area(b.dataset.st); say(stamped(a.id) ? `${a.n}: печать есть!` : td.includes(a.id) ? `${a.n}: дверь открыта сегодня!` : `${a.n} откроется ${whenOpens(a.id)}.`); });
+    $('#sdAlbum').onclick = () => { sfx.pop(); screenAlbum(); };
+    try { TALK.fab(); } catch (e) {}
+  }
+
+  // the home: no tabs, no search for the child; the grown-ups' «Все игры» shows the old tabs with a way back
+  function home(st) {
+    document.body.classList.toggle('simple', on());
+    if (ALLG) {
+      const kt = st.querySelector('.kids-top');
+      const bar = document.createElement('div'); bar.className = 'sd-allbar';
+      bar.innerHTML = `<b>🎮 Все игры</b><small>для взрослых: любая игра откроется для ${esc(P.settings.name || '')}</small><button class="chip" id="sdBack">← День</button>`;
+      (kt || st.firstElementChild).after(bar);
+      bar.querySelector('#sdBack').onclick = () => { sfx.pop(); ALLG = false; P.homeTab = 'today'; goHome(); };
+      return;
+    }
+    try { TALK.fab(); } catch (e) {}
+    if (!on()) return;
+    const tb = $('#tabBar'); if (tb) tb.remove();
+    const s = $('#homeSearch'); if (s) s.remove();
+    ['.tryit', 'section.recent', 'section.foryou', 'section.team', '#sec7'].forEach(q => st.querySelectorAll(q).forEach(x => x.remove()));
+  }
+  // inside «Сегодня»: the doors after the path, the passport next to the stickers
+  function path(box) {
+    if (!on()) return;
+    const mine = box.querySelector('.pd-mine'), sec = document.createElement('div');
+    sec.innerHTML = sectionHTML(); const el = sec.firstElementChild;
+    if (mine) mine.before(el); else box.append(el);
+    bind(el);
+    // the doors up top, under the friend: what opens after the path (or «open — scroll down»)
+    const hero = box.querySelector('.pd-hero'), ds = today();
+    if (hero && ds.length) {
+      const t = document.createElement('button'); t.className = 'sd-tease' + (pathDone() ? ' open' : ''); t.id = 'sdTease';
+      t.innerHTML = `<span>${pathDone() ? '🚪 Двери дня открыты:' : '🔒 После тропы:'}</span>${ds.map(a => `<b>${a.e} ${esc(a.n)}</b>`).join('')}`;
+      hero.after(t);
+      t.onclick = () => { sfx.pop(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    }
+    if (mine && !mine.querySelector('#passBtn')) {
+      mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Паспорт</button>`);
+      mine.querySelector('#passBtn').onclick = () => { sfx.pop(); homeLeave(); screenPassport(); };
+    }
+  }
+  function allGames() { ALLG = true; P.homeTab = 'speak'; HOME_POS = null; goHome(); }
+
+  // «Для взрослых» → «День»: the switches
+  function parentSec(sec) {
+    const c = cfg(), L = LS(), ids = Object.keys(L).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)), V = vis(), fg = favGame();
+    const favList = [...V].map(id => GAMES.find(g => g.id === id)).filter(g => g && !g.info).sort((a, b) => nm(a.name).localeCompare(nm(b.name)));
+    sec = sec || document.createElement('section'); sec.className = 'psec'; sec.id = 'dayPar';
+    sec.innerHTML = `<h2>🗺️ День</h2>
+      <button class="big" id="sdAll">🎮 Все игры</button>
+      <label class="sw" for="sdOn"><input id="sdOn" type="checkbox" ${c.on ? 'checked' : ''}><span class="set-t"><b>Простой день</b><small>тропа и двери дня; если выключить — у ребёнка снова все вкладки</small></span></label>
+      <h3 class="fam-s">Обязательно каждый день</h3>
+      <p class="sd-note">Обязательное идёт по тропе по порядку. Остальное — «по желанию», после сундука.</p>
+      <div class="sd-must">${ids.map(id => `<label class="sw" for="sdM-${id}"><input id="sdM-${id}" type="checkbox" data-must="${id}" ${c.must[id] === false ? '' : 'checked'}><span>${esc(L[id].name)}</span></label>`).join('')}</div>
+      <h3 class="fam-s">Двери дня</h3>
+      <div class="sd-seg" id="sdK">${[2, 3].map(n => `<button class="chip ${c.k === n ? 'sel' : ''}" data-k="${n}">${n} ${plural(n, ['дверь', 'двери', 'дверей'])}</button>`).join('')}</div>
+      <p class="sd-note">Сегодня: ${today().map(a => a.e + ' ' + esc(a.n)).join(', ')}</p>
+      <div class="sd-areas" id="sdAreas">${AREAS.map(a => `<button class="chip ${c.off.includes(a.id) ? '' : 'sel'}" data-area="${a.id}">${a.e} ${esc(a.n)}</button>`).join('')}</div>
+      <p class="sd-note">Выключенная тема не приходит в двери. Открыть дверь сегодня:</p>
+      <select id="sdAdd" class="sd-sel"><option value="">— выбрать —</option>${AREAS.filter(a => gamesOf(a, V).length && !today().some(t => t.id === a.id)).map(a => `<option value="${a.id}">${a.e} ${esc(a.n)}</option>`).join('')}</select>
+      <h3 class="fam-s">Любимая игра</h3>
+      <div class="sd-seg" id="sdFavM">${[10, 20, 30, 0].map(n => `<button class="chip ${c.fav === n ? 'sel' : ''}" data-m="${n}">${n ? n + ' мин' : 'без лимита'}</button>`).join('')}</div>
+      <select id="sdFavG" class="sd-sel"><option value="">сама: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>`;
+    const redo = () => parentSec(sec);
+    sec.querySelector('#sdAll').onclick = () => { sfx.pop(); allGames(); };
+    sec.querySelector('#sdOn').onchange = e => { setCfg('on', e.target.checked); sfx.tick(); };
+    sec.querySelectorAll('[data-must]').forEach(i => i.onchange = () => {
+      const m = { ...cfg().must }; m[i.dataset.must] = i.checked;
+      if (!Object.keys(LS()).some(id => m[id] !== false)) { i.checked = true; return; }   // at least one step stays
+      setCfg('must', m); sfx.tick();
+    });
+    sec.querySelector('#sdK').onclick = e => { const b = e.target.closest('[data-k]'); if (!b) return; setCfg('k', +b.dataset.k); sfx.tick(); redo(); };
+    sec.querySelector('#sdAreas').onclick = e => { const b = e.target.closest('[data-area]'); if (!b) return; const off = cfg().off, id = b.dataset.area; setCfg('off', off.includes(id) ? off.filter(x => x !== id) : [...off, id]); sfx.tick(); redo(); };
+    sec.querySelector('#sdAdd').onchange = e => { const id = e.target.value; if (!id) return; today(); P.doorsToday.extra = [...(P.doorsToday.extra || []), id]; save(); sfx.tick(); redo(); };
+    sec.querySelector('#sdFavM').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; setCfg('fav', +b.dataset.m); sfx.tick(); redo(); };
+    sec.querySelector('#sdFavG').onchange = e => { setCfg('favGame', e.target.value); sfx.tick(); };
+    return sec;
+  }
+  return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+})();
+/* SIMPLE-END */
+/* TALK-BEGIN */
+/* ---------- the friend who listens (simple-day, phase 3): the child's friend sits in a corner of the home, the door
+   rooms and the passport. A tap opens a little talk: «Слушаю…» with the phone's speech recognition when the
+   microphone is on, buttons and a text field when it is off. What was said is matched here, on the phone, against a
+   few wishes — what is today, how many stars, help, go on with a story, open a game, a door or a lesson. Nothing is
+   recorded or kept. The friend answers aloud and opens the thing if it is open today; if not, it says when it opens.
+   The words it listens for are language data (regular expressions in four languages), never translated. ---------- */
+const TALK = (() => {
+  const norm = s => String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/ß/g, 'ss').normalize('NFD').replace(/\p{M}/gu, '').replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim();
+  // wishes: words of ru / en / pt / de, after norm() (no accents, е for ё, й as и)
+  const W = {
+    stars: /звезд|star|estrel|stern/,
+    today: /сегодня|что делать|план|today|plan|hoje|heute|was machen|was ist dran/,
+    help: /помог|помощ|не знаю|что ты умеешь|help|ajuda|hilfe/,
+    story: /продолж|истори|story|stories|continu|histori|geschicht|weiter/
+  };
+  // the names children use for a door or a game → its door (area) or game id
+  const SYN = [
+    [/рису|рисова|draw|desenh|malen|zeichn/, 'g:draw'], [/раскрас|colou?r|pintar|ausmal/, 'g:color'],
+    [/шахмат|chess|xadrez|schach/, 'a:chess'], [/космос|планет|ракет|space|planet|rocket|espaco|foguet|weltraum|rakete/, 'a:space'],
+    [/комикс|comic|banda desenh|quadrinh/, 'a:comics'], [/музык|компози|music|composer|musica|compositor|musik|komponist/, 'a:music'],
+    [/балет|театр|ballet|theat|bale|teatro/, 'a:ballet'], [/сказк|книг|tale|book|conto|livro|marchen|buch/, 'a:books'],
+    [/професс|кем стать|job|profession|profiss|beruf/, 'a:jobs'], [/новост|news|noticia|nachricht/, 'a:news'],
+    [/путешеств|стран|город|travel|countr|viagem|pais|reise|land/, 'a:world'], [/опыт|лаборат|experiment|lab|experienc|labor/, 'a:lab'],
+    [/тело|сердц|body|heart|corpo|coracao|korper|herz/, 'a:body'], [/природ|океан|растен|nature|ocean|plant|natureza|oceano|natur|ozean|pflanz/, 'a:nature'],
+    [/головолом|задачк|загадк|puzzle|riddle|quebra|enigma|ratsel/, 'a:logic'], [/язык|language|lingua|idioma|sprache/, 'a:langs'],
+    [/картин|музе|художн|museum|paint|museu|pintur|bild|maler/, 'g:museum'], [/любим|favou?rite|favorit|lieblings/, 'fav']
+  ];
+  const STOP = new Set(['открои', 'открыть', 'хочу', 'давай', 'играть', 'игра', 'игру', 'поиграть', 'включи', 'покажи', 'пожалуиста', 'open', 'want', 'play', 'please', 'show', 'game', 'quero', 'abre', 'abrir', 'jogar', 'jogo', 'mostra', 'offne', 'mochte', 'spielen', 'spiel', 'bitte', 'zeig']);
+  const stem = w => w.slice(0, Math.max(4, Math.min(6, w.length - 1)));
+  // what the words point to: a lesson of the path, a door, a game (by its name, as this language writes it)
+  function target(t) {
+    for (const [re, x] of SYN) if (re.test(t)) return x;
+    const words = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w)).map(stem);
+    if (!words.length) return null;
+    const hit = name => { const ws = norm(name).split(' ').filter(w => w.length >= 4).map(stem); return ws.length ? ws.filter(w => words.some(u => u.startsWith(w) || w.startsWith(u))).length / ws.length : 0; };
+    let best = null, sc = 0;
+    const L = LS(); Object.keys(L).forEach(id => { const s = hit(L[id].name); if (s > sc) { sc = s; best = 'l:' + id; } });
+    SIMPLE.AREAS.forEach(a => { const s = hit(a.n); if (s > sc) { sc = s; best = 'a:' + a.id; } });
+    const V = SIMPLE.vis(); GAMES.forEach(g => { if (!V.has(g.id)) return; const s = hit(nm(g.name)); if (s > sc + .01) { sc = s; best = 'g:' + g.id; } });
+    return sc >= .5 ? best : null;
+  }
+  const areaOf = id => { const V = SIMPLE.vis(); return SIMPLE.AREAS.find(a => SIMPLE.gamesOf(a, V).includes(id)) || null; };
+  const leftSteps = () => SIMPLE.must().filter(id => !dayCounts(dayKey())[id]).length;
+  const listJoin = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' и ' + xs[xs.length - 1] : (xs[0] || '');
+  const afterPath = n => `${n} откроется после тропы. Осталось ${leftSteps()} ${plural(leftSteps(), ['шаг', 'шага', 'шагов'])}.`;
+  // a wish → { say, go } : what the friend answers and what opens (after the answer)
+  function answer(text) {
+    const t = norm(text);
+    if (!t) return { say: 'Я не расслышал. Нажми на меня и скажи ещё раз!' };
+    const simple = SIMPLE.on(), done = SIMPLE.pathDone(), td = SIMPLE.today();
+    const x = target(t);
+    if (x === 'fav' || (x && x.startsWith('g:') && SIMPLE.favGame() && x.slice(2) === SIMPLE.favGame().id && simple)) {
+      const g = SIMPLE.favGame(); if (!g) return { say: 'Скажи, во что хочешь поиграть.' };
+      if (!simple) return { say: `Открываю: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
+      if (P.chest !== dayKey()) return { say: `${nm(g.name)} — твоя любимая игра. Она откроется после сундука.` };
+      if (SIMPLE.favLeft() <= 0) return { say: 'Время любимой игры на сегодня вышло. Завтра снова!' };
+      return { say: `Открываю любимую игру: ${nm(g.name)}!`, go: () => SIMPLE.favGo() };
+    }
+    if (x && x.startsWith('l:')) { const id = x.slice(2); return { say: `Начинаем: ${LS()[id].name}!`, go: () => { homeLeave(); startLesson(id); } }; }
+    if (x && x.startsWith('a:')) {
+      const a = SIMPLE.AREAS.find(y => y.id === x.slice(2)); if (!a) return { say: 'Такой двери у нас нет.' };
+      const V = SIMPLE.vis(), gs = SIMPLE.gamesOf(a, V);
+      if (!gs.length) return { say: `${a.n} сейчас закрыто. Спроси взрослых.` };
+      if (!simple) return { say: `Открываю: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
+      if (!td.some(y => y.id === a.id)) return { say: `${a.n} откроется ${SIMPLE.whenOpens(a.id)}. А сегодня: ${listJoin(td.map(y => y.n))}.` };
+      if (!done) return { say: afterPath(a.n) };
+      return { say: `Открываю дверь: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
+    }
+    if (x && x.startsWith('g:')) {
+      const g = GAMES.find(y => y.id === x.slice(2)); if (!g) return { say: 'Такой игры я не знаю.' };
+      if (!SIMPLE.vis().has(g.id)) return { say: `${nm(g.name)} сейчас выключена. Спроси взрослых.` };
+      if (!simple) return { say: `Открываю: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
+      const a = areaOf(g.id);
+      if (!a) return { say: `${nm(g.name)} — внутри занятий дня. Пройди тропу!` };
+      if (!td.some(y => y.id === a.id)) return { say: `${nm(g.name)} живёт за дверью «${a.n}». Она откроется ${SIMPLE.whenOpens(a.id)}.` };
+      if (!done) return { say: afterPath(nm(g.name)) };
+      return { say: `Открываю: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
+    }
+    if (W.stars.test(t)) return { say: `У тебя ${P.stars} ${plural(P.stars, ['звёздочка', 'звёздочки', 'звёздочек'])}!` };
+    if (W.story.test(t)) {
+      const last = (P.recent || []).find(r => String(r[3]).startsWith('learn:')), id = last ? String(last[3]).slice(6) : '';
+      const k = id ? Object.keys(LEARN).find(k => (LEARN[k].items || []).some(it => it.id === id)) : '';
+      if (!k) return { say: 'Истории живут за дверями дня: путешествия, космос, профессии. Выбирай!' };
+      const a = areaOf('learn-' + k);
+      if (simple && a && !(td.some(y => y.id === a.id) && done)) return { say: `${LEARN[k].name}: ${td.some(y => y.id === a.id) ? 'после тропы' : SIMPLE.whenOpens(a.id)}.` };
+      return { say: `Продолжаем: ${LEARN[k].name}!`, go: () => { homeLeave(); screenLearn(k); } };
+    }
+    if (W.today.test(t)) {
+      const L = LS(), left = SIMPLE.must().filter(id => !dayCounts(dayKey())[id]).map(id => L[id].name);
+      const doors = listJoin(td.map(a => a.n));
+      if (left.length) return { say: `Сегодня: ${listJoin(left)}. Потом двери: ${doors}.` };
+      return { say: `Тропа пройдена! Двери открыты: ${doors}.` };
+    }
+    if (W.help.test(t)) return { say: 'Скажи, например: что сегодня? Сколько у меня звёзд? Открой раскраски. Хочу комикс.' };
+    return { say: 'Я пока не понял. Скажи: что сегодня? Или: открой раскраски.' };
+  }
+  // the little talk: the friend, its answer, what was heard; the microphone or a text field
+  let busy = false;
+  function open() {
+    if (busy) return; busy = true;
+    const ov = document.createElement('div'); ov.className = 'tk'; ov.id = 'tk';
+    const mic = srOk();
+    ov.innerHTML = `<div class="tk-box" role="dialog" aria-label="Поговорить с другом">
+      <button class="ibtn tk-x" id="tkX" aria-label="Закрыть">✕</button>
+      <div class="tk-top"><span class="tk-face">${friendSVG()}</span><p class="tk-say" id="tkSay">${esc(mic ? 'Слушаю! Что хочешь?' : 'Что хочешь? Нажми или напиши.')}</p></div>
+      <p class="tk-you" id="tkYou"></p>
+      ${mic ? `<button class="big tk-mic" id="tkMic">🎤 Скажи ещё</button>` : ''}
+      <div class="tk-chips">${['Что сегодня?', 'Сколько у меня звёзд?', 'Открой раскраски', 'Помоги'].map(q => `<button class="chip" data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>
+      <form class="tk-form" id="tkForm"><input id="tkIn" type="text" autocomplete="off" placeholder="Напиши другу…" enterkeyhint="send"><button class="chip" type="submit">➤</button></form>
+    </div>`;
+    document.body.append(ov);
+    const close = () => { busy = false; ov.remove(); };
+    const reply = async text => {
+      $('#tkYou').textContent = text ? '«' + text + '»' : '';
+      const a = answer(text);
+      $('#tkSay').textContent = a.say;
+      await say(a.say);
+      if (a.go && ov.isConnected) { close(); a.go(); }
+    };
+    const listen = async () => {
+      const b = $('#tkMic'); if (b) b.disabled = true;
+      $('#tkYou').textContent = '…';
+      const r = await hear('', { maxMs: 6000, loose: true, onHeard: t => { if (ov.isConnected) $('#tkYou').textContent = '«' + t + '»'; } });
+      if (!ov.isConnected) return;
+      if (b) b.disabled = false;
+      await reply(r.heard || '');
+    };
+    ov.onclick = e => { if (e.target === ov) close(); };
+    $('#tkX').onclick = () => { sfx.pop(); close(); };
+    ov.querySelectorAll('[data-q]').forEach(b => b.onclick = () => { sfx.pop(); reply(b.dataset.q); });
+    $('#tkForm').onsubmit = e => { e.preventDefault(); const v = $('#tkIn').value; $('#tkIn').value = ''; if (v.trim()) reply(v); };
+    if (mic) { $('#tkMic').onclick = () => { sfx.pop(); listen(); }; say('Слушаю!').then(() => { if (ov.isConnected) listen(); }); }
+    else say('Что хочешь? Нажми или напиши.');
+  }
+  // the friend in the corner
+  function fab() {
+    const sc = $('.screen'); if (!sc || sc.querySelector('.tk-fab')) return;
+    const b = document.createElement('button'); b.className = 'tk-fab'; b.id = 'tkFab'; b.setAttribute('aria-label', 'Поговорить с другом');
+    b.innerHTML = `<span class="tk-face">${friendSVG()}</span><span class="tk-dot">💬</span>`;
+    sc.append(b);
+    b.onclick = () => { sfx.pop(); hopEl(b); open(); };
+  }
+  return { answer, open, fab, target, norm };
+})();
+/* TALK-END */
 /* FUNSPEAK-BEGIN */
 /* ---------- The speech games feel like a walk with the friend, not a drill:
    - during a lesson of «Сегодня» a trail of stones under a game's header shows every step of it: a done step is a star,
@@ -26906,7 +27410,7 @@ document.addEventListener('visibilitychange', () => {
   if (!cloudOn() || !cloudFams().length) return;
   if (document.hidden) { clearTimeout(CL_T); cloudPushNow(); return; }
   // back on the screen: another phone may have played meanwhile
-  cloudPullAll().then(ch => { if (!ch) return; POLISH.calm(() => { if ($('.who-grid') && !$('.who-pick')) screenWho(ROOT.curFam); else if ($('#tabBar')) goHome(); }); });
+  cloudPullAll().then(ch => { if (!ch) return; POLISH.calm(() => { if ($('.who-grid') && !$('.who-pick')) screenWho(ROOT.curFam); else if ($('.home-t')) goHome(); }); });
 });
 // at the start: the children's newest progress before anyone taps themself (a short wait, then whatever is here)
 function cloudBootWait() {
@@ -27246,7 +27750,7 @@ function whoBoot() {
   if (LIGA_HASH || PULT_HASH) return false;
   if (WHO_HASH && !CL_BOOTED && cloudFams().length) {
     const id = WHO_HASH, f = whoFams().find(x => x.kids.includes(id));
-    if (f) { WHO_HASH = null; CL_BOOTED = true; whoEnter(f.id, id, true); cloudPullAll(3500).then(ch => { CL_SETTLED = true; if (ch) POLISH.calm(() => { if ($('#tabBar')) goHome(); }); }); return true; }
+    if (f) { WHO_HASH = null; CL_BOOTED = true; whoEnter(f.id, id, true); cloudPullAll(3500).then(ch => { CL_SETTLED = true; if (ch) POLISH.calm(() => { if ($('.home-t')) goHome(); }); }); return true; }
   }
   if (cloudBootWait()) return true;
   // …/#login on a phone that has a family but not its login yet: straight to the sign-in
