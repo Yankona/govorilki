@@ -20,7 +20,7 @@ KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq']
 APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/', 'de': SITE + '/play/de/'}
 # the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
 APP_DIR = os.environ.get('APP_DIR', '')
-APP_FILES = ['index.html', 'ru', 'en', 'pt', 'de', 'art', 'music', 'img', 'trips', 'engine', 'icons', 'tales', 'data', 'sw.js', 'manifest.webmanifest']
+APP_FILES = ['index.html', 'fonts', 'ru', 'en', 'pt', 'de', 'art', 'music', 'img', 'trips', 'engine', 'icons', 'tales', 'data', 'sw.js', 'manifest.webmanifest']
 HL = {'ru': 'ru', 'en': 'en', 'pt': 'pt-PT', 'de': 'de'}   # the one set of hreflang codes (the game's pages use the same)
 OG_LOCALE = {'ru': 'ru_RU', 'en': 'en_GB', 'pt': 'pt_PT', 'de': 'de_DE'}
 SHORT = {'ru': 'RU', 'en': 'EN', 'pt': 'PT', 'de': 'DE'}
@@ -89,8 +89,7 @@ def head(l, k, title, desc, canonical, alts, ld, og_type='website', xdef=None):
 <meta name="theme-color" content="#FF8A2A">
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Nunito:wght@600;800&display=swap">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
 <style>{CSS}</style>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head>
