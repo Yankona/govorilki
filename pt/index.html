@@ -655,6 +655,7 @@ b.r{color:var(--berry)}
 .scheme figcaption{font:700 13px var(--f-body);color:var(--ink-soft)}
 .cam{position:relative;flex:none;width:min(78vw,340px,48vh);aspect-ratio:200/220;overflow:hidden;background:#1E1A2E;border:12px solid var(--sun);border-radius:50%/48%;box-shadow:0 8px 0 #D39A00}
 .cam video{display:block;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.cam-ask{display:flex;flex-direction:column;gap:8px;max-width:640px;margin:0 auto 12px;padding:12px 14px;border-radius:20px;background:var(--t-blue);color:var(--ink)}.cam-ask p{margin:0;display:flex;flex-direction:column;gap:2px}.cam-ask b{font:800 18px var(--f-body)}.cam-ask small{font:600 14px/1.35 var(--f-body);color:var(--ink-soft)}
 .cam-l{position:absolute;bottom:7%;left:50%;translate:-50% 0;padding:2px 12px;background:var(--paper);border-radius:99px;font:800 15px var(--f-body)}
 .artic-stage.cam-on .mirror,.artic-stage.cam-on .cam{width:min(44vw,320px,40vh)}
 .snd-tabs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
@@ -1965,8 +1966,17 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .story-e .pic{font-size:64px}
 .story h2{margin:0;text-align:center;font:700 26px/1.15 var(--f-display)}
 .story-t{margin:0;font:700 21px/1.55 var(--f-body)}
-.ss{border-radius:8px;transition:background .2s}
+.ss{border-radius:8px;transition:background .2s,color .2s}
 .ss.on{background:#FFE58A;box-shadow:0 0 0 3px #FFE58A}
+/* the text the voice is reading: dark letters on the yellow light in every look (bright, calm, dark, «Миссия Л») */
+.ss.on,.fr-text .ss.on,.sy.on,.rw.on,.bl-tale .ss.bl-on{color:#2A2346}
+.ss.on b,.ss.on i,.ss.on a,.sy.on b{color:inherit}
+/* «Читаю сам»: bigger text with one sentence a line for steps 5–6, the piece to read aloud underlined */
+.sr-tag{margin:-4px 0 0;font:800 14px var(--f-body);color:var(--ink-soft)}
+.story-t.sr-big{font-size:25px;line-height:1.7}.story-t.sr-big .ss{display:block;margin-bottom:6px}
+.ss.sr-pick{text-decoration:underline 3px var(--sea);text-underline-offset:6px}
+.sr-ctl{display:flex;flex-direction:column;gap:6px}.sr-ctl .cx-heard{margin:0;min-height:1.4em;font:700 16px/1.4 var(--f-body);color:var(--ink)}
+body:is(.look-dark,.quest) .bl-tale .ss.bl-on{background:#FFE58A;box-shadow:0 0 0 3px #FFE58A}
 /* BOOKS-CSS-BEGIN: «Книжная полка» and the audio tales */
 .bk-wrap,.tl-wrap{display:flex;flex-direction:column;gap:14px;width:100%;max-width:880px;margin:0 auto}
 .bk-note{margin:0;font:700 15px/1.35 var(--f-body);color:var(--ink-soft);text-align:center}
@@ -2019,7 +2029,7 @@ a.big{color:#FFFFFF;align-self:flex-start}
 .fr-r b{font:800 17px/1.2 var(--f-body)}.fr-r small{font:700 12px/1.3 var(--f-body);color:var(--leaf)}.fr-face{width:72px;height:72px}.kface.emo.fr-face{font-size:52px}.kface.emo.tl-ff{font-size:22px}
 .fr-priv{margin:8px 0 0;font:700 13px/1.35 var(--f-body);color:var(--ink-soft);text-align:center}
 .fr-rec .pt-who{margin-bottom:6px}.fr-tip{margin:6px 0 14px;text-align:center;color:var(--ink-soft);font:600 15px/1.4 var(--f-body)}
-.fr-text{font-size:26px;line-height:1.65}.fr-text .ss{border-radius:8px;transition:background .2s}
+.fr-text{font-size:26px;line-height:1.65}.fr-text .ss{border-radius:8px;transition:background .2s,color .2s}
 .fr-text .ss.done{text-decoration:underline 3px var(--leaf);text-underline-offset:6px}
 .fr-text .ss.on{background:#FFE58A;box-shadow:0 0 0 4px #FFE58A}
 .fr-info{text-align:center;font:800 15px var(--f-body);color:var(--ink-soft)}.fr-delw{text-align:center;margin:4px 0 0}
@@ -3083,6 +3093,7 @@ body.pv-on #app{padding-top:52px}
 .set-t small{font:700 13px/1.3 var(--f-body);color:var(--ink-soft)}
 .set-go{flex:none;font:800 26px/1 var(--f-body);color:var(--ink-soft)}
 .set-row.danger .set-t b{color:var(--berry)}
+body:not(.look-dark):not(.quest) .set-row.danger .set-t b{color:#C2185B}
 .set-sw{display:flex!important;align-items:center;gap:12px;min-height:60px;padding:10px 18px;cursor:pointer}
 .set-off{display:none!important}
 .set-more{width:100%}
@@ -3750,7 +3761,10 @@ body.look-dark .win-main .big.share{background:#2F6FD6;box-shadow:0 5px 0 #1D4C9
 .cx-logo{position:absolute;top:5px;left:5px;max-width:calc(100% - 10px);z-index:2;font:900 13px/1.15 var(--f-display);color:#fff;background:#1E1A33;border-radius:6px;padding:3px 7px;text-align:left}
 .cx-eps{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .cx-e{width:50px;height:54px;border-radius:14px;border:3px solid var(--line-strong);background:var(--paper);color:var(--ink);display:grid;place-items:center;font:800 18px/1 var(--f-body);cursor:pointer;padding:2px}
-.cx-e small{font-size:12px}.cx-e.done{background:var(--leaf);color:#fff;border-color:var(--leaf)}.cx-e.new{background:var(--tiger);color:#fff;border-color:var(--tiger-deep);animation:bob 1.2s ease-in-out infinite}.cx-e.lock,.cx-e.soon{opacity:.6}
+/* small white words on orange need a deeper orange (contrast ≥4.5:1 in every look) */
+.nw-new,.cx-lv .chip.on,.cx-tabs .chip.on,.cx-row .chip.on,.cx-e.new{background:#A8520E}.cx-e.new{border-color:#8A430B}.cx-e.new small{color:#fff}
+body.look-dark .prow-btns .big,body.look-calm .prow-btns .big{background:#A8520E}
+.cx-e small{font-size:12px}.cx-e.done{background:var(--leaf);color:#fff;border-color:var(--leaf)}.cx-e.new{background:#A8520E;color:#fff;border-color:#8A430B;animation:bob 1.2s ease-in-out infinite}.cx-e.lock,.cx-e.soon{opacity:.6}
 .cx-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
 .cx-card{background:linear-gradient(160deg,#FFF1A8,#FFD3E0);color:#1E1A33;border:3px solid #1E1A33;border-radius:14px;padding:8px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;max-width:200px}
 .cx-card b{font:800 15px/1.15 var(--f-display)}.cx-card small{font-size:12px;line-height:1.2}
@@ -5214,7 +5228,8 @@ const EVT = (() => {
       else if (k === 'ge') { const b = base(id); add('g:' + b + ':e'); add('g:' + b + ':st', n || 0); add('g:' + b + ':sec', s || 0); }
       else if (k === 'step') add('step:' + id);
       else if (k === 'door') add('door:' + id);
-      else if (k === 'story') { add('story'); add('story:' + id); }
+      else if (k === 'story') { add('story'); add('story:' + id); if (n === 2) add('story-self'); else if (n === 1) add('story-heard'); }
+      else if (k === 'aloud') add('aloud');
       else if (k === 'err') add('err:' + String(id).split('@')[0]);
       else if (k === 'grown') add('grown');
     }
@@ -5249,14 +5264,14 @@ const EVT = (() => {
   }
   
   function week(p, n = 7) {
-    const from = Math.floor((now() - n * 864e5) / 6e4); let sec = 0, games = 0, stories = 0; const days = new Set(), area = {};
+    const from = Math.floor((now() - n * 864e5) / 6e4); let sec = 0, games = 0, stories = 0, self = 0; const days = new Set(), area = {};
     for (const e of read()) {
       if (e[0] < from || e[2] !== p) continue;
       if (e[1] === 'pc' || e[1] === 'scr') { sec += e[5] || 0; days.add(dayOf(e)); const a = AREA(e[3] || ''); area[a] = (area[a] || 0) + (e[5] || 0); }
-      else if (e[1] === 'ge') games++; else if (e[1] === 'story') stories++;
+      else if (e[1] === 'ge') games++; else if (e[1] === 'story') { stories++; if (e[4] === 2) self++; }
     }
     Object.keys(area).forEach(a => { area[a] = Math.round(area[a] / 60); if (!area[a]) delete area[a]; });
-    return { min: Math.round(sec / 60), games, stories, days: days.size, area };
+    return { min: Math.round(sec / 60), games, stories, self, days: days.size, area };
   }
   function wipe() { L = []; clearTimeout(T); T = 0; try { localStorage.removeItem(KEY); } catch (e) {} }
   addEventListener('error', e => err('js@' + (+e.lineno || 0)));
@@ -5637,7 +5652,7 @@ function screenArtic(i, auto = false, then = null) {
         <div class="prow-btns"><button class="big" id="go">${ICON.play}Começar</button><button class="big ghost" id="camBtn"></button></div>
         <p class="muted" id="camNote" hidden></p>
       </div></div>`, { back: then ? goHome : screenArticMenu });
-  bindCam($('#artStage'));
+  bindCam($('#artStage'), { auto: true });
   const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
   
   let cur = a.thumb, swap = 0;
@@ -6952,23 +6967,54 @@ async function startCam(video) {
   await video.play().catch(() => {});
 }
 const camHTML = "<div class=\"cam\" id=\"cam\" hidden><video id=\"camV\" autoplay playsinline muted></video><span class=\"cam-l\">Este és tu</span></div>";
-function bindCam(stage) {
-  const btn = $('#camBtn'), cam = $('#cam'), note = $('#camNote');
+
+
+
+
+const camAuto = () => !EMBEDDED && P.settings.mirrorAuto !== false && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+let CAM_BACK = null;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { if (camStream && CAM_BACK) CAM_BACK.hide(); }
+  else if (CAM_BACK && CAM_BACK.stage.isConnected && CAM_BACK.was) CAM_BACK.show();
+});
+function bindCam(stage, { auto = false } = {}) {
+  const btn = $('#camBtn'), cam = $('#cam'), note = $('#camNote'), t = tok;
   const label = on => `${ICON.cam}${on ? "Desligar a câmara" : "Câmara-espelho"}`;
   btn.innerHTML = label(false);
-  btn.onclick = async () => {
-    sfx.pop();
-    if (camStream) { stopCam(); cam.hidden = true; stage.classList.remove('cam-on'); btn.innerHTML = label(false); return; }
+  const off = () => { stopCam(); cam.hidden = true; stage.classList.remove('cam-on'); btn.innerHTML = label(false); };
+  const on = async quiet => {
     try {
       await startCam($('#camV'));
+      if (t !== tok || !stage.isConnected) { stopCam(); return false; }
       cam.hidden = false; stage.classList.add('cam-on'); btn.innerHTML = label(true); note.hidden = true;
-      talk("Olha para ti e faz como na imagem!");
+      if (!quiet) talk("Olha para ti e faz como na imagem!");
+      return true;
     } catch (e) {
-      stopCam(); note.hidden = false;
-      note.textContent = "Aqui a câmara não está disponível. Funciona na aplicação, no telemóvel. Entretanto, podes treinar em frente a um espelho normal.";
-      talk("A câmara não liga aqui. Vamos olhar para um espelho normal!");
+      stopCam(); return false;
     }
   };
+  CAM_BACK = { stage, was: false, hide() { this.was = true; off(); }, show() { this.was = false; if (t === tok) on(true); } };
+  btn.onclick = async () => {
+    sfx.pop(); const ask = $('#camAsk'); if (ask) ask.remove();
+    if (camStream) { off(); CAM_BACK.was = false; return; }
+    if (await on()) { ROOT.camAsk = 'yes'; save(); return; }
+    note.hidden = false;
+    note.textContent = "Aqui a câmara não está disponível. Funciona na aplicação, no telemóvel. Entretanto, podes treinar em frente a um espelho normal.";
+    talk("A câmara não liga aqui. Vamos olhar para um espelho normal!");
+  };
+  if (!auto || !camAuto() || ROOT.camAsk === 'no') return;
+  if (ROOT.camAsk === 'yes') { on(true).then(ok => { if (!ok && t === tok) { ROOT.camAsk = 'no'; save(); } }); return; }
+  
+  stage.insertAdjacentHTML('beforebegin', `<div class="cam-ask" id="camAsk"><p><b>🪞 ${esc("Ligamos o espelho mágico?")}</b><small>${esc("Vais ver a tua boca e a tua língua. A câmara não grava nada nem envia nada.")}</small></p>
+    <div class="prow-btns"><button class="big" id="camYes">${esc("Sim, ligar")}</button><button class="big ghost" id="camNo">${esc("Não, obrigado")}</button></div></div>`);
+  talk("Queres ver-te como num espelho? Carrega em «Sim, ligar».");
+  $('#camYes').onclick = async () => {
+    sfx.pop(); $('#camAsk').remove();
+    const ok = await on(); if (t !== tok) return;
+    ROOT.camAsk = ok ? 'yes' : 'no'; save();
+    if (!ok) { note.hidden = false; note.textContent = "A câmara não ligou. Podes praticar em frente a um espelho normal."; }
+  };
+  $('#camNo').onclick = () => { sfx.pop(); $('#camAsk').remove(); ROOT.camAsk = 'no'; save(); talk("Está bem! Senta-te em frente a um espelho normal."); };
 }
 function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {
   newScreen(); HOW_CUR = null;
@@ -9329,7 +9375,9 @@ function screenStory(k, i, o = {}) {
   { const it0 = learnItems(k)[i]; if (it0 && it0.px && it0.s == null) { const t0 = tok; PACK.story(it0).then(() => { if (tok === t0) screenStory(k, i, o); }, () => { if (tok === t0) sfx.oops(); }); return; } }
   const t = newScreen(), T = LEARN[k], items = learnItems(k), it = items[i], parts = sentences(it.s), back = o.back || (() => screenLearn(k));
   EVT.enter('story:' + k);
-  let miss = 0, rd = 0, reading = 0;
+  
+  const self = selfReader(), lvR = +(readLevels()[LANG] || 0), hasQ = !!(it.q && it.a && it.a.length);
+  let miss = 0, rd = 0, reading = 0, aloud = 0;
   shell(T.name, `<article class="story">
       ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">fonte</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
@@ -9340,6 +9388,12 @@ function screenStory(k, i, o = {}) {
         ${it.look ? `<a class="chip" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(it.look)}" target="_blank" rel="noopener">🖼 Ver o quadro</a>` : ''}</div>
       <div class="story-q" id="stQ" hidden></div>
     </article>`, { back });
+  if (self) {
+    $('.story').classList.add('sr-on'); $('#stListen').hidden = true;
+    if (lvR && lvR < 7) $('#stT').classList.add('sr-big');
+    $('#stT').insertAdjacentHTML('beforebegin', `<p class="sr-tag">📖 ${esc(G("Leio sozinha", "Leio sozinho"))}</p>`);
+    $('#stListen').parentElement.insertAdjacentHTML('beforebegin', `<div class="sr-ctl" id="srCtl"><div class="prow-btns"><button class="big" id="srDone">${esc(G("✓ Já li!", "✓ Já li!"))}</button>${srOk() ? `<button class="big ghost" id="srAloud"><span class="emo">🎤</span>${esc("Ler um bocadinho em voz alta")}</button>` : ''}</div><p class="cx-heard" id="srHeard" aria-live="polite"></p></div>`);
+  }
   const spans = $$('.ss');
   { const h2 = $('.story h2'), ms = mlStripHTML(it.e); if (h2 && ms) { h2.insertAdjacentHTML('afterend', ms); mlStripBind($('.story')); } }
   
@@ -9357,35 +9411,97 @@ function screenStory(k, i, o = {}) {
     } finally { reading--; if (!reading && ar) ar.classList.remove('reading'); }
   }
   $('#stListen').onclick = () => { sfx.pop(); readAloud(); };
-  function ask() {
-    const opts = shuffle(it.a.map((a, j) => ({ a, ok: j === 0 })));
-    const q = $('#stQ'); q.hidden = false;
-    q.innerHTML = `<p class="story-qt">${esc(it.q)}</p><div class="sq-a">${opts.map(o => `<button class="ans" data-ok="${o.ok ? 1 : 0}">${esc(o.a)}</button>`).join('')}</div>`;
-    q.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    talk(`${it.q} ${opts.map(o => o.a).join('? ')}?`);
-    q.onclick = e => {
-      const b = e.target.closest('.ans'); if (!b || b.disabled) return;
-      if (b.dataset.ok !== '1') {
-        miss++; b.disabled = true; wiggle(b); sfx.oops();
-        if (miss >= 2) $('.ans[data-ok="1"]', q).classList.add('hint');
-        talk(miss >= 2 ? `Pista: ${it.a[0]}.` : "Não é bem isso. Pensa mais um bocadinho!");
-        return;
-      }
-      sfx.good(); b.classList.add('right'); hopEl(b);
-      { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); }
-      const stamp0 = T.place && TRAVEL.stamped(k);
-      P.learn = { ...(P.learn || {}), [it.id]: 1 }; EVT.log('story', it.id); save(); if (o.done) o.done();
-      const xl = T.onDone ? T.onDone(it) || '' : '';
-      
-      const order = items.map((x, j) => (i + 1 + j) % items.length).filter(j => j !== i), nj = o.back ? -1 : (order.find(j => !learnDone(items[j].id)) ?? (i + 1 < items.length ? i + 1 : -1));
-      const nIt = nj >= 0 ? items[nj] : null;
-      const nextCard = nIt ? `<button class="st-next" data-a="next"><span class="st-nt">${learnImg(nIt.id) ? `<img src="${esc(learnImg(nIt.id)[4] || `${SITE_ROOT}img/learn/${nIt.id}-s.webp`)}" alt="" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(nIt.e))}">` : pic(nIt.e)}</span><span class="st-nx"><small>Próxima história</small><b>${esc(nIt.t)}</b>${nIt.q ? `<i>🤔 ${esc(nIt.q)}</i>` : ''}</span></button>` : '';
-      const done = () => finish({ key: 'learn:' + it.id, stars: miss ? 2 : 3, line: `${it.a[0]}! Agora já conheces mais uma história.${xl ? ' ' + xl : ''}`, extra: nextCard, nextLabel: nIt ? (Q() ? "▶ Continuar a ler" : "▶ Continuar a ouvir") : '',
-        next: nIt ? () => screenStory(k, nj) : null, menu: back });
-      later(() => { if (T.place && !stamp0 && TRAVEL.stamped(k)) TRAVEL.stampShow(k, done); else done(); }, 700);
+  
+  function askOne(qt, ans, { voice = true } = {}) {
+    return new Promise(res => {
+      let m = 0;
+      const opts = shuffle(ans.map((a, j) => ({ a, ok: j === 0 })));
+      const q = $('#stQ'); q.hidden = false;
+      q.innerHTML = `<p class="story-qt">${esc(qt)}</p><div class="sq-a">${opts.map(o => `<button class="ans" data-ok="${o.ok ? 1 : 0}">${esc(o.a)}</button>`).join('')}</div>`;
+      q.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (voice) talk(`${qt} ${opts.map(o => o.a).join('? ')}?`);
+      q.onclick = e => {
+        const b = e.target.closest('.ans'); if (!b || b.disabled) return;
+        if (b.dataset.ok !== '1') {
+          miss++; m++; b.disabled = true; wiggle(b); sfx.oops();
+          if (m >= 2) $('.ans[data-ok="1"]', q).classList.add('hint');
+          talk(m >= 2 ? `Pista: ${ans[0]}.` : "Não é bem isso. Pensa mais um bocadinho!");
+          return;
+        }
+        q.onclick = null; sfx.good(); b.classList.add('right'); hopEl(b);
+        { const r = b.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); }
+        later(() => res(), 650);
+      };
+    });
+  }
+  
+  function aboutQ() {
+    const others = shuffle(items.filter(x => x !== it && x.t && x.t !== it.t)).slice(0, 2).map(x => x.t);
+    return others.length ? ["De que fala esta história?", [it.t, ...others]] : null;
+  }
+  function complete(mode) {
+    const stamp0 = T.place && TRAVEL.stamped(k);
+    P.learn = { ...(P.learn || {}), [it.id]: 1 };
+    
+    EVT.log('story', it.id, mode === 'read' ? 2 : 1);
+    if (mode === 'read') { try { GUIDE.readSelf(P); } catch (e) {} P.selfRead = (+P.selfRead || 0) + 1; }
+    save(); if (o.done) o.done();
+    const xl = T.onDone ? T.onDone(it) || '' : '';
+    
+    const order = items.map((x, j) => (i + 1 + j) % items.length).filter(j => j !== i), nj = o.back ? -1 : (order.find(j => !learnDone(items[j].id)) ?? (i + 1 < items.length ? i + 1 : -1));
+    const nIt = nj >= 0 ? items[nj] : null;
+    const nextCard = nIt ? `<button class="st-next" data-a="next"><span class="st-nt">${learnImg(nIt.id) ? `<img src="${esc(learnImg(nIt.id)[4] || `${SITE_ROOT}img/learn/${nIt.id}-s.webp`)}" alt="" onerror="this.outerHTML = this.dataset.fb" data-fb="${esc(pic(nIt.e))}">` : pic(nIt.e)}</span><span class="st-nx"><small>Próxima história</small><b>${esc(nIt.t)}</b>${nIt.q ? `<i>🤔 ${esc(nIt.q)}</i>` : ''}</span></button>` : '';
+    
+    const stars = mode === 'read' ? (miss ? 2 : 3) : selfReader({ ...P, settings: { ...P.settings, stRead: '' } }) ? (miss ? 1 : 2) : (miss ? 2 : 3);
+    const line = mode === 'read' ? `${G("Leste a história sozinha", "Leste a história sozinho")} ${G("e percebeste tudo", "e percebeste tudo")}!${aloud ? ' ' + G("E leste muito bem em voz alta!", "E leste muito bem em voz alta!") : ''}${xl ? ' ' + xl : ''}`
+      : `${hasQ ? it.a[0] : "Viva"}! Agora já conheces mais uma história.${xl ? ' ' + xl : ''}`;
+    const done = () => finish({ key: 'learn:' + it.id, stars, line, extra: nextCard, nextLabel: nIt ? (Q() || self ? "▶ Continuar a ler" : "▶ Continuar a ouvir") : '',
+      next: nIt ? () => screenStory(k, nj) : null, menu: back });
+    later(() => { if (T.place && !stamp0 && TRAVEL.stamped(k)) TRAVEL.stampShow(k, done); else done(); }, 700);
+  }
+  
+  function bindAloud() {
+    const b = $('#srAloud'), heard = $('#srHeard'); if (!b) return;
+    let n = 1; while (n < parts.length && parts.slice(0, n + 1).join(' ').split(/\s+/).length <= 40) n++;
+    const piece = parts.slice(0, n).join(' '), want = normW(piece).split(' ').filter(Boolean);
+    let busy = false;
+    b.onclick = async () => {
+      if (busy) { srAbortAll(); return; }
+      busy = true; sfx.tick(); hush();
+      spans.forEach(s => s.classList.toggle('sr-pick', +s.dataset.j < n));
+      b.innerHTML = `<span class="emo">⏹</span>${esc(G("Já acabei", "Já acabei"))}`;
+      heard.textContent = "Lê em voz alta a parte sublinhada. Estou a ouvir…";
+      const t1 = Date.now();
+      const r = await hear(piece, { maxMs: 9000 + piece.length * 120, onHeard: h => { if (heard.isConnected) heard.textContent = `Ouço: «${h.slice(-60)}»`; } }).catch(() => ({}));
+      if (t !== tok || !b.isConnected) return;
+      busy = false; spans.forEach(s => s.classList.remove('sr-pick'));
+      b.innerHTML = `<span class="emo">🎤</span>${esc("Ler outra vez")}`;
+      const got = normW((r && r.heard) || '').split(' ').filter(Boolean), same = (a, c) => a === c || (a.length > 3 && c.length > 3 && a.slice(0, 4) === c.slice(0, 4));
+      const hit = r && r.ok ? want.length : want.filter(w => got.some(g => same(w, g))).length;
+      const secs = Math.max(1, (Date.now() - t1) / 1000), wpm = Math.round(hit / secs * 60);
+      EVT.log('aloud', it.id, hit, secs);
+      if (!hit) { heard.textContent = G("Não te ouvi. Tenta outra vez — ou lê em silêncio e carrega em «Já li».", "Não te ouvi. Tenta outra vez — ou lê em silêncio e carrega em «Já li»."); return; }
+      const pace = wpm < 35 ? "Lês com atenção — é assim mesmo." : wpm < 80 ? "Um bom ritmo, certinho!" : "Rápido e claro!";
+      heard.textContent = `Ouvi ${hit} ${plural(hit, ["palavra", "palavras", "palavras"])} de ${want.length}. ${pace}`;
+      if (hit / want.length >= .6) { aloud = 1; sfx.good(); talk(`Muito bem! ${pace}`); } else talk("Bom começo! Tenta outra vez, com calma.");
     };
   }
   (async () => {
+    if (self) {
+      bindAloud();
+      await talk(G("Lê a história sozinha. Depois pergunto-te de que fala.", "Lê a história sozinho. Depois pergunto-te de que fala.")); if (t !== tok) return;
+      await new Promise(res => { $('#srDone').onclick = () => { sfx.star(); srAbortAll(); res(); }; });
+      if (t !== tok) return;
+      const c = $('#srCtl'); if (c) c.remove();
+      const aq = aboutQ(); if (aq) { await askOne(aq[0], aq[1]); if (t !== tok) return; }
+      if (hasQ) { await askOne(it.q, it.a); if (t !== tok) return; }
+      
+      const q = $('#stQ'); q.hidden = false;
+      q.innerHTML = `<p class="story-qt">${esc("Tudo certo! Queres ouvir a voz a ler?")}</p><div class="prow-btns"><button class="big" id="srNext">▶ Seguinte</button></div>`;
+      $('#stListen').hidden = false; $('#stListen').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      $('#srNext').onclick = () => { sfx.pop(); hush(); rd++; complete('read'); };
+      return;
+    }
     if (Q()) {
       await talk("Lê a história em voz alta. Podes carregar em «Ouvir»."); if (t !== tok) return;
       await askSaid(G("Já li!", "Já li!"), { need: Math.min(8, 1 + parts.length * 1.1) }); if (t !== tok) return;
@@ -9394,7 +9510,8 @@ function screenStory(k, i, o = {}) {
       while (reading && t === tok) await wait(200);
       if (t !== tok) return;
     }
-    ask();
+    if (hasQ) { await askOne(it.q, it.a); if (t !== tok) return; }
+    complete(Q() ? 'read' : 'listen');
   })();
 }
 
@@ -17954,7 +18071,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '165';
+const APP_VER = '166';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 
@@ -18486,6 +18603,14 @@ function readLevels(pr = P) {
   rskOf(pr); const o = {};
   Object.keys(pr.rskill).forEach(l => { const v = pr.rskill[l]; if (READ_LANGS.includes(l) && v && +v.lv) o[l] = +v.lv; });
   return o;
+}
+
+
+function selfReader(pr = P) {
+  if (!pr || !pr.settings) return false;
+  const m = pr.settings.stRead; if (m === 'read') return true; if (m === 'listen') return false;
+  const lv = +(readLevels(pr)[LANG] || 0);
+  return lv ? lv >= 5 : (+pr.settings.age || 0) >= 7;
 }
 
 function readLangToday(n = dayNo(), pr = P) {
@@ -21379,7 +21504,7 @@ const SWAB = (() => {
           <div class="prow-btns"><button class="big" id="go">${ICON.play}Começar</button><button class="big ghost" id="camBtn"></button></div>
           <p class="muted" id="camNote" hidden></p>
         </div></div>`, { back: menu });
-    bindCam($('#artStage'));
+    bindCam($('#artStage'), { auto: true });
     const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
     const setFace = (pose, at, fx) => { const old = mirror.querySelector('svg.face'); old.insertAdjacentHTML('afterend', at ? faceBud(pose, at, fx === 'wig' ? 'sw-wig' : fx === 'pull' ? 'sw-pull' : '') : faceSVG(pose)); old.remove(); };
     const start = async () => {
@@ -24195,7 +24320,7 @@ const REPORT_AREAS = [
   { k: 'math', e: '🔢', n: "Matemática", act: d => (d.ga.math || 0) + d.mt, up: d => (d.m > d.m0 && d.m0 > 0) || (d.so > d.so0 && d.so0 > 0), lv: d => d.m && MSK.L[d.m - 1] ? MSK.L[d.m - 1].n : '' },
   { k: 'logic', e: '🧩', n: "Lógica", act: d => d.ga.logic || 0, up: d => d.ol > d.ol0, lv: d => d.ol ? `problemas resolvidos: ${d.ol}` : '' },
   { k: 'chess', e: '♟️', n: "Xadrez", act: d => d.ga.chess || 0, up: d => d.cs > d.cs0 || (d.ai > d.ai0 && d.ai0 > 0), lv: d => d.cs ? `lições feitas: ${d.cs}` : '' },
-  { k: 'world', e: '🌍', n: "Histórias", act: d => d.ls, up: d => d.ls >= 3, lv: d => d.ls ? `histórias: ${d.ls}` : '' },
+  { k: 'world', e: '🌍', n: "Histórias", act: d => d.ls, up: d => d.ls >= 3, lv: d => d.ls ? `histórias: ${d.ls}${d.lr ? ` (${d.sx ? "leu sozinho" : "leu sozinha"}: ${d.lr})` : ''}` : '' },
   { k: 'art', e: '🎨', n: "Música e desenho", act: d => d.ga.art || 0, up: () => false, lv: () => '' },
   
   { k: 'rume', e: '🪆', n: "Russo", act: d => d.ga.rume || 0, up: d => RUREP.ups(d).length > 0, lv: d => RUREP.skills(d) }
@@ -24244,6 +24369,8 @@ const GUIDE = (() => {
     return pr.gw;
   }
   
+  function readSelf(pr = P) { const g = week(pr); g.lr = (+g.lr || 0) + 1; }
+  
   function note(key, stars) {
     const pr = P, g = week(pr), a = areaOf(key), now = lv(pr), d = dayKey();
     g.n++; if (a) g.a[a] = (g.a[a] || 0) + 1;
@@ -24277,7 +24404,7 @@ const GUIDE = (() => {
     const b = g.b || {}, ks = Object.keys(b).filter(keyOk);
     const good = ks.filter(k => b[k][0] >= 3).map(k => [areaOf(k), k]).slice(-4);
     const hard = ks.filter(k => b[k][1] >= 2 && b[k][0] < 3).map(k => [areaOf(k), k]).slice(-2);
-    return { w: g.w, a: ageOf(pr), tr: pr.settings.track === 'l' ? 'l' : 'r', snd: soundsOf(pr).slice(0, 4), d: dd, min: g.min || 0, st: g.w === weekId() ? weekStars(pr) : 0, n: g.n || 0, ls: (g.ls || []).length,
+    return { w: g.w, a: ageOf(pr), tr: pr.settings.track === 'l' ? 'l' : 'r', snd: soundsOf(pr).slice(0, 4), d: dd, min: g.min || 0, st: g.w === weekId() ? weekStars(pr) : 0, n: g.n || 0, ls: (g.ls || []).length, lr: +g.lr || 0, sx: pr.settings.gender === 'm' ? 1 : 0,
       ga: g.a || {}, good, hard, m: now.m, so: now.so, ol: now.ol, oll: now.oll, wpm: now.w, rl: now.rl, cs: now.cs, ai: now.ai,
       m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0, cs0: s0.cs || 0, ai0: s0.ai || 0,
       mS: last ? 0 : gs.m && now.m ? daysSince(gs.m[1]) : 0, rS: last ? 0 : gs.rl && now.rl ? daysSince(gs.rl[1]) : 0,
@@ -24299,7 +24426,7 @@ const GUIDE = (() => {
     Object.keys(x.ga || {}).slice(0, 10).forEach(k => { if (/^[a-z]{2,8}$/.test(k)) ga[k] = clampN(x.ga[k], 999); });
     const pairs = (v, m) => (Array.isArray(v) ? v : []).slice(0, m).filter(p => Array.isArray(p) && /^[a-z]{0,8}$/.test(p[0] || '') && keyOk(p[1])).map(p => [p[0] || '', p[1]]);
     const o = { w: /^\d{4}-\d\d-\d\d$/.test(x.w || '') ? x.w : weekId(), a: n('a', 18), tr: x.tr === 'l' ? 'l' : 'r', snd: (Array.isArray(x.snd) ? x.snd : []).filter(s => SOUND_SET.some(z => z[0] === s)).slice(0, 4),
-      d: n('d', 7), min: n('min', 9999), st: n('st', 1e5), n: n('n', 9999), ls: n('ls', 99), ga, good: pairs(x.good, 4), hard: pairs(x.hard, 2),
+      d: n('d', 7), min: n('min', 9999), st: n('st', 1e5), n: n('n', 9999), ls: n('ls', 99), lr: n('lr', 99), sx: n('sx', 1), ga, good: pairs(x.good, 4), hard: pairs(x.hard, 2),
       m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), wpm: n('wpm', 999), rl: n('rl', 9), cs: n('cs', 99), ai: n('ai', 99),
       m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), cs0: n('cs0', 99), ai0: n('ai0', 99),
       ru: n('ru', 3333), ru0: n('ru0', 3333), mn: n('mn', 99), mc: n('mc', 99), mw: n('mw', 999), ml0: n('ml0', 3333), mk: n('mk', 5),
@@ -24350,6 +24477,7 @@ const GUIDE = (() => {
     if (d.wpm > d.w0 && d.w0) L.push(`velocidade de leitura — ${d.wpm} palavras por minuto`);
     { const u = RUREP.ups(d); if (u.length) L.push(`russo — cresceu: ${u.join(', ')}`); }
     d.good.forEach(x => { const n = gname(x[1]); if (n && L.length < 4) L.push(`⭐⭐⭐ em: ${n}`); });
+    if (d.lr) L.push(`${d.sx ? "leu sozinho" : "leu sozinha"}: ${d.lr} ${plural(d.lr, ["história", "histórias", "histórias"])}`);
     if (d.ls && L.length < 4) L.push(`histórias ouvidas: ${d.ls}`);
     return L.slice(0, 4);
   }
@@ -24423,7 +24551,7 @@ const GUIDE = (() => {
     const rows = KIDS.filter(id => ROOT.profiles[id]).map(id => { const w = EVT.week(id); if (!w.min && !w.games) return '';
       const AN = { games: "jogos", stories: "histórias", travel: "viagem", home: "ecrã inicial", grown: "para adultos", other: "lições e outros" };
       const ar = Object.entries(w.area).sort((a, b) => b[1] - a[1]).map(([k, m]) => `${AN[k] || k} ${m} min`).join(' · ');
-      return `<li><b>${esc(ROOT.profiles[id].settings.name || '')}</b>: ${w.min} min · ${w.days} ${plural(w.days, ["dia", "dias", "dias"])} · jogos: ${w.games}${w.stories ? ` · histórias: ${w.stories}` : ''}${ar ? `<br><small>${ar}</small>` : ''}</li>`; }).join('');
+      return `<li><b>${esc(ROOT.profiles[id].settings.name || '')}</b>: ${w.min} min · ${w.days} ${plural(w.days, ["dia", "dias", "dias"])} · jogos: ${w.games}${w.stories ? ` · histórias: ${w.stories}${w.self ? ` (${ROOT.profiles[id].settings.gender === 'm' ? "leu sozinho" : "leu sozinha"}: ${w.self})` : ''}` : ''}${ar ? `<br><small>${ar}</small>` : ''}</li>`; }).join('');
     return rows ? `<div class="gd-ev"><h3 class="fam-s">⏱ Últimos 7 dias neste telemóvel</h3><ul>${rows}</ul></div>` : '';
   }
   
@@ -24437,7 +24565,7 @@ const GUIDE = (() => {
     box.innerHTML = guestHTML(pg);
     if (!box.dataset.gb) { box.dataset.gb = 1; bind(box, id => { const k = ((gLoad(GPROG_KEY, null) || {}).kids || []).find(x => x.id === id); return k && k.gd ? { d: k.gd, n: k.n } : null; }); }
   }
-  return { note, digest, clean, card, tip, areas, pool, wins, hard, rows, reportText, mountFam, mountGuest, readLv, mathLv, AREAS, week };
+  return { note, readSelf, digest, clean, card, tip, areas, pool, wins, hard, rows, reportText, mountFam, mountGuest, readLv, mathLv, AREAS, week };
 })();
  
  
@@ -26512,6 +26640,11 @@ const SIMPLE = (() => {
       <h3 class="fam-s">Jogo preferido</h3>
       <div class="sd-seg" id="sdFavM">${[10, 20, 30, 0].map(n => `<button class="chip ${c.fav === n ? 'sel' : ''}" data-m="${n}">${n ? n + " min" : "sem limite"}</button>`).join('')}</div>
       <select id="sdFavG" class="sd-sel"><option value="">automático: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>`;
+    sec.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Histórias: ler sozinho / ouvir</h3>
+      <div class="sd-seg" id="sdSR">${[['', "pelo nível de leitura"], ['read', "📖 ler sozinho"], ['listen', "🔊 ouvir"]].map(([v, n]) => `<button class="chip ${(P.settings.stRead || '') === v ? 'sel' : ''}" data-sr="${v}">${n}</button>`).join('')}</div>
+      <p class="sd-note">Ler sozinho: histórias, notícias e viagens sem a voz, depois 1–2 perguntas; «Ouvir» aparece depois da resposta. Agora: <b>${selfReader() ? "lê sozinho" : "ouve"}</b>.</p>
+      <h3 class="fam-s">Espelho</h3>
+      <label class="sw" for="sdMir"><input id="sdMir" type="checkbox" ${P.settings.mirrorAuto === false ? '' : 'checked'}><span class="set-t"><b>O espelho liga-se sozinho</b><small>nos exercícios da língua a câmara do telemóvel abre como um espelho; nada é gravado nem enviado</small></span></label>`);
     const redo = () => parentSec(sec);
     sec.querySelector('#sdAll').onclick = () => { sfx.pop(); allGames(); };
     sec.querySelector('#sdOn').onchange = e => { setCfg('on', e.target.checked); sfx.tick(); };
@@ -26525,6 +26658,8 @@ const SIMPLE = (() => {
     sec.querySelector('#sdAdd').onchange = e => { const id = e.target.value; if (!id) return; today(); P.doorsToday.extra = [...(P.doorsToday.extra || []), id]; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdFavM').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; setCfg('fav', +b.dataset.m); sfx.tick(); redo(); };
     sec.querySelector('#sdFavG').onchange = e => { setCfg('favGame', e.target.value); sfx.tick(); };
+    sec.querySelector('#sdSR').onclick = e => { const b = e.target.closest('[data-sr]'); if (!b) return; P.settings.stRead = b.dataset.sr; save(); sfx.tick(); redo(); };
+    sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
   }
   return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
@@ -27242,8 +27377,9 @@ function dataSecHTML() {
     <p class="muted">Sincronização da família: ${cf.length ? "ativada, o progresso das crianças fica guardado no nosso servidor (Cloudflare)" : "desativada"}. ${ROOT.srOff ? "O reconhecimento de voz da Google está desativado." : "O reconhecimento de voz está ativado: a voz da criança é processada pela Google."}</p>
     <div class="prow-btns"><button class="big ghost" id="dataGet">⬇️ Descarregar os dados da família</button><button class="big ghost danger" id="dataDel">Apagar tudo</button></div>
     <p class="muted" id="dataOut"></p>
-    <p class="muted">${privLink("Privacidade: o que é guardado, onde e quanto")}</p></section>`;
+    <p class="muted">${privLink("Privacidade: o que é guardado, onde e quanto")}</p></section>`.replace(/<div class="prow-btns"><button class="big ghost" id="dataGet"/, m => CAM_NOTE + m);
 }
+const CAM_NOTE = "<p class=\"muted\">A câmara-espelho nos exercícios da língua mostra a cara da criança apenas no ecrã: a imagem não é gravada, não é guardada nem enviada. A câmara desliga-se quando a criança sai do exercício ou fecha a aplicação. Liga-se sozinha — o interruptor «O espelho liga-se sozinho» em «Dia e todos os jogos».</p>";
 function bindDataSec() {
   bindConsent('stIn');
   const g = $('#dataGet'), d = $('#dataDel');
@@ -27298,6 +27434,7 @@ async function statsPull(days) {
   if (!r || !r.ct) throw new Error('net');
   return openForAdmin(r, await adminPrivate(ROOT.adminKey));
 }
+const storySelfP = (a, b) => `<p>Leram sozinhos: <b>${a}</b> · em voz alta: <b>${b}</b></p>`;
 function statsHTML(S) {
   const D = S.days || {}, ds = Object.keys(D).sort(), last = ds.slice(-7), sum = (k, set = ds) => set.reduce((a, d) => a + (D[d][k] || 0), 0);
   const few = n => n > 0 && n < 5 ? '<5' : String(n);
@@ -27320,7 +27457,7 @@ function statsHTML(S) {
     <h3 class="fam-s">Histórias</h3><p>Ouvidas até ao fim: <b>${few(sum('story'))}</b></p>${list(keysOf(/^story:(.+)$/), "história")}
     <h3 class="fam-s">Falhas</h3>${list(keysOf(/^err:(.+)$/), "falha")}
     <h3 class="fam-s">Idiomas e ecrãs</h3>${list({ ...keysOf(/^(lang:.+)$/), ...keysOf(/^(dev:.+)$/) }, "o quê")}
-    ${Object.keys(S.months || {}).length ? `<h3 class="fam-s">Por mês (com mais de 13 meses)</h3>${list(Object.fromEntries(Object.entries(S.months).map(([m, o]) => [m, o.kids || 0])), "mês · crianças")}` : ''}</section>`;
+    ${Object.keys(S.months || {}).length ? `<h3 class="fam-s">Por mês (com mais de 13 meses)</h3>${list(Object.fromEntries(Object.entries(S.months).map(([m, o]) => [m, o.kids || 0])), "mês · crianças")}` : ''}</section>`.replace(/<\/section>$/, () => storySelfP(few(sum('story-self')), few(sum('aloud'))) + '</section>');
 }
  
  
