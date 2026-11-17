@@ -53,7 +53,7 @@ const ev = (p, s) => p.evaluate(s => window.__T.run(s), s);
     const cards = await S.p.$$eval('#guideSec .gd-card', cs => cs.map(c => ({ id: c.dataset.gk, vis: c.offsetParent !== null, txt: c.innerText,
       btns: [...c.querySelectorAll('button')].filter(b => !b.matches('[data-gshare]')).length, idea: c.querySelector('.gd-idea') && c.querySelector('.gd-idea').open,
       ok: c.querySelectorAll('.gd-ok p').length, hard: c.querySelectorAll('.gd-hard p').length, sum: (c.querySelector('.gd-wkr summary') || {}).textContent || '',
-      rows: [...c.querySelectorAll('.gd-rows p')].map(p => p.innerText.replace(/\s+/g, ' ')) })));
+      rows: [...c.querySelectorAll('.gd-rows p')].map(p => p.textContent.replace(/\s+/g, ' ')) })));
     const C = id => cards.find(c => c.id === id) || {};
     if (cards.length !== 3) bad.push(`cards: ${cards.length} (want 3)`);
     if (!cards.every(c => c.vis)) bad.push('a card is hidden');
