@@ -42,9 +42,7 @@ input{-webkit-user-select:text;user-select:text}
 img{max-width:100%}
 [hidden]{display:none!important}
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Russo+One&family=Nunito:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="../fonts/fonts.css">
 <script>
 /* MOVE-BEGIN */
 /* The move to govorilki.com. The game used to live at yankona.github.io/govorilki; a browser keeps each address's data
@@ -5133,7 +5131,6 @@ function goHome() {
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
   const RF = readFineCheck();
   navHome();
-  setTimeout(() => statPing(), 4000);
   document.body.classList.toggle('quest', Q()); lookApply();
   if (PATH.fresh(ROOT.cur)) P.homeTab = 'today';
   const tab = HOME_TABS.some(x => x.id === P.homeTab) ? P.homeTab : 'today';
@@ -8436,7 +8433,72 @@ const who = id => id === KID.id ? KID : GRAND[id] || (typeof KNOWN_KIDS !== 'und
 const colorName = c => c === 'white' ? 'белыми' : 'чёрными';
 const otherColor = c => c === 'white' ? 'black' : 'white';
 const SITE = EMBEDDED ? 'https://govorilki.com/play/' : location.origin + location.pathname;
-const RELAYS = ['https://ntfy.sh/', 'https://ntfy.envs.net/', 'https://ntfy.adminforge.de/'];
+
+
+
+
+const RELAYS = ['ch:'];
+const RCH = (() => {
+  const E = new TextEncoder(), D = new TextDecoder(), ids = {};
+  const b64 = u => btoa(String.fromCharCode(...u)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const unb64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0));
+  const of = name => ids[name] || (ids[name] = (async () => {
+    const S = crypto.subtle, h = new Uint8Array(await S.digest('SHA-256', E.encode('govorilki-ch:' + name)));
+    const key = await S.importKey('raw', await S.digest('SHA-256', E.encode('govorilki-key:' + name)), 'AES-GCM', false, ['encrypt', 'decrypt']);
+    return { t: [...h.slice(0, 16)].map(x => x.toString(16).padStart(2, '0')).join(''), key };
+  })());
+  const off = () => EMBEDDED || !CLOUD || !window.crypto || !crypto.subtle;
+  async function post(name, text) {
+    if (off()) throw new Error('off');
+    const { t, key } = await of(name), iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, E.encode(text)));
+    
+    const r = await fetch(`${CLOUD}/v1/ch/${t}`, { method: 'POST', body: JSON.stringify({ iv: b64(iv), ct: b64(ct) }) });
+    if (!r.ok) throw new Error(r.status);
+  }
+  
+  async function lines(name, since, after) {
+    if (off()) throw new Error('off');
+    const { t, key } = await of(name);
+    const r = await fetch(`${CLOUD}/v1/ch/${t}?since=${encodeURIComponent(since || '12h')}&after=${after || 0}`);
+    if (!r.ok) throw new Error(r.status);
+    const j = await r.json(), out = [];
+    for (const m of j.msgs || []) {
+      try { out.push({ event: 'message', id: m.id, time: Math.floor(m.at / 1000), message: D.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(m.iv) }, key, unb64(m.ct))) }); } catch (e) {}
+    }
+    return out;
+  }
+  return { post, lines };
+})();
+
+async function rfetch(url, o) {
+  const m = String(url).match(/^ch:([^/?]+)(?:\/json\?(.*))?$/);
+  if (!m) return fetch(url, o);
+  if (o && o.method === 'POST') { await RCH.post(m[1], o.body); return { ok: true, status: 200, text: async () => '' }; }
+  const ls = await RCH.lines(m[1], new URLSearchParams(m[2] || '').get('since'));
+  return { ok: true, status: 200, text: async () => ls.map(x => JSON.stringify(x)).join('\n') };
+}
+
+class RSource {
+  constructor(url) {
+    const m = String(url).match(/^ch:([^/?]+)\/sse\?since=(.*)$/) || [];
+    this.name = m[1]; this.since = decodeURIComponent(m[2] || '12h'); this.after = 0; this.opened = false; this.closed = !m[1];
+    this.timer = setTimeout(() => this.tick(), 0);
+  }
+  async tick() {
+    if (this.closed) return;
+    if (!document.hidden) {
+      try {
+        const ls = await RCH.lines(this.name, this.since, this.after);
+        if (this.closed) return;
+        if (!this.opened) { this.opened = true; if (this.onopen) this.onopen(); }
+        ls.forEach(x => { this.after = Math.max(this.after, x.id); if (this.onmessage) this.onmessage({ data: JSON.stringify(x) }); });
+      } catch (e) { if (this.onerror) this.onerror(e); }
+    }
+    if (!this.closed) this.timer = setTimeout(() => this.tick(), 4000);
+  }
+  close() { this.closed = true; clearTimeout(this.timer); }
+}
 const famDate = at => new Date(at).toLocaleDateString(LOC, { day: 'numeric', month: 'short' });
 const rid = (n = 8) => { const a = new Uint8Array(n); crypto.getRandomValues(a); return [...a].map(x => (x % 36).toString(36)).join(''); };
 
@@ -8499,7 +8561,7 @@ function relayClose() { SUBS.forEach(s => { try { s.close(); } catch (e) {} }); 
 async function relayPost(msg) {
   if (PREVIEW || DEMO) return true; 
   const body = JSON.stringify({ ...msg, at: Date.now() }), topic = 'govorilki-' + famCode();
-  const res = await Promise.allSettled(RELAYS.map(r => fetch(r + topic, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
+  const res = await Promise.allSettled(RELAYS.map(r => rfetch(r + topic, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
   return res.some(x => x.status === 'fulfilled');
 }
 function relaySub(onMsg, onNet) {
@@ -8515,7 +8577,7 @@ function relaySub(onMsg, onNet) {
   };
   RELAYS.forEach(r => {
     if (!window.EventSource) return;
-    const es = new EventSource(`${r}${topic}/sse?since=12h`);
+    const es = new RSource(`${r}${topic}/sse?since=12h`);
     es.onopen = alive;
     es.onerror = net;
     es.onmessage = e => { alive(); try { take(r, JSON.parse(e.data)); } catch (x) {} };
@@ -8524,7 +8586,7 @@ function relaySub(onMsg, onNet) {
   
   const poll = () => {
     if (t !== tok) return;
-    RELAYS.forEach(r => fetch(`${r}${topic}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : Promise.reject())
+    RELAYS.forEach(r => rfetch(`${r}${topic}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : Promise.reject())
       .then(txt => { alive(); txt.split('\n').forEach(l => { try { take(r, JSON.parse(l)); } catch (e) {} }); }, net));
     later(poll, 20000);
   };
@@ -11000,8 +11062,13 @@ const PIPER_SRC = `
 let s = null, tts = null, q = Promise.resolve(), ORT = null, PATCH = null, MAP = null, MAPV = null;
 // the voice reads text through its phonemizer, then a neural net turns phoneme numbers into sound; the stress of the
 // words the phonemizer gets wrong is fixed in those numbers, just before the net (the same ONNX runtime module)
-const ORT_URL = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.27.0/wasm/+esm';
-const PH_URL = 'https://cdn.jsdelivr.net/npm/@mintplex-labs/piper-tts-web@1.0.5/dist/piper-o91UDS6e.js/+esm';
+// the engine's files come from our own site (engine/piper/, the same versions as on the CDN), so no third party sees the
+// players' addresses; only the claude.ai copy, which cannot fetch them, uses the CDN. ENG is filled in when the worker starts.
+const ENG = '__ENG__', CDN = 'https://cdn.jsdelivr.net/npm/';
+const ORT_URL = ENG ? ENG + 'ort.wasm.min.mjs' : CDN + 'onnxruntime-web@1.27.0/wasm/+esm';
+const PH_URL = ENG ? ENG + 'piper-o91UDS6e.js' : CDN + '@mintplex-labs/piper-tts-web@1.0.5/dist/piper-o91UDS6e.js/+esm';
+const TTS_URL = ENG ? ENG + 'piper-tts-web.js' : CDN + '@mintplex-labs/piper-tts-web@1.0.5/+esm';
+const phBase = () => ENG ? ENG + 'piper_phonemize' : tts.WASM_BASE;
 const ACC = String.fromCharCode(0x301), VL = 'аеёиоуыэюя', VI = 'aɑeɛiɪoɔuyʌɵ';
 async function hook() {
   if (ORT !== null) return;
@@ -11058,7 +11125,7 @@ async function phon(text) {
   return new Promise(async (res, rej) => {
     try {
       const m = await createPiperPhonemize({ print: d => { try { res([].concat(JSON.parse(d).phonemes).flat().join('')); } catch (e) { rej(e); } }, printErr: () => {},
-        locateFile: u => tts.WASM_BASE + (u.endsWith('.wasm') ? '.wasm' : '.data') });
+        locateFile: u => phBase() + (u.endsWith('.wasm') ? '.wasm' : '.data') });
       m.callMain(['-l', 'ru', '--input', JSON.stringify([{ text }]), '--espeak_data', '/espeak-ng-data']);
     } catch (e) { rej(e); }
   });
@@ -11111,11 +11178,11 @@ async function run({ id, voice, text, pairs, need }) {
   let learned = null;
   try {
     await hook();
-    if (!tts) tts = await import('https://cdn.jsdelivr.net/npm/@mintplex-labs/piper-tts-web@1.0.5/+esm');
+    if (!tts) tts = await import(TTS_URL);
     if (!s || s.voiceId !== voice) {
       tts.TtsSession._instance = null;
       s = await tts.TtsSession.create({ voiceId: voice, progress: p => self.postMessage({ progress: p.total ? p.loaded / p.total : 0 }),
-        wasmPaths: { onnxWasm: 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.27.0/dist/', piperData: tts.WASM_BASE + '.data', piperWasm: tts.WASM_BASE + '.wasm' } });
+        wasmPaths: { onnxWasm: ENG || CDN + 'onnxruntime-web@1.27.0/dist/', piperData: phBase() + '.data', piperWasm: phBase() + '.wasm' } });
     }
     if (!text) { self.postMessage({ id, ok: true }); return; }
     pairs = pairs || [];
@@ -11173,7 +11240,7 @@ function piperNote() {
 }
 function piperCall(text, fix, voiceAs) {
   if (!PIPER.w) {
-    try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC], { type: 'text/javascript' })), { type: 'module' }); }
+    try { PIPER.w = new Worker(URL.createObjectURL(new Blob([PIPER_SRC.replace("'__ENG__'", JSON.stringify(EMBEDDED ? '' : new URL(SITE_ROOT + 'engine/piper/', location.href).href))], { type: 'text/javascript' })), { type: 'module' }); }
     catch (e) { PIPER.failed = true; PIPER.failedAt = performance.now(); return Promise.reject(e); }
     PIPER.w.onmessage = e => { const d = e.data; if (d.progress != null) { PIPER.pct = d.progress; piperNote(); return; } const f = PIPER.wait[d.id]; delete PIPER.wait[d.id]; if (f) f(d); };
     PIPER.w.onerror = () => { PIPER.failed = true; PIPER.failedAt = performance.now(); PIPER.w = null; Object.values(PIPER.wait).forEach(f => f({ ok: false, err: 'worker' })); PIPER.wait = {}; };
@@ -11558,7 +11625,6 @@ function screenParents(focus) {
 `}    </ul></section>
     </div>`, { guide: false, back: PAR_BACK });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
-  const exS = $('#expState'); if (exS) { exS.insertAdjacentHTML('afterend', shareHTML('shareIn')); bindShareBox('shareIn'); }
   const nmL = $('#nameIn') && $('#nameIn').closest('label'); if (nmL) { nmL.insertAdjacentHTML('afterend', mlLangsHTML('mlLangsIn', P)); bindMlLangs('mlLangsIn', P); }
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
   vs(); later(vs, 1200);
@@ -11944,7 +12010,7 @@ const ltopic = code => 'govorilki-liga-' + code;
 async function lpost(code, msg) {
   if (DEMO) return true; 
   const body = JSON.stringify({ ...msg, at: Date.now() });
-  const r = await Promise.allSettled(RELAYS.map(u => fetch(u + ltopic(code), { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
+  const r = await Promise.allSettled(RELAYS.map(u => rfetch(u + ltopic(code), { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
   return r.some(x => x.status === 'fulfilled');
 }
 function ltake(code, m) {
@@ -11971,7 +12037,7 @@ async function lshare(code, force) {
 }
 async function lpoll(code) {
   let ch = false;
-  await Promise.allSettled(RELAYS.map(r => fetch(`${r}${ltopic(code)}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : '')
+  await Promise.allSettled(RELAYS.map(r => rfetch(`${r}${ltopic(code)}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : '')
     .then(txt => txt.split('\n').forEach(l => { try { const x = JSON.parse(l); if (x.event === 'message' && ltake(code, JSON.parse(x.message))) ch = true; } catch (e) {} }))));
   if (ch) save();
   return ch;
@@ -12053,7 +12119,7 @@ function screenLeague(join) {
   
   RELAYS.forEach(r => {
     if (!window.EventSource) return;
-    const es = new EventSource(`${r}${ltopic(L.code)}/sse?since=12h`);
+    const es = new RSource(`${r}${ltopic(L.code)}/sse?since=12h`);
     es.onmessage = e => { try { const x = JSON.parse(e.data); if (x.event === 'message' && ltake(L.code, JSON.parse(x.message)) && t === tok) { save(); render(); } } catch (er) {} };
     SUBS.push(es);
   });
@@ -12068,7 +12134,7 @@ function screenLeagueJoin(code) {
       <section class="psec"><h2>Как вас увидят</h2>
         <label class="prow" for="ljTeam">Название команды <input id="ljTeam" type="text" maxlength="24" autocomplete="off" value="${esc(L && L.team || f.name)}"></label>
         ${f.kids.map(id => { const st = ROOT.profiles[id].settings; return `<label class="prow">${esc(st.name)}: имя в лиге <input data-nick="${id}" type="text" maxlength="16" autocomplete="off" value="${esc(L && L.nick && L.nick[id] || st.name)}"></label>`; }).join('')}
-        <p class="muted">В лигу уходят только имя или прозвище, выбранный друг-аватар, возраст и очки. Без фамилий, фото и голоса. Таблица идёт через общедоступный сервер ntfy (там хранится 12 часов) и видна тем, у кого есть код лиги.</p>
+        <p class="muted">В лигу уходят только имя или прозвище, выбранный друг-аватар, возраст и очки. Без фамилий, фото и голоса. Таблица идёт через наш сервер в зашифрованном виде (там хранится 12 часов) и видна только тем, у кого есть код лиги.</p>
         <label class="sw" for="ljOk"><input id="ljOk" type="checkbox" ${inIt ? 'checked' : ''}>Я родитель и согласен показывать эти данные в лиге</label>
       </section>
       <section class="psec">${inIt ? `<h2>Лига ${L.code}</h2><div class="prow-btns"><button class="big" id="ljSave">Сохранить</button></div>`
@@ -12400,7 +12466,6 @@ function screenObDone({ liga = '' } = {}) {
     ${f.grands.length ? '<button class="big ghost" id="obChess">📨 Пригласить родных</button>' : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
-  $('#obGo').insertAdjacentHTML('beforebegin', shareHTML('obShare')); bindShareBox('obShare'); statPing(true);
   $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
   if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenInvite(goHome); };
 }
@@ -17806,7 +17871,7 @@ const pultFam = f => `<section class="psec pf"><h2>${esc(f.name)}${f.id === ROOT
 async function pultPoll() {
   let ch = false;
   await Promise.allSettled(Object.values(ROOT.families).filter(f => f.grands.length && (f.code || f.id === 'main' && ROOT.fam)).flatMap(f =>
-    RELAYS.map(r => fetch(`${r}govorilki-${famCodeOf(f)}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : '').then(txt => txt.split('\n').forEach(l => {
+    RELAYS.map(r => rfetch(`${r}govorilki-${famCodeOf(f)}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : '').then(txt => txt.split('\n').forEach(l => {
       try { const x = JSON.parse(l), m = x.event === 'message' && JSON.parse(x.message);
         if (m && m.k === 'here' && f.grands.some(g => g.id === m.by)) { f.seen = f.seen || {}; const at = +m.at || x.time * 1000; if (!(f.seen[m.by] >= at)) { f.seen[m.by] = at; ch = true; } } } catch (e) {}
     })))));
@@ -17873,11 +17938,10 @@ function screenPult() {
     }
   };
   pultPoll().then(ch => { if (ch && t === tok) { box.innerHTML = draw(); bind(); cloudPultFill(); appVer($('#pvVer')); } });
-  setTimeout(() => statPing(), 4000);
   appVer($('#pvVer'));
 }
 
-const APP_VER = '163';
+const APP_VER = '164';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -18074,7 +18138,7 @@ const guestGamesBtns = pg => {
 async function relayPostTo(code, msg) {
   if (DEMO) return true;
   const body = JSON.stringify({ ...msg, at: Date.now() });
-  const res = await Promise.allSettled(RELAYS.map(r => fetch(r + 'govorilki-' + code, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
+  const res = await Promise.allSettled(RELAYS.map(r => rfetch(r + 'govorilki-' + code, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
   return res.some(x => x.status === 'fulfilled');
 }
 function guestPlayed(key, stars) {
@@ -18176,7 +18240,6 @@ function screenInviteFamily(back) {
 
 
 const ADMIN_PUB =  { x: 'Er9pozD45o7szpWBRZ0S_oB2qYm1Y5IXKJuhxRPVbq0', y: 'EmhA4ssBWuyIvZtgKoamHyO7ySBGF_9ghtF5A4nsETc' };
-const ST_TOPIC = 'govorilki-st-q7m2x9';
 const stB64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 const stUnB64 = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0));
 const ST_EC = { name: 'ECDH', namedCurve: 'P-256' };
@@ -18202,47 +18265,16 @@ async function openForAdmin(m, prv) {
   const key = await S.deriveKey({ name: 'ECDH', public: eph }, prv, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
   return JSON.parse(new TextDecoder().decode(await S.decrypt({ name: 'AES-GCM', iv: stUnB64(m.iv) }, key, stUnB64(m.ct))));
 }
-function statSnap() {
-  const ok = !!ROOT.share;
-  const fams = Object.values(ROOT.families).filter(f => !f.guest && !f.via).map(f => ({ n: ok ? cleanS(f.name, 30) : '', cc: f.cc || '', gr: f.grands.length, lg: f.league ? 1 : 0,
-    kids: f.kids.filter(id => ROOT.profiles[id]).map(id => { const pr = ROOT.profiles[id], st = pr.settings, pl = pr.plays || {};
-      return { n: ok ? cleanS(st.name, 20) : '', a: st.age || 0, tr: st.track === 'l' ? 'l' : 'r', st: pr.stars || 0, sk: streakOf(pr), wl: weekLessons(pr), td: dayTotalOf(pr, dayKey()),
-        last: ((pr.recent || [])[0] || [])[2] || 0, top: Object.keys(pl).sort((a, b) => pl[b] - pl[a]).slice(0, 4) }; }) }));
-  return { v: 1, id: ROOT.sid, at: Date.now(), made: ROOT.made, ver: APP_VER, lang: LANG, ok: ok ? 1 : 0, fams };
-}
-async function statPing(force) {
-  if (!ADMIN_PUB || DEMO || GUEST || PREVIEW || EMBEDDED || !window.crypto || !crypto.subtle || !fam() || !KIDS.length) return;
-  if (!ROOT.sid) { ROOT.sid = rid(12); ROOT.made = ROOT.made || Date.now(); save(); }
-  if (!force && Date.now() - (ROOT.stAt || 0) < 3 * 3600e3) return;
-  try {
-    const body = JSON.stringify({ ...(await sealForAdmin(statSnap())), at: Date.now() });
-    const r = await Promise.allSettled(RELAYS.map(u => fetch(u + ST_TOPIC, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
-    if (r.some(x => x.status === 'fulfilled')) { ROOT.stAt = Date.now(); save(); }
-  } catch (e) {}
-}
 
-const shareHTML = id => `<div class="share-box"><label class="sw" for="${id}"><input id="${id}" type="checkbox" ${ROOT.share ? 'checked' : ''}>Показывать автору «Говорилок» имена семьи и детей</label><p class="muted">Автор приложения видит, сколько семей играет и как идут занятия: возраст детей, звёзды, игры — чтобы делать «Говорилки» лучше. Без галочки — без имён. Всё зашифровано: прочитать может только автор.</p></div>`;
-function bindShareBox(id) { const el = document.getElementById(id); if (el) el.onchange = () => { ROOT.share = el.checked; save(); statPing(true); }; }
-async function adminPoll() {
-  const seen = ROOT.adminSeen = ROOT.adminSeen || {}; let n = 0;
-  const prv = await adminPrivate(ROOT.adminKey);
-  await Promise.allSettled(RELAYS.map(r => fetch(`${r}${ST_TOPIC}/json?poll=1&since=12h`).then(x => x.ok ? x.text() : '').then(async txt => {
-    for (const l of txt.split('\n')) {
-      try { const x = JSON.parse(l); if (x.event !== 'message') continue; const m = JSON.parse(x.message); if (m.k !== 'st') continue;
-        const s = await openForAdmin(m, prv); if (!s || !s.id || !Array.isArray(s.fams)) continue;
-        if (!seen[s.id] || seen[s.id].at < s.at) { seen[s.id] = s; n++; } } catch (e) {}
-    }
-  })));
-  const ids = Object.keys(seen); if (ids.length > 600) ids.sort((a, b) => seen[a].at - seen[b].at).slice(0, ids.length - 600).forEach(k => delete seen[k]);
-  if (n) save();
-  return n;
-}
+
+
+async function adminPoll() { if (ROOT.adminSeen || 'share' in ROOT || ROOT.sid) { delete ROOT.adminSeen; delete ROOT.share; delete ROOT.sid; delete ROOT.stAt; save(); } return 0; }
 function screenAdmin() {
   if (!ROOT.adminKey) { goHome(); return; }
   const t = newScreen();
   const lastOf = s => Math.max(s.at || 0, ...s.fams.flatMap(f => f.kids.map(k => k.last || 0)));
   const draw = () => {
-    const all = Object.values(ROOT.adminSeen || {}).sort((a, b) => lastOf(b) - lastOf(a));
+    const all = [];
     const kids = all.flatMap(s => s.fams.flatMap(f => f.kids)), day = dayKey();
     const today = all.filter(s => s.fams.some(f => f.kids.some(k => k.last && dayKey(new Date(k.last)) === day))).length;
     const week = all.filter(s => s.fams.some(f => f.kids.some(k => k.wl > 0))).length;
@@ -18251,7 +18283,7 @@ function screenAdmin() {
       <small>⭐ ${k.st} · 🔥 ${k.sk} ${plural(k.sk, ['день', 'дня', 'дней'])} подряд · 📚 ${k.wl} ${plural(k.wl, ['занятие', 'занятия', 'занятий'])} за неделю${k.last ? ` · последняя игра ${pultAgo(k.last)}` : ''}</small>
       ${(k.top || []).length ? `<small>Чаще всего: ${esc(k.top.map(x => recentName(x) || x).join(', '))}</small>` : ''}</div>`;
     return `<section class="psec"><h2>👑 Все семьи</h2><p>Установок: <b>${all.length}</b> · детей: <b>${kids.length}</b> · играли сегодня: <b>${today}</b> · занимались на этой неделе: <b>${week}</b></p>
-      <p class="muted">Каждое приложение присылает сводку раз в несколько часов. Сервер хранит сводки 12 часов, а этот телефон копит их у себя — открывайте этот экран хотя бы раз в день. Имена видны только у семей, которые разрешили.</p>
+      <p class="muted">Сводки от семей выключены: они уходили без согласия родителей. Скоро здесь будет анонимная статистика — только у семей, которые разрешили.</p>
       <div class="prow-btns"><button class="big ghost" id="admRe">🔄 Обновить</button></div><p class="muted" id="admOut"></p></section>
       ${all.map(s => s.fams.map(f => `<section class="psec adm-f"><h2>${f.n ? esc(f.n) : 'Семья без имени'}</h2>
         <p class="muted">${FLAG(f.cc || 'PT')} ${L[s.lang] || esc(s.lang || '')} · с нами с ${s.made ? new Date(s.made).toLocaleDateString(LOC) : '—'} · сводка ${pultAgo(s.at)} · версия ${esc(String(s.ver || '—'))}${f.gr ? ` · родных: ${f.gr}` : ''}${f.lg ? ' · в лиге' : ''}</p>
@@ -23351,7 +23383,7 @@ const CHESSMM = (() => {
   async function post(topic, msg) {
     if (PREVIEW || DEMO) return true;
     const body = JSON.stringify({ ...msg, at: Date.now() });
-    const r = await Promise.allSettled(RELAYS.map(u => fetch(u + topic, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
+    const r = await Promise.allSettled(RELAYS.map(u => rfetch(u + topic, { method: 'POST', body }).then(x => { if (!x.ok) throw new Error(x.status); })));
     return r.some(x => x.status === 'fulfilled');
   }
   
@@ -23367,14 +23399,14 @@ const CHESSMM = (() => {
     };
     RELAYS.forEach(r => {
       if (!window.EventSource) return;
-      const es = new EventSource(`${r}${topic}/sse?since=${since}`);
+      const es = new RSource(`${r}${topic}/sse?since=${since}`);
       es.onopen = alive; es.onerror = net;
       es.onmessage = e => { alive(); try { take(r, JSON.parse(e.data)); } catch (x) {} };
       SUBS.push(es);
     });
     const poll = () => {
       if (t !== tok) return;
-      RELAYS.forEach(r => fetch(`${r}${topic}/json?poll=1&since=${since}`).then(x => x.ok ? x.text() : Promise.reject())
+      RELAYS.forEach(r => rfetch(`${r}${topic}/json?poll=1&since=${since}`).then(x => x.ok ? x.text() : Promise.reject())
         .then(txt => { alive(); txt.split('\n').forEach(l => { try { take(r, JSON.parse(l)); } catch (e) {} }); }, net));
       later(poll, every);
     };

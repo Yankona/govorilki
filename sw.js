@@ -1,7 +1,7 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
-// page kept under its own address. Icons and fonts come from the cache and refresh in the background.
-const CACHE = 'govorilki-v163';
+// page kept under its own address. Icons and fonts (our own copy in fonts/) come from the cache and refresh in the background.
+const CACHE = 'govorilki-v164';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './de/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -28,13 +28,13 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   // recordings of the tales: straight to the network (Range requests; iOS media breaks when a SW answers them)
   if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
-  // the voice's program (Piper, ONNX runtime) from the CDN: kept once, never fetched again for each phrase
-  if (/^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {
+  // the voice's program (Piper, ONNX runtime; our own copy in engine/piper/, the CDN in older pages): about 32 MB, kept
+  // once in its own cache, which a new version does not clear, and never fetched again for each phrase
+  if (url.origin === location.origin && url.pathname.includes('/engine/piper/') || /^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {
     e.respondWith(caches.open('govorilki-voice').then(async c => (await c.match(req)) || fetch(req).then(res => { if (res && res.ok) c.put(req, res.clone()); return res; })));
     return;
   }
-  const font = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
-  if (url.origin !== location.origin && !font) return;
+  if (url.origin !== location.origin) return;
   // the actors' recordings of the audio tales (some MB each, played with Range requests): straight from the network / the browser's own cache
   if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
   if (req.mode === 'navigate' || url.pathname.endsWith('/index.html')) {
