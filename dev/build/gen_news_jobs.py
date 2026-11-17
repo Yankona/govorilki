@@ -8,8 +8,8 @@
 import json, os, re, glob, gzip
 B = os.path.dirname(os.path.abspath(__file__)); S = os.path.join(B, '..', 'stories')
 TOPICS = {'space', 'animals', 'water', 'plants', 'tech', 'sport', 'places', 'old', 'art', 'music', 'ballet'}
-SECS = ['help', 'build', 'move', 'make', 'learn', 'nature', 'digital']
-TAGS = {'help', 'animals', 'nature', 'tech', 'build', 'art', 'music', 'stage', 'sport', 'science', 'computers', 'words', 'travel', 'food'}
+SECS = ['help', 'build', 'move', 'make', 'learn', 'nature', 'digital', 'own']
+TAGS = {'help', 'animals', 'nature', 'tech', 'build', 'art', 'music', 'stage', 'sport', 'science', 'computers', 'words', 'travel', 'food', 'ideas'}
 ids, warn, stress, news, jobs = set(), [], {}, [], []
 def check(x, lo, hi):
     assert re.fullmatch(r'[a-z0-9-]+', x['id']) and x['id'] not in ids, x['id']
@@ -31,7 +31,7 @@ for x in news: del x['_d']
 for p in sorted(glob.glob(os.path.join(S, 'jobs', '*.json'))):
     d = json.load(open(p, encoding='utf-8'))
     for x in d['jobs']:
-        check(x, 400, 900)
+        check(x, 400, 1000)
         assert x['sec'] in SECS and set(x['tags']) <= TAGS and x['tools'] and x['clue'], x['id']
         jobs.append({k: x[k] for k in ('id', 'e', 't', 'sec', 's', 'q', 'a', 'tools', 'clue', 'tags')})
     stress.update(d.get('stress', {}))

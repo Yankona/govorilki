@@ -23,3 +23,11 @@ Style (read `i18n/GUIDE.md` and `i18n/de/GUIDE_DE.md` quickly): for children 4�
 - News: real names of people and places in their usual spelling for each language (Artemis II, Sagrada Família, Bormio…).
 - Months in UI: lowercase in PT (outubro), capitalised in EN/DE.
 - Russian school grades/typography: use each language's quotes (EN “ ”, PT « », DE „ “).
+
+## «Своё дело» (business stories and the games «Моё маленькое дело», «Придумай своё дело»)
+- Money in the stories is in Russian roubles: convert to the reader's money with simple, realistic small numbers —
+  EN: dollars ($), PT and DE: euros (€) — and KEEP THE SUMS RIGHT (cost + what is left = price) in the story, its question
+  and its answers (e.g. «30 рублей … 50 … остаётся 20» → EN «costs $1 … I sell it for $2 … $1 is left»).
+- In the games the money word «монетка / монетки / монеток» (plural forms of the game's coin) becomes the currency word:
+  EN dollar / dollars / dollars; PT euro / euros / euros; DE Euro / Euro / Euro.
+- Keep «Своё дело» = one's own business (EN «My own business» or «Starting a business», PT «Negócio próprio», DE «Eigenes Geschäft»).
