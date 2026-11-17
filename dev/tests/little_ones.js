@@ -78,7 +78,7 @@ let bad = 0;
     await p.screenshot({ path: `${SHOTS}/little-${lang}-${DEV}-after.png` });
     if (await p.$('#ltCol')) {
       await p.click('#ltCol'); await p.waitForTimeout(700);
-      await p.click('.lt-c:nth-child(3)'); await p.click('#ltSvg path'); await p.waitForTimeout(200);
+      await p.click('.lt-c:nth-child(3)'); await p.click('#ltSvg path:last-child'); await p.waitForTimeout(200);
       ok((await run(`Object.keys(P.lilCol.f).length`)) === 1, 'colouring did not colour');
       await p.screenshot({ path: `${SHOTS}/little-${lang}-${DEV}-colour.png` });
       await home();
