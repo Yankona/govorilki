@@ -7,7 +7,7 @@ written by hand in that language, never a word-for-word translation. Shape:
 ```
 { "lang": "ru", "brand": "Говорилки",
   "ui": { "play", "play_sub", "login", "nav_more", "articles", "disclaimer", "footer", "lang_name", "toc", "faq" },
-  "pages": { "home" | "r" | "l" | "s" | "gym" | "read" | "world" | "grand" | "faq": {
+  "pages": { "home" | "r" | "l" | "s" | "gym" | "read" | "world" | "grand" | "faq" | "privacy": {
       "slug", "nav", "title" (≤ 60), "description" (140–160), "h1", "lead",
       "sections": [ { "h2", "html" } ], "faq": [ { "q", "a" } ] } } }
 ```
