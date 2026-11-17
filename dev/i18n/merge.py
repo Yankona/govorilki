@@ -1,5 +1,6 @@
 # Merges the translated batches, the fixed translations and the phonics content into tables/{en,pt}.json and langdata/{en,pt}.json
-import stories_ld, json, os, glob
+import stories_ld, json, os, glob, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'build')); import gen_comics
 H = os.path.dirname(os.path.abspath(__file__))
 tables = {'en': {}, 'pt': {}}
 done = missing = 0
@@ -27,5 +28,6 @@ for L in ('en', 'pt'):
         f = H + f'/phonics/{part}.{L}.json'
         if os.path.exists(f): data.update(json.load(open(f)))
     data['MORE_STORIES'] = stories_ld.more(L)
+    data['COMIC_EPS'] = gen_comics.load(L)   # comics: translated series only, never the Russian ones
     json.dump(data, open(H + f'/langdata/{L}.json', 'w'), ensure_ascii=False)
 print('translated', done, 'missing', missing)
