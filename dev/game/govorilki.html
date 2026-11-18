@@ -3421,6 +3421,19 @@ body.simple .home-t .stage{padding-bottom:110px}
 #dayPar .big{margin:4px 0 14px}
 @media (prefers-reduced-motion:reduce){.sd-door.open .sd-dc{animation:none}}
 /* SIMPLE-CSS-END */
+/* WISH-CSS: tomorrow's plan, the jar */
+.wi-plan{display:flex;flex-direction:column;gap:10px;background:var(--paper);border-radius:22px;padding:14px 16px;box-shadow:0 5px 0 var(--line-strong);margin-top:12px}
+.wi-plan h3{margin:0;font:900 20px var(--f-head);color:var(--ink)}.wi-plan p{margin:0;font:800 16px var(--f-body);color:var(--ink)}
+.wi-ch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.wi-ch .sd-door{box-shadow:none;background:color-mix(in srgb,var(--a) 12%,var(--paper))}
+.wi-dif{display:flex;flex-wrap:wrap;gap:8px}
+.wi-jar{display:flex;flex-direction:column;align-items:center;gap:14px}
+.wi-pot{font-size:84px;line-height:1}
+.wi-l{list-style:none;margin:0;padding:0;width:min(100%,520px);display:flex;flex-direction:column;gap:8px}
+.wi-l li{display:flex;gap:10px;align-items:center;background:var(--paper);border-radius:16px;padding:10px 14px;font:800 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
+.wi-l li.on{background:color-mix(in srgb,var(--sun) 22%,var(--paper))}.wi-l small{display:block;font:700 13px var(--f-body);color:var(--ink-soft)}
+.wi-pl{margin:4px 0 10px;padding-left:4px;list-style:none;display:flex;flex-direction:column;gap:4px;font:700 15px var(--f-body)}
+/* WISH-CSS-END */
 /* TALK-CSS: the friend in the corner and the little talk */
 .tk-fab{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:68px;height:68px;border-radius:50%;border:0;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),0 6px 18px rgba(0,0,0,.18);padding:6px;cursor:pointer}
 .tk-fab .tk-face svg{width:56px;height:56px;display:block}
@@ -9790,6 +9803,7 @@ function screenStory(k, i, o = {}) {
     P.learn = { ...(P.learn || {}), [it.id]: 1 };
     // the journal: 2 = read by the child, 1 = listened to
     EVT.log('story', it.id, mode === 'read' ? 2 : 1);
+    try { WISH.fulfil(x => x.story === it.id); } catch (e) {}
     if (mode === 'read') { try { GUIDE.readSelf(P); } catch (e) {} P.selfRead = (+P.selfRead || 0) + 1; }
     save(); if (o.done) o.done();
     const xl = T.onDone ? T.onDone(it) || '' : '';
@@ -16638,7 +16652,8 @@ const MSK = (() => {
   const S = () => (P.mskill = P.mskill && typeof P.mskill === 'object' ? P.mskill : {});
   const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : a === 5 ? 2 : a === 6 ? 3 : a === 7 ? 5 : a === 8 ? 7 : a === 9 ? 9 : 11; };
   const has = () => !!(P.mskill && P.mskill.lv);
-  const lv = () => Math.max(1, Math.min(L.length, (P.mskill && P.mskill.lv) || startLv()));
+  // «трудно»/«легко» said to the friend: one step today, within the levels (wishes)
+  const lv = () => Math.max(1, Math.min(L.length, ((P.mskill && P.mskill.lv) || startLv()) + (() => { try { return WISH.nudge(); } catch (e) { return 0; } })()));
   const rank = (l = lv()) => RANK.reduce((r, x) => l >= x[0] ? x : r, RANK[0]);
   const rankTxt = (l = lv()) => `${rank(l)[1]} ${rank(l)[2]}`;
   // the other maths games follow the level: the steps open up to it, the numbers to 100 take their level
@@ -16869,7 +16884,7 @@ const RSK = (() => {
   const has = () => !!S().lv;
   // a little one who does not read yet stays on the steps heard, not read (little-ones)
   const capL = () => { try { return LITTLE.listen() ? 3 : L.length; } catch (e) { return L.length; } };
-  const lv = () => Math.max(1, Math.min(capL(), S().lv || startLv()));
+  const lv = () => Math.max(1, Math.min(capL(), (S().lv || startLv()) + (() => { try { return WISH.nudge(); } catch (e) { return 0; } })()));
   // an older child at an early step: grown-up looks and words
   const big = () => age() >= 8;
   const early = () => big() && lv() <= 5;
@@ -26402,7 +26417,14 @@ const LETTERS = (() => {
     $('#pvLetters').onclick = () => { sfx.pop(); inbox(() => screenPult()); };
   }
   setTimeout(() => { flush().catch(() => {}); }, 8000);
-  return { screen, row, flush, inbox, pultBtn, poll };
+  // a letter written by the game for the grown-up (one tap, e.g. «Хочу в игру» from «День»): same seal, same road
+  async function send(k, t, w) {
+    const f = fam(), ages = f ? f.kids.map(id => ROOT.profiles[id] && ROOT.profiles[id].settings.age).filter(Boolean) : [];
+    const it = { k, t: String(t).slice(0, 3000), w, c: '', ages, cc: f && f.cc || '', lang: LANG, ver: APP_VER, at: Date.now() };
+    out().push(it); sent().unshift({ k, t: it.t, at: it.at, ok: 0 }); ROOT.lettersSent = sent().slice(0, 30); save();
+    await flush(); return !out().some(x => x.at === it.at);
+  }
+  return { screen, row, flush, inbox, pultBtn, poll, send };
 })();
 /* LETTERS-END */
 /* POLISH-BEGIN */
@@ -27369,7 +27391,7 @@ const SIMPLE = (() => {
   // the stories of cities and countries belong to «Путешествия»
   const gamesOf = (a, V) => [...a.ids, ...(a.id === 'world' ? GAMES.filter(g => g.id.startsWith('learn-') && !claimed.has(g.id)).map(g => g.id) : [])].filter(id => V.has(id));
   const area = id => AREAS.find(a => a.id === id);
-  const likes = () => [...new Set((P.settings.likes || []).map(l => LIKE_AREA[l]).filter(Boolean))];
+  const likes = () => [...new Set([...(P.settings.likes || []).map(l => LIKE_AREA[l]), ...(() => { try { return WISH.moreAreas(); } catch (e) { return []; } })()].filter(Boolean))];
   const listens = () => { try { return LITTLE.listen(); } catch (e) { return false; } };
   function pool() { const V = vis(), c = cfg(), age = P.settings.age || 6, ls = listens(); return AREAS.filter(a => age >= (a.age || 0) && !c.off.includes(a.id) && !(ls && a.id === 'comics') && gamesOf(a, V).length); }
   function rng(seed) { let h = 2166136261; for (const ch of String(seed)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); h = h >>> 0 || 1; return () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return (h % 1e6) / 1e6; }; }
@@ -27398,11 +27420,12 @@ const SIMPLE = (() => {
   // today's doors stay the same all day, whatever changes; a grown-up can add one
   function today() {
     const k = dayKey(), t = P.doorsToday;
-    if (!t || t.d !== k) { const ids = plan(dayNo() + 15)[dayNo()] || []; P.doorsToday = { d: k, ids, extra: [] }; save(); }
+    if (!t || t.d !== k) { let ids = plan(dayNo() + 15)[dayNo()] || []; try { ids = WISH.applyDoors(ids, t && t.ids); } catch (e) {} P.doorsToday = { d: k, ids, extra: [] }; save(); }
     const V = vis();
     return [...new Set([...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
   }
   function whenOpens(id) {
+    try { if (WISH.promised(id)) return 'завтра'; } catch (e) {}
     const n = dayNo(), p = plan(n + 15);
     for (let d = n + 1; d <= n + 15; d++) if ((p[d] || []).includes(id)) {
       const k = d - n; if (k === 1) return 'завтра'; if (k === 2) return 'послезавтра';
@@ -27440,13 +27463,14 @@ const SIMPLE = (() => {
     if (first) P.doorSeen[a.id] = (P.doorSeen[a.id] || 0) + 1;
     save();
     const gs = roomGames(a);
+    let wd = null; try { wd = WISH.fulfil(x => x.area === a.id && !x.story); } catch (e) {}
     newScreen();
     shell(`${a.e} ${a.n}`, `<div class="sd-room">
       ${first ? `<p class="sd-stamp"><span class="emo">${a.e}</span>Новая печать в паспорт!</p>` : ''}
       <div class="tiles">${gs.map((g, i) => `<button class="tile ${i ? '' : 'sd-feat'}" data-id="${g.id}" style="--bg:${g.bg}">${i ? '' : '<i class="tile-new">Игра дня</i>'}<span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b><small>${esc(typeof g.sub === 'function' ? g.sub() : g.sub)}</small></button>`).join('')}</div></div>`, { back: goHome });
     $$('.sd-room .tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
     try { TALK.fab(); } catch (e) {}
-    say(`${a.n}! Игра дня: ${nm(gs[0].name)}.`);
+    say(wd ? `Ты хотел${G('а', '')}: «${wd.t}». Вот! ${a.n}! Игра дня: ${nm(gs[0].name)}.` : `${a.n}! Игра дня: ${nm(gs[0].name)}.`);
   }
 
   // the favourite game: the one a grown-up chose, or the one played most
@@ -27560,8 +27584,10 @@ const SIMPLE = (() => {
       t.onclick = () => { sfx.pop(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     }
     try { LITTLE.home(box); } catch (e) {}
+    try { WISH.home(box); } catch (e) {}
     if (mine && !mine.querySelector('#passBtn')) {
-      mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Паспорт</button>`);
+      mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Паспорт</button><button class="chip" id="jarBtn"><span class="emo">🫙</span>Желания</button>`);
+      mine.querySelector('#jarBtn').onclick = () => { sfx.pop(); homeLeave(); WISH.screenJar(); };
       mine.querySelector('#passBtn').onclick = () => { sfx.pop(); homeLeave(); screenPassport(); };
     }
   }
@@ -27586,7 +27612,8 @@ const SIMPLE = (() => {
       <select id="sdAdd" class="sd-sel"><option value="">— выбрать —</option>${AREAS.filter(a => gamesOf(a, V).length && !today().some(t => t.id === a.id)).map(a => `<option value="${a.id}">${a.e} ${esc(a.n)}</option>`).join('')}</select>
       <h3 class="fam-s">Любимая игра</h3>
       <div class="sd-seg" id="sdFavM">${[10, 20, 30, 0].map(n => `<button class="chip ${c.fav === n ? 'sel' : ''}" data-m="${n}">${n ? n + ' мин' : 'без лимита'}</button>`).join('')}</div>
-      <select id="sdFavG" class="sd-sel"><option value="">сама: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>`;
+      <select id="sdFavG" class="sd-sel"><option value="">сама: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>
+      <div id="wiPar">${(() => { try { return WISH.parentHTML(); } catch (e) { return ''; } })()}</div>`;
     sec.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Истории: читать самому / слушать</h3>
       <div class="sd-seg" id="sdSR">${[['', 'по уровню чтения'], ['read', '📖 читать самому'], ['listen', '🔊 слушать']].map(([v, n]) => `<button class="chip ${(P.settings.stRead || '') === v ? 'sel' : ''}" data-sr="${v}">${n}</button>`).join('')}</div>
       <p class="sd-note">Читать самому: истории, новости и путешествия без голоса, потом 1–2 вопроса; «Послушать» — после ответа. Сейчас: <b>${selfReader() ? 'читает сам' : 'слушает'}</b>.</p>
@@ -27605,6 +27632,7 @@ const SIMPLE = (() => {
     sec.querySelector('#sdAdd').onchange = e => { const id = e.target.value; if (!id) return; today(); P.doorsToday.extra = [...(P.doorsToday.extra || []), id]; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdFavM').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; setCfg('fav', +b.dataset.m); sfx.tick(); redo(); };
     sec.querySelector('#sdFavG').onchange = e => { setCfg('favGame', e.target.value); sfx.tick(); };
+    try { WISH.parentBind(sec, redo); } catch (e) {}
     sec.querySelector('#sdSR').onclick = e => { const b = e.target.closest('[data-sr]'); if (!b) return; P.settings.stRead = b.dataset.sr; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
@@ -27662,6 +27690,8 @@ const TALK = (() => {
   function answer(text) {
     const t = norm(text);
     if (!t) return { say: 'Я не расслышал. Нажми на меня и скажи ещё раз!' };
+    // a wish first: «хочу про акул», «больше шахмат», «скучно», «трудно» (wishes)
+    try { const w = WISH.handle(text); if (w) return w; } catch (e) {}
     const simple = SIMPLE.on(), done = SIMPLE.pathDone(), td = SIMPLE.today();
     // a name the children use first; then the plain wishes (stars, today, help, story); then a game by its name
     const x = syn(t) || (Object.values(W).some(re => re.test(t)) ? null : target(t));
@@ -27708,6 +27738,7 @@ const TALK = (() => {
       return { say: `Тропа пройдена! Двери открыты: ${doors}.` };
     }
     if (W.help.test(t)) return { say: 'Скажи, например: что сегодня? Сколько у меня звёзд? Открой раскраски. Хочу комикс.' };
+    try { const u = WISH.unknown(text); if (u) return u; } catch (e) {}
     return { say: 'Я пока не понял. Скажи: что сегодня? Или: открой раскраски.' };
   }
   // the little talk: the friend, its answer, what was heard; the microphone or a text field
@@ -27756,9 +27787,224 @@ const TALK = (() => {
     sc.append(b);
     b.onclick = () => { sfx.pop(); hopEl(b); open(); };
   }
-  return { answer, open, fab, target, norm };
+  return { answer, open, fab, target, norm, syn };
 })();
 /* TALK-END */
+/* WISH-BEGIN */
+/* ---------- the child's wishes (the owner: «чтобы ребёнок мог сам что-то запрашивать, предлагать для развития игры, и
+   чтобы аватар это учитывал и использовал дальше»). All on this phone, no cloud AI:
+   - the friend listens to free wishes — «хочу про акул», «давай больше шахмат», «скучно», «слишком трудно» — and
+     matches them here against the game's own content (story titles, door areas, games) in four languages;
+   - it opens what is open today, or promises it: the wished door comes tomorrow (never two days running, the grown-ups'
+     «обязательно» untouched), «больше» makes a door come more often for a week, «трудно»/«легко» moves tomorrow's
+     reading and maths one step within the child's levels;
+   - after the chest the friend asks about tomorrow: a door from three pictures, and were today's tasks easy or hard;
+   - wishes live in «Желания» (a jar: ✨ came true, ⏳ waiting); the friend says «ты хотел…» when one comes true;
+   - a wish the game cannot meet goes to «Хочу в игру» for the grown-ups (names taken out); they may send the list to
+     the author with one tap through «Написать автору» — nothing leaves the phone by itself. ---------- */
+const WISH = (() => {
+  const norm = s => TALK.norm(s);
+  // wish words, after norm(): ru / en / pt / de
+  const W = {
+    more: /больше|еще|чаще|more|again|mais|outra vez|mehr|nochmal/,
+    bored: /скучн|надоел|bored|boring|aborrec|chato|seca|langweil/,
+    hard: /трудн|сложн|тяжел|hard|difficult|dificil|complicad|schwer|schwierig/,
+    easy: /легк|просто|скучно легко|easy|too simple|facil|leicht|einfach/,
+    want: /хочу|хочется|давай|можно|про |about|want|wish|lets|let s|quero|vamos|sobre|posso|will|mochte|uber|lass uns/
+  };
+  // topics children ask for → a door (only words our content really covers)
+  const TOPIC = [
+    [/акул|рыб|кит|дельфин|осьмин|океан|море|shark|fish|whale|dolphin|octopus|ocean|sea|tubar|peixe|baleia|golfinh|polvo|oceano|mar|hai|fisch|wal|delfin|krake|meer/, 'nature'],
+    [/динозавр|dino/, 'nature'], [/зверь|звери|животн|animal|bicho|tier/, 'nature'],
+    [/планет|звезд|ракет|космонавт|луна|planet|rocket|astronaut|moon|foguet|lua|rakete|mond/, 'space'],
+    [/робот|машин|изобрет|robot|machine|invent|maquina|invencao|maschine|erfind/, 'lab'],
+    [/врач|пожарн|полиц|пилот|повар|doctor|firefight|police|pilot|cook|medico|bombeir|policia|piloto|cozinh|arzt|feuerwehr|polizei|koch/, 'jobs'],
+    [/принцесс|фея|сказк|princess|fairy|tale|princesa|fada|conto|prinzessin|fee|marchen/, 'books'],
+    [/город|стран|поезд|самолет|city|country|train|plane|cidade|pais|comboio|aviao|stadt|land|zug|flugzeug/, 'world']
+  ];
+  const list = () => (P.wishes = P.wishes || []);
+  // what goes into the jar: real wishes (how the day felt — «скучно», «трудно» — only steers tomorrow)
+  const JAR = ['story', 'topic', 'more', 'plan', 'idea'];
+  const out = () => (P.wishOut = P.wishOut || []);
+  const tomorrowKey = () => { const d = new Date(); d.setDate(d.getDate() + 1); return dayKey(d); };
+  // a wish kept: what was said (short), when, what it points to, and when it came true
+  function keep(text, kind, x = {}) {
+    const w = { t: String(text).trim().slice(0, 60), d: dayKey(), kind, ...x, done: '' };
+    list().unshift(w); P.wishes = list().slice(0, 30); save();
+    try { EVT.log('wish', kind + (x.area ? ':' + x.area : '')); } catch (e) {}
+    return w;
+  }
+  // a wish comes true: the friend remembers it
+  function fulfil(pred) {
+    const ws = list().filter(x => !x.done && JAR.includes(x.kind) && pred(x)); if (!ws.length) return null;
+    ws.forEach(w => { w.done = dayKey(); try { EVT.log('wish-done', w.kind + (w.area ? ':' + w.area : '')); } catch (e) {} });
+    save(); return ws[ws.length - 1];
+  }
+  const area = id => SIMPLE.AREAS.find(a => a.id === id);
+  const inToday = id => SIMPLE.today().some(a => a.id === id);
+  // the door wished for comes tomorrow (not if it is today's: no door two days running)
+  function promise(id) { P.wantDoor = { area: id, d: dayKey() }; save(); }
+  const promised = id => !!(P.wantDoor && P.wantDoor.area === id && P.wantDoor.d === dayKey());
+  // called by SIMPLE.today() on a new day: the promised door takes the place of one of the same group
+  function applyDoors(ids, yesterday) {
+    const w = P.wantDoor; if (!w || w.d >= dayKey()) return ids;
+    delete P.wantDoor;
+    const a = area(w.area), pool = SIMPLE.pool();
+    if (!a || !pool.some(x => x.id === a.id) || ids.includes(a.id) || (yesterday || []).includes(a.id)) return ids;
+    const out2 = [...ids], j = out2.findIndex(id => (area(id) || {}).g === a.g);
+    // the little ones keep their creative door
+    if (j < 0 && out2.length) { const lil = (() => { try { return LITTLE.on(); } catch (e) { return false; } })(); const k = lil ? out2.findIndex(id => (area(id) || {}).g !== 'c') : out2.length - 1; out2[k < 0 ? out2.length - 1 : k] = a.id; }
+    else if (j >= 0) out2[j] = a.id; else out2.push(a.id);
+    return out2;
+  }
+  // «больше …»: that door comes more often for a week
+  const moreAreas = () => (P.wishMore || []).filter(x => Date.now() - x.t < 7 * 864e5).map(x => x.area);
+  function more(id) { P.wishMore = [{ area: id, t: Date.now() }, ...(P.wishMore || []).filter(x => x.area !== id)].slice(0, 4); save(); }
+  // tomorrow's reading and maths: one step easier or harder, within the child's levels
+  function nudge() { const n = P.nudge; return n && n.d === dayKey() ? n.v : 0; }
+  function setNudge(v) { P.nudge = { d: tomorrowKey(), v }; save(); }
+  // the stories whose title the wish names (any language: titles are translated with the game)
+  function story(t) {
+    const STOP = new Set([...RU('хочу давай историю истории больше').split(' '), 'want', 'quero', 'mochte', 'about', 'sobre', 'uber', 'story', 'historia', 'geschichte', 'more', 'mais', 'mehr']);
+    const ws = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w)).map(w => w.slice(0, Math.max(4, Math.min(6, w.length - 1))));
+    if (!ws.length) return null;
+    let best = null, sc = 0;
+    Object.keys(LEARN).forEach(k => (LEARN[k].items || []).forEach((it, i) => {
+      const tw = norm(it.t).split(' ').filter(w => w.length >= 4);
+      const s = tw.filter(w => ws.some(u => w.startsWith(u) || u.startsWith(w.slice(0, 4)))).length;
+      if (s > sc) { sc = s; best = { k, i, it }; }
+    }));
+    return best;
+  }
+  const areaOfGame = id => { const V = SIMPLE.vis(); return SIMPLE.AREAS.find(a => SIMPLE.gamesOf(a, V).includes(id)) || null; };
+  // an area wished for: open now, after the path, or tomorrow
+  function forArea(a, text, kind, extra = '') {
+    const td = inToday(a.id);
+    keep(text, kind, { area: a.id });
+    if (kind === 'more') more(a.id);
+    if (td && SIMPLE.doorOpen(a)) { fulfil(x => x.area === a.id); return { say: `${extra}Дверь «${a.n}» открыта — заходи!`, go: () => { homeLeave(); SIMPLE.room(a); } }; }
+    if (td) return { say: `${extra}Дверь «${a.n}» сегодня есть! Она откроется после тропы.` };
+    promise(a.id);
+    return { say: `${extra}Я запомнил! Завтра будет дверь «${a.n}».` };
+  }
+  // the friend's answer to a wish, or null when it is not a wish
+  function handle(text) {
+    const t = norm(text); if (!t) return null;
+    let x = null; try { x = TALK.syn(t); } catch (e) {}
+    const ar = x && x.startsWith('a:') ? area(x.slice(2)) : x && x.startsWith('g:') ? areaOfGame(x.slice(2)) : null;
+    if (W.hard.test(t) && !W.easy.test(t.replace(W.hard, ''))) { keep(text, 'hard'); setNudge(-1); return { say: 'Понял! Завтра задания будут чуть полегче. А сегодня можно нажать «Полегче».' }; }
+    if (W.easy.test(t) && !/скучн|bored|aborrec|langweil/.test(t)) { keep(text, 'easy'); setNudge(1); return { say: 'Ого! Завтра задания будут чуть потруднее. Ты растёшь!' }; }
+    if (W.bored.test(t)) {
+      keep(text, 'bored');
+      const ds = SIMPLE.today(), fresh = ds.find(a => SIMPLE.doorOpen(a) && !SIMPLE.stamped(a.id)) || ds.find(a => SIMPLE.doorOpen(a));
+      if (fresh) return { say: `Давай что-нибудь новое! Дверь «${fresh.n}».`, go: () => { homeLeave(); SIMPLE.room(fresh); } };
+      return { say: `Сначала тропа — а потом откроются двери: ${ds.map(a => a.n).join(', ')}. Это будет интересно!` };
+    }
+    if (ar && W.more.test(t)) return forArea(ar, text, 'more', 'Будет чаще! ');
+    // a story named in the wish: «хочу про акул»
+    if (!x) {
+      const st = story(t), sa = st ? areaOfGame('learn-' + st.k) : null;
+      if (st && sa) {
+        keep(text, 'story', { area: sa.id, story: st.it.id });
+        if (inToday(sa.id) && SIMPLE.doorOpen(sa)) { fulfil(w => w.story === st.it.id); return { say: `Вот история: ${st.it.t}!`, go: () => { homeLeave(); screenStory(st.k, st.i, { back: goHome }); } }; }
+        if (inToday(sa.id)) return { say: `Есть история «${st.it.t}»! Она за дверью «${sa.n}», после тропы.` };
+        promise(sa.id); return { say: `Есть история «${st.it.t}»! Завтра будет дверь «${sa.n}».` };
+      }
+      if (!x) for (const [re, id] of TOPIC) if (re.test(t)) { const a = area(id); if (a && SIMPLE.pool().some(p => p.id === id)) return forArea(a, text, 'topic'); }
+    }
+    return null;
+  }
+  // nothing in the game for it: the grown-ups' list «Хочу в игру», names taken out
+  function clean(text) {
+    let s = String(text).replace(/\S+@\S+|https?:\S+|\d+/g, '').trim();
+    const names = []; try { (fam() || { kids: [] }).kids.forEach(id => names.push(ROOT.profiles[id].settings.name)); ((fam() || {}).grands || []).forEach(g => names.push(g.name)); } catch (e) {}
+    names.filter(Boolean).forEach(n => { s = s.replace(new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '…'); });
+    return s.replace(/\s+/g, ' ').slice(0, 80);
+  }
+  function unknown(text) {
+    const t = norm(text);
+    if (!W.want.test(t) || t.split(' ').length < 2) return null;
+    const s = clean(text); keep(s, 'idea');
+    if (!out().some(x => x.t === s)) { out().unshift({ t: s, d: dayKey(), a: P.settings.age || 0 }); P.wishOut = out().slice(0, 40); save(); }
+    return { say: 'Такого у нас пока нет. Я запомнил и попрошу автора придумать!' };
+  }
+
+  // after the chest: «Что хочешь завтра?» from three pictures, then «задания были…?»
+  function choices() {
+    const ds = SIMPLE.today().map(a => a.id), pool = SIMPLE.pool().filter(a => !ds.includes(a.id)), lk = SIMPLE.likes();
+    const r = (() => { let h = dayNo(); return () => (h = (h * 9301 + 49297) % 233280) / 233280; })();
+    const sorted = pool.map(a => [a, (lk.includes(a.id) ? 2 : 0) + r()]).sort((p, q) => q[1] - p[1]).map(x => x[0]);
+    const pick = []; for (const a of sorted) { if (pick.length >= 3) break; if (!pick.some(p => p.g === a.g) || sorted.length < 4) pick.push(a); }
+    for (const a of sorted) { if (pick.length >= 3) break; if (!pick.includes(a)) pick.push(a); }
+    return pick;
+  }
+  function home(box) {
+    if (P.chest !== dayKey()) return;
+    const k = dayKey(), pl = P.planDay && P.planDay.d === k ? P.planDay : null, sd = box.querySelector('#sdBox'); if (!sd) return;
+    const card = document.createElement('section'); card.className = 'wi-plan'; card.id = 'wiPlan';
+    const draw = () => {
+      const p = P.planDay && P.planDay.d === k ? P.planDay : null;
+      if (p && p.area && p.diff !== undefined) {
+        const a = area(p.area);
+        card.innerHTML = `<h3>🌙 Завтра</h3><p>${a ? `${a.e} ${esc(a.n)}` : ''} · ${['полегче', 'как сегодня', 'потруднее'][p.diff + 1]} ✓</p>`;
+        return;
+      }
+      if (!p || !p.area) {
+        card.innerHTML = `<h3>🌙 Что хочешь завтра?</h3><div class="wi-ch">${choices().map(a => `<button class="sd-door open" data-wa="${a.id}" style="--a:${a.a}"><span class="sd-dc">${pic(a.e)}</span><b>${esc(a.n)}</b></button>`).join('')}</div>`;
+        card.querySelectorAll('[data-wa]').forEach(b => b.onclick = () => {
+          sfx.pop(); const a = area(b.dataset.wa);
+          P.planDay = { d: k, area: a.id }; promise(a.id); more(a.id); keep(a.n, 'plan', { area: a.id }); draw();
+          say(`Завтра — ${a.n}! А задания сегодня были лёгкие, нормальные или трудные?`);
+        });
+        return;
+      }
+      card.innerHTML = `<h3>Задания сегодня были…</h3><div class="wi-dif">${[['😌', 'лёгкие', 1], ['🙂', 'нормальные', 0], ['😮‍💨', 'трудные', -1]].map(([e, n, v]) => `<button class="chip" data-wd="${v}"><span class="emo">${e}</span>${n}</button>`).join('')}</div>`;
+      card.querySelectorAll('[data-wd]').forEach(b => b.onclick = () => {
+        sfx.pop(); const v = +b.dataset.wd; P.planDay.diff = v; if (v) setNudge(v); else save(); draw();
+        say(v > 0 ? 'Завтра будет чуть потруднее!' : v < 0 ? 'Завтра будет чуть полегче!' : 'Отлично! Завтра так же.');
+      });
+    };
+    draw(); sd.after(card);
+    if (!pl) later(() => { if (card.isConnected) say('Ты молодец! Что хочешь завтра?'); }, 1500);
+  }
+  // «Желания»: the jar
+  function screenJar() {
+    newScreen();
+    const ws = list().filter(w => JAR.includes(w.kind));
+    shell('Мои желания', `<div class="wi-jar"><div class="wi-pot" aria-hidden="true">🫙</div>
+      ${ws.length ? `<ul class="wi-l">${ws.map(w => `<li class="${w.done ? 'on' : ''}"><span class="emo">${w.done ? '✨' : '⏳'}</span><span>${esc(w.t)}${w.area && area(w.area) ? ` <small>${area(w.area).e} ${esc(area(w.area).n)}</small>` : ''}</span></li>`).join('')}</ul>` : '<p class="lead">Пока пусто. Скажи другу, чего тебе хочется!</p>'}
+      <button class="big" id="wiTalk">💬 Сказать желание</button></div>`);
+    $('#wiTalk').onclick = () => { sfx.pop(); TALK.open(); };
+    say(ws.some(w => w.done) ? 'Смотри, сколько желаний сбылось!' : 'Здесь живут твои желания.');
+  }
+  // the grown-ups: the child's wishes and «Хочу в игру», with «Отправить автору» (one tap) and «Очистить»
+  function parentHTML() {
+    const ws = list(), o = out();
+    return `<h3 class="fam-s">Желания ${esc(P.settings.name || '')}</h3>
+      ${ws.length ? `<ul class="wi-pl">${ws.slice(0, 12).map(w => `<li>${w.done ? '✨' : '⏳'} ${esc(w.t)}</li>`).join('')}</ul>` : '<p class="sd-note">Пока нет. Ребёнок говорит желания другу в уголке.</p>'}
+      <h3 class="fam-s">Хочу в игру</h3>
+      <p class="sd-note">Чего ребёнок просил, а в игре пока нет. Имена убраны. Сами по себе никуда не уходят.</p>
+      ${o.length ? `<ul class="wi-pl" id="wiOut">${o.map(x => `<li>💡 ${esc(x.t)}</li>`).join('')}</ul>
+        <div class="sd-seg"><button class="chip" id="wiSend">📨 Отправить автору</button><button class="chip" id="wiClr">🗑 Очистить</button></div><p class="sd-note" id="wiMsg"></p>` : '<p class="sd-note">Пока пусто.</p>'}
+      ${ws.length ? '<button class="chip" id="wiClrAll">🗑 Забыть все желания</button>' : ''}`;
+  }
+  function parentBind(sec, redo) {
+    const s = sec.querySelector('#wiSend');
+    if (s) s.onclick = async () => {
+      sfx.pop(); s.disabled = true;
+      const txt = 'Хочу в игру (от детей):\n' + out().map(x => `• ${x.t}${x.a ? ` (${x.a})` : ''}`).join('\n');
+      let ok = false; try { ok = await LETTERS.send('game', txt, 'kid'); } catch (e) {}
+      try { EVT.log('wish-sent', String(out().length)); } catch (e) {}
+      P.wishOut = []; save();
+      const m = sec.querySelector('#wiMsg'); if (m) m.textContent = ok ? 'Спасибо! Список у автора.' : 'Спасибо! Список уйдёт автору, как только появится связь.';
+      later(redo, 1500);
+    };
+    const c = sec.querySelector('#wiClr'); if (c) c.onclick = () => { sfx.pop(); P.wishOut = []; save(); redo(); };
+    const a = sec.querySelector('#wiClrAll'); if (a) a.onclick = () => { sfx.pop(); P.wishes = []; P.wishOut = []; delete P.wishMore; delete P.wantDoor; delete P.nudge; save(); redo(); };
+  }
+  return { handle, unknown, fulfil, applyDoors, promised, moreAreas, nudge, home, screenJar, parentHTML, parentBind, list, out, clean, story, W };
+})();
+/* WISH-END */
 /* LITTLE-BEGIN */
 /* ---------- the little ones (4–6) who do not read yet (a family: «она не читает, все задания скипает, плакала, что не
    было рисовалок»):
@@ -28470,6 +28716,7 @@ function dataSecHTML() {
     <p class="muted">Синхронизация семьи: ${cf.length ? 'включена, прогресс детей хранится на нашем сервере (Cloudflare)' : 'выключена'}. ${ROOT.srOff ? 'Распознавание речи Google выключено.' : 'Распознавание речи включено: голос ребёнка обрабатывает Google.'}</p>
     <div class="prow-btns"><button class="big ghost" id="dataGet">⬇️ Скачать данные семьи</button><button class="big ghost danger" id="dataDel">Удалить всё</button></div>
     <p class="muted" id="dataOut"></p>
+    <p class="muted">Желания детей и список «Хочу в игру» хранятся только на этом телефоне: посмотреть и очистить — «🗺️ День и все игры».</p>
     <p class="muted">${privLink('Конфиденциальность: что хранится, где и сколько')}</p></section>`.replace(/<div class="prow-btns"><button class="big ghost" id="dataGet"/, m => CAM_NOTE + m);
 }
 const CAM_NOTE = '<p class="muted">Камера-зеркало в упражнениях для язычка показывает ребёнку его лицо только на экране: изображение не записывается, не сохраняется и никуда не отправляется. Камера выключается, когда ребёнок уходит из упражнения или закрывает приложение. Включается само — переключатель «Зеркало включается само» в «День и все игры».</p>';
