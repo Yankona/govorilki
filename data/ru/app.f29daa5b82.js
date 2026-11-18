@@ -15002,7 +15002,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '172';
+const APP_VER = '173';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -20985,6 +20985,7 @@ const SETUI = (() => {
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     let daySec = null; try { daySec = SIMPLE.parentSec(); root.append(daySec); } catch (e) {}
     let foSec = null; try { foSec = FOCUS.parentSec(); root.append(foSec); } catch (e) {}
+    let otSec = null; try { if (OWNT.ok()) { otSec = OWNT.parentSec(); root.append(otSec); } } catch (e) {}
     const PAGES = [
       ['focus', '🎯', 'Что важно', 'логопедия, чтение, математика — от вашего выбора', [foSec]],
       ['day', '🗺️', 'День и все игры', 'обязательные занятия, двери дня, любимая игра', [daySec]],
@@ -20992,6 +20993,7 @@ const SETUI = (() => {
       ['fam', '👪', 'Семья', '', [S.fam]],
       ['friends', '🤝', 'Друзья', '', [S.friends]],
       ['kid', '🧒', name, 'имя, языки, интересы, чтение', [S.kid, S.book]],
+      ['own', '🎧', 'Свои сказки', 'аудио только на этом телефоне', [otSec]],
       ['voice', '🔊', 'Голос и звук', '', [voice, S.el]],
       ['lang', '🌐', 'Язык игры', ln || '', [S.lang]],
       ['trip', '✈️', 'Поездка', '', [S.trip]],
@@ -21360,7 +21362,7 @@ const GUIDE = (() => {
       m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0, cs0: s0.cs || 0, ai0: s0.ai || 0,
       mS: last ? 0 : gs.m && now.m ? daysSince(gs.m[1]) : 0, rS: last ? 0 : gs.rl && now.rl ? daysSince(gs.rl[1]) : 0,
       ru: now.ru || 0, ru0: s0.ru || 0, ...(() => { try { if (!now.ru) return {}; const m = RUME.mon(pr); return { mn: m.n || 0, mc: m.cr || 0, mw: m.wr || 0, ml0: m.l0 || 0, mk: RUME.weakK(pr) }; } catch (e) { return {}; } })(),
-      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, ...(() => { try { const b = MYBOOK.bk(pr); return { bt: cleanS(b.title, 60), bp: MYBOOK.weekPages(pr, g.w), bs: last ? 0 : MYBOOK.streakOf(pr), bl: b.like != null ? +b.like + 1 : 0 }; } catch (e) { return {}; } })(), sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
+      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, ...(() => { try { const b = MYBOOK.bk(pr); return { bt: cleanS(b.title, 60), bp: MYBOOK.weekPages(pr, g.w), bs: last ? 0 : MYBOOK.streakOf(pr), bl: b.like != null ? +b.like + 1 : 0 }; } catch (e) { return {}; } })(), ...(() => { try { const m = OWNT.weekMin(pr, g.w); return m ? { tm: m } : {}; } catch (e) { return {}; } })(), sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
   }
   
   function digest(pr) {
@@ -21382,7 +21384,7 @@ const GUIDE = (() => {
       m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), wpm: n('wpm', 999), rl: n('rl', 9), cs: n('cs', 99), ai: n('ai', 99),
       m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), cs0: n('cs0', 99), ai0: n('ai0', 99),
       ru: n('ru', 3333), ru0: n('ru0', 3333), mn: n('mn', 99), mc: n('mc', 99), mw: n('mw', 999), ml0: n('ml0', 3333), mk: n('mk', 5),
-      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), bt: cleanS(x.bt, 60), bp: n('bp', 9999), bs: n('bs', 999), bl: n('bl', 3), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
+      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), bt: cleanS(x.bt, 60), bp: n('bp', 9999), bs: n('bs', 999), bl: n('bl', 3), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99), tm: n('tm', 9999) };
     if (!deep && x.last) o.last = clean(x.last, true);
     if (!deep) { try { const fo = FOCUS.clean(x.fo); if (fo) o.fo = fo; } catch (e) {} }
     return o;
@@ -21443,6 +21445,7 @@ const GUIDE = (() => {
     return L.slice(0, 2);
   }
   
+  const talesLine = d => d && d.tm ? `🎧 Свои сказки: ${d.tm} мин за неделю` : '';
   const bookLine = d => d && (d.bt || d.bp) ? `📚 Книга${d.bt ? `: «${d.bt}»` : ''}${d.bl ? ' ' + ['😐', '🙂', '😍'][d.bl - 1] : ''}, прочитано ${d.bp || 0} ${plural(d.bp || 0, ['страница', 'страницы', 'страниц'])} за неделю${d.bs ? `, ${d.bs} ${plural(d.bs, ['день', 'дня', 'дней'])} подряд` : ''}` : '';
   const actLine = d => `🎯 ${d.d} ${plural(d.d, ['день', 'дня', 'дней'])} из 7${d.min ? ` · ⏱️ ${d.min} мин` : ''}${d.st ? ` · ⭐ ${d.st}` : ''}`;
   
@@ -21458,7 +21461,7 @@ const GUIDE = (() => {
   const fmtW = w => { const a = new Date(w), b = new Date(w); b.setDate(b.getDate() + 6); return `${a.getDate()}.${String(a.getMonth() + 1).padStart(2, '0')}–${b.getDate()}.${String(b.getMonth() + 1).padStart(2, '0')}`; };
   function reportText(d, name) {
     const R = weekOfD(d), x = R.d, w = wins(x), h = hard(x);
-    return [`📊 ${name}: ${R.t} (${fmtW(x.w)})`, actLine(x), ...(bookLine(x) ? [bookLine(x)] : []), ...(w.length ? ['✅ Получается:', ...w.map(s => '• ' + s)] : []), ...(h.length ? ['🌱 Пока трудно:', ...h.map(s => '• ' + s)] : []),
+    return [`📊 ${name}: ${R.t} (${fmtW(x.w)})`, actLine(x), ...(bookLine(x) ? [bookLine(x)] : []), ...(talesLine(x) ? [talesLine(x)] : []), ...(w.length ? ['✅ Получается:', ...w.map(s => '• ' + s)] : []), ...(h.length ? ['🌱 Пока трудно:', ...h.map(s => '• ' + s)] : []),
       ...rows(x).map(r => `${r.a.e} ${r.a.n} ${arrow(r)}${r.l ? ' — ' + r.l : ''}`), ...(RUREP.month(d) ? ['🪆 ' + RUREP.month(d)] : []), '— Говорилки'].join('\n');
   }
   
@@ -21466,7 +21469,7 @@ const GUIDE = (() => {
     const w = wins(d), h = hard(d), t = tip(d, kid.id), R = weekOfD(d), rr = rows(R.d), empty = !d.n && !d.d && !d.min && !d.kp;
     return `<div class="gd-card" data-gk="${esc(kid.id)}">
       <div class="gd-h"><span class="chip-face">${kid.face}</span><b>${esc(kid.n)}</b><small>${d.a} ${plural(d.a, ['год', 'года', 'лет'])}</small></div>
-      ${bookLine(d) ? `<p class="gd-act gd-book">${esc(bookLine(d))}</p>` : ''}
+      ${bookLine(d) ? `<p class="gd-act gd-book">${esc(bookLine(d))}</p>` : ''}${talesLine(d) ? `<p class="gd-act gd-tales">${esc(talesLine(d))}</p>` : ''}
       ${empty ? `<p class="gd-act">🌱 На этой неделе ещё не было занятий. Как только ${esc(kid.n)} поиграет, здесь появятся успехи.</p>` : `<p class="gd-act">${esc(actLine(d))}</p>`}
       ${w.length ? `<div class="gd-ok"><h3 class="gd-s">✅ Получается</h3>${w.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : empty ? '' : '<div class="gd-ok"><h3 class="gd-s">✅ Получается</h3><p>Занятия идут, новых уровней на этой неделе пока нет — это нормально.</p></div>'}
       ${h.length ? `<div class="gd-hard"><h3 class="gd-s">🌱 Пока трудно</h3>${h.map(x => `<p>${esc(x)}</p>`).join('')}</div>` : ''}
@@ -21555,6 +21558,7 @@ const HOMEUX = (() => {
       if (hero && plan) hero.after(plan);
       try { KPR.todayCard(st); } catch (e) {}
       try { MYBOOK.card(st); } catch (e) {}
+      try { OWNT.card(st); } catch (e) {}
       const all = st.querySelector('.alltabs'); if (all) all.remove();
       
       const qs = [st.querySelector('.rank'), st.querySelector('.season'), st.querySelector('.garage')].filter(Boolean);
@@ -22610,6 +22614,359 @@ const TALES = (() => {
 })();
 GAMES.push({ id: 'bookshelf', name: 'Книжная полка', sub: 'лучшие книги для твоего возраста', kw: 'книги сказки аудиосказки чтение', ico: () => pic('📚'), bg: 'var(--t-peach)', go: () => BOOKSHELF.open(), grp: 6, also: [2, 10],
   prog: () => { const n = BOOKSHELF.readN(); return n ? `прочитано книг: ${n}` : ''; } });
+ 
+
+
+const OWNT = (() => {
+  const DB = 'govorilki-owntales', PART = 2 * 1048576, POS = 'govorilki-owntales', CNT = 'govorilki-owntales-n';
+  const NOTE = 'Файлы хранятся только на этом телефоне. Добавляйте записи, которые вы купили или имеете право слушать дома.';
+  const EMO = ['🎧', '📖', '🌙', '⭐', '🏰', '👑', '🧚', '🐉', '🐻', '🦊', '🐺', '🐰', '🐸', '🐱', '🐶', '🦁', '🐟', '🌲', '🚂', '🚀'];
+  const AUD = /\.(mp3|m4a|m4b|aac|ogg|oga|opus|wav|flac|webm|mp4)$/i;
+  let dbp = null;
+  const db = () => dbp || (dbp = new Promise((res, rej) => {
+    const r = indexedDB.open(DB, 1);
+    r.onupgradeneeded = () => { const d = r.result; if (!d.objectStoreNames.contains('meta')) d.createObjectStore('meta', { keyPath: 'k' }); if (!d.objectStoreNames.contains('parts')) d.createObjectStore('parts'); };
+    r.onsuccess = () => res(r.result); r.onerror = () => { dbp = null; rej(r.error); };
+  }));
+  const tx = async (st, mode, fn) => { const d = await db(); return new Promise((res, rej) => { const x = d.transaction(st, mode), q = fn(x.objectStore(st)); x.oncomplete = () => res(q ? q.result : undefined); x.onerror = x.onabort = () => rej(x.error); }); };
+  const ok = () => { try { return !EMBEDDED && !!window.indexedDB && !(GUEST && !GUEST_OFF) && !PREVIEW && !(fam() && fam().guest); } catch (e) { return false; } };
+  const famId = () => ROOT.curFam || '';
+  const night = () => { try { return MYBOOK.night(); } catch (e) { const h = new Date().getHours(); return h >= 19 || h < 5; } };
+  
+  const cnts = () => { try { return JSON.parse(localStorage.getItem(CNT) || '{}') || {}; } catch (e) { return {}; } };
+  const has = () => ok() && (cnts()[famId()] || 0) > 0;
+  async function all() { return (await tx('meta', 'readonly', s => s.getAll()).catch(() => [])) || []; }
+  async function list() {
+    if (!ok()) return [];
+    const xs = (await all()).filter(x => x.fam === famId()).sort((a, b) => (a.ord || 0) - (b.ord || 0) || a.at - b.at);
+    try { const c = cnts(); if (xs.length) c[famId()] = xs.length; else delete c[famId()]; localStorage.setItem(CNT, JSON.stringify(c)); } catch (e) {}
+    return xs;
+  }
+  const put = m => tx('meta', 'readwrite', s => s.put(m));
+  const dropParts = k => tx('parts', 'readwrite', s => s.delete(IDBKeyRange.bound(k + '#', k + '#￿')));
+  
+  const pk = k => famId() + ':' + (ROOT.cur || '') + ':' + k;
+  const posAll = () => { try { return JSON.parse(localStorage.getItem(POS) || '{}') || {}; } catch (e) { return {}; } };
+  
+  const posOf = (k, key) => posAll()[key || pk(k)] || {};
+  function posSet(k, v, key) { try { const a = posAll(), x = key || pk(k); a[x] = { ...(a[x] || {}), ...v }; localStorage.setItem(POS, JSON.stringify(a)); } catch (e) {} }
+  function posDrop(k) { try { const a = posAll(); Object.keys(a).filter(x => x.endsWith(':' + k)).forEach(x => delete a[x]); localStorage.setItem(POS, JSON.stringify(a)); } catch (e) {} }
+  
+  function addSec(s, pr = P) {
+    if (!pr || !(s > 0)) return;
+    const d = pr.ownMin = pr.ownMin && typeof pr.ownMin === 'object' ? pr.ownMin : {}, k = dayKey();
+    d[k] = Math.round((+d[k] || 0) + s); const ks = Object.keys(d).sort(); while (ks.length > 60) delete d[ks.shift()];
+  }
+  function weekMin(pr = P, w = weekId()) {
+    const L = (pr && pr.ownMin) || {}, w0 = new Date(w + 'T12:00:00'); let n = 0;
+    for (let i = 0; i < 7; i++) { const x = new Date(w0); x.setDate(x.getDate() + i); n += +L[dayKey(x)] || 0; }
+    return Math.round(n / 60);
+  }
+  const size = b => b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' КБ' : b < 1073741824 ? (b / 1048576).toFixed(b < 10485760 ? 1 : 0).replace('.', ',') + ' МБ' : (b / 1073741824).toFixed(1).replace('.', ',') + ' ГБ';
+  const fmtT = s => { s = Math.max(0, Math.floor(s || 0)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = String(s % 60).padStart(2, '0'); return h ? `${h}:${String(m).padStart(2, '0')}:${x}` : `${m}:${x}`; };
+  const cover = (m, cls) => m.img && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(m.img) ? `<img class="ot-img ${cls || ''}" src="${m.img}" alt="">` : `<span class="ot-emo emo ${cls || ''}">${m.e || '🎧'}</span>`;
+  const nameOf = f => (f.replace(/\.[a-z0-9]{2,4}$/i, '').replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim() || 'Сказка').slice(0, 60);
+  const mimeOf = f => { const x = (f.match(/\.([a-z0-9]+)$/i) || [])[1] || ''; return ({ mp3: 'audio/mpeg', m4a: 'audio/mp4', m4b: 'audio/mp4', mp4: 'audio/mp4', aac: 'audio/aac', ogg: 'audio/ogg', oga: 'audio/ogg', opus: 'audio/ogg', wav: 'audio/wav', flac: 'audio/flac', webm: 'audio/webm' })[x.toLowerCase()] || 'audio/mpeg'; };
+  
+  const durOf = f => new Promise(res => {
+    let u = ''; try { u = URL.createObjectURL(f); } catch (e) { res(0); return; }
+    const a = new Audio(); let done = false;
+    const end = v => { if (done) return; done = true; try { a.removeAttribute('src'); a.load(); } catch (e) {} URL.revokeObjectURL(u); res(isFinite(v) && v > 0 ? Math.round(v) : 0); };
+    a.preload = 'metadata'; a.onloadedmetadata = () => end(a.duration); a.onerror = () => end(0); setTimeout(() => end(0), 6000); a.src = u;
+  });
+  
+  async function addFiles(files, onProg) {
+    const fs = [...files].filter(f => f && f.size > 0 && (/^audio\//.test(f.type) || AUD.test(f.name || '')));
+    const out = { added: [], skipped: files.length - fs.length, err: '' };
+    if (!fs.length) return out;
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+    let ord = (await list()).reduce((a, x) => Math.max(a, x.ord || 0), 0);
+    const total = fs.reduce((a, f) => a + f.size, 0); let done = 0;
+    for (const f of fs) {
+      const k = 'ot' + Date.now().toString(36) + rid6(), n = Math.ceil(f.size / PART);
+      try {
+        for (let i = 0; i < n; i++) {
+          const buf = await f.slice(i * PART, Math.min(f.size, (i + 1) * PART)).arrayBuffer();
+          await tx('parts', 'readwrite', s => s.put(buf, k + '#' + i));
+          done += buf.byteLength; if (onProg) onProg(done / total, f.name);
+        }
+        const m = { k, fam: famId(), name: nameOf(f.name || ''), e: '🎧', img: '', ord: ++ord, size: f.size, n, dur: await durOf(f), mime: /^audio\//.test(f.type) ? f.type : mimeOf(f.name || ''), at: Date.now() };
+        await put(m); out.added.push(m);
+      } catch (e) {
+        await dropParts(k).catch(() => {});
+        out.err = e && (e.name === 'QuotaExceededError' || /quota/i.test(e.message || '')) ? 'quota' : 'fail'; break;
+      }
+    }
+    await list(); return out;
+  }
+  
+  async function blobOf(m) {
+    const ps = [];
+    for (let i = 0; i < m.n; i++) { const b = await tx('parts', 'readonly', s => s.get(m.k + '#' + i)); if (!b) throw new Error('part'); ps.push(b); }
+    return new Blob(ps, { type: m.mime || 'audio/mpeg' });
+  }
+  async function remove(k) { await tx('meta', 'readwrite', s => s.delete(k)); await dropParts(k); posDrop(k); await list(); }
+  async function space() {
+    const xs = await all(), mine = xs.filter(x => x.fam === famId());
+    let free = 0; try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); free = Math.max(0, (e.quota || 0) - (e.usage || 0)); } } catch (e) {}
+    return { used: mine.reduce((a, x) => a + (x.size || 0), 0), n: mine.length, all: xs.reduce((a, x) => a + (x.size || 0), 0), free };
+  }
+  
+  async function shrink(f) {
+    const u = URL.createObjectURL(f);
+    try {
+      const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = u; });
+      const S = 240, c = document.createElement('canvas'); c.width = c.height = S;
+      const w = im.naturalWidth, h = im.naturalHeight, m = Math.min(w, h);
+      c.getContext('2d').drawImage(im, (w - m) / 2, (h - m) / 2, m, m, 0, 0, S, S);
+      return c.toDataURL('image/jpeg', 0.82);
+    } finally { URL.revokeObjectURL(u); }
+  }
+
+   
+  async function shelf(back) {
+    const t = newScreen(), nt = night();
+    back = back || goHome;
+    shell('Свои сказки', `<div class="ot-wrap${nt ? ' ot-nt' : ''}">${nt ? '<p class="ot-lead">🌙 Сказка перед сном. Выбери и слушай.</p>' : ''}
+      <div class="ot-list" id="otList"><p class="muted">Открываю…</p></div>
+      <p class="ot-par"><button class="chip" id="otMng">👪 Для взрослых: добавить сказки</button></p></div>`, { back, guide: false });
+    if (nt) { const sc = $('.screen'); if (sc) sc.classList.add('ot-dark'); }
+    $('#otMng').onclick = () => { sfx.pop(); grownUp(() => manage(() => shelf(back)), 'Добавлять и удалять сказки — это для взрослых.'); };
+    const xs = await list(); if (t !== tok) return;
+    if (!xs.length) { $('#otList').innerHTML = '<p class="ot-lead">Здесь будут сказки, которые взрослые добавят с этого телефона.</p>'; return; }
+    $('#otList').innerHTML = xs.map(m => {
+      const p = posOf(m.k), pc = m.dur && p.t ? Math.min(100, Math.round(p.t / m.dur * 100)) : 0;
+      return `<button class="ot-i${p.done ? ' seen' : ''}" data-k="${esc(m.k)}">${cover(m)}<span class="ot-tx"><b>${esc(m.name)}</b>
+        <small>${p.done ? `<span class="ot-ok">${G('✓ слушала', '✓ слушал')}</span>` : ''}${m.dur ? `<span>${fmtT(m.dur)}</span>` : ''}</small>
+        ${pc && pc < 100 ? `<span class="mb-bar"><i style="width:${pc}%"></i></span>` : ''}</span><span class="g-go">▶</span></button>`;
+    }).join('');
+    $('#otList').onclick = e => { const b = e.target.closest('.ot-i'); if (b) { if (!nt) sfx.pop(); play(b.dataset.k, () => shelf(back)); } };
+  }
+
+   
+  async function play(k, back) {
+    const t = newScreen();
+    const m = (await list()).find(x => x.k === k); if (t !== tok) return;
+    if (!m) { shell('Свои сказки', '<p class="lead">Этой сказки больше нет на телефоне.</p>', { back }); return; }
+    let nt = night();
+    const KEY = pk(k), PR = P, p0 = posOf(k, KEY);
+    shell(esc(m.name), `<div class="ot-pl" id="otPl">
+        <div class="ot-cv">${cover(m, 'ot-big')}</div>
+        <h2 class="ot-h">${esc(m.name)}</h2>
+        <p class="ot-done" id="otDone"${p0.done ? '' : ' hidden'}>${G('✓ Ты уже слушала эту сказку', '✓ Ты уже слушал эту сказку')}</p>
+        <input type="range" class="ot-rng" id="otRng" min="0" max="1000" step="1" value="0" aria-label="Где мы в сказке">
+        <div class="ot-tm"><span id="otCur">${fmtT(p0.t || 0)}</span><span id="otDur">${m.dur ? fmtT(m.dur) : ''}</span></div>
+        <div class="ot-ctl"><button class="ot-sk" id="otBk" aria-label="Назад на 15 секунд">↺<small>15</small></button>
+          <button class="ot-pp" id="otPP" aria-label="Слушать" disabled>…</button>
+          <button class="ot-sk" id="otFw" aria-label="Вперёд на 15 секунд">↻<small>15</small></button></div>
+        <p class="ot-err" id="otErr" role="alert"></p>
+        <div class="ot-ntb"><button class="chip" id="otNight"></button></div>
+        <div class="ot-sleep" id="otSleep">
+          <p class="ot-sl">⏲ Выключить через</p>
+          <div class="mb-seg" id="otTm"><button class="chip" data-min="10">10 мин</button><button class="chip" data-min="20">20 мин</button><button class="chip" data-min="30">30 мин</button><button class="chip sel" data-min="0">Не выключать</button></div>
+          <p class="ot-left" id="otLeft"></p>
+          <button class="chip" id="otDim">🌑 Затемнить экран</button>
+        </div></div>`, { back, guide: false });
+    const sc = $('.screen'), pp = $('#otPP'), rng = $('#otRng');
+    const setNt = v => { nt = v; if (sc) sc.classList.toggle('ot-dark', nt); $('#otSleep').hidden = !nt; $('#otNight').textContent = nt ? '☀️ Дневной вид' : '🌙 Перед сном'; };
+    setNt(nt);
+    let au = null, url = '', playing = false, last = 0, acc = 0, lastSave = 0, dead = 0, deadT = 0, fading = false;
+    const err = s => { $('#otErr').textContent = s || ''; };
+    const btn = () => { pp.textContent = playing ? '⏸' : '▶'; pp.setAttribute('aria-label', playing ? 'Пауза' : 'Слушать'); pp.classList.toggle('on', playing); };
+    const paint = () => {
+      if (!au) return; const d = isFinite(au.duration) && au.duration > 0 ? au.duration : m.dur || 0;
+      $('#otCur').textContent = fmtT(au.currentTime); if (d) $('#otDur').textContent = fmtT(d);
+      if (d && !rng.dragging) rng.value = Math.round(au.currentTime / d * 1000);
+    };
+    
+    const tick = () => { const n = performance.now(); if (playing && last) acc += Math.min(2, (n - last) / 1000); last = playing ? n : 0; };
+    function keep(force) {
+      if (!au) return; tick();
+      const n = Date.now(); if (!force && n - lastSave < 15000) return; lastSave = n;
+      const d = au.duration || m.dur || 0;
+      if (!(posOf(k, KEY).done && au.currentTime < 1)) posSet(k, { t: d && au.currentTime > d - 3 ? 0 : Math.floor(au.currentTime) }, KEY);
+      if (acc >= 1) { addSec(acc, PR); acc = 0; save(); }
+    }
+    function left() {
+      const l = $('#otLeft'); if (!l) return;
+      if (!dead) { l.textContent = ''; return; }
+      const s = Math.max(0, Math.round((dead - Date.now()) / 60000)); l.textContent = `Сказка выключится через ${s || 1} мин`;
+    }
+    
+    function sleepDue() {
+      if (!dead || Date.now() < dead || fading || !au) return;
+      fading = true; const v0 = au.volume; let i = 0;
+      const st = setInterval(() => { i++; try { au.volume = Math.max(0, v0 * (1 - i / 12)); } catch (e) {} if (i >= 12) { clearInterval(st); au.pause(); try { au.volume = v0; } catch (e) {} fading = false; dead = 0; left(); $$('#otTm .chip').forEach(c => c.classList.toggle('sel', c.dataset.min === '0')); } }, 500);
+    }
+    function media() {
+      try {
+        if (!('mediaSession' in navigator)) return;
+        navigator.mediaSession.metadata = new MediaMetadata({ title: m.name, artist: 'Свои сказки' });
+        navigator.mediaSession.setActionHandler('play', () => { if (t === tok) go(); });
+        navigator.mediaSession.setActionHandler('pause', () => { if (t === tok && au) au.pause(); });
+        navigator.mediaSession.setActionHandler('seekbackward', () => skip(-15));
+        navigator.mediaSession.setActionHandler('seekforward', () => skip(15));
+      } catch (e) {}
+    }
+    function bye() {
+      keep(true); playing = false;
+      try { if (au) { au.pause(); au.removeAttribute('src'); au.load(); } } catch (e) {}
+      if (url) URL.revokeObjectURL(url); url = ''; au = null; clearInterval(deadT);
+      try { if ('mediaSession' in navigator) { navigator.mediaSession.metadata = null; ['play', 'pause', 'seekbackward', 'seekforward'].forEach(a => navigator.mediaSession.setActionHandler(a, null)); } } catch (e) {}
+    }
+    try { url = URL.createObjectURL(await blobOf(m)); } catch (e) {
+      if (t === tok) { err('Файл не открылся. Возможно, его удалили или на телефоне не хватило места. Добавьте сказку ещё раз.'); pp.textContent = '▶'; }
+      return;
+    }
+    if (t !== tok) { URL.revokeObjectURL(url); return; }
+    au = new Audio(); au.preload = 'auto'; au.setAttribute('playsinline', ''); au.src = url; TALE_AUDIO = au;
+    au.addEventListener('loadedmetadata', () => {
+      const d = au.duration;
+      if (isFinite(d) && d > 0 && Math.round(d) !== m.dur) { m.dur = Math.round(d); put(m).catch(() => {}); }
+      const p = posOf(k, KEY); if (p.t > 0 && (!d || p.t < d - 3)) { try { au.currentTime = p.t; } catch (e) {} }
+      paint();
+    }, { once: true });
+    au.addEventListener('timeupdate', () => { if (t !== tok) { bye(); return; } paint(); keep(); sleepDue(); });
+    au.addEventListener('playing', () => { playing = true; last = performance.now(); btn(); });
+    au.addEventListener('pause', () => { tick(); playing = false; last = 0; btn(); keep(true); if (t !== tok) bye(); });
+    au.addEventListener('ended', () => {
+      tick(); playing = false; btn(); posSet(k, { t: 0, done: 1, at: dayKey() }, KEY); keep(true);
+      $('#otDone').hidden = false; $('#otDone').textContent = nt ? 'Конец. Спокойной ночи! 🌙' : G('✓ Ты дослушала сказку!', '✓ Ты дослушал сказку!');
+      if (!nt) sfx.good();
+    });
+    au.addEventListener('error', () => { if (t === tok) { err('Этот файл телефон не может проиграть. Попробуйте mp3 или m4a.'); playing = false; btn(); } });
+    pp.disabled = false; btn(); media();
+    function go() {
+      if (!au) return; err(''); try { speakerOn(); } catch (e) {}
+      if (au.ended) au.currentTime = 0;
+      TALE_AUDIO = au; const pr = au.play(); if (pr && pr.catch) pr.catch(e => { if (e && e.name !== 'AbortError' && t === tok) err('Не получилось включить звук. Нажмите ещё раз.'); });
+    }
+    function skip(s) { if (!au) return; const d = au.duration || m.dur || 0; au.currentTime = Math.max(0, Math.min(d ? d - 0.5 : 1e9, au.currentTime + s)); paint(); keep(true); }
+    pp.onclick = () => { if (!au) return; if (playing) au.pause(); else go(); };
+    $('#otBk').onclick = () => skip(-15);
+    $('#otFw').onclick = () => skip(15);
+    rng.addEventListener('pointerdown', () => { rng.dragging = true; });
+    rng.addEventListener('input', () => { rng.dragging = true; const d = au && (au.duration || m.dur); if (d) $('#otCur').textContent = fmtT(rng.value / 1000 * d); });
+    rng.addEventListener('change', () => { rng.dragging = false; const d = au && (au.duration || m.dur); if (d) { au.currentTime = rng.value / 1000 * d; keep(true); } });
+    $('#otNight').onclick = () => setNt(!nt);
+    $('#otTm').onclick = e => {
+      const b = e.target.closest('[data-min]'); if (!b) return;
+      const mn = +b.dataset.min; $$('#otTm .chip').forEach(c => c.classList.toggle('sel', c === b));
+      dead = mn ? Date.now() + mn * 60000 : 0; clearInterval(deadT);
+      if (dead) { deadT = setInterval(() => { if (t !== tok) { clearInterval(deadT); return; } left(); sleepDue(); }, 15000); if (!playing) go(); }
+      left();
+    };
+    $('#otDim').onclick = () => {
+      document.body.insertAdjacentHTML('beforeend', '<div class="ot-dim" id="otDimOv" role="button" aria-label="Включить экран"><p>Нажми, чтобы включить экран</p></div>');
+      const ov = $('#otDimOv'); ov.onclick = () => ov.remove();
+      const gone = () => { if (t !== tok) { const o = $('#otDimOv'); if (o) o.remove(); } else setTimeout(gone, 1000); }; gone();
+    };
+  }
+
+   
+  async function manage(back) {
+    const t = newScreen();
+    shell('Свои сказки', `<div class="ot-wrap ot-mng">
+        <p class="ot-note">🔒 ${NOTE}</p>
+        <button class="big ot-add" id="otAdd">➕ Добавить аудиофайлы</button>
+        <input type="file" id="otFile" class="ot-file" accept="audio/*,.mp3,.m4a,.m4b,.aac,.ogg,.opus,.wav" multiple tabindex="-1" aria-hidden="true">
+        <input type="file" id="otPhoto" class="ot-file" accept="image/*" tabindex="-1" aria-hidden="true">
+        <p class="ot-hint">Можно выбрать несколько файлов сразу: mp3, m4a, ogg. Потом дайте каждой сказке название и картинку.</p>
+        <div class="ot-busy" id="otBusy" hidden><span class="mb-bar"><i id="otBar" style="width:0%"></i></span><small id="otBusyT"></small></div>
+        <p class="ot-msg" id="otMsg" role="status"></p>
+        <div class="ot-ed" id="otEd"></div>
+        <p class="ot-space" id="otSpace"></p>
+        <p class="ot-par"><button class="chip" id="otKid">🎧 Открыть полку, как её видит ребёнок</button></p></div>`, { back, guide: false });
+    let xs = [], busy = false, delArm = '', picFor = '';
+    const msg = s => { $('#otMsg').textContent = s || ''; };
+    async function draw() {
+      xs = await list(); if (t !== tok) return;
+      $('#otEd').innerHTML = xs.length ? xs.map((m, i) => `<div class="ot-row" data-k="${esc(m.k)}">
+          <button class="ot-cvb" data-act="pic" aria-label="Картинка сказки">${cover(m)}</button>
+          <div class="ot-rf"><input class="ot-nm" data-act="name" value="${esc(m.name)}" maxlength="60" aria-label="Название сказки"><small>${m.dur ? fmtT(m.dur) + ' · ' : ''}${size(m.size)}</small></div>
+          <div class="ot-rb"><button class="ibtn" data-act="up" aria-label="Выше"${i ? '' : ' disabled'}>▲</button><button class="ibtn" data-act="dn" aria-label="Ниже"${i < xs.length - 1 ? '' : ' disabled'}>▼</button>
+          <button class="ibtn ot-del${delArm === m.k ? ' arm' : ''}" data-act="del" aria-label="Удалить сказку">${delArm === m.k ? 'Точно?' : '🗑'}</button></div></div>`).join('')
+        : '<p class="muted">Сказок пока нет.</p>';
+      const sp = await space(); if (t !== tok) return;
+      $('#otSpace').textContent = `Занято сказками: ${size(sp.used)}${sp.n ? ` (${sp.n} ${plural(sp.n, ['сказка', 'сказки', 'сказок'])})` : ''}.${sp.free ? ` Свободно для игры: около ${size(sp.free)}.` : ''}`;
+    }
+    $('#otAdd').onclick = () => { if (busy) return; sfx.pop(); $('#otFile').value = ''; $('#otFile').click(); };
+    $('#otFile').onchange = async () => {
+      const fs = [...($('#otFile').files || [])]; if (!fs.length || busy) return;
+      busy = true; msg(''); $('#otBusy').hidden = false; $('#otAdd').disabled = true;
+      const r = await addFiles(fs, (f, nm) => { if (t !== tok) return; $('#otBar').style.width = Math.round(f * 100) + '%'; $('#otBusyT').textContent = `Сохраняю «${nameOf(nm)}» — ${Math.round(f * 100)}%`; });
+      busy = false; if (t !== tok) return;
+      $('#otBusy').hidden = true; $('#otAdd').disabled = false;
+      const n = r.added.length;
+      msg((n ? `Добавлено: ${n} ${plural(n, ['сказка', 'сказки', 'сказок'])}. Дайте им название и картинку.` : '') +
+        (r.skipped ? ` Не аудио — пропущено: ${r.skipped}.` : '') +
+        (r.err === 'quota' ? ' Не хватило места на телефоне: удалите старые сказки или освободите место.' : r.err ? ' Один файл не сохранился. Попробуйте ещё раз.' : ''));
+      if (n) sfx.good();
+      draw();
+    };
+    const row = e => { const r = e.target.closest('.ot-row'); return r ? xs.find(x => x.k === r.dataset.k) : null; };
+    $('#otEd').addEventListener('change', async e => {
+      if (e.target.dataset.act !== 'name') return; const m = row(e); if (!m) return;
+      m.name = (e.target.value || '').replace(/\s+/g, ' ').trim().slice(0, 60) || m.name; e.target.value = m.name; await put(m); msg('Название сохранено.');
+    });
+    $('#otEd').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset.act === 'name') e.target.blur(); });
+    $('#otEd').addEventListener('click', async e => {
+      const b = e.target.closest('[data-act]'); if (!b || b.tagName === 'INPUT') return; const m = row(e); if (!m) return;
+      const a = b.dataset.act, i = xs.indexOf(m);
+      if (a === 'up' || a === 'dn') {
+        const j = a === 'up' ? i - 1 : i + 1; if (j < 0 || j >= xs.length) return; sfx.tick();
+        [xs[i], xs[j]] = [xs[j], xs[i]]; xs.forEach((x, n) => { x.ord = n + 1; });
+        for (const x of xs) await put(x); draw();
+      } else if (a === 'del') {
+        if (delArm !== m.k) { delArm = m.k; draw(); return; }
+        delArm = ''; await remove(m.k); msg(`«${m.name}» удалена, место освобождено.`); draw();
+      } else if (a === 'pic') { sfx.pop(); picDialog(m); }
+    });
+    function picDialog(m) {
+      const ov = document.createElement('div'); ov.className = 'mb-ov';
+      ov.innerHTML = `<div class="mb-box ot-pick" role="dialog" aria-label="Картинка сказки"><button class="ibtn mb-x" id="otPx" aria-label="Закрыть">✕</button><h2>Картинка сказки</h2>
+        <div class="ot-emos">${EMO.map(x => `<button class="ot-e${!m.img && m.e === x ? ' sel' : ''}" data-e="${x}"><span class="emo">${x}</span></button>`).join('')}</div>
+        <button class="big" id="otPh">📷 Фото с телефона</button><p class="mb-priv">Фото остаётся только на этом телефоне.</p></div>`;
+      document.body.append(ov);
+      const close = () => ov.remove();
+      ov.querySelector('#otPx').onclick = close;
+      ov.onclick = async e => {
+        if (e.target === ov) { close(); return; }
+        const b = e.target.closest('[data-e]'); if (!b) return;
+        m.e = b.dataset.e; m.img = ''; await put(m); close(); sfx.pop(); draw();
+      };
+      ov.querySelector('#otPh').onclick = () => { picFor = m.k; close(); $('#otPhoto').value = ''; $('#otPhoto').click(); };
+    }
+    $('#otPhoto').onchange = async () => {
+      const f = ($('#otPhoto').files || [])[0], m = xs.find(x => x.k === picFor); if (!f || !m) return;
+      try { m.img = await shrink(f); await put(m); msg('Картинка сохранена.'); } catch (e) { msg('Эта картинка не открылась. Попробуйте другую.'); }
+      draw();
+    };
+    $('#otKid').onclick = () => { sfx.pop(); shelf(() => manage(back)); };
+    draw();
+  }
+
+  
+  function parentSec() {
+    const s = document.createElement('section'); s.className = 'psec'; s.id = 'otSec';
+    s.innerHTML = `<h2>🎧 Свои сказки</h2><p class="muted">Аудиосказки с этого телефона: mp3, m4a, ogg. Дети слушают их в «Узнаём» и перед сном.</p>
+      <p class="ot-note">🔒 ${NOTE}</p><button class="big" id="otOpen">🎧 Добавить и изменить сказки</button>`;
+    s.querySelector('#otOpen').onclick = () => { sfx.pop(); grownUp(() => manage(() => screenParents()), 'Свои сказки — это для взрослых.'); };
+    return s;
+  }
+  
+  function card(st) {
+    if (!st || !has() || st.querySelector('#otCard')) return;
+    const nt = night(), w = document.createElement('div');
+    w.innerHTML = `<button class="ot-card${nt ? ' mb-night' : ''}" id="otCard"><span class="ot-emo emo">🎧</span><span class="mb-tt"><small>🎧 Свои сказки${nt ? ' · 🌙 перед сном' : ''}</small><b>Послушать сказку</b></span><span class="g-go">▶</span></button>`;
+    const el = w.firstElementChild, after = st.querySelector('#mbCard') || st.querySelector('#pdPath') || st.querySelector('#pdBox') || st.querySelector('section.today');
+    if (after) after.after(el); else st.prepend(el);
+    el.onclick = () => { if (!nt) sfx.pop(); try { homeLeave(); } catch (e) {} shelf(goHome); };
+  }
+  GAMES.push({ id: 'own-tales', name: 'Свои сказки', sub: 'сказки, которые добавили взрослые', kw: 'сказки слушать аудио перед сном', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => shelf(goHome), grp: 10, also: [2, 6], hide: () => !has(),
+    prog: () => { try { const a = posAll(), pre = famId() + ':' + (ROOT.cur || '') + ':'; const n = Object.keys(a).filter(x => x.startsWith(pre) && a[x].done).length; return n ? `дослушано: ${n}` : ''; } catch (e) { return ''; } } });
+  return { ok, has, list, addFiles, remove, space, shelf, play, manage, parentSec, card, weekMin, NOTE };
+})();
  
  
 

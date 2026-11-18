@@ -2027,6 +2027,54 @@ body:is(.look-dark,.quest) .bl-tale .ss.bl-on{background:#FFE58A;box-shadow:0 0 
 .bk-badge.rd{background:var(--leaf);color:#fff}.bk-badge.nw{background:var(--sun)}
 .bk-card.read .bk-cov{filter:saturate(.85)}
 .bk-parent{display:flex;gap:10px;align-items:flex-start;margin:4px 0 0;padding:12px 14px;border-radius:16px;background:var(--t-blue);font:700 15px/1.4 var(--f-body)}.bk-parent .emo{font-size:24px}
+/* OWNT-CSS: «🎧 Свои сказки» — the shelf, the player (dark «перед сном»), the grown-ups' page */
+.ot-wrap{display:flex;flex-direction:column;gap:12px;max-width:620px;margin:0 auto;padding:4px 16px 24px;box-sizing:border-box;width:100%}
+.ot-lead{margin:4px 0;font:700 18px/1.35 var(--f-body)}
+.ot-list{display:flex;flex-direction:column;gap:10px}
+.ot-i{display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px 10px 10px;border:0;border-radius:20px;background:var(--paper);color:var(--ink);box-shadow:0 4px 0 var(--line);font:inherit;text-align:left;cursor:pointer}
+.ot-i .ot-emo,.ot-i .ot-img,.ot-cvb .ot-emo,.ot-cvb .ot-img{flex:none;width:64px;height:64px;border-radius:16px}
+.ot-emo{display:grid;place-items:center;background:var(--t-lilac);font-size:36px}.ot-img{object-fit:cover;display:block}
+.ot-tx{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}.ot-tx b{font:700 19px/1.2 var(--f-display);overflow-wrap:anywhere}
+.ot-tx small{display:flex;gap:10px;font:700 14px var(--f-body);color:var(--ink-soft)}.ot-ok{color:var(--leaf,#2E8B57)}
+.ot-par{text-align:center;margin:8px 0 0}
+.ot-pl{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:520px;margin:0 auto;padding:6px 0 24px;text-align:center}
+.ot-cv .ot-big{width:min(56vw,220px);height:min(56vw,220px);border-radius:32px;font-size:min(30vw,120px)}
+.ot-h{margin:0;font:700 26px/1.2 var(--f-display);overflow-wrap:anywhere}
+.ot-done{margin:0;font:800 17px var(--f-body);color:var(--leaf,#2E8B57)}
+.ot-rng{width:100%;height:36px;accent-color:var(--plum)}
+.ot-tm{display:flex;justify-content:space-between;width:100%;margin-top:-8px;font:700 15px var(--f-body);color:var(--ink-soft)}
+.ot-ctl{display:flex;align-items:center;justify-content:center;gap:22px}
+.ot-pp{width:104px;height:104px;border:0;border-radius:50%;background:var(--plum);color:#fff;font:800 46px/1 var(--f-body);box-shadow:0 7px 0 color-mix(in srgb,var(--plum) 60%,#000);cursor:pointer}
+.ot-pp:active{transform:translateY(5px);box-shadow:0 2px 0 color-mix(in srgb,var(--plum) 60%,#000)}.ot-pp:disabled{opacity:.6}
+.ot-sk{display:flex;flex-direction:column;align-items:center;justify-content:center;width:68px;height:68px;border:0;border-radius:50%;background:var(--paper);color:var(--ink);box-shadow:0 4px 0 var(--line);font:800 26px/1 var(--f-body);cursor:pointer}
+.ot-sk small{font:800 13px/1 var(--f-body)}
+.ot-err{margin:0;min-height:0;color:var(--berry);font:700 15px/1.35 var(--f-body)}.ot-err:empty{display:none}
+.ot-sleep{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}.ot-sleep[hidden]{display:none}
+.ot-sl{margin:6px 0 0;font:700 17px var(--f-body)}.ot-left{margin:0;font:700 15px var(--f-body)}.ot-left:empty{display:none}
+.ot-dim{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;padding:0 16px 40px;background:#000;cursor:pointer}
+.ot-dim p{margin:0;color:#2A2A33;font:700 15px var(--f-body)}
+html body:has(.screen.ot-dark){background:#151935}.screen.ot-dark{background:#151935;color:#D9DCF2}.screen.ot-dark .bar{background:#151935}.screen.ot-dark .bar h1{color:#D9DCF2}
+.ot-dark .ot-i{background:#1E2340;color:#D9DCF2;box-shadow:0 4px 0 #0E1128}.ot-dark .ot-tx small,.ot-dark .ot-tm{color:#A9AED6}
+.ot-dark .ot-pp{background:#5B55A0;box-shadow:0 7px 0 #383370;color:#F1F0FF}.ot-dark .ot-sk{background:#1E2340;color:#D9DCF2;box-shadow:0 4px 0 #0E1128}
+.ot-dark .ot-emo{background:#2E3560}.screen.ot-dark .ot-pl .chip,.screen.ot-dark .ot-wrap .chip{background:#1E2340;color:#D9DCF2;border-color:#3A4170;box-shadow:0 3px 0 #0E1128}body .screen.ot-dark #otTm .chip.sel{background:#8C84C8;color:#14172C;box-shadow:0 3px 0 #383370,inset 0 0 0 3px #C9C3F5}.screen.ot-dark .starpill{color:var(--ink)}
+.ot-dark .ot-rng{accent-color:#8C84C8}.ot-dark .mb-bar{background:#2E3560}.ot-dark .mb-bar i{background:#8C84C8}.ot-dark .ot-done,.ot-dark .ot-ok{color:#9FD8B4}
+.ot-card{display:flex;align-items:center;gap:12px;width:100%;max-width:560px;margin:8px auto 6px;padding:12px 16px;border:0;border-radius:24px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line),inset 0 0 0 3px color-mix(in srgb,var(--plum) 25%,transparent);font:inherit;text-align:left;cursor:pointer}
+.ot-card .ot-emo{flex:none;width:52px;height:52px;border-radius:14px;font-size:30px}
+.ot-card.mb-night{background:#1E2340;color:#D9DCF2;box-shadow:0 5px 0 #11152B,inset 0 0 0 2px #3A4170}.ot-card.mb-night .mb-tt small{color:#A9AED6}.ot-card.mb-night .ot-emo{background:#2E3560}
+.ot-note{margin:0;padding:12px 14px;border-radius:16px;background:color-mix(in srgb,var(--plum) 10%,var(--paper));font:700 15px/1.4 var(--f-body)}
+.ot-hint,.ot-space{margin:0;color:var(--ink-soft);font:600 14px/1.4 var(--f-body)}
+.ot-add{align-self:stretch}.ot-file{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden}
+.ot-busy{display:flex;flex-direction:column;gap:6px}.ot-busy small{font:700 14px var(--f-body);color:var(--ink-soft)}
+.ot-msg{margin:0;font:700 15px/1.4 var(--f-body)}.ot-msg:empty{display:none}
+.ot-ed{display:flex;flex-direction:column;gap:10px}
+.ot-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:18px;background:var(--paper);box-shadow:0 3px 0 var(--line)}
+.ot-cvb{flex:none;padding:0;border:0;background:none;cursor:pointer;border-radius:16px}
+.ot-rf{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}.ot-rf small{font:600 13px var(--f-body);color:var(--ink-soft)}
+.ot-nm{width:100%;min-width:0;font:700 16px var(--f-body);padding:9px 10px;border-radius:12px;border:2px solid var(--line);background:var(--surface,var(--paper));color:var(--ink)}
+.ot-rb{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;max-width:96px}.ot-rb .ibtn{width:44px;height:44px}.ot-rb .ibtn:disabled{opacity:.3}
+.ot-del.arm{width:auto!important;padding:0 8px;background:var(--berry);color:#fff;font:800 13px var(--f-body)}
+.ot-emos{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.ot-e{height:56px;border:2px solid var(--line);border-radius:14px;background:var(--paper);font-size:30px;cursor:pointer}.ot-e.sel{border-color:var(--plum);background:color-mix(in srgb,var(--plum) 15%,var(--paper))}
 /* MYBOOK-CSS: «📚 Моя книга» on the home screen and its dialogs; «перед сном» is dim and still */
 .mb-card{display:flex;flex-direction:column;gap:10px;margin:14px auto 6px;max-width:560px;padding:14px 16px 16px;border-radius:24px;background:var(--paper);color:var(--ink);box-shadow:0 5px 0 var(--line),inset 0 0 0 3px color-mix(in srgb,var(--plum) 35%,transparent)}
 .mb-top{display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;width:100%}
@@ -3926,7 +3974,7 @@ body.look-dark .prow-btns .big,body.look-calm .prow-btns .big{background:#A8520E
 </head>
 <body>
 <div id="app"><script>(function(){var k='calm';try{var r=JSON.parse(localStorage.getItem('govorilki-v2')||'null');if(r&&r.profiles&&Object.keys(r.profiles).length)document.documentElement.classList.add('gv-ret');var p=r&&r.profiles&&r.profiles[r.cur],f=r&&r.families&&r.families[r.curFam];k=(p&&p.settings&&p.settings.look)||(f&&f.look)||k}catch(e){}document.body.classList.toggle('look-calm',k!=='bright');document.body.classList.toggle('look-dark',k==='dark')})()</script><style>.lp-skel{visibility:hidden}.gv-f .lp-skel{visibility:visible}.gv-ret .lp-skel{display:none}.lp-wait{display:block;width:44px;height:44px;margin:28px auto;border-radius:50%;border:5px solid var(--line,#ddd);border-top-color:var(--tiger-deep,#e07a2e);animation:lpw 1s linear infinite}@keyframes lpw{to{transform:rotate(1turn)}}</style><div class="screen"><main class="stage scroll" id="stage"><div class="lp"><header class="lp-hero"><h1 class="logo"><span class="vh">Tagarelas</span><span aria-hidden="true"><span class="lt" data-c="T"></span><span class="lt" data-c="a"></span><span class="lt" data-c="g"></span><span class="lt" data-c="a"></span><span class="lt" data-c="r"></span><span class="lt" data-c="e"></span><span class="lt" data-c="l"></span><span class="lt" data-c="a"></span><span class="lt" data-c="s"></span></span></h1><p class="lp-tag lp-skel">Fala, leitura e matemática em jogos para crianças dos 4 aos 12 anos. Uns minutos por dia, com um amigo que fala e ouve.</p><span class="lp-wait" role="progressbar" aria-label="…"></span><p class="lp-free lp-skel">Grátis · sem publicidade · funciona sem internet · português, English, Deutsch, русский</p></header></div></main></div><script>(function(){var F,G=new Promise(function(r){F=function(){document.documentElement.classList.add('gv-f');r()}});window.__gvF=G;try{var p=document.querySelector('.lp-skel'),t=setTimeout(F,1500);document.fonts.load(getComputedStyle(p).font,p.textContent).then(function(){clearTimeout(t);F()},F)}catch(e){F()}})()</script></div>
-<script>window.GV_APP='../data/pt/app.a4ceb2c230.js';(window.__gvF||Promise.resolve()).then(function(){var go=function(){var s=document.createElement('script');s.src=window.GV_APP;document.body.appendChild(s)};document.hidden?go():requestAnimationFrame(function(){setTimeout(go,0)})})</script>
+<script>window.GV_APP='../data/pt/app.b7ef023ea4.js';(window.__gvF||Promise.resolve()).then(function(){var go=function(){var s=document.createElement('script');s.src=window.GV_APP;document.body.appendChild(s)};document.hidden?go():requestAnimationFrame(function(){setTimeout(go,0)})})</script>
 <script>
 // a new version takes over right away: reload once when the updated worker starts controlling the page
 if ('serviceWorker' in navigator) {
