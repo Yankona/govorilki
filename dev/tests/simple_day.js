@@ -9,7 +9,7 @@ const LANGS = (process.argv[4] || 'ru,en,pt,de').split(',');
 const SHOTS = path.join(__dirname, 'shots');
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const SUB = { ru: 'ru/', en: '', pt: 'pt/', de: 'de/' };
-const kid = (name, g, age, fr, lang, track, likes) => ({ stars: 20, plays: { draw: 6, museum: 2 }, learn: {}, days: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: fr, onboarded: true, lang, likes } });
+const kid = (name, g, age, fr, lang, track, likes) => ({ stars: 20, plays: { draw: 6, museum: 2 }, learn: {}, days: {}, book: { title: 'Т', log: {} }, settings: { focus: { sp: 'yes', subj: [] }, name, gender: g, track, age, friend: fr, onboarded: true, lang, likes } });
 let bad = 0;
 const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
 (async () => {

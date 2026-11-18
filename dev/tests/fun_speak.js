@@ -9,7 +9,7 @@ const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = proces
 const SHOTS = path.join(__dirname, 'shots', 'fun-after'); require('fs').mkdirSync(SHOTS, { recursive: true });
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const LANGS = { ru: 'ru/', en: '', pt: 'pt/', de: 'de/' };
-const kid = (name, g, age, fr, track, lang) => ({ stars: 12, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: fr, onboarded: true, lang } });
+const kid = (name, g, age, fr, track, lang) => ({ stars: 12, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { focus: { sp: 'yes', subj: [] }, name, gender: g, track, age, friend: fr, onboarded: true, lang } });
 let bad = 0; const ok = (c, m) => { console.log((c ? 'ok   ' : 'FAIL ') + m); if (!c) bad++; };
 async function open(b, lang, who) {
   const seed = { engine: 'device', micOff: true, srOff: true, parentPhone: true, cur: who, curFam: 'f1',

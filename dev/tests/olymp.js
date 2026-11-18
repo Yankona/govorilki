@@ -7,7 +7,7 @@ const D = require('path').join(__dirname, 'shots') + '/';
 require('fs').mkdirSync(D, { recursive: true });
 const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', DEV = process.argv[3] || 'phone';
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
-const kid = (name, g, age, track, lang) => ({ stars: 5, plays: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track, age, friend: 'kitty', onboarded: true, lang } });
+const kid = (name, g, age, track, lang) => ({ stars: 5, plays: {}, book: { title: 'Т', log: {} }, settings: { focus: { sp: 'yes', subj: [] }, name, gender: g, track, age, friend: 'kitty', onboarded: true, lang } });
 let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m); if (!c) bad++; };
 (async () => {
   const b = await chromium.launch();

@@ -22,7 +22,7 @@ let bad = 0;
     for (const mic of [true, false]) {
       const seed = { engine: 'device', micOff: !mic, srOff: !mic, parentPhone: true, cur: 'k1', curFam: 'f1',
         families: { f1: { id: 'f1', name: 'Т', cc: 'PT', kids: ['k1'], grands: [] } },
-        profiles: { k1: { stars: 37, plays: {}, learn: {}, days: {}, book: { title: 'Т', log: {} }, settings: { name: 'Тина', gender: 'f', track: 'r', age: 5, friend: 'kitty', onboarded: true, lang, likes: ['draw'] } } } };
+        profiles: { k1: { stars: 37, plays: {}, learn: {}, days: {}, book: { title: 'Т', log: {} }, settings: { focus: { sp: 'yes', subj: [] }, name: 'Тина', gender: 'f', track: 'r', age: 5, friend: 'kitty', onboarded: true, lang, likes: ['draw'] } } } };
       const c = await b.newContext(DEV === 'laptop' ? { viewport: { width: 1280, height: 800 } } : { ...devices['iPhone 13'], deviceScaleFactor: 1 });
       await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
       await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
