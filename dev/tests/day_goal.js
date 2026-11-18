@@ -60,18 +60,23 @@ let bad = 0;
     ok(!!(await p.$('#dgBook')), 'no book step');
     await run(`P.book.log[dayKey()] = 1; save()`); await home(); await p.waitForTimeout(800);
     ok(await run('dayComplete()'), 'not complete with the book');
-    ok((await run('DAYG.streak()')) === 1, 'streak not 1');
+    ok((await run('DAYG.inWeek()')) >= 1, 'the day not counted in the week');
     if (await p.$('.overlay [data-a="ok"]')) { await p.click('.overlay [data-a="ok"]'); await p.waitForTimeout(300); }
     // favourites open after the path; the surprise has its tag
     const open = await p.$$eval('.sd-door.open', ds => ds.map(d => d.dataset.door));
     ok(open.includes('art') && open.includes('books') && (await p.$$('.sd-door .sd-tag')).length === open.length, `open doors ${open}`);
     await p.$eval('#sdBox', el => el.scrollIntoView()).catch(() => {});
     await p.screenshot({ path: `${SHOTS}/goal-${lang}-${DEV}-doors.png` });
-    // 🔥 with a «заморозка»: three complete days this week earn one; a missed day keeps the run
-    const fz = await run(`(() => { const k = n => { const d = new Date(); d.setDate(d.getDate() - n); return dayKey(d); };
-      P.doneDays = { [k(4)]: 1, [k(3)]: 1, [k(2)]: 1 }; P.frozen = []; P.fz = { bank: 1, w: weekId() }; P.days[dayKey()] = {}; save();
-      const used = DAYG.autoFreeze(); return { used, s: DAYG.streak(), frozen: P.frozen.includes(k(1)) }; })()`);
-    ok(fz.used && fz.frozen && fz.s === 4, `freeze ${JSON.stringify(fz)}`);
+    // 🔥 is the week: five complete days of seven; a missed day burns nothing (dev/docs/science-dose.md)
+    const wk = await run(`(() => { const w = weekId(), today = dayKey(), keys = [];
+      for (let i = 0; i < 7 && keys.length < 4; i++) { const d = new Date(w); d.setDate(d.getDate() + i); const k = dayKey(d); if (k !== today) keys.push(k); }
+      P.doneDays = Object.fromEntries(keys.map(k => [k, 1])); save(); const before = DAYG.streak(), n4 = DAYG.inWeek();
+      P.days[dayKey()] = Object.fromEntries(SIMPLE.must().map(id => [id, 1])); P.book.log[dayKey()] = 1; save();
+      const r = DAYG.markDone(); return { before, n4, r, after: DAYG.streak() }; })()`);
+    ok(wk.n4 === 4 && wk.r && wk.r.made && wk.after >= 1, `week ${JSON.stringify(wk)}`);
+    const gap = await run(`(() => { const w = weekId(), keys = []; for (const i of [0, 1, 3, 4, 6]) { const d = new Date(w); d.setDate(d.getDate() + i - 7); keys.push(dayKey(d)); }
+      P.doneDays = { ...P.doneDays, ...Object.fromEntries(keys.map(k => [k, 1])) }; save(); return DAYG.streak(); })()`);
+    ok(gap >= 2, `a week with two missed days still made: ${gap}`);
     // three looks
     for (const lk of ['bright', 'calm', 'dark']) { await run(`P.settings.look = '${lk}'; save()`); await home(); await p.screenshot({ path: `${SHOTS}/goal-${lang}-${DEV}-${lk}.png` }); }
     await run(`P.settings.look = ''; save()`);

@@ -27392,7 +27392,8 @@ const SIMPLE = (() => {
     const ms = lil ? LITTLE.must(ids) : ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
     const out = ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
     // the hardest step between two easier ones (day-goal)
-    try { return DAYG.sandwich(out); } catch (e) { return out; }
+    let o2 = out; try { o2 = DAYPLAN.order(out) || out; } catch (e) {}
+    try { return DAYG.sandwich(o2); } catch (e) { return o2; }
   }
   const opt = () => { const ms = must(); return Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); };
 
@@ -28128,8 +28129,9 @@ const WISH = (() => {
      sticker; seven days in a row — a badge), then by age «Оделась сама» or «Почистил зубы», at the weekend «Помог
      дома»; one tap each, a star each; grown-ups choose them in «День и все игры»;
    - one bar: «Сегодня: 3 из 7» with the life steps, the path and the book;
-   - 🔥 is the run of complete days, with stickers at 3, 7, 14 and 30; three complete days in a week earn one
-     «заморозка», which keeps the run over one missed day; never a word of blame;
+   - 🔥 counts the week, not a chain that breaks (dev/docs/science-dose.md: a broken streak pushes children away):
+     five complete days of seven make the week, and the friend counts the weeks made in a row; a missed day burns
+     nothing; never a word of blame;
    - a sandwich: from the journal on this phone (steps finished, steps left halfway) the hardest step of the path goes
      between two easier ones and is kept short; every step stays; grown-ups can keep the fixed order;
    - for the grown-ups: «любит / даётся трудно / где зависает» in plain words, from the same journal. ---------- */
@@ -28138,7 +28140,7 @@ const DAYG = (() => {
     bed: ['🛏️', 'Застелила кровать', 'Застелил кровать'], dress: ['👕', 'Оделась сама', 'Оделся сам'], teeth: ['🪥', 'Почистила зубы', 'Почистил зубы'],
     school: ['🏫', 'Сходила в школу', 'Сходил в школу'], garden: ['🧸', 'Сходила в сад', 'Сходил в сад'], help: ['🧹', 'Помогла дома', 'Помог дома']
   };
-  const MIL = [3, 7, 14, 30];
+  const WEEK_GOAL = 5, MIL = [2, 4, 8];
   const dcfg = () => (P.settings.day || {});
   const weekend = () => [0, 6].includes(new Date().getDay());
   function lifeIds() {
@@ -28156,33 +28158,34 @@ const DAYG = (() => {
   }
   // the hook other parts use: the path done and the book read (when the book is in the goal)
   const complete = () => SIMPLE.pathDone() && (!bookOn() || bookDone());
-  const ok = k => !!((P.doneDays || {})[k] || (P.frozen || []).includes(k));
-  function streak() { const d = new Date(); if (!ok(dayKey(d))) d.setDate(d.getDate() - 1); let n = 0; while (ok(dayKey(d))) { n++; d.setDate(d.getDate() - 1); } return n; }
-  // a missed day keeps the run when a «заморозка» is in the bank (earned by three complete days in a week)
-  function autoFreeze() {
-    const d = new Date(); d.setDate(d.getDate() - 1); const y = dayKey(d); d.setDate(d.getDate() - 1); const y2 = dayKey(d);
-    if (ok(y) || !ok(y2) || !(P.fz && P.fz.bank)) return false;
-    P.frozen = [...(P.frozen || []), y]; P.fz.bank = 0; save(); return true;
+  // the week: complete days from Monday to Sunday; five make the week
+  const weekEnd = w => { const d = new Date(w); d.setDate(d.getDate() + 6); return dayKey(d); };
+  const inWeek = (w = weekId()) => Object.keys(P.doneDays || {}).filter(k => k >= w && k <= weekEnd(w)).length;
+  // weeks made in a row (this week counts once it is made)
+  function streak() {
+    let w = weekId(), n = 0;
+    if (inWeek(w) < WEEK_GOAL) { const d = new Date(w); d.setDate(d.getDate() - 7); w = dayKey(d); }
+    while (inWeek(w) >= WEEK_GOAL) { n++; const d = new Date(w); d.setDate(d.getDate() - 7); w = dayKey(d); }
+    return n;
   }
+  const autoFreeze = () => false;   // no chain to keep: a missed day burns nothing
   function markDone() {
     if (!complete()) return null;
     const k = dayKey(); P.doneDays = P.doneDays || {}; if (P.doneDays[k]) return null;
     P.doneDays[k] = 1;
-    const w = weekId(), inWeek = Object.keys(P.doneDays).filter(x => x >= w).length;
-    P.fz = P.fz || { bank: 0, w: '' };
-    if (inWeek >= 3 && P.fz.w !== w && !P.fz.bank) { P.fz.bank = 1; P.fz.w = w; }
-    const s = streak(), m = MIL.find(x => x === s && !(P.csMil || []).includes(x));
+    const n = inWeek(), made = n === WEEK_GOAL, s2 = streak(), m = made ? MIL.find(x => x === s2 && !(P.csMil || []).includes(x)) : 0;
     if (m) P.csMil = [...(P.csMil || []), m];
-    save(); try { EVT.log('daydone', String(s)); } catch (e) {}
-    return { s, m };
+    save(); try { EVT.log('daydone', String(n)); } catch (e) {}
+    return { n, made, s: s2, m };
   }
   function celebrate(r) {
     const ov = document.createElement('div'); ov.className = 'overlay';
-    ov.innerHTML = `<div class="winbox" role="dialog"><div class="dg-fire">🔥</div><h2>${r.m ? `${r.m} ${plural(r.m, ['день', 'дня', 'дней'])} подряд!` : 'День пройден!'}</h2>
-      <p class="win-line">${r.m ? 'Новая наклейка-огонёк!' : `Огонёк горит: ${r.s} ${plural(r.s, ['день', 'дня', 'дней'])} подряд.`}${P.fz && P.fz.bank ? ' У тебя есть заморозка ❄️.' : ''}</p>
-      <div class="win-btns"><button class="big" data-a="ok">Ура!</button></div></div>`;
-    $('.screen').append(ov); confetti(80); sfx.good();
-    say(r.m ? `Ура! ${r.m} ${plural(r.m, ['день', 'дня', 'дней'])} подряд! Огонёк горит!` : 'Ура! День пройден! Огонёк горит!');
+    const h = r.made ? 'Неделя засчитана!' : 'День пройден!';
+    const line = r.made ? (r.s > 1 ? `Уже ${r.s} ${plural(r.s, ['неделя', 'недели', 'недель'])} подряд!` : 'Пять дней на этой неделе — огонёк недели горит!') + (r.m ? ' Новая наклейка-огонёк!' : '')
+      : `На этой неделе ${r.n} из ${WEEK_GOAL}. ${WEEK_GOAL - r.n > 0 ? `Ещё ${WEEK_GOAL - r.n} — и неделя засчитана!` : ''}`;
+    ov.innerHTML = `<div class="winbox" role="dialog"><div class="dg-fire">🔥</div><h2>${h}</h2><p class="win-line">${line}</p><div class="win-btns"><button class="big" data-a="ok">Ура!</button></div></div>`;
+    $('.screen').append(ov); confetti(r.made ? 90 : 60); sfx.good();
+    say(`${h} ${line}`);
     ov.onclick = e => { if (e.target.closest('[data-a]')) { sfx.pop(); ov.remove(); } };
   }
   // a real-life step ticked: a star; the bed — a cloud and, after seven days in a row, a badge
@@ -28255,7 +28258,7 @@ const DAYG = (() => {
       sd.insertAdjacentHTML('beforebegin', `<button class="sd-fav ${bookDone() ? 'open' : ''} dg-book" id="dgBook"><span class="sd-fi"><span class="emo">📚</span></span><span class="sd-ft"><b>${bookDone() ? 'Книжка — готово! ✓' : 'Почитать книжку'}</b><small>${bookDone() ? 'огонёк горит' : 'сам или с мамой и папой — и день пройден'}</small></span></button>`);
       box.querySelector('#dgBook').onclick = () => { sfx.pop(); homeLeave(); const b = GAMES.find(x => x.id === 'book'); if (b) b.go(); };
     }
-    const wb = document.querySelector('#weekBtn b'); if (wb) wb.textContent = streak();
+    const wb = document.querySelector('#weekBtn b'); if (wb) wb.textContent = `${inWeek()}/${WEEK_GOAL}`;
     const r = markDone(); if (r) later(() => celebrate(r), 700);
   }
   function parentHTML() {
@@ -28267,7 +28270,7 @@ const DAYG = (() => {
       <label class="sw" for="dgBookIn"><input id="dgBookIn" type="checkbox" ${bookOn() ? 'checked' : ''}><span class="set-t"><b>Книжка — часть цели дня</b><small>день пройден, когда тропа и книжка</small></span></label>
       <h3 class="fam-s">Уже сделано утром</h3>
       <div class="sd-areas" id="dgLife">${Object.keys(LIFE).map(id => `<button class="chip ${L.includes(id) || (weekend() && L.includes('help') && (id === 'school' || id === 'garden') && (dcfg().life || []).includes(id)) ? 'sel' : ''}" data-l="${id}">${LIFE[id][0]} ${esc(lifeName(id))}</button>`).join('')}</div>
-      <p class="sd-note">🔥 ${streak()} ${plural(streak(), ['день', 'дня', 'дней'])} подряд${P.fz && P.fz.bank ? ' · заморозка ❄️ есть' : ''}</p>`;
+      <p class="sd-note">🔥 На этой неделе ${inWeek()} из ${WEEK_GOAL} дней · недель подряд: ${streak()}. Пропуск ничего не сжигает.</p>`;
   }
   function parentBind(sec, redo) {
     const set = (k, v) => { P.settings.day = { ...(P.settings.day || {}), [k]: v }; save(); };
@@ -28276,8 +28279,11 @@ const DAYG = (() => {
     const lf = sec.querySelector('#dgLife');
     if (lf) lf.onclick = e => { const c = e.target.closest('[data-l]'); if (!c) return; const cur = Array.isArray(dcfg().life) ? dcfg().life : lifeIds(), id = c.dataset.l; set('life', cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id]); sfx.tick(); redo(); };
   }
-  return { goal, complete, streak, lifeIds, life, tick, sandwich, hardest, hard, insight, home, parentHTML, parentBind, markDone, autoFreeze, bookOn, bookDone, LIFE };
+  return { goal, complete, streak, inWeek, WEEK_GOAL, lifeIds, life, tick, sandwich, hardest, hard, insight, home, parentHTML, parentBind, markDone, autoFreeze, bookOn, bookDone, LIFE };
 })();
+// the one place where the grown-ups' focus (weights of subjects, minutes by age — task/parent-focus) plugs into the
+// day: order(ids) reorders or drops nothing it must keep; dose(id, plan) trims a step's games. Identity by default.
+const DAYPLAN = { order: ids => ids, dose: (id, plan) => plan };
 // the hook for other parts (e.g. «Моя книга»): is today complete?
 function dayComplete() { try { return DAYG.complete(); } catch (e) { return false; } }
 /* DAYG-END */
@@ -28407,6 +28413,7 @@ const LITTLE = (() => {
 })();
 function LITTLE_PLAN(id, full) {
   let p = full; try { p = LITTLE.plan(id, full); } catch (e) {}
+  try { p = DAYPLAN.dose(id, p) || p; } catch (e) {}
   // the hardest step of the path is kept short (day-goal)
   try { if (p.length > 3 && DAYG.hardest() === id) p = p.slice(0, 3); } catch (e) {}
   return p;
