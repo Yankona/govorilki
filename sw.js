@@ -1,7 +1,7 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
 // page kept under its own address. Icons and fonts (our own copy in fonts/) come from the cache and refresh in the background.
-const CACHE = 'govorilki-v168';
+const CACHE = 'govorilki-v169';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './de/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -30,7 +30,7 @@ self.addEventListener('fetch', e => {
   if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
   // the voice's program (Piper, ONNX runtime; our own copy in engine/piper/, the CDN in older pages): about 32 MB, kept
   // once in its own cache, which a new version does not clear, and never fetched again for each phrase
-  if (url.origin === location.origin && url.pathname.includes('/engine/piper/') || /^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {
+  if (url.origin === location.origin && /\/engine\/(piper|face)\//.test(url.pathname) || /^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {
     e.respondWith(caches.open('govorilki-voice').then(async c => (await c.match(req)) || fetch(req).then(res => { if (res && res.ok) c.put(req, res.clone()); return res; })));
     return;
   }
