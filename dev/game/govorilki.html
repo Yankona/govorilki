@@ -27878,9 +27878,9 @@ const LITTLE = (() => {
       const ear = EAR.filter(ok), n = dayNo();
       const r = p.find(x => String(x.key).startsWith('r-skill')) || (ok('r-skill') ? gameStep('r-skill', 'read') : null);
       const e = ear.length ? gameStep(ear[n % ear.length], 'read') : null;
-      // 5–6 and not reading yet: syllables first every day (SYLSTEP), then a game by ear or «Чтение по силам» by turns
+      // 5–6 and not reading yet: syllables first every day (SYLSTEP), then «Чтение по силам» (its first steps are heard)
       const sy = listen() && SYLS.forAge() && ok('syl-step') ? gameStep('syl-step', 'read') : null;
-      p = listen() ? (sy ? [sy, n % 2 ? r || e : e || r] : [r, e]).filter(Boolean) : p.slice(0, 2);
+      p = listen() ? (sy ? [sy, r || e] : [r, e]).filter(Boolean) : p.slice(0, 2);
     } else p = p.slice(0, 2);
     if (!p.length) p = full.slice(0, 1);
     if (short) { const one = p.filter(x => x.key === short); if (one.length) return one; }
