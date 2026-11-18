@@ -15,7 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'dist')
 SITE = os.environ.get('SITE_URL', 'https://govorilki.com').rstrip('/')
 LANGS = ['ru', 'en', 'pt', 'de']
-ART = ['ru', 'en', 'pt']   # the languages with articles; de has its home only (for now)
+ART = ['ru', 'en', 'pt', 'de']   # the languages with articles (de: a smaller set, see DE_KEYS)
 KEYS = ['home', 'r', 'l', 's', 'gym', 'read', 'world', 'grand', 'faq', 'privacy']
 APP = {'ru': SITE + '/play/ru/', 'en': SITE + '/play/', 'pt': SITE + '/play/pt/', 'de': SITE + '/play/de/'}
 # the game itself is served from /play/ of the same site (APP_DIR: the folder with its built files, the repository's root)
@@ -28,7 +28,8 @@ TODAY = datetime.date.today().isoformat()
 FRIENDS = ['tiger', 'kitty', 'panda', 'unicorn', 'ghost']
 
 C = {l: json.load(open(os.path.join(HERE, 'content', l + '.json'), encoding='utf-8')) for l in LANGS}
-PAGES = {l: KEYS if l in ART else ['home', 'privacy'] for l in LANGS}   # the privacy page is in every language
+DE_KEYS = ['home', 'world', 's', 'gym', 'read', 'faq', 'privacy']   # German: written by hand for German-speaking families, not every topic yet
+PAGES = {l: (DE_KEYS if l == 'de' else KEYS) if l in ART else ['home', 'privacy'] for l in LANGS}   # the privacy page is in every language
 for l in LANGS:
     assert set(C[l]['pages']) >= set(PAGES[l]), (l, set(PAGES[l]) - set(C[l]['pages']))
 ROOT = json.load(open(os.path.join(HERE, 'content', 'root.json'), encoding='utf-8'))
@@ -205,13 +206,19 @@ def extras():
         alts, xdef = alts_for(k)
         return ''.join(f'<xhtml:link rel="alternate" hreflang="{HL[a]}" href="{u}"/>' for a, u in alts.items()) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{xdef}"/>'
     urls.append(f'<url><loc>{SITE}/</loc><lastmod>{TODAY}</lastmod>{xl("home")}</url>')
+    # the game's first page in each language (its own head has the title, description and this hreflang set)
+    gx = ''.join(f'<xhtml:link rel="alternate" hreflang="{HL[a]}" href="{APP[a]}"/>' for a in LANGS) + f'<xhtml:link rel="alternate" hreflang="x-default" href="{APP["en"]}"/>'
+    for l in LANGS: urls.append(f'<url><loc>{APP[l]}</loc><lastmod>{TODAY}</lastmod>{gx}</url>')
     for k in KEYS:
         for l in LANGS:
             if k in PAGES[l]: urls.append(f'<url><loc>{url(l, k)}</loc><lastmod>{TODAY}</lastmod>{xl(k)}</url>')
     open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(urls) + '\n</urlset>\n')
-    open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /play/\n\nSitemap: {SITE}/sitemap.xml\n')
+    # /play/: only the game's first page per language is open to search; the rest (data packs, engine, pictures, the
+    # parent's and family areas live behind #… inside the page) stays out
+    play = ''.join(f'Allow: {APP[l][len(SITE):]}$\n' for l in LANGS)
+    open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\n{play}Disallow: /play/\n\nSitemap: {SITE}/sitemap.xml\n')
     # no redirect of «/» any more: govorilki.com is a page of its own (hub), so search engines can see it
-    open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n')
+    open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n' + ''.join(f'{APP[l][len(SITE):]}\n  ! X-Robots-Tag\n' for l in LANGS))
     nf = head('ru', None, 'Говорилки · Chatterbox · Tagarelas', C['ru']['pages']['home']['description'], SITE + '/', alts_for('home')[0], {'@context': 'https://schema.org', '@type': 'WebPage'}, xdef=SITE + '/')
     nf = nf.replace('<head>', '<head>\n<meta name="robots" content="noindex">')
     nf += f'<main class="wrap hub"><div class="hero-f"><img src="/assets/ghost.svg" alt="" width="96" height="96"></div><h1>404</h1><div class="lang-cards">' + ''.join(f'<a class="lang-card" href="{path(a, "home")}"><b>{esc(C[a]["brand"])}</b><span>{esc(C[a]["ui"]["lang_name"])}</span></a>' for a in LANGS) + '</div></main></body></html>'
