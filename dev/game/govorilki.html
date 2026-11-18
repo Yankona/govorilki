@@ -27504,14 +27504,38 @@ const SIMPLE = (() => {
   }
 
   // the favourite game: the one a grown-up chose, or the one played most
+  // the favourite game is a reward: what the child chose (or a grown-up), else a game from the child's favourite doors —
+  // never speech exercises, grammar, tongue twisters or a game of the path (the audit, 18.11: the reward turned into a
+  // warm-up or grammar). The Л-arena races stay: older children love them.
+  const ARENA = ['l-moto', 'l-rap', 'l-catch', 'l-boss', 'l-word'];
+  const NOT_REWARD = new Set([0, 1, 2, 3, 5, 6, 9, 12, 14, 15, 16]);
+  function rewardOk(id, V) {
+    const g = GAMES.find(x => x.id === id); if (!g || !V.has(id) || g.info) return false;
+    if (ARENA.includes(id)) return true;
+    if (NOT_REWARD.has(g.grp)) return false;
+    const path = new Set(Object.keys(LS()).flatMap(l => { try { return lessonPlan0(l).map(x => String(x.key)); } catch (e) { return []; } }));
+    return !path.has(id) && !['soroban', 'olymp-day', 'r-skill', 'm-skill', 'book', 'rume', 'rume-day'].includes(id);
+  }
+  function rewardGames() {
+    const V = vis(), ids = [...new Set([...favs().flatMap(a => gamesOf(area(a), V)), ...(Q() ? ARENA : []), 'draw', 'color', 'chess-ai', 'piano'])];
+    return ids.filter(id => rewardOk(id, V)).map(id => GAMES.find(g => g.id === id));
+  }
   function favGame() {
-    const c = cfg(), V = vis(), inLesson = new Set(['breath', 'artic', 'soroban', 'olymp-day', 'r-skill', 'm-skill', 'book']);
-    if (c.favGame && V.has(c.favGame)) return GAMES.find(g => g.id === c.favGame);
-    try { if (LITTLE.on() && (P.settings.likes || []).some(l => ['draw', 'art', 'unicorn', 'beauty'].includes(l)) && V.has('draw')) return GAMES.find(g => g.id === 'draw'); } catch (e) {}
-    let best = '', n = 0;
-    Object.entries(P.plays || {}).forEach(([k, v]) => { if (V.has(k) && !inLesson.has(k) && v > n) { best = k; n = v; } });
-    if (!best) best = [Q() ? 'chess-ai' : 'draw', 'draw', 'color', 'museum'].find(id => V.has(id)) || [...V][0];
-    return GAMES.find(g => g.id === best) || null;
+    const c = cfg(), V = vis();
+    if (c.favGame && rewardOk(c.favGame, V)) return GAMES.find(g => g.id === c.favGame);
+    if (P.favGameKid && rewardOk(P.favGameKid, V)) return GAMES.find(g => g.id === P.favGameKid);
+    try { if (LITTLE.on() && (P.settings.likes || []).some(l => ['draw', 'art', 'unicorn', 'beauty'].includes(l)) && rewardOk('draw', V)) return GAMES.find(g => g.id === 'draw'); } catch (e) {}
+    const rg = rewardGames(); let best = null, n = 0;
+    rg.forEach(g => { const v = (P.plays || {})[g.id] || 0; if (v > n) { best = g; n = v; } });
+    return best || rg[0] || null;
+  }
+  // the child chooses the favourite game: big tiles of the reward games
+  function favChoose() {
+    newScreen();
+    const rg = rewardGames().slice(0, 16), cur = favGame();
+    shell('Любимая игра', `<div class="sd-room"><p class="lead">Какая игра — твоя награда после сундука?</p><div class="tiles">${rg.map(g => `<button class="tile ${cur && cur.id === g.id ? 'sd-feat' : ''}" data-id="${g.id}" style="--bg:${g.bg}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b></button>`).join('')}</div></div>`, { back: goHome });
+    say('Какая игра — твоя награда?');
+    $$('.sd-room .tile').forEach(b => b.onclick = () => { sfx.good(); P.favGameKid = b.dataset.id; save(); say(`Твоя любимая игра: ${nm(GAMES.find(g => g.id === b.dataset.id).name)}!`); later(goHome, 900); });
   }
   // the favourite game's minutes (the owner, 18.11: a brother's minutes ran out during his sister's lessons): a
   // balance of this child for today, spent only while this child is in the game with the app in front; ⏸ or going
@@ -27534,7 +27558,10 @@ const SIMPLE = (() => {
     const g = favGame(); if (!g) return;
     if (favLeft() <= 0) { say('Время любимой игры на сегодня вышло. Завтра снова!'); return; }
     if (!favState() || favState().used === undefined) { P.fav = { d: dayKey(), used: 0 }; save(); }
-    FAV_ON = true; FAVK = ROOT.cur; FLAST = Date.now(); WARNED = favLeft() <= 60e3; tick(); homeLeave(); g.go(); favBar();
+    FAV_ON = true; FAVK = ROOT.cur; FLAST = Date.now(); WARNED = favLeft() <= 60e3; tick(); homeLeave();
+    // the reward opens at once: no tongue warm-up in front of it
+    const w0 = P.warmAt; P.warmAt = Date.now(); try { g.go(); } finally { P.warmAt = w0; }
+    favBar();
   }
   // counts every two seconds while this child plays in front; a gentle stop at the end
   function tick() {
@@ -27570,7 +27597,7 @@ const SIMPLE = (() => {
       ${ask ? `<div class="sd-ask" id="sdAsk"><b>💛 Что ты любишь?</b><small>Выбери 2–4 — они будут открыты каждый день!</small><button class="big" id="sdAskGo">Выбрать</button><button class="ibtn" id="sdAskX" aria-label="Потом">✕</button></div>` : ''}
       <div class="sd-head"><h2>Двери дня</h2><small>${done ? 'открыты — выбирай!' : `откроются после тропы · ещё ${ms - dn} ${plural(ms - dn, ['шаг', 'шага', 'шагов'])}`}</small></div>
       <div class="sd-doors">${ds.map(door).join('')}</div>
-      ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Любимая игра: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button>` : ''}
+      ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Любимая игра: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button><button class="sd-gh" id="sdFavCh">✏️ Выбрать любимую игру</button>` : ''}
       <div class="sd-soon"><p>🎁 Завтра — новый сюрприз! <button class="sd-gh" id="sdFavs">💛 Моё любимое</button></p></div>
     </section>`;
   }
@@ -27582,6 +27609,7 @@ const SIMPLE = (() => {
       homeLeave(); room(a);
     });
     const fb = box.querySelector('#sdFavs'); if (fb) fb.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
+    const fc = box.querySelector('#sdFavCh'); if (fc) fc.onclick = () => { sfx.pop(); homeLeave(); favChoose(); };
     const ag = box.querySelector('#sdAskGo'); if (ag) ag.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
     const ax = box.querySelector('#sdAskX'); if (ax) ax.onclick = () => { sfx.pop(); P.favAsked = 1; save(); const el = box.querySelector('#sdAsk'); if (el) el.remove(); };
     const f = box.querySelector('#sdFav');
@@ -27725,7 +27753,7 @@ const SIMPLE = (() => {
     sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
   }
-  return { favStop, favState, AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+  return { rewardOk, rewardGames, favChoose, favStop, favState, AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
 /* SIMPLE-END */
 /* TALK-BEGIN */

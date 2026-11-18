@@ -58,6 +58,21 @@ let bad = 0;
     // midnight: a new day, a full balance
     await run(`P.fav.d = '2000-01-01'; save()`);
     ok((await run('SIMPLE.favLeft()')) === 600000, 'midnight does not reset');
+    // the reward is a reward: never speech, grammar or a game of the path; no warm-up in front of it (audit 18.11)
+    await run(`P.plays = { 'gram-many': 30, 'breath': 40, 'l-twist': 25, 'olymp-day': 20 }; delete P.favGameKid; save()`);
+    const fg = await run('(() => { const g = SIMPLE.favGame(); return g ? { id: g.id, grp: g.grp } : null; })()');
+    ok(fg && ![0, 1, 2, 3, 5, 6, 9, 12, 14, 15, 16].includes(fg.grp) || (fg && ['l-moto', 'l-rap', 'l-catch', 'l-boss', 'l-word'].includes(fg.id)), `reward is ${JSON.stringify(fg)}`);
+    await run(`switchKid('k1')`); await p.waitForTimeout(600);
+    await run(`P.plays = { 'artic': 50, 'breath': 40 }; P.warmAt = 0; P.days[dayKey()] = Object.fromEntries(SIMPLE.must().map(id => [id, 1])); P.chest = dayKey(); save()`);
+    ok((await run('SIMPLE.favGame().id')) === 'draw', 'little one\'s reward is not drawing');
+    await run('SIMPLE.favGo()'); await p.waitForTimeout(1200);
+    ok(!(await p.$('.warm')), 'a tongue warm-up in front of the reward');
+    await run('SIMPLE.favStop(); goHome()'); await p.waitForTimeout(500);
+    // the child chooses the reward
+    await run('SIMPLE.favChoose()'); await p.waitForTimeout(600);
+    const t0 = await p.$('.sd-room .tile:not(.sd-feat)'); const tid = t0 ? await t0.getAttribute('data-id') : '';
+    if (t0) { await t0.click(); await p.waitForTimeout(1200); }
+    ok(tid && (await run('SIMPLE.favGame().id')) === tid, `child choice not kept (${tid})`);
     console.log(`${lang} ${DEV}: missing ${JSON.stringify(miss)} | errors ${JSON.stringify(errs)}`);
     if (errs.length || miss.length) bad++;
     await c.close();
