@@ -27844,7 +27844,7 @@ const TALK = (() => {
       const V = SIMPLE.vis(), gs = SIMPLE.gamesOf(a, V);
       if (!gs.length) return { say: `${a.n} сейчас закрыто. Спроси взрослых.` };
       if (!simple) return { say: `Открываю: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
-      if (!td.some(y => y.id === a.id)) { P.wantDoor = { area: a.id, d: dayKey() }; save(); return { say: `${a.n} будет завтра сюрпризом! А чтобы каждый день — добавь в «Моё любимое».`, go: () => { homeLeave(); SIMPLE.favPick(); } }; }
+      if (!td.some(y => y.id === a.id)) { P.wantDoor = { area: a.id, d: dayKey() }; save(); return { say: `${a.n} будет завтра сюрпризом! А чтобы каждый день — добавь в «Моё любимое».` }; }
       if (!SIMPLE.doorOpen(a)) return { say: afterPath(a.n) };
       return { say: `Открываю дверь: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
     }

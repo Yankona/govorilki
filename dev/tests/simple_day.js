@@ -63,7 +63,7 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
       await p.screenshot({ path: `${SHOTS}/simple-${lang}-${k}-${DEV}-after.png`, fullPage: false });
       await p.click('#sdFav'); await p.waitForTimeout(800);
       ok(!(await p.$('#pdBox')), `${tag}: favourite game did not open`, miss);
-      await run(`P.fav.t = Date.now() - 11 * 60e3`); await p.waitForTimeout(4800);
+      await run(`P.fav.used = 10 * 60e3 - 500`); await p.waitForTimeout(4800);
       ok(!!(await p.$('#sdHome')), `${tag}: no «time is up»`, miss);
       if (await p.$('#sdHome')) { await p.click('#sdHome'); await p.waitForTimeout(500); }
       ok(!!(await p.$('#pdBox')), `${tag}: not home after the time`, miss);
