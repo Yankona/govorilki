@@ -8,6 +8,8 @@ D=$(cd "$(dirname "$0")/.." && pwd)
 SITE=$(cd "${SITE:-$D/..}" && pwd)
 MSG=$1; [ -f "$MSG" ] || { echo "usage: $0 <commit-message-file>"; exit 2; }
 V=$(grep -o 'govorilki-v[0-9]*' "$SITE/sw.js" | head -1)
+# only a version that build/release_check.sh built and checked (it writes dev/.release-ok)
+[ "$(cut -d' ' -f1 "$D/.release-ok" 2>/dev/null)" = "${V#govorilki-v}" ] || { echo "${V#govorilki-v} was not checked: run build/release_check.sh ${V#govorilki-v} first"; exit 5; }
 cd "$SITE"
 grep -q "(версия ${V#govorilki-v})" README.md || { echo "README.md has no note for ${V#govorilki-v}: add «**… (версия ${V#govorilki-v}).** …» at the top"; exit 3; }
 git add -A && git commit -q -F "$MSG"

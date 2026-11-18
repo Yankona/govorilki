@@ -2,8 +2,9 @@
 # Release, step 1 of 2: build/release_check.sh <version> [--voice]
 # Copies new site files from site-add/ into $SITE, sets the version in $SITE/sw.js, rebuilds the Russian pronunciation
 # dictionary when asked (--voice: Russian texts changed; needs .venv-racc, see skill voice-stress), builds all four
-# languages, checks that no new string is left untranslated, and runs the smoke test on a phone and a laptop.
-# Exit codes: 2 usage, 3 untranslated strings (skill translate), 4 smoke test failed.
+# languages, checks that no new string is left untranslated, checks the built pages and packs (build/check_site.js)
+# and runs the browser tests of tests/ci.sh (smoke on a phone and a laptop + tests/ci.txt, about 5 minutes).
+# Exit codes: 2 usage, 3 untranslated strings (skill translate), 4 a browser test failed, 5 the site check failed.
 set -eo pipefail
 D=$(cd "$(dirname "$0")/.." && pwd); cd "$D"
 export SITE=$(cd "${SITE:-$D/..}" && pwd)
@@ -20,8 +21,11 @@ echo "$OUT" | grep -E "translated|missing"
 # the baseline: 8 strings in 3 groups stay Russian on purpose in every language (GAMES, LEARN_IMG, SND_HI)
 if echo "$OUT" | grep -E "built; missing" | grep -vq "missing 8 in 3 groups"; then
   echo "UNTRANSLATED: see i18n/out-{en,pt,de}.html.missing.json, then skill translate"; exit 3; fi
-(tests/serve.sh >/dev/null 2>&1 &)
-for i in $(seq 20); do curl -s -o /dev/null -w "%{http_code}" http://localhost:8781/govorilki/ru/ | grep -q 200 && break; timeout 1 tail -f /dev/null || true; done
-RC=0; node tests/smoke.js || RC=4; node tests/smoke.js http://localhost:8781/govorilki/ laptop || RC=4
-pkill -f "http.server 8781" || true
-[ $RC = 0 ] && echo "READY: v$V built and checked in $SITE (git -C $SITE status --short to review)"; exit $RC
+# the built pages: scripts parse, every data pack the page names is there with its hash, the service worker's files
+# exist, source JSON parses, no secrets or personal emails (build/check_site.js, seconds)
+node build/check_site.js | grep -v '^ok' || { echo "SITE CHECK FAILED (above)"; exit 5; }
+# the smoke test on a phone and a laptop + the fast feature tests of tests/ci.txt (the same as the «Checks» action on
+# every task branch, about 5 minutes)
+tests/ci.sh || exit 4
+echo "$V $(git -C "$SITE" rev-parse HEAD)" > "$D/.release-ok"   # build/publish.sh refuses a version not checked here
+echo "READY: v$V built and checked in $SITE (git -C $SITE status --short to review)"
