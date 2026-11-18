@@ -618,6 +618,31 @@ b.r{color:var(--berry)}
 .cam-ask{display:flex;flex-direction:column;gap:8px;max-width:640px;margin:0 auto 12px;padding:12px 14px;border-radius:20px;background:var(--t-blue);color:var(--ink)}.cam-ask p{margin:0;display:flex;flex-direction:column;gap:2px}.cam-ask b{font:800 18px var(--f-body)}.cam-ask small{font:600 14px/1.35 var(--f-body);color:var(--ink-soft)}
 .cam-l{position:absolute;bottom:7%;left:50%;translate:-50% 0;padding:2px 12px;background:var(--paper);border-radius:99px;font:800 15px var(--f-body)}
 .artic-stage.cam-on .mirror,.artic-stage.cam-on .cam{width:min(44vw,320px,40vh)}
+/* honest exercises: the ring that fills while the pose is held, the hint, «Делаю!» (speech-honest) */
+.hon{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;width:100%}
+.hon-r{--p:0;position:relative;flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ok,#2FA865) calc(var(--p) * 1%),var(--line) 0);transition:background .15s}
+.hon-r::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--paper)}
+.hon-r .emo{position:relative;font-size:34px;line-height:1}
+.hon-r.ok{box-shadow:0 0 0 4px #BFF0D2}
+.hon-l{flex:1 1 160px;font:800 19px/1.25 var(--f-body);color:var(--ink);min-height:1.25em}
+.hon-hold{flex:1 1 100%;touch-action:none;user-select:none;-webkit-user-select:none}
+.hon-hold.on{background:#2FA865;box-shadow:0 5px 0 #1E7A48;transform:translateY(2px)}
+.hon-b{flex:1 1 100%}
+.cam.hon-on{transition:border-color .2s}.cam.hon-on .cam-l{max-width:88%;width:max-content;text-align:center;line-height:1.2}.cam.held .cam-l{background:#DDF6E7}.cam.held{border-color:#2FA865;box-shadow:0 8px 0 #1E7A48}
+.steps i.on.miss{filter:grayscale(1);opacity:.45}
+/* «Послушай условие»: the answers wait for the instruction */
+#stage.ls-wait button,#stage.ls-wait [data-id],#stage.ls-wait .card,#stage.ls-wait .item{opacity:.6;filter:saturate(.6);transition:opacity .3s}
+.ls-ear{position:fixed;left:50%;bottom:calc(var(--guide-h,90px) + 14px);translate:-50% 0;z-index:30;display:flex;align-items:center;gap:8px;padding:8px 18px;border-radius:99px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);font:800 18px var(--f-body);color:var(--ink);pointer-events:none;animation:lsIn .3s ease}
+.ls-ear .emo{font-size:30px;line-height:1;animation:lsBeat 1.2s ease-in-out infinite}
+.ls-ear.ls-pic{padding:10px 22px;gap:12px}.ls-ear.ls-pic .emo{font-size:44px}.ls-g{display:inline-flex;font-size:40px;line-height:1}.ls-g svg{width:46px;height:46px}
+.ls-ear.ls-go{background:#DDF6E7}
+.ls-ear.ls-shake{animation:lsShake .4s ease}
+#replay.ls-big{transform:scale(1.35);box-shadow:0 0 0 6px var(--t-yellow);animation:lsBeat 1.2s ease-in-out infinite}
+.guide.ls-on #replay{width:58px;height:58px}
+@keyframes lsIn{from{opacity:0;translate:-50% 12px}}
+@keyframes lsBeat{50%{transform:scale(1.12)}}
+@keyframes lsShake{25%{translate:calc(-50% - 8px) 0}75%{translate:calc(-50% + 8px) 0}}
+@media (prefers-reduced-motion:reduce){.ls-ear,.ls-ear .emo,#replay.ls-big{animation:none}}
 .snd-tabs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
 .snd-tab{width:76px;height:76px;border:0;border-radius:22px;background:var(--paper);font:900 46px/1 var(--f-body);cursor:pointer;box-shadow:0 5px 0 var(--line-strong)}
 .snd-tab.sel{background:var(--t-yellow);box-shadow:0 5px 0 #D39A00,inset 0 0 0 4px var(--sun)}
@@ -4723,6 +4748,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
+  try { HONEST.leave(); } catch (e) {}
   if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
   try { EVT.next(); } catch (e) {}
@@ -4893,7 +4919,9 @@ function talk(text, opts) {
   lastLine = text;
   const b = $('#bubble'); if (b) { SAID_FULL = gx(text); b.textContent = SAID_FULL; b.classList.remove('open'); b.scrollTop = 0; bubbleFit(b); saidSync(); }
   const r = $('.guide-ryz'); if (r) { r.classList.remove('talking'); void r.offsetWidth; r.classList.add('talking'); }
-  return say(text, opts);
+  const p = say(text, opts);
+  try { LISTEN.said(text, p); } catch (e) {}
+  return p;
 }
 function wiggle(el) { el.classList.remove('wiggle'); void el.offsetWidth; el.classList.add('wiggle'); }
 function hopEl(el) { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); }
@@ -5379,7 +5407,7 @@ function goHome() {
   newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
-  srDefault(); EVT.wrap(GAMES); EVT.shown(); EVT.enter('home:' + (P.homeTab || 'today')); EVT.send();
+  srDefault(); EVT.wrap(GAMES); try { LISTEN.wrap(GAMES); } catch (e) {} EVT.shown(); EVT.enter('home:' + (P.homeTab || 'today')); EVT.send();
   const RF = readFineCheck();
   navHome();
   document.body.classList.toggle('quest', Q()); lookApply();
@@ -5689,6 +5717,7 @@ function screenArtic(i, auto = false, then = null) {
         <p class="muted" id="camNote" hidden></p>
       </div></div>`, { back: then ? goHome : screenArticMenu });
   bindCam($('#artStage'), { auto: true });
+  const H = HONEST.artic(a, t);
   const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
   // a pose melts into the next one, so the tongue and the lips seem to move; the same pose again: held, it breathes
   let cur = a.thumb, swap = 0;
@@ -5708,16 +5737,21 @@ function screenArtic(i, auto = false, then = null) {
   const start = async () => {
     if (started || t !== tok) return; started = true;
     $('#go').hidden = true; sfx.pop();
+    H.go();
     await talk('Приготовились!'); if (t !== tok) return;
     for (let k = 0; k < a.steps.length; k++) {
       const [pose, line, ms, fx] = a.steps[k];
       setFace(pose, fx); dots[k].classList.add('on');
       if (line) { sayB.hidden = false; sayB.textContent = line; sayB.style.animation = 'none'; void sayB.offsetWidth; sayB.style.animation = ''; say(line); } else sayB.hidden = true;
       if (fx === 'tick') sfx.tick(); else if (line) ARTFUN.beat(a.id);
-      await wait(ms * pace()); if (t !== tok) return;
+      // the exercise goes on when the child really does it (the mirror sees it, or «Делаю!» is held): honest
+      const r = await H.step(pose, ms * pace()); if (t !== tok) return;
+      dots[k].classList.toggle('miss', r === 'miss');
     }
     sayB.hidden = true;
-    finish(then ? { key: 'artic:' + a.id, stars: 1, line: 'Язычок размялся — теперь рисуем! ' + ARTFUN.reward(), again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: 'Язычок стал сильнее! ' + ARTFUN.reward(), again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
+    const R = H.end();
+    if (!R.ok) { H.retry(() => screenArtic(i, false, then)); return; }
+    finish(then ? { key: 'artic:' + a.id, stars: 1, line: R.line + 'Язычок размялся — теперь рисуем! ' + ARTFUN.reward(), again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: R.line + (R.line ? '' : 'Язычок стал сильнее! ') + ARTFUN.reward(), again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
   };
   $('#go').onclick = start;
   // before «Начать»: the movement again and again, so the child sees what the tongue does
@@ -7103,19 +7137,21 @@ function bindCam(stage, { auto = false } = {}) {
     note.textContent = 'Здесь камера недоступна. Она работает в приложении на телефоне. А пока можно заниматься перед обычным зеркалом.';
     talk('Камера здесь не включается. Давай смотреть в обычное зеркало!');
   };
-  if (!auto || !camAuto() || ROOT.camAsk === 'no') return;
-  if (ROOT.camAsk === 'yes') { on(true).then(ok => { if (!ok && t === tok) { ROOT.camAsk = 'no'; save(); } }); return; }
-  // the first time: ask once
-  stage.insertAdjacentHTML('beforebegin', `<div class="cam-ask" id="camAsk"><p><b>🪞 ${esc('Включим волшебное зеркало?')}</b><small>${esc('Ты увидишь свой рот и язычок. Камера ничего не записывает и никуда не отправляет.')}</small></p>
+  if (ROOT.camAsk === 'no' && !ROOT.camNoAt) { ROOT.camNoAt = Date.now(); save(); }
+  const again = ROOT.camAsk === 'no' && Date.now() - (ROOT.camNoAt || 0) > 7 * 864e5;
+  if (!auto || !camAuto() || (ROOT.camAsk === 'no' && !again)) return;
+  if (ROOT.camAsk === 'yes') { on(true).then(ok => { if (!ok && t === tok) { ROOT.camAsk = 'no'; ROOT.camNoAt = Date.now(); save(); } }); return; }
+  // the first time: ask once; after «no», kindly again once a week, with a word for the grown-ups
+  stage.insertAdjacentHTML('beforebegin', `<div class="cam-ask" id="camAsk"><p><b>🪞 ${esc('Включим волшебное зеркало?')}</b><small>${esc('Ты увидишь свой рот и язычок. Камера ничего не записывает и никуда не отправляет.')}</small>${again ? `<small class="cam-par">${esc('Для взрослых: зеркало помогает увидеть, правда ли ребёнок делает упражнение, и подсказывает «Получается!» или «Попробуй ещё». Видео смотрит только этот телефон: оно не записывается и никуда не отправляется. Без камеры упражнение засчитывается, когда ребёнок держит кнопку «Делаю!».')}</small>` : ''}</p>
     <div class="prow-btns"><button class="big" id="camYes">${esc('Да, включить')}</button><button class="big ghost" id="camNo">${esc('Не надо')}</button></div></div>`);
   talk('Хочешь видеть себя, как в зеркале? Нажми «Да, включить».');
   $('#camYes').onclick = async () => {
     sfx.pop(); $('#camAsk').remove();
     const ok = await on(); if (t !== tok) return;
-    ROOT.camAsk = ok ? 'yes' : 'no'; save();
+    ROOT.camAsk = ok ? 'yes' : 'no'; if (!ok) ROOT.camNoAt = Date.now(); save();
     if (!ok) { note.hidden = false; note.textContent = 'Камера не включилась. Можно заниматься перед обычным зеркалом.'; }
   };
-  $('#camNo').onclick = () => { sfx.pop(); $('#camAsk').remove(); ROOT.camAsk = 'no'; save(); talk('Хорошо! Садись перед обычным зеркалом.'); };
+  $('#camNo').onclick = () => { sfx.pop(); $('#camAsk').remove(); ROOT.camAsk = 'no'; ROOT.camNoAt = Date.now(); save(); talk('Хорошо! Садись перед обычным зеркалом.'); };
 }
 function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {
   newScreen(); HOW_CUR = null;
@@ -25420,7 +25456,9 @@ const GUIDE = (() => {
   function famHTML() {
     const f = fam(); if (!f) return '';
     const ids = f.kids.filter(id => ROOT.profiles[id]).sort((a, b) => (b === ROOT.cur) - (a === ROOT.cur));
-    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) })).join('')
+    // the tongue exercises left this week (speech-honest): a calm line above the idea
+    const skip = id => { try { const l = HONEST.reportLine(ROOT.profiles[id]); return l ? `<p class="gd-act gd-skip">🙈 ${esc(l)}</p>` : ''; } catch (e) { return ''; } };
+    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) }).replace('<details class="gd-idea">', skip(id) + '<details class="gd-idea">')).join('')
       || '<p class="lead">Добавьте ребёнка в семью — и здесь появится отчёт.</p>';
   }
   function mountFam(box) {
@@ -27784,7 +27822,7 @@ const LITTLE = (() => {
   const td = () => todayState();
   // the plan of a step for a little one: a few short games, nothing to read; «только одну» keeps one game
   function plan(id, full) {
-    if (!on()) return full;
+    if (!on()) { const sh = td().short; if (id === 'speech' && sh && sh[id]) { const one = full.filter(x => x.key === sh[id]); if (one.length) return one; } return full; }
     const t = td(), short = t.short && t.short[id];
     let p = listen() ? full.filter(x => !TEXT.has(x.key) && !String(x.key).startsWith('comix')) : full;
     if (id === 'speech') {
@@ -27807,7 +27845,7 @@ const LITTLE = (() => {
   }
   // a step left halfway: once a day per step the friend offers one game; two left → the creative door opens
   function skipped(id) {
-    if (!on() || !LS()[id]) return;
+    if (!(on() || id === 'speech') || !LS()[id]) return;
     const t = td(); t.skips = (t.skips || 0) + 1;
     t.offered = t.offered || {};
     if (!t.offered[id] && nextStepOf(id)) { t.offered[id] = 1; t.offer = id; }
@@ -27816,7 +27854,7 @@ const LITTLE = (() => {
   }
   const rescue = () => on() && (td().skips || 0) >= 2;
   function offer() {
-    const t = td(), id = t.offer; if (!id || !on() || $('.lt-offer')) return;
+    const t = td(), id = t.offer; if (!id || !(on() || id === 'speech') || $('.lt-offer')) return;
     delete t.offer; save();
     const s = nextStepOf(id); if (!s) return;
     const ov = document.createElement('div'); ov.className = 'overlay lt-offer';
@@ -27872,7 +27910,7 @@ const LITTLE = (() => {
   };
   // on the home: the stickers of the day under the bubble, the offer, the sticker to colour after the path
   function home(box) {
-    if (!on()) return;
+    if (!on()) { later(offer, 900); return; }
     const ss = dayStickers(), hero = box.querySelector('.pd-hero');
     if (hero && ss.length) hero.insertAdjacentHTML('afterend', `<div class="lt-day" aria-label="Наклейки дня">${ss.map(e => `<span class="emo">${e}</span>`).join('')}</div>`);
     const doors = box.querySelector('.sd-doors');
@@ -27880,11 +27918,307 @@ const LITTLE = (() => {
     later(offer, 900);
   }
   // for the grown-ups' «День»: a calm line about today
-  const parentLine = () => on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc(P.settings.name || '')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '';
+  const parentLine = () => (() => { try { const l = HONEST.todayLine(P); return l ? `<p class="sd-note">${esc(l)}</p>` : ''; } catch (e) { return ''; } })() + (on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc(P.settings.name || '')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '');
   return { on, listen, reads, plan, must, skipped, rescue, offer, stepDone, home, colour, parentLine, TEXT, EAR, dayStickers };
 })();
 function LITTLE_PLAN(id, full) { try { return LITTLE.plan(id, full); } catch (e) { return full; } }
 /* LITTLE-END */
+/* HONEST-BEGIN */
+/* ---------- Honest speech exercises (one child tried, the other let the exercises run and they counted as done):
+   - an exercise of «Зарядка для язычка» counts only when it was really done: the magic mirror looks at the face, or,
+     without a camera, the child holds «Делаю!» while doing it; the girl waits for the child (the count goes on only while
+     the pose is held) and a ring fills while it is held; not done → «Попробуй ещё», no star, no thing for «Домик Язычка»;
+   - the mirror looks with a face model in the browser (MediaPipe Face Landmarker, Apache-2.0, our own copy in
+     engine/face/, loaded only here). It sees the lips, the jaw and the cheeks, not the tongue: for a tongue exercise it
+     checks only that the mouth is open and held, and says «Молодец, что старался — посмотри в зеркало, как язычок»
+     instead of a verdict. Nothing is recorded or sent: the picture goes from the camera to the model on this phone and
+     only a few numbers (how open, how wide) come out. The neutral face of each child is measured in the first seconds
+     (P.faceCal: numbers only). The model runs about 10 times a second, pauses when the app is hidden and stops with the
+     exercise; no WebGL/WASM → the button;
+   - leaving an exercise unfinished is a skip: it is counted (the parents' «Отчёт»: «пропущено N упражнений»), the step of
+     the day stays unfinished (2/5) and the friend offers «Давай только одну!» once (the little ones' rule, now for every
+     child's speech step);
+   - «Послушай условие»: a game with a spoken instruction (speech, reading by ear, maths, puzzles) does not take answers
+     while the instruction plays the first time today (always for a child up to 6): a soft «слушаю…» and a big 🔊; taps
+     during it, or two quick wrong answers, bring «Ты не услышал(а). Послушай, пожалуйста, внимательно» and the
+     instruction again, then the answers open. Never more than twice in a game. ---------- */
+const FACE = (() => {
+  const S = { lm: null, p: null, failed: false, live: 0 };
+  const dir = () => new URL(SITE_ROOT + 'engine/face/', location.href).href;
+  const can = () => !EMBEDDED && typeof WebAssembly === 'object';
+  // the model, once per visit (tests give window.__FACE_STUB: numbers instead of a face)
+  function load() {
+    if (window.__FACE_STUB) return Promise.resolve(S.lm = S.lm || { stub: true });
+    if (S.lm) return Promise.resolve(S.lm);
+    if (S.failed || !can()) return Promise.resolve(null);
+    if (!S.p) S.p = (async () => {
+      const B = dir(), V = await import(B + 'vision_bundle.mjs');
+      const files = { wasmLoaderPath: B + 'vision_wasm_internal.js', wasmBinaryPath: B + 'vision_wasm_internal.wasm' };
+      const mk = delegate => V.FaceLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: B + 'face_landmarker.task', delegate }, outputFaceBlendshapes: true, outputFaceLandmarks: false, runningMode: 'VIDEO', numFaces: 1 });
+      try { S.lm = await mk('GPU'); } catch (e) { S.lm = await mk('CPU'); }
+      return S.lm;
+    })().catch(() => { S.failed = true; S.p = null; try { EVT.err('face'); } catch (e) {} return null; });
+    return S.p;
+  }
+  const ready = () => !!S.lm;
+  // a few numbers from one frame: how open the jaw is, how wide the smile, how round the lips, how puffed the cheeks
+  function read(video, now) {
+    if (window.__FACE_STUB) return window.__FACE_STUB(now);
+    if (!S.lm || S.lm.stub || !video || !video.videoWidth) return null;
+    const r = S.lm.detectForVideo(video, now), c = r && r.faceBlendshapes && r.faceBlendshapes[0];
+    if (!c) return { face: false };
+    const m = {}; c.categories.forEach(x => { m[x.categoryName] = x.score; });
+    const v = k => m[k] || 0;
+    return { face: true, open: v('jawOpen'), smile: (v('mouthSmileLeft') + v('mouthSmileRight')) / 2 + (v('mouthStretchLeft') + v('mouthStretchRight')) / 4, pucker: Math.max(v('mouthPucker'), v('mouthFunnel')), puff: v('cheekPuff') };
+  }
+  // the model looks about 10 times a second while the exercise is on the screen and the app is shown
+  function watch(video) {
+    const t = tok, w = { cur: null, n: 0, on: true, ms: 0 };
+    S.live++;
+    const end = () => { if (w.on) { w.on = false; S.live--; clearTimeout(w.h); } };
+    const step = () => {
+      if (!w.on) return;
+      if (t !== tok) { end(); return; }
+      if (!document.hidden && (camStream || window.__FACE_STUB) && S.lm) {
+        const a = performance.now();
+        try { w.cur = read(video, a); w.n++; } catch (e) { w.cur = null; }
+        w.ms = performance.now() - a;
+      } else w.cur = null;
+      w.h = setTimeout(step, Math.max(40, 100 - w.ms));
+    };
+    step(); w.stop = end;
+    return w;
+  }
+  // the neutral face of the child and how far each movement must go
+  const DEF = { open: .05, smile: .12, pucker: .1, puff: .05 }, NEED = { open: .16, smile: .3, pucker: .28, puff: .2 }, CAP = { open: .25, smile: .4, pucker: .35, puff: .25 };
+  const cal = () => { const c = P.faceCal; return { b: { ...DEF, ...(c && c.b) }, k: { ...(c && c.k) } }; };
+  function calibrate(xs) {
+    xs = xs.filter(x => x && x.face); if (xs.length < 5) return false;
+    const c = P.faceCal || {}, b = {};
+    // the lower quarter: a child who already copies the girl during the intro does not raise the neutral face
+    Object.keys(DEF).forEach(k => { const v = xs.map(x => x[k]).sort((p, q) => p - q)[Math.floor(xs.length / 4)]; const nw = Math.min(CAP[k], v); b[k] = c.b && c.b[k] != null ? (c.b[k] + nw) / 2 : nw; });
+    P.faceCal = { ...c, b, at: dayKey() }; save();
+    return true;
+  }
+  // 0 … 1 … more: how far the movement went (1 = enough)
+  function level(kind, s) {
+    if (!s || !s.face) return 0;
+    if (kind === 'any') return 1;
+    const C = cal(), need = NEED[kind] * (C.k[kind] || 1);
+    return Math.max(0, (s[kind] - C.b[kind]) / need);
+  }
+  // after an exercise: a child who always comes close but not quite gets a little easier goal (never below 60 %)
+  function adapt(kind, peaks) {
+    if (!peaks.length || kind === 'any') return;
+    const avg = peaks.reduce((a, b) => a + b, 0) / peaks.length, c = P.faceCal || (P.faceCal = {}), k = c.k || (c.k = {}), s = k[kind] || 1;
+    if (avg >= .55 && avg < 1) k[kind] = Math.max(.6, s * .9); else if (avg > 1.8) k[kind] = Math.min(1, s * 1.05);
+  }
+  return { load, ready, watch, calibrate, level, adapt, live: () => S.live, failed: () => S.failed, stub: () => !!(S.lm && S.lm.stub) };
+})();
+
+const HONEST = (() => {
+  // what the mirror can see in each pose of the girl; the rest are tongue poses: only «the mouth is open»
+  const KIND = { frog: 'smile', trunk: 'pucker', horn: 'pucker', donkey: 'smile', donkey2: 'any', slap: 'any', puff: 'puff', cheeks: 'puff' };
+  const OWN = { 'sh-accordion': { donkey: 'any' } };
+  const kindOf = (a, pose) => (OWN[a.id] && OWN[a.id][pose]) || KIND[pose] || 'open';
+  const isTongue = a => a.steps.some(s => !KIND[s[0]]);
+  const EMO = { smile: '😁', pucker: '😗', open: '😮', puff: '🐡', any: '🙂' };
+  const MORE = { smile: 'Ещё чуть шире!', pucker: 'Губки чуть вперёд!', open: 'Открой ротик чуть шире!', puff: 'Надуй щёчки сильнее!', any: 'Смотри в зеркало!' };
+  // the day's notes: exercises done and left (for «Отчёт»), kept two weeks
+  function log(f) {
+    const k = dayKey(), L = P.artLog || (P.artLog = {}), d = L[k] || (L[k] = { d: 0, s: 0 });
+    d[f]++; Object.keys(L).sort().slice(0, -14).forEach(x => delete L[x]); save();
+  }
+  const sumDays = (pr, n) => { const L = pr.artLog || {}, out = { d: 0, s: 0 }; for (let i = 0; i < n; i++) { const x = new Date(); x.setDate(x.getDate() - i); const v = L[dayKey(x)]; if (v) { out.d += v.d; out.s += v.s; } } return out; };
+  // the open exercise: left without being done = skipped
+  let OPEN = null;
+  function leave() { if (OPEN && !OPEN.done && !OPEN.again && (OPEN.go || OPEN.lesson)) { const o = OPEN; OPEN = null; log('s'); try { EVT.log('skip', 'artic:' + o.id); } catch (e) {} } OPEN = null; }
+  const TRIES = {};
+  function artic(a, t) {
+    const o = OPEN = { id: a.id, done: false, go: false, again: false, lesson: !!ACTIVE }, tongue = isTongue(a);
+    const jaw = /челюст/i.test(a.tip || '');
+    let W = null, mode = 'hold', holding = false, hits = 0, total = 0, tried = 0, calib = [], peaks = {}, jawLo = 1, jawHi = 0, jawSaid = false;
+    const side = $('#artStage .artic-side'), stepsEl = $('#steps');
+    stepsEl.insertAdjacentHTML('afterend', `<div class="hon" id="hon" hidden><span class="hon-r" id="honR" style="--p:0"><span class="emo" id="honE">🙂</span></span>
+      <b class="hon-l" id="honL"></b><button class="big hon-hold" id="honHold" hidden>✋ Делаю!</button></div>`);
+    const box = $('#hon'), ring = $('#honR'), lab = $('#honL'), em = $('#honE'), hb = $('#honHold');
+    bindHold(hb, () => { holding = true; }, () => { holding = false; });
+    // the mirror's eyes: when the camera is on, the model is loaded and watches; the button otherwise
+    const cam = () => $('#camV');
+    const sync = () => {
+      if (t !== tok) return;
+      const live = !!(camStream || (window.__FACE_STUB && !$('#cam').hidden));
+      if (live && FACE.ready()) { if (!W || !W.on) W = FACE.watch(cam()); mode = 'face'; }
+      else { if (W) { W.stop(); W = null; } mode = 'hold'; if (live && !FACE.failed()) FACE.load().then(() => sync()); }
+      hb.hidden = mode !== 'hold' || !o.go;
+      $('#cam') && $('#cam').classList.toggle('hon-on', mode === 'face');
+    };
+    const iv = setInterval(() => {
+      if (t !== tok) { clearInterval(iv); if (W) W.stop(); return; }
+      sync();
+      // the first seconds before «Начать»: the neutral face
+      if (!o.go && W && W.cur && W.cur.face && calib.length < 100) calib.push(W.cur);
+    }, 100);
+    sync();
+    const show = (p, txt, kind, ok) => {
+      box.hidden = false; ring.style.setProperty('--p', Math.round(Math.min(1, p) * 100));
+      ring.classList.toggle('ok', !!ok); em.textContent = EMO[kind] || '🙂';
+      if (txt != null && lab.textContent !== txt) lab.textContent = txt;
+      const c = $('#cam'); if (c) c.classList.toggle('held', !!ok && mode === 'face');
+      // the same hint on the mirror itself: on a phone the child looks there, not below
+      const cl = c && c.querySelector('.cam-l'); if (cl && mode === 'face' && txt) cl.textContent = txt;
+    };
+    // one step of the exercise: at least its time; it counts when the pose was held long enough. The girl waits for
+    // the child: up to 2.5 times the step's time, then the step is missed and the exercise goes on.
+    async function step(pose, ms) {
+      const kind = kindOf(a, pose), need = Math.min(ms * .5, 900), maxT = ms * 2.5;
+      let el = 0, held = 0, peak = 0, last = performance.now(), seen = 0;
+      total++;
+      while (t === tok) {
+        await wait(50); if (t !== tok) return 'gone';
+        const now = performance.now(), dt = Math.min(200, now - last); last = now; el += dt;
+        let lv = 0;
+        if (mode === 'face') {
+          const s = W && W.cur; lv = FACE.level(kind, s); if (s && s.face) seen += dt;
+          if (jaw && s && s.face && kind === 'open') { jawLo = Math.min(jawLo, s.open); jawHi = Math.max(jawHi, s.open); }
+        } else lv = holding ? 1 : 0;
+        peak = Math.max(peak, lv);
+        if (lv >= 1) held += dt;
+        const ok = lv >= 1;
+        let txt;
+        if (mode === 'hold') txt = holding ? 'Делаешь — держи!' : el > 700 ? 'Нажми и держи «Делаю!», пока делаешь' : null;
+        else if (seen < 300 && el > 1500) txt = 'Я тебя не вижу — сядь напротив камеры';
+        else if (ok) txt = tongue && kind === 'open' ? 'Ротик открыт — держи!' : 'Получается!';
+        else if (lv >= .5) txt = MORE[kind];
+        else if (el > 1200) txt = tongue && kind === 'open' ? 'Открой ротик, как девочка' : 'Попробуй ещё';
+        if (jaw && !jawSaid && jawHi - jawLo > .35) { jawSaid = true; txt = 'Подбородок не двигается — работает язычок'; }
+        show(need ? held / need : 1, txt, mode === 'hold' ? 'any' : kind, ok);
+        if (el >= ms && held >= need) { hits++; (peaks[kind] = peaks[kind] || []).push(peak); return 'hit'; }
+        if (el >= maxT) { (peaks[kind] = peaks[kind] || []).push(peak); if (peak >= .4) tried++; return 'miss'; }
+      }
+      return 'gone';
+    }
+    function go() {
+      o.go = true; sync();
+      if (mode === 'face' && FACE.calibrate(calib)) calib = [];
+      show(0, mode === 'hold' ? 'Нажми и держи «Делаю!», пока делаешь' : 'Смотри в зеркало и делай, как девочка', mode === 'hold' ? 'any' : kindOf(a, a.steps[0][0]), false);
+    }
+    // the end: done → the line of the result; not done → «Попробуй ещё»
+    function end() {
+      if (W) { W.stop(); W = null; }
+      if (mode === 'face') Object.entries(peaks).forEach(([k, v]) => FACE.adapt(k, v));
+      const n = (TRIES[a.id + dayKey()] = (TRIES[a.id + dayKey()] || 0) + 1);
+      const okRate = hits / Math.max(1, total), effort = (hits + tried) / Math.max(1, total);
+      // the second try of a child who clearly tries, but whose face the model reads poorly, counts too
+      const ok = okRate >= .6 || (n >= 2 && effort >= .6 && mode === 'face');
+      try { EVT.log('artic', a.id, Math.round(okRate * 100), mode === 'face' ? 1 : 0); } catch (e) {}
+      if (ok) { o.done = true; log('d'); }
+      const line = !ok ? '' : tongue ? `Молодец, что старал${G('ась', 'ся')}! Посмотри в зеркало, как язычок. ` : okRate >= .6 ? 'Получается! ' : `Молодец, что старал${G('ась', 'ся')}! `;
+      return { ok, line, rate: okRate, mode };
+    }
+    // not done: «Попробуй ещё» with «Ещё раз» (and «Пропустить» on the path of the day)
+    function retry(again) {
+      box.hidden = false; show(0, 'Попробуй ещё', 'any', false); hb.hidden = true;
+      box.insertAdjacentHTML('beforeend', `<div class="prow-btns hon-b"><button class="big" id="honAgain">↻ Ещё раз</button>${ACTIVE ? '<button class="big ghost" id="honSkip">Пропустить</button>' : ''}</div>`);
+      talk(mode === 'face' ? 'Попробуй ещё! Я смотрю в зеркало вместе с тобой. Делай, как девочка.' : 'Попробуй ещё! Нажми и держи кнопку «Делаю!», пока делаешь упражнение.');
+      $('#honAgain').onclick = () => { sfx.pop(); o.again = true; again(); };
+      const sk = $('#honSkip'); if (sk) sk.onclick = () => { sfx.pop(); goHome(); };
+    }
+    return { go, step, end, retry, mode: () => mode };
+  }
+  // the parents: a calm line about the exercises left
+  function reportLine(pr) {
+    const w = sumDays(pr, 7); if (!w.s) return '';
+    return `Зарядка для язычка за 7 дней: сделано ${w.d}, пропущено ${w.s} ${plural(w.s, ['упражнение', 'упражнения', 'упражнений'])}. Это нормально — лучше одно упражнение по-настоящему, чем пять для галочки.`;
+  }
+  function todayLine(pr) { const d = sumDays(pr, 1); return d.s ? `Сегодня пропущено ${d.s} ${plural(d.s, ['упражнение', 'упражнения', 'упражнений'])} зарядки для язычка, сделано ${d.d}.` : ''; }
+  return { artic, leave, reportLine, todayLine, log, sum: sumDays };
+})();
+
+/* «Послушай условие» */
+const LISTEN = (() => {
+  const GRP = new Set([1, 2, 3, 5, 6, 9, 11, 12]), IDS = /^(math|n100|olymp|r-skill|abc|read|syl|hear|code|primer|sz-|sh-|snd-|l-)/;
+  const want = g => g && (GRP.has(g.grp) || IDS.test(g.id)) && g.grp !== 0 && g.grp !== 4 && g.grp !== 13;
+  let S = null, PEND = null, tapAt = 0;
+  const little = () => (P.settings.age || 6) <= 6;
+  const live = () => S && S.tok === tok;
+  function wrap(list) {
+    (list || []).forEach(g => {
+      if (!g || g.lsW || typeof g.go !== 'function' || !want(g)) return;
+      const go = g.go; g.lsW = 1;
+      g.go = function (...a) { PEND = { g, at: performance.now() }; S = null; return go.apply(this, a); };
+    });
+  }
+  // the game's first line after it opens is its instruction
+  function begin(g) {
+    const k = dayKey(), seen = P.lsSeen && P.lsSeen.d === k ? P.lsSeen : (P.lsSeen = { d: k, ids: [] });
+    const first = !seen.ids.includes(g.id); if (first) { seen.ids.push(g.id); save(); }
+    S = { tok, g, q: '', qBusy: false, qEnd: 0, qn: 0, gate: first || little(), early: 0, wrongs: [], told: 0 };
+    const gd = $('.guide'); if (gd) gd.classList.add('ls-on');
+  }
+  // every line the friend says: a line soon after a tap is the answer's feedback, the others are questions
+  function said(text, p) {
+    const now = performance.now();
+    if (PEND && now - PEND.at < 2500 && !EMBEDDED) { const g = PEND.g; PEND = null; begin(g); }
+    else if (PEND && now - PEND.at >= 2500) PEND = null;
+    if (!live() || S.mute) return;
+    if (now - tapAt < 450 && text !== S.q) return;
+    const my = ++S.qn, me = S; S.q = text; S.qBusy = true;
+    if (S.gate) lock();
+    const done = () => { if (S !== me || me.qn !== my) return; me.qBusy = false; me.qEnd = performance.now(); if (me.gate) { me.gate = false; unlock(); } };
+    Promise.resolve(p).then(done, done);
+    setTimeout(done, 20000);
+  }
+  function lock() {
+    const sc = $('.screen'), st = $('#stage'); if (!sc || !st) return;
+    st.classList.add('ls-wait');
+    if (!$('.ls-ear')) sc.insertAdjacentHTML('beforeend', `<div class="ls-ear${little() ? ' ls-pic' : ''}" aria-hidden="true">${little() && S.g.ico ? `<span class="ls-g">${(() => { try { return S.g.ico(); } catch (e) { return ''; } })()}</span>` : ''}<span class="emo">👂</span><b>слушаю…</b></div>`);
+    const r = $('#replay'); if (r) r.classList.add('ls-big');
+  }
+  function unlock() {
+    const st = $('#stage'); if (st) st.classList.remove('ls-wait');
+    const r = $('#replay'); if (r) r.classList.remove('ls-big');
+    const e = $('.ls-ear'); if (!e) return;
+    if (little()) { e.classList.add('ls-go'); e.innerHTML = '<span class="emo">👆</span><b>нажимай!</b>'; setTimeout(() => e.remove(), 1600); } else e.remove();
+  }
+  async function notHeard() {
+    if (!live() || S.told >= 2) return;
+    // qn moves on: the question cut short by hush() must not open the answers now
+    const me = S, q = S.q; me.told++; me.qn++; me.wrongs = []; me.early = 0; me.gate = true; me.mute = true; lock();
+    try { EVT.log('listen', me.g.id); } catch (e) {}
+    hush();
+    try { await talk(`Ты не услышал${G('а', '')}. Послушай, пожалуйста, внимательно.`); } finally { me.mute = false; }
+    if (S !== me || me.tok !== tok) return;
+    tapAt = 0;
+    if (q) talk(q); else { me.gate = false; unlock(); }
+  }
+  const ANS = 'button, [data-id], [data-i], [data-k], [role="button"], .card, .item, .fi, .tile, .opt, .ans';
+  function guard(e) {
+    if (!live() || !S.gate) return;
+    const st = $('#stage'); if (!st || !st.contains(e.target)) return;
+    const el = e.target.closest(ANS); if (!el || !st.contains(el)) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    if (e.type !== 'pointerdown') return true;
+    S.early++;
+    const ear = $('.ls-ear'); if (ear) { ear.classList.remove('ls-shake'); void ear.offsetWidth; ear.classList.add('ls-shake'); }
+    if (S.early >= 2 && !S.mute) notHeard();
+    return true;
+  }
+  document.addEventListener('pointerdown', e => { if (!guard(e)) tapAt = performance.now(); }, true);
+  document.addEventListener('click', guard, true);
+  // a wrong answer right after the question (or during it), twice in a row: the child guesses without listening
+  function wrong() {
+    if (!live() || S.gate || S.mute) return;
+    const now = performance.now(); if (now - tapAt > 600) return;
+    const fast = S.qBusy || now - S.qEnd < 1800;
+    if (!fast) { S.wrongs = []; return; }
+    S.wrongs.push(now);
+    if (S.wrongs.length >= 2) { S.wrongs = []; const me = S; setTimeout(() => { if (S === me && me.tok === tok) notHeard(); }, 700); }
+  }
+  return { wrap, said, wrong, state: () => S && { id: S.g.id, gate: S.gate, told: S.told, q: S.q, live: live(), w: S.wrongs.length, busy: S.qBusy, end: Math.round(performance.now() - S.qEnd), tap: Math.round(performance.now() - tapAt) } };
+})();
+{ const o = sfx.oops; sfx.oops = function (...a) { try { LISTEN.wrong(); } catch (e) {} return o.apply(this, a); }; }
+/* HONEST-END */
 /* FUNSPEAK-BEGIN */
 /* ---------- The speech games feel like a walk with the friend, not a drill:
    - during a lesson of «Сегодня» a trail of stones under a game's header shows every step of it: a done step is a star,
@@ -28472,7 +28806,7 @@ function dataSecHTML() {
     <p class="muted" id="dataOut"></p>
     <p class="muted">${privLink('Конфиденциальность: что хранится, где и сколько')}</p></section>`.replace(/<div class="prow-btns"><button class="big ghost" id="dataGet"/, m => CAM_NOTE + m);
 }
-const CAM_NOTE = '<p class="muted">Камера-зеркало в упражнениях для язычка показывает ребёнку его лицо только на экране: изображение не записывается, не сохраняется и никуда не отправляется. Камера выключается, когда ребёнок уходит из упражнения или закрывает приложение. Включается само — переключатель «Зеркало включается само» в «День и все игры».</p>';
+const CAM_NOTE = '<p class="muted">Камера-зеркало в упражнениях для язычка показывает ребёнку его лицо только на экране: изображение не записывается, не сохраняется и никуда не отправляется. Чтобы сказать «Получается!» или «Попробуй ещё», видео анализирует программа прямо на телефоне (без интернета): из кадра получаются только несколько чисел — насколько открыт рот, широкая ли улыбка. Камера выключается, когда ребёнок уходит из упражнения или закрывает приложение. Включается само — переключатель «Зеркало включается само» в «День и все игры».</p>';
 function bindDataSec() {
   bindConsent('stIn'); try { const p0 = $('#dataSec > p'); if (p0) p0.insertAdjacentHTML('afterend', COMIX.dataRows()); COMIX.dataBind(); } catch (e) {}
   const g = $('#dataGet'), d = $('#dataDel');
