@@ -211,7 +211,8 @@ def extras():
     open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + '\n'.join(urls) + '\n</urlset>\n')
     open(os.path.join(OUT, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /play/\n\nSitemap: {SITE}/sitemap.xml\n')
     # no redirect of «/» any more: govorilki.com is a page of its own (hub), so search engines can see it
-    open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n')
+    # /play/*: no-transform keeps Cloudflare from injecting its Web Analytics beacon into the children's game (audit 18.11)
+    open(os.path.join(OUT, '_headers'), 'w').write('/assets/*\n  Cache-Control: public, max-age=604800\n/play/sw.js\n  Cache-Control: no-cache\n/play/*\n  X-Robots-Tag: noindex\n  Cache-Control: public, max-age=0, must-revalidate, no-transform\n')
     nf = head('ru', None, 'Говорилки · Chatterbox · Tagarelas', C['ru']['pages']['home']['description'], SITE + '/', alts_for('home')[0], {'@context': 'https://schema.org', '@type': 'WebPage'}, xdef=SITE + '/')
     nf = nf.replace('<head>', '<head>\n<meta name="robots" content="noindex">')
     nf += f'<main class="wrap hub"><div class="hero-f"><img src="/assets/ghost.svg" alt="" width="96" height="96"></div><h1>404</h1><div class="lang-cards">' + ''.join(f'<a class="lang-card" href="{path(a, "home")}"><b>{esc(C[a]["brand"])}</b><span>{esc(C[a]["ui"]["lang_name"])}</span></a>' for a in LANGS) + '</div></main></body></html>'

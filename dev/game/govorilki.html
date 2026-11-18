@@ -2708,6 +2708,14 @@ body.pv-on #app{padding-top:52px}
 .lp-tag{margin:0;max-width:660px;font:800 clamp(18px,2.6vw,24px)/1.35 var(--f-body);color:var(--ink)}
 .lp-friends{display:flex;justify-content:center;gap:4px}.lp-f{width:clamp(54px,12vw,96px);display:block}.lp-f svg{width:100%;height:auto;display:block}
 .lp-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.lp-quick{background:var(--card,#fff);border-radius:22px;padding:16px 16px 10px;margin:4px auto 14px;max-width:520px;box-shadow:0 4px 16px rgba(0,0,0,.08);text-align:center}
+.lp-quick .lp-q-h{margin:0;font-size:24px}.lp-quick .lp-q-p{margin:6px 0 10px;font-size:19px;font-weight:700}
+.lp-quick .lp-ages{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:10px}
+.lp-quick .lp-ages .pick-b{min-height:58px;font-size:24px;font-weight:800}
+.lp-quick .lp-q-n{margin:10px 0 0;font-size:14px}
+.name-ask{text-align:center}.name-ask .fe-name{width:100%;max-width:340px;font-size:20px;padding:12px;border-radius:14px;margin:4px 0 10px}
+.name-ask .picks-g{max-width:340px;margin:0 auto 8px}
+.mic-ask .winbox p{font-size:18px;line-height:1.4}
 .lp-free{margin:0;font:700 14px var(--f-body);color:var(--ink-soft)}
 .lp-sec{display:flex;flex-direction:column;gap:12px}.lp-sec>h2{margin:0;text-align:center;font:400 clamp(26px,4vw,36px) var(--f-display);color:var(--ink)}
 .lp-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
@@ -5361,7 +5369,7 @@ window.addEventListener('popstate', () => {
   // back on the game's own entry: a fresh entry drops the one the browser would go «forward» to
   try { if (!(history.state && history.state.gv)) history.pushState({ gv: 1 }, '', location.pathname + location.search + location.hash); } catch (e) {}
 });
-let LANG_CHECKED = false;
+let LANG_CHECKED = false, HOME_HELLO = false;
 function goHome() {
   try { EVT.why('home', true); } catch (e) {}
   if (!LANG_CHECKED) { LANG_CHECKED = true; if (langRedirect()) return;
@@ -5419,7 +5427,7 @@ function goHome() {
         <button class="chip ${P.settings.friend ? '' : 'nudge'}" id="friendBtn"><span class="chip-face">${friendSVG()}</span>${P.settings.friend ? 'Мой друг' : 'Выбери друга!'}</button>
       </div>
     </header>
-    ${holidayCard()}
+    ${nameAskHTML() + holidayCard()}
     <div id="relpBox">${relpHTML()}</div>
     ${tripCardHTML()}
     ${readFineHTML()}
@@ -5481,7 +5489,10 @@ function goHome() {
   on('#homeGear', () => { sfx.pop(); homeLeave(); PAR_BACK = null; SETUI.reset(); screenParents(); });
   on('#homePult', () => { sfx.pop(); homeLeave(); screenPult(); });
   on('#whoChip', () => { sfx.pop(); homeLeave(); screenWho(); });
-  if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); bindRelp(); bindReadFine(RF); }
+  if (tab === 'today') { bindLeagueCard(); leagueTick(); bindInbox(); bindHolidayCard(); bindRelp(); bindReadFine(RF); nameAskBind();
+    { const pb = $('#parentsBtn'); if (pb) { pb.insertAdjacentHTML('afterend', installBtnHTML('homeInstall')); const ib = $('#homeInstall'); ib.className = 'link-btn'; installBind(ib); } }
+    // the friend says hello when the game opens (once a visit), not only after a tap on it (audit)
+    if (!HOME_HELLO) { HOME_HELLO = true; later(() => { if ($('.home-t') && !document.querySelector('.overlay')) mlHelloMaybe(say(greet())); }, 700); } }
   on('#gpBtn', () => { sfx.pop(); homeLeave(); screenGplayWho(); });
   on('#tripCard', () => { sfx.pop(); homeLeave(); screenTrip(); });
   on('#parentsBtn', () => { sfx.pop(); PAR_BACK = null; SETUI.reset(); screenParents(); });
@@ -8304,14 +8315,35 @@ function micOn() {
   MIC.pending = (async () => {
     try {
       const a = ac(); if (!a) return false;
+      if (!(await micExplain())) { MIC.denied = true; return false; }
       audioSession('play-and-record');
       const s = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: false, autoGainControl: false } });
+      if (!ROOT.micOk) { ROOT.micOk = 1; save(); }
       const an = a.createAnalyser(); an.fftSize = 1024; a.createMediaStreamSource(s).connect(an);
       Object.assign(MIC, { stream: s, an, buf: new Float32Array(an.fftSize) });
       return true;
     } catch (e) { MIC.denied = true; EVT.err('mic'); return false; } finally { MIC.pending = null; }
   })();
   return MIC.pending;
+}
+/* before the phone's own question about the microphone, the friend says why it is needed (audit): only the first
+   time, at the first moment the child has to speak or blow; «Не сейчас» plays on without it */
+async function micExplain() {
+  if (ROOT.micOk) return true;
+  try { if (navigator.permissions && navigator.permissions.query) { const st = await navigator.permissions.query({ name: 'microphone' }); if (st.state === 'granted') { ROOT.micOk = 1; save(); return true; } if (st.state === 'denied') return false; } } catch (e) {}
+  const my = tok, line = 'Я хочу тебя услышать! Сейчас телефон спросит про микрофон. Нажми «Разрешить» — тогда я услышу, как ты говоришь и дуешь. Я ничего не записываю.';
+  return new Promise(res => {
+    const ov = document.createElement('div'); ov.className = 'overlay mic-ask';
+    ov.innerHTML = `<div class="winbox" role="dialog" aria-label="Микрофон"><div class="ryz-w">${friendSVG()}</div><h2>🎤 Я хочу тебя услышать!</h2>
+      <p>Сейчас телефон спросит про микрофон. Нажми «Разрешить» — тогда я услышу, как ты говоришь и дуешь. Я ничего не записываю.</p>
+      <div class="win-btns"><button class="big" data-m="1">Хорошо!</button><button class="big ghost" data-m="0">Не сейчас</button></div></div>`;
+    document.body.append(ov);
+    let done = false;
+    const end = v => { if (done) return; done = true; clearInterval(iv); ov.remove(); hush(); res(v); };
+    const iv = setInterval(() => { if (tok !== my) end(false); }, 400);
+    ov.onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; sfx.pop(); end(b.dataset.m === '1'); };
+    say(line);
+  });
 }
 function micOff() { const had = !!MIC.stream; if (MIC.stream) MIC.stream.getTracks().forEach(tr => tr.stop()); MIC.stream = MIC.an = null; MIC.live = false; if (had) audioSession('playback'); }
 // the microphone is let go soon after use, so phones play our voice at full volume again
@@ -12102,6 +12134,8 @@ function screenAlbum() {
 /* ---------- for grown-ups ---------- */
 var PAR_BACK = null;
 function screenParents(focus) {
+  // «Для взрослых» is behind the same code as the family panel (audit): asked once a visit, or never on the parent's own phone
+  if (!pultOpen()) { if (!ROOT.pultPin && ROOT.parentPhone === undefined) pultWho(() => screenParents(focus)); else pultGate(false, () => screenParents(focus)); return; }
   newScreen(); EVT.enter('parents');
   shell('Для взрослых', `<div class="parents">
     <section class="psec gd-sec" id="guideSec"><h2>📊 Отчёт</h2><p class="muted">Что получается и что пока трудно — коротко, по каждому ребёнку.</p><div id="guideBox"></div></section>
@@ -12605,6 +12639,8 @@ function lrank(code, key) {
 }
 function leagueCard() {
   const L = league();
+  // a brand-new family is not offered the league: it comes after a few days of playing (audit)
+  if (!L && Object.keys(P.days || {}).length < 3) return '';
   if (!L) return `<button class="lg-cta" id="leagueBtn"><span class="emo">🏆</span><span class="lg-t"><b>Лига семей</b><small>соревнуйся с друзьями из других семей</small></span><span class="g-go">▶</span></button>`;
   const rows = lrank(L.code, 'ws'), me = rows.findIndex(r => r.u === P.uid), top = rows.slice(0, 3);
   return `<button class="lg-card" id="leagueBtn"><span class="emo">🏆</span><span class="lg-t"><b>${rows.length > 1 && me >= 0 ? `Лига: ${me + 1}-е место из ${rows.length}` : 'Лига семей'}</b>
@@ -12937,6 +12973,9 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
   };
   drawSnd(); drawLikes(); drawMods();
   const ksS = $('#ksSnd'); if (ksS) { ksS.closest('section').insertAdjacentHTML('beforebegin', `<section class="psec ks-langs"><h2>Языки</h2>${mlLangsHTML('ksLangs', pr)}</section>`); bindMlLangs('ksLangs', pr); }
+  // one short screen (audit): languages and sounds in sight, the rest under «Ещё»
+  { const rest = ['#ksKid', '#ksBday', '#ksMods', '#ksWords'].map(q => $(q) && $(q).closest('section')).filter(Boolean);
+    if (rest.length) { const d = document.createElement('details'); d.className = 'set-more ks-more'; d.innerHTML = '<summary>Ещё: интересы, день рождения, разделы, свои слова</summary>'; rest[0].before(d); rest.forEach(x => d.append(x)); } }
   const resuggest = () => { if (!modsTouched) { mods = suggestMods(track, snd, likes); drawMods(); } };
   $('#ksSnd').onclick = e => {
     const b = e.target.closest('[data-snd]'); if (!b) return; const k = b.dataset.snd; sfx.tick();
@@ -13010,12 +13049,12 @@ function screenObDone({ liga = '' } = {}) {
     <div class="ob-kids">${f.kids.map(id => { const st = ROOT.profiles[id].settings; return `<div class="ob-kid"><span class="chip-face">${kidFace(id)}</span><span><b>${esc(st.name)}</b>
       <small>звуки: ${soundsOf(ROOT.profiles[id]).map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ')}${(st.likes || []).length ? ' · ' + st.likes.map(l => (LIKES.find(x => x.id === l) || {}).e || '').join('') : ''}</small></span></div>`; }).join('')}</div>
     ${liga ? `<button class="big" id="obLeague">🏆 ${LIGA_FROM ? `Вступить в лигу семьи «${esc(LIGA_FROM)}»` : 'Вступить в лигу друзей'}</button><button class="big ghost" id="obGo">Начать занятия</button>`
-      : `<button class="big" id="obGo">Начать занятия</button><button class="lg-cta" id="obLeague"><span class="emo">🏆</span><span class="lg-t"><b>Лига семей</b></span></button>`}
+      : `<button class="big" id="obGo">Начать занятия</button>`}
     ${f.grands.length ? '<button class="big ghost" id="obChess">📨 Пригласить родных</button>' : ''}
   </div></main></div>`;
   $('#obGo').onclick = () => { sfx.pop(); goHome(); };
   $('#obGo').insertAdjacentHTML('beforebegin', consentHTML('obStats')); bindConsent('obStats');
-  $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
+  if ($('#obLeague')) $('#obLeague').onclick = () => { sfx.pop(); screenLeague(liga || undefined); };
   if ($('#obChess')) $('#obChess').onclick = () => { sfx.pop(); P = ROOT.profiles[ROOT.cur]; famPeople(); screenInvite(goHome); };
 }
 // the race: words on the signs follow the sounds the child trains
@@ -13248,7 +13287,12 @@ function guessCountry() {
   for (const [cc, l] of Object.entries(TZ_CC)) if (l.includes(tz)) return cc;
   for (const [cc, v] of Object.entries(MORE_CC)) if (v[1] === tz) return cc;
   if (/^America\/(Toronto|Vancouver|Montreal|Edmonton|Winnipeg|Halifax|Regina|St_Johns)/.test(tz)) return 'CA';
-  const lang = (navigator.language || '').split('-')[1]; return lang && COUNTRY_NAMES[lang.toUpperCase()] ? lang.toUpperCase() : 'RU';
+  // no telling time zone: the browser's region only when its language is the page's (an English phone on the Russian
+  // page says nothing about where the family lives), else the page's own country — never the USA by default (audit)
+  const PAGE_CC = { ru: 'RU', pt: 'PT', de: 'DE', en: 'GB' };
+  let ls = []; try { ls = [...(navigator.languages || []), navigator.language || '']; } catch (e) {}
+  for (const l of ls) { const [lg, rg] = String(l).split('-'); const R = (rg || '').toUpperCase(); if (lg && lg.toLowerCase() === LANG && R && COUNTRY_NAMES[R]) return R; }
+  return PAGE_CC[LANG] || 'RU';
 }
 // Easter: Gregorian (Western) and Julian computus moved to the civil calendar (Orthodox)
 function easterWest(y) {
@@ -18895,15 +18939,15 @@ function screenPultTest() {
   $('#ptAs').onclick = e => { const b = e.target.closest('[data-das]'); if (!b) return; sfx.pop(); pultDemo(b.dataset.das, lang); };
 }
 // the first visit: the parent's own phone opens with the panel and needs no code; a phone the children play on gets a code
-function pultWho() {
+function pultWho(next = screenPult) {
   newScreen();
   shell('Как дела у всех', `<div class="pult-gate">
     <p class="lead">Чей это телефон?</p>
     <button class="big" id="pwMine">📱 Мой: открывать с пульта, без кода</button>
     <button class="big ghost" id="pwKids">🧒 Здесь играют дети: закрыть пульт кодом</button>
     <p class="muted">Это можно поменять в пульте, внизу.</p></div>`, { back: () => goHome(), guide: false, raw: true });
-  $('#pwMine').onclick = () => { sfx.pop(); ROOT.parentPhone = true; save(); screenPult(); };
-  $('#pwKids').onclick = () => { sfx.pop(); ROOT.parentPhone = false; save(); pultGate(true); };
+  $('#pwMine').onclick = () => { sfx.pop(); ROOT.parentPhone = true; save(); next(); };
+  $('#pwKids').onclick = () => { sfx.pop(); ROOT.parentPhone = false; save(); pultGate(true, next); };
 }
 // how the game opens for someone else, in the sandbox: our league link, a grandparent's link of our family (or a made-up
 // grandmother), with our children's progress as their phones would get it
@@ -18916,7 +18960,7 @@ function pultDemo(as, lang) {
   demoStart({ as, lang, hash: '#' + pultLink(f, g).split('#')[1], prog: { at: Date.now(), kids: progSnap(), kin } });
 }
 // the code: made up once on this phone, asked once per visit; four dots and a keypad, like a phone's lock
-function pultGate(change) {
+function pultGate(change, next = screenPult) {
   newScreen();
   let step = change || !ROOT.pultPin ? 1 : 0, first = '', code = '', ask = null;
   shell('Как дела у всех', `<div class="pult-gate">
@@ -18944,10 +18988,10 @@ function pultGate(change) {
     if (step === 1) { first = code; code = ''; step = 2; draw(); return; }
     if (step === 2) {
       if (code !== first) { first = ''; code = ''; step = 1; say('Коды не совпадают. Придумайте код ещё раз.'); wiggle($('#pgD')); draw(); return; }
-      ROOT.pultPin = pinHash(code); save(); pultLetIn(); sfx.good(); screenPult(); return;
+      ROOT.pultPin = pinHash(code); save(); pultLetIn(); GROWN_AT = Date.now(); sfx.good(); next(); return;
     }
     if (pinHash(code) !== ROOT.pultPin) { code = ''; say('Не тот код. Попробуйте ещё раз.'); wiggle($('#pgD')); draw(); return; }
-    pultLetIn(); sfx.pop(); screenPult();
+    pultLetIn(); GROWN_AT = Date.now(); sfx.pop(); next();
   };
   const key = k => {
     const need = step === 3 ? String(ask[0] * ask[1]).length : 4;
@@ -20048,9 +20092,9 @@ function artMusList(box, D, P2) {
 }
 
 /* ---------- something only a grown-up decides: the code of the family control panel, or a sum too hard for a child ---------- */
-let GROWN_OK = false;
+let GROWN_OK = false, GROWN_AT = 0;
 function grownUp(then, why) {
-  if (GROWN_OK) { then(); return; }
+  if (GROWN_OK && Date.now() - GROWN_AT < 5 * 60000) { then(); return; }
   const pin = !!ROOT.pultPin, a = 23 + Math.floor(Math.random() * 67), b = 23 + Math.floor(Math.random() * 67);
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox gu-box" role="dialog" aria-label="Для взрослых"><h2>👪 Для взрослых</h2><p>${esc(why || 'Это решают взрослые.')}</p>
@@ -20063,13 +20107,23 @@ function grownUp(then, why) {
   ov.querySelector('#guNo').onclick = () => { sfx.tick(); close(); };
   const ok = () => {
     const v = inp.value.trim();
-    if (pin ? pinHash(v) === ROOT.pultPin : +v === a * b) { GROWN_OK = true; close(); sfx.good(); then(); return; }
+    if (pin ? pinHash(v) === ROOT.pultPin : +v === a * b) { GROWN_OK = true; GROWN_AT = Date.now(); close(); sfx.good(); then(); return; }
     ov.querySelector('#guErr').textContent = pin ? 'Не тот код.' : 'Не так. Посчитайте ещё раз (можно на калькуляторе).'; inp.value = ''; wiggle(inp);
   };
   ov.querySelector('#guOk').onclick = ok;
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') ok(); });
 }
 
+/* the parental gate before every link out of the game (audit; app-store rules for children's apps): a tap on a link to
+   another site asks the grown-up's check first, then opens the link in a new tab. Our own site needs no check. */
+const linkOut = h => { try { const u = new URL(h, location.href); return /^https?:$/.test(u.protocol) ? u.origin !== location.origin && !/(^|\.)govorilki\.com$/.test(u.hostname) : !/^(javascript|blob|data):/.test(u.protocol) && u.protocol !== location.protocol; } catch (e) { return false; } };
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
+  const h = a.getAttribute('href'); if (!h || h === '#' || h.startsWith('#') || !linkOut(a.href)) return;
+  if (GROWN_OK && Date.now() - GROWN_AT < 5 * 60000) return;
+  e.preventDefault(); e.stopPropagation();
+  grownUp(() => { try { window.open(a.href, '_blank', 'noopener'); } catch (er) {} }, 'Эта ссылка ведёт на другой сайт. Откроем её вместе со взрослым.');
+}, true);
 /* ---------- reading of past days: a grown-up writes in the pages read on a day that was not marked; the fine of that
    day comes back ---------- */
 function readFineBack(k) {
@@ -28606,9 +28660,12 @@ function screenLanding({ liga = '' } = {}) {
   </div></main></div>`;
   LANDUX.apply();
   LANDX.apply();
+  quickLand();
   bindLang($('.lp-lang'), () => screenLanding({ liga }));
   const start = () => { sfx.pop(); try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} screenFamilyEdit(null, { first: true, liga }); };
   $('#obStart').onclick = start; $('#obStart2').onclick = start;
+  $('#lpQuick').onclick = e => { const b = e.target.closest('[data-qa]'); if (b) quickStart(+b.dataset.qa); };
+  installBind($('#obInstall'));
   $('#obHave').onclick = () => {
     sfx.pop();
     const box = $('#lpLogin');
@@ -28636,6 +28693,73 @@ function screenLanding({ liga = '' } = {}) {
     if (LAND_LOGIN) later(() => { const b = $('#lpLogin'); if (b) b.scrollIntoView({ block: 'start' }); }, 300);
   }
 }
+/* QUICK-BEGIN: the first run in one tap (audit 18.11): the child's age on the first page starts the game — a family
+   of one child with no name yet; the name comes later on the home screen («Как тебя зовут?»), more children and the
+   family's sign-in in «Для взрослых». The old way (the family form) stays under «Создать семью сразу». */
+function quickStart(age) {
+  sfx.magic();
+  try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {}
+  const track = ageTrack(age), cc = guessCountry(), fid = 'f' + rid6();
+  let kid; do kid = 'k' + rid6(); while (ROOT.profiles[kid]);
+  ROOT.profiles[kid] = blankProfile('', '', track, '');
+  ROOT.profiles[kid].book.title = track === 'l' ? 'Моя книга' : '';
+  Object.assign(ROOT.profiles[kid].settings, { name: '', gender: '', track, age, look: 'calm' });
+  ROOT.families[fid] = { id: fid, name: 'Наша семья', cc, cc2: '', kids: [kid], grands: [], look: 'calm', quick: 1 };
+  try { ROOT.families[fid].places = famPlaces(ROOT.families[fid]); } catch (e) {}
+  try { holYear.c = {}; } catch (e) {}
+  useFamily(fid); ROOT.cur = kid; P = ROOT.profiles[kid]; famPeople(); save();
+  goHome();
+}
+// the first page: «Играть сейчас» with the ages on top; the family form becomes a quiet button below
+function quickLand() {
+  const cta = $('.lp-hero .lp-cta'); if (!cta) return;
+  cta.insertAdjacentHTML('beforebegin', `<div class="lp-quick" id="lpQuick">${quickHead()}<div class="picks-g nums lp-ages">${[4, 5, 6, 7, 8, 9, 10, 11, 12].map(a => `<button class="pick-b lp-age" data-qa="${a}">${a}</button>`).join('')}</div>${quickNote()}</div>`);
+  const st = $('#obStart'); if (st) { st.classList.add('ghost'); st.textContent = quickFam(); cta.append(st); }
+  cta.insertAdjacentHTML('afterbegin', installBtnHTML('obInstall'));
+}
+const quickHead = () => '<h2 class="lp-q-h">▶️ Играть сейчас</h2><p class="lp-q-p">Сколько лет ребёнку?</p>';
+const quickNote = () => '<p class="muted lp-q-n">Без регистрации. Имя, братьев и сестёр, вход семьи можно добавить потом.</p>';
+const quickFam = () => '👪 Создать семью сразу: имена, несколько детей';
+const installBtnHTML = id => `<button class="big ghost" id="${id}" hidden>${'📲 Установить на телефон'}</button>`;
+// «Как тебя зовут?» on the home screen of a child who started without a name: one field and girl / boy; «Потом» hides
+// it for the day
+const nameAskOn = () => !GUEST && !GPLAY && P && P.settings && !(P.settings.name || '').trim() && P.settings.nameLater !== dayKey();
+function nameAskHTML() {
+  if (!nameAskOn()) return '';
+  const g = P.settings.gender;
+  return `<section class="group name-ask" id="nameAsk"><div class="group-head"><h2>👋 Как тебя зовут?</h2><p>Друг будет звать тебя по имени</p></div>
+    <input class="fe-name" id="naName" type="text" maxlength="20" autocomplete="off" placeholder="Имя" aria-label="Имя">
+    <div class="picks-g two"><button class="pick-b ${g === 'f' ? 'sel' : ''}" data-ng="f">👧 Девочка</button><button class="pick-b ${g === 'm' ? 'sel' : ''}" data-ng="m">🧒 Мальчик</button></div>
+    <div class="prow-btns"><button class="big" id="naOk">Готово</button><button class="big ghost" id="naLater">Потом</button></div></section>`;
+}
+function nameAskBind() {
+  const box = $('#nameAsk'); if (!box) return;
+  box.onclick = e => {
+    const g = e.target.closest('[data-ng]');
+    if (g) { sfx.tick(); P.settings.gender = g.dataset.ng; box.querySelectorAll('[data-ng]').forEach(x => x.classList.toggle('sel', x === g)); save(); return; }
+    if (e.target.closest('#naLater')) { sfx.pop(); P.settings.nameLater = dayKey(); save(); box.hidden = true; return; }
+    if (e.target.closest('#naOk')) {
+      const n = cleanS($('#naName').value, 20);
+      if (!n) { wiggle($('#naName')); $('#naName').focus(); return; }
+      Object.assign(P.settings, { name: n, nameTouched: true }); save(); sfx.magic(); goHome();
+    }
+  };
+}
+// «Установить»: where the browser offers to install the app (Android, desktop Chrome), a button of our own
+let INSTALL_EVT = null;
+try {
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); INSTALL_EVT = e; $$('.inst-b').forEach(b => { b.hidden = false; }); });
+  addEventListener('appinstalled', () => { INSTALL_EVT = null; $$('.inst-b').forEach(b => { b.hidden = true; }); });
+} catch (e) {}
+function installBind(b) {
+  if (!b) return;
+  b.classList.add('inst-b'); b.hidden = !INSTALL_EVT;
+  b.onclick = async () => {
+    const ev = INSTALL_EVT; if (!ev) return; sfx.pop();
+    try { ev.prompt(); const r = await ev.userChoice; if (r && r.outcome === 'accepted') { INSTALL_EVT = null; $$('.inst-b').forEach(x => { x.hidden = true; }); } } catch (e) {}
+  };
+}
+/* QUICK-END */
 /* LAND-END */
 /* WHO-BEGIN */
 /* ---------- «Кто играет?»: the first page. The phone may keep several families; a child picks the family, then
@@ -28684,6 +28808,7 @@ function whoBoot() {
   }
   if (SEM_HASH) { const s = SEM_HASH; SEM_HASH = null; screenSem(s); return true; }
   if (!whoFams().length) return false;
+  { const fs = whoFams(); if (fs.length === 1 && fs[0].kids.filter(id => ROOT.profiles[id]).length === 1 && !fs[0].grands.length && !GUEST) return false; }
   const at = ROOT.startAt || 'who';
   if (at === 'pult' && !GUEST) { screenPult(); return true; }
   if (at === 'kid' && !GUEST) return false;
