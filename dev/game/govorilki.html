@@ -1495,6 +1495,9 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .rk-o{min-height:64px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);font:800 clamp(18px,4.4vw,22px)/1.25 var(--f-body);padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 var(--line-strong)}
 .rk-opts.lets .rk-o{aspect-ratio:1.2;font:900 clamp(34px,10vmin,64px)/1 var(--f-body)}
 .rk-opts.pics .rk-o{aspect-ratio:1}.rk-opts.pics .rk-o .pic{font-size:clamp(46px,13vmin,72px)}
+.sy{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}.sy-st{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}#syBox{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.sy-m{display:flex;gap:clamp(30px,10vw,70px);border:0;background:none;padding:10px;cursor:pointer;transition:gap .7s cubic-bezier(.5,0,.3,1.25)}.sy-m.joined{gap:0}.sy-m .mg-l{width:auto;min-width:clamp(96px,22vmin,140px);padding:0 10px}
+.rk-opts.sy-2{grid-template-columns:repeat(2,minmax(0,1fr));width:min(100%,420px)}
 .rk-o.right{background:var(--t-green);box-shadow:0 6px 0 var(--leaf)}.rk-o.wrong{opacity:.45}
 .rk-o:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line-strong)}
 .rk-mic.ear{animation:pdRing 1.2s ease-out infinite}
@@ -5253,6 +5256,7 @@ const GAMES = [
   { id: 'abc-find', name: 'Найди букву', sub: 'слушай и нажимай', ico: () => '<span class="ico-letters"><b class="L c">М</b>?</span>', bg: 'var(--t-blue)', go: () => screenFindLetter(), grp: 2 },
   { id: 'abc-first', name: 'Первая буква', sub: 'с какой буквы слово?', ico: () => pic('🍉'), bg: 'var(--t-pink)', go: () => screenFirstLetter(), grp: 2 },
   { id: 'read-merge', name: 'Слоги-паровозики', sub: 'М бежит к А — МА!', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b></span>', bg: 'var(--t-green)', go: () => screenMerge(), grp: 2 },
+  { id: 'syl-step', name: 'Читаем по слогам', sub: 'МА-МУ-МЫ, потом слова', kw: 'слоги слог читать чтение пятилетки', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">У</b></span>', bg: 'var(--t-yellow)', go: () => SYLS.play(), grp: 2, prog: () => P.sylSt && P.sylSt[LANG] ? `ступенька ${SYLS.st()} из 3` : '' },
   { id: 'read-words', name: 'Читаем слова', sub: 'ма-ма, ры-ба, ко-а-ла', ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenReadWords(), grp: 2 },
   { id: 'read-pick', name: 'Прочитай и найди', sub: 'слово → картинка', ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenReadPick(), grp: 2 },
   { id: 'write', name: 'Пишем буквы', sub: 'обведи пальчиком', ico: () => pic('✏️'), bg: 'var(--t-mint)', go: () => screenPaint({ mode: 'write' }), grp: 2, prog: () => '' },
@@ -6390,6 +6394,85 @@ function screenReadPick() {
   };
   show();
 }
+/* SYLSTEP-BEGIN */
+/* ---------- reading by syllables for the 5–6-year-olds (the owner: «для пятилеток как раз можно такие чтения, это слоги.
+   Очень важно начинать со слогов, а для ребёнка старше эти слоги уже не нужны»). Three little stairs, one per language
+   (P.sylSt[LANG] = { st, r }): 1 open syllables of one consonant (МА-МО-МУ-МЫ), 2 closed syllables (АМ, УМ; English: short
+   words), 3 two-syllable words with a picture (МА-МА, ЛУ-НА). A round is five short tasks — the letters run together and the
+   voice reads them, then «find the syllable» or «read and find the picture» with two choices; a wrong tap only brings a hint,
+   so every round ends in success. Three rounds on a stair — the next stair. «Сегодня» gives it every day to a child of 5–6
+   who does not read yet (LITTLE.plan); older children skip it (their reading starts from words). ---------- */
+const SYLS = (() => {
+  const S = () => { P.sylSt = P.sylSt || {}; const o = P.sylSt[LANG] = P.sylSt[LANG] || {}; o.st = Math.max(1, Math.min(3, +o.st || 1)); o.r = +o.r || 0; return o; };
+  const two = () => { const w = RWORDS.filter(x => x[0].split('-').length === 2); return w.length >= 4 ? w : RWORDS; };
+  // the syllables of one consonant: МА МО МУ МЫ МИ (open) or АМ ОМ УМ (closed)
+  // (no closed syllable starts with Ы: primers skip them, and the voice says them like И)
+  const row = (c, closed) => M_VOW.filter(v => !(closed && v === RU('Ы'))).map(v => closed ? [v, c] : [c, v]).filter(p => !M_BAD.includes(p.join('')));
+  function deck(st, n) {
+    if (st === 3) return sample(two(), 4).map(w => ({ kind: 'word', w }));
+    if (st === 2 && M_LIST) { const pool = sample(M_LIST, 5); return pool.map((s, i) => i < 2 ? { kind: 'join', parts: [s[0], s.slice(1)], s } : { kind: 'find', s, pool }); }
+    // one consonant per round, the next one each round: М, Н, Л, Р…
+    const c = M_CONS[n % M_CONS.length], r = row(c, st === 2), it = sample(r, Math.min(3, r.length)), all = r.map(p => p.join(''));
+    return [...it.map(p => ({ kind: 'join', parts: p, s: p.join('') })), ...sample(it, 2).map(p => ({ kind: 'find', s: p.join(''), pool: all }))];
+  }
+  const tiles = s => [...s].map(Lspan).join('');
+  const drawn = s => IS_RU ? prDraw(s) : sylSay(s) + '!';
+  function play() {
+    const t = newScreen(), o = S(), st = o.st, list = deck(st, (P.plays || {})['syl-step'] || 0);
+    let k = 0, busy = false;
+    shell('Читаем по слогам', `<div class="sy"><p class="sy-st">${'⭐'.repeat(st)}${'☆'.repeat(3 - st)} · ${['', 'Открытые слоги', 'Закрытые слоги', 'Слова по слогам'][st]}</p><div id="syBox"></div></div>`);
+    const box = $('#syBox'), q = LQ.start('syl-step', list.length, true);
+    const next = () => { k++; if (k >= list.length) done(); else later(show, 450); };
+    function show() {
+      busy = false; const x = list[k]; box.dataset.k = k; box.dataset.kind = x.kind; box.dataset.a = x.kind === 'word' ? x.w[1] : x.s;
+      if (x.kind === 'join') {
+        box.innerHTML = `<button class="sy-m" id="syM" aria-label="${esc(x.s)}"><b class="mg-l">${tiles(x.parts[0])}</b><b class="mg-l">${tiles(x.parts[1])}</b></button><p class="merge-syl" id="syS"></p>`;
+        talk(k === 0 ? q.intro + ' ' + 'Нажми на буквы — они побегут друг к другу.' : 'Нажми на буквы.');
+        $('#syM').onclick = async () => {
+          if (busy) return; busy = true; const m = $('#syM'); m.classList.add('joined'); sfx.whoosh(.5, .14);
+          await wait(700); if (t !== tok) return;
+          $('#syS').innerHTML = tiles(x.s); q.hit($('#syS'), x.s);
+          await talk(`${drawn(x.s)} Повтори: ${sylSay(x.s)}.`); if (t !== tok) return;
+          next();
+        };
+      } else if (x.kind === 'find') {
+        const opts = shuffle([x.s, pickOne(x.pool.filter(y => y !== x.s))]);
+        box.innerHTML = `<button class="rk-hear" id="syH">${ICON.speaker}<span>Послушать ещё</span></button><div class="rk-opts lets sy-2">${opts.map(v => `<button class="rk-o" data-v="${esc(v)}">${tiles(v)}</button>`).join('')}</div>`;
+        const ask = `Найди: ${sylSay(x.s)}.`; talk(ask); $('#syH').onclick = () => talk(ask);
+        box.querySelector('.rk-opts').onclick = async e => {
+          const b = e.target.closest('.rk-o'); if (!b || busy) return;
+          if (b.dataset.v !== x.s) { wiggle(b); sfx.tick(); q.miss(box.querySelector(`.rk-o[data-v="${CSS.escape(x.s)}"]`)); talk(`Это ${sylSay(b.dataset.v)}. А где ${sylSay(x.s)}?`); return; }
+          busy = true; b.classList.add('right'); sfx.good(); q.hit(b, x.s);
+          await talk(`Да! ${sylSay(x.s)}!`); if (t !== tok) return;
+          next();
+        };
+      } else {
+        const [w, e] = x.w, alt = pickOne(RWORDS.filter(y => y[1] !== e));
+        box.innerHTML = `<div class="rw-word" id="syW">${wordChips(w)}</div><div class="rk-opts pics sy-2">${shuffle([e, alt[1]]).map(p => `<button class="rk-o" data-v="${esc(p)}">${pic(p)}</button>`).join('')}</div>`;
+        chipHint($('#syW'));
+        talk(k === 0 ? q.intro + ' ' + 'Прочитай слово по кусочкам. Нажми на кусочек — я подскажу. Потом найди картинку.' : 'Прочитай и найди картинку.');
+        box.querySelector('.rk-opts').onclick = async ev => {
+          const b = ev.target.closest('.rk-o'); if (!b || busy) return;
+          if (b.dataset.v !== e) { wiggle(b); sfx.tick(); q.miss(box.querySelector(`.rk-o[data-v="${CSS.escape(e)}"]`)); talk(`Почти! Прочитай ещё раз: ${w.split('-').map(sylSay).join(', ')}.`); return; }
+          busy = true; b.classList.add('right'); sfx.good(); q.hit(b);
+          await talk(`${cap(wordOf(w))}!`); if (t !== tok) return;
+          next();
+        };
+      }
+    }
+    function done() {
+      const o = S(); o.r++; let up = false;
+      if (o.r >= 3 && o.st < 3) { o.st++; o.r = 0; up = true; }
+      save();
+      finish({ key: 'syl-step', line: q.end + ' ' + (up ? 'Новая ступенька! Ты читаешь по слогам!' : 'Ты читаешь по слогам!'), again: play });
+    }
+    show();
+  }
+  // for a 5–6-year-old who does not read yet; older children read words already
+  const forAge = (pr = P) => { const a = pr.settings && pr.settings.age || 6; return a >= 5 && a <= 6; };
+  return { play, st: () => S().st, forAge };
+})();
+/* SYLSTEP-END */
 
 /* ---------- math ---------- */
 const MATH_E = ['🐼', '🐨', '🦄', '🦙', '🍎', '🍓', '⭐', '🎈', '🐞', '🌸', '🐟', '🧁'];
@@ -17010,7 +17093,8 @@ const RSK = (() => {
     ['Зимой многие птицы улетают на юг, где тепло и много еды. Но воробьи, синицы и снегири остаются. Им трудно найти корм под снегом. Поэтому ребята из нашей школы сделали кормушки и каждое утро насыпают в них семечки. Теперь у окон класса всегда весело и шумно.', 'Что сделали ребята для птиц?', 'Кормушки.', 'Скворечники на юге.', 'Снежную горку.'],
     ['Вулкан — это гора, внутри которой есть очень горячая расплавленная порода. Иногда она поднимается наверх и выливается из кратера. Эту огненную реку называют лавой. Остывая, лава становится твёрдым камнем. Некоторые острова в океане появились именно так — из застывшей лавы.', 'Как появились некоторые острова?', 'Из застывшей лавы.', 'Из песка и ракушек.', 'Их построили люди.']
   ];
-  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a === 7 ? 3 : a === 8 ? 4 : a === 9 ? 5 : 6;
+  // from 7 the check starts at words: syllables are for the 5–6-year-olds (SYLSTEP)
+  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a <= 8 ? 4 : a === 9 ? 5 : 6;
   const NOCAP = s => s.toUpperCase();
   const opt = (v, html) => ({ v, html: html || esc(v) });
   const near = (pool, right, key, n = 2) => sample(pool.filter(x => key(x) !== key(right)), n);
@@ -28789,7 +28873,9 @@ const LITTLE = (() => {
       const ear = EAR.filter(ok), n = dayNo();
       const r = p.find(x => String(x.key).startsWith('r-skill')) || (ok('r-skill') ? gameStep('r-skill', 'read') : null);
       const e = ear.length ? gameStep(ear[n % ear.length], 'read') : null;
-      p = listen() ? [r, e].filter(Boolean) : p.slice(0, 2);
+      // 5–6 and not reading yet: syllables first every day (SYLSTEP), then «Чтение по силам» (its first steps are heard)
+      const sy = listen() && SYLS.forAge() && ok('syl-step') ? gameStep('syl-step', 'read') : null;
+      p = listen() ? (sy ? [sy, r || e] : [r, e]).filter(Boolean) : p.slice(0, 2);
     } else p = p.slice(0, 2);
     if (!p.length) p = full.slice(0, 1);
     if (short) { const one = p.filter(x => x.key === short); if (one.length) return one; }
