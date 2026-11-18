@@ -3426,6 +3426,8 @@ body.simple .home-t .stage{padding-bottom:110px}
 .tk-fab .tk-face svg{width:56px;height:56px;display:block}
 .tk-dot{position:absolute;right:-4px;top:-6px;font-size:22px}
 .screen:has(.guide) .tk-fab{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+/* above the bottom tab bar of the phone, not over «Узнаём» (audit-rewards); on a laptop the tabs are a left column */
+@media (max-width:899px){.screen:has(.tabbar) .tk-fab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}.screen:has(.tabbar):has(.guide) .tk-fab{bottom:calc(158px + env(safe-area-inset-bottom,0px))}}
 .tk{position:fixed;inset:0;z-index:90;background:rgba(20,15,50,.45);display:flex;align-items:flex-end;justify-content:center}
 .tk-box{position:relative;width:min(100%,560px);background:var(--paper);color:var(--ink);border-radius:26px 26px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
 .tk-x{position:absolute;right:12px;top:12px}
@@ -3814,6 +3816,9 @@ const PACK = (() => {
     const names = Object.keys(PACKS), sw = navigator.serviceWorker; if (!names.length || !sw) return;
     let reg = null; try { reg = await Promise.race([sw.ready, wait(20000)]); } catch (e) {}
     if (reg && reg.active) reg.active.postMessage({ keep: names.map(n => new URL(url(n), location.href).href) });
+    // the photos of the stories go offline too: the small one of every story (≈1.4 MB for all), so the lists, «Дальше»
+    // and a story without its big photo show a picture without a connection (audit-rewards)
+    if (reg && reg.active) try { reg.active.postMessage({ keep: pics() }); } catch (e) {}
     await wait(4000);
     for (const n of names) {
       try { if (window.caches && await caches.match(url(n))) continue; } catch (e) {}
@@ -3821,8 +3826,9 @@ const PACK = (() => {
       await wait(150);
     }
   }
+  const pics = () => EMBEDDED ? [] : Object.keys(LEARN_IMG).map(id => new URL(LEARN_IMG[id][4] || `${SITE_ROOT}img/learn/${id}-s.webp`, location.href).href);
   addEventListener('load', () => setTimeout(warm, 300));
-  return { get, story, warm, url, loaded: n => !!got[n] };
+  return { get, story, warm, url, pics, loaded: n => !!got[n] };
 })();
 const LOC = { ru: 'ru-RU', en: 'en-GB', pt: 'pt-PT', de: 'de-DE' }[LANG];
 const IS_RU = LANG === 'ru';
@@ -3951,7 +3957,13 @@ const gx = t => kidNames(P.settings.gender === 'm' && GX_RE ? String(t).replace(
 const STICKERS = ['🐨','🦄','🐼','🦙','svg:redpanda','🐬','🦋','🌸','🍓','svg:koala','🐞','🌈','🦊','🍭','svg:unicorn','🐠','🌻','🐣','🦜','svg:alpaca','👑','🎀','🐙','🍒','svg:panda','🦩','🍩','🐝','🌟','svg:tiger'];
 const STICKERS_L = ['👻','🎮','⚽','🚀','svg:ghost','🦖','🐉','🏆','🛹','🤖','🏰','🦈','🏎️','🛸','svg:tiger','🎸','🦅','🐺','🌋','⚡','🎯','🏀','🧩','🔭','svg:panda','🐙','🦁','🐲','🧙','🪐'];
 const STK = () => P.settings.track === 'l' ? STICKERS_L : STICKERS;
-const stickerCount = () => Math.min(STK().length, Math.floor(P.stars / 5));
+// one sticker kind: a sticker for every day of practice (the first finished step of the day), so the album of 30
+// lasts a month (audit-rewards). A child of an older version keeps the stickers already earned (stkBase).
+const practiceDays = () => Object.keys(P.days || {}).filter(k => k >= P.stkFrom && Object.values(dayCounts(k)).some(v => v > 0)).length;
+const stickerCount = () => {
+  if (!P.stkFrom) { P.stkBase = Math.min(STK().length, Math.floor((P.stars || 0) / 5)); P.stkFrom = dayKey(); }
+  return Math.min(STK().length, (P.stkBase || 0) + practiceDays());
+};
 
 /* ---------- daily lessons: speech, reading, math; each one can be done again and again ---------- */
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -3969,6 +3981,8 @@ const LESSONS_R = {
 const LESSONS_L = {
   speech: { name: 'Тренировка Л', sub: 'разогрев, язык, арена Л', mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: 'Скорочтение', sub: 'слоги и текст на время', mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
+  // the maths of the day for «Миссия Л» too: a round at the child's level and one game (audit-rewards)
+  math: { name: 'Математика', sub: 'по силам: уровень растёт вместе с тобой', mins: 5, color: 'var(--leaf)', bg: 'var(--t-green)' },
   book: { name: 'Книга', sub: 'немного каждый день, с удовольствием', mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
   puzzle: { name: 'Задачка дня', sub: 'одна хитрая задача по силам', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
   soro: { name: 'Счёты', sub: 'бусины и счёт в уме, каждый день', mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
@@ -4023,6 +4037,10 @@ function lessonPlan0(id) {
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
       if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
     } else if (id === 'read') { try { return RSK.plan(n, s); } catch (e) { ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read'))); } }
+    else if (id === 'math') {
+      const mg = ['m-sprint', 'flash', 'n100-grid'].filter(g => GAMES.some(x => x.id === g));
+      ['m-skill', mg[(n + s) % mg.length]].filter(g => g && GAMES.some(x => x.id === g)).forEach(g => steps.push(gameStep(g, 'math')));
+    }
     else steps.push(gameStep('book', 'book'));
     return steps;
   }
@@ -4995,14 +5013,16 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     const a = e.target.closest('[data-a]'); if (!a) return; sfx.pop();
     if (a.dataset.a === 'again') again(); else if (a.dataset.a === 'next') next(); else (menu || goHome)();
   };
-  sfx.good(); confetti(); later(sfx.star, 450);
-  mlPraiseMaybe(say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? ' Смотри, у тебя новая наклейка!' : ''}${fair.note ? ' ' + fair.note : ''}`));
+  sfx.good(); if (sticker || /Новый уровень|новый уровень/.test(line)) confetti(); later(sfx.star, 450);
+  const praise = say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? ' Смотри, у тебя новая наклейка!' : ''}${fair.note ? ' ' + fair.note : ''}`);
+  mlPraiseMaybe(praise);
+  if (ov.dataset.like) { const t = tok; Promise.resolve(praise).then(() => { if (t === tok && ov.isConnected) say('Понравилась игра? Нажми палец вверх или вниз.'); }); }
   const first = ov.querySelector('[data-a="next"]') || ov.querySelector('[data-a]');
   if (first) first.focus({ preventScroll: true });
 }
 function lessonDoneOverlay(id, sticker, medal) {
   // a little one: the friend dances, a sticker of the day (little-ones)
-  try { if (LITTLE.on()) { LITTLE.stepDone(id); return; } } catch (e) {}
+  try { if (LITTLE.on()) { LITTLE.stepDone(id, sticker); return; } } catch (e) {}
   const L = LS()[id], s = streak(), days = `${s} ${plural(s, ['день', 'дня', 'дней'])}`, cnt = dayCounts(dayKey())[id] || 1;
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="Занятие выполнено">
@@ -5020,8 +5040,8 @@ function lessonDoneOverlay(id, sticker, medal) {
     const a = e.target.closest('[data-a]'); if (!a) return; sfx.pop();
     if (a.dataset.a === 'more') startLesson(id); else if (a.dataset.a === 'cal') screenCalendar(); else goHome();
   };
-  sfx.good(); confetti(60); later(sfx.star, 500); later(() => confetti(40), 900);
-  say(`Ура${nameBit()}! Занятие выполнено! ${s > 1 ? `Ты занимаешься ${days} подряд!` : ''} ${medal ? 'У тебя новая медаль!' : ''} ${id === 'book' ? 'Завтра почитаем ещё!' : 'Хочешь ещё одно занятие?'}`);
+  sfx.good(); if (medal || sticker) { confetti(60); later(() => confetti(40), 900); } later(sfx.star, 500);
+  say(`Ура${nameBit()}! Занятие выполнено! ${s > 1 ? `Ты занимаешься ${days} подряд!` : ''} ${medal ? 'У тебя новая медаль!' : ''} ${sticker ? 'И новая наклейка в альбом!' : ''} ${id === 'book' ? 'Завтра почитаем ещё!' : 'Хочешь ещё одно занятие?'}`);
   ov.querySelector('[data-a]').focus({ preventScroll: true });
 }
 
@@ -9725,7 +9745,7 @@ function screenStory(k, i, o = {}) {
   const self = selfReader(), lvR = +(readLevels()[LANG] || 0), hasQ = !!(it.q && it.a && it.a.length);
   let miss = 0, rd = 0, reading = 0, aloud = 0;
   shell(T.name, `<article class="story">
-      ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">источник</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
+      ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" data-sm="${esc(learnImg(it.id)[4] || `${SITE_ROOT}img/learn/${it.id}-s.webp`)}" onerror="if (this.dataset.sm) { this.src = this.dataset.sm; this.dataset.sm = ''; } else this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">источник</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
       <p class="story-t" id="stT">${parts.map((p, j) => `<span class="ss" data-j="${j}">${esc(p)}</span>`).join('')}</p>
       ${it.try ? `<p class="story-try"><b>🧪 ${k === 'jobs' ? 'Опыт дома' : 'Попробуй сам'}</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
@@ -10028,18 +10048,18 @@ if (LEARN.jobs) {
     const b = e.target.closest('#jbPass,#jbGuess,#jbDream,#jbStand,#jbIdea'); if (!b) return false;
     sfx.pop(); ({ jbPass: screenJobPass, jbGuess: screenJobGuess, jbDream: screenJobDream, jbStand: screenBizStand, jbIdea: screenBizIdea })[b.id](); return true;
   };
-  J.onDone = it => `Наклейка «${it.t}» — в паспорте профессий! ${G('А ты хотела бы так работать?', 'А ты хотел бы так работать?')}`;
+  J.onDone = it => `Печать «${it.t}» — в паспорте профессий! ${G('А ты хотела бы так работать?', 'А ты хотел бы так работать?')}`;
 }
 const jobIdx = id => LEARN.jobs.items.findIndex(x => x.id === id);
 // the passport: a sticker for each job story heard; the news badges below
 function screenJobPass() {
   newScreen();
   const J = LEARN.jobs, its = J.items, n = its.filter(x => learnDone(x.id)).length, nb = Object.keys(P.newsB || {}).sort();
-  const st = shell('Паспорт профессий', `<div class="tv-pass jp-head"><b>🎫 ${esc(P.settings.name || 'Мой')} — паспорт профессий</b><small>Наклеек: ${n} из ${its.length}. Послушай историю — получишь наклейку.</small></div>
+  const st = shell('Паспорт профессий', `<div class="tv-pass jp-head"><b>🎫 ${esc(P.settings.name || 'Мой')} — паспорт профессий</b><small>Печатей: ${n} из ${its.length}. Послушай историю — получишь печать.</small></div>
     ${JOB_SECS.map(([sk, sn, se]) => { const xs = its.filter(x => x.sec === sk); return xs.length ? `<h3 class="tv-h">${se} ${esc(sn)}</h3><div class="tv-grid jp-g">${xs.map((x, j) => `<button class="tv-c jp-s ${learnDone(x.id) ? 'got' : ''}" data-id="${x.id}" style="--bg:${learnDone(x.id) ? J.bg : 'var(--paper)'};--r:${[-6, 4, -3, 7, -5, 2][j % 6]}deg"><span class="tv-e">${pic(x.e)}</span><b>${esc(x.t)}</b>${learnDone(x.id) ? '' : '<small>?</small>'}</button>`).join('')}</div>` : ''; }).join('')}
     <h3 class="tv-h">🗞️ Значки «Знаю новости»</h3>
     ${nb.length ? `<div class="jp-news">${nb.map(m => `<span class="jp-nb">🏅<small>${esc(newsMonth(m))}</small></span>`).join('')}</div>` : `<p class="lead">Послушай самые свежие истории в разделе «Что нового в мире» — и здесь появится значок.</p>`}`, { back: () => screenLearn('jobs') });
-  talk(n ? `В твоём паспорте ${n} наклеек из ${its.length}. Выбери профессию и послушай историю!` : 'Это твой паспорт профессий. Послушай историю о профессии — и получишь наклейку!');
+  talk(n ? `В твоём паспорте ${n} ${plural(n, ['печать', 'печати', 'печатей'])} из ${its.length}. Выбери профессию и послушай историю!` : 'Это твой паспорт профессий. Послушай историю о профессии — и получишь печать!');
   st.onclick = e => { const c = e.target.closest('.jp-s'); if (!c) return; sfx.pop(); screenStory('jobs', jobIdx(c.dataset.id), { back: screenJobPass }); };
 }
 // «Угадай профессию»: a riddle and three tools; which job is it?
@@ -12089,14 +12109,13 @@ function screenFriends() {
 /* ---------- stickers ---------- */
 function screenAlbum() {
   newScreen();
-  const n = stickerCount(), left = 5 - (P.stars % 5), all = n >= STK().length;
-  const leftTxt = `${left} ${plural(left, ['звёздочка', 'звёздочки', 'звёздочек'])}`;
+  const n = stickerCount(), all = n >= STK().length, today = (dayTotal(dayKey()) > 0);
   shell(Q() ? 'Мои трофеи' : 'Мои наклейки', `<div class="album">
-      <p class="lead">${all ? 'Ты собрала все наклейки!' : `${n ? `Собрано ${n} из ${STK().length}.` : 'Пока пусто.'} До новой наклейки: ${leftTxt}.`}</p>
-      ${all ? '' : `<div class="next-bar" aria-hidden="true"><i style="width:${(P.stars % 5) / 5 * 100}%"></i></div>`}
+      <p class="lead">${all ? 'Ты собрала все наклейки!' : `${n ? `Собрано ${n} из ${STK().length}.` : 'Пока пусто.'} ${today ? 'Сегодняшняя наклейка уже здесь. Завтра будет новая!' : 'Сделай сегодня одно занятие — и будет новая наклейка.'}`}</p>
+      ${all ? '' : `<div class="next-bar" aria-hidden="true"><i style="width:${Math.round(n / STK().length * 100)}%"></i></div>`}
       <div class="stickers">${STK().map((s, i) => i < n ? `<span class="stk" style="--r:${(i * 37 % 17) - 8}deg">${stickerHTML(s)}</span>` : '<span class="stk locked">?</span>').join('')}</div>
     </div>`);
-  talk(all ? 'Ух ты! Все наклейки собраны!' : n ? `Смотри, сколько наклеек! Ещё ${leftTxt}, и будет новая!` : 'Здесь будут твои наклейки. За каждые пять звёздочек — новая наклейка!');
+  talk(all ? 'Ух ты! Все наклейки собраны!' : n ? `Смотри, сколько наклеек! ${today ? 'Завтра будет новая!' : 'Сделай одно занятие — и будет новая!'}` : 'Здесь будут твои наклейки. За каждый день занятий — новая наклейка!');
 }
 
 /* ---------- for grown-ups ---------- */
@@ -12164,7 +12183,7 @@ function screenParents(focus) {
       <li>Зарядку для язычка делайте перед зеркалом: девочка на экране показывает, ребёнок повторяет. Под каждым упражнением есть подсказка, на что смотреть.</li>
       <li>Игра не слушает микрофон. Кнопку «Я сказала!» нажимает ребёнок или вы, когда слово или фраза сказаны вслух. Если звук не получился, попросите повторить ещё раз, не торопясь.</li>
       <li>В дыхательных упражнениях ребёнок по-настоящему дует, а пальчиком держит кнопку, пока длится выдох. Следите, чтобы вдох был носом, а плечи не поднимались.</li>
-      <li>Хвалите за старание. За каждые 5 звёздочек открывается новая наклейка.</li>
+      <li>Хвалите за старание. За каждый день занятий в альбом приходит новая наклейка: альбома хватает на месяц.</li>
 `}    </ul></section>
     </div>`, { guide: false, back: PAR_BACK });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
@@ -12727,13 +12746,17 @@ function leaveLeague(f) {
 /* ---------- each child's own setup: the sounds being trained, what the child loves, which games are on the home screen.
    Vera and Sava keep their programmes; a new child gets the same games picked by sounds, age and interests,
    «Для тебя» with the games that fit the interests, and «Мои слова» with words about them. ---------- */
-const SOUND_SET = [['r', 'Р', '🐯'], ['l', 'Л', '🎤'], ['sz', 'С и З', '🐍'], ['sh', 'Ш Ж Ч Щ', '🐝']];
+const SOUND_SET = [['sz', 'С и З', '🐍'], ['sh', 'Ш Ж Ч Щ', '🐝'], ['l', 'Л', '🎤'], ['r', 'Р', '🐯']];
 const SND_RE = IS_RU ? { r: /р/i, l: /л/i, sz: /[сз]/i, sh: /[шжчщ]/i } : LANG === 'pt' ? { r: /r/i, l: /l/i, sz: /[szç]/i, sh: /ch|j|x|g[ei]/i } : LANG === 'de' ? { r: /r/i, l: /l/i, sz: /[szß]/i, sh: /sch|ch/i } : { r: /r/i, l: /l/i, sz: /[sz]/i, sh: /sh|ch|j|g[ei]/i };
 const SND_HI = IS_RU ? { r: 'р', l: 'л', sz: 'сз', sh: 'шжчщ' } : LANG === 'pt' ? { r: 'r', l: 'l', sz: 'szç', sh: 'chjx' } : LANG === 'de' ? { r: 'r', l: 'l', sz: 'szß', sh: 'sch' } : { r: 'r', l: 'l', sz: 'sz', sh: 'shcj' };
-const defSounds = track => track === 'l' ? ['l'] : ['r', 'sh', 'sz'];
-const soundsOf = pr => pr.settings.sounds && pr.settings.sounds.length ? pr.settings.sounds : defSounds(pr.settings.track);
+// the sounds by age, in the order speech develops (audit-rewards): С/З and the hissing ones first, Л from 5, Р from 6;
+// a parent can always pick others. A new child's setup starts from these and stores them; a child who already plays
+// without stored sounds keeps the old programme (LEGACY_SOUNDS: Р, Ш, С/З).
+const LEGACY_SOUNDS = { r: ['r', 'sh', 'sz'], l: ['l'] };
+const defSounds = (track, age) => track === 'l' ? ['l'] : (age || 6) <= 4 ? ['sz', 'sh'] : (age || 6) === 5 ? ['sz', 'sh', 'l'] : ['sz', 'sh', 'l', 'r'];
+const soundsOf = pr => pr.settings.sounds && pr.settings.sounds.length ? pr.settings.sounds : [...LEGACY_SOUNDS[pr.settings.track === 'l' ? 'l' : 'r']];
 const mySounds = () => soundsOf(P);
-const customSounds = () => { const s = P.settings.sounds; return !!(s && s.length && [...s].sort().join() !== [...defSounds(P.settings.track)].sort().join()); };
+const customSounds = () => { const s = mySounds(); return !!(s && s.length && [...s].sort().join() !== [...LEGACY_SOUNDS[P.settings.track === 'l' ? 'l' : 'r']].sort().join()); };
 const sndLetters = () => mySounds().map(k => SND_HI[k]).join('');
 const sndLabel = () => mySounds().map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ');
 const MODS = [
@@ -12896,7 +12919,8 @@ const kidChip = (on, val, label, attr) => `<button class="pick-b ${on ? 'sel' : 
 function screenKidSetup(id, { queue = [], first = false, liga = '', back = null, idx = 1, total = 1 } = {}) {
   newScreen();
   const pr = ROOT.profiles[id], st = pr.settings, she = st.gender === 'f', name = st.name || 'Ребёнок';
-  let snd = [...soundsOf(pr)], likes = [...(st.likes || [])], mods = [...modsOf(pr)], off = [...(st.off || [])], track = st.age ? ageTrack(st.age) : st.track;
+  const isNew = !(st.sounds && st.sounds.length) && !Object.keys(pr.plays || {}).length && !pr.stars;
+  let snd = [...(isNew ? defSounds(st.age ? ageTrack(st.age) : st.track, st.age) : soundsOf(pr))], likes = [...(st.likes || [])], mods = [...modsOf(pr)], off = [...(st.off || [])], track = st.age ? ageTrack(st.age) : st.track;
   let modsTouched = !!st.mods;
   const body = `<div class="fe ks">
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', st.friend || (she ? 'unicorn' : 'tiger'))}</span><div><h1 class="ks-name">${esc(name)}</h1>
@@ -12951,7 +12975,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
   const list = (v, n, len) => [...new Set(String(v || '').split(/[,;\n]+/).map(x => cleanS(x, len)).filter(Boolean))].slice(0, n);
   $('#ksNext').onclick = () => {
     const bd = $('#ksBday').value; if (/^\d{4}-\d\d-\d\d$/.test(bd)) { st.bday = bd; st.age = ageFrom(bd) || st.age; } else delete st.bday;
-    Object.assign(st, { sounds: snd.length ? snd : defSounds(track), likes, ownLikes: list($('#ksOwn').value, 10, 30), mods, off, track, words: list($('#ksWords').value, 40, 30) });
+    Object.assign(st, { sounds: snd.length ? snd : defSounds(track, st.age), likes, ownLikes: list($('#ksOwn').value, 10, 30), mods, off, track, words: list($('#ksWords').value, 40, 30) });
     // the defaults of a programme are not stored, so Vera and Sava keep following their programmes
     if (!modsTouched && mods.join() === defMods(track).join()) delete st.mods;
     save(); sfx.magic();
@@ -13134,14 +13158,17 @@ function battleVerdict(key, ev) {
 function resultExtras(ov, { key, stars, line, title, ev, inLesson }) {
   const b = BATTLES[key], val = b ? b.v(ev) : 0, like = (P.likeG || {})[key] || 0, bt = BATTLE && BATTLE.g === key ? BATTLE : null;
   if (bt && bt.done) BATTLE = null;
+  // 👍/👎 only outside the path and only until the game is rated, asked aloud (audit-rewards)
+  const askLike = !inLesson && !like;
   const box = document.createElement('div'); box.className = 'res-x';
   box.innerHTML = `<div class="res-sub">${!inLesson && b && !GPLAY ? `<button class="chip res-bt" data-r="battle">⚔️ ${bt && bt.done && bt.via === 'link' ? 'Ответить на баттл' : 'Вызвать на баттл'}</button>` : ''}
       ${inLesson || EMBEDDED ? '' : '<button class="chip" data-r="save">💾 Сохранить</button>'}
-      <span class="res-like" role="group" aria-label="Понравилась игра?"><button class="chip ${like > 0 ? 'sel' : ''}" data-r="up" aria-label="Нравится">👍</button><button class="chip ${like < 0 ? 'sel' : ''}" data-r="down" aria-label="Не нравится">👎</button></span></div>
+      ${askLike ? `<span class="res-like" role="group" aria-label="Понравилась игра?"><button class="chip ${like > 0 ? 'sel' : ''}" data-r="up" aria-label="Нравится">👍</button><button class="chip ${like < 0 ? 'sel' : ''}" data-r="down" aria-label="Не нравится">👎</button></span>` : ''}</div>
     <p class="res-msg" id="resMsg" role="status"></p><div class="res-sheet" id="resSheet" hidden></div>`;
   const main = ov.querySelector('.win-main');
   if (!inLesson) { const sb = document.createElement('button'); sb.className = 'big share'; sb.dataset.r = 'share'; sb.innerHTML = '📤 Поделиться'; main.append(sb); sb.onclick = e => box.onclick({ target: sb, stopPropagation: () => e.stopPropagation() }); }
   ov.querySelector('.winbox').append(box);
+  if (askLike) ov.dataset.like = '1';
   const msg = m => { const e = ov.querySelector('#resMsg'); if (e) e.textContent = m; };
   const info = { title, line, stars, game: gameName(key) };
   let card = null; const getCard = () => card || (card = resultCard(info).catch(() => null));
@@ -22302,7 +22329,8 @@ const SWAB = (() => {
   ];
   const list = () => EX.filter(e => !e.care || mySounds().includes('r'));
   const ok = () => !!(P.settings.swabOk);
-  const daily = () => P.settings.swabDaily !== false;
+  // it needs an adult, so it joins the «Логопед» step only when an adult turns it on (audit-rewards)
+  const daily = () => P.settings.swabDaily === true;
   function menu() {
     newScreen();
     const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
@@ -22314,7 +22342,7 @@ const SWAB = (() => {
         ${ok() ? '' : '<div class="og-btns"><button class="big" id="swOk">Понятно, я рядом</button></div>'}</details>
       <p class="lead">Садимся перед зеркалом. Взрослый держит палочку, ребёнок повторяет за девочкой.</p>
       <div class="cards" id="swCards">${list().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceBud(a.pose, a.at)}<span>${a.name}</span>${P.best['swab:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>
-      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Одно упражнение с палочкой — в занятии «Логопед» после зарядки</label></div>`);
+      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Одно упражнение с палочкой — в занятии «Логопед» после зарядки (только когда взрослый рядом)</label></div>`);
     const okb = $('#swOk'); if (okb) okb.onclick = () => { sfx.pop(); P.settings.swabOk = 1; save(); menu(); };
     $('#swDaily').onchange = e => { P.settings.swabDaily = e.target.checked; save(); sfx.tick(); };
     $('#swCards').onclick = e => { const c = e.target.closest('.card'); if (!c) return; sfx.pop(); if (!ok()) { wiggle($('.sw-safe')); $('.sw-safe').open = true; talk('Сначала взрослый читает, как делать безопасно.'); return; } ex(+c.dataset.i); };
@@ -25862,7 +25890,7 @@ const BOOKSHELF = (() => {
     const sh = BOOK_SHELVES.find(x => x.id === sid) || BOOK_SHELVES.find(x => x.id === shelfFor(P.settings.age)) || BOOK_SHELVES[0];
     const books = BOOKS.filter(b => b.s === sh.id), n = books.filter(b => S[b.id] === 'read').length;
     shell('Книжная полка', `<div class="bk-wrap">
-      <p class="lead" id="bkLead">Выбери полку и книгу. Прочитанные книги отмечай — за каждую будет наклейка!</p>
+      <p class="lead" id="bkLead">Выбери полку и книгу. Прочитанные книги отмечай — за каждую пять звёзд!</p>
       ${IS_RU ? TALES.tile() : '<p class="bk-note"><span class="emo">🎧</span> Аудиосказки пока есть только в русской версии игры.</p>'}
       <div class="bk-tabs" role="tablist">${BOOK_SHELVES.map(x => `<button class="bk-tab ${x.id === sh.id ? 'sel' : ''}" data-s="${x.id}" role="tab" aria-selected="${x.id === sh.id}"><span class="emo">${x.e}</span><b>${x.n}</b><small>${x.age}</small></button>`).join('')}</div>
       <section class="bk-shelf"><h2><span class="emo">${sh.e}</span> ${sh.n} <small>${sh.age}</small></h2>
@@ -25906,7 +25934,7 @@ const BOOKSHELF = (() => {
       save();
     };
   }
-  // the first «Прочитали» of a book: five stars, and five stars always make a new sticker
+  // the first «Прочитали» of a book: five stars (stickers come one a day, for a day of practice)
   function reward(b) {
     const got = P.shelfGot = Array.isArray(P.shelfGot) ? P.shelfGot : [];
     if (got.includes(b.id)) { sfx.good(); talk('Отлично, ещё одна прочитанная книга!'); return; }
@@ -27280,7 +27308,7 @@ const PATH = (() => {
     const sk = streak(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
     const days = WEEK.map((w, i) => { const k = dayKey(new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i)), on = dayTotal(k) > 0;
       return `<span class="pd-wd ${on ? 'on' : ''} ${k === tk ? 'now' : ''}"><i>${on ? '✓' : ''}</i>${w}</span>`; }).join('');
-    const sc = stickerCount(), all = STK().length, left = (sc + 1) * 5 - P.stars;
+    const sc = stickerCount(), all = STK().length, stkToday = dayTotal(tk) > 0;
     const kid = id => {
       const pr = id === ROOT.cur ? P : ROOT.profiles[id], ids = Object.keys(pr.settings.track === 'l' ? LESSONS_L : LESSONS_R);
       const v = pr.days && pr.days[tk], c = v === true ? { speech: 1 } : (v || {}), d = ids.filter(x => c[x]).length;
@@ -27288,7 +27316,7 @@ const PATH = (() => {
     };
     const el = document.createElement('aside'); el.className = 'pd-side';
     el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд<small>эта неделя</small></h3><div class="pd-wk">${days}</div></button>
-      <button class="pd-card" id="pdStars"><h3>Звёзды</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc < all ? `ещё ${left} — и новая наклейка` : 'все наклейки собраны!'}</small></button>
+      <button class="pd-card" id="pdStars"><h3>Звёзды</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc >= all ? 'все наклейки собраны!' : stkToday ? `наклеек: ${sc} из ${all}` : 'одно занятие — и новая наклейка'}</small></button>
       ${KIDS.length > 1 ? `<div class="pd-card pd-fam"><h3>Семья сегодня</h3>${KIDS.map(kid).join('')}</div>` : ''}`;
     // everything else of the tab goes into the middle column
     const main = document.createElement('div'); main.className = 'pd-main';
@@ -27831,19 +27859,19 @@ const LITTLE = (() => {
       else say('Хорошо! Я подожду.');
     };
   }
-  // the end of a step: the friend dances, a sticker of the day lands on the path
+  // the end of a step: the friend dances, a picture lands on the path; the first step of the day brings the album sticker
   const STK_DAY = ['🌟', '🦄', '🐞', '🌈', '🍓', '🐠', '🦋', '🌻', '🐣', '🍭', '🎈', '🐬', '🦊', '🐼', '🍉', '🚀'];
   function dayStickers() { const k = dayKey(); return P.lilStk && P.lilStk.d === k ? P.lilStk.s : []; }
-  function stepDone(id) {
+  function stepDone(id, sticker) {
     const k = dayKey(); if (!P.lilStk || P.lilStk.d !== k) P.lilStk = { d: k, s: [] };
     const e = STK_DAY[(dayNo() * 3 + P.lilStk.s.length) % STK_DAY.length]; P.lilStk.s.push(e); save();
     const ov = document.createElement('div'); ov.className = 'overlay';
     ov.innerHTML = `<div class="winbox lt-win" role="dialog" aria-label="Шаг готов"><div class="ryz-w lt-dance">${friendSVG()}</div>
-      <h2>Ура! Шаг готов!</h2><div class="lt-stk"><span class="emo">${e}</span></div><p class="win-line">Наклейка дня — на тропу!</p>
+      <h2>Ура! Шаг готов!</h2><div class="lt-stk"><span class="emo">${sticker ? stickerHTML(sticker) : e}</span></div><p class="win-line">${sticker ? 'Новая наклейка — в альбом!' : 'Картинка — на тропу!'}</p>
       <div class="win-btns"><button class="big" data-a="home">Дальше!</button></div></div>`;
     $('.screen').append(ov);
-    sfx.good(); confetti(70); later(sfx.star, 450);
-    say(`Ура${nameBit()}! Шаг готов! Вот тебе наклейка!`);
+    sfx.good(); if (sticker) confetti(70); later(sfx.star, 450);
+    say(`Ура${nameBit()}! Шаг готов!${sticker ? ' Вот тебе новая наклейка!' : ''}`);
     ov.onclick = e2 => { if (!e2.target.closest('[data-a]')) return; sfx.pop(); goHome(); };
     ov.querySelector('[data-a]').focus({ preventScroll: true });
   }
@@ -27858,23 +27886,23 @@ const LITTLE = (() => {
     newScreen();
     const sh = SHAPES[dayNo() % SHAPES.length], k = dayKey(); let cur = COLS[0];
     if (!P.lilCol || P.lilCol.d !== k) P.lilCol = { d: k, f: {} };
-    shell('Раскрась наклейку', `<div class="lt-col"><svg viewBox="0 0 120 120" class="lt-svg" id="ltSvg">${sh[1].map((x, i) => `<path d="${x[0]}" data-i="${i}" fill="${P.lilCol.f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="2.5"/>`).join('')}</svg>
+    shell('Раскрась картинку', `<div class="lt-col"><svg viewBox="0 0 120 120" class="lt-svg" id="ltSvg">${sh[1].map((x, i) => `<path d="${x[0]}" data-i="${i}" fill="${P.lilCol.f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="2.5"/>`).join('')}</svg>
       <div class="lt-pal">${COLS.map((c, i) => `<button class="lt-c ${i ? '' : 'sel'}" data-c="${c}" style="background:${c}" aria-label="Цвет ${i + 1}"></button>`).join('')}</div>
       <button class="big" id="ltDone">Готово!</button></div>`);
-    say('Раскрась наклейку! Нажми на цвет, потом на кусочек.');
+    say('Раскрась картинку! Нажми на цвет, потом на кусочек.');
     $$('.lt-c').forEach(b => b.onclick = () => { sfx.tick(); cur = b.dataset.c; $$('.lt-c').forEach(x => x.classList.toggle('sel', x === b)); });
     $('#ltSvg').onclick = e => { const p = e.target.closest('path'); if (!p) return; sfx.pop(); p.setAttribute('fill', cur); P.lilCol.f[p.dataset.i] = cur; save(); };
-    $('#ltDone').onclick = () => { sfx.good(); confetti(50); P.lilCol.done = 1; save(); say('Какая красивая наклейка!'); later(goHome, 1200); };
+    $('#ltDone').onclick = () => { sfx.good(); confetti(50); P.lilCol.done = 1; save(); say('Какая красивая картинка!'); later(goHome, 1200); };
   }
   const colourHTML = () => {
     const sh = SHAPES[dayNo() % SHAPES.length], f = (P.lilCol && P.lilCol.d === dayKey() && P.lilCol.f) || {};
-    return `<button class="sd-fav open lt-colb" id="ltCol"><span class="sd-fi"><svg viewBox="0 0 120 120" width="48" height="48">${sh[1].map((x, i) => `<path d="${x[0]}" fill="${f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="3"/>`).join('')}</svg></span><span class="sd-ft"><b>Раскрась наклейку</b><small>подарок за тропу</small></span></button>`;
+    return `<button class="sd-fav open lt-colb" id="ltCol"><span class="sd-fi"><svg viewBox="0 0 120 120" width="48" height="48">${sh[1].map((x, i) => `<path d="${x[0]}" fill="${f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="3"/>`).join('')}</svg></span><span class="sd-ft"><b>Раскрась картинку</b><small>подарок за тропу</small></span></button>`;
   };
   // on the home: the stickers of the day under the bubble, the offer, the sticker to colour after the path
   function home(box) {
     if (!on()) return;
     const ss = dayStickers(), hero = box.querySelector('.pd-hero');
-    if (hero && ss.length) hero.insertAdjacentHTML('afterend', `<div class="lt-day" aria-label="Наклейки дня">${ss.map(e => `<span class="emo">${e}</span>`).join('')}</div>`);
+    if (hero && ss.length) hero.insertAdjacentHTML('afterend', `<div class="lt-day" aria-label="Картинки дня">${ss.map(e => `<span class="emo">${e}</span>`).join('')}</div>`);
     const doors = box.querySelector('.sd-doors');
     if (doors && SIMPLE.pathDone()) { doors.insertAdjacentHTML('afterend', colourHTML()); box.querySelector('#ltCol').onclick = () => { sfx.pop(); homeLeave(); colour(); }; }
     later(offer, 900);
@@ -27999,7 +28027,7 @@ const LANDX = (() => {
     const tile = x => `<div class="ld-g" style="--bg:${x.g.bg}"><span class="tile-ico">${x.ico}</span><b>${x.name}</b></div>`;
     const steps = [
       ['🧸', 'Первый день', 'Ребёнок выбирает друга-зверька и то, что любит. Друг объясняет задания голосом и слышит, когда ребёнок отвечает.'],
-      ['🗺️', 'Каждый день', 'Дорожка из трёх коротких занятий и сундук со звёздами в конце. За каждые 5 звёзд — новая наклейка.'],
+      ['🗺️', 'Каждый день', 'Дорожка из трёх коротких занятий и сундук со звёздами в конце. За каждый день — новая наклейка в альбом.'],
       ['🔥', 'Каждую неделю', 'Серия дней подряд и медали: за 3 дня, неделю, две недели и месяц. Братья и сёстры держат общую серию.'],
       ['📈', 'Шаг за шагом', IS_RU ? 'Букварь — 33 буквы по порядку, «Ступеньки» в математике — от точек до уравнений, шахматы с компьютером — 10 уровней.' : 'Буквы и первые слова, «Ступеньки» в математике — от точек до уравнений, шахматы с компьютером — 10 уровней.'],
       ['🖼️', 'Целый мир', 'Музей мира — больше 1000 картин, музыкальная шкатулка с композиторами, опыты на площадке и путешествия по странам.'],

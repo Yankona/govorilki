@@ -28,7 +28,8 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
     const home = async () => { await run('goHome()'); await p.waitForTimeout(500); };
     await p.goto(BASE + SUB[lang]); await p.waitForTimeout(1500);
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
-    for (const [k, nDoors, nMust] of [['k1', 2, 4], ['k2', 3, 5]]) {
+    // «Миссия Л» has six steps since the maths of the day (audit-rewards)
+    for (const [k, nDoors, nMust] of [['k1', 2, 4], ['k2', 3, 6]]) {
       await run(`switchKid('${k}')`); await p.waitForTimeout(700); await home();
       const tag = `${lang}/${k}`;
       ok(!(await p.$('#tabBar')), `${tag}: tab bar still there`, miss);
