@@ -3446,6 +3446,10 @@ body.simple .home-t .stage{padding-bottom:110px}
 .sd-pick{display:flex;flex-direction:column;gap:14px;width:100%;max-width:720px;margin:0 auto}.sd-pick .sd-doors{width:100%;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}.sd-door.pk{outline:4px solid var(--tiger);outline-offset:2px}
 .sd-favbar{position:fixed;right:calc(12px + env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));z-index:60;border:0;border-radius:999px;background:#FFE3EE;color:#2A2346;font:900 15px var(--f-body);padding:8px 14px;box-shadow:0 3px 0 rgba(0,0,0,.15);cursor:pointer}
 .sd-favbar b{margin-left:4px}
+.sd-know h3{margin:6px 0 8px;font:900 20px var(--f-head);color:var(--ink)}
+.sd-kn{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.sd-k{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:var(--paper);border-radius:16px;padding:10px 6px;box-shadow:0 3px 0 var(--line-strong);color:var(--ink);font:inherit;cursor:pointer}
+.sd-k .tile-ico{width:44px;height:44px}.sd-k .tile-ico svg{width:44px;height:44px}.sd-k .emo{font-size:36px}.sd-k b{font:800 13px/1.15 var(--f-body);text-align:center}.sd-k .tile-new{position:absolute;top:-6px;right:-4px}
 /* DAYG-CSS-END */
 /* TALK-CSS: the friend in the corner and the little talk */
 .tk-fab{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:68px;height:68px;border-radius:50%;border:0;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),0 6px 18px rgba(0,0,0,.18);padding:6px;cursor:pointer}
@@ -27449,7 +27453,13 @@ const SIMPLE = (() => {
   // today's doors stay the same all day, whatever changes; a grown-up can add one
   function today() {
     const k = dayKey(), t = P.doorsToday;
-    if (!t || t.d !== k) { let ids = plan(dayNo() + 15)[dayNo()] || []; try { ids = WISH.applyDoors(ids, t && t.ids); } catch (e) {} P.doorsToday = { d: k, ids, extra: [] }; save(); }
+    if (!t || t.d !== k) {
+      let ids = plan(dayNo() + 15)[dayNo()] || [];
+      // fresh news this child has not heard: the surprise of the day is «Новости мира»
+      try { if (newsDot('learn-news') && pool().some(a => a.id === 'news') && !favs().includes('news') && !((t && t.ids) || []).includes('news')) ids = ['news']; } catch (e) {}
+      try { ids = WISH.applyDoors(ids, t && t.ids); } catch (e) {}
+      P.doorsToday = { d: k, ids, extra: [] }; save();
+    }
     const V = vis(), wt = cfg().week, wk = wt && wt.until >= dayKey() ? [wt.area] : [];
     return [...new Set([...favs(), ...wk, ...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
   }
@@ -27600,6 +27610,7 @@ const SIMPLE = (() => {
       <div class="sd-doors">${ds.map(door).join('')}</div>
       ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Любимая игра: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button><button class="sd-gh" id="sdFavCh">✏️ Выбрать любимую игру</button>` : ''}
       <div class="sd-soon"><p>🎁 Завтра — новый сюрприз! <button class="sd-gh" id="sdFavs">💛 Моё любимое</button></p></div>
+      ${knowHTML()}
     </section>`;
   }
   function bind(box) {
@@ -27610,6 +27621,7 @@ const SIMPLE = (() => {
       homeLeave(); room(a);
     });
     const fb = box.querySelector('#sdFavs'); if (fb) fb.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
+    box.querySelectorAll('[data-know]').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); const id = b.dataset.know; if (id === 'cal') screenCalendar(); else GAMES.find(g => g.id === id).go(); });
     const fc = box.querySelector('#sdFavCh'); if (fc) fc.onclick = () => { sfx.pop(); homeLeave(); favChoose(); };
     const ag = box.querySelector('#sdAskGo'); if (ag) ag.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
     const ax = box.querySelector('#sdAskX'); if (ax) ax.onclick = () => { sfx.pop(); P.favAsked = 1; save(); const el = box.querySelector('#sdAsk'); if (el) el.remove(); };
@@ -27627,6 +27639,13 @@ const SIMPLE = (() => {
     const L = LS(), ms = must().map(id => L[id].name.toLowerCase()), fv = favs().map(id => area(id).n);
     const j = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' и ' + xs[xs.length - 1] : (xs[0] || '');
     return fv.length ? `Сначала ${j(ms)}, а потом твои ${j(fv)}!` : `Сначала ${j(ms)}, а потом сюрприз!`;
+  }
+  // «Узнаём» on the home: the holidays, the news, science, stories, journeys, professions, comics, music, the museum —
+  // always one tap, never behind the path (the owner, 18.11: «праздники, новости, наука и многое-многое другое нельзя терять»)
+  const KNOW = ['learn-news', 'phys-lab', 'how', 'space', 'tales', 'travel', 'learn-jobs', 'comics', 'composers', 'museum'];
+  function knowHTML() {
+    const V = vis(), gs = KNOW.filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
+    return `<section class="sd-know" id="sdKnow"><h3>🌍 Узнаём</h3><div class="sd-kn">${gs.map(g => `<button class="sd-k" data-know="${g.id}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b>${newsDot(g.id) ? '<i class="tile-new">Новое!</i>' : ''}</button>`).join('')}<button class="sd-k" data-know="cal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div></section>`;
   }
   // «Моё любимое»: big pictures, 2–4, any day again
   function favPick() {
@@ -27754,7 +27773,7 @@ const SIMPLE = (() => {
     sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
   }
-  return { rewardOk, rewardGames, favChoose, favStop, favState, AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+  return { KNOW, rewardOk, rewardGames, favChoose, favStop, favState, AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
 /* SIMPLE-END */
 /* TALK-BEGIN */

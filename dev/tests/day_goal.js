@@ -77,6 +77,20 @@ let bad = 0;
     const gap = await run(`(() => { const w = weekId(), keys = []; for (const i of [0, 1, 3, 4, 6]) { const d = new Date(w); d.setDate(d.getDate() + i - 7); keys.push(dayKey(d)); }
       P.doneDays = { ...P.doneDays, ...Object.fromEntries(keys.map(k => [k, 1])) }; save(); return DAYG.streak(); })()`);
     ok(gap >= 2, `a week with two missed days still made: ${gap}`);
+    // «Узнаём» is always there, one tap, before the path is done: news, science, stories, journeys, professions, comics,
+    // music, the museum, the holidays (the owner: «нельзя терять»); a holiday card stays on the home when there is one
+    await run(`P.days[dayKey()] = {}; save()`); await home();
+    const kn = await p.$$eval('[data-know]', bs => bs.map(b => b.dataset.know));
+    const want = await run(`SIMPLE.KNOW.filter(id => SIMPLE.vis().has(id))`);
+    ok(want.length >= 6 && want.every(id => kn.includes(id)) && kn.includes('cal'), `«Узнаём» ${kn} / ${want}`);
+    const hol = await run(`typeof holidayCard === 'function' ? (holidayCard() ? !!document.querySelector('.hol, .holiday, [class*="hol"]') : true) : true`);
+    ok(hol, 'holiday card lost');
+    for (const id of ['learn-news', 'comics', 'cal']) {
+      if (!kn.includes(id)) continue;
+      await p.click(`[data-know="${id}"]`); await p.waitForTimeout(900);
+      ok(!(await p.$('.home-t')), `«Узнаём» ${id} does not open`);
+      await home();
+    }
     // three looks
     for (const lk of ['bright', 'calm', 'dark']) { await run(`P.settings.look = '${lk}'; save()`); await home(); await p.screenshot({ path: `${SHOTS}/goal-${lang}-${DEV}-${lk}.png` }); }
     await run(`P.settings.look = ''; save()`);
