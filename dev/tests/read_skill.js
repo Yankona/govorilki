@@ -89,7 +89,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       if (age === 10) { await run('RSK.setLv(9); goHome()'); await p.waitForTimeout(600); const pl = await run(`lessonPlan('read').map(s => s.key)`); ok(pl.join() === 'r-skill,l-syll,speed', `${tag}: «Сегодня» at step 9: ${pl.join(', ')}`); }
       // start one lesson from «Сегодня»: the round opens
       await run(`P.today = null; startLesson('read')`); await p.waitForTimeout(700);
-      ok(!!(await p.$('#rkBox')), `${tag}: «Сегодня» → reading opens «Чтение по силам»`);
+      ok(!!(await p.$(age <= 6 ? '#syBox' : '#rkBox')), `${tag}: «Сегодня» → reading opens ${age <= 6 ? '«Читаем по слогам»' : '«Чтение по силам»'}`);
       // the grown-ups' panel
       if (age === 8) { await run('screenParents()'); await p.waitForTimeout(600); ok(!!(await p.$('#rkLvIn')), `${tag}: the panel has the reading step`); }
       ok(!errs.length, `${tag}: no page errors ` + errs.join(' | '));
