@@ -93,7 +93,7 @@ let bad = 0;
     // the older child: unchanged
     await run(`switchKid('k2')`); await p.waitForTimeout(700); await home();
     const st2 = await p.$$eval('.pd-n[data-l]:not(.pd-opt)', ns => ns.length);
-    ok(st2 === 5, `older child path ${st2}`);
+    ok(st2 === 4, `older child path ${st2}`);   // track l: the book is its own card, not a step (my-book)
     ok(!(await run('LITTLE.on()')), 'older child counted as little');
     const same = await run(`(() => { const n = dayNo(), o = { pool: SIMPLE.pool(), likes: SIMPLE.likes(), kid: 'k2' }; const a = SIMPLE.plan(n + 10, { ...o, little: false }), b2 = SIMPLE.plan(n + 10, o); return JSON.stringify(a[n + 5]) === JSON.stringify(b2[n + 5]); })()`);
     ok(same, 'older child rotation changed');
