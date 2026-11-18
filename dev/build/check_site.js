@@ -33,7 +33,14 @@ const PAGES = { '': 'en', 'en/': 'en', 'ru/': 'ru', 'pt/': 'pt', 'de/': 'de' };
 for (const [dir, L] of Object.entries(PAGES)) {
   const f = path.join(SITE, dir, 'index.html');
   if (!fs.existsSync(f)) { fail(`/${dir}: no index.html`); continue; }
-  const html = fs.readFileSync(f, 'utf8');
+  let html = fs.readFileSync(f, 'utf8');
+  // the game's script lives in data/<lang>/app.<hash>.js since v172 (audit-speed): check it as part of the page
+  const ap = (html.match(/GV_APP\s*=\s*'([^']+)'/) || [])[1];
+  if (ap) {
+    const af = path.join(SITE, dir, ap);
+    if (!fs.existsSync(af)) fail(`/${dir}: the game's script ${ap} is missing`);
+    else html += '\n<script>' + fs.readFileSync(af, 'utf8') + '</script>';
+  }
   const lang = (html.match(/\bLANG = '([a-z]+)'/) || [])[1];
   if (lang !== L) fail(`/${dir}: LANG is ${lang}, expected ${L}`);
   let i = 0, nScripts = 0;
