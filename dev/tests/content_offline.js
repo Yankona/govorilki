@@ -21,6 +21,7 @@ const CHECKS = [
   ['stories', "(() => { const k = Object.keys(LEARN).find(k => !LEARN[k].place && !['news', 'jobs', 'space', 'phys'].includes(k) && learnItems(k).length); screenStory(k, 0); return '#stT'; })()", 40],
   ['journey', "(() => { const k = Object.keys(LEARN).find(k => LEARN[k].place && learnItems(k).length); screenStory(k, 0); return '#stT'; })()", 40],
   ['journey map', "(() => { TRAVEL.screen(); return '.tv-c'; })()", 3],
+  ['globe', "(() => { TRAVEL.screen(); document.querySelector('#tvGlobe').click(); return 'GLOBE'; })()", 0],
   ['jobs', STORY('jobs'), 40],
   ['comics', "(() => { COMIX.shelf(); return '.cx-e'; })()", 1],
 ];
@@ -43,6 +44,13 @@ const CHECKS = [
       for (const [name, code, min] of CHECKS) {
         let sel = null; try { sel = await p.evaluate(s => window.__T.run(s), code); } catch (e) { out.push(`${mode} ${name}: ${e.message.slice(0, 80)}`); continue; }
         if (sel === 'none') { out.push(`${mode} ${name}: no items`); continue; }
+        // the globe: its map pack is loaded and the canvas drawn
+        if (sel === 'GLOBE') {
+          let g = false; for (let i = 0; i < 20 && !g; i++) { await p.waitForTimeout(400); g = await p.evaluate(() => window.__T.run("!!(typeof GLOBE_GEO !== 'undefined' && GLOBE_GEO) && !!document.querySelector('#glC')")); }
+          if (!g) out.push(`${mode} ${name}: not drawn`);
+          await p.evaluate(() => window.__T.run('goHome()')).catch(() => {}); await p.waitForTimeout(300);
+          continue;
+        }
         let txt = '';
         for (let i = 0; i < 20 && txt.length < min; i++) { await p.waitForTimeout(400); txt = await p.evaluate(s => [...document.querySelectorAll(s)].map(e => e.innerText).join(' ').trim(), sel); }
         if (txt.length < min) out.push(`${mode} ${name}: empty (${JSON.stringify(txt.slice(0, 40))})`);
