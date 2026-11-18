@@ -658,6 +658,31 @@ b.r{color:var(--berry)}
 .cam-ask{display:flex;flex-direction:column;gap:8px;max-width:640px;margin:0 auto 12px;padding:12px 14px;border-radius:20px;background:var(--t-blue);color:var(--ink)}.cam-ask p{margin:0;display:flex;flex-direction:column;gap:2px}.cam-ask b{font:800 18px var(--f-body)}.cam-ask small{font:600 14px/1.35 var(--f-body);color:var(--ink-soft)}
 .cam-l{position:absolute;bottom:7%;left:50%;translate:-50% 0;padding:2px 12px;background:var(--paper);border-radius:99px;font:800 15px var(--f-body)}
 .artic-stage.cam-on .mirror,.artic-stage.cam-on .cam{width:min(44vw,320px,40vh)}
+/* honest exercises: the ring that fills while the pose is held, the hint, «Делаю!» (speech-honest) */
+.hon{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;width:100%}
+.hon-r{--p:0;position:relative;flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ok,#2FA865) calc(var(--p) * 1%),var(--line) 0);transition:background .15s}
+.hon-r::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--paper)}
+.hon-r .emo{position:relative;font-size:34px;line-height:1}
+.hon-r.ok{box-shadow:0 0 0 4px #BFF0D2}
+.hon-l{flex:1 1 160px;font:800 19px/1.25 var(--f-body);color:var(--ink);min-height:1.25em}
+.hon-hold{flex:1 1 100%;touch-action:none;user-select:none;-webkit-user-select:none}
+.hon-hold.on{background:#2FA865;box-shadow:0 5px 0 #1E7A48;transform:translateY(2px)}
+.hon-b{flex:1 1 100%}
+.cam.hon-on{transition:border-color .2s}.cam.hon-on .cam-l{max-width:88%;width:max-content;text-align:center;line-height:1.2}.cam.held .cam-l{background:#DDF6E7}.cam.held{border-color:#2FA865;box-shadow:0 8px 0 #1E7A48}
+.steps i.on.miss{filter:grayscale(1);opacity:.45}
+/* «Послушай условие»: the answers wait for the instruction */
+#stage.ls-wait button,#stage.ls-wait [data-id],#stage.ls-wait .card,#stage.ls-wait .item{opacity:.6;filter:saturate(.6);transition:opacity .3s}
+.ls-ear{position:fixed;left:50%;bottom:calc(var(--guide-h,90px) + 14px);translate:-50% 0;z-index:30;display:flex;align-items:center;gap:8px;padding:8px 18px;border-radius:99px;background:var(--paper);box-shadow:0 4px 0 var(--line-strong);font:800 18px var(--f-body);color:var(--ink);pointer-events:none;animation:lsIn .3s ease}
+.ls-ear .emo{font-size:30px;line-height:1;animation:lsBeat 1.2s ease-in-out infinite}
+.ls-ear.ls-pic{padding:10px 22px;gap:12px}.ls-ear.ls-pic .emo{font-size:44px}.ls-g{display:inline-flex;font-size:40px;line-height:1}.ls-g svg{width:46px;height:46px}
+.ls-ear.ls-go{background:#DDF6E7}
+.ls-ear.ls-shake{animation:lsShake .4s ease}
+#replay.ls-big{transform:scale(1.35);box-shadow:0 0 0 6px var(--t-yellow);animation:lsBeat 1.2s ease-in-out infinite}
+.guide.ls-on #replay{width:58px;height:58px}
+@keyframes lsIn{from{opacity:0;translate:-50% 12px}}
+@keyframes lsBeat{50%{transform:scale(1.12)}}
+@keyframes lsShake{25%{translate:calc(-50% - 8px) 0}75%{translate:calc(-50% + 8px) 0}}
+@media (prefers-reduced-motion:reduce){.ls-ear,.ls-ear .emo,#replay.ls-big{animation:none}}
 .snd-tabs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
 .snd-tab{width:76px;height:76px;border:0;border-radius:22px;background:var(--paper);font:900 46px/1 var(--f-body);cursor:pointer;box-shadow:0 5px 0 var(--line-strong)}
 .snd-tab.sel{background:var(--t-yellow);box-shadow:0 5px 0 #D39A00,inset 0 0 0 4px var(--sun)}
@@ -1510,6 +1535,9 @@ body.quest .tile b,body.quest h2,body.quest .bar h1{letter-spacing:.01em}
 .rk-o{min-height:64px;border:0;border-radius:22px;background:var(--paper);color:var(--ink);font:800 clamp(18px,4.4vw,22px)/1.25 var(--f-body);padding:10px 14px;cursor:pointer;box-shadow:0 6px 0 var(--line-strong)}
 .rk-opts.lets .rk-o{aspect-ratio:1.2;font:900 clamp(34px,10vmin,64px)/1 var(--f-body)}
 .rk-opts.pics .rk-o{aspect-ratio:1}.rk-opts.pics .rk-o .pic{font-size:clamp(46px,13vmin,72px)}
+.sy{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}.sy-st{margin:0;font:800 16px var(--f-body);color:var(--ink-soft)}#syBox{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.sy-m{display:flex;gap:clamp(30px,10vw,70px);border:0;background:none;padding:10px;cursor:pointer;transition:gap .7s cubic-bezier(.5,0,.3,1.25)}.sy-m.joined{gap:0}.sy-m .mg-l{width:auto;min-width:clamp(96px,22vmin,140px);padding:0 10px}
+.rk-opts.sy-2{grid-template-columns:repeat(2,minmax(0,1fr));width:min(100%,420px)}
 .rk-o.right{background:var(--t-green);box-shadow:0 6px 0 var(--leaf)}.rk-o.wrong{opacity:.45}
 .rk-o:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line-strong)}
 .rk-mic.ear{animation:pdRing 1.2s ease-out infinite}
@@ -3518,11 +3546,43 @@ body.simple .home-t .stage{padding-bottom:110px}
 #dayPar .big{margin:4px 0 14px}
 @media (prefers-reduced-motion:reduce){.sd-door.open .sd-dc{animation:none}}
 /* SIMPLE-CSS-END */
+/* WISH-CSS: tomorrow's plan, the jar */
+.wi-plan{display:flex;flex-direction:column;gap:10px;background:var(--paper);border-radius:22px;padding:14px 16px;box-shadow:0 5px 0 var(--line-strong);margin-top:12px}
+.wi-plan h3{margin:0;font:900 20px var(--f-head);color:var(--ink)}.wi-plan p{margin:0;font:800 16px var(--f-body);color:var(--ink)}
+.wi-ch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.wi-ch .sd-door{box-shadow:none;background:color-mix(in srgb,var(--a) 12%,var(--paper))}
+.wi-dif{display:flex;flex-wrap:wrap;gap:8px}
+.wi-jar{display:flex;flex-direction:column;align-items:center;gap:14px}
+.wi-pot{font-size:84px;line-height:1}
+.wi-l{list-style:none;margin:0;padding:0;width:min(100%,520px);display:flex;flex-direction:column;gap:8px}
+.wi-l li{display:flex;gap:10px;align-items:center;background:var(--paper);border-radius:16px;padding:10px 14px;font:800 17px var(--f-body);color:var(--ink);box-shadow:0 3px 0 var(--line-strong)}
+.wi-l li.on{background:color-mix(in srgb,var(--sun) 22%,var(--paper))}.wi-l small{display:block;font:700 13px var(--f-body);color:var(--ink-soft)}
+.wi-pl{margin:4px 0 10px;padding-left:4px;list-style:none;display:flex;flex-direction:column;gap:4px;font:700 15px var(--f-body)}
+/* WISH-CSS-END */
+/* DAYG-CSS: life steps, the book, the favourites picker, tags */
+.dg-life{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.dg-l{position:relative;display:flex;align-items:center;gap:8px;border:2px dashed var(--line-strong);background:var(--paper);color:var(--ink);border-radius:18px;padding:8px 14px;font:800 15px var(--f-body);cursor:pointer}
+.dg-l .emo{font-size:24px}.dg-l.on{border-style:solid;border-color:var(--leaf);background:color-mix(in srgb,var(--leaf) 14%,var(--paper))}.dg-l i{font-style:normal;color:var(--leaf);font-weight:900}
+.dg-pop{position:absolute;right:-6px;top:-14px;font-size:28px;animation:ltPop .6s cubic-bezier(.3,1.6,.5,1)}
+.dg-fire{font-size:72px;text-align:center}
+.sd-tag{font:800 11px var(--f-body);color:var(--ink-soft)}
+.sd-ask{position:relative;display:flex;flex-direction:column;gap:6px;align-items:flex-start;background:color-mix(in srgb,var(--sun) 20%,var(--paper));border-radius:20px;padding:14px 16px}
+.sd-ask b{font:900 19px var(--f-body);color:var(--ink)}.sd-ask small{font:700 14px var(--f-body);color:var(--ink-soft)}.sd-ask .ibtn{position:absolute;right:8px;top:8px}
+.sd-pick{display:flex;flex-direction:column;gap:14px;width:100%;max-width:720px;margin:0 auto}.sd-pick .sd-doors{width:100%;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}.sd-door.pk{outline:4px solid var(--tiger);outline-offset:2px}
+.sd-favbar{position:fixed;right:calc(12px + env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));z-index:60;border:0;border-radius:999px;background:#FFE3EE;color:#2A2346;font:900 15px var(--f-body);padding:8px 14px;box-shadow:0 3px 0 rgba(0,0,0,.15);cursor:pointer}
+.sd-favbar b{margin-left:4px}
+.sd-know h3{margin:6px 0 8px;font:900 20px var(--f-head);color:var(--ink)}
+.sd-kn{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.sd-k{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:var(--paper);border-radius:16px;padding:10px 6px;box-shadow:0 3px 0 var(--line-strong);color:var(--ink);font:inherit;cursor:pointer}
+.sd-k .tile-ico{width:44px;height:44px}.sd-k .tile-ico svg{width:44px;height:44px}.sd-k .emo{font-size:36px}.sd-k b{font:800 13px/1.15 var(--f-body);text-align:center}.sd-k .tile-new{position:absolute;top:-6px;right:-4px}
+/* DAYG-CSS-END */
 /* TALK-CSS: the friend in the corner and the little talk */
 .tk-fab{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:68px;height:68px;border-radius:50%;border:0;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),0 6px 18px rgba(0,0,0,.18);padding:6px;cursor:pointer}
 .tk-fab .tk-face svg{width:56px;height:56px;display:block}
 .tk-dot{position:absolute;right:-4px;top:-6px;font-size:22px}
 .screen:has(.guide) .tk-fab{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+/* above the bottom tab bar of the phone, not over «Узнаём» (audit-rewards); on a laptop the tabs are a left column */
+@media (max-width:899px){.screen:has(.tabbar) .tk-fab{bottom:calc(84px + env(safe-area-inset-bottom,0px))}.screen:has(.tabbar):has(.guide) .tk-fab{bottom:calc(158px + env(safe-area-inset-bottom,0px))}}
 .tk{position:fixed;inset:0;z-index:90;background:rgba(20,15,50,.45);display:flex;align-items:flex-end;justify-content:center}
 .tk-box{position:relative;width:min(100%,560px);background:var(--paper);color:var(--ink);border-radius:26px 26px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
 .tk-x{position:absolute;right:12px;top:12px}
@@ -3907,6 +3967,9 @@ const PACK = (() => {
     const names = Object.keys(PACKS), sw = navigator.serviceWorker; if (!names.length || !sw) return;
     let reg = null; try { reg = await Promise.race([sw.ready, wait(20000)]); } catch (e) {}
     if (reg && reg.active) reg.active.postMessage({ keep: names.map(n => new URL(url(n), location.href).href) });
+    
+    
+    if (reg && reg.active) try { reg.active.postMessage({ keep: pics() }); } catch (e) {}
     await wait(4000);
     for (const n of names) {
       try { if (window.caches && await caches.match(url(n))) continue; } catch (e) {}
@@ -3914,8 +3977,9 @@ const PACK = (() => {
       await wait(150);
     }
   }
+  const pics = () => EMBEDDED ? [] : Object.keys(LEARN_IMG).map(id => new URL(LEARN_IMG[id][4] || `${SITE_ROOT}img/learn/${id}-s.webp`, location.href).href);
   addEventListener('load', () => setTimeout(warm, 300));
-  return { get, story, warm, url, loaded: n => !!got[n] };
+  return { get, story, warm, url, pics, loaded: n => !!got[n] };
 })();
 const LOC = { ru: 'ru-RU', en: 'en-GB', pt: 'pt-PT', de: 'de-DE' }[LANG];
 const IS_RU = LANG === 'ru';
@@ -4044,7 +4108,13 @@ const gx = t => kidNames(P.settings.gender === 'm' && GX_RE ? String(t).replace(
 const STICKERS = ['🐨','🦄','🐼','🦙','svg:redpanda','🐬','🦋','🌸','🍓','svg:koala','🐞','🌈','🦊','🍭','svg:unicorn','🐠','🌻','🐣','🦜','svg:alpaca','👑','🎀','🐙','🍒','svg:panda','🦩','🍩','🐝','🌟','svg:tiger'];
 const STICKERS_L = ['👻','🎮','⚽','🚀','svg:ghost','🦖','🐉','🏆','🛹','🤖','🏰','🦈','🏎️','🛸','svg:tiger','🎸','🦅','🐺','🌋','⚡','🎯','🏀','🧩','🔭','svg:panda','🐙','🦁','🐲','🧙','🪐'];
 const STK = () => P.settings.track === 'l' ? STICKERS_L : STICKERS;
-const stickerCount = () => Math.min(STK().length, Math.floor(P.stars / 5));
+
+
+const practiceDays = () => Object.keys(P.days || {}).filter(k => k >= P.stkFrom && Object.values(dayCounts(k)).some(v => v > 0)).length;
+const stickerCount = () => {
+  if (!P.stkFrom) { P.stkBase = Math.min(STK().length, Math.floor((P.stars || 0) / 5)); P.stkFrom = dayKey(); }
+  return Math.min(STK().length, (P.stkBase || 0) + practiceDays());
+};
 
  
 const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -4062,6 +4132,8 @@ const LESSONS_R = {
 const LESSONS_L = {
   speech: { name: "Treino do L", sub: "aquecimento, língua, arena do L", mins: 15, color: 'var(--tiger)', bg: 'var(--t-peach)' },
   read: { name: "Leitura rápida", sub: "sílabas e texto contra o relógio", mins: 10, color: 'var(--sea)', bg: 'var(--t-blue)' },
+  
+  math: { name: "Matemática", sub: "ao teu nível: cresce contigo", mins: 5, color: 'var(--leaf)', bg: 'var(--t-green)' },
   book: { name: "Livro", sub: "um pouco todos os dias, com gosto", mins: 0, color: 'var(--plum)', bg: 'var(--t-lilac)' },
   puzzle: { name: "Problema do dia", sub: "um problema esperto ao teu alcance", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' },
   soro: { name: "Ábaco", sub: "contas e cálculo mental, todos os dias", mins: 3, color: 'var(--sun)', bg: 'var(--t-yellow)' }
@@ -4118,6 +4190,10 @@ function lessonPlan0(id) {
       for (let k = 0; k < 2; k++) steps.push(gameStep(lg[(o + k) % lg.length], 'game'));
       if (mlOn()) steps.push(gameStep(['ml-say', 'ml-guess', 'ml-sound'][(n + s) % 3], 'game'));
     } else if (id === 'read') { try { return RSK.plan(n, s); } catch (e) { ['l-syll', 'speed'].forEach(g => steps.push(gameStep(g, 'read'))); } }
+    else if (id === 'math') {
+      const mg = ['m-sprint', 'flash', 'n100-grid'].filter(g => GAMES.some(x => x.id === g));
+      ['m-skill', mg[(n + s) % mg.length]].filter(g => g && GAMES.some(x => x.id === g)).forEach(g => steps.push(gameStep(g, 'math')));
+    }
     else steps.push(gameStep('book', 'book'));
     return steps;
   }
@@ -4785,6 +4861,7 @@ const BOOKC = ['#EF4F7E', '#3D8BFD', '#2FA865', '#8C6CF2'];
 const app = $('#app');
 let tok = 0, timers = [], rafId = 0, resizeFn = null, lastLine = '';
 function newScreen() {
+  try { HONEST.leave(); } catch (e) {}
   if (typeof SAY_MISS === 'object' && SAY_MISS) { SAY_MISS.n = 0; SAY_MISS.words = []; }
   document.querySelectorAll('.srch').forEach(x => x.remove());
   try { EVT.next(); } catch (e) {}
@@ -4955,7 +5032,9 @@ function talk(text, opts) {
   lastLine = text;
   const b = $('#bubble'); if (b) { SAID_FULL = gx(text); b.textContent = SAID_FULL; b.classList.remove('open'); b.scrollTop = 0; bubbleFit(b); saidSync(); }
   const r = $('.guide-ryz'); if (r) { r.classList.remove('talking'); void r.offsetWidth; r.classList.add('talking'); }
-  return say(text, opts);
+  const p = say(text, opts);
+  try { LISTEN.said(text, p); } catch (e) {}
+  return p;
 }
 function wiggle(el) { el.classList.remove('wiggle'); void el.offsetWidth; el.classList.add('wiggle'); }
 function hopEl(el) { el.classList.remove('hop'); void el.offsetWidth; el.classList.add('hop'); }
@@ -5057,14 +5136,16 @@ function finish({ key, stars = 3, line = '', again, next, menu, ev = {}, extra =
     const a = e.target.closest('[data-a]'); if (!a) return; sfx.pop();
     if (a.dataset.a === 'again') again(); else if (a.dataset.a === 'next') next(); else (menu || goHome)();
   };
-  sfx.good(); confetti(); later(sfx.star, 450);
-  mlPraiseMaybe(say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? " Olha, tens um autocolante novo!" : ''}${fair.note ? ' ' + fair.note : ''}`));
+  sfx.good(); if (sticker || /Новый уровень|новый уровень/.test(line)) confetti(); later(sfx.star, 450);
+  const praise = say(`${title.replace('!', '')}${nameBit()}! ${line}${sticker ? " Olha, tens um autocolante novo!" : ''}${fair.note ? ' ' + fair.note : ''}`);
+  mlPraiseMaybe(praise);
+  if (ov.dataset.like) { const t = tok; Promise.resolve(praise).then(() => { if (t === tok && ov.isConnected) say("Gostaste do jogo? Carrega no polegar para cima ou para baixo."); }); }
   const first = ov.querySelector('[data-a="next"]') || ov.querySelector('[data-a]');
   if (first) first.focus({ preventScroll: true });
 }
 function lessonDoneOverlay(id, sticker, medal) {
   
-  try { if (LITTLE.on()) { LITTLE.stepDone(id); return; } } catch (e) {}
+  try { if (LITTLE.on()) { LITTLE.stepDone(id, sticker); return; } } catch (e) {}
   const L = LS()[id], s = streak(), days = `${s} ${plural(s, ["dia", "dias", "dias"])}`, cnt = dayCounts(dayKey())[id] || 1;
   const ov = document.createElement('div'); ov.className = 'overlay';
   ov.innerHTML = `<div class="winbox" role="dialog" aria-label="Lição concluída">
@@ -5082,8 +5163,8 @@ function lessonDoneOverlay(id, sticker, medal) {
     const a = e.target.closest('[data-a]'); if (!a) return; sfx.pop();
     if (a.dataset.a === 'more') startLesson(id); else if (a.dataset.a === 'cal') screenCalendar(); else goHome();
   };
-  sfx.good(); confetti(60); later(sfx.star, 500); later(() => confetti(40), 900);
-  say(`Hurra${nameBit()}! Lição concluída! ${s > 1 ? `Estás a treinar há ${days} seguidos!` : ''} ${medal ? "Tens uma medalha nova!" : ''} ${id === 'book' ? "Amanhã lemos mais!" : "Queres mais uma lição?"}`);
+  sfx.good(); if (medal || sticker) { confetti(60); later(() => confetti(40), 900); } later(sfx.star, 500);
+  say(`Viva${nameBit()}! Lição feita! ${s > 1 ? `Estás a treinar há ${days} seguidos!` : ''} ${medal ? "Tens uma medalha nova!" : ''} ${sticker ? "E um autocolante novo para a caderneta!" : ''} ${id === 'book' ? "Amanhã lemos mais!" : "Queres mais uma lição?"}`);
   ov.querySelector('[data-a]').focus({ preventScroll: true });
 }
 
@@ -5178,6 +5259,7 @@ const GAMES = [
   { id: 'abc-find', name: "Encontra a letra", sub: "ouve e toca", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b>?</span>", bg: 'var(--t-blue)', go: () => screenFindLetter(), grp: 2 },
   { id: 'abc-first', name: "Primeira letra", sub: "com que letra começa a palavra?", ico: () => pic('🍉'), bg: 'var(--t-pink)', go: () => screenFirstLetter(), grp: 2 },
   { id: 'read-merge', name: "Comboios de sílabas", sub: "M corre para o A — MA!", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b><b class=\"L v\">A</b></span>", bg: 'var(--t-green)', go: () => screenMerge(), grp: 2 },
+  { id: 'syl-step', name: "Ler por sílabas", sub: "MA-ME-MI, depois palavras", kw: "sílabas sílaba ler leitura cinco anos", ico: () => "<span class=\"ico-letters\"><b class=\"L c\">M</b><b class=\"L v\">U</b></span>", bg: 'var(--t-yellow)', go: () => SYLS.play(), grp: 2, prog: () => P.sylSt && P.sylSt[LANG] ? `degrau ${SYLS.st()} de 3` : '' },
   { id: 'read-words', name: "Ler palavras", sub: "ga-to, bo-la, ma-ca-co", ico: () => pic('📖'), bg: 'var(--t-lilac)', go: () => screenReadWords(), grp: 2 },
   { id: 'read-pick', name: "Lê e encontra", sub: "palavra → imagem", ico: () => pic('🖼️'), bg: 'var(--t-peach)', go: () => screenReadPick(), grp: 2 },
   { id: 'write', name: "Escrever letras", sub: "segue com o dedo", ico: () => pic('✏️'), bg: 'var(--t-mint)', go: () => screenPaint({ mode: 'write' }), grp: 2, prog: () => '' },
@@ -5429,11 +5511,11 @@ function goHome() {
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
   
-  if (ACTIVE) { try { LITTLE.skipped(ACTIVE); } catch (e) {} }
+  if (ACTIVE) { try { EVT.log('leave', ACTIVE); } catch (e) {} try { LITTLE.skipped(ACTIVE); } catch (e) {} }
   newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
-  srDefault(); EVT.wrap(GAMES); EVT.shown(); EVT.enter('home:' + (P.homeTab || 'today')); EVT.send();
+  srDefault(); EVT.wrap(GAMES); try { LISTEN.wrap(GAMES); } catch (e) {} EVT.shown(); EVT.enter('home:' + (P.homeTab || 'today')); EVT.send();
   const RF = readFineCheck();
   navHome();
   document.body.classList.toggle('quest', Q()); lookApply();
@@ -5746,6 +5828,7 @@ function screenArtic(i, auto = false, then = null) {
         <p class="muted" id="camNote" hidden></p>
       </div></div>`, { back: then ? goHome : screenArticMenu });
   bindCam($('#artStage'), { auto: true });
+  const H = HONEST.artic(a, t);
   const mirror = $('#mirror'), sayB = $('#sayB'), dots = $$('#steps i');
   
   let cur = a.thumb, swap = 0;
@@ -5765,16 +5848,21 @@ function screenArtic(i, auto = false, then = null) {
   const start = async () => {
     if (started || t !== tok) return; started = true;
     $('#go').hidden = true; sfx.pop();
+    H.go();
     await talk("Preparar!"); if (t !== tok) return;
     for (let k = 0; k < a.steps.length; k++) {
       const [pose, line, ms, fx] = a.steps[k];
       setFace(pose, fx); dots[k].classList.add('on');
       if (line) { sayB.hidden = false; sayB.textContent = line; sayB.style.animation = 'none'; void sayB.offsetWidth; sayB.style.animation = ''; say(line); } else sayB.hidden = true;
       if (fx === 'tick') sfx.tick(); else if (line) ARTFUN.beat(a.id);
-      await wait(ms * pace()); if (t !== tok) return;
+      
+      const r = await H.step(pose, ms * pace()); if (t !== tok) return;
+      dots[k].classList.toggle('miss', r === 'miss');
     }
     sayB.hidden = true;
-    finish(then ? { key: 'artic:' + a.id, stars: 1, line: "A língua já aqueceu — agora vamos desenhar! " + ARTFUN.reward(), again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: "A tua língua ficou mais forte! " + ARTFUN.reward(), again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
+    const R = H.end();
+    if (!R.ok) { H.retry(() => screenArtic(i, false, then)); return; }
+    finish(then ? { key: 'artic:' + a.id, stars: 1, line: R.line + "A língua já aqueceu — agora vamos desenhar! " + ARTFUN.reward(), again: () => screenArtic(i, auto, then), next: then, menu: then } : { key: 'artic:' + a.id, stars: 1, line: R.line + (R.line ? '' : "A tua língua ficou mais forte! ") + ARTFUN.reward(), again: () => screenArtic(i, auto), next: i < AL().length - 1 ? () => screenArtic(i + 1) : null, menu: screenArticMenu });
   };
   $('#go').onclick = start;
   
@@ -6289,6 +6377,80 @@ function screenReadPick() {
   };
   show();
 }
+ 
+
+
+const SYLS = (() => {
+  const S = () => { P.sylSt = P.sylSt || {}; const o = P.sylSt[LANG] = P.sylSt[LANG] || {}; o.st = Math.max(1, Math.min(3, +o.st || 1)); o.r = +o.r || 0; return o; };
+  const two = () => { const w = RWORDS.filter(x => x[0].split('-').length === 2); return w.length >= 4 ? w : RWORDS; };
+  
+  
+  const row = (c, closed) => M_VOW.filter(v => !(closed && v === RU('Ы'))).map(v => closed ? [v, c] : [c, v]).filter(p => !M_BAD.includes(p.join('')));
+  function deck(st, n) {
+    if (st === 3) return sample(two(), 4).map(w => ({ kind: 'word', w }));
+    if (st === 2 && M_LIST) { const pool = sample(M_LIST, 5); return pool.map((s, i) => i < 2 ? { kind: 'join', parts: [s[0], s.slice(1)], s } : { kind: 'find', s, pool }); }
+    
+    const c = M_CONS[n % M_CONS.length], r = row(c, st === 2), it = sample(r, Math.min(3, r.length)), all = r.map(p => p.join(''));
+    return [...it.map(p => ({ kind: 'join', parts: p, s: p.join('') })), ...sample(it, 2).map(p => ({ kind: 'find', s: p.join(''), pool: all }))];
+  }
+  const tiles = s => [...s].map(Lspan).join('');
+  const drawn = s => IS_RU ? prDraw(s) : sylSay(s) + '!';
+  function play() {
+    const t = newScreen(), o = S(), st = o.st, list = deck(st, (P.plays || {})['syl-step'] || 0);
+    let k = 0, busy = false;
+    shell("Ler por sílabas", `<div class="sy"><p class="sy-st">${'⭐'.repeat(st)}${'☆'.repeat(3 - st)} · ${['', "Sílabas abertas", "Sílabas fechadas", "Palavras por sílabas"][st]}</p><div id="syBox"></div></div>`);
+    const box = $('#syBox'), q = LQ.start('syl-step', list.length, true);
+    const next = () => { k++; if (k >= list.length) done(); else later(show, 450); };
+    function show() {
+      busy = false; const x = list[k]; box.dataset.k = k; box.dataset.kind = x.kind; box.dataset.a = x.kind === 'word' ? x.w[1] : x.s;
+      if (x.kind === 'join') {
+        box.innerHTML = `<button class="sy-m" id="syM" aria-label="${esc(x.s)}"><b class="mg-l">${tiles(x.parts[0])}</b><b class="mg-l">${tiles(x.parts[1])}</b></button><p class="merge-syl" id="syS"></p>`;
+        talk(k === 0 ? q.intro + ' ' + "Toca nas letras — elas vão correr uma para a outra." : "Toca nas letras.");
+        $('#syM').onclick = async () => {
+          if (busy) return; busy = true; const m = $('#syM'); m.classList.add('joined'); sfx.whoosh(.5, .14);
+          await wait(700); if (t !== tok) return;
+          $('#syS').innerHTML = tiles(x.s); q.hit($('#syS'), x.s);
+          await talk(`${drawn(x.s)} Repete: ${sylSay(x.s)}.`); if (t !== tok) return;
+          next();
+        };
+      } else if (x.kind === 'find') {
+        const opts = shuffle([x.s, pickOne(x.pool.filter(y => y !== x.s))]);
+        box.innerHTML = `<button class="rk-hear" id="syH">${ICON.speaker}<span>Ouvir outra vez</span></button><div class="rk-opts lets sy-2">${opts.map(v => `<button class="rk-o" data-v="${esc(v)}">${tiles(v)}</button>`).join('')}</div>`;
+        const ask = `Encontra: ${sylSay(x.s)}.`; talk(ask); $('#syH').onclick = () => talk(ask);
+        box.querySelector('.rk-opts').onclick = async e => {
+          const b = e.target.closest('.rk-o'); if (!b || busy) return;
+          if (b.dataset.v !== x.s) { wiggle(b); sfx.tick(); q.miss(box.querySelector(`.rk-o[data-v="${CSS.escape(x.s)}"]`)); talk(`Isto é ${sylSay(b.dataset.v)}. E onde está ${sylSay(x.s)}?`); return; }
+          busy = true; b.classList.add('right'); sfx.good(); q.hit(b, x.s);
+          await talk(`Sim! ${sylSay(x.s)}!`); if (t !== tok) return;
+          next();
+        };
+      } else {
+        const [w, e] = x.w, alt = pickOne(RWORDS.filter(y => y[1] !== e));
+        box.innerHTML = `<div class="rw-word" id="syW">${wordChips(w)}</div><div class="rk-opts pics sy-2">${shuffle([e, alt[1]]).map(p => `<button class="rk-o" data-v="${esc(p)}">${pic(p)}</button>`).join('')}</div>`;
+        chipHint($('#syW'));
+        talk(k === 0 ? q.intro + ' ' + "Lê a palavra aos bocadinhos. Toca num bocadinho e eu ajudo. Depois encontra a imagem." : "Lê e encontra a imagem.");
+        box.querySelector('.rk-opts').onclick = async ev => {
+          const b = ev.target.closest('.rk-o'); if (!b || busy) return;
+          if (b.dataset.v !== e) { wiggle(b); sfx.tick(); q.miss(box.querySelector(`.rk-o[data-v="${CSS.escape(e)}"]`)); talk(`Quase! Lê outra vez: ${w.split('-').map(sylSay).join(', ')}.`); return; }
+          busy = true; b.classList.add('right'); sfx.good(); q.hit(b);
+          await talk(`${cap(wordOf(w))}!`); if (t !== tok) return;
+          next();
+        };
+      }
+    }
+    function done() {
+      const o = S(); o.r++; let up = false;
+      if (o.r >= 3 && o.st < 3) { o.st++; o.r = 0; up = true; }
+      save();
+      finish({ key: 'syl-step', line: q.end + ' ' + (up ? "Um degrau novo! Já lês por sílabas!" : "Já lês por sílabas!"), again: play });
+    }
+    show();
+  }
+  
+  const forAge = (pr = P) => { const a = pr.settings && pr.settings.age || 6; return a >= 5 && a <= 6; };
+  return { play, st: () => S().st, forAge };
+})();
+ 
 
  
 const MATH_E = ['🐼', '🐨', '🦄', '🦙', '🍎', '🍓', '⭐', '🎈', '🐞', '🌸', '🐟', '🧁'];
@@ -7095,19 +7257,21 @@ function bindCam(stage, { auto = false } = {}) {
     note.textContent = "Aqui a câmara não está disponível. Funciona na aplicação, no telemóvel. Entretanto, podes treinar em frente a um espelho normal.";
     talk("A câmara não liga aqui. Vamos olhar para um espelho normal!");
   };
-  if (!auto || !camAuto() || ROOT.camAsk === 'no') return;
-  if (ROOT.camAsk === 'yes') { on(true).then(ok => { if (!ok && t === tok) { ROOT.camAsk = 'no'; save(); } }); return; }
+  if (ROOT.camAsk === 'no' && !ROOT.camNoAt) { ROOT.camNoAt = Date.now(); save(); }
+  const again = ROOT.camAsk === 'no' && Date.now() - (ROOT.camNoAt || 0) > 7 * 864e5;
+  if (!auto || !camAuto() || (ROOT.camAsk === 'no' && !again)) return;
+  if (ROOT.camAsk === 'yes') { on(true).then(ok => { if (!ok && t === tok) { ROOT.camAsk = 'no'; ROOT.camNoAt = Date.now(); save(); } }); return; }
   
-  stage.insertAdjacentHTML('beforebegin', `<div class="cam-ask" id="camAsk"><p><b>🪞 ${esc("Ligamos o espelho mágico?")}</b><small>${esc("Vais ver a tua boca e a tua língua. A câmara não grava nada nem envia nada.")}</small></p>
+  stage.insertAdjacentHTML('beforebegin', `<div class="cam-ask" id="camAsk"><p><b>🪞 ${esc("Ligamos o espelho mágico?")}</b><small>${esc("Vais ver a tua boca e a tua língua. A câmara não grava nada nem envia nada.")}</small>${again ? `<small class="cam-par">${esc("Para os adultos: o espelho ajuda a ver se a criança faz mesmo o exercício e diz «Está a dar!» ou «Tenta outra vez». Só este telemóvel vê o vídeo: não é gravado nem enviado. Sem câmara, o exercício conta quando a criança carrega no botão «Estou a fazer!».")}</small>` : ''}</p>
     <div class="prow-btns"><button class="big" id="camYes">${esc("Sim, ligar")}</button><button class="big ghost" id="camNo">${esc("Não, obrigado")}</button></div></div>`);
   talk("Queres ver-te como num espelho? Carrega em «Sim, ligar».");
   $('#camYes').onclick = async () => {
     sfx.pop(); $('#camAsk').remove();
     const ok = await on(); if (t !== tok) return;
-    ROOT.camAsk = ok ? 'yes' : 'no'; save();
+    ROOT.camAsk = ok ? 'yes' : 'no'; if (!ok) ROOT.camNoAt = Date.now(); save();
     if (!ok) { note.hidden = false; note.textContent = "A câmara não ligou. Podes praticar em frente a um espelho normal."; }
   };
-  $('#camNo').onclick = () => { sfx.pop(); $('#camAsk').remove(); ROOT.camAsk = 'no'; save(); talk("Está bem! Senta-te em frente a um espelho normal."); };
+  $('#camNo').onclick = () => { sfx.pop(); $('#camAsk').remove(); ROOT.camAsk = 'no'; ROOT.camNoAt = Date.now(); save(); talk("Está bem! Senta-te em frente a um espelho normal."); };
 }
 function screenSounds(si = P.settings.track === 'l' ? sndIdx(RU('Л')) : 0) {
   newScreen(); HOW_CUR = null;
@@ -9500,7 +9664,7 @@ function screenStory(k, i, o = {}) {
   const self = selfReader(), lvR = +(readLevels()[LANG] || 0), hasQ = !!(it.q && it.a && it.a.length);
   let miss = 0, rd = 0, reading = 0, aloud = 0;
   shell(T.name, `<article class="story">
-      ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" onerror="this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">fonte</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
+      ${learnImg(it.id) ? `<figure class="story-img"><span class="si-w"><img src="${esc(learnImg(it.id)[3] || `${SITE_ROOT}img/learn/${it.id}.webp`)}" data-sm="${esc(learnImg(it.id)[4] || `${SITE_ROOT}img/learn/${it.id}-s.webp`)}" onerror="if (this.dataset.sm) { this.src = this.dataset.sm; this.dataset.sm = ''; } else this.closest('figure').outerHTML = this.dataset.fb" data-fb="${esc(`<div class="story-e">${pic(it.e)}</div>`)}" alt="${esc(it.t)}"></span><figcaption>${esc(learnImg(it.id)[0] || 'Wikimedia Commons')} · ${esc(learnImg(it.id)[1])} · <a href="${esc(learnImg(it.id)[2])}" target="_blank" rel="noopener">fonte</a></figcaption></figure>` : `<div class="story-e">${pic(it.e)}</div>`}
       <h2>${esc(it.t)}</h2>
       <p class="story-t" id="stT">${parts.map((p, j) => `<span class="ss" data-j="${j}">${esc(p)}</span>`).join('')}</p>
       ${it.try ? `<p class="story-try"><b>🧪 ${k === 'jobs' ? "Experiência em casa" : "Experimenta tu"}</b>${esc(it.try.replace(/^[^:.!?]{3,30}:\s*/, ''))}</p>` : ''}
@@ -9565,6 +9729,7 @@ function screenStory(k, i, o = {}) {
     P.learn = { ...(P.learn || {}), [it.id]: 1 };
     
     EVT.log('story', it.id, mode === 'read' ? 2 : 1);
+    try { WISH.fulfil(x => x.story === it.id); } catch (e) {}
     if (mode === 'read') { try { GUIDE.readSelf(P); } catch (e) {} P.selfRead = (+P.selfRead || 0) + 1; }
     save(); if (o.done) o.done();
     const xl = T.onDone ? T.onDone(it) || '' : '';
@@ -9799,18 +9964,18 @@ if (LEARN.jobs) {
     const b = e.target.closest('#jbPass,#jbGuess,#jbDream,#jbStand,#jbIdea'); if (!b) return false;
     sfx.pop(); ({ jbPass: screenJobPass, jbGuess: screenJobGuess, jbDream: screenJobDream, jbStand: screenBizStand, jbIdea: screenBizIdea })[b.id](); return true;
   };
-  J.onDone = it => `Ganhaste o autocolante «${it.t}» no passaporte das profissões! ${G("Gostavas de trabalhar assim?", "Gostavas de trabalhar assim?")}`;
+  J.onDone = it => `O carimbo «${it.t}» está no passaporte das profissões! ${G("Gostavas de trabalhar assim?", "Gostavas de trabalhar assim?")}`;
 }
 const jobIdx = id => LEARN.jobs.items.findIndex(x => x.id === id);
 
 function screenJobPass() {
   newScreen();
   const J = LEARN.jobs, its = J.items, n = its.filter(x => learnDone(x.id)).length, nb = Object.keys(P.newsB || {}).sort();
-  const st = shell("Passaporte das profissões", `<div class="tv-pass jp-head"><b>🎫 ${esc(P.settings.name || "Meu")} — passaporte das profissões</b><small>Autocolantes: ${n} de ${its.length}. Ouve uma história e ganhas um autocolante.</small></div>
+  const st = shell("Passaporte das profissões", `<div class="tv-pass jp-head"><b>🎫 ${esc(P.settings.name || "Meu")} — passaporte das profissões</b><small>Carimbos: ${n} de ${its.length}. Ouve uma história e ganhas um carimbo.</small></div>
     ${JOB_SECS.map(([sk, sn, se]) => { const xs = its.filter(x => x.sec === sk); return xs.length ? `<h3 class="tv-h">${se} ${esc(sn)}</h3><div class="tv-grid jp-g">${xs.map((x, j) => `<button class="tv-c jp-s ${learnDone(x.id) ? 'got' : ''}" data-id="${x.id}" style="--bg:${learnDone(x.id) ? J.bg : 'var(--paper)'};--r:${[-6, 4, -3, 7, -5, 2][j % 6]}deg"><span class="tv-e">${pic(x.e)}</span><b>${esc(x.t)}</b>${learnDone(x.id) ? '' : '<small>?</small>'}</button>`).join('')}</div>` : ''; }).join('')}
     <h3 class="tv-h">🗞️ Crachás «Sei as novidades»</h3>
     ${nb.length ? `<div class="jp-news">${nb.map(m => `<span class="jp-nb">🏅<small>${esc(newsMonth(m))}</small></span>`).join('')}</div>` : `<p class="lead">Ouve as histórias mais recentes em «O que há de novo no mundo» e aqui aparece um crachá.</p>`}`, { back: () => screenLearn('jobs') });
-  talk(n ? `No teu passaporte há ${n} autocolantes em ${its.length}. Escolhe uma profissão e ouve a história!` : "Este é o teu passaporte das profissões. Ouve uma história sobre uma profissão e ganhas um autocolante!");
+  talk(n ? `No teu passaporte há ${n} ${plural(n, ["carimbo", "carimbos", "carimbos"])} em ${its.length}. Escolhe uma profissão e ouve a história!` : "Este é o teu passaporte das profissões. Ouve uma história sobre uma profissão e ganhas um carimbo!");
   st.onclick = e => { const c = e.target.closest('.jp-s'); if (!c) return; sfx.pop(); screenStory('jobs', jobIdx(c.dataset.id), { back: screenJobPass }); };
 }
 
@@ -11835,14 +12000,13 @@ function screenFriends() {
  
 function screenAlbum() {
   newScreen();
-  const n = stickerCount(), left = 5 - (P.stars % 5), all = n >= STK().length;
-  const leftTxt = `${left} ${plural(left, ["estrela", "estrelas", "estrelas"])}`;
+  const n = stickerCount(), all = n >= STK().length, today = (dayTotal(dayKey()) > 0);
   shell(Q() ? "Os meus troféus" : "Os meus autocolantes", `<div class="album">
-      <p class="lead">${all ? "Juntaste todos os autocolantes!" : `${n ? `Já tens ${n} de ${STK().length}.` : "Ainda está vazio."} Até ao próximo autocolante: ${leftTxt}.`}</p>
-      ${all ? '' : `<div class="next-bar" aria-hidden="true"><i style="width:${(P.stars % 5) / 5 * 100}%"></i></div>`}
+      <p class="lead">${all ? "Juntaste todos os autocolantes!" : `${n ? `Já tens ${n} de ${STK().length}.` : "Ainda está vazio."} ${today ? "O autocolante de hoje já está aqui. Amanhã há outro novo!" : "Faz hoje uma lição e ganhas um autocolante novo."}`}</p>
+      ${all ? '' : `<div class="next-bar" aria-hidden="true"><i style="width:${Math.round(n / STK().length * 100)}%"></i></div>`}
       <div class="stickers">${STK().map((s, i) => i < n ? `<span class="stk" style="--r:${(i * 37 % 17) - 8}deg">${stickerHTML(s)}</span>` : '<span class="stk locked">?</span>').join('')}</div>
     </div>`);
-  talk(all ? "Uau! Todos os autocolantes estão reunidos!" : n ? `Olha quantos autocolantes! Mais ${leftTxt} e ganhas um novo!` : "Aqui vão ficar os teus autocolantes. A cada cinco estrelas ganhas um autocolante novo!");
+  talk(all ? "Uau! Todos os autocolantes estão reunidos!" : n ? `Olha quantos autocolantes! ${today ? "Amanhã há outro novo!" : "Faz uma lição e ganhas um novo!"}` : "Aqui vão ficar os teus autocolantes. Cada dia de lições dá um autocolante novo!");
 }
 
  
@@ -11912,7 +12076,7 @@ function screenParents(focus) {
       <li>Faça a ginástica da língua em frente ao espelho: a menina no ecrã mostra e a criança repete. Por baixo de cada exercício há uma dica sobre o que observar.</li>
       <li>O jogo não ouve através do microfone. O botão «Já disse!» é tocado pela criança ou por si quando a palavra ou a frase foi dita em voz alta. Se o som não saiu bem, peça para repetir mais uma vez, com calma.</li>
       <li>Nos exercícios de respiração, a criança sopra a sério e mantém o dedo no botão enquanto dura a expiração. Veja se a inspiração é feita pelo nariz e se os ombros não sobem.</li>
-      <li>Elogie o esforço. A cada 5 estrelas desbloqueia-se um novo autocolante.</li>
+      <li>Elogie o esforço. Cada dia de lições traz um autocolante novo para a caderneta: a caderneta dura um mês.</li>
 `}    </ul></section>
     </div>`, { guide: false, back: PAR_BACK });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
@@ -12474,13 +12638,17 @@ function leaveLeague(f) {
 
 
 
-const SOUND_SET = [['r', "R", '🐯'], ['l', "L", '🎤'], ['sz', "S e Z", '🐍'], ['sh', "CH J X", '🐝']];
+const SOUND_SET = [['sz', "S e Z", '🐍'], ['sh', "CH J X", '🐝'], ['l', "L", '🎤'], ['r', "R", '🐯']];
 const SND_RE = IS_RU ? { r: /р/i, l: /л/i, sz: /[сз]/i, sh: /[шжчщ]/i } : LANG === 'pt' ? { r: /r/i, l: /l/i, sz: /[szç]/i, sh: /ch|j|x|g[ei]/i } : LANG === 'de' ? { r: /r/i, l: /l/i, sz: /[szß]/i, sh: /sch|ch/i } : { r: /r/i, l: /l/i, sz: /[sz]/i, sh: /sh|ch|j|g[ei]/i };
 const SND_HI = IS_RU ? { r: 'р', l: 'л', sz: 'сз', sh: 'шжчщ' } : LANG === 'pt' ? { r: 'r', l: 'l', sz: 'szç', sh: 'chjx' } : LANG === 'de' ? { r: 'r', l: 'l', sz: 'szß', sh: 'sch' } : { r: 'r', l: 'l', sz: 'sz', sh: 'shcj' };
-const defSounds = track => track === 'l' ? ['l'] : ['r', 'sh', 'sz'];
-const soundsOf = pr => pr.settings.sounds && pr.settings.sounds.length ? pr.settings.sounds : defSounds(pr.settings.track);
+
+
+
+const LEGACY_SOUNDS = { r: ['r', 'sh', 'sz'], l: ['l'] };
+const defSounds = (track, age) => track === 'l' ? ['l'] : (age || 6) <= 4 ? ['sz', 'sh'] : (age || 6) === 5 ? ['sz', 'sh', 'l'] : ['sz', 'sh', 'l', 'r'];
+const soundsOf = pr => pr.settings.sounds && pr.settings.sounds.length ? pr.settings.sounds : [...LEGACY_SOUNDS[pr.settings.track === 'l' ? 'l' : 'r']];
 const mySounds = () => soundsOf(P);
-const customSounds = () => { const s = P.settings.sounds; return !!(s && s.length && [...s].sort().join() !== [...defSounds(P.settings.track)].sort().join()); };
+const customSounds = () => { const s = mySounds(); return !!(s && s.length && [...s].sort().join() !== [...LEGACY_SOUNDS[P.settings.track === 'l' ? 'l' : 'r']].sort().join()); };
 const sndLetters = () => mySounds().map(k => SND_HI[k]).join('');
 const sndLabel = () => mySounds().map(k => SOUND_SET.find(x => x[0] === k)[1]).join(', ');
 const MODS = [
@@ -12643,7 +12811,8 @@ const kidChip = (on, val, label, attr) => `<button class="pick-b ${on ? 'sel' : 
 function screenKidSetup(id, { queue = [], first = false, liga = '', back = null, idx = 1, total = 1 } = {}) {
   newScreen();
   const pr = ROOT.profiles[id], st = pr.settings, she = st.gender === 'f', name = st.name || "Criança";
-  let snd = [...soundsOf(pr)], likes = [...(st.likes || [])], mods = [...modsOf(pr)], off = [...(st.off || [])], track = st.age ? ageTrack(st.age) : st.track;
+  const isNew = !(st.sounds && st.sounds.length) && !Object.keys(pr.plays || {}).length && !pr.stars;
+  let snd = [...(isNew ? defSounds(st.age ? ageTrack(st.age) : st.track, st.age) : soundsOf(pr))], likes = [...(st.likes || [])], mods = [...modsOf(pr)], off = [...(st.off || [])], track = st.age ? ageTrack(st.age) : st.track;
   let modsTouched = !!st.mods;
   const body = `<div class="fe ks">
     <header class="fe-hero"><span class="fe-ryz">${friendSVG('', st.friend || (she ? 'unicorn' : 'tiger'))}</span><div><h1 class="ks-name">${esc(name)}</h1>
@@ -12701,7 +12870,7 @@ function screenKidSetup(id, { queue = [], first = false, liga = '', back = null,
   const list = (v, n, len) => [...new Set(String(v || '').split(/[,;\n]+/).map(x => cleanS(x, len)).filter(Boolean))].slice(0, n);
   $('#ksNext').onclick = () => {
     const bd = $('#ksBday').value; if (/^\d{4}-\d\d-\d\d$/.test(bd)) { st.bday = bd; st.age = ageFrom(bd) || st.age; } else delete st.bday;
-    Object.assign(st, { sounds: snd.length ? snd : defSounds(track), likes, ownLikes: list($('#ksOwn').value, 10, 30), mods, off, track, words: list($('#ksWords').value, 40, 30) });
+    Object.assign(st, { sounds: snd.length ? snd : defSounds(track, st.age), likes, ownLikes: list($('#ksOwn').value, 10, 30), mods, off, track, words: list($('#ksWords').value, 40, 30) });
     
     if (!modsTouched && mods.join() === defMods(track).join()) delete st.mods;
     save(); sfx.magic();
@@ -12882,14 +13051,17 @@ function battleVerdict(key, ev) {
 function resultExtras(ov, { key, stars, line, title, ev, inLesson }) {
   const b = BATTLES[key], val = b ? b.v(ev) : 0, like = (P.likeG || {})[key] || 0, bt = BATTLE && BATTLE.g === key ? BATTLE : null;
   if (bt && bt.done) BATTLE = null;
+  
+  const askLike = !inLesson && !like;
   const box = document.createElement('div'); box.className = 'res-x';
   box.innerHTML = `<div class="res-sub">${!inLesson && b && !GPLAY ? `<button class="chip res-bt" data-r="battle">⚔️ ${bt && bt.done && bt.via === 'link' ? "Responder à batalha" : "Desafiar para uma batalha"}</button>` : ''}
       ${inLesson || EMBEDDED ? '' : "<button class=\"chip\" data-r=\"save\">💾 Guardar</button>"}
-      <span class="res-like" role="group" aria-label="Gostaste do jogo?"><button class="chip ${like > 0 ? 'sel' : ''}" data-r="up" aria-label="Gosto">👍</button><button class="chip ${like < 0 ? 'sel' : ''}" data-r="down" aria-label="Não gosto">👎</button></span></div>
+      ${askLike ? `<span class="res-like" role="group" aria-label="Gostaste do jogo?"><button class="chip ${like > 0 ? 'sel' : ''}" data-r="up" aria-label="Gosto">👍</button><button class="chip ${like < 0 ? 'sel' : ''}" data-r="down" aria-label="Não gosto">👎</button></span>` : ''}</div>
     <p class="res-msg" id="resMsg" role="status"></p><div class="res-sheet" id="resSheet" hidden></div>`;
   const main = ov.querySelector('.win-main');
   if (!inLesson) { const sb = document.createElement('button'); sb.className = 'big share'; sb.dataset.r = 'share'; sb.innerHTML = "📤 Partilhar"; main.append(sb); sb.onclick = e => box.onclick({ target: sb, stopPropagation: () => e.stopPropagation() }); }
   ov.querySelector('.winbox').append(box);
+  if (askLike) ov.dataset.like = '1';
   const msg = m => { const e = ov.querySelector('#resMsg'); if (e) e.textContent = m; };
   const info = { title, line, stars, game: gameName(key) };
   let card = null; const getCard = () => card || (card = resultCard(info).catch(() => null));
@@ -16305,7 +16477,8 @@ const MSK = (() => {
   const S = () => (P.mskill = P.mskill && typeof P.mskill === 'object' ? P.mskill : {});
   const startLv = () => { const a = P.settings.age || (Q() ? 9 : 5); return a <= 4 ? 1 : a === 5 ? 2 : a === 6 ? 3 : a === 7 ? 5 : a === 8 ? 7 : a === 9 ? 9 : 11; };
   const has = () => !!(P.mskill && P.mskill.lv);
-  const lv = () => Math.max(1, Math.min(L.length, (P.mskill && P.mskill.lv) || startLv()));
+  
+  const lv = () => Math.max(1, Math.min(L.length, ((P.mskill && P.mskill.lv) || startLv()) + (() => { try { return WISH.nudge(); } catch (e) { return 0; } })()));
   const rank = (l = lv()) => RANK.reduce((r, x) => l >= x[0] ? x : r, RANK[0]);
   const rankTxt = (l = lv()) => `${rank(l)[1]} ${rank(l)[2]}`;
   
@@ -16474,7 +16647,8 @@ const RSK = (() => {
     ["No inverno, muitas aves voam para o sul, onde está calor e há muita comida. Mas os pardais, os chapins e os dom-fafes ficam. É difícil encontrarem comida debaixo da neve. Por isso, as crianças da nossa escola fizeram comedouros e todas as manhãs enchem-nos de sementes. Agora, junto às janelas da sala, há sempre alegria e barulho.", "O que fizeram as crianças pelas aves?", "Comedouros.", "Caixas-ninho no sul.", "Um escorrega de neve."],
     ["Um vulcão é uma montanha com rocha derretida muito quente lá dentro. Às vezes, ela sobe e sai da cratera. A este rio de fogo chama-se lava. Ao arrefecer, a lava torna-se pedra dura. Algumas ilhas do oceano surgiram precisamente assim, da lava solidificada.", "Como surgiram algumas ilhas?", "Da lava solidificada.", "De areia e conchas.", "Foram construídas por pessoas."]
   ];
-  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a === 7 ? 3 : a === 8 ? 4 : a === 9 ? 5 : 6;
+  
+  const AGE_LV = a => a <= 5 ? 1 : a === 6 ? 2 : a <= 8 ? 4 : a === 9 ? 5 : 6;
   const NOCAP = s => s.toUpperCase();
   const opt = (v, html) => ({ v, html: html || esc(v) });
   const near = (pool, right, key, n = 2) => sample(pool.filter(x => key(x) !== key(right)), n);
@@ -16530,7 +16704,7 @@ const RSK = (() => {
   const has = () => !!S().lv;
   
   const capL = () => { try { return LITTLE.listen() ? 3 : L.length; } catch (e) { return L.length; } };
-  const lv = () => Math.max(1, Math.min(capL(), S().lv || startLv()));
+  const lv = () => Math.max(1, Math.min(capL(), (S().lv || startLv()) + (() => { try { return WISH.nudge(); } catch (e) { return 0; } })()));
   
   const big = () => age() >= 8;
   const early = () => big() && lv() <= 5;
@@ -18499,7 +18673,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '168';
+const APP_VER = '170';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Sou a autora da app: criar uma chave</button></div>`;
 
@@ -21910,7 +22084,8 @@ const SWAB = (() => {
   ];
   const list = () => EX.filter(e => !e.care || mySounds().includes('r'));
   const ok = () => !!(P.settings.swabOk);
-  const daily = () => P.settings.swabDaily !== false;
+  
+  const daily = () => P.settings.swabDaily === true;
   function menu() {
     newScreen();
     const bgs = ['var(--t-pink)', 'var(--t-blue)', 'var(--t-yellow)', 'var(--t-green)', 'var(--t-lilac)', 'var(--t-peach)', 'var(--t-mint)'];
@@ -21922,7 +22097,7 @@ const SWAB = (() => {
         ${ok() ? '' : "<div class=\"og-btns\"><button class=\"big\" id=\"swOk\">Percebi, estou aqui</button></div>"}</details>
       <p class="lead">Sentamo-nos em frente ao espelho. O adulto segura o cotonete, a criança imita a menina.</p>
       <div class="cards" id="swCards">${list().map((a, i) => `<button class="card" data-i="${i}" style="--bg:${bgs[i % bgs.length]}">${faceBud(a.pose, a.at)}<span>${a.name}</span>${P.best['swab:' + a.id] ? `<i class="done">${ICON.star}</i>` : ''}</button>`).join('')}</div>
-      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Um exercício com cotonete na sessão «Fala», depois do aquecimento</label></div>`);
+      <label class="sw-daily"><input type="checkbox" id="swDaily" ${daily() ? 'checked' : ''}> Um exercício com cotonete na sessão «Fala», depois do aquecimento (só com um adulto ao lado)</label></div>`);
     const okb = $('#swOk'); if (okb) okb.onclick = () => { sfx.pop(); P.settings.swabOk = 1; save(); menu(); };
     $('#swDaily').onchange = e => { P.settings.swabDaily = e.target.checked; save(); sfx.tick(); };
     $('#swCards').onclick = e => { const c = e.target.closest('.card'); if (!c) return; sfx.pop(); if (!ok()) { wiggle($('.sw-safe')); $('.sw-safe').open = true; talk("Primeiro o adulto lê como fazer em segurança."); return; } ex(+c.dataset.i); };
@@ -24979,7 +25154,9 @@ const GUIDE = (() => {
   function famHTML() {
     const f = fam(); if (!f) return '';
     const ids = f.kids.filter(id => ROOT.profiles[id]).sort((a, b) => (b === ROOT.cur) - (a === ROOT.cur));
-    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) })).join('')
+    
+    const skip = id => { try { const l = HONEST.reportLine(ROOT.profiles[id]); return l ? `<p class="gd-act gd-skip">🙈 ${esc(l)}</p>` : ''; } catch (e) { return ''; } };
+    return ids.map(id => card(digest(ROOT.profiles[id]), { id, n: ROOT.profiles[id].settings.name || '', face: kidFace(id) }).replace('<details class="gd-idea">', skip(id) + '<details class="gd-idea">')).join('')
       || "<p class=\"lead\">Adicionem uma criança à família e o relatório aparece aqui.</p>";
   }
   function mountFam(box) {
@@ -25409,7 +25586,7 @@ const BOOKSHELF = (() => {
     const sh = BOOK_SHELVES.find(x => x.id === sid) || BOOK_SHELVES.find(x => x.id === shelfFor(P.settings.age)) || BOOK_SHELVES[0];
     const books = BOOKS.filter(b => b.s === sh.id), n = books.filter(b => S[b.id] === 'read').length;
     shell("Estante de livros", `<div class="bk-wrap">
-      <p class="lead" id="bkLead">Escolhe uma prateleira e um livro. Marca os livros que já leste, e ganhas um autocolante por cada um!</p>
+      <p class="lead" id="bkLead">Escolhe uma prateleira e um livro. Marca os livros que já leste, e ganhas cinco estrelas por cada um!</p>
       ${IS_RU ? TALES.tile() : "<p class=\"bk-note\"><span class=\"emo\">🎧</span> Por agora, os contos em áudio só existem na versão russa do jogo.</p>"}
       <div class="bk-tabs" role="tablist">${BOOK_SHELVES.map(x => `<button class="bk-tab ${x.id === sh.id ? 'sel' : ''}" data-s="${x.id}" role="tab" aria-selected="${x.id === sh.id}"><span class="emo">${x.e}</span><b>${x.n}</b><small>${x.age}</small></button>`).join('')}</div>
       <section class="bk-shelf"><h2><span class="emo">${sh.e}</span> ${sh.n} <small>${sh.age}</small></h2>
@@ -26195,7 +26372,14 @@ const LETTERS = (() => {
     $('#pvLetters').onclick = () => { sfx.pop(); inbox(() => screenPult()); };
   }
   setTimeout(() => { flush().catch(() => {}); }, 8000);
-  return { screen, row, flush, inbox, pultBtn, poll };
+  
+  async function send(k, t, w) {
+    const f = fam(), ages = f ? f.kids.map(id => ROOT.profiles[id] && ROOT.profiles[id].settings.age).filter(Boolean) : [];
+    const it = { k, t: String(t).slice(0, 3000), w, c: '', ages, cc: f && f.cc || '', lang: LANG, ver: APP_VER, at: Date.now() };
+    out().push(it); sent().unshift({ k, t: it.t, at: it.at, ok: 0 }); ROOT.lettersSent = sent().slice(0, 30); save();
+    await flush(); return !out().some(x => x.at === it.at);
+  }
+  return { screen, row, flush, inbox, pultBtn, poll, send };
 })();
  
  
@@ -26949,7 +27133,9 @@ const PATH = (() => {
   function line(s) {
     const N = s.ids.length, d = s.done.length;
     let t;
-    if (!d) t = Q() ? `Missão do dia: ${N} ${plural(N, ["passo", "passos", "passos"])}. Vamos!` : `Olá${nameBit()}! Hoje há ${N} ${plural(N, ["lição", "lições", "lições"])}. Vamos começar?`;
+    
+    const pl = (() => { try { return SIMPLE.planLine(); } catch (e) { return ''; } })();
+    if (!d) t = pl ? (Q() ? '' : `Olá${nameBit()}! `) + pl : Q() ? `Missão do dia: ${N} ${plural(N, ["passo", "passos", "passos"])}. Vamos!` : `Olá${nameBit()}! Hoje há ${N} ${plural(N, ["lição", "lições", "lições"])}. Vamos começar?`;
     else if (!s.all) t = `Já ${d} de ${N}! A seguir: ${LS()[s.now].name}.`;
     else if (!s.opened) t = "Tudo feito! Abre o baú!";
     else t = Q() ? "Missão cumprida! As portas do dia estão abertas." : `Trilho concluído${nameBit()}! As portas do dia estão abertas.`;
@@ -27046,7 +27232,7 @@ const PATH = (() => {
     const sk = streak(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
     const days = WEEK.map((w, i) => { const k = dayKey(new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i)), on = dayTotal(k) > 0;
       return `<span class="pd-wd ${on ? 'on' : ''} ${k === tk ? 'now' : ''}"><i>${on ? '✓' : ''}</i>${w}</span>`; }).join('');
-    const sc = stickerCount(), all = STK().length, left = (sc + 1) * 5 - P.stars;
+    const sc = stickerCount(), all = STK().length, stkToday = dayTotal(tk) > 0;
     const kid = id => {
       const pr = id === ROOT.cur ? P : ROOT.profiles[id], ids = Object.keys(pr.settings.track === 'l' ? LESSONS_L : LESSONS_R).filter(x => x !== 'book');
       const v = pr.days && pr.days[tk], c = v === true ? { speech: 1 } : (v || {}), d = ids.filter(x => c[x]).length;
@@ -27054,7 +27240,7 @@ const PATH = (() => {
     };
     const el = document.createElement('aside'); el.className = 'pd-side';
     el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} ${plural(sk, ["dia", "dias", "dias"])} seguidos<small>esta semana</small></h3><div class="pd-wk">${days}</div></button>
-      <button class="pd-card" id="pdStars"><h3>Estrelas</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc < all ? `mais ${left} e há um autocolante novo` : "todos os autocolantes recolhidos!"}</small></button>
+      <button class="pd-card" id="pdStars"><h3>Estrelas</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc >= all ? "todos os autocolantes recolhidos!" : stkToday ? `autocolantes: ${sc} de ${all}` : "uma lição e um autocolante novo"}</small></button>
       ${KIDS.length > 1 ? `<div class="pd-card pd-fam"><h3>Família hoje</h3>${KIDS.map(kid).join('')}</div>` : ''}`;
     
     const main = document.createElement('div'); main.className = 'pd-main';
@@ -27101,7 +27287,7 @@ const SIMPLE = (() => {
   const DAYS_IN = ["no domingo", "na segunda-feira", "na terça-feira", "na quarta-feira", "na quinta-feira", "na sexta-feira", "no sábado"];
   let ALLG = false, FAV_ON = false, FT = null, CACHE = null;
 
-  const cfg = () => { const d = (P && P.settings.day) || {}; return { on: d.on !== false, k: d.k || ((P.settings.age || 6) <= 6 ? 2 : 3), fav: d.fav === undefined ? 10 : d.fav, off: d.off || [], must: d.must || {}, favGame: d.favGame || '' }; };
+  const cfg = () => { const d = (P && P.settings.day) || {}; return { week: d.week || null, on: d.on !== false, k: d.k || ((P.settings.age || 6) <= 6 ? 2 : 3), fav: d.fav === undefined ? 10 : d.fav, off: d.off || [], must: d.must || {}, favGame: d.favGame || '' }; };
   const setCfg = (k, v) => { P.settings.day = { ...(P.settings.day || {}), [k]: v }; CACHE = null; save(); };
   const on = () => { try { return cfg().on && !ALLG && !GPLAY; } catch (e) { return false; } };
   
@@ -27110,7 +27296,10 @@ const SIMPLE = (() => {
     
     let lil = false; try { lil = LITTLE.on() && !Object.keys(m).length; } catch (e) {}
     const ms = lil ? LITTLE.must(ids) : ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
-    return ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
+    const out = ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
+    
+    let o2 = out; try { o2 = DAYPLAN.order(out) || out; } catch (e) {}
+    try { return DAYG.sandwich(o2); } catch (e) { return o2; }
   }
   const opt = () => { const ms = must(); return Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); };
 
@@ -27126,22 +27315,33 @@ const SIMPLE = (() => {
   
   const gamesOf = (a, V) => [...a.ids, ...(a.id === 'world' ? GAMES.filter(g => g.id.startsWith('learn-') && !claimed.has(g.id)).map(g => g.id) : [])].filter(id => V.has(id));
   const area = id => AREAS.find(a => a.id === id);
-  const likes = () => [...new Set((P.settings.likes || []).map(l => LIKE_AREA[l]).filter(Boolean))];
+  const likes = () => [...new Set([...(P.settings.likes || []).map(l => LIKE_AREA[l]), ...(() => { try { return WISH.moreAreas(); } catch (e) { return []; } })()].filter(Boolean))];
   const listens = () => { try { return LITTLE.listen(); } catch (e) { return false; } };
+  
+  
+  function favs() {
+    const pl = pool().map(a => a.id);
+    let f = (Array.isArray(P.favs) ? P.favs : likes().slice(0, 3)).filter(id => pl.includes(id));
+    if (!f.length) f = ['art', 'books'].filter(id => pl.includes(id));
+    return f.slice(0, 4);
+  }
+  const isSurprise = id => !!(P.doorsToday && P.doorsToday.d === dayKey() && P.doorsToday.ids.includes(id) && !favs().includes(id));
   function pool() { const V = vis(), c = cfg(), age = P.settings.age || 6, ls = listens(); return AREAS.filter(a => age >= (a.age || 0) && !c.off.includes(a.id) && !(ls && a.id === 'comics') && gamesOf(a, V).length); }
   function rng(seed) { let h = 2166136261; for (const ch of String(seed)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); h = h >>> 0 || 1; return () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return (h % 1e6) / 1e6; }; }
   
   
   function plan(upto, opts = {}) {
-    const c = { ...cfg(), ...opts }, A = opts.pool || pool(), lk = opts.likes || likes(), kid = opts.kid || ROOT.cur || 'k', k = Math.min(c.k, A.length);
-    const lil = opts.little !== undefined ? opts.little : (() => { try { return LITTLE.on(); } catch (e) { return false; } })();
-    const key = [kid, upto, c.k, A.map(a => a.id).join(), lk.join(), lil].join('|');
+    
+    const fv = opts.favs || favs(), A = (opts.pool || pool()).filter(a => !fv.includes(a.id)), lk = opts.likes || likes(), kid = opts.kid || ROOT.cur || 'k', k = Math.min(opts.k || 1, A.length);
+    const seen = P.doorSeen || {};
+    const lil = (opts.little !== undefined ? opts.little : (() => { try { return LITTLE.on(); } catch (e) { return false; } })()) && !fv.some(id => (area(id) || {}).g === 'c');
+    const key = [kid, upto, k, A.map(a => a.id).join(), lk.join(), lil, fv.join()].join('|');
     if (!opts.pool && CACHE && CACHE.key === key) return CACHE.out;
     const start = Math.min(EPOCH, upto - 40), last = {}, out = {}, r0 = rng(kid);
     A.map(a => [a, r0()]).sort((x, y) => x[1] - y[1]).forEach(([a], i) => { last[a.id] = start - 1 - i; });
     let y = [];
     for (let d = start; d <= upto; d++) {
-      const r = rng(kid + ':' + d), sc = a => { const gap = d - last[a.id]; return (gap >= 9 ? 100 : 0) + gap * (lk.includes(a.id) ? 1.7 : 1) + r() * 2; };
+      const r = rng(kid + ':' + d), sc = a => { const gap = d - last[a.id]; return (gap >= 9 ? 100 : 0) + gap * (lk.includes(a.id) ? 1.7 : 1) + (seen[a.id] ? 0 : 3) + r() * 2; };
       const cand = A.filter(a => !y.includes(a.id)).map(a => ({ a, s: sc(a) })).sort((p, q) => q.s - p.s), pick = [];
       for (const x of cand) { if (pick.length >= k) break; if (pick.some(p => p.g === x.a.g) && cand.some(o => o !== x && !pick.includes(o.a) && !pick.some(p => p.g === o.a.g))) continue; pick.push(x.a); }
       for (const x of cand) { if (pick.length >= k) break; if (!pick.includes(x.a)) pick.push(x.a); }
@@ -27155,11 +27355,19 @@ const SIMPLE = (() => {
   
   function today() {
     const k = dayKey(), t = P.doorsToday;
-    if (!t || t.d !== k) { const ids = plan(dayNo() + 15)[dayNo()] || []; P.doorsToday = { d: k, ids, extra: [] }; save(); }
-    const V = vis();
-    return [...new Set([...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
+    if (!t || t.d !== k) {
+      let ids = plan(dayNo() + 15)[dayNo()] || [];
+      
+      try { if (newsDot('learn-news') && pool().some(a => a.id === 'news') && !favs().includes('news') && !((t && t.ids) || []).includes('news')) ids = ['news']; } catch (e) {}
+      try { ids = WISH.applyDoors(ids, t && t.ids); } catch (e) {}
+      P.doorsToday = { d: k, ids, extra: [] }; save();
+    }
+    const V = vis(), wt = cfg().week, wk = wt && wt.until >= dayKey() ? [wt.area] : [];
+    return [...new Set([...favs(), ...wk, ...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
   }
   function whenOpens(id) {
+    if (favs().includes(id)) return "depois do trilho";
+    try { if (WISH.promised(id)) return "amanhã"; } catch (e) {}
     const n = dayNo(), p = plan(n + 15);
     for (let d = n + 1; d <= n + 15; d++) if ((p[d] || []).includes(id)) {
       const k = d - n; if (k === 1) return "amanhã"; if (k === 2) return "depois de amanhã";
@@ -27195,74 +27403,130 @@ const SIMPLE = (() => {
     try { EVT.log('door', a.id); } catch (e) {}
     const first = stamp(a.id);
     if (first) P.doorSeen[a.id] = (P.doorSeen[a.id] || 0) + 1;
+    const bonus = first && isSurprise(a.id); if (bonus) { P.stars += 2; try { weekAdd(P, 2); } catch (e) {} }
     save();
     const gs = roomGames(a);
+    let wd = null; try { wd = WISH.fulfil(x => x.area === a.id && !x.story); } catch (e) {}
     newScreen();
     shell(`${a.e} ${a.n}`, `<div class="sd-room">
-      ${first ? `<p class="sd-stamp"><span class="emo">${a.e}</span>Um carimbo novo no passaporte!</p>` : ''}
+      ${first ? `<p class="sd-stamp"><span class="emo">${a.e}</span>Um selo novo no passaporte!${bonus ? " +2 ⭐ pela surpresa!" : ''}</p>` : ''}
       <div class="tiles">${gs.map((g, i) => `<button class="tile ${i ? '' : 'sd-feat'}" data-id="${g.id}" style="--bg:${g.bg}">${i ? '' : "<i class=\"tile-new\">Jogo do dia</i>"}<span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b><small>${esc(typeof g.sub === 'function' ? g.sub() : g.sub)}</small></button>`).join('')}</div></div>`, { back: goHome });
     $$('.sd-room .tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
     try { TALK.fab(); } catch (e) {}
-    say(`${a.n}! Jogo do dia: ${nm(gs[0].name)}.`);
+    say(wd ? `Desejaste${G("", '')} «${wd.t}». Aqui está! ${a.n}! Jogo do dia: ${nm(gs[0].name)}.` : `${a.n}! Jogo do dia: ${nm(gs[0].name)}.`);
   }
 
   
-  function favGame() {
-    const c = cfg(), V = vis(), inLesson = new Set(['breath', 'artic', 'soroban', 'olymp-day', 'r-skill', 'm-skill', 'book']);
-    if (c.favGame && V.has(c.favGame)) return GAMES.find(g => g.id === c.favGame);
-    try { if (LITTLE.on() && (P.settings.likes || []).some(l => ['draw', 'art', 'unicorn', 'beauty'].includes(l)) && V.has('draw')) return GAMES.find(g => g.id === 'draw'); } catch (e) {}
-    let best = '', n = 0;
-    Object.entries(P.plays || {}).forEach(([k, v]) => { if (V.has(k) && !inLesson.has(k) && v > n) { best = k; n = v; } });
-    if (!best) best = [Q() ? 'chess-ai' : 'draw', 'draw', 'color', 'museum'].find(id => V.has(id)) || [...V][0];
-    return GAMES.find(g => g.id === best) || null;
+  
+  
+  
+  const ARENA = ['l-moto', 'l-rap', 'l-catch', 'l-boss', 'l-word'];
+  const NOT_REWARD = new Set([0, 1, 2, 3, 5, 6, 9, 12, 14, 15, 16]);
+  function rewardOk(id, V) {
+    const g = GAMES.find(x => x.id === id); if (!g || !V.has(id) || g.info) return false;
+    if (ARENA.includes(id)) return true;
+    if (NOT_REWARD.has(g.grp)) return false;
+    const path = new Set(Object.keys(LS()).flatMap(l => { try { return lessonPlan0(l).map(x => String(x.key)); } catch (e) { return []; } }));
+    return !path.has(id) && !['soroban', 'olymp-day', 'r-skill', 'm-skill', 'book', 'rume', 'rume-day'].includes(id);
   }
+  function rewardGames() {
+    const V = vis(), ids = [...new Set([...favs().flatMap(a => gamesOf(area(a), V)), ...(Q() ? ARENA : []), 'draw', 'color', 'chess-ai', 'piano'])];
+    return ids.filter(id => rewardOk(id, V)).map(id => GAMES.find(g => g.id === id));
+  }
+  function favGame() {
+    const c = cfg(), V = vis();
+    if (c.favGame && rewardOk(c.favGame, V)) return GAMES.find(g => g.id === c.favGame);
+    if (P.favGameKid && rewardOk(P.favGameKid, V)) return GAMES.find(g => g.id === P.favGameKid);
+    try { if (LITTLE.on() && (P.settings.likes || []).some(l => ['draw', 'art', 'unicorn', 'beauty'].includes(l)) && rewardOk('draw', V)) return GAMES.find(g => g.id === 'draw'); } catch (e) {}
+    const rg = rewardGames(); let best = null, n = 0;
+    rg.forEach(g => { const v = (P.plays || {})[g.id] || 0; if (v > n) { best = g; n = v; } });
+    return best || rg[0] || null;
+  }
+  
+  function favChoose() {
+    newScreen();
+    const rg = rewardGames().slice(0, 16), cur = favGame();
+    shell("Jogo preferido", `<div class="sd-room"><p class="lead">Que jogo é o teu prémio depois do baú?</p><div class="tiles">${rg.map(g => `<button class="tile ${cur && cur.id === g.id ? 'sd-feat' : ''}" data-id="${g.id}" style="--bg:${g.bg}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b></button>`).join('')}</div></div>`, { back: goHome });
+    say("Que jogo é o teu prémio?");
+    $$('.sd-room .tile').forEach(b => b.onclick = () => { sfx.good(); P.favGameKid = b.dataset.id; save(); say(`O teu jogo preferido: ${nm(GAMES.find(g => g.id === b.dataset.id).name)}!`); later(goHome, 900); });
+  }
+  
+  
+  
+  let FAVK = null, FLAST = 0, WARNED = false, FN = 0;
   const favState = () => (P.fav && P.fav.d === dayKey()) ? P.fav : null;
-  function favLeft() { const m = cfg().fav, f = favState(); if (!m) return Infinity; return f ? Math.max(0, f.t + m * 60e3 - Date.now()) : m * 60e3; }
+  function favLeft() { const m = cfg().fav, f = favState(); if (!m) return Infinity; return Math.max(0, m * 60e3 - ((f && f.used) || 0)); }
+  function favStop() { FAV_ON = false; FAVK = null; clearInterval(FT); const b = document.getElementById('sdFavBar'); if (b) b.remove(); try { save(); } catch (e) {} }
+  function favBar() {
+    if (!cfg().fav || !FAV_ON) return;
+    let b = document.getElementById('sdFavBar');
+    if (!b) {
+      b = document.createElement('button'); b.id = 'sdFavBar'; b.className = 'sd-favbar'; b.setAttribute('aria-label', "Pausa");
+      document.body.append(b);
+      b.onclick = () => { sfx.pop(); favStop(); say("Pausa! Os minutos ficam à tua espera."); goHome(); };
+    }
+    b.innerHTML = `⏳ ${Math.ceil(favLeft() / 60e3)} min <b>⏸</b>`;
+  }
   function favGo() {
     const g = favGame(); if (!g) return;
     if (favLeft() <= 0) { say("O tempo do jogo preferido acabou por hoje. Amanhã há mais!"); return; }
-    if (!favState()) { P.fav = { d: dayKey(), t: Date.now() }; save(); }
-    FAV_ON = true; tick(); homeLeave(); g.go();
+    if (!favState() || favState().used === undefined) { P.fav = { d: dayKey(), used: 0 }; save(); }
+    FAV_ON = true; FAVK = ROOT.cur; FLAST = Date.now(); WARNED = favLeft() <= 60e3; tick(); homeLeave();
+    
+    const w0 = P.warmAt; P.warmAt = Date.now(); try { g.go(); } finally { P.warmAt = w0; }
+    favBar();
   }
   
   function tick() {
     clearInterval(FT); if (!cfg().fav) return;
     FT = setInterval(() => {
-      if (favLeft() > 0) return; clearInterval(FT);
-      if (!FAV_ON || $('#pdBox')) { FAV_ON = false; return; }
-      FAV_ON = false;
+      const now = Date.now(), dt = Math.min(now - FLAST, 5000); FLAST = now;
+      if (!FAV_ON || FAVK !== ROOT.cur || $('.home-t')) { favStop(); return; }
+      if (document.visibilityState !== 'visible') return;
+      const f = favState(); if (!f) { favStop(); return; }
+      f.used = (f.used || 0) + dt; if (++FN % 5 === 0) save(); favBar();
+      if (!WARNED && favLeft() <= 60e3 && favLeft() > 0) { WARNED = true; say("Mais um minuto do teu jogo preferido!"); }
+      if (favLeft() > 0) return;
+      favStop();
       const ov = document.createElement('div'); ov.className = 'overlay';
       ov.innerHTML = `<div class="winbox" role="dialog"><div class="sd-sand">⌛</div><h2>O tempo acabou!</h2><p class="win-line">O jogo preferido por hoje terminou. Amanhã há mais, e com portas novas!</p><div class="win-btns"><button class="big" id="sdHome">Início</button></div></div>`;
       document.body.append(ov);
       say("O tempo do jogo preferido acabou. Amanhã há mais!");
       ov.querySelector('#sdHome').onclick = () => { sfx.pop(); ov.remove(); goHome(); };
-    }, 4000);
+    }, 2000);
   }
+  
+  document.addEventListener('visibilitychange', () => { FLAST = Date.now(); });
 
   
   function sectionHTML() {
     const ds = today(), done = pathDone(), chest = chestOpen(), fg = favGame(), m = cfg().fav, left = favLeft();
-    const n = dayNo(), tm = (plan(n + 15)[n + 1] || []).map(area).filter(Boolean), lk = likes().filter(id => !ds.some(a => a.id === id) && !tm.some(a => a.id === id) && pool().some(a => a.id === id)).map(area);
+    const fv = favs(), ask = !Array.isArray(P.favs) && !P.favAsked;
     const ms = must().length, dn = must().filter(id => dayCounts(dayKey())[id]).length;
     const door = a => { const op = doorOpen(a); return `<button class="sd-door ${op ? 'open' : 'shut'} ${stamped(a.id) ? 'seen' : ''}" data-door="${a.id}" style="--a:${a.a}" aria-label="${esc(a.n)}">
-        <span class="sd-dc">${pic(a.e)}${op ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b></button>`; };
-    const favSub = !chest ? "depois do baú" : left <= 0 ? "por hoje chega, amanhã há mais" : !m ? "joga o que quiseres" : favState() ? `faltam ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ["minuto", "minutos", "minutos"])}` : `${m} ${plural(m, ["minuto", "minutos", "minutos"])}`;
+        <span class="sd-dc">${pic(a.e)}${op ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b><small class="sd-tag">${fv.includes(a.id) ? "💛 os meus preferidos" : isSurprise(a.id) ? "🎁 surpresa do dia" : "⭐ tema da semana"}</small></button>`; };
+    const favSub = !chest ? "depois do baú" : left <= 0 ? "por hoje chega, amanhã há mais" : !m ? "joga o que quiseres" : favState() && favState().used ? `faltam ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ["minuto", "minutos", "minutos"])} · ou guarda para a noite` : `${m} ${plural(m, ["minuto", "minutos", "minutos"])} · ou guarda para a noite`;
     return `<section class="sd" id="sdBox">
+      ${ask ? `<div class="sd-ask" id="sdAsk"><b>💛 De que gostas?</b><small>Escolhe 2–4 — vão estar abertas todos os dias!</small><button class="big" id="sdAskGo">Escolher</button><button class="ibtn" id="sdAskX" aria-label="Mais tarde">✕</button></div>` : ''}
       <div class="sd-head"><h2>Portas do dia</h2><small>${done ? "abertas, escolhe!" : `abrem depois do trilho · faltam ${ms - dn} ${plural(ms - dn, ["passo", "passos", "passos"])}`}</small></div>
       <div class="sd-doors">${ds.map(door).join('')}</div>
-      ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Jogo preferido: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button>` : ''}
-      <div class="sd-soon">${tm.length ? `<p><b>Amanhã:</b> ${tm.map(a => `<button class="sd-gh" data-soon="${a.id}">${a.e} ${esc(a.n)}</button>`).join('')}</p>` : ''}
-        ${lk.length ? `<p><b>Os teus preferidos:</b> ${lk.map(a => `<button class="sd-gh" data-soon="${a.id}">${a.e} ${esc(a.n)} <em>${whenOpens(a.id)}</em></button>`).join('')}</p>` : ''}</div>
+      ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Jogo preferido: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button><button class="sd-gh" id="sdFavCh">✏️ Escolher o jogo preferido</button>` : ''}
+      <div class="sd-soon"><p>🎁 Amanhã — uma nova surpresa! <button class="sd-gh" id="sdFavs">💛 Os meus preferidos</button></p></div>
+      ${knowHTML()}
     </section>`;
   }
   function bind(box) {
-    FAV_ON = false;
+    favStop();
     box.querySelectorAll('[data-door]').forEach(b => b.onclick = () => {
       const a = area(b.dataset.door); sfx.pop();
       if (!doorOpen(a)) { const left = must().filter(id => !dayCounts(dayKey())[id]).length; wiggle(b.querySelector('.sd-dc')); say(`${a.n} abre depois do trilho. Faltam ${left} ${plural(left, ["passo", "passos", "passos"])}.`); return; }
       homeLeave(); room(a);
     });
-    box.querySelectorAll('[data-soon]').forEach(b => b.onclick = () => { sfx.pop(); const a = area(b.dataset.soon); say(`${a.n} abre ${whenOpens(a.id)}.`); });
+    const fb = box.querySelector('#sdFavs'); if (fb) fb.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
+    box.querySelectorAll('[data-know]').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); const id = b.dataset.know; if (id === 'cal') screenCalendar(); else GAMES.find(g => g.id === id).go(); });
+    const fc = box.querySelector('#sdFavCh'); if (fc) fc.onclick = () => { sfx.pop(); homeLeave(); favChoose(); };
+    const ag = box.querySelector('#sdAskGo'); if (ag) ag.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
+    const ax = box.querySelector('#sdAskX'); if (ax) ax.onclick = () => { sfx.pop(); P.favAsked = 1; save(); const el = box.querySelector('#sdAsk'); if (el) el.remove(); };
     const f = box.querySelector('#sdFav');
     if (f) f.onclick = () => {
       sfx.pop();
@@ -27271,6 +27535,43 @@ const SIMPLE = (() => {
     };
   }
 
+  
+  function planLine() {
+    if (!on()) return '';
+    const L = LS(), ms = must().map(id => L[id].name.toLowerCase()), fv = favs().map(id => area(id).n);
+    const j = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + " e " + xs[xs.length - 1] : (xs[0] || '');
+    return fv.length ? `Primeiro ${j(ms)}, e depois os teus ${j(fv)}!` : `Primeiro ${j(ms)}, e depois uma surpresa!`;
+  }
+  
+  
+  const KNOW = ['learn-news', 'phys-lab', 'how', 'space', 'tales', 'travel', 'learn-jobs', 'comics', 'composers', 'museum'];
+  function knowHTML() {
+    const V = vis(), gs = KNOW.filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
+    return `<section class="sd-know" id="sdKnow"><h3>🌍 Descobrir</h3><div class="sd-kn">${gs.map(g => `<button class="sd-k" data-know="${g.id}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b>${newsDot(g.id) ? "<i class=\"tile-new\">Novo!</i>" : ''}</button>`).join('')}<button class="sd-k" data-know="cal"><span class="emo">📅</span><b>Calendário e feriados</b></button></div></section>`;
+  }
+  
+  function favPick() {
+    newScreen();
+    const A = pool(); let sel = favs().slice();
+    shell("Os meus preferidos", `<div class="sd-pick"><p class="lead">Escolhe 2–4. Vão estar abertas todos os dias depois do trilho!</p>
+      <div class="sd-doors" id="fpGrid">${A.map(a => `<button class="sd-door open ${sel.includes(a.id) ? 'pk' : ''}" data-fp="${a.id}" style="--a:${a.a}" aria-pressed="${sel.includes(a.id)}"><span class="sd-dc">${pic(a.e)}${sel.includes(a.id) ? '<span class="sd-ck">💛</span>' : ''}</span><b>${esc(a.n)}</b></button>`).join('')}</div>
+      <button class="big" id="fpDone">Pronto!</button><button class="link-btn" id="fpLikes">💛 Mais: de que eu gosto</button></div>`, { back: goHome });
+    say("De que gostas? Escolhe de duas a quatro!");
+    $('#fpGrid').onclick = e => {
+      const b = e.target.closest('[data-fp]'); if (!b) return; const id = b.dataset.fp, a = area(id);
+      if (sel.includes(id)) sel = sel.filter(x => x !== id); else { if (sel.length >= 4) { sfx.oops(); say("Podem ser quatro, no máximo. Primeiro tira uma."); return; } sel.push(id); say(a.n); }
+      sfx.pop(); b.classList.toggle('pk', sel.includes(id)); b.setAttribute('aria-pressed', sel.includes(id));
+      const dc = b.querySelector('.sd-dc'), ck = dc.querySelector('.sd-ck'); if (sel.includes(id) && !ck) dc.insertAdjacentHTML('beforeend', '<span class="sd-ck">💛</span>'); else if (!sel.includes(id) && ck) ck.remove();
+    };
+    $('#fpDone').onclick = () => {
+      if (!sel.length) { sfx.oops(); say("Escolhe pelo menos uma!"); return; }
+      sfx.good(); P.favs = sel; P.favAsked = 1; CACHE = null;
+      if (P.doorsToday && P.doorsToday.d === dayKey() && P.doorsToday.ids.every(id => sel.includes(id))) delete P.doorsToday;
+      save(); try { EVT.log('favs', sel.join('.')); } catch (e) {}
+      say(`Ótimo! Todos os dias: ${sel.map(id => area(id).n).join(', ')}.`); later(goHome, 900);
+    };
+    $('#fpLikes').onclick = () => { sfx.pop(); kidPicker(P.settings.name || "Amigo", P.settings.gender === 'f', P.settings.likes || [], s2 => { P.settings.likes = s2; save(); favPick(); }); };
+  }
   
   function screenPassport() {
     newScreen();
@@ -27317,8 +27618,11 @@ const SIMPLE = (() => {
       t.onclick = () => { sfx.pop(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     }
     try { LITTLE.home(box); } catch (e) {}
+    try { WISH.home(box); } catch (e) {}
+    try { DAYG.home(box); } catch (e) {}
     if (mine && !mine.querySelector('#passBtn')) {
-      mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Passaporte</button>`);
+      mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Passaporte</button><button class="chip" id="jarBtn"><span class="emo">🫙</span>Desejos</button>`);
+      mine.querySelector('#jarBtn').onclick = () => { sfx.pop(); homeLeave(); WISH.screenJar(); };
       mine.querySelector('#passBtn').onclick = () => { sfx.pop(); homeLeave(); screenPassport(); };
     }
   }
@@ -27331,20 +27635,23 @@ const SIMPLE = (() => {
     sec = sec || document.createElement('section'); sec.className = 'psec'; sec.id = 'dayPar';
     sec.innerHTML = `<h2>🗺️ Dia</h2>${(() => { try { return LITTLE.parentLine(); } catch (e) { return ''; } })()}
       <button class="big" id="sdAll">🎮 Todos os jogos</button>
-      <label class="sw" for="sdOn"><input id="sdOn" type="checkbox" ${c.on ? 'checked' : ''}><span class="set-t"><b>Dia simples</b><small>trilho e portas do dia; se desligares, a criança volta a ter todos os separadores</small></span></label>
+      <label class="sw" for="sdOn"><input id="sdOn" type="checkbox" ${c.on ? 'checked' : ''}><span class="set-t"><b>Dia simples</b><small>o trilho e as portas do dia; se desligares, a criança volta a ter todos os separadores</small></span></label>
       <h3 class="fam-s">Obrigatório todos os dias</h3>
-      <p class="sd-note">O obrigatório vem pelo trilho, por ordem. O resto é «se quiseres», depois do baú.</p>
+      <p class="sd-note">O obrigatório segue pelo trilho, por ordem. O resto é "se quiseres", depois do baú.</p>
       <div class="sd-must">${ids.map(id => `<label class="sw" for="sdM-${id}"><input id="sdM-${id}" type="checkbox" data-must="${id}" ${c.must[id] === false ? '' : 'checked'}><span>${esc(L[id].name)}</span></label>`).join('')}</div>
       <label class="sw" for="sdBook"><input id="sdBook" type="checkbox" ${MYBOOK.on() ? 'checked' : ''}><span class="set-t"><b>📚 O meu livro</b><small>um cartão próprio no ecrã inicial: que livro e quanto foi lido; pode ser marcado a qualquer hora, também à noite — não prende o trilho</small></span></label>
       <h3 class="fam-s">Portas do dia</h3>
-      <div class="sd-seg" id="sdK">${[2, 3].map(n => `<button class="chip ${c.k === n ? 'sel' : ''}" data-k="${n}">${n} ${plural(n, ["porta", "portas", "portas"])}</button>`).join('')}</div>
+      <p class="sd-note">Todos os dias estão abertos os "Preferidos" da criança (${favs().map(id => area(id).e + ' ' + esc(area(id).n)).join(', ')}) e uma porta-surpresa.</p>
+      <select id="sdWeek" class="sd-sel"><option value="">⭐ Tema da semana — nenhum</option>${AREAS.map(a => `<option value="${a.id}" ${c.week && c.week.area === a.id && c.week.until >= dayKey() ? 'selected' : ''}>⭐ Tema da semana: ${a.e} ${esc(a.n)}</option>`).join('')}</select>
       <p class="sd-note">Hoje: ${today().map(a => a.e + ' ' + esc(a.n)).join(', ')}</p>
       <div class="sd-areas" id="sdAreas">${AREAS.map(a => `<button class="chip ${c.off.includes(a.id) ? '' : 'sel'}" data-area="${a.id}">${a.e} ${esc(a.n)}</button>`).join('')}</div>
       <p class="sd-note">Um tema desligado não aparece nas portas. Abrir uma porta hoje:</p>
       <select id="sdAdd" class="sd-sel"><option value="">— escolher —</option>${AREAS.filter(a => gamesOf(a, V).length && !today().some(t => t.id === a.id)).map(a => `<option value="${a.id}">${a.e} ${esc(a.n)}</option>`).join('')}</select>
       <h3 class="fam-s">Jogo preferido</h3>
       <div class="sd-seg" id="sdFavM">${[10, 20, 30, 0].map(n => `<button class="chip ${c.fav === n ? 'sel' : ''}" data-m="${n}">${n ? n + " min" : "sem limite"}</button>`).join('')}</div>
-      <select id="sdFavG" class="sd-sel"><option value="">automático: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>`;
+      <select id="sdFavG" class="sd-sel"><option value="">sozinha: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>
+      <div id="dgPar">${(() => { try { return DAYG.parentHTML(); } catch (e) { return ''; } })()}</div>
+      <div id="wiPar">${(() => { try { return WISH.parentHTML(); } catch (e) { return ''; } })()}</div>`;
     sec.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Histórias: ler sozinho / ouvir</h3>
       <div class="sd-seg" id="sdSR">${[['', "pelo nível de leitura"], ['read', "📖 ler sozinho"], ['listen', "🔊 ouvir"]].map(([v, n]) => `<button class="chip ${(P.settings.stRead || '') === v ? 'sel' : ''}" data-sr="${v}">${n}</button>`).join('')}</div>
       <p class="sd-note">Ler sozinho: histórias, notícias e viagens sem a voz, depois 1–2 perguntas; «Ouvir» aparece depois da resposta. Agora: <b>${selfReader() ? "lê sozinho" : "ouve"}</b>.</p>
@@ -27359,16 +27666,18 @@ const SIMPLE = (() => {
       if (!Object.keys(LS()).some(id => m[id] !== false)) { i.checked = true; return; }   
       setCfg('must', m); sfx.tick();
     });
-    sec.querySelector('#sdK').onclick = e => { const b = e.target.closest('[data-k]'); if (!b) return; setCfg('k', +b.dataset.k); sfx.tick(); redo(); };
+    sec.querySelector('#sdWeek').onchange = e => { const v = e.target.value, d = new Date(); d.setDate(d.getDate() + 7); setCfg('week', v ? { area: v, until: dayKey(d) } : null); sfx.tick(); redo(); };
     sec.querySelector('#sdAreas').onclick = e => { const b = e.target.closest('[data-area]'); if (!b) return; const off = cfg().off, id = b.dataset.area; setCfg('off', off.includes(id) ? off.filter(x => x !== id) : [...off, id]); sfx.tick(); redo(); };
     sec.querySelector('#sdAdd').onchange = e => { const id = e.target.value; if (!id) return; today(); P.doorsToday.extra = [...(P.doorsToday.extra || []), id]; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdFavM').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; setCfg('fav', +b.dataset.m); sfx.tick(); redo(); };
     sec.querySelector('#sdFavG').onchange = e => { setCfg('favGame', e.target.value); sfx.tick(); };
+    try { WISH.parentBind(sec, redo); } catch (e) {}
+    try { DAYG.parentBind(sec, redo); } catch (e) {}
     sec.querySelector('#sdSR').onclick = e => { const b = e.target.closest('[data-sr]'); if (!b) return; P.settings.stRead = b.dataset.sr; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
   }
-  return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+  return { KNOW, rewardOk, rewardGames, favChoose, favStop, favState, AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
  
  
@@ -27417,6 +27726,8 @@ const TALK = (() => {
   function answer(text) {
     const t = norm(text);
     if (!t) return { say: "Não ouvi bem. Toca em mim e diz outra vez!" };
+    
+    try { const w = WISH.handle(text); if (w) return w; } catch (e) {}
     const simple = SIMPLE.on(), done = SIMPLE.pathDone(), td = SIMPLE.today();
     
     const x = syn(t) || (Object.values(W).some(re => re.test(t)) ? null : target(t));
@@ -27433,7 +27744,7 @@ const TALK = (() => {
       const V = SIMPLE.vis(), gs = SIMPLE.gamesOf(a, V);
       if (!gs.length) return { say: `${a.n} está fechado agora. Pergunta a um adulto.` };
       if (!simple) return { say: `A abrir: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
-      if (!td.some(y => y.id === a.id)) return { say: `${a.n} abre ${SIMPLE.whenOpens(a.id)}. E hoje: ${listJoin(td.map(y => y.n))}.` };
+      if (!td.some(y => y.id === a.id)) { P.wantDoor = { area: a.id, d: dayKey() }; save(); return { say: `${a.n} vai ser a surpresa de amanhã! Para ter todos os dias, junta aos «Preferidos».` }; }
       if (!SIMPLE.doorOpen(a)) return { say: afterPath(a.n) };
       return { say: `A abrir a porta: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
     }
@@ -27443,7 +27754,7 @@ const TALK = (() => {
       if (!simple) return { say: `A abrir: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
       const a = areaOf(g.id);
       if (!a) return { say: `${nm(g.name)} está dentro das atividades do dia. Faz o trilho!` };
-      if (!td.some(y => y.id === a.id)) return { say: `${nm(g.name)} está atrás da porta «${a.n}». Abre ${SIMPLE.whenOpens(a.id)}.` };
+      if (!td.some(y => y.id === a.id)) { P.wantDoor = { area: a.id, d: dayKey() }; save(); return { say: `${nm(g.name)} mora atrás da porta «${a.n}». Amanhã vai ser a surpresa! Para ter todos os dias, junta aos «Preferidos».` }; }
       if (!SIMPLE.doorOpen(a)) return { say: afterPath(nm(g.name)) };
       return { say: `A abrir: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
     }
@@ -27463,6 +27774,7 @@ const TALK = (() => {
       return { say: `Trilho feito! As portas estão abertas: ${doors}.` };
     }
     if (W.help.test(t)) return { say: "Experimenta dizer: O que há hoje? Quantas estrelas tenho? Abre pintar. Quero banda desenhada." };
+    try { const u = WISH.unknown(text); if (u) return u; } catch (e) {}
     return { say: "Ainda não percebi. Diz: O que há hoje? Ou: Abre pintar." };
   }
   
@@ -27511,8 +27823,371 @@ const TALK = (() => {
     sc.append(b);
     b.onclick = () => { sfx.pop(); hopEl(b); open(); };
   }
-  return { answer, open, fab, target, norm };
+  return { answer, open, fab, target, norm, syn };
 })();
+ 
+ 
+
+
+const WISH = (() => {
+  const norm = s => TALK.norm(s);
+  
+  const W = {
+    more: /больше|еще|чаще|more|again|mais|outra vez|mehr|nochmal/,
+    bored: /скучн|надоел|bored|boring|aborrec|chato|seca|langweil/,
+    hard: /трудн|сложн|тяжел|hard|difficult|dificil|complicad|schwer|schwierig/,
+    easy: /легк|просто|скучно легко|easy|too simple|facil|leicht|einfach/,
+    want: /хочу|хочется|давай|можно|про |about|want|wish|lets|let s|quero|vamos|sobre|posso|will|mochte|uber|lass uns/
+  };
+  
+  const TOPIC = [
+    [/акул|рыб|кит|дельфин|осьмин|океан|море|shark|fish|whale|dolphin|octopus|ocean|sea|tubar|peixe|baleia|golfinh|polvo|oceano|mar|hai|fisch|wal|delfin|krake|meer/, 'nature'],
+    [/динозавр|dino/, 'nature'], [/зверь|звери|животн|animal|bicho|tier/, 'nature'],
+    [/планет|ракет|космонавт|луна|planet|rocket|astronaut|moon|foguet|lua|rakete|mond/, 'space'],
+    [/робот|машин|изобрет|robot|machine|invent|maquina|invencao|maschine|erfind/, 'lab'],
+    [/врач|пожарн|полиц|пилот|повар|doctor|firefight|police|pilot|cook|medico|bombeir|policia|piloto|cozinh|arzt|feuerwehr|polizei|koch/, 'jobs'],
+    [/принцесс|фея|сказк|princess|fairy|tale|princesa|fada|conto|prinzessin|fee|marchen/, 'books'],
+    [/город|стран|поезд|самолет|city|country|train|plane|cidade|pais|comboio|aviao|stadt|land|zug|flugzeug/, 'world']
+  ];
+  const list = () => (P.wishes = P.wishes || []);
+  
+  const JAR = ['story', 'topic', 'more', 'plan', 'idea'];
+  const out = () => (P.wishOut = P.wishOut || []);
+  const tomorrowKey = () => { const d = new Date(); d.setDate(d.getDate() + 1); return dayKey(d); };
+  
+  function keep(text, kind, x = {}) {
+    const w = { t: String(text).trim().slice(0, 60), d: dayKey(), kind, ...x, done: '' };
+    list().unshift(w); P.wishes = list().slice(0, 30); save();
+    try { EVT.log('wish', kind + (x.area ? ':' + x.area : '')); } catch (e) {}
+    return w;
+  }
+  
+  function fulfil(pred) {
+    const ws = list().filter(x => !x.done && JAR.includes(x.kind) && pred(x)); if (!ws.length) return null;
+    ws.forEach(w => { w.done = dayKey(); try { EVT.log('wish-done', w.kind + (w.area ? ':' + w.area : '')); } catch (e) {} });
+    save(); return ws[ws.length - 1];
+  }
+  const area = id => SIMPLE.AREAS.find(a => a.id === id);
+  const inToday = id => SIMPLE.today().some(a => a.id === id);
+  
+  function promise(id) { P.wantDoor = { area: id, d: dayKey() }; save(); }
+  const promised = id => !!(P.wantDoor && P.wantDoor.area === id && P.wantDoor.d === dayKey());
+  
+  function applyDoors(ids, yesterday) {
+    const w = P.wantDoor; if (!w || w.d >= dayKey()) return ids;
+    delete P.wantDoor;
+    const a = area(w.area), pool = SIMPLE.pool();
+    if (!a || !pool.some(x => x.id === a.id) || ids.includes(a.id) || (yesterday || []).includes(a.id)) return ids;
+    const out2 = [...ids], j = out2.findIndex(id => (area(id) || {}).g === a.g);
+    
+    if (j < 0 && out2.length) { const lil = (() => { try { return LITTLE.on(); } catch (e) { return false; } })(); const k = lil ? out2.findIndex(id => (area(id) || {}).g !== 'c') : out2.length - 1; out2[k < 0 ? out2.length - 1 : k] = a.id; }
+    else if (j >= 0) out2[j] = a.id; else out2.push(a.id);
+    return out2;
+  }
+  
+  const moreAreas = () => (P.wishMore || []).filter(x => Date.now() - x.t < 7 * 864e5).map(x => x.area);
+  function more(id) { P.wishMore = [{ area: id, t: Date.now() }, ...(P.wishMore || []).filter(x => x.area !== id)].slice(0, 4); save(); }
+  
+  function nudge() { const n = P.nudge; return n && n.d === dayKey() ? n.v : 0; }
+  function setNudge(v) { P.nudge = { d: tomorrowKey(), v }; save(); }
+  
+  function story(t) {
+    const STOP = new Set([...RU('хочу давай историю истории больше').split(' '), 'want', 'quero', 'mochte', 'about', 'sobre', 'uber', 'story', 'historia', 'geschichte', 'more', 'mais', 'mehr']);
+    const ws = t.split(' ').filter(w => w.length >= 4 && !STOP.has(w)).map(w => w.slice(0, Math.max(4, Math.min(6, w.length - 1))));
+    if (!ws.length) return null;
+    let best = null, sc = 0;
+    Object.keys(LEARN).forEach(k => (LEARN[k].items || []).forEach((it, i) => {
+      const tw = norm(it.t).split(' ').filter(w => w.length >= 4);
+      const s = tw.filter(w => ws.some(u => w.startsWith(u) || u.startsWith(w.slice(0, 4)))).length;
+      if (s > sc) { sc = s; best = { k, i, it }; }
+    }));
+    return best;
+  }
+  const areaOfGame = id => { const V = SIMPLE.vis(); return SIMPLE.AREAS.find(a => SIMPLE.gamesOf(a, V).includes(id)) || null; };
+  
+  function forArea(a, text, kind, extra = '') {
+    const td = inToday(a.id);
+    keep(text, kind, { area: a.id });
+    if (kind === 'more') more(a.id);
+    if (td && SIMPLE.doorOpen(a)) { fulfil(x => x.area === a.id); return { say: `${extra}A porta «${a.n}» está aberta. Entra!`, go: () => { homeLeave(); SIMPLE.room(a); } }; }
+    if (td) return { say: `${extra}Hoje há a porta «${a.n}»! Abre depois do trilho.` };
+    promise(a.id);
+    return { say: `${extra}Combinado! Amanhã há a porta «${a.n}».` };
+  }
+  
+  function handle(text) {
+    const t = norm(text); if (!t) return null;
+    
+    if (/сколько|что сегодня|how many|what s today|what is today|quant|o que ha hoje|wie viele|was ist heute/.test(t)) return null;
+    let x = null; try { x = TALK.syn(t); } catch (e) {}
+    const ar = x && x.startsWith('a:') ? area(x.slice(2)) : x && x.startsWith('g:') ? areaOfGame(x.slice(2)) : null;
+    if (W.hard.test(t) && !W.easy.test(t.replace(W.hard, ''))) { keep(text, 'hard'); setNudge(-1); return { say: "Combinado! Amanhã as tarefas serão um bocadinho mais fáceis. E hoje podes carregar em «Mais fácil»." }; }
+    if (W.easy.test(t) && !/скучн|bored|aborrec|langweil/.test(t)) { keep(text, 'easy'); setNudge(1); return { say: "Uau! Amanhã as tarefas serão um bocadinho mais difíceis. Estás a crescer!" }; }
+    if (W.bored.test(t)) {
+      keep(text, 'bored');
+      const ds = SIMPLE.today(), fresh = ds.find(a => SIMPLE.doorOpen(a) && !SIMPLE.stamped(a.id)) || ds.find(a => SIMPLE.doorOpen(a));
+      if (fresh) return { say: `Vamos experimentar algo novo! A porta «${fresh.n}».`, go: () => { homeLeave(); SIMPLE.room(fresh); } };
+      return { say: `Primeiro o trilho, depois abrem-se as portas: ${ds.map(a => a.n).join(', ')}. Vai ser divertido!` };
+    }
+    if (ar && W.more.test(t)) return forArea(ar, text, 'more', "Vai haver mais! ");
+    
+    if (!x) {
+      const st = story(t), sa = st ? areaOfGame('learn-' + st.k) : null;
+      if (st && sa) {
+        keep(text, 'story', { area: sa.id, story: st.it.id });
+        if (inToday(sa.id) && SIMPLE.doorOpen(sa)) { fulfil(w => w.story === st.it.id); return { say: `Aqui está uma história: ${st.it.t}!`, go: () => { homeLeave(); screenStory(st.k, st.i, { back: goHome }); } }; }
+        if (inToday(sa.id)) return { say: `Há uma história «${st.it.t}»! Está atrás da porta «${sa.n}», depois do trilho.` };
+        promise(sa.id); return { say: `Há uma história «${st.it.t}»! Amanhã há a porta «${sa.n}».` };
+      }
+      if (!x) for (const [re, id] of TOPIC) if (re.test(t)) { const a = area(id); if (a && SIMPLE.pool().some(p => p.id === id)) return forArea(a, text, 'topic'); }
+    }
+    return null;
+  }
+  
+  function clean(text) {
+    let s = String(text).replace(/\S+@\S+|https?:\S+|\d+/g, '').trim();
+    const names = []; try { (fam() || { kids: [] }).kids.forEach(id => names.push(ROOT.profiles[id].settings.name)); ((fam() || {}).grands || []).forEach(g => names.push(g.name)); } catch (e) {}
+    names.filter(Boolean).forEach(n => { s = s.replace(new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '…'); });
+    return s.replace(/\s+/g, ' ').slice(0, 80);
+  }
+  function unknown(text) {
+    const t = norm(text);
+    if (!W.want.test(t) || t.split(' ').length < 2) return null;
+    const s = clean(text); keep(s, 'idea');
+    if (!out().some(x => x.t === s)) { out().unshift({ t: s, d: dayKey(), a: P.settings.age || 0 }); P.wishOut = out().slice(0, 40); save(); }
+    return { say: "Ainda não temos isso. Vou guardar o pedido e pedir ao autor que o crie!" };
+  }
+
+  
+  function choices() {
+    const ds = SIMPLE.today().map(a => a.id), pool = SIMPLE.pool().filter(a => !ds.includes(a.id)), lk = SIMPLE.likes();
+    const r = (() => { let h = dayNo(); return () => (h = (h * 9301 + 49297) % 233280) / 233280; })();
+    const sorted = pool.map(a => [a, (lk.includes(a.id) ? 2 : 0) + r()]).sort((p, q) => q[1] - p[1]).map(x => x[0]);
+    const pick = []; for (const a of sorted) { if (pick.length >= 3) break; if (!pick.some(p => p.g === a.g) || sorted.length < 4) pick.push(a); }
+    for (const a of sorted) { if (pick.length >= 3) break; if (!pick.includes(a)) pick.push(a); }
+    return pick;
+  }
+  function home(box) {
+    if (P.chest !== dayKey()) return;
+    const k = dayKey(), pl = P.planDay && P.planDay.d === k ? P.planDay : null, sd = box.querySelector('#sdBox'); if (!sd) return;
+    const card = document.createElement('section'); card.className = 'wi-plan'; card.id = 'wiPlan';
+    const draw = () => {
+      const p = P.planDay && P.planDay.d === k ? P.planDay : null;
+      if (p && p.area && p.diff !== undefined) {
+        const a = area(p.area);
+        card.innerHTML = `<h3>🌙 Amanhã</h3><p>${a ? `${a.e} ${esc(a.n)}` : ''} · ${["um pouco mais fácil", "como hoje", "um pouco mais difícil"][p.diff + 1]} ✓</p>`;
+        return;
+      }
+      if (!p || !p.area) {
+        card.innerHTML = `<h3>🌙 O que queres amanhã?</h3><div class="wi-ch">${choices().map(a => `<button class="sd-door open" data-wa="${a.id}" style="--a:${a.a}"><span class="sd-dc">${pic(a.e)}</span><b>${esc(a.n)}</b></button>`).join('')}</div>`;
+        card.querySelectorAll('[data-wa]').forEach(b => b.onclick = () => {
+          sfx.pop(); const a = area(b.dataset.wa);
+          P.planDay = { d: k, area: a.id }; promise(a.id); more(a.id); keep(a.n, 'plan', { area: a.id }); draw();
+          say(`Amanhã: ${a.n}! E as tarefas de hoje foram fáceis, normais ou difíceis?`);
+        });
+        return;
+      }
+      card.innerHTML = `<h3>As tarefas de hoje foram…</h3><div class="wi-dif">${[['😌', "fáceis", 1], ['🙂', "normais", 0], ['😮‍💨', "difíceis", -1]].map(([e, n, v]) => `<button class="chip" data-wd="${v}"><span class="emo">${e}</span>${n}</button>`).join('')}</div>`;
+      card.querySelectorAll('[data-wd]').forEach(b => b.onclick = () => {
+        sfx.pop(); const v = +b.dataset.wd; P.planDay.diff = v; if (v) setNudge(v); else save(); draw();
+        say(v > 0 ? "Amanhã vai ser um bocadinho mais difícil!" : v < 0 ? "Amanhã vai ser um bocadinho mais fácil!" : "Ótimo! Amanhã igual.");
+      });
+    };
+    draw(); sd.after(card);
+    if (!pl) later(() => { if (card.isConnected) say("Muito bem! O que queres amanhã?"); }, 1500);
+  }
+  
+  function screenJar() {
+    newScreen();
+    const ws = list().filter(w => JAR.includes(w.kind));
+    shell("Os meus desejos", `<div class="wi-jar"><div class="wi-pot" aria-hidden="true">🫙</div>
+      ${ws.length ? `<ul class="wi-l">${ws.map(w => `<li class="${w.done ? 'on' : ''}"><span class="emo">${w.done ? '✨' : '⏳'}</span><span>${esc(w.t)}${w.area && area(w.area) ? ` <small>${area(w.area).e} ${esc(area(w.area).n)}</small>` : ''}</span></li>`).join('')}</ul>` : "<p class=\"lead\">Ainda está vazio. Diz ao teu amigo o que gostavas de ter!</p>"}
+      <button class="big" id="wiTalk">💬 Dizer um desejo</button></div>`);
+    $('#wiTalk').onclick = () => { sfx.pop(); TALK.open(); };
+    say(ws.some(w => w.done) ? "Olha quantos desejos se realizaram!" : "Aqui vivem os teus desejos.");
+  }
+  
+  function parentHTML() {
+    const ws = list(), o = out();
+    return `<h3 class="fam-s">Desejos de ${esc(P.settings.name || '')}</h3>
+      ${ws.length ? `<ul class="wi-pl">${ws.slice(0, 12).map(w => `<li>${w.done ? '✨' : '⏳'} ${esc(w.t)}</li>`).join('')}</ul>` : "<p class=\"sd-note\">Ainda não há. A criança conta os desejos ao amigo no cantinho.</p>"}
+      <h3 class="fam-s">Desejos para o jogo</h3>
+      <p class="sd-note">O que a criança pediu e o jogo ainda não tem. Os nomes foram retirados. Nada é enviado sozinho.</p>
+      ${o.length ? `<ul class="wi-pl" id="wiOut">${o.map(x => `<li>💡 ${esc(x.t)}</li>`).join('')}</ul>
+        <div class="sd-seg"><button class="chip" id="wiSend">📨 Enviar ao autor</button><button class="chip" id="wiClr">🗑 Limpar</button></div><p class="sd-note" id="wiMsg"></p>` : "<p class=\"sd-note\">Ainda está vazio.</p>"}
+      ${ws.length ? "<button class=\"chip\" id=\"wiClrAll\">🗑 Esquecer todos os desejos</button>" : ''}`;
+  }
+  function parentBind(sec, redo) {
+    const s = sec.querySelector('#wiSend');
+    if (s) s.onclick = async () => {
+      sfx.pop(); s.disabled = true;
+      const txt = "Desejos para o jogo (das crianças):\n" + out().map(x => `• ${x.t}${x.a ? ` (${x.a})` : ''}`).join('\n');
+      let ok = false; try { ok = await LETTERS.send('game', txt, 'kid'); } catch (e) {}
+      try { EVT.log('wish-sent', String(out().length)); } catch (e) {}
+      P.wishOut = []; save();
+      const m = sec.querySelector('#wiMsg'); if (m) m.textContent = ok ? "Obrigado! A lista está com o autor." : "Obrigado! A lista seguirá para o autor assim que houver ligação.";
+      later(redo, 1500);
+    };
+    const c = sec.querySelector('#wiClr'); if (c) c.onclick = () => { sfx.pop(); P.wishOut = []; save(); redo(); };
+    const a = sec.querySelector('#wiClrAll'); if (a) a.onclick = () => { sfx.pop(); P.wishes = []; P.wishOut = []; delete P.wishMore; delete P.wantDoor; delete P.nudge; save(); redo(); };
+  }
+  return { handle, unknown, fulfil, applyDoors, promised, moreAreas, nudge, home, screenJar, parentHTML, parentBind, list, out, clean, story, W };
+})();
+ 
+ 
+
+
+const DAYG = (() => {
+  const LIFE = {
+    bed: ['🛏️', "Fiz a cama", "Fiz a cama"], dress: ['👕', "Vesti-me sozinha", "Vesti-me sozinho"], teeth: ['🪥', "Lavei os dentes", "Lavei os dentes"],
+    school: ['🏫', "Fui à escola", "Fui à escola"], garden: ['🧸', "Fui ao jardim de infância", "Fui ao jardim de infância"], help: ['🧹', "Ajudei em casa", "Ajudei em casa"]
+  };
+  const WEEK_GOAL = 5, MIL = [2, 4, 8];
+  const dcfg = () => (P.settings.day || {});
+  const weekend = () => [0, 6].includes(new Date().getDay());
+  function lifeIds() {
+    const d = dcfg().life, def = ['bed', (P.settings.age || 6) <= 6 ? 'dress' : 'teeth'];
+    const ids = (Array.isArray(d) ? d : def).map(id => weekend() && (id === 'school' || id === 'garden') ? 'help' : id);
+    return [...new Set(ids)].filter(id => LIFE[id]).sort((a, b) => (a === 'bed' ? -1 : 0) - (b === 'bed' ? -1 : 0));
+  }
+  const life = () => { const k = dayKey(); if (!P.life || P.life.d !== k) P.life = { d: k, done: {} }; return P.life; };
+  const lifeName = id => LIFE[id][P.settings.gender === 'm' ? 2 : 1];
+  const bookOn = () => dcfg().book !== false;
+  const bookDone = () => !!(P.book && P.book.log && P.book.log[dayKey()]);
+  function goal() {
+    const L = lifeIds(), l = life(), ms = SIMPLE.must(), c = dayCounts(dayKey());
+    return { total: L.length + ms.length + (bookOn() ? 1 : 0), done: L.filter(id => l.done[id]).length + ms.filter(id => c[id]).length + (bookOn() && bookDone() ? 1 : 0) };
+  }
+  
+  const complete = () => SIMPLE.pathDone() && (!bookOn() || bookDone());
+  
+  const weekEnd = w => { const d = new Date(w); d.setDate(d.getDate() + 6); return dayKey(d); };
+  const inWeek = (w = weekId()) => Object.keys(P.doneDays || {}).filter(k => k >= w && k <= weekEnd(w)).length;
+  
+  function streak() {
+    let w = weekId(), n = 0;
+    if (inWeek(w) < WEEK_GOAL) { const d = new Date(w); d.setDate(d.getDate() - 7); w = dayKey(d); }
+    while (inWeek(w) >= WEEK_GOAL) { n++; const d = new Date(w); d.setDate(d.getDate() - 7); w = dayKey(d); }
+    return n;
+  }
+  const autoFreeze = () => false;   
+  function markDone() {
+    if (!complete()) return null;
+    const k = dayKey(); P.doneDays = P.doneDays || {}; if (P.doneDays[k]) return null;
+    P.doneDays[k] = 1;
+    const n = inWeek(), made = n === WEEK_GOAL, s2 = streak(), m = made ? MIL.find(x => x === s2 && !(P.csMil || []).includes(x)) : 0;
+    if (m) P.csMil = [...(P.csMil || []), m];
+    save(); try { EVT.log('daydone', String(n)); } catch (e) {}
+    return { n, made, s: s2, m };
+  }
+  function celebrate(r) {
+    const ov = document.createElement('div'); ov.className = 'overlay';
+    const h = r.made ? "Semana cumprida!" : "Dia cumprido!";
+    const line = r.made ? (r.s > 1 ? `Já ${r.s} ${plural(r.s, ["semana", "semanas", "semanas"])} seguidas!` : "Cinco dias nesta semana — a chama da semana está acesa!") + (r.m ? " Um novo autocolante de chama!" : '')
+      : `Nesta semana: ${r.n} de ${WEEK_GOAL}. ${WEEK_GOAL - r.n > 0 ? `Mais ${WEEK_GOAL - r.n} — e a semana fica cumprida!` : ''}`;
+    ov.innerHTML = `<div class="winbox" role="dialog"><div class="dg-fire">🔥</div><h2>${h}</h2><p class="win-line">${line}</p><div class="win-btns"><button class="big" data-a="ok">Viva!</button></div></div>`;
+    $('.screen').append(ov); confetti(r.made ? 90 : 60); sfx.good();
+    say(`${h} ${line}`);
+    ov.onclick = e => { if (e.target.closest('[data-a]')) { sfx.pop(); ov.remove(); } };
+  }
+  
+  function tick(id, btn) {
+    const l = life(); if (l.done[id]) { say(lifeName(id) + "! Muito bem!"); return; }
+    l.done[id] = 1; P.stars += 1; try { weekAdd(P, 1); } catch (e) {}
+    try { EVT.log('life', id); } catch (e) {}
+    let line = lifeName(id) + "! Muito bem!";
+    if (id === 'bed') {
+      P.bedDays = { ...(P.bedDays || {}), [dayKey()]: 1 };
+      const d = new Date(); let n = 0; while ((P.bedDays || {})[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
+      line = "Viva, a cama parece uma nuvem!";
+      if (n >= 7 && !(P.badges || []).includes('bed7')) { P.badges = [...(P.badges || []), 'bed7']; line += " Sete dias seguidos — o emblema «Cama Feita»!"; }
+    }
+    save(); sfx.good(); confetti(30);
+    if (btn) { btn.classList.add('on'); btn.insertAdjacentHTML('beforeend', `<span class="dg-pop">${id === 'bed' ? '☁️' : '⭐'}</span>`); }
+    say(line);
+    later(() => goHome(), 1300);
+  }
+  
+  let MEMO = null;
+  function scores() {
+    const t = Math.floor(Date.now() / 6e4), me = ROOT.cur;
+    let n = 0; try { n = EVT.size(); } catch (e) {}
+    if (MEMO && MEMO.t === t && MEMO.me === me && MEMO.n === n) return MEMO;
+    const since = t - 14 * 1440, st = {}, lv = {}, ge = {};
+    let ev = []; try { ev = EVT.all(); } catch (e) {}
+    ev.forEach(e => {
+      if (e[0] < since || e[2] !== me) return;
+      if (e[1] === 'step') st[e[3]] = (st[e[3]] || 0) + 1;
+      else if (e[1] === 'leave') lv[e[3]] = (lv[e[3]] || 0) + 1;
+      else if (e[1] === 'ge') { const g = ge[e[3]] = ge[e[3]] || { n: 0, s: 0 }; g.n++; g.s += +e[4] || 0; }
+    });
+    MEMO = { t, me, n, st, lv, ge }; return MEMO;
+  }
+  const hard = id => { const s = scores(); return (s.lv[id] || 0) / ((s.st[id] || 0) + (s.lv[id] || 0) + 1); };
+  function sandwich(ms) {
+    if (dcfg().order === 'fixed' || ms.length < 3) return ms;
+    const h = ms.map(id => [id, hard(id)]), top = h.reduce((a, b) => b[1] > a[1] ? b : a);
+    if (top[1] < .34) return ms;
+    const rest = ms.filter(id => id !== top[0]).sort((a, b) => hard(a) - hard(b) || ms.indexOf(a) - ms.indexOf(b));
+    return [rest[0], top[0], ...rest.slice(1)];
+  }
+  const hardest = () => { try { const ms = SIMPLE.must(); const h = ms.map(id => [id, hard(id)]).sort((a, b) => b[1] - a[1])[0]; return h && h[1] >= .34 ? h[0] : ''; } catch (e) { return ''; } };
+  
+  function insight() {
+    const s = scores(), L = LS();
+    const g = Object.entries(s.ge).filter(([k]) => GAMES.some(x => x.id === k));
+    const love = g.sort((a, b) => b[1].n - a[1].n).slice(0, 3).map(([k]) => nm(GAMES.find(x => x.id === k).name));
+    const hd = Object.keys(L).filter(id => hard(id) >= .34).map(id => L[id].name);
+    const stuck = g.filter(([, v]) => v.n >= 2 && v.s / v.n < 2).slice(0, 3).map(([k]) => nm(GAMES.find(x => x.id === k).name));
+    return { love, hd, stuck };
+  }
+  
+  function home(box) {
+    if (!SIMPLE.on()) return;
+    const hero = box.querySelector('.pd-hero'), l = life(), L = lifeIds();
+    autoFreeze();
+    if (hero && L.length) {
+      hero.insertAdjacentHTML('afterend', `<div class="dg-life">${L.map(id => `<button class="dg-l ${l.done[id] ? 'on' : ''}" data-life="${id}"><span class="emo">${LIFE[id][0]}</span><b>${esc(lifeName(id))}</b>${l.done[id] ? '<i>✓</i>' : ''}</button>`).join('')}</div>`);
+      box.querySelectorAll('[data-life]').forEach(b => b.onclick = () => { sfx.pop(); tick(b.dataset.life, b); });
+    }
+    const g = goal(), sm = box.querySelector('.pd-prog small'), bar = box.querySelector('.pd-bar i');
+    if (sm) sm.textContent = `Hoje: ${g.done} de ${g.total}`;
+    if (bar) bar.style.width = Math.round(g.done / Math.max(1, g.total) * 100) + '%';
+    const say0 = box.querySelector('.pd-say');
+    if (bookOn() && SIMPLE.pathDone() && !bookDone() && say0) say0.textContent = "Mais um livro — e a chama fica acesa!";
+    const sd = box.querySelector('#sdBox');
+    if (bookOn() && sd) {
+      sd.insertAdjacentHTML('beforebegin', `<button class="sd-fav ${bookDone() ? 'open' : ''} dg-book" id="dgBook"><span class="sd-fi"><span class="emo">📚</span></span><span class="sd-ft"><b>${bookDone() ? "Livro — feito! ✓" : "Ler um livro"}</b><small>${bookDone() ? "a chama está acesa" : "sozinho ou com a mãe e o pai — e o dia está cumprido"}</small></span></button>`);
+      box.querySelector('#dgBook').onclick = () => { sfx.pop(); homeLeave(); const b = GAMES.find(x => x.id === 'book'); if (b) b.go(); };
+    }
+    const wb = document.querySelector('#weekBtn b'); if (wb) wb.textContent = `${inWeek()}/${WEEK_GOAL}`;
+    const r = markDone(); if (r) later(() => celebrate(r), 700);
+  }
+  function parentHTML() {
+    const ins = insight(), L = lifeIds();
+    return `<h3 class="fam-s">Como vai</h3>
+      <p class="sd-note">💛 Gosta de: ${esc(ins.love.join(', ') || "ainda há poucos dados")}<br>🧗 Acha difícil: ${esc(ins.hd.join(', ') || "nada de especial")}<br>⏸ Onde fica parado: ${esc(ins.stuck.join(', ') || "em lado nenhum")}</p>
+      <p class="sd-note">O passo mais difícil do trilho fica entre dois fáceis e fica mais curto. Todos os passos ficam.</p>
+      <label class="sw" for="dgOrd"><input id="dgOrd" type="checkbox" ${dcfg().order === 'fixed' ? '' : 'checked'}><span class="set-t"><b>Ordem inteligente</b><small>o difícil entre os fáceis («sanduíche»)</small></span></label>
+      <label class="sw" for="dgBookIn"><input id="dgBookIn" type="checkbox" ${bookOn() ? 'checked' : ''}><span class="set-t"><b>O livro faz parte do objetivo do dia</b><small>o dia está cumprido quando o trilho e o livro estiverem feitos</small></span></label>
+      <h3 class="fam-s">Já feito de manhã</h3>
+      <div class="sd-areas" id="dgLife">${Object.keys(LIFE).map(id => `<button class="chip ${L.includes(id) || (weekend() && L.includes('help') && (id === 'school' || id === 'garden') && (dcfg().life || []).includes(id)) ? 'sel' : ''}" data-l="${id}">${LIFE[id][0]} ${esc(lifeName(id))}</button>`).join('')}</div>
+      <p class="sd-note">🔥 Nesta semana: ${inWeek()} de ${WEEK_GOAL} dias · semanas seguidas: ${streak()}. Faltar um dia não queima nada.</p>`;
+  }
+  function parentBind(sec, redo) {
+    const set = (k, v) => { P.settings.day = { ...(P.settings.day || {}), [k]: v }; save(); };
+    const o = sec.querySelector('#dgOrd'); if (o) o.onchange = e => { set('order', e.target.checked ? '' : 'fixed'); sfx.tick(); };
+    const b = sec.querySelector('#dgBookIn'); if (b) b.onchange = e => { set('book', e.target.checked); sfx.tick(); };
+    const lf = sec.querySelector('#dgLife');
+    if (lf) lf.onclick = e => { const c = e.target.closest('[data-l]'); if (!c) return; const cur = Array.isArray(dcfg().life) ? dcfg().life : lifeIds(), id = c.dataset.l; set('life', cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id]); sfx.tick(); redo(); };
+  }
+  return { goal, complete, streak, inWeek, WEEK_GOAL, lifeIds, life, tick, sandwich, hardest, hard, insight, home, parentHTML, parentBind, markDone, autoFreeze, bookOn, bookDone, LIFE };
+})();
+
+
+const DAYPLAN = { order: ids => ids, dose: (id, plan) => plan };
+
+function dayComplete() { try { return DAYG.complete(); } catch (e) { return false; } }
  
  
 
@@ -27530,7 +28205,7 @@ const LITTLE = (() => {
   const td = () => todayState();
   
   function plan(id, full) {
-    if (!on()) return full;
+    if (!on()) { const sh = td().short; if (id === 'speech' && sh && sh[id]) { const one = full.filter(x => x.key === sh[id]); if (one.length) return one; } return full; }
     const t = td(), short = t.short && t.short[id];
     let p = listen() ? full.filter(x => !TEXT.has(x.key) && !String(x.key).startsWith('comix')) : full;
     if (id === 'speech') {
@@ -27540,7 +28215,9 @@ const LITTLE = (() => {
       const ear = EAR.filter(ok), n = dayNo();
       const r = p.find(x => String(x.key).startsWith('r-skill')) || (ok('r-skill') ? gameStep('r-skill', 'read') : null);
       const e = ear.length ? gameStep(ear[n % ear.length], 'read') : null;
-      p = listen() ? [r, e].filter(Boolean) : p.slice(0, 2);
+      
+      const sy = listen() && SYLS.forAge() && ok('syl-step') ? gameStep('syl-step', 'read') : null;
+      p = listen() ? (sy ? [sy, r || e] : [r, e]).filter(Boolean) : p.slice(0, 2);
     } else p = p.slice(0, 2);
     if (!p.length) p = full.slice(0, 1);
     if (short) { const one = p.filter(x => x.key === short); if (one.length) return one; }
@@ -27553,7 +28230,7 @@ const LITTLE = (() => {
   }
   
   function skipped(id) {
-    if (!on() || !LS()[id]) return;
+    if (!(on() || id === 'speech') || !LS()[id]) return;
     const t = td(); t.skips = (t.skips || 0) + 1;
     t.offered = t.offered || {};
     if (!t.offered[id] && nextStepOf(id)) { t.offered[id] = 1; t.offer = id; }
@@ -27562,7 +28239,7 @@ const LITTLE = (() => {
   }
   const rescue = () => on() && (td().skips || 0) >= 2;
   function offer() {
-    const t = td(), id = t.offer; if (!id || !on() || $('.lt-offer')) return;
+    const t = td(), id = t.offer; if (!id || !(on() || id === 'speech') || $('.lt-offer')) return;
     delete t.offer; save();
     const s = nextStepOf(id); if (!s) return;
     const ov = document.createElement('div'); ov.className = 'overlay lt-offer';
@@ -27580,16 +28257,16 @@ const LITTLE = (() => {
   
   const STK_DAY = ['🌟', '🦄', '🐞', '🌈', '🍓', '🐠', '🦋', '🌻', '🐣', '🍭', '🎈', '🐬', '🦊', '🐼', '🍉', '🚀'];
   function dayStickers() { const k = dayKey(); return P.lilStk && P.lilStk.d === k ? P.lilStk.s : []; }
-  function stepDone(id) {
+  function stepDone(id, sticker) {
     const k = dayKey(); if (!P.lilStk || P.lilStk.d !== k) P.lilStk = { d: k, s: [] };
     const e = STK_DAY[(dayNo() * 3 + P.lilStk.s.length) % STK_DAY.length]; P.lilStk.s.push(e); save();
     const ov = document.createElement('div'); ov.className = 'overlay';
     ov.innerHTML = `<div class="winbox lt-win" role="dialog" aria-label="Passo feito"><div class="ryz-w lt-dance">${friendSVG()}</div>
-      <h2>Viva! O passo está feito!</h2><div class="lt-stk"><span class="emo">${e}</span></div><p class="win-line">O autocolante do dia vai para o trilho!</p>
+      <h2>Viva! O passo está feito!</h2><div class="lt-stk"><span class="emo">${sticker ? stickerHTML(sticker) : e}</span></div><p class="win-line">${sticker ? "Um autocolante novo para a caderneta!" : "Uma imagem para o trilho!"}</p>
       <div class="win-btns"><button class="big" data-a="home">Em frente!</button></div></div>`;
     $('.screen').append(ov);
-    sfx.good(); confetti(70); later(sfx.star, 450);
-    say(`Viva${nameBit()}! O passo está feito! Aqui tens um autocolante!`);
+    sfx.good(); if (sticker) confetti(70); later(sfx.star, 450);
+    say(`Viva${nameBit()}! O passo está feito!${sticker ? " Aqui tens um autocolante novo!" : ''}`);
     ov.onclick = e2 => { if (!e2.target.closest('[data-a]')) return; sfx.pop(); goHome(); };
     ov.querySelector('[data-a]').focus({ preventScroll: true });
   }
@@ -27604,32 +28281,318 @@ const LITTLE = (() => {
     newScreen();
     const sh = SHAPES[dayNo() % SHAPES.length], k = dayKey(); let cur = COLS[0];
     if (!P.lilCol || P.lilCol.d !== k) P.lilCol = { d: k, f: {} };
-    shell("Pinta o autocolante", `<div class="lt-col"><svg viewBox="0 0 120 120" class="lt-svg" id="ltSvg">${sh[1].map((x, i) => `<path d="${x[0]}" data-i="${i}" fill="${P.lilCol.f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="2.5"/>`).join('')}</svg>
+    shell("Pinta a imagem", `<div class="lt-col"><svg viewBox="0 0 120 120" class="lt-svg" id="ltSvg">${sh[1].map((x, i) => `<path d="${x[0]}" data-i="${i}" fill="${P.lilCol.f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="2.5"/>`).join('')}</svg>
       <div class="lt-pal">${COLS.map((c, i) => `<button class="lt-c ${i ? '' : 'sel'}" data-c="${c}" style="background:${c}" aria-label="Cor ${i + 1}"></button>`).join('')}</div>
       <button class="big" id="ltDone">Pronto!</button></div>`);
-    say("Pinta o autocolante! Toca numa cor e depois num pedaço.");
+    say("Pinta a imagem! Carrega numa cor e depois numa parte.");
     $$('.lt-c').forEach(b => b.onclick = () => { sfx.tick(); cur = b.dataset.c; $$('.lt-c').forEach(x => x.classList.toggle('sel', x === b)); });
     $('#ltSvg').onclick = e => { const p = e.target.closest('path'); if (!p) return; sfx.pop(); p.setAttribute('fill', cur); P.lilCol.f[p.dataset.i] = cur; save(); };
-    $('#ltDone').onclick = () => { sfx.good(); confetti(50); P.lilCol.done = 1; save(); say("Que autocolante tão bonito!"); later(goHome, 1200); };
+    $('#ltDone').onclick = () => { sfx.good(); confetti(50); P.lilCol.done = 1; save(); say("Que imagem tão bonita!"); later(goHome, 1200); };
   }
   const colourHTML = () => {
     const sh = SHAPES[dayNo() % SHAPES.length], f = (P.lilCol && P.lilCol.d === dayKey() && P.lilCol.f) || {};
-    return `<button class="sd-fav open lt-colb" id="ltCol"><span class="sd-fi"><svg viewBox="0 0 120 120" width="48" height="48">${sh[1].map((x, i) => `<path d="${x[0]}" fill="${f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="3"/>`).join('')}</svg></span><span class="sd-ft"><b>Pinta o autocolante</b><small>um presente pelo trilho</small></span></button>`;
+    return `<button class="sd-fav open lt-colb" id="ltCol"><span class="sd-fi"><svg viewBox="0 0 120 120" width="48" height="48">${sh[1].map((x, i) => `<path d="${x[0]}" fill="${f[i] || '#FFFFFF'}" stroke="#2A2346" stroke-width="3"/>`).join('')}</svg></span><span class="sd-ft"><b>Pinta a imagem</b><small>um presente pelo trilho</small></span></button>`;
   };
   
   function home(box) {
-    if (!on()) return;
+    if (!on()) { later(offer, 900); return; }
     const ss = dayStickers(), hero = box.querySelector('.pd-hero');
-    if (hero && ss.length) hero.insertAdjacentHTML('afterend', `<div class="lt-day" aria-label="Autocolantes do dia">${ss.map(e => `<span class="emo">${e}</span>`).join('')}</div>`);
+    if (hero && ss.length) hero.insertAdjacentHTML('afterend', `<div class="lt-day" aria-label="Imagens do dia">${ss.map(e => `<span class="emo">${e}</span>`).join('')}</div>`);
     const doors = box.querySelector('.sd-doors');
     if (doors && SIMPLE.pathDone()) { doors.insertAdjacentHTML('afterend', colourHTML()); box.querySelector('#ltCol').onclick = () => { sfx.pop(); homeLeave(); colour(); }; }
     later(offer, 900);
   }
   
-  const parentLine = () => on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Hoje ${esc(P.settings.name || '')} deixou<!--${P.settings.gender === 'f' ? "" : ''}--> para depois ${td().skips} ${plural(td().skips, ["passo", "passos", "passos"])} — a porta criativa abriu-se sozinha, para o dia acabar com alegria.</p>` : '';
+  const parentLine = () => (() => { try { const l = HONEST.todayLine(P); return l ? `<p class="sd-note">${esc(l)}</p>` : ''; } catch (e) { return ''; } })() + (on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Hoje ${esc(P.settings.name || '')} deixou<!--${P.settings.gender === 'f' ? "" : ''}--> para depois ${td().skips} ${plural(td().skips, ["passo", "passos", "passos"])} — a porta criativa abriu-se sozinha, para o dia acabar com alegria.</p>` : '');
   return { on, listen, reads, plan, must, skipped, rescue, offer, stepDone, home, colour, parentLine, TEXT, EAR, dayStickers };
 })();
-function LITTLE_PLAN(id, full) { try { return LITTLE.plan(id, full); } catch (e) { return full; } }
+function LITTLE_PLAN(id, full) {
+  let p = full; try { p = LITTLE.plan(id, full); } catch (e) {}
+  try { p = DAYPLAN.dose(id, p) || p; } catch (e) {}
+  
+  try { if (p.length > 3 && DAYG.hardest() === id) p = p.slice(0, 3); } catch (e) {}
+  return p;
+}
+ 
+ 
+
+
+const FACE = (() => {
+  const S = { lm: null, p: null, failed: false, live: 0 };
+  const dir = () => new URL(SITE_ROOT + 'engine/face/', location.href).href;
+  const can = () => !EMBEDDED && typeof WebAssembly === 'object';
+  
+  function load() {
+    if (window.__FACE_STUB) return Promise.resolve(S.lm = S.lm || { stub: true });
+    if (S.lm) return Promise.resolve(S.lm);
+    if (S.failed || !can()) return Promise.resolve(null);
+    if (!S.p) S.p = (async () => {
+      const B = dir(), V = await import(B + 'vision_bundle.mjs');
+      const files = { wasmLoaderPath: B + 'vision_wasm_internal.js', wasmBinaryPath: B + 'vision_wasm_internal.wasm' };
+      const mk = delegate => V.FaceLandmarker.createFromOptions(files, { baseOptions: { modelAssetPath: B + 'face_landmarker.task', delegate }, outputFaceBlendshapes: true, outputFaceLandmarks: false, runningMode: 'VIDEO', numFaces: 1 });
+      try { S.lm = await mk('GPU'); } catch (e) { S.lm = await mk('CPU'); }
+      return S.lm;
+    })().catch(() => { S.failed = true; S.p = null; try { EVT.err('face'); } catch (e) {} return null; });
+    return S.p;
+  }
+  const ready = () => !!S.lm;
+  
+  function read(video, now) {
+    if (window.__FACE_STUB) return window.__FACE_STUB(now);
+    if (!S.lm || S.lm.stub || !video || !video.videoWidth) return null;
+    const r = S.lm.detectForVideo(video, now), c = r && r.faceBlendshapes && r.faceBlendshapes[0];
+    if (!c) return { face: false };
+    const m = {}; c.categories.forEach(x => { m[x.categoryName] = x.score; });
+    const v = k => m[k] || 0;
+    return { face: true, open: v('jawOpen'), smile: (v('mouthSmileLeft') + v('mouthSmileRight')) / 2 + (v('mouthStretchLeft') + v('mouthStretchRight')) / 4, pucker: Math.max(v('mouthPucker'), v('mouthFunnel')), puff: v('cheekPuff') };
+  }
+  
+  function watch(video) {
+    const t = tok, w = { cur: null, n: 0, on: true, ms: 0 };
+    S.live++;
+    const end = () => { if (w.on) { w.on = false; S.live--; clearTimeout(w.h); } };
+    const step = () => {
+      if (!w.on) return;
+      if (t !== tok) { end(); return; }
+      if (!document.hidden && (camStream || window.__FACE_STUB) && S.lm) {
+        const a = performance.now();
+        try { w.cur = read(video, a); w.n++; } catch (e) { w.cur = null; }
+        w.ms = performance.now() - a;
+      } else w.cur = null;
+      w.h = setTimeout(step, Math.max(40, 100 - w.ms));
+    };
+    step(); w.stop = end;
+    return w;
+  }
+  
+  const DEF = { open: .05, smile: .12, pucker: .1, puff: .05 }, NEED = { open: .16, smile: .3, pucker: .28, puff: .2 }, CAP = { open: .25, smile: .4, pucker: .35, puff: .25 };
+  const cal = () => { const c = P.faceCal; return { b: { ...DEF, ...(c && c.b) }, k: { ...(c && c.k) } }; };
+  function calibrate(xs) {
+    xs = xs.filter(x => x && x.face); if (xs.length < 5) return false;
+    const c = P.faceCal || {}, b = {};
+    
+    Object.keys(DEF).forEach(k => { const v = xs.map(x => x[k]).sort((p, q) => p - q)[Math.floor(xs.length / 4)]; const nw = Math.min(CAP[k], v); b[k] = c.b && c.b[k] != null ? (c.b[k] + nw) / 2 : nw; });
+    P.faceCal = { ...c, b, at: dayKey() }; save();
+    return true;
+  }
+  
+  function level(kind, s) {
+    if (!s || !s.face) return 0;
+    if (kind === 'any') return 1;
+    const C = cal(), need = NEED[kind] * (C.k[kind] || 1);
+    return Math.max(0, (s[kind] - C.b[kind]) / need);
+  }
+  
+  function adapt(kind, peaks) {
+    if (!peaks.length || kind === 'any') return;
+    const avg = peaks.reduce((a, b) => a + b, 0) / peaks.length, c = P.faceCal || (P.faceCal = {}), k = c.k || (c.k = {}), s = k[kind] || 1;
+    if (avg >= .55 && avg < 1) k[kind] = Math.max(.6, s * .9); else if (avg > 1.8) k[kind] = Math.min(1, s * 1.05);
+  }
+  return { load, ready, watch, calibrate, level, adapt, live: () => S.live, failed: () => S.failed, stub: () => !!(S.lm && S.lm.stub) };
+})();
+
+const HONEST = (() => {
+  
+  const KIND = { frog: 'smile', trunk: 'pucker', horn: 'pucker', donkey: 'smile', donkey2: 'any', slap: 'any', puff: 'puff', cheeks: 'puff' };
+  const OWN = { 'sh-accordion': { donkey: 'any' } };
+  const kindOf = (a, pose) => (OWN[a.id] && OWN[a.id][pose]) || KIND[pose] || 'open';
+  const isTongue = a => a.steps.some(s => !KIND[s[0]]);
+  const EMO = { smile: '😁', pucker: '😗', open: '😮', puff: '🐡', any: '🙂' };
+  const MORE = { smile: "Um bocadinho mais largo!", pucker: "Os lábios um pouco mais para a frente!", open: "Abre a boca um bocadinho mais!", puff: "Enche mais as bochechas!", any: "Olha para o espelho!" };
+  
+  function log(f) {
+    const k = dayKey(), L = P.artLog || (P.artLog = {}), d = L[k] || (L[k] = { d: 0, s: 0 });
+    d[f]++; Object.keys(L).sort().slice(0, -14).forEach(x => delete L[x]); save();
+  }
+  const sumDays = (pr, n) => { const L = pr.artLog || {}, out = { d: 0, s: 0 }; for (let i = 0; i < n; i++) { const x = new Date(); x.setDate(x.getDate() - i); const v = L[dayKey(x)]; if (v) { out.d += v.d; out.s += v.s; } } return out; };
+  
+  let OPEN = null;
+  function leave() { if (OPEN && !OPEN.done && !OPEN.again && (OPEN.go || OPEN.lesson)) { const o = OPEN; OPEN = null; log('s'); try { EVT.log('skip', 'artic:' + o.id); } catch (e) {} } OPEN = null; }
+  const TRIES = {};
+  function artic(a, t) {
+    const o = OPEN = { id: a.id, done: false, go: false, again: false, lesson: !!ACTIVE }, tongue = isTongue(a);
+    const jaw = /челюст/i.test(a.tip || '');
+    let W = null, mode = 'hold', holding = false, hits = 0, total = 0, tried = 0, calib = [], peaks = {}, jawLo = 1, jawHi = 0, jawSaid = false;
+    const side = $('#artStage .artic-side'), stepsEl = $('#steps');
+    stepsEl.insertAdjacentHTML('afterend', `<div class="hon" id="hon" hidden><span class="hon-r" id="honR" style="--p:0"><span class="emo" id="honE">🙂</span></span>
+      <b class="hon-l" id="honL"></b><button class="big hon-hold" id="honHold" hidden>✋ Estou a fazer!</button></div>`);
+    const box = $('#hon'), ring = $('#honR'), lab = $('#honL'), em = $('#honE'), hb = $('#honHold');
+    bindHold(hb, () => { holding = true; }, () => { holding = false; });
+    
+    const cam = () => $('#camV');
+    const sync = () => {
+      if (t !== tok) return;
+      const live = !!(camStream || (window.__FACE_STUB && !$('#cam').hidden));
+      if (live && FACE.ready()) { if (!W || !W.on) W = FACE.watch(cam()); mode = 'face'; }
+      else { if (W) { W.stop(); W = null; } mode = 'hold'; if (live && !FACE.failed()) FACE.load().then(() => sync()); }
+      hb.hidden = mode !== 'hold' || !o.go;
+      $('#cam') && $('#cam').classList.toggle('hon-on', mode === 'face');
+    };
+    const iv = setInterval(() => {
+      if (t !== tok) { clearInterval(iv); if (W) W.stop(); return; }
+      sync();
+      
+      if (!o.go && W && W.cur && W.cur.face && calib.length < 100) calib.push(W.cur);
+    }, 100);
+    sync();
+    const show = (p, txt, kind, ok) => {
+      box.hidden = false; ring.style.setProperty('--p', Math.round(Math.min(1, p) * 100));
+      ring.classList.toggle('ok', !!ok); em.textContent = EMO[kind] || '🙂';
+      if (txt != null && lab.textContent !== txt) lab.textContent = txt;
+      const c = $('#cam'); if (c) c.classList.toggle('held', !!ok && mode === 'face');
+      
+      const cl = c && c.querySelector('.cam-l'); if (cl && mode === 'face' && txt) cl.textContent = txt;
+    };
+    
+    
+    async function step(pose, ms) {
+      const kind = kindOf(a, pose), need = Math.min(ms * .5, 900), maxT = ms * 2.5;
+      let el = 0, held = 0, peak = 0, last = performance.now(), seen = 0;
+      total++;
+      while (t === tok) {
+        await wait(50); if (t !== tok) return 'gone';
+        const now = performance.now(), dt = Math.min(200, now - last); last = now; el += dt;
+        let lv = 0;
+        if (mode === 'face') {
+          const s = W && W.cur; lv = FACE.level(kind, s); if (s && s.face) seen += dt;
+          if (jaw && s && s.face && kind === 'open') { jawLo = Math.min(jawLo, s.open); jawHi = Math.max(jawHi, s.open); }
+        } else lv = holding ? 1 : 0;
+        peak = Math.max(peak, lv);
+        if (lv >= 1) held += dt;
+        const ok = lv >= 1;
+        let txt;
+        if (mode === 'hold') txt = holding ? "Estás a fazer — segura!" : el > 700 ? "Carrega e segura «Estou a fazer!» enquanto fazes" : null;
+        else if (seen < 300 && el > 1500) txt = "Não te vejo — senta-te em frente à câmara";
+        else if (ok) txt = tongue && kind === 'open' ? "A boca está aberta — segura!" : "Está a dar!";
+        else if (lv >= .5) txt = MORE[kind];
+        else if (el > 1200) txt = tongue && kind === 'open' ? "Abre a boca como a menina" : "Tenta outra vez";
+        if (jaw && !jawSaid && jawHi - jawLo > .35) { jawSaid = true; txt = "O queixo fica quieto — só a língua trabalha"; }
+        show(need ? held / need : 1, txt, mode === 'hold' ? 'any' : kind, ok);
+        if (el >= ms && held >= need) { hits++; (peaks[kind] = peaks[kind] || []).push(peak); return 'hit'; }
+        if (el >= maxT) { (peaks[kind] = peaks[kind] || []).push(peak); if (peak >= .4) tried++; return 'miss'; }
+      }
+      return 'gone';
+    }
+    function go() {
+      o.go = true; sync();
+      if (mode === 'face' && FACE.calibrate(calib)) calib = [];
+      show(0, mode === 'hold' ? "Carrega e segura «Estou a fazer!» enquanto fazes" : "Olha para o espelho e faz como a menina", mode === 'hold' ? 'any' : kindOf(a, a.steps[0][0]), false);
+    }
+    
+    function end() {
+      if (W) { W.stop(); W = null; }
+      if (mode === 'face') Object.entries(peaks).forEach(([k, v]) => FACE.adapt(k, v));
+      const n = (TRIES[a.id + dayKey()] = (TRIES[a.id + dayKey()] || 0) + 1);
+      const okRate = hits / Math.max(1, total), effort = (hits + tried) / Math.max(1, total);
+      
+      const ok = okRate >= .6 || (n >= 2 && effort >= .6 && mode === 'face');
+      try { EVT.log('artic', a.id, Math.round(okRate * 100), mode === 'face' ? 1 : 0); } catch (e) {}
+      if (ok) { o.done = true; log('d'); }
+      const line = !ok ? '' : tongue ? `Muito bem, esforçaste-te${G("", "")}! Vê no espelho o que faz a língua. ` : okRate >= .6 ? "Está a dar! " : `Muito bem, esforçaste-te${G("", "")}! `;
+      return { ok, line, rate: okRate, mode };
+    }
+    
+    function retry(again) {
+      box.hidden = false; show(0, "Tenta outra vez", 'any', false); hb.hidden = true;
+      box.insertAdjacentHTML('beforeend', `<div class="prow-btns hon-b"><button class="big" id="honAgain">↻ Outra vez</button>${ACTIVE ? "<button class=\"big ghost\" id=\"honSkip\">Saltar</button>" : ''}</div>`);
+      talk(mode === 'face' ? "Tenta outra vez! Estou a olhar para o espelho contigo. Faz como a menina." : "Tenta outra vez! Carrega e segura o botão «Estou a fazer!» enquanto fazes o exercício.");
+      $('#honAgain').onclick = () => { sfx.pop(); o.again = true; again(); };
+      const sk = $('#honSkip'); if (sk) sk.onclick = () => { sfx.pop(); goHome(); };
+    }
+    return { go, step, end, retry, mode: () => mode };
+  }
+  
+  function reportLine(pr) {
+    const w = sumDays(pr, 7); if (!w.s) return '';
+    return `Exercícios da língua em 7 dias: ${w.d} feitos, ${w.s} ${plural(w.s, ["exercício", "exercícios", "exercícios"])} saltados. Não faz mal — mais vale um exercício a sério do que cinco só para cumprir.`;
+  }
+  function todayLine(pr) { const d = sumDays(pr, 1); return d.s ? `Hoje: ${d.s} ${plural(d.s, ["exercício", "exercícios", "exercícios"])} da língua saltados, ${d.d} feitos.` : ''; }
+  return { artic, leave, reportLine, todayLine, log, sum: sumDays };
+})();
+
+ 
+const LISTEN = (() => {
+  const GRP = new Set([1, 2, 3, 5, 6, 9, 11, 12]), IDS = /^(math|n100|olymp|r-skill|abc|read|syl|hear|code|primer|sz-|sh-|snd-|l-)/;
+  const want = g => g && (GRP.has(g.grp) || IDS.test(g.id)) && g.grp !== 0 && g.grp !== 4 && g.grp !== 13;
+  let S = null, PEND = null, tapAt = 0;
+  const little = () => (P.settings.age || 6) <= 6;
+  const live = () => S && S.tok === tok;
+  function wrap(list) {
+    (list || []).forEach(g => {
+      if (!g || g.lsW || typeof g.go !== 'function' || !want(g)) return;
+      const go = g.go; g.lsW = 1;
+      g.go = function (...a) { PEND = { g, at: performance.now() }; S = null; return go.apply(this, a); };
+    });
+  }
+  
+  function begin(g) {
+    const k = dayKey(), seen = P.lsSeen && P.lsSeen.d === k ? P.lsSeen : (P.lsSeen = { d: k, ids: [] });
+    const first = !seen.ids.includes(g.id); if (first) { seen.ids.push(g.id); save(); }
+    S = { tok, g, q: '', qBusy: false, qEnd: 0, qn: 0, gate: first || little(), early: 0, wrongs: [], told: 0 };
+    const gd = $('.guide'); if (gd) gd.classList.add('ls-on');
+  }
+  
+  function said(text, p) {
+    const now = performance.now();
+    if (PEND && now - PEND.at < 2500 && !EMBEDDED) { const g = PEND.g; PEND = null; begin(g); }
+    else if (PEND && now - PEND.at >= 2500) PEND = null;
+    if (!live() || S.mute) return;
+    if (now - tapAt < 450 && text !== S.q) return;
+    const my = ++S.qn, me = S; S.q = text; S.qBusy = true;
+    if (S.gate) lock();
+    const done = () => { if (S !== me || me.qn !== my) return; me.qBusy = false; me.qEnd = performance.now(); if (me.gate) { me.gate = false; unlock(); } };
+    Promise.resolve(p).then(done, done);
+    setTimeout(done, 20000);
+  }
+  function lock() {
+    const sc = $('.screen'), st = $('#stage'); if (!sc || !st) return;
+    st.classList.add('ls-wait');
+    if (!$('.ls-ear')) sc.insertAdjacentHTML('beforeend', `<div class="ls-ear${little() ? ' ls-pic' : ''}" aria-hidden="true">${little() && S.g.ico ? `<span class="ls-g">${(() => { try { return S.g.ico(); } catch (e) { return ''; } })()}</span>` : ''}<span class="emo">👂</span><b>a ouvir…</b></div>`);
+    const r = $('#replay'); if (r) r.classList.add('ls-big');
+  }
+  function unlock() {
+    const st = $('#stage'); if (st) st.classList.remove('ls-wait');
+    const r = $('#replay'); if (r) r.classList.remove('ls-big');
+    const e = $('.ls-ear'); if (!e) return;
+    if (little()) { e.classList.add('ls-go'); e.innerHTML = "<span class=\"emo\">👆</span><b>agora carrega!</b>"; setTimeout(() => e.remove(), 1600); } else e.remove();
+  }
+  async function notHeard() {
+    if (!live() || S.told >= 2) return;
+    
+    const me = S, q = S.q; me.told++; me.qn++; me.wrongs = []; me.early = 0; me.gate = true; me.mute = true; lock();
+    try { EVT.log('listen', me.g.id); } catch (e) {}
+    hush();
+    try { await talk(`Não ouviste${G("", '')}. Ouve com atenção, por favor.`); } finally { me.mute = false; }
+    if (S !== me || me.tok !== tok) return;
+    tapAt = 0;
+    if (q) talk(q); else { me.gate = false; unlock(); }
+  }
+  const ANS = 'button, [data-id], [data-i], [data-k], [role="button"], .card, .item, .fi, .tile, .opt, .ans';
+  function guard(e) {
+    if (!live() || !S.gate) return;
+    const st = $('#stage'); if (!st || !st.contains(e.target)) return;
+    const el = e.target.closest(ANS); if (!el || !st.contains(el)) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    if (e.type !== 'pointerdown') return true;
+    S.early++;
+    const ear = $('.ls-ear'); if (ear) { ear.classList.remove('ls-shake'); void ear.offsetWidth; ear.classList.add('ls-shake'); }
+    if (S.early >= 2 && !S.mute) notHeard();
+    return true;
+  }
+  document.addEventListener('pointerdown', e => { if (!guard(e)) tapAt = performance.now(); }, true);
+  document.addEventListener('click', guard, true);
+  
+  function wrong() {
+    if (!live() || S.gate || S.mute) return;
+    const now = performance.now(); if (now - tapAt > 600) return;
+    const fast = S.qBusy || now - S.qEnd < 1800;
+    if (!fast) { S.wrongs = []; return; }
+    S.wrongs.push(now);
+    if (S.wrongs.length >= 2) { S.wrongs = []; const me = S; setTimeout(() => { if (S === me && me.tok === tok) notHeard(); }, 700); }
+  }
+  return { wrap, said, wrong, state: () => S && { id: S.g.id, gate: S.gate, told: S.told, q: S.q, live: live(), w: S.wrongs.length, busy: S.qBusy, end: Math.round(performance.now() - S.qEnd), tap: Math.round(performance.now() - tapAt) } };
+})();
+{ const o = sfx.oops; sfx.oops = function (...a) { try { LISTEN.wrong(); } catch (e) {} return o.apply(this, a); }; }
  
  
 
@@ -27737,7 +28700,7 @@ const LANDX = (() => {
     const tile = x => `<div class="ld-g" style="--bg:${x.g.bg}"><span class="tile-ico">${x.ico}</span><b>${x.name}</b></div>`;
     const steps = [
       ['🧸', "O primeiro dia", "A criança escolhe um amigo animal e aquilo de que gosta. O amigo explica as tarefas em voz alta e ouve quando a criança responde."],
-      ['🗺️', "Todos os dias", "Um caminho de três lições curtas e um baú de estrelas no fim. A cada 5 estrelas, um autocolante novo."],
+      ['🗺️', "Todos os dias", "Um caminho de três lições curtas e um baú de estrelas no fim. Cada dia traz um autocolante novo para a caderneta."],
       ['🔥', "Todas as semanas", "Dias seguidos e medalhas por 3 dias, uma semana, duas semanas e um mês. Irmãos e irmãs mantêm uma série em conjunto."],
       ['📈', "Passo a passo", IS_RU ? "A cartilha: 33 letras por ordem; «Degraus» na matemática: dos pontos às equações; xadrez com o computador: 10 níveis." : "Letras e primeiras palavras; «Degraus» na matemática: dos pontos às equações; xadrez com o computador: 10 níveis."],
       ['🖼️', "O mundo inteiro", "O Museu do Mundo com mais de 1000 quadros, uma caixa de música com compositores, experiências no parque e viagens pelo mundo."],
@@ -28194,15 +29157,16 @@ const consentHTML = id => EMBEDDED ? '' : `<div class="share-box"><label class="
 function bindConsent(id) { const el = document.getElementById(id); if (el) el.onchange = () => { sfx.tick(); setStats(el.checked); }; }
 function dataSecHTML() {
   const n = EVT.size(), cf = cloudFams();
-  return `<section class="psec" id="dataSec"><h2>🔒 Os seus dados</h2>
-    <p class="muted">Tudo fica guardado neste telemóvel. O registo de atividade para o «Relatório» (${n} ${plural(n, ["registo", "registos", "registos"])} em 90 dias) nunca é enviado para lado nenhum. Não há publicidade, cookies nem contadores de terceiros.</p>
+  return `<section class="psec" id="dataSec"><h2>🔒 Os vossos dados</h2>
+    <p class="muted">Tudo fica guardado neste telemóvel. O registo de atividades para o «Relatório» (${n} ${plural(n, ["registo", "registos", "registos"])} nos últimos 90 dias) nunca é enviado para lado nenhum. Sem publicidade, sem cookies e sem contadores de terceiros.</p>
     ${consentHTML('stIn')}
     <p class="muted">Sincronização da família: ${cf.length ? "ativada, o progresso das crianças fica guardado no nosso servidor (Cloudflare)" : "desativada"}. ${ROOT.srOff ? "O reconhecimento de voz da Google está desativado." : "O reconhecimento de voz está ativado: a voz da criança é processada pela Google."}</p>
-    <div class="prow-btns"><button class="big ghost" id="dataGet">⬇️ Descarregar os dados da família</button><button class="big ghost danger" id="dataDel">Apagar tudo</button></div>
+    <div class="prow-btns"><button class="big ghost" id="dataGet">⬇️ Descarregar dados da família</button><button class="big ghost danger" id="dataDel">Apagar tudo</button></div>
     <p class="muted" id="dataOut"></p>
+    <p class="muted">Os desejos das crianças e a lista «Desejos para o jogo» ficam só neste telemóvel: para ver ou limpar, vai a «🗺️ Dia e todos os jogos».</p>
     <p class="muted">${privLink("Privacidade: o que é guardado, onde e quanto")}</p></section>`.replace(/<div class="prow-btns"><button class="big ghost" id="dataGet"/, m => CAM_NOTE + m);
 }
-const CAM_NOTE = "<p class=\"muted\">A câmara-espelho nos exercícios da língua mostra a cara da criança apenas no ecrã: a imagem não é gravada, não é guardada nem enviada. A câmara desliga-se quando a criança sai do exercício ou fecha a aplicação. Liga-se sozinha — o interruptor «O espelho liga-se sozinho» em «Dia e todos os jogos».</p>";
+const CAM_NOTE = "<p class=\"muted\">A câmara-espelho nos exercícios da língua mostra a cara da criança apenas no ecrã: a imagem não é gravada, não é guardada nem enviada. Para dizer «Está a dar!» ou «Tenta outra vez», um programa analisa o vídeo no próprio telemóvel (sem internet): de cada imagem saem só alguns números — quanto a boca está aberta, quão largo é o sorriso. A câmara desliga-se quando a criança sai do exercício ou fecha a aplicação. Liga-se sozinha — o interruptor «O espelho liga-se sozinho» em «Dia e todos os jogos».</p>";
 function bindDataSec() {
   bindConsent('stIn'); try { const p0 = $('#dataSec > p'); if (p0) p0.insertAdjacentHTML('afterend', COMIX.dataRows()); COMIX.dataBind(); } catch (e) {}
   const g = $('#dataGet'), d = $('#dataDel');

@@ -71,6 +71,8 @@ let bad = 0;
     ok(t.mins.speech >= 3 && t.mins.speech <= 6, `Тоша: speech ${t.mins.speech} min`);
     ok(t.min >= TABLE[5][0] && t.min <= TABLE[5][1], `Тоша: day ${t.min} min`);
     ok((await run(`FOCUS.dose().tries`)) >= 50, 'Тоша: the target is under 50');
+    // syllables for 5–6 stay in the reading step (syllables), whatever the dose
+    ok(await run(`(() => { let want = false; try { want = SYLS.forAge() && LITTLE.listen() && GAMES.some(g => g.id === 'syl-step' && !(g.hide && g.hide())); } catch (e) {} return !want || lessonPlan('read').some(s => s.key === 'syl-step'); })()`), 'Тоша: no syllables in «Чтение»');
     await p.screenshot({ path: `${SHOTS}/focus-${lang}-${DEV}-tosha.png` });
 
     // Тим: a new child, «не знаю» → no speech; the check normal → none; a lag → the block

@@ -28,7 +28,8 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       // «Сегодня» before the check: the reading node asks for the check first
       await run('goHome()'); await p.waitForTimeout(700);
       const plan0 = await run(`lessonPlan('read').map(s => s.key)`);
-      ok(plan0[0] === 'r-skill', `${tag}: «Сегодня» reading starts with «Чтение по силам» (${plan0.join(', ')})`);
+      // a 5–6-year-old who does not read yet: the syllables first (SYLSTEP), then «Чтение по силам»
+      ok(plan0[age <= 6 ? 1 : 0] === 'r-skill' && (age > 6 || plan0[0] === 'syl-step'), `${tag}: «Сегодня» reading starts with «Чтение по силам» (${plan0.join(', ')})`);
       // the tile is in «Учимся»
       await p.click('.tb[data-tab="learn"]').catch(() => {}); await p.waitForTimeout(500);
       ok(!!(await p.$('.tile[data-id="r-skill"]')), `${tag}: the tile «Чтение по силам» in «Учимся»`);
@@ -79,7 +80,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       if (age === 8) await run('RSK.setLv(1)');
       await run('goHome()'); await p.waitForTimeout(600); await p.click('.tb[data-tab="today"]').catch(() => {}); await p.waitForTimeout(600);
       const plan = await run(`lessonPlan('read').map(s => s.key)`), lb = await p.$eval('.pd-n[data-l="read"]', e => e.innerText.replace(/\s+/g, ' ')).catch(() => '-');
-      if (age === 5) ok(plan[0] === 'r-skill' && plan.length >= 2, `${tag}: «Сегодня» at step ${await lvl()}: ${plan.join(', ')} · «${lb}»`);
+      if (age === 5) ok(plan[0] === 'syl-step' && plan[1] === 'r-skill', `${tag}: «Сегодня» at step ${await lvl()}: ${plan.join(', ')} · «${lb}»`);
       if (age === 8) {
         ok(plan.join() === 'r-skill,abc-find', `${tag}: «Сегодня» at step 1: ${plan.join(', ')} · «${lb}»`);
         ok(!/малыш|baby|bebé|Baby/i.test(lb), `${tag}: no baby words in the node`);
@@ -88,7 +89,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
       if (age === 10) { await run('RSK.setLv(9); goHome()'); await p.waitForTimeout(600); const pl = await run(`lessonPlan('read').map(s => s.key)`); ok(pl.join() === 'r-skill,l-syll,speed', `${tag}: «Сегодня» at step 9: ${pl.join(', ')}`); }
       // start one lesson from «Сегодня»: the round opens
       await run(`P.today = null; startLesson('read')`); await p.waitForTimeout(700);
-      ok(!!(await p.$('#rkBox')), `${tag}: «Сегодня» → reading opens «Чтение по силам»`);
+      ok(!!(await p.$(age <= 6 ? '#syBox' : '#rkBox')), `${tag}: «Сегодня» → reading opens ${age <= 6 ? '«Читаем по слогам»' : '«Чтение по силам»'}`);
       // the grown-ups' panel
       if (age === 8) { await run('screenParents()'); await p.waitForTimeout(600); ok(!!(await p.$('#rkLvIn')), `${tag}: the panel has the reading step`); }
       ok(!errs.length, `${tag}: no page errors ` + errs.join(' | '));

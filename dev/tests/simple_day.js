@@ -28,17 +28,19 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
     const home = async () => { await run('goHome()'); await p.waitForTimeout(500); };
     await p.goto(BASE + SUB[lang]); await p.waitForTimeout(1500);
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
-    // Тоша: the book is its own card now, not a step of the path (my-book)
-    for (const [k, nDoors, nMust] of [['k1', 2, 4], ['k2', 3, 4]]) {
+    // the book is its own card (my-book); «Миссия Л» got the maths of the day (audit-rewards): 5 steps
+    for (const [k, nMust] of [['k1', 3], ['k2', 5]]) {
       await run(`switchKid('${k}')`); await p.waitForTimeout(700); await home();
       const tag = `${lang}/${k}`;
       ok(!(await p.$('#tabBar')), `${tag}: tab bar still there`, miss);
       ok(!(await p.$('#homeSearch')), `${tag}: search still there`, miss);
-      const steps = await p.$$eval('.pd-n[data-l]', ns => ns.map(n => n.dataset.l));
+      const steps = await p.$$eval('.pd-n[data-l]:not(.pd-opt)', ns => ns.map(n => n.dataset.l));
       ok(steps.length === nMust, `${tag}: path steps ${steps.length} ≠ ${nMust}`, miss);
       ok(steps[0] === 'speech' && steps[1] === 'read', `${tag}: path order ${steps}`, miss);
-      const doors = await p.$$('.sd-door');
-      ok(doors.length === nDoors, `${tag}: doors ${doors.length} ≠ ${nDoors}`, miss);
+      // «Моё любимое» + one surprise door (the owner, 18.11)
+      const doors = await p.$$('.sd-door'), nFav = await run('SIMPLE.favs().length'), nSur = await run('SIMPLE.today().filter(a => SIMPLE.isSurprise(a.id)).length');
+      ok(doors.length === nFav + nSur && nSur === 1 && nFav >= 1, `${tag}: doors ${doors.length}, favourites ${nFav}, surprise ${nSur}`, miss);
+      const nDoors = doors.length;
       ok((await p.$$('.sd-door.shut')).length === nDoors, `${tag}: doors not shut before the path`, miss);
       await p.screenshot({ path: `${SHOTS}/simple-${lang}-${k}-${DEV}-before.png`, fullPage: false });
       if (doors.length) { await doors[0].click(); await p.waitForTimeout(400); ok(!!(await p.$('#pdBox')), `${tag}: a shut door opened`, miss); }
@@ -62,7 +64,7 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
       await p.screenshot({ path: `${SHOTS}/simple-${lang}-${k}-${DEV}-after.png`, fullPage: false });
       await p.click('#sdFav'); await p.waitForTimeout(800);
       ok(!(await p.$('#pdBox')), `${tag}: favourite game did not open`, miss);
-      await run(`P.fav.t = Date.now() - 11 * 60e3`); await p.waitForTimeout(4800);
+      await run(`P.fav.used = 10 * 60e3 - 500`); await p.waitForTimeout(4800);
       ok(!!(await p.$('#sdHome')), `${tag}: no «time is up»`, miss);
       if (await p.$('#sdHome')) { await p.click('#sdHome'); await p.waitForTimeout(500); }
       ok(!!(await p.$('#pdBox')), `${tag}: not home after the time`, miss);
@@ -73,17 +75,16 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
       await run(`P.settings.day = {}; save()`);
     }
     // rotation: 30 days, both children, with likes and without; plus 2 and 3 doors
+    // the surprise door over 30 days: never two days running, every other area at least once; favourites every day
     const fair = await run(`(() => { const res = [];
-      for (const k of ['k1', 'k2']) for (const lk of [null, []]) for (const kk of [2, 3]) {
-        P = ROOT.profiles[k]; const A = SIMPLE.pool(), n = dayNo(), likes = lk || SIMPLE.likes();
-        const pl = SIMPLE.plan(n + 30, { pool: A, likes, k: kk, kid: k }); let rep = 0, mix = 0; const last = {}, gap = {};
-        for (let d = n; d < n + 30; d++) { const ds = pl[d]; if ((pl[d - 1] || []).some(x => ds.includes(x))) rep++;
-          const gs = ds.map(id => SIMPLE.AREAS.find(a => a.id === id).g); if (new Set(gs).size < Math.min(ds.length, 3)) mix++;
-          A.forEach(a => { if (ds.includes(a.id)) { gap[a.id] = Math.max(gap[a.id] || 0, d - (last[a.id] ?? n - 1)); last[a.id] = d; } }); }
-        A.forEach(a => { gap[a.id] = Math.max(gap[a.id] || 0, n + 30 - (last[a.id] ?? n - 1)); });
-        res.push({ k, likes: likes.length, kk, areas: A.length, rep, mix, max: Math.max(...Object.values(gap)) }); }
+      for (const k of ['k1', 'k2']) for (const lk of [null, []]) {
+        P = ROOT.profiles[k]; const fv = SIMPLE.favs(), A = SIMPLE.pool(), n = dayNo(), likes = lk || SIMPLE.likes();
+        const pl = SIMPLE.plan(n + 30, { pool: A, likes, kid: k, favs: fv }); let rep = 0, favIn = 0; const seen = new Set();
+        for (let d = n; d < n + 30; d++) { const ds = pl[d]; if ((pl[d - 1] || []).some(x => ds.includes(x))) rep++; if (ds.some(x => fv.includes(x))) favIn++; ds.forEach(x => seen.add(x)); }
+        const others = A.filter(a => !fv.includes(a.id)).map(a => a.id), unseen = others.filter(x => !seen.has(x));
+        res.push({ k, likes: likes.length, areas: others.length, rep, favIn, unseen: unseen.length }); }
       P = ROOT.profiles[ROOT.cur]; return res; })()`);
-    fair.forEach(f => ok(f.rep === 0 && f.max <= 10 && f.mix === 0, `${lang}: rotation ${JSON.stringify(f)}`, miss));
+    fair.forEach(f => ok(f.rep === 0 && f.favIn === 0 && f.unseen === 0, `${lang}: surprise rotation ${JSON.stringify(f)}`, miss));
     // the grown-ups: «День», «Все игры» with the tabs and a way back
     await run(`screenParents('day')`); await p.waitForTimeout(700);
     ok(!!(await p.$('#dayPar:not(.set-off)')), `${lang}: no «День» page`, miss);
@@ -97,8 +98,8 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
     await run(`P.settings.day = { on: false }; save()`); await home();
     ok(!!(await p.$('#tabBar')), `${lang}: switch off keeps no tabs`, miss);
     await run(`P.settings.day = {}; save()`);
-    const r = fair.map(f => `${f.k}/${f.kk}${f.likes ? '♥' : ''}:${f.max}`).join(' ');
-    console.log(`${lang} ${DEV}: rotation max gap ${r} | missing ${JSON.stringify(miss)} | errors ${JSON.stringify(errs)}`);
+    const r = fair.map(f => `${f.k}${f.likes ? '♥' : ''}:${f.areas}`).join(' ');
+    console.log(`${lang} ${DEV}: surprise areas ${r} | missing ${JSON.stringify(miss)} | errors ${JSON.stringify(errs)}`);
     if (errs.length || miss.length) bad++;
     await c.close();
   }
