@@ -27952,7 +27952,7 @@ const WISH = (() => {
   const TOPIC = [
     [/акул|рыб|кит|дельфин|осьмин|океан|море|shark|fish|whale|dolphin|octopus|ocean|sea|tubar|peixe|baleia|golfinh|polvo|oceano|mar|hai|fisch|wal|delfin|krake|meer/, 'nature'],
     [/динозавр|dino/, 'nature'], [/зверь|звери|животн|animal|bicho|tier/, 'nature'],
-    [/планет|звезд|ракет|космонавт|луна|planet|rocket|astronaut|moon|foguet|lua|rakete|mond/, 'space'],
+    [/планет|ракет|космонавт|луна|planet|rocket|astronaut|moon|foguet|lua|rakete|mond/, 'space'],
     [/робот|машин|изобрет|robot|machine|invent|maquina|invencao|maschine|erfind/, 'lab'],
     [/врач|пожарн|полиц|пилот|повар|doctor|firefight|police|pilot|cook|medico|bombeir|policia|piloto|cozinh|arzt|feuerwehr|polizei|koch/, 'jobs'],
     [/принцесс|фея|сказк|princess|fairy|tale|princesa|fada|conto|prinzessin|fee|marchen/, 'books'],
@@ -28026,6 +28026,8 @@ const WISH = (() => {
   // the friend's answer to a wish, or null when it is not a wish
   function handle(text) {
     const t = norm(text); if (!t) return null;
+    // a question, not a wish: «сколько у меня звёзд», «что сегодня»
+    if (/сколько|что сегодня|how many|what s today|what is today|quant|o que ha hoje|wie viele|was ist heute/.test(t)) return null;
     let x = null; try { x = TALK.syn(t); } catch (e) {}
     const ar = x && x.startsWith('a:') ? area(x.slice(2)) : x && x.startsWith('g:') ? areaOfGame(x.slice(2)) : null;
     if (W.hard.test(t) && !W.easy.test(t.replace(W.hard, ''))) { keep(text, 'hard'); setNudge(-1); return { say: 'Понял! Завтра задания будут чуть полегче. А сегодня можно нажать «Полегче».' }; }
