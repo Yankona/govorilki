@@ -1,9 +1,8 @@
-# parent-focus: «Что важно для вашего ребёнка?», the 1-minute sound check, the week as «N of 7»
+# parent-focus: «Что важно для вашего ребёнка?», the 1-minute sound check
 import json, os, re
 H = os.path.dirname(os.path.abspath(__file__))
 fixed = json.load(open(H + '/fixed.json', encoding='utf-8')); fde = json.load(open(H + '/de/fixed_de.json', encoding='utf-8'))
 miss = json.load(open(H + '/out-en.html.missing.json', encoding='utf-8'))
-T = {L: json.load(open(H + f'/tables/{L}.json', encoding='utf-8')) for L in ('en', 'pt', 'de')}
 W = {
   'Что важно': ('What matters', 'O que importa', 'Was wichtig ist'),
   'логопедия, чтение, математика — от вашего выбора': ('speech therapy, reading, maths — your choice', 'terapia da fala, leitura, matemática — à vossa escolha', 'Sprachtherapie, Lesen, Mathe — nach Ihrer Wahl'),
@@ -53,29 +52,11 @@ W = {
      '<div class="fo-row"><span><b>{0}</b> <small>{1}</small></span>\n        <span class="sd-seg" data-l="{2}" data-g="{3}"><button class="chip sel" data-v="1">Bem</button><button class="chip" data-v="0">Ainda não</button></span></div>',
      '<div class="fo-row"><span><b>{0}</b> <small>{1}</small></span>\n        <span class="sd-seg" data-l="{2}" data-g="{3}"><button class="chip sel" data-v="1">Sauber</button><button class="chip" data-v="0">Noch nicht</button></span></div>'),
 }
-# changed templates: the old translation with the week as «N of 7»
-WK = {'en': ('My calendar: {0} of 7 days', '{0} of 7 days<small>this week</small>'), 'pt': ('O meu calendário: {0} de 7 dias', '{0} de 7 dias<small>esta semana</small>'), 'de': ('Mein Kalender: {0} von 7 Tagen', '{0} von 7 Tagen<small>diese Woche</small>')}
-def shift(t, k):  # {n} → {n+k}
-    return re.sub(r'\{(\d+)\}', lambda m: '{%d}' % (int(m.group(1)) + k), t)
-def old_path(L, k):
-    for kk, v in T[L]['PATH'].items():
-        if k == 'pill' and 'weekBtn' in kk and '{14}' in kk and '{19}' in kk: return v
-        if k == 'card' and 'pdWeek' in kk: return v
-def tr_path(L, k):
-    v = old_path(L, k)
-    if k == 'pill':
-        v = re.sub(r'aria-label="[^"]*\{0\} \{1\}[^"]*"><span class="emo">🔥</span><b>\{2\}</b>', 'aria-label="%s"><span class="emo">🔥</span><b>{1}<small>/7</small></b>' % WK[L][0], v)
-        head, rest = v.split('<small>/7</small></b>', 1)
-        return head + '<small>/7</small></b>' + shift(rest, -1)
-    v = re.sub(r'\{0\} \{1\} [^<]*<small>[^<]*</small>', WK[L][1], v, count=1)
-    head, rest = v.split('</small></h3>', 1)
-    return head + '</small></h3>' + shift(rest, -1)
 CYR = re.compile('[А-Яа-яЁё]'); n = 0
 for g, keys in miss.items():
     if g in ('GAMES', 'LEARN_IMG', 'SND_HI'): continue
     for k in keys:
-        if g == 'PATH': tr = tuple(tr_path(L, 'pill' if 'weekBtn' in k else 'card') for L in ('en', 'pt', 'de'))
-        else: tr = W[k]
+        tr = W[k]
         assert not any(CYR.search(x) for x in tr), (k, tr)
         assert all(sorted(re.findall(r'\{\d+\}', x)) == sorted(re.findall(r'\{\d+\}', k)) for x in tr), (k, tr)
         fixed.setdefault(g, {})[k] = list(tr[:2]); fde.setdefault(g, {})[k] = tr[2]; n += 1

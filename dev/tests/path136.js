@@ -2,7 +2,7 @@
 const { chromium, devices } = require('playwright');
 const D = require('path').join(__dirname, 'shots') + '/';
 const PAGE = process.argv[2] || 'http://localhost:8781/govorilki/ru/', TAG = process.argv[3] || 'ru';
-const kid = (name, g, tr, age, fr, stars) => ({ stars, plays: {}, likeG: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: tr, age, friend: fr, onboarded: true, lang: TAG } });
+const kid = (name, g, tr, age, fr, stars) => ({ stars, plays: {}, likeG: {}, book: { title: 'Т', log: {} }, settings: { focus: { sp: 'yes', subj: [] }, name, gender: g, track: tr, age, friend: fr, onboarded: true, lang: TAG } });
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 async function open(b, cur, opt) {
   const fam = { engine: 'device', micOff: true, srOff: true, parentPhone: true, cur, curFam: 'ft', families: { ft: { id: 'ft', name: 'Т', cc: 'PT', kids: ['k1', 'k2'], grands: [] } }, profiles: { k1: kid('Тина', 'f', 'r', 5, 'kitty', 35), k2: kid('Тоша', 'm', 'l', 8, 'tiger', 140) } };

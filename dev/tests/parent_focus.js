@@ -4,7 +4,7 @@
 //            and chess doors still there;
 //   Тоша, 5 — логопедия «нужна»: a short speech block first, ≥ 50 tries of the sound, within 3–6 minutes;
 //   Тим, 6 — «не знаю» (a new child): no speech step; the 1-minute check says normal → still none; a lag → the block.
-// The day's minutes stay inside the table; the week pill counts 5 of 7 days; «Отчёт» shows the focus.
+// The day's minutes (the path only) stay inside the table; nothing outside the path is cut or limited; «Отчёт» shows the focus.
 // node tests/parent_focus.js [base=http://localhost:8781/govorilki/] [phone|laptop] [langs=ru,en,pt,de]
 const { chromium, devices } = require('playwright');
 const path = require('path');
@@ -48,8 +48,18 @@ let bad = 0;
     ok(t.doors.includes('art') && t.doors.includes('chess'), `Тина: doors ${t.doors}`);
     ok(t.min >= TABLE[8][0] && t.min <= TABLE[8][1], `Тина: day ${t.min} min`);
     ok(await run(`GAMES.some(g => g.id === 'syll')`), 'Тина: the speech games are gone from the game');
-    ok((await run(`FOCUS.week()`)) === 5, 'Тина: the week is not 5 of 7');
-    ok(/5\s*\/\s*7/.test(await p.$eval('#weekBtn', e => e.textContent).catch(() => '')), 'Тина: the pill does not say 5/7');
+    ok((await run(`FOCUS.week()`)) === 5, 'Тина: «Отчёт» does not count 5 of 7 days');
+    // nothing is lost: holidays, news, science, stories, journeys, jobs, comics, music, the museum stay one tap away
+    const lost = await run(`(() => { const V = SIMPLE.vis(); return ['learn-news', 'learn-jobs', 'learn-space', 'learn-phys', 'travel', 'comics', 'composers', 'museum', 'tales', 'space'].filter(id => GAMES.some(g => g.id === id && !(g.hide && g.hide())) && !V.has(id)); })()`);
+    ok(!lost.length, 'Тина: lost from the game: ' + lost);
+    ok(await run(`SIMPLE.pool().length >= 12`), 'Тина: door areas were cut');
+    ok(await run(`typeof screenHoliday === 'function'`), 'Тина: holidays gone');
+    // the minutes count only the path; a game opened for interest is free and changes nothing
+    ok(await run(`Math.round(FOCUS.alloc(SIMPLE.must()).total) === FOCUS.minutes()`), 'Тина: minutes count more than the path');
+    const before = JSON.stringify(t.must);
+    await run(`GAMES.find(g => g.id === 'museum').go()`); await p.waitForTimeout(700);
+    ok(!(await p.$('.lt-offer')) && JSON.stringify(await run('SIMPLE.must()')) === before, 'Тина: a free game changed the day');
+    await home();
     await p.screenshot({ path: `${SHOTS}/focus-${lang}-${DEV}-tina.png` });
 
     // Тоша: the speech block, ≥ 50 tries, 3–6 minutes, first on the path

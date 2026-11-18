@@ -27251,11 +27251,10 @@ const PATH = (() => {
   // the old friend-and-plan block becomes the path
   function today(st) {
     const hero = st.querySelector('.hero'), plan = st.querySelector('section.today'); if (!hero || !plan) return;
-    // the week: days of the last 7, not an unbroken run (parent-focus)
-    const s = state(), N = s.ids.length, d = s.done.length, sk = (() => { try { return FOCUS.week(); } catch (e) { return streak(); } })(), sc = stickerCount();
+    const s = state(), N = s.ids.length, d = s.done.length, sk = streak(), sc = stickerCount();
     const box = document.createElement('section'); box.className = 'pd'; box.id = 'pdBox';
     box.innerHTML = `<div class="pd-top">
-        <button class="pd-pill" id="weekBtn" aria-label="Мой календарь: ${sk} из 7 дней"><span class="emo">🔥</span><b>${sk}<small>/7</small></b></button>
+        <button class="pd-pill" id="weekBtn" aria-label="Мой календарь: ${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд"><span class="emo">🔥</span><b>${sk}</b></button>
         <div class="pd-pill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div></div>
       <div class="pd-hero">
         <button class="pd-fr guide-ryz${Q() && P.cos && P.cos.frame ? ' frame-' + P.cos.frame : ''}" id="pdFriend" aria-label="Поздороваться">${friendSVG()}</button>
@@ -27286,7 +27285,7 @@ const PATH = (() => {
   // the right panel of a wide screen: the week, the stars, the family today
   function side(st) {
     if (st.querySelector('.pd-side') || !st.querySelector('#pdBox')) return;
-    const sk = (() => { try { return FOCUS.week(); } catch (e) { return streak(); } })(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
+    const sk = streak(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
     const days = WEEK.map((w, i) => { const k = dayKey(new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i)), on = dayTotal(k) > 0;
       return `<span class="pd-wd ${on ? 'on' : ''} ${k === tk ? 'now' : ''}"><i>${on ? '✓' : ''}</i>${w}</span>`; }).join('');
     const sc = stickerCount(), all = STK().length, left = (sc + 1) * 5 - P.stars;
@@ -27296,7 +27295,7 @@ const PATH = (() => {
       return `<div class="pd-fm"><span class="chip-face">${kidFace(id)}</span><b>${esc(pr.settings.label || pr.settings.name || '…')}</b><span class="pd-bar"><i style="width:${Math.round(d / ids.length * 100)}%"></i></span><small>${d}/${ids.length}</small></div>`;
     };
     const el = document.createElement('aside'); el.className = 'pd-side';
-    el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} из 7 дней<small>за неделю</small></h3><div class="pd-wk">${days}</div></button>
+    el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд<small>эта неделя</small></h3><div class="pd-wk">${days}</div></button>
       <button class="pd-card" id="pdStars"><h3>Звёзды</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc < all ? `ещё ${left} — и новая наклейка` : 'все наклейки собраны!'}</small></button>
       ${KIDS.length > 1 ? `<div class="pd-card pd-fam"><h3>Семья сегодня</h3>${KIDS.map(kid).join('')}</div>` : ''}`;
     // everything else of the tab goes into the middle column
@@ -27637,7 +27636,6 @@ const SIMPLE = (() => {
    - the day's length by age (8–12 / 12–15 / 15–20 / 20–25 minutes) and one game's length (2–3 / 3–4 / 4–5 / up to 10):
      each lesson keeps as many steps as its share of the minutes; a main subject gets twice the share; soroban, the
      puzzle, the drawing and chess doors stay every day, lighter;
-   - the week counts days (5 of the last 7), not an unbroken run;
    - «Отчёт» shows the focus and how often it was done this week. P.settings.focus = { sp: 'yes'|'no'|'unk',
      subj: ['read', 'math', 'chess', 'art'], chk: { d, ans: { lang: { group: 1 clean | 0 not yet } }, intel, lag: ['ru:r'], res: 'ok'|'lag' } }. ---------- */
 const FOCUS = (() => {
@@ -27656,7 +27654,7 @@ const FOCUS = (() => {
   // the dose by age: the day (min–max minutes), one game, the speech block's tries
   function dose(pr = P) {
     const a = ageOf(pr);
-    return a <= 5 ? { day: [8, 12], game: 2.5, gl: '2–3', tries: 50, sp: '3–5' } : a <= 7 ? { day: [12, 15], game: 3.5, gl: '3–4', tries: 80, sp: '5–7' }
+    return a <= 5 ? { day: [8, 12], game: 2.5, gl: '2–3', tries: 50, sp: '3–5' } : a <= 7 ? { day: [12, 15], game: 3.5, gl: '3–4', tries: a === 6 ? 60 : 80, sp: '5–7' }
       : a <= 9 ? { day: [15, 20], game: 4.5, gl: '4–5', tries: 70, sp: '5–7' } : { day: [20, 25], game: 8, gl: 'до 10', tries: 60, sp: '5' };
   }
   const langsOf = (pr = P) => { let l = []; try { l = myLangs(pr); } catch (e) {} l = l.filter(c => NORM[c]); return l.length ? l : [NORM[LANG] ? LANG : 'ru']; };
@@ -27687,27 +27685,34 @@ const FOCUS = (() => {
     const d = dose(pr), k = String(st.key || '');
     if (st.kind === 'breath') return .5; if (st.kind === 'artic') return 1;
     if (k === 'soroban') return ageOf(pr) <= 5 ? 2 : 3; if (k === 'olymp-day') return 3; if (st.kind === 'book') return 0;
-    return id === 'speech' && speech(pr) ? SPG : d.game;
+    return id === 'speech' && speech(pr) ? (little() ? 1.6 : SPG) : d.game;
   }
   const sum = (steps, id) => steps.reduce((a, s) => a + mins(s, id), 0);
   // the speech block of a child who needs it: one warm-up for the tongue, then sound games until the tries are enough
   function speechBlock(full) {
-    const n = dayNo(), d = dose(), want = Math.ceil(d.tries / TRIES);
+    const n = dayNo(), d = dose(), want = Math.ceil(d.tries / TRIES), lil = little();
     const warm = full.find(s => s.kind === 'artic') || full.find(s => s.kind === 'breath');
     const games = full.filter(s => s.kind === 'game' && !/^(ml-|gram)/.test(String(s.key)));
     let snd = []; try { snd = mySounds(); } catch (e) { snd = ['r']; }
     const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()) && !gameOff(id); };
     const pool = [...new Set(snd.flatMap(k => POOL[k] || []))].filter(id => ok(id) && !games.some(s => s.key === id));
     for (let i = 0; games.length < want && i < pool.length; i++) games.push(gameStep(pool[(n + i) % pool.length], 'game'));
-    return [warm, ...games.slice(0, want)].filter(Boolean);
+    // the little ones: three sound games, no separate warm-up (a step of theirs is at most 3 games)
+    return (lil ? games.slice(0, 3) : [warm, ...games.slice(0, want)]).filter(Boolean);
   }
+  // «Давай только одну!» (little-ones): the one game the friend offered, even when it came from the speech block
+  function one(id, steps) {
+    const k = (todayState().short || {})[id], o = steps.filter(x => x.key === k);
+    return o.length ? o : GAMES.some(g => g.id === k) ? [gameStep(k, 'game')] : steps;
+  }
+  const little = () => { try { return LITTLE.on(); } catch (e) { return false; } };
   // the lessons' full plans (before the dose), the minutes each one gets
   let CACHE = null;
   function alloc(ids) {
     const key = [ROOT.cur, dayKey(), ids.join(), JSON.stringify(get()), P.settings.age, JSON.stringify(dayCounts(dayKey())), JSON.stringify(todayState().short || {})].join('|');
     if (CACHE && CACHE.key === key) return CACHE.out;
-    const d = dose(), mn = main(), full = {}, out = { mins: {}, steps: {} };
-    ids.forEach(id => { let p = []; try { p = LITTLE_PLAN(id, lessonPlan0(id)); } catch (e) {} full[id] = id === 'speech' && speech() ? speechBlock(p) : p; });
+    const d = dose(), mn = main(), full = {}, out = { mins: {}, steps: {} }, sh = todayState().short || {};
+    ids.forEach(id => { let p = []; try { p = LITTLE_PLAN(id, lessonPlan0(id)); } catch (e) {} full[id] = sh[id] ? one(id, p) : id === 'speech' && speech() ? speechBlock(p) : p; });
     // fixed: the speech block, soroban, the puzzle, the book; the rest of the day goes to reading and maths, a main one ×2
     const fixed = ids.filter(id => id === 'speech' || !['read', 'math'].includes(id));
     fixed.forEach(id => { const p = id === 'speech' ? full[id] : full[id].slice(0, 1); out.steps[id] = p; out.mins[id] = sum(p, id); });
@@ -27726,7 +27731,7 @@ const FOCUS = (() => {
   function must(ms, ids, m) {
     const sp = speech(), mn = main(), ord = ['speech', 'read', 'math', 'soro', 'puzzle', 'book'];
     let out = ms.filter(id => id !== 'speech' || sp);
-    if (sp && ids.includes('speech') && !out.includes('speech')) out.unshift('speech');
+    if (sp && ids.includes('speech') && !out.includes('speech') && (m || {}).speech !== false) out.unshift('speech');
     mn.forEach(id => { if (ids.includes(id) && !out.includes(id)) out.push(id); });
     const extra = ord.filter(id => ids.includes(id) && !out.includes(id) && id !== 'speech' && (m || {})[id] !== false);
     while (extra.length && alloc(out).total < dose().day[0]) out.push(extra.shift());
@@ -27739,15 +27744,17 @@ const FOCUS = (() => {
   // a lesson's steps today: its share of the minutes
   function plan(id, steps) {
     let ms = []; try { ms = SIMPLE.must(); } catch (e) { return steps; }
+    if ((todayState().short || {})[id]) return one(id, steps);
     if (!ms.includes(id)) return id === 'speech' && speech() ? speechBlock(steps) : steps;
     const a = alloc(ms), p = a.steps[id];
     if (!p || !p.length) return steps;
     return p;
   }
-  // the doors that stay every day, lighter: drawing, and chess from 5; a main one first
-  function doors() { const a = ageOf(), d = ['art', ...(a >= 5 ? ['chess'] : [])], mn = main().filter(x => x === 'art' || x === 'chess'); return [...new Set([...mn, ...d])]; }
+  // with a main subject chosen, the doors that stay every day, lighter: drawing, and chess from 5 (without a choice the
+  // rotation brings them as before)
+  function doors() { if (!main().length) return []; const a = ageOf(), d = ['art', ...(a >= 5 ? ['chess'] : [])], mn = main().filter(x => x === 'art' || x === 'chess'); return [...new Set([...mn, ...d])]; }
   const minutes = () => { try { return Math.round(alloc(SIMPLE.must()).total); } catch (e) { return 0; } };
-  // the week: days with a lesson in the last 7 (a missed day does not reset anything)
+  // for «Отчёт»: days with a lesson in the last 7 (the streak itself is task/wishes)
   function week(pr = P) {
     let n = 0; const d = new Date();
     for (let i = 0; i < 7; i++) { const k = dayKey(d), v = (pr.days || {})[k]; if (v === true || (v && Object.values(v).some(x => x)) || (pr.frozen || []).includes(k)) n++; d.setDate(d.getDate() - 1); }
