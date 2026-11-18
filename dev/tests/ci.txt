@@ -1,0 +1,10 @@
+# Fast browser tests for every task branch and every release (tests/ci.sh runs them after the smoke test).
+# One per line: [VAR=value …] <test file> [arguments]. About 5 minutes with the smoke test on a phone and a laptop.
+# Keep the total under ~5 minutes: add a test only if it is green on main and fast; prefer fewer languages over fewer tests.
+QUICK=1 lang_parity.js                                    # every game a child sees in ru is in en/pt/de too (35 s)
+packs.js                                                  # story packs arrive, everything works offline after one visit (30 s)
+firstrun9.js ci http://localhost:8781/govorilki/ ru skip  # a new family's first minutes up to the first step (20 s)
+privacy_hotfix.js                                         # nothing goes to third parties, the family channel is sealed (50 s)
+simple_day.js http://localhost:8781/govorilki/ phone ru,en   # the day's path, doors, favourite game, 30-day rotation (60 s)
+little_ones.js http://localhost:8781/govorilki/ phone ru,en  # the 4–6 path: nothing to read, three short steps (55 s)
+parent_focus.js http://localhost:8781/govorilki/ phone ru,en  # «Что важно»: speech only when needed, dose and day minutes by age, nothing outside the path cut (40 s)

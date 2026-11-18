@@ -23,7 +23,8 @@ Read CLAUDE.md first. Run commands from `dev/`. Keep your context small: grep th
 ```
 ./build/build_all.sh            # builds into the repo root; must end with «missing 8 in 3 groups» for en, pt, de
 (tests/serve.sh >/dev/null 2>&1 &)
-node tests/smoke.js && node tests/smoke.js http://localhost:8781/govorilki/ laptop
+node build/check_site.js       # translations, page scripts, data packs, secrets (seconds)
+tests/ci.sh                    # smoke on a phone and a laptop + tests/ci.txt (~5 min); the «Checks» action runs the same on your pushed branch
 node tests/<slug>.js            # your own test of what you changed (skill ui-test)
 ```
 Look at the screenshots that matter (Read the png). Fix until everything is green.
@@ -44,7 +45,7 @@ Then `send_message` (claude-code-remote) to the parent session id from your prom
 ```
 [task/<slug>] готово            (или: не готово — <почему>)
 Сделано: <2–4 строки, словами владельца, без кода>
-Проверки: сборка ок (missing 8), smoke ru/en/pt/de ок (телефон, ноутбук), <свой тест> ок
+Проверки: сборка ок (missing 8), check_site ок, tests/ci.sh ок, «Checks» на ветке зелёный, <свой тест> ок
 Заметка для README: **<Заголовок>.** <1–3 предложения для владельца>
 Нужно от владельца: <вопрос> / ничего
 ```

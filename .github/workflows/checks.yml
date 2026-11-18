@@ -1,0 +1,71 @@
+# Checks every task branch and pull request: builds the four languages (into the runner only), checks translations,
+# page scripts, data packs and secrets (dev/build/check_site.js), then runs the smoke test on a phone and a laptop and
+# the fast feature tests of dev/tests/ci.txt in Chromium (dev/tests/ci.sh). About 10 minutes.
+# It never deploys, never pushes and needs no secrets: read-only token, no `secrets.*` anywhere in this file.
+name: Checks
+on:
+  push:
+    branches: ['task/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Built pages untouched (children never commit them; the release builds them)
+        if: startsWith(github.head_ref || github.ref_name, 'task/')
+        run: |
+          git fetch -q --depth=50 origin main
+          B=$(git merge-base origin/main HEAD 2>/dev/null) || { echo "::notice::no merge base with main in the last 50 commits, skipped"; exit 0; }
+          F=$(git diff --name-only "$B" HEAD -- index.html sw.js ru en pt de data)
+          if [ -n "$F" ]; then echo "::error::This task branch changes built pages (only the release builds them):"; echo "$F" | head -20; exit 1; fi
+          echo "ok: no built pages in the branch"
+      - name: Tools
+        working-directory: dev
+        run: |
+          (cd i18n && npm ci --silent)
+          PW=$(cat tests/playwright.version)
+          npm i --no-save --silent --no-audit --no-fund "playwright@$PW"
+          echo "PW=$PW" >> "$GITHUB_ENV"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ runner.os }}-${{ env.PW }}
+      - name: Chromium
+        working-directory: dev
+        run: npx playwright install --with-deps chromium
+      - name: Build en, ru, pt, de
+        working-directory: dev
+        run: |
+          ./build/build_all.sh > build.log 2>&1 || { tail -40 build.log; exit 1; }
+          grep -E "built|packs" build.log
+      - name: Translations, scripts, packs, secrets
+        working-directory: dev
+        run: node build/check_site.js
+      - name: Browser tests (smoke + tests/ci.txt)
+        working-directory: dev
+        run: tests/ci.sh
+      - name: Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shots
+          path: dev/tests/shots/
+          retention-days: 7
+          if-no-files-found: ignore

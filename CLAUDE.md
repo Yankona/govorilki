@@ -32,7 +32,8 @@ every point they raised. Screenshots and screen videos from the owner show real 
 - `build/say_ru.py` → `site-data/say-ru.json` (how the voices pronounce Russian); `build/say_manual.json` is the hand part.
 - `build/gen_stories.py` + `stories/<batch>/*.json` → the STORIES block of the game.
 - `site-add/` — new files for the site (pictures, music) at their site paths; the release copies them into `$SITE`.
-- `tests/` — Playwright (`serve.sh`, `smoke.js`, feature tests). `tools/` — voice checks, tts caches, Piper phonemizer
+- `tests/` — Playwright (`serve.sh`, `smoke.js`, feature tests; `ci.sh` runs smoke + the fast list `ci.txt`, used by the
+  «Checks» action on every `task/**` push and PR, and by the release). `build/check_site.js` — checks of the built site without a browser. `tools/` — voice checks, tts caches, Piper phonemizer
   (`phsrv`), pictures.
 
 ## How the game works (and what has bitten us)

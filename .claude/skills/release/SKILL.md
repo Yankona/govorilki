@@ -8,9 +8,11 @@ From `dev/`, on an up-to-date `main` (`git pull -q origin main`), with the child
 
 1. **Version**: N = the live number + 1 (`grep -o 'govorilki-v[0-9]*' ../sw.js`). One version per batch.
 2. **Build and check**: `build/release_check.sh N` — add `--voice` if Russian texts changed (new text, stories,
-   `say_manual.json`); it needs `.venv-racc` (skill `voice-stress`) and ~2 min.
+   `say_manual.json`); it needs `.venv-racc` (skill `voice-stress`); about 6 min (build 40 s, browser tests 5 min).
    - exit 3 → untranslated strings: skill `translate`, then run it again;
-   - exit 4 → a smoke test failed: fix, then run it again;
+   - exit 4 → a browser test failed (smoke or tests/ci.txt; the failing test's last lines are printed): fix, then run it again;
+   - exit 5 → the site check failed (build/check_site.js: a script that does not parse, a missing or stale data pack, a secret): fix, then run it again;
+   - `build/publish.sh` refuses a version that release_check did not pass (`dev/.release-ok`);
    - also run the feature tests the children wrote (`tests/<slug>.js`) against the served site.
 3. **README note** at the top of `../README.md`, right before the latest note (the first line that starts with `**`
    and has `(версия …).**`). Russian, for the owner, no code words:
