@@ -2002,6 +2002,11 @@ body:is(.look-dark,.quest) .bl-tale .ss.bl-on{background:#FFE58A;box-shadow:0 0 
 .mb-ov.mb-night .mb-pm{background:#5B55A0;box-shadow:0 5px 0 #383370}.mb-ov.mb-night .mb-box input{background:#151933;border-color:#3A4170;color:#E6E7F7}
 .mb-ov.mb-night *{animation:none!important;transition:none!important}
 .gd-book{font-weight:700}
+/* the chosen chip of the book (pages, «понравилось?», the bookshelf): body.look-calm .chip wiped the ring of .chip.sel,
+   so a tap left no mark (the owner: «понравилось не отмечается») */
+:is(#likes,#pgs,.mb-seg,.bk-days) .chip.sel,body.look-calm :is(#likes,#pgs,.mb-seg,.bk-days) .chip.sel{background:#FFE7A0;color:#2A2346;box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}
+body.look-calm .bk-act.sel,.bk-act.sel{background:var(--leaf);color:#fff;box-shadow:0 3px 0 #1E7A48,inset 0 0 0 3px #7BE0A8}
+body .mb-ov.mb-night :is(#mbLike,#mbQ,#mbMode,#likes) .chip.sel{background:#8C84C8;color:#14172C;box-shadow:0 3px 0 #383370,inset 0 0 0 3px #C9C3F5}
 /* MYBOOK-CSS-END */
 .bk-ov{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:var(--shade)}
 .bk-box{position:relative;display:flex;flex-direction:column;gap:8px;width:min(100%,460px);max-height:calc(100% - 16px);overflow:auto;padding:22px 18px 18px;border-radius:24px;background:var(--paper);color:var(--ink);text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
@@ -7442,7 +7447,12 @@ function screenBook() {
   /* WEEK-END */
   $('#pgs').onclick = ev => { const b = ev.target.closest('.mn'); if (!b) return; pages = +b.dataset.p; $('#pageIn').value = ''; $$('#pgs .mn').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
   $('#pageIn').addEventListener('input', ev => { pages = Math.max(0, Math.round(+ev.target.value || 0)); $$('#pgs .mn').forEach(x => x.classList.remove('sel')); });
-  $('#likes').onclick = ev => { const b = ev.target.closest('.lk'); if (!b) return; like = +b.dataset.l; $$('#likes .lk').forEach(x => x.classList.toggle('sel', x === b)); sfx.tick(); };
+  $('#likes').onclick = ev => {
+    const b = ev.target.closest('.lk'); if (!b) return; like = +b.dataset.l;
+    $$('#likes .lk').forEach(x => { x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', x === b); }); sfx.tick();
+    // a day already written: the smile is kept at once, no «Обновить запись» needed
+    const x = P.book.log[sel]; if (x) { x.like = like; MYBOOK.likeSet(like); save(); }
+  };
   $('#dictBtn').onclick = () => { sfx.pop(); screenDict({ back: screenBook }); };
   try { MYBOOK.bk(); MYBOOK.page($('.book-wrap')); } catch (e) {}
   $('#bkBackBtn').onclick = () => grownUp(() => { const b = $('#bkBack'); b.hidden = false; $('#bkBackBtn').hidden = true; bookBackfill(b); b.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 'Вписать чтение за прошлый день может только взрослый.');
@@ -25339,7 +25349,7 @@ const GUIDE = (() => {
       m0: s0.m || 0, so0: s0.so || 0, ol0: s0.ol || 0, w0: s0.w || 0, rl0: s0.rl || 0, cs0: s0.cs || 0, ai0: s0.ai || 0,
       mS: last ? 0 : gs.m && now.m ? daysSince(gs.m[1]) : 0, rS: last ? 0 : gs.rl && now.rl ? daysSince(gs.rl[1]) : 0,
       ru: now.ru || 0, ru0: s0.ru || 0, ...(() => { try { if (!now.ru) return {}; const m = RUME.mon(pr); return { mn: m.n || 0, mc: m.cr || 0, mw: m.wr || 0, ml0: m.l0 || 0, mk: RUME.weakK(pr) }; } catch (e) { return {}; } })(),
-      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, ...(() => { try { const b = MYBOOK.bk(pr); return { bt: cleanS(b.title, 60), bp: MYBOOK.weekPages(pr, g.w), bs: last ? 0 : MYBOOK.streakOf(pr) }; } catch (e) { return {}; } })(), sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
+      kp: (((pr.guide || {}).pj) || {})[g.w] || '', sy: pr.sylBest || 0, ...(() => { try { const b = MYBOOK.bk(pr); return { bt: cleanS(b.title, 60), bp: MYBOOK.weekPages(pr, g.w), bs: last ? 0 : MYBOOK.streakOf(pr), bl: b.like != null ? +b.like + 1 : 0 }; } catch (e) { return {}; } })(), sp: les.speech || 0, rd: (les.read || 0) + (les.book || 0), mt: (les.math || 0) + (les.soro || 0) + (les.puzzle || 0) };
   }
   // this week and the last full week
   function digest(pr) {
@@ -25360,7 +25370,7 @@ const GUIDE = (() => {
       m: n('m', 16), so: n('so', 99), ol: n('ol', 9999), oll: n('oll', 8), wpm: n('wpm', 999), rl: n('rl', 9), cs: n('cs', 99), ai: n('ai', 99),
       m0: n('m0', 16), so0: n('so0', 99), ol0: n('ol0', 9999), w0: n('w0', 999), rl0: n('rl0', 9), cs0: n('cs0', 99), ai0: n('ai0', 99),
       ru: n('ru', 3333), ru0: n('ru0', 3333), mn: n('mn', 99), mc: n('mc', 99), mw: n('mw', 999), ml0: n('ml0', 3333), mk: n('mk', 5),
-      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), bt: cleanS(x.bt, 60), bp: n('bp', 9999), bs: n('bs', 999), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
+      kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), bt: cleanS(x.bt, 60), bp: n('bp', 9999), bs: n('bs', 999), bl: n('bl', 3), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
     if (!deep && x.last) o.last = clean(x.last, true);
     return o;
   }
@@ -25420,7 +25430,7 @@ const GUIDE = (() => {
     return L.slice(0, 2);
   }
   // «📚 Книга: „…“, прочитано N страниц за неделю, X дней подряд» (my-book)
-  const bookLine = d => d && (d.bt || d.bp) ? `📚 Книга${d.bt ? `: «${d.bt}»` : ''}, прочитано ${d.bp || 0} ${plural(d.bp || 0, ['страница', 'страницы', 'страниц'])} за неделю${d.bs ? `, ${d.bs} ${plural(d.bs, ['день', 'дня', 'дней'])} подряд` : ''}` : '';
+  const bookLine = d => d && (d.bt || d.bp) ? `📚 Книга${d.bt ? `: «${d.bt}»` : ''}${d.bl ? ' ' + ['😐', '🙂', '😍'][d.bl - 1] : ''}, прочитано ${d.bp || 0} ${plural(d.bp || 0, ['страница', 'страницы', 'страниц'])} за неделю${d.bs ? `, ${d.bs} ${plural(d.bs, ['день', 'дня', 'дней'])} подряд` : ''}` : '';
   const actLine = d => `🎯 ${d.d} ${plural(d.d, ['день', 'дня', 'дней'])} из 7${d.min ? ` · ⏱️ ${d.min} мин` : ''}${d.st ? ` · ⭐ ${d.st}` : ''}`;
   // the weekly report: one line per area with ↑ (a level rose), = (practised, same level) — areas not touched are left out
   const AREAS = REPORT_AREAS;
@@ -26027,9 +26037,12 @@ const MYBOOK = (() => {
     e.pages = (+e.pages || 0) + pages; if (mins) e.mins = (+e.mins || 0) + mins; if (ch) e.ch = (+e.ch || 0) + ch;
     e.like = add.like != null && add.like >= 0 ? add.like : (e.like != null ? e.like : null);
     if (was && was.late && !replace) e.late = was.late;
+    if (e.like != null) b.like = e.like;
     b.log[k] = e; if (!b.start) b.start = k;
     if (!was) { const c = { ...dayCounts(k) }; c.book = (c.book || 0) + 1; P.days[k] = c; }
     try { P.readDays = P.readDays || {}; P.readDays[k] = 1; } catch (e2) {}
+    // «book:logged»: the day's bar and streak update at once (detail: the day, today's totals, the day's first log)
+    try { document.dispatchEvent(new CustomEvent('book:logged', { detail: { day: k, first: !was, ...e } })); } catch (e3) {}
     return !was;
   }
   // the stars of the day's first log; a log after midnight for the evening before brings its fine back
@@ -26103,7 +26116,7 @@ const MYBOOK = (() => {
       ov.querySelector('#mbU').textContent = unit();
       ov.querySelector('#mbQ').innerHTML = QK[mode].map(x => `<button class="chip ${x === n ? 'sel' : ''}" data-q="${x}">${mode === 'c' ? `${x} ${plural(x, ['глава', 'главы', 'глав'])}` : `${x} ${mode === 'p' ? pgA(x) : 'мин'}`}</button>`).join('');
       ov.querySelectorAll('#mbMode [data-m]').forEach(x => x.classList.toggle('sel', x.dataset.m === mode));
-      ov.querySelectorAll('#mbLike [data-l]').forEach(x => x.classList.toggle('sel', +x.dataset.l === like));
+      ov.querySelectorAll('#mbLike [data-l]').forEach(x => { x.classList.toggle('sel', +x.dataset.l === like); x.setAttribute('aria-pressed', +x.dataset.l === like); });
     };
     draw();
     ov.querySelector('#mbMode').onclick = e => { const x = e.target.closest('[data-m]'); if (!x) return; mode = x.dataset.m; n = 0; tick(); draw(); };
@@ -26160,14 +26173,14 @@ const MYBOOK = (() => {
     ov.querySelector('#mbYes').onclick = () => { ov.remove(); finishBook(); };
   }
   function finishBook() {
-    const b = bk(), nt = night(), it = { t: b.title, by: b.by || '', id: b.id || '', e: b.e || '', start: b.start || '', end: dayKey(), pages: +b.read || 0 };
+    const b = bk(), nt = night(), it = { t: b.title, by: b.by || '', id: b.id || '', e: b.e || '', start: b.start || '', end: dayKey(), pages: +b.read || 0, like: b.like != null ? b.like : null };
     b.shelf = [it, ...(b.shelf || [])].slice(0, 300);
     const got = P.shelfGot = Array.isArray(P.shelfGot) ? P.shelfGot : [];
     let stars = 5;
     if (b.id) { P.shelf = P.shelf && typeof P.shelf === 'object' ? P.shelf : {}; P.shelf[b.id] = 'read'; if (got.includes(b.id)) stars = 2; else got.push(b.id); }
     const before = stickerCount(); P.stars += stars; weekAdd(P, stars);
     const after = stickerCount(), stk = after > before ? STK()[after - 1] : null;
-    Object.assign(b, { title: '', by: '', id: '', e: '', total: 0, read: 0, ch: 0, start: '' });
+    Object.assign(b, { title: '', by: '', id: '', e: '', total: 0, read: 0, ch: 0, start: '', like: null });
     save(); const sn = $('#starN'); if (sn) sn.textContent = P.stars;
     const ov = overlay(`<div class="mb-shelf1">${cover(it, true)}</div><h2>Книга прочитана!</h2><p class="mb-res">«${esc(it.t)}»${it.pages ? ` · ${it.pages} ${pgW(it.pages)}` : ''} · +${stars} ${ICON.star}</p>
       ${stk ? `<div class="new-sticker"><span class="emo">${stickerHTML(stk)}</span>Новая наклейка!</div>` : ''}
@@ -26193,7 +26206,7 @@ const MYBOOK = (() => {
       <input id="mbP" type="number" inputmode="numeric" min="1" max="3000" placeholder="Сколько страниц в книге (можно не писать)">
       <button class="big" id="mbSet">Читаю эту книгу</button>`, 'Какую книгу читаешь?');
     const set = o => {
-      const b = bk(); Object.assign(b, { title: o.t, by: o.by || '', id: o.id || '', e: o.e || '', total: +o.total || 0, read: 0, ch: 0, start: logDay() });
+      const b = bk(); Object.assign(b, { title: o.t, by: o.by || '', id: o.id || '', e: o.e || '', total: +o.total || 0, read: 0, ch: 0, start: logDay(), like: null });
       if (o.id) { P.shelf = P.shelf && typeof P.shelf === 'object' ? P.shelf : {}; P.shelf[o.id] = 'now'; }
       save(); ov.remove(); tick(); redrawCard();
       (night() ? say : talk)(`Читаем: ${o.t}. Отмечай каждый вечер, сколько ${G('прочитала', 'прочитал')}.`);
@@ -26212,7 +26225,7 @@ const MYBOOK = (() => {
       ${b.title ? `<div class="mb-hd">${cover(b)}<div><b>${esc(b.title)}</b>${b.by ? `<small>${esc(b.by)}</small>` : ''}<small>прочитано ${+b.read || 0}${b.total ? ` из ${b.total}` : ''} ${pgW(b.total || b.read || 0)}</small></div></div>` : '<p>Книга пока не выбрана.</p>'}
       <div class="mb-seg"><button class="chip" id="mbPgLog">📖 ${G('Я почитала', 'Я почитал')}</button>${b.title ? `<button class="chip" id="mbPgFin">🏁 ${G('Дочитала', 'Дочитал')}!</button>` : ''}<button class="chip" id="mbPgPick">🔄 Другая книга</button></div>
       <h3 class="mb-lb">🗄️ Мой книжный шкаф${sh.length ? ` · ${sh.length}` : ''}</h3>
-      ${sh.length ? `<div class="mb-list mb-done">${sh.slice(0, 60).map(x => `<span class="mb-bk">${cover(x)}<b>${esc(x.t)}</b><small>${x.pages ? `${x.pages} ${pgW(x.pages)}` : esc(x.by || '')}</small></span>`).join('')}</div>` : `<p class="muted">${G('Здесь будут книги, которые ты дочитала.', 'Здесь будут книги, которые ты дочитал.')}</p>`}</section>`;
+      ${sh.length ? `<div class="mb-list mb-done">${sh.slice(0, 60).map(x => `<span class="mb-bk">${cover(x)}<b>${esc(x.t)}</b><small>${x.like != null && LIKE_E[x.like] ? LIKE_E[x.like] + ' ' : ''}${x.pages ? `${x.pages} ${pgW(x.pages)}` : esc(x.by || '')}</small></span>`).join('')}</div>` : `<p class="muted">${G('Здесь будут книги, которые ты дочитала.', 'Здесь будут книги, которые ты дочитал.')}</p>`}</section>`;
   }
   function page(root) {
     if (!root) return;
@@ -26222,7 +26235,13 @@ const MYBOOK = (() => {
     el.querySelector('#mbPgPick').onclick = () => { tick(); pickDialog(); };
     const f = el.querySelector('#mbPgFin'); if (f) f.onclick = () => { tick(); finishDialog(); };
   }
-  return { on, bk, card, record, reward, logDialog, pickDialog, finishDialog, streakOf, weekPages, night, logDay, page, noteOf };
+  // «понравилось?» of the book now (the last smile given), kept with the book and on the shelf
+  function likeSet(l) { const b = bk(); if (l >= 0 && b.title) b.like = l; }
+  const LIKE_E = ['😐', '🙂', '😍'];
+  // for the day's bar and streak (task/wishes): was the book logged for this evening, and how much
+  const bookToday = (pr = P) => { const e = bk(pr).log[logDay()]; return e ? { pages: +e.pages || 0, mins: +e.mins || 0, ch: +e.ch || 0, like: e.like != null ? e.like : null } : null; };
+  const bookLoggedToday = (pr = P) => !!bookToday(pr);
+  return { bookToday, bookLoggedToday, LIKE_E, likeSet, on, bk, card, record, reward, logDialog, pickDialog, finishDialog, streakOf, weekPages, night, logDay, page, noteOf };
 })();
 /* MYBOOK-END */
 // audio fairy tales (Russian only): texts free of copyright, each in its own file under tales/, fetched when opened and

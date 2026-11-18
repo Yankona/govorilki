@@ -13,6 +13,7 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const SUB = { ru: 'ru/', en: '', pt: 'pt/', de: 'de/' };
 const kid = (name, g, age, fr, lang, track, look, book) => ({ stars: 20, plays: { draw: 6 }, learn: {}, days: {}, book, settings: { name, gender: g, track, age, friend: fr, onboarded: true, lang, look } });
 const bad = [];
+const looksChosen = (p, sel, other) => p.evaluate(([a, b]) => { const s = x => { const c = getComputedStyle(document.querySelector(x)); return c.backgroundColor + c.boxShadow; }; return s(a) !== s(b); }, [sel, other]);
 const ok = (c, msg) => { if (!c) bad.push(msg); };
 async function ctx(b, lang, when, look) {
   const y = new Date(when); y.setDate(y.getDate() - 1);
@@ -55,11 +56,16 @@ async function ctx(b, lang, when, look) {
     const s0 = await run('P.stars');
     await p.click('#mbLog'); await p.waitForTimeout(400);
     ok(!!(await p.$('.mb-ov.mb-night')), `${tag}: dialog not calm`);
+    await p.evaluate(() => { window.__ev = []; document.addEventListener('book:logged', e => window.__ev.push(e.detail)); });
     await p.click('#mbQ [data-q="10"]'); await p.click('#mbLike [data-l="2"]'); await p.fill('#mbNote', 'Призрак и пятно');
+    ok(await looksChosen(p, '#mbLike [data-l="2"]', '#mbLike [data-l="0"]'), `${tag}: «понравилось» not visibly chosen (card)`);
     await p.screenshot({ path: `${SHOTS}/mybook-${lang}-${DEV}-log.png` });
     await p.click('#mbSave'); await p.waitForTimeout(600);
     ok(await run('P.stars') === s0 + 3, `${tag}: stars ${s0} → ${await run('P.stars')}`);
     ok(await run(`P.book.log[dayKey()].pages === 10 && dayCounts(dayKey()).book === 1 && readOn(dayKey())`), `${tag}: day not counted`);
+    const ev = await p.evaluate(() => window.__ev);
+    ok(ev.length === 1 && ev[0].first && ev[0].pages === 10, `${tag}: book:logged ${JSON.stringify(ev)}`);
+    ok(await run(`MYBOOK.bookLoggedToday(P) && MYBOOK.bookToday(P).pages === 10 && P.book.like === 2`), `${tag}: bookToday / like`);
     ok(await run('MYBOOK.streakOf()') === 2, `${tag}: streak ${await run('MYBOOK.streakOf()')}`);
     ok(await run(`!JSON.stringify(ROOT).includes('Призрак')`) && await run(`MYBOOK.noteOf(dayKey()) === 'Призрак и пятно'`), `${tag}: note not phone-only`);
     await p.waitForTimeout(2000);
@@ -69,14 +75,22 @@ async function ctx(b, lang, when, look) {
     await p.click('#mbOk'); await p.waitForTimeout(300);
     // the parents' report
     const d = await run('GUIDE.digest(P)');
-    ok(d.bp === 17 && d.bs === 2 && d.bt, `${tag}: digest ${JSON.stringify([d.bt, d.bp, d.bs])}`);
+    ok(d.bp === 17 && d.bs === 2 && d.bt && d.bl === 3, `${tag}: digest ${JSON.stringify([d.bt, d.bp, d.bs])}`);
     await run(`screenParents('guide')`); await p.waitForTimeout(900);
     const line = await p.$eval('.gd-book', e => e.textContent).catch(() => '');
-    ok(/17/.test(line) && /2/.test(line), `${tag}: report line «${line}»`);
+    ok(/17/.test(line) && /2/.test(line) && /😍/.test(line), `${tag}: report line «${line}»`);
     if (line) { await p.$eval('.gd-book', e => e.scrollIntoView({ block: 'center' })); await p.screenshot({ path: `${SHOTS}/mybook-${lang}-${DEV}-report.png` }); }
+    await run('screenBook()'); await p.waitForTimeout(600);
+    await p.click('#likes .lk[data-l="1"]'); await p.waitForTimeout(200);
+    ok(await looksChosen(p, '#likes .lk[data-l="1"]', '#likes .lk[data-l="0"]'), `${tag}: «понравилось» not visibly chosen (book page)`);
+    await p.screenshot({ path: `${SHOTS}/mybook-${lang}-${DEV}-like.png` });
+    await p.reload(); await p.waitForTimeout(1500);
+    ok(await run(`P.book.log[dayKey()].like === 1 && P.book.like === 1`), `${tag}: like lost after reload ${await run('JSON.stringify(P.book.log[dayKey()])')}`);
+    await run('screenBook()'); await p.waitForTimeout(600);
+    ok(!!(await p.$('#likes .lk.sel[data-l="1"]')), `${tag}: like not shown after reload`);
     // finish the book → the shelf → the next book
     await home(); await p.click('#mbLog'); await p.waitForTimeout(300); await p.click('#mbFin'); await p.waitForTimeout(300); await p.click('#mbYes'); await p.waitForTimeout(500);
-    ok(await run('P.book.shelf.length === 1 && !P.book.title'), `${tag}: not on the shelf`);
+    ok(await run('P.book.shelf.length === 1 && !P.book.title && P.book.shelf[0].like === 1'), `${tag}: not on the shelf`);
     await p.click('#mbNext'); await p.waitForTimeout(400);
     await p.screenshot({ path: `${SHOTS}/mybook-${lang}-${DEV}-pick.png` });
     await p.click('.mb-list .mb-bk'); await p.waitForTimeout(400);
@@ -99,6 +113,9 @@ async function ctx(b, lang, when, look) {
       await x.run(`switchKid('k2')`); await x.p.waitForTimeout(600); await x.run('goHome()'); await x.p.waitForTimeout(600);
       ok(!!(await x.p.$('#mbCard:not(.mb-night)')), `${tag}/${look}: no daytime card`);
       if (lang === 'ru' || look === 'bright') { await x.p.$eval('#mbCard', e => e.scrollIntoView({ block: 'center' })).catch(() => {}); await x.p.screenshot({ path: `${SHOTS}/mybook-${lang}-${DEV}-day-${look}.png` }); }
+      await x.run('screenBook()'); await x.p.waitForTimeout(600); await x.p.click('#likes .lk[data-l="2"]'); await x.p.waitForTimeout(200);
+      ok(await looksChosen(x.p, '#likes .lk[data-l="2"]', '#likes .lk[data-l="0"]'), `${tag}/${look}: «понравилось» not visibly chosen`);
+      if (lang === 'ru') await x.p.screenshot({ path: `${SHOTS}/mybook-${lang}-${DEV}-like-${look}.png` });
       ok(!x.errs.length, `${tag}/${look}: page errors ${x.errs.slice(0, 3)}`);
       await x.c.close();
     }

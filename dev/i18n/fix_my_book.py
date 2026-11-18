@@ -8,6 +8,7 @@ W = {
   'Ещё один день с книгой! Плюс три звёздочки. Читай с удовольствием.': ('One more day with a book! Plus three stars. Enjoy your reading.', 'Mais um dia com um livro! Mais três estrelas. Lê com gosto.', 'Noch ein Tag mit einem Buch! Drei Sterne dazu. Viel Spaß beim Lesen.'),
   '📚 Книга{0}, прочитано {1} {2} за неделю{3}': ('📚 Book{0}, {1} {2} read this week{3}', '📚 Livro{0}, {1} {2} lidas esta semana{3}', '📚 Buch{0}, {1} {2} gelesen diese Woche{3}'),
   'страница': ('page', 'página', 'Seite'), 'страницы': ('pages', 'páginas', 'Seiten'), 'страниц': ('pages', 'páginas', 'Seiten'), 'страницу': ('page', 'página', 'Seite'),
+  '📚 Книга{0}{1}, прочитано {2} {3} за неделю{4}': ('📚 Book{0}{1}, {2} {3} read this week{4}', '📚 Livro{0}{1}, {2} {3} lidas esta semana{4}', '📚 Buch{0}{1}, {2} {3} gelesen diese Woche{4}'),
   ', {0} {1} подряд': (', {0} {1} in a row', ', {0} {1} seguidos', ', {0} {1} am Stück'),
   'глава': ('chapter', 'capítulo', 'Kapitel'), 'главы': ('chapters', 'capítulos', 'Kapitel'), 'глав': ('chapters', 'capítulos', 'Kapitel'), 'главу': ('chapter', 'capítulo', 'Kapitel'),
   ' · 🌙 перед сном': (' · 🌙 bedtime', ' · 🌙 antes de dormir', ' · 🌙 vor dem Schlafen'),
