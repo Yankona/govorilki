@@ -3434,6 +3434,17 @@ body.simple .home-t .stage{padding-bottom:110px}
 .wi-l li.on{background:color-mix(in srgb,var(--sun) 22%,var(--paper))}.wi-l small{display:block;font:700 13px var(--f-body);color:var(--ink-soft)}
 .wi-pl{margin:4px 0 10px;padding-left:4px;list-style:none;display:flex;flex-direction:column;gap:4px;font:700 15px var(--f-body)}
 /* WISH-CSS-END */
+/* DAYG-CSS: life steps, the book, the favourites picker, tags */
+.dg-life{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.dg-l{position:relative;display:flex;align-items:center;gap:8px;border:2px dashed var(--line-strong);background:var(--paper);color:var(--ink);border-radius:18px;padding:8px 14px;font:800 15px var(--f-body);cursor:pointer}
+.dg-l .emo{font-size:24px}.dg-l.on{border-style:solid;border-color:var(--leaf);background:color-mix(in srgb,var(--leaf) 14%,var(--paper))}.dg-l i{font-style:normal;color:var(--leaf);font-weight:900}
+.dg-pop{position:absolute;right:-6px;top:-14px;font-size:28px;animation:ltPop .6s cubic-bezier(.3,1.6,.5,1)}
+.dg-fire{font-size:72px;text-align:center}
+.sd-tag{font:800 11px var(--f-body);color:var(--ink-soft)}
+.sd-ask{position:relative;display:flex;flex-direction:column;gap:6px;align-items:flex-start;background:color-mix(in srgb,var(--sun) 20%,var(--paper));border-radius:20px;padding:14px 16px}
+.sd-ask b{font:900 19px var(--f-body);color:var(--ink)}.sd-ask small{font:700 14px var(--f-body);color:var(--ink-soft)}.sd-ask .ibtn{position:absolute;right:8px;top:8px}
+.sd-pick{display:flex;flex-direction:column;gap:14px;width:100%;max-width:720px;margin:0 auto}.sd-pick .sd-doors{width:100%;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}.sd-door.pk{outline:4px solid var(--tiger);outline-offset:2px}
+/* DAYG-CSS-END */
 /* TALK-CSS: the friend in the corner and the little talk */
 .tk-fab{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:68px;height:68px;border-radius:50%;border:0;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),0 6px 18px rgba(0,0,0,.18);padding:6px;cursor:pointer}
 .tk-fab .tk-face svg{width:56px;height:56px;display:block}
@@ -5388,7 +5399,7 @@ function goHome() {
   if (!fam() || !KIDS.length) { const c = LIGA_HASH; LIGA_HASH = null; screenWelcome({ liga: c || '' }); return; }
   if (LIGA_HASH) { const c = LIGA_HASH; LIGA_HASH = null; screenLeague(c); return; }
   // a step left halfway: the little ones get a gentle offer (little-ones)
-  if (ACTIVE) { try { LITTLE.skipped(ACTIVE); } catch (e) {} }
+  if (ACTIVE) { try { EVT.log('leave', ACTIVE); } catch (e) {} try { LITTLE.skipped(ACTIVE); } catch (e) {} }
   newScreen(); ACTIVE = null; BATTLE = null; HOW_CUR = null; howWrap();
   if (GPLAY && (GPLAY.kid !== ROOT.cur || GPLAY.fam !== ROOT.curFam || GUEST)) GPLAY = null;
   P = GPLAY ? GPLAY.p : ROOT.profiles[ROOT.cur]; gplayBanner(); famPeople(); takeBattleHash(); if (Q()) useFreezes();
@@ -27205,7 +27216,9 @@ const PATH = (() => {
   function line(s) {
     const N = s.ids.length, d = s.done.length;
     let t;
-    if (!d) t = Q() ? `Миссия дня: ${N} ${plural(N, ['шаг', 'шага', 'шагов'])}. Погнали!` : `Привет${nameBit()}! Сегодня ${N} ${plural(N, ['занятие', 'занятия', 'занятий'])}. Начнём?`;
+    // the plan in the child's words: the path, then the favourites (simple-day)
+    const pl = (() => { try { return SIMPLE.planLine(); } catch (e) { return ''; } })();
+    if (!d) t = pl ? (Q() ? '' : `Привет${nameBit()}! `) + pl : Q() ? `Миссия дня: ${N} ${plural(N, ['шаг', 'шага', 'шагов'])}. Погнали!` : `Привет${nameBit()}! Сегодня ${N} ${plural(N, ['занятие', 'занятия', 'занятий'])}. Начнём?`;
     else if (!s.all) t = `Уже ${d} из ${N}! Дальше: ${LS()[s.now].name}.`;
     else if (!s.opened) t = 'Всё сделано! Открывай сундук!';
     else t = Q() ? 'Миссия выполнена! Двери дня открыты.' : `Тропа пройдена${nameBit()}! Двери дня открыты.`;
@@ -27366,7 +27379,7 @@ const SIMPLE = (() => {
   const DAYS_IN = ['в воскресенье', 'в понедельник', 'во вторник', 'в среду', 'в четверг', 'в пятницу', 'в субботу'];
   let ALLG = false, FAV_ON = false, FT = null, CACHE = null;
 
-  const cfg = () => { const d = (P && P.settings.day) || {}; return { on: d.on !== false, k: d.k || ((P.settings.age || 6) <= 6 ? 2 : 3), fav: d.fav === undefined ? 10 : d.fav, off: d.off || [], must: d.must || {}, favGame: d.favGame || '' }; };
+  const cfg = () => { const d = (P && P.settings.day) || {}; return { week: d.week || null, on: d.on !== false, k: d.k || ((P.settings.age || 6) <= 6 ? 2 : 3), fav: d.fav === undefined ? 10 : d.fav, off: d.off || [], must: d.must || {}, favGame: d.favGame || '' }; };
   const setCfg = (k, v) => { P.settings.day = { ...(P.settings.day || {}), [k]: v }; CACHE = null; save(); };
   const on = () => { try { return cfg().on && !ALLG && !GPLAY; } catch (e) { return false; } };
   // the lessons that make the path, in order, and the ones «по желанию»
@@ -27375,7 +27388,9 @@ const SIMPLE = (() => {
     // the little ones: three steps by default (little-ones); a grown-up's choice wins
     let lil = false; try { lil = LITTLE.on() && !Object.keys(m).length; } catch (e) {}
     const ms = lil ? LITTLE.must(ids) : ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
-    return ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
+    const out = ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
+    // the hardest step between two easier ones (day-goal)
+    try { return DAYG.sandwich(out); } catch (e) { return out; }
   }
   const opt = () => { const ms = must(); return Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); };
 
@@ -27393,20 +27408,31 @@ const SIMPLE = (() => {
   const area = id => AREAS.find(a => a.id === id);
   const likes = () => [...new Set([...(P.settings.likes || []).map(l => LIKE_AREA[l]), ...(() => { try { return WISH.moreAreas(); } catch (e) { return []; } })()].filter(Boolean))];
   const listens = () => { try { return LITTLE.listen(); } catch (e) { return false; } };
+  // «Моё любимое» (the owner, 18.11: «всё, что я люблю, я не могу получить каждый день»): 2–4 areas the child picked,
+  // else what «Я люблю» says; open every day after the path, never «через N дней». The rotation is one surprise door.
+  function favs() {
+    const pl = pool().map(a => a.id);
+    let f = (Array.isArray(P.favs) ? P.favs : likes().slice(0, 3)).filter(id => pl.includes(id));
+    if (!f.length) f = ['art', 'books'].filter(id => pl.includes(id));
+    return f.slice(0, 4);
+  }
+  const isSurprise = id => !!(P.doorsToday && P.doorsToday.d === dayKey() && P.doorsToday.ids.includes(id) && !favs().includes(id));
   function pool() { const V = vis(), c = cfg(), age = P.settings.age || 6, ls = listens(); return AREAS.filter(a => age >= (a.age || 0) && !c.off.includes(a.id) && !(ls && a.id === 'comics') && gamesOf(a, V).length); }
   function rng(seed) { let h = 2166136261; for (const ch of String(seed)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619); h = h >>> 0 || 1; return () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return (h % 1e6) / 1e6; }; }
   // the doors of each day from EPOCH to `upto`: highest score wins; a long wait (9+ days) comes first; liked areas
   // wait less; never the door of yesterday; doors of one day from different groups when there is a choice
   function plan(upto, opts = {}) {
-    const c = { ...cfg(), ...opts }, A = opts.pool || pool(), lk = opts.likes || likes(), kid = opts.kid || ROOT.cur || 'k', k = Math.min(c.k, A.length);
-    const lil = opts.little !== undefined ? opts.little : (() => { try { return LITTLE.on(); } catch (e) { return false; } })();
-    const key = [kid, upto, c.k, A.map(a => a.id).join(), lk.join(), lil].join('|');
+    // the surprise door: one area a day that is not a favourite, the least tried first; no door two days running
+    const fv = opts.favs || favs(), A = (opts.pool || pool()).filter(a => !fv.includes(a.id)), lk = opts.likes || likes(), kid = opts.kid || ROOT.cur || 'k', k = Math.min(opts.k || 1, A.length);
+    const seen = P.doorSeen || {};
+    const lil = (opts.little !== undefined ? opts.little : (() => { try { return LITTLE.on(); } catch (e) { return false; } })()) && !fv.some(id => (area(id) || {}).g === 'c');
+    const key = [kid, upto, k, A.map(a => a.id).join(), lk.join(), lil, fv.join()].join('|');
     if (!opts.pool && CACHE && CACHE.key === key) return CACHE.out;
     const start = Math.min(EPOCH, upto - 40), last = {}, out = {}, r0 = rng(kid);
     A.map(a => [a, r0()]).sort((x, y) => x[1] - y[1]).forEach(([a], i) => { last[a.id] = start - 1 - i; });
     let y = [];
     for (let d = start; d <= upto; d++) {
-      const r = rng(kid + ':' + d), sc = a => { const gap = d - last[a.id]; return (gap >= 9 ? 100 : 0) + gap * (lk.includes(a.id) ? 1.7 : 1) + r() * 2; };
+      const r = rng(kid + ':' + d), sc = a => { const gap = d - last[a.id]; return (gap >= 9 ? 100 : 0) + gap * (lk.includes(a.id) ? 1.7 : 1) + (seen[a.id] ? 0 : 3) + r() * 2; };
       const cand = A.filter(a => !y.includes(a.id)).map(a => ({ a, s: sc(a) })).sort((p, q) => q.s - p.s), pick = [];
       for (const x of cand) { if (pick.length >= k) break; if (pick.some(p => p.g === x.a.g) && cand.some(o => o !== x && !pick.includes(o.a) && !pick.some(p => p.g === o.a.g))) continue; pick.push(x.a); }
       for (const x of cand) { if (pick.length >= k) break; if (!pick.includes(x.a)) pick.push(x.a); }
@@ -27421,10 +27447,11 @@ const SIMPLE = (() => {
   function today() {
     const k = dayKey(), t = P.doorsToday;
     if (!t || t.d !== k) { let ids = plan(dayNo() + 15)[dayNo()] || []; try { ids = WISH.applyDoors(ids, t && t.ids); } catch (e) {} P.doorsToday = { d: k, ids, extra: [] }; save(); }
-    const V = vis();
-    return [...new Set([...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
+    const V = vis(), wt = cfg().week, wk = wt && wt.until >= dayKey() ? [wt.area] : [];
+    return [...new Set([...favs(), ...wk, ...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
   }
   function whenOpens(id) {
+    if (favs().includes(id)) return 'после тропы';
     try { if (WISH.promised(id)) return 'завтра'; } catch (e) {}
     const n = dayNo(), p = plan(n + 15);
     for (let d = n + 1; d <= n + 15; d++) if ((p[d] || []).includes(id)) {
@@ -27461,12 +27488,13 @@ const SIMPLE = (() => {
     try { EVT.log('door', a.id); } catch (e) {}
     const first = stamp(a.id);
     if (first) P.doorSeen[a.id] = (P.doorSeen[a.id] || 0) + 1;
+    const bonus = first && isSurprise(a.id); if (bonus) { P.stars += 2; try { weekAdd(P, 2); } catch (e) {} }
     save();
     const gs = roomGames(a);
     let wd = null; try { wd = WISH.fulfil(x => x.area === a.id && !x.story); } catch (e) {}
     newScreen();
     shell(`${a.e} ${a.n}`, `<div class="sd-room">
-      ${first ? `<p class="sd-stamp"><span class="emo">${a.e}</span>Новая печать в паспорт!</p>` : ''}
+      ${first ? `<p class="sd-stamp"><span class="emo">${a.e}</span>Новая печать в паспорт!${bonus ? ' +2 ⭐ за сюрприз!' : ''}</p>` : ''}
       <div class="tiles">${gs.map((g, i) => `<button class="tile ${i ? '' : 'sd-feat'}" data-id="${g.id}" style="--bg:${g.bg}">${i ? '' : '<i class="tile-new">Игра дня</i>'}<span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b><small>${esc(typeof g.sub === 'function' ? g.sub() : g.sub)}</small></button>`).join('')}</div></div>`, { back: goHome });
     $$('.sd-room .tile').forEach(b => b.onclick = () => { sfx.pop(); GAMES.find(g => g.id === b.dataset.id).go(); });
     try { TALK.fab(); } catch (e) {}
@@ -27509,17 +27537,17 @@ const SIMPLE = (() => {
   // the doors under the path; before the path is done, a teaser
   function sectionHTML() {
     const ds = today(), done = pathDone(), chest = chestOpen(), fg = favGame(), m = cfg().fav, left = favLeft();
-    const n = dayNo(), tm = (plan(n + 15)[n + 1] || []).map(area).filter(Boolean), lk = likes().filter(id => !ds.some(a => a.id === id) && !tm.some(a => a.id === id) && pool().some(a => a.id === id)).map(area);
+    const fv = favs(), ask = !Array.isArray(P.favs) && !P.favAsked;
     const ms = must().length, dn = must().filter(id => dayCounts(dayKey())[id]).length;
     const door = a => { const op = doorOpen(a); return `<button class="sd-door ${op ? 'open' : 'shut'} ${stamped(a.id) ? 'seen' : ''}" data-door="${a.id}" style="--a:${a.a}" aria-label="${esc(a.n)}">
-        <span class="sd-dc">${pic(a.e)}${op ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b></button>`; };
+        <span class="sd-dc">${pic(a.e)}${op ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b><small class="sd-tag">${fv.includes(a.id) ? '💛 моё любимое' : isSurprise(a.id) ? '🎁 сюрприз дня' : '⭐ тема недели'}</small></button>`; };
     const favSub = !chest ? 'после сундука' : left <= 0 ? 'на сегодня всё, завтра снова' : !m ? 'играй сколько хочешь' : favState() ? `осталось ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ['минута', 'минуты', 'минут'])}` : `${m} ${plural(m, ['минута', 'минуты', 'минут'])}`;
     return `<section class="sd" id="sdBox">
+      ${ask ? `<div class="sd-ask" id="sdAsk"><b>💛 Что ты любишь?</b><small>Выбери 2–4 — они будут открыты каждый день!</small><button class="big" id="sdAskGo">Выбрать</button><button class="ibtn" id="sdAskX" aria-label="Потом">✕</button></div>` : ''}
       <div class="sd-head"><h2>Двери дня</h2><small>${done ? 'открыты — выбирай!' : `откроются после тропы · ещё ${ms - dn} ${plural(ms - dn, ['шаг', 'шага', 'шагов'])}`}</small></div>
       <div class="sd-doors">${ds.map(door).join('')}</div>
       ${fg ? `<button class="sd-fav ${chest && left > 0 ? 'open' : 'shut'}" id="sdFav"><span class="sd-fi">${fg.ico()}</span><span class="sd-ft"><b>Любимая игра: ${nm(fg.name)}</b><small>⏳ ${favSub}</small></span></button>` : ''}
-      <div class="sd-soon">${tm.length ? `<p><b>Завтра:</b> ${tm.map(a => `<button class="sd-gh" data-soon="${a.id}">${a.e} ${esc(a.n)}</button>`).join('')}</p>` : ''}
-        ${lk.length ? `<p><b>Твои любимые:</b> ${lk.map(a => `<button class="sd-gh" data-soon="${a.id}">${a.e} ${esc(a.n)} <em>${whenOpens(a.id)}</em></button>`).join('')}</p>` : ''}</div>
+      <div class="sd-soon"><p>🎁 Завтра — новый сюрприз! <button class="sd-gh" id="sdFavs">💛 Моё любимое</button></p></div>
     </section>`;
   }
   function bind(box) {
@@ -27529,7 +27557,9 @@ const SIMPLE = (() => {
       if (!doorOpen(a)) { const left = must().filter(id => !dayCounts(dayKey())[id]).length; wiggle(b.querySelector('.sd-dc')); say(`${a.n} откроется после тропы. Осталось ${left} ${plural(left, ['шаг', 'шага', 'шагов'])}.`); return; }
       homeLeave(); room(a);
     });
-    box.querySelectorAll('[data-soon]').forEach(b => b.onclick = () => { sfx.pop(); const a = area(b.dataset.soon); say(`${a.n} откроется ${whenOpens(a.id)}.`); });
+    const fb = box.querySelector('#sdFavs'); if (fb) fb.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
+    const ag = box.querySelector('#sdAskGo'); if (ag) ag.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
+    const ax = box.querySelector('#sdAskX'); if (ax) ax.onclick = () => { sfx.pop(); P.favAsked = 1; save(); const el = box.querySelector('#sdAsk'); if (el) el.remove(); };
     const f = box.querySelector('#sdFav');
     if (f) f.onclick = () => {
       sfx.pop();
@@ -27538,6 +27568,36 @@ const SIMPLE = (() => {
     };
   }
 
+  // the day in the child's words: «Сначала логопед и счёты, а потом твои Мастерская и Комиксы!»
+  function planLine() {
+    if (!on()) return '';
+    const L = LS(), ms = must().map(id => L[id].name.toLowerCase()), fv = favs().map(id => area(id).n);
+    const j = xs => xs.length > 1 ? xs.slice(0, -1).join(', ') + ' и ' + xs[xs.length - 1] : (xs[0] || '');
+    return fv.length ? `Сначала ${j(ms)}, а потом твои ${j(fv)}!` : `Сначала ${j(ms)}, а потом сюрприз!`;
+  }
+  // «Моё любимое»: big pictures, 2–4, any day again
+  function favPick() {
+    newScreen();
+    const A = pool(); let sel = favs().slice();
+    shell('Моё любимое', `<div class="sd-pick"><p class="lead">Выбери 2–4. Они будут открыты каждый день после тропы!</p>
+      <div class="sd-doors" id="fpGrid">${A.map(a => `<button class="sd-door open ${sel.includes(a.id) ? 'pk' : ''}" data-fp="${a.id}" style="--a:${a.a}" aria-pressed="${sel.includes(a.id)}"><span class="sd-dc">${pic(a.e)}${sel.includes(a.id) ? '<span class="sd-ck">💛</span>' : ''}</span><b>${esc(a.n)}</b></button>`).join('')}</div>
+      <button class="big" id="fpDone">Готово!</button><button class="link-btn" id="fpLikes">💛 Ещё: что я люблю</button></div>`, { back: goHome });
+    say('Что ты любишь? Выбери от двух до четырёх!');
+    $('#fpGrid').onclick = e => {
+      const b = e.target.closest('[data-fp]'); if (!b) return; const id = b.dataset.fp, a = area(id);
+      if (sel.includes(id)) sel = sel.filter(x => x !== id); else { if (sel.length >= 4) { sfx.oops(); say('Можно четыре. Сначала убери одно.'); return; } sel.push(id); say(a.n); }
+      sfx.pop(); b.classList.toggle('pk', sel.includes(id)); b.setAttribute('aria-pressed', sel.includes(id));
+      const dc = b.querySelector('.sd-dc'), ck = dc.querySelector('.sd-ck'); if (sel.includes(id) && !ck) dc.insertAdjacentHTML('beforeend', '<span class="sd-ck">💛</span>'); else if (!sel.includes(id) && ck) ck.remove();
+    };
+    $('#fpDone').onclick = () => {
+      if (!sel.length) { sfx.oops(); say('Выбери хотя бы одно!'); return; }
+      sfx.good(); P.favs = sel; P.favAsked = 1; CACHE = null;
+      if (P.doorsToday && P.doorsToday.d === dayKey() && P.doorsToday.ids.every(id => sel.includes(id))) delete P.doorsToday;
+      save(); try { EVT.log('favs', sel.join('.')); } catch (e) {}
+      say(`Отлично! Каждый день: ${sel.map(id => area(id).n).join(', ')}.`); later(goHome, 900);
+    };
+    $('#fpLikes').onclick = () => { sfx.pop(); kidPicker(P.settings.name || 'Друг', P.settings.gender === 'f', P.settings.likes || [], s2 => { P.settings.likes = s2; save(); favPick(); }); };
+  }
   // «Паспорт дверей»: the stamps of the month and when the others open
   function screenPassport() {
     newScreen();
@@ -27585,6 +27645,7 @@ const SIMPLE = (() => {
     }
     try { LITTLE.home(box); } catch (e) {}
     try { WISH.home(box); } catch (e) {}
+    try { DAYG.home(box); } catch (e) {}
     if (mine && !mine.querySelector('#passBtn')) {
       mine.insertAdjacentHTML('afterbegin', `<button class="chip" id="passBtn"><span class="emo">🎒</span>Паспорт</button><button class="chip" id="jarBtn"><span class="emo">🫙</span>Желания</button>`);
       mine.querySelector('#jarBtn').onclick = () => { sfx.pop(); homeLeave(); WISH.screenJar(); };
@@ -27605,7 +27666,8 @@ const SIMPLE = (() => {
       <p class="sd-note">Обязательное идёт по тропе по порядку. Остальное — «по желанию», после сундука.</p>
       <div class="sd-must">${ids.map(id => `<label class="sw" for="sdM-${id}"><input id="sdM-${id}" type="checkbox" data-must="${id}" ${c.must[id] === false ? '' : 'checked'}><span>${esc(L[id].name)}</span></label>`).join('')}</div>
       <h3 class="fam-s">Двери дня</h3>
-      <div class="sd-seg" id="sdK">${[2, 3].map(n => `<button class="chip ${c.k === n ? 'sel' : ''}" data-k="${n}">${n} ${plural(n, ['дверь', 'двери', 'дверей'])}</button>`).join('')}</div>
+      <p class="sd-note">Каждый день открыто «Моё любимое» ребёнка (${favs().map(id => area(id).e + ' ' + esc(area(id).n)).join(', ')}) и одна дверь-сюрприз.</p>
+      <select id="sdWeek" class="sd-sel"><option value="">⭐ Тема недели — нет</option>${AREAS.map(a => `<option value="${a.id}" ${c.week && c.week.area === a.id && c.week.until >= dayKey() ? 'selected' : ''}>⭐ Тема недели: ${a.e} ${esc(a.n)}</option>`).join('')}</select>
       <p class="sd-note">Сегодня: ${today().map(a => a.e + ' ' + esc(a.n)).join(', ')}</p>
       <div class="sd-areas" id="sdAreas">${AREAS.map(a => `<button class="chip ${c.off.includes(a.id) ? '' : 'sel'}" data-area="${a.id}">${a.e} ${esc(a.n)}</button>`).join('')}</div>
       <p class="sd-note">Выключенная тема не приходит в двери. Открыть дверь сегодня:</p>
@@ -27613,6 +27675,7 @@ const SIMPLE = (() => {
       <h3 class="fam-s">Любимая игра</h3>
       <div class="sd-seg" id="sdFavM">${[10, 20, 30, 0].map(n => `<button class="chip ${c.fav === n ? 'sel' : ''}" data-m="${n}">${n ? n + ' мин' : 'без лимита'}</button>`).join('')}</div>
       <select id="sdFavG" class="sd-sel"><option value="">сама: ${fg ? esc(nm(fg.name)) : '—'}</option>${favList.map(g => `<option value="${g.id}" ${c.favGame === g.id ? 'selected' : ''}>${esc(nm(g.name))}</option>`).join('')}</select>
+      <div id="dgPar">${(() => { try { return DAYG.parentHTML(); } catch (e) { return ''; } })()}</div>
       <div id="wiPar">${(() => { try { return WISH.parentHTML(); } catch (e) { return ''; } })()}</div>`;
     sec.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Истории: читать самому / слушать</h3>
       <div class="sd-seg" id="sdSR">${[['', 'по уровню чтения'], ['read', '📖 читать самому'], ['listen', '🔊 слушать']].map(([v, n]) => `<button class="chip ${(P.settings.stRead || '') === v ? 'sel' : ''}" data-sr="${v}">${n}</button>`).join('')}</div>
@@ -27627,17 +27690,18 @@ const SIMPLE = (() => {
       if (!Object.keys(LS()).some(id => m[id] !== false)) { i.checked = true; return; }   // at least one step stays
       setCfg('must', m); sfx.tick();
     });
-    sec.querySelector('#sdK').onclick = e => { const b = e.target.closest('[data-k]'); if (!b) return; setCfg('k', +b.dataset.k); sfx.tick(); redo(); };
+    sec.querySelector('#sdWeek').onchange = e => { const v = e.target.value, d = new Date(); d.setDate(d.getDate() + 7); setCfg('week', v ? { area: v, until: dayKey(d) } : null); sfx.tick(); redo(); };
     sec.querySelector('#sdAreas').onclick = e => { const b = e.target.closest('[data-area]'); if (!b) return; const off = cfg().off, id = b.dataset.area; setCfg('off', off.includes(id) ? off.filter(x => x !== id) : [...off, id]); sfx.tick(); redo(); };
     sec.querySelector('#sdAdd').onchange = e => { const id = e.target.value; if (!id) return; today(); P.doorsToday.extra = [...(P.doorsToday.extra || []), id]; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdFavM').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; setCfg('fav', +b.dataset.m); sfx.tick(); redo(); };
     sec.querySelector('#sdFavG').onchange = e => { setCfg('favGame', e.target.value); sfx.tick(); };
     try { WISH.parentBind(sec, redo); } catch (e) {}
+    try { DAYG.parentBind(sec, redo); } catch (e) {}
     sec.querySelector('#sdSR').onclick = e => { const b = e.target.closest('[data-sr]'); if (!b) return; P.settings.stRead = b.dataset.sr; save(); sfx.tick(); redo(); };
     sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
   }
-  return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+  return { AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
 /* SIMPLE-END */
 /* TALK-BEGIN */
@@ -27708,7 +27772,7 @@ const TALK = (() => {
       const V = SIMPLE.vis(), gs = SIMPLE.gamesOf(a, V);
       if (!gs.length) return { say: `${a.n} сейчас закрыто. Спроси взрослых.` };
       if (!simple) return { say: `Открываю: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
-      if (!td.some(y => y.id === a.id)) return { say: `${a.n} откроется ${SIMPLE.whenOpens(a.id)}. А сегодня: ${listJoin(td.map(y => y.n))}.` };
+      if (!td.some(y => y.id === a.id)) { P.wantDoor = { area: a.id, d: dayKey() }; save(); return { say: `${a.n} будет завтра сюрпризом! А чтобы каждый день — добавь в «Моё любимое».`, go: () => { homeLeave(); SIMPLE.favPick(); } }; }
       if (!SIMPLE.doorOpen(a)) return { say: afterPath(a.n) };
       return { say: `Открываю дверь: ${a.n}!`, go: () => { homeLeave(); SIMPLE.room(a); } };
     }
@@ -27718,7 +27782,7 @@ const TALK = (() => {
       if (!simple) return { say: `Открываю: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
       const a = areaOf(g.id);
       if (!a) return { say: `${nm(g.name)} — внутри занятий дня. Пройди тропу!` };
-      if (!td.some(y => y.id === a.id)) return { say: `${nm(g.name)} живёт за дверью «${a.n}». Она откроется ${SIMPLE.whenOpens(a.id)}.` };
+      if (!td.some(y => y.id === a.id)) { P.wantDoor = { area: a.id, d: dayKey() }; save(); return { say: `${nm(g.name)} живёт за дверью «${a.n}». Завтра она будет сюрпризом! А чтобы каждый день — добавь в «Моё любимое».` }; }
       if (!SIMPLE.doorOpen(a)) return { say: afterPath(nm(g.name)) };
       return { say: `Открываю: ${nm(g.name)}!`, go: () => { homeLeave(); g.go(); } };
     }
@@ -28005,6 +28069,166 @@ const WISH = (() => {
   return { handle, unknown, fulfil, applyDoors, promised, moreAreas, nudge, home, screenJar, parentHTML, parentBind, list, out, clean, story, W };
 })();
 /* WISH-END */
+/* DAYG-BEGIN */
+/* ---------- one goal of the day (the owner: «пройти всё и почитать книжку»):
+   - the day is complete when the path is done and the book is logged (a grown-up may take the book out of the goal);
+   - the day never starts at 0: one or two real-life steps come first — «Застелила кровать» every morning (a cloud
+     sticker; seven days in a row — a badge), then by age «Оделась сама» or «Почистил зубы», at the weekend «Помог
+     дома»; one tap each, a star each; grown-ups choose them in «День и все игры»;
+   - one bar: «Сегодня: 3 из 7» with the life steps, the path and the book;
+   - 🔥 is the run of complete days, with stickers at 3, 7, 14 and 30; three complete days in a week earn one
+     «заморозка», which keeps the run over one missed day; never a word of blame;
+   - a sandwich: from the journal on this phone (steps finished, steps left halfway) the hardest step of the path goes
+     between two easier ones and is kept short; every step stays; grown-ups can keep the fixed order;
+   - for the grown-ups: «любит / даётся трудно / где зависает» in plain words, from the same journal. ---------- */
+const DAYG = (() => {
+  const LIFE = {
+    bed: ['🛏️', 'Застелила кровать', 'Застелил кровать'], dress: ['👕', 'Оделась сама', 'Оделся сам'], teeth: ['🪥', 'Почистила зубы', 'Почистил зубы'],
+    school: ['🏫', 'Сходила в школу', 'Сходил в школу'], garden: ['🧸', 'Сходила в сад', 'Сходил в сад'], help: ['🧹', 'Помогла дома', 'Помог дома']
+  };
+  const MIL = [3, 7, 14, 30];
+  const dcfg = () => (P.settings.day || {});
+  const weekend = () => [0, 6].includes(new Date().getDay());
+  function lifeIds() {
+    const d = dcfg().life, def = ['bed', (P.settings.age || 6) <= 6 ? 'dress' : 'teeth'];
+    const ids = (Array.isArray(d) ? d : def).map(id => weekend() && (id === 'school' || id === 'garden') ? 'help' : id);
+    return [...new Set(ids)].filter(id => LIFE[id]).sort((a, b) => (a === 'bed' ? -1 : 0) - (b === 'bed' ? -1 : 0));
+  }
+  const life = () => { const k = dayKey(); if (!P.life || P.life.d !== k) P.life = { d: k, done: {} }; return P.life; };
+  const lifeName = id => LIFE[id][P.settings.gender === 'm' ? 2 : 1];
+  const bookOn = () => dcfg().book !== false;
+  const bookDone = () => !!(P.book && P.book.log && P.book.log[dayKey()]);
+  function goal() {
+    const L = lifeIds(), l = life(), ms = SIMPLE.must(), c = dayCounts(dayKey());
+    return { total: L.length + ms.length + (bookOn() ? 1 : 0), done: L.filter(id => l.done[id]).length + ms.filter(id => c[id]).length + (bookOn() && bookDone() ? 1 : 0) };
+  }
+  // the hook other parts use: the path done and the book read (when the book is in the goal)
+  const complete = () => SIMPLE.pathDone() && (!bookOn() || bookDone());
+  const ok = k => !!((P.doneDays || {})[k] || (P.frozen || []).includes(k));
+  function streak() { const d = new Date(); if (!ok(dayKey(d))) d.setDate(d.getDate() - 1); let n = 0; while (ok(dayKey(d))) { n++; d.setDate(d.getDate() - 1); } return n; }
+  // a missed day keeps the run when a «заморозка» is in the bank (earned by three complete days in a week)
+  function autoFreeze() {
+    const d = new Date(); d.setDate(d.getDate() - 1); const y = dayKey(d); d.setDate(d.getDate() - 1); const y2 = dayKey(d);
+    if (ok(y) || !ok(y2) || !(P.fz && P.fz.bank)) return false;
+    P.frozen = [...(P.frozen || []), y]; P.fz.bank = 0; save(); return true;
+  }
+  function markDone() {
+    if (!complete()) return null;
+    const k = dayKey(); P.doneDays = P.doneDays || {}; if (P.doneDays[k]) return null;
+    P.doneDays[k] = 1;
+    const w = weekId(), inWeek = Object.keys(P.doneDays).filter(x => x >= w).length;
+    P.fz = P.fz || { bank: 0, w: '' };
+    if (inWeek >= 3 && P.fz.w !== w && !P.fz.bank) { P.fz.bank = 1; P.fz.w = w; }
+    const s = streak(), m = MIL.find(x => x === s && !(P.csMil || []).includes(x));
+    if (m) P.csMil = [...(P.csMil || []), m];
+    save(); try { EVT.log('daydone', String(s)); } catch (e) {}
+    return { s, m };
+  }
+  function celebrate(r) {
+    const ov = document.createElement('div'); ov.className = 'overlay';
+    ov.innerHTML = `<div class="winbox" role="dialog"><div class="dg-fire">🔥</div><h2>${r.m ? `${r.m} ${plural(r.m, ['день', 'дня', 'дней'])} подряд!` : 'День пройден!'}</h2>
+      <p class="win-line">${r.m ? 'Новая наклейка-огонёк!' : `Огонёк горит: ${r.s} ${plural(r.s, ['день', 'дня', 'дней'])} подряд.`}${P.fz && P.fz.bank ? ' У тебя есть заморозка ❄️.' : ''}</p>
+      <div class="win-btns"><button class="big" data-a="ok">Ура!</button></div></div>`;
+    $('.screen').append(ov); confetti(80); sfx.good();
+    say(r.m ? `Ура! ${r.m} ${plural(r.m, ['день', 'дня', 'дней'])} подряд! Огонёк горит!` : 'Ура! День пройден! Огонёк горит!');
+    ov.onclick = e => { if (e.target.closest('[data-a]')) { sfx.pop(); ov.remove(); } };
+  }
+  // a real-life step ticked: a star; the bed — a cloud and, after seven days in a row, a badge
+  function tick(id, btn) {
+    const l = life(); if (l.done[id]) { say(lifeName(id) + '! Молодец!'); return; }
+    l.done[id] = 1; P.stars += 1; try { weekAdd(P, 1); } catch (e) {}
+    try { EVT.log('life', id); } catch (e) {}
+    let line = lifeName(id) + '! Молодец!';
+    if (id === 'bed') {
+      P.bedDays = { ...(P.bedDays || {}), [dayKey()]: 1 };
+      const d = new Date(); let n = 0; while ((P.bedDays || {})[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
+      line = 'Ура, кровать как облачко!';
+      if (n >= 7 && !(P.badges || []).includes('bed7')) { P.badges = [...(P.badges || []), 'bed7']; line += ' Семь дней подряд — значок «Заправленная кровать»!'; }
+    }
+    save(); sfx.good(); confetti(30);
+    if (btn) { btn.classList.add('on'); btn.insertAdjacentHTML('beforeend', `<span class="dg-pop">${id === 'bed' ? '☁️' : '⭐'}</span>`); }
+    say(line);
+    later(() => goHome(), 1300);
+  }
+  // the order of the path: the hardest step between two easier ones (the journal of the last two weeks)
+  let MEMO = null;
+  function scores() {
+    const t = Math.floor(Date.now() / 6e4), me = ROOT.cur;
+    let n = 0; try { n = EVT.size(); } catch (e) {}
+    if (MEMO && MEMO.t === t && MEMO.me === me && MEMO.n === n) return MEMO;
+    const since = t - 14 * 1440, st = {}, lv = {}, ge = {};
+    let ev = []; try { ev = EVT.all(); } catch (e) {}
+    ev.forEach(e => {
+      if (e[0] < since || e[2] !== me) return;
+      if (e[1] === 'step') st[e[3]] = (st[e[3]] || 0) + 1;
+      else if (e[1] === 'leave') lv[e[3]] = (lv[e[3]] || 0) + 1;
+      else if (e[1] === 'ge') { const g = ge[e[3]] = ge[e[3]] || { n: 0, s: 0 }; g.n++; g.s += +e[4] || 0; }
+    });
+    MEMO = { t, me, n, st, lv, ge }; return MEMO;
+  }
+  const hard = id => { const s = scores(); return (s.lv[id] || 0) / ((s.st[id] || 0) + (s.lv[id] || 0) + 1); };
+  function sandwich(ms) {
+    if (dcfg().order === 'fixed' || ms.length < 3) return ms;
+    const h = ms.map(id => [id, hard(id)]), top = h.reduce((a, b) => b[1] > a[1] ? b : a);
+    if (top[1] < .34) return ms;
+    const rest = ms.filter(id => id !== top[0]).sort((a, b) => hard(a) - hard(b) || ms.indexOf(a) - ms.indexOf(b));
+    return [rest[0], top[0], ...rest.slice(1)];
+  }
+  const hardest = () => { try { const ms = SIMPLE.must(); const h = ms.map(id => [id, hard(id)]).sort((a, b) => b[1] - a[1])[0]; return h && h[1] >= .34 ? h[0] : ''; } catch (e) { return ''; } };
+  // for the grown-ups: what the child loves, what is hard, where they get stuck
+  function insight() {
+    const s = scores(), L = LS();
+    const g = Object.entries(s.ge).filter(([k]) => GAMES.some(x => x.id === k));
+    const love = g.sort((a, b) => b[1].n - a[1].n).slice(0, 3).map(([k]) => nm(GAMES.find(x => x.id === k).name));
+    const hd = Object.keys(L).filter(id => hard(id) >= .34).map(id => L[id].name);
+    const stuck = g.filter(([, v]) => v.n >= 2 && v.s / v.n < 2).slice(0, 3).map(([k]) => nm(GAMES.find(x => x.id === k).name));
+    return { love, hd, stuck };
+  }
+  // the home: the life steps under the friend, the bar «Сегодня: N из M», the book, 🔥, the day done
+  function home(box) {
+    if (!SIMPLE.on()) return;
+    const hero = box.querySelector('.pd-hero'), l = life(), L = lifeIds();
+    autoFreeze();
+    if (hero && L.length) {
+      hero.insertAdjacentHTML('afterend', `<div class="dg-life">${L.map(id => `<button class="dg-l ${l.done[id] ? 'on' : ''}" data-life="${id}"><span class="emo">${LIFE[id][0]}</span><b>${esc(lifeName(id))}</b>${l.done[id] ? '<i>✓</i>' : ''}</button>`).join('')}</div>`);
+      box.querySelectorAll('[data-life]').forEach(b => b.onclick = () => { sfx.pop(); tick(b.dataset.life, b); });
+    }
+    const g = goal(), sm = box.querySelector('.pd-prog small'), bar = box.querySelector('.pd-bar i');
+    if (sm) sm.textContent = `Сегодня: ${g.done} из ${g.total}`;
+    if (bar) bar.style.width = Math.round(g.done / Math.max(1, g.total) * 100) + '%';
+    const say0 = box.querySelector('.pd-say');
+    if (bookOn() && SIMPLE.pathDone() && !bookDone() && say0) say0.textContent = 'Ещё книжка — и огонёк горит!';
+    const sd = box.querySelector('#sdBox');
+    if (bookOn() && sd) {
+      sd.insertAdjacentHTML('beforebegin', `<button class="sd-fav ${bookDone() ? 'open' : ''} dg-book" id="dgBook"><span class="sd-fi"><span class="emo">📚</span></span><span class="sd-ft"><b>${bookDone() ? 'Книжка — готово! ✓' : 'Почитать книжку'}</b><small>${bookDone() ? 'огонёк горит' : 'сам или с мамой и папой — и день пройден'}</small></span></button>`);
+      box.querySelector('#dgBook').onclick = () => { sfx.pop(); homeLeave(); const b = GAMES.find(x => x.id === 'book'); if (b) b.go(); };
+    }
+    const wb = document.querySelector('#weekBtn b'); if (wb) wb.textContent = streak();
+    const r = markDone(); if (r) later(() => celebrate(r), 700);
+  }
+  function parentHTML() {
+    const ins = insight(), L = lifeIds();
+    return `<h3 class="fam-s">Как идёт</h3>
+      <p class="sd-note">💛 Любит: ${esc(ins.love.join(', ') || 'пока мало данных')}<br>🧗 Даётся трудно: ${esc(ins.hd.join(', ') || 'ничего особенного')}<br>⏸ Где зависает: ${esc(ins.stuck.join(', ') || 'нигде')}</p>
+      <p class="sd-note">Самый трудный шаг тропы ставится между двумя лёгкими и делается короче. Все шаги остаются.</p>
+      <label class="sw" for="dgOrd"><input id="dgOrd" type="checkbox" ${dcfg().order === 'fixed' ? '' : 'checked'}><span class="set-t"><b>Умный порядок</b><small>трудное между лёгким («сэндвич»)</small></span></label>
+      <label class="sw" for="dgBookIn"><input id="dgBookIn" type="checkbox" ${bookOn() ? 'checked' : ''}><span class="set-t"><b>Книжка — часть цели дня</b><small>день пройден, когда тропа и книжка</small></span></label>
+      <h3 class="fam-s">Уже сделано утром</h3>
+      <div class="sd-areas" id="dgLife">${Object.keys(LIFE).map(id => `<button class="chip ${L.includes(id) || (weekend() && L.includes('help') && (id === 'school' || id === 'garden') && (dcfg().life || []).includes(id)) ? 'sel' : ''}" data-l="${id}">${LIFE[id][0]} ${esc(lifeName(id))}</button>`).join('')}</div>
+      <p class="sd-note">🔥 ${streak()} ${plural(streak(), ['день', 'дня', 'дней'])} подряд${P.fz && P.fz.bank ? ' · заморозка ❄️ есть' : ''}</p>`;
+  }
+  function parentBind(sec, redo) {
+    const set = (k, v) => { P.settings.day = { ...(P.settings.day || {}), [k]: v }; save(); };
+    const o = sec.querySelector('#dgOrd'); if (o) o.onchange = e => { set('order', e.target.checked ? '' : 'fixed'); sfx.tick(); };
+    const b = sec.querySelector('#dgBookIn'); if (b) b.onchange = e => { set('book', e.target.checked); sfx.tick(); };
+    const lf = sec.querySelector('#dgLife');
+    if (lf) lf.onclick = e => { const c = e.target.closest('[data-l]'); if (!c) return; const cur = Array.isArray(dcfg().life) ? dcfg().life : lifeIds(), id = c.dataset.l; set('life', cur.includes(id) ? cur.filter(x => x !== id) : [...cur, id]); sfx.tick(); redo(); };
+  }
+  return { goal, complete, streak, lifeIds, life, tick, sandwich, hardest, hard, insight, home, parentHTML, parentBind, markDone, autoFreeze, bookOn, bookDone, LIFE };
+})();
+// the hook for other parts (e.g. «Моя книга»): is today complete?
+function dayComplete() { try { return DAYG.complete(); } catch (e) { return false; } }
+/* DAYG-END */
 /* LITTLE-BEGIN */
 /* ---------- the little ones (4–6) who do not read yet (a family: «она не читает, все задания скипает, плакала, что не
    было рисовалок»):
@@ -28129,7 +28353,12 @@ const LITTLE = (() => {
   const parentLine = () => on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc(P.settings.name || '')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '';
   return { on, listen, reads, plan, must, skipped, rescue, offer, stepDone, home, colour, parentLine, TEXT, EAR, dayStickers };
 })();
-function LITTLE_PLAN(id, full) { try { return LITTLE.plan(id, full); } catch (e) { return full; } }
+function LITTLE_PLAN(id, full) {
+  let p = full; try { p = LITTLE.plan(id, full); } catch (e) {}
+  // the hardest step of the path is kept short (day-goal)
+  try { if (p.length > 3 && DAYG.hardest() === id) p = p.slice(0, 3); } catch (e) {}
+  return p;
+}
 /* LITTLE-END */
 /* FUNSPEAK-BEGIN */
 /* ---------- The speech games feel like a walk with the friend, not a drill:
