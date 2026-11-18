@@ -18,7 +18,7 @@ const SHOTS = path.join(__dirname, 'shots', 'speech_honest'); require('fs').mkdi
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const LANGS = (process.env.LANGS || 'ru,en,pt,de').split(',');
 const DIR = { ru: 'ru/', en: '', pt: 'pt/', de: 'de/' };
-const kid = (name, g, age, fr, lang) => ({ stars: 12, plays: {}, learn: {}, best: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: 'r', age, friend: fr, onboarded: true, lang } });
+const kid = (name, g, age, fr, lang) => ({ stars: 12, plays: {}, learn: {}, best: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: 'r', age, friend: fr, onboarded: true, lang, focus: { sp: 'yes', subj: [] } } });   // «логопедия нужна» (parent-focus: a new child has none until the check)
 let bad = 0; const ok = (c, m) => { console.log((c ? 'ok   ' : 'FAIL ') + m); if (!c) bad++; };
 const wait = ms => new Promise(r => setTimeout(r, ms));
 async function open(b, lang, who, { cam = true } = {}) {
@@ -160,7 +160,7 @@ const won = p => p.evaluate(() => { const w = document.querySelector('.winbox .w
     p = await open(b, lang, 'k2');
     await mimic(p, false);
     await run(p, "(AL().forEach(a => a.steps = a.steps.slice(0, 2)), 0)");
-    await run(p, "(ACTIVE = 'speech', (() => { const s = lessonPlan('speech').find(x => x.kind === 'artic'); todayState().done.speech = lessonPlan('speech').filter(x => x.kind === 'breath').map(x => x.key); save(); s.run(); })())"); await wait(1500);
+    await run(p, "(ACTIVE = 'speech', (() => { const s = lessonPlan('speech').find(x => x.kind === 'artic'); todayState().done.speech = lessonPlan('speech').filter(x => x.kind !== 'artic').slice(0, 1).map(x => x.key);   /* one step done before (the focus dose may have no breath step) */ save(); s.run(); })())"); await wait(1500);
     const plan0 = await run(p, "lessonPlan('speech').length");
     await p.click('#backBtn'); await wait(300); await run(p, 'goHome()'); await wait(1600);
     const sk = await run(p, 'HONEST.sum(P, 1)');
