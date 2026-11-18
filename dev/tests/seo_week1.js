@@ -36,11 +36,18 @@ for (const [u, hl] of Object.entries(H)) for (const [k, v] of Object.entries(hl)
 }
 const sm = fs.readFileSync(path.join(DIST, 'sitemap.xml'), 'utf8');
 const locs = attr(sm, /<loc>([^<]*)<\/loc>/g);
-ok(locs.length === pages.length - 0 && locs.every(l => H[l]), `sitemap: ${locs.length} urls for ${pages.length} pages`);
+// the game's first pages are in the sitemap too (their own head carries title, description and hreflang)
+const GAMES = ['https://govorilki.com/play/', 'https://govorilki.com/play/ru/', 'https://govorilki.com/play/pt/', 'https://govorilki.com/play/de/'];
+ok(locs.length === pages.length + GAMES.length && locs.every(l => H[l] || GAMES.includes(l)) && GAMES.every(g => locs.includes(g)), `sitemap: ${locs.length} urls for ${pages.length} pages + ${GAMES.length} game pages`);
 ok((sm.match(/hreflang="x-default"/g) || []).length === locs.length, 'sitemap: x-default on every url');
 ok(/^<\?xml/.test(sm) && (sm.match(/<url>/g) || []).length === (sm.match(/<\/url>/g) || []).length, 'sitemap: xml');
 const rb = fs.readFileSync(path.join(DIST, 'robots.txt'), 'utf8');
 ok(/Disallow: \/play\//.test(rb) && /Sitemap: https:\/\/govorilki\.com\/sitemap\.xml/.test(rb) && !/Disallow: \/\s*$/m.test(rb), 'robots.txt');
+// the game's first page per language is open to search, nothing else under /play/
+ok(['/play/$', '/play/ru/$', '/play/pt/$', '/play/de/$'].every(a => rb.includes('Allow: ' + a + '\n')) && (rb.match(/Allow: \/play/g) || []).length === 4, 'robots.txt: game first pages');
+const hd = fs.readFileSync(path.join(DIST, '_headers'), 'utf8');
+ok(/\/play\/\*\n  X-Robots-Tag: noindex/.test(hd) && ['/play/', '/play/ru/', '/play/pt/', '/play/de/'].every(a => hd.includes(a + '\n  ! X-Robots-Tag')), '_headers: noindex lifted only on the game first pages');
+for (const l of ['', 'ru/', 'pt/', 'de/']) { const g = fs.readFileSync(path.join(DIST, 'play', l, 'index.html'), 'utf8'); ok(!/noindex/.test(g.slice(0, 5000)) && g.includes(`<link rel="canonical" href="https://govorilki.com/play/${l}">`), `game ${l || 'en'}: noindex or canonical`); }
 ok(!fs.existsSync(path.join(DIST, '_redirects')), '_redirects still there (302 on «/»)');
 console.log(`tags: ${pages.length} pages, ${locs.length} sitemap urls`);
 const table = Object.entries(H).filter(([u]) => /\.com\/((ru|en|pt|de)\/)?$/.test(u) || /\/r\/$|\/sound-r\//.test(u));
