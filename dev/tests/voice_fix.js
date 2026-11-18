@@ -18,7 +18,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     for (const [what, extra] of [['new family', {}], ['empty choice, mobile data', { piperVoice: '', engine: '' }], ['chose the phone', { engine: 'device' }]]) {
       const c0 = await b.newContext({ ...devices['iPhone 13'], deviceScaleFactor: 1 });
       await c0.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-      await c0.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+      await c0.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
       const seed = { micOff: true, srOff: true, parentPhone: true, cur: 'k1', curFam: 'f1', families: { f1: { id: 'f1', name: 'Т', cc: 'PT', kids: ['k1'], grands: [] } }, profiles: { k1: kid('Тина', 'f', 6, 'kitty', lang) }, ...extra };
       await c0.addInitScript(s => { window.__said = []; try { Object.defineProperty(navigator, 'connection', { value: { type: 'cellular', saveData: false } }); } catch (e) {} try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 5); }; } catch (e) {} localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, seed);
       const q = await c0.newPage(); await q.goto(BASE + sub); await q.waitForTimeout(1200);
@@ -32,7 +32,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
     const fam = { engine: 'device', micOff: true, srOff: true, parentPhone: true, cur: 'k1', curFam: 'f1', families: { f1: { id: 'f1', name: 'Т', cc: 'PT', kids: ['k1', 'k2'], grands: [] } }, profiles: { k1: kid('Тина', 'f', 6, 'kitty', lang), k2: kid('Тоша', 'm', 8, 'tiger', lang, 'l') } };
     const c = await b.newContext(DEV === 'phone' ? { ...devices['iPhone 13'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 800 } });
     await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text();
+    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text();
       // every text that goes to a voice passes sayParts (ElevenLabs, Piper, the phone's voice)
       t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) }; { const sp0 = sayParts; sayParts = t => { const r = sp0(t); window.__parts.push(...r); return r; }; }');
       r.fulfill({ response: x, body: t }); });

@@ -26,6 +26,9 @@ every point they raised. Screenshots and screen videos from the owner show real 
 - `build/packs.js` (called by build.py) — data packs: story texts (s, a of every LEARN item; q stays for «А знаешь ли ты?»), holiday texts, the globe map
   (`let NAME = /*__PACK__*/{…}`) and SAYRU go to `$SITE/data/<lang>/*.json`; Russian LX defaults leave en/pt/de; comments go.
   The game fetches a pack when a screen needs it (`PACK`, `PACK.story(it)`); the service worker keeps them all after one visit.
+  build.py then moves the game's script out of the site page into `$SITE/data/<lang>/app.<hash>.js` (the page is ~0.37 MB):
+  the page paints a copy of the start screen's words at once and loads the script after that paint. Tests that patch the
+  script must route `/\/app\.[0-9a-f]+\.js$/` too (all tests do). The artifact copy stays one inline file.
 - `build/release_check.sh` and `build/publish.sh` — the release (skill `release`).
 - `i18n/` — translator, done batches, `fixed.json` {group: {ru: [en, pt]}}, `de/fixed_de.json` {group: {ru: de}},
   language content for `LX()` in `phonics/*.json` and `de/langdata_de.json`. `tables/`, `langdata/` are generated (gitignored).
@@ -45,14 +48,17 @@ every point they raised. Screenshots and screen videos from the owner show real 
   are data, not text; groups in `I18N_SKIP` (`i18n/i18n.js`). Every language reports «missing 8 in 3 groups» — that is
   the baseline (GAMES, LEARN_IMG, SND_HI). More than 8 = new untranslated strings.
 - Version: `govorilki-vNNN` in `$SITE/sw.js` (offline cache name, shown in the parent panel). One bump per release.
-- Voices: Piper in the browser, default «Руслан» (`ru_RU-ruslan-medium`), the phone's voice as fallback. Russian text goes
+- Voices: Piper in the browser, default «Руслан» (`ru_RU-ruslan-medium`), the phone's voice as fallback. Руслан's model
+  is ours: `site-add/engine/piper/voices/` (3 parts under Pages' 25 MB limit + `voices.json` with sha-256); the worker
+  answers the engine's Hugging Face URLs from there and keeps the model in OPFS. Other voices still come from Hugging Face. Russian text goes
   through the say module (stress from SAYRU, ё, numbers, soft Л) before any voice.
 - Data packs: a new story collection works as is if its items are in LEARN (any `LEARN.x = {…}`, or a name in
   `STORY_SETS` of `build/packs.js`); code that reads a story's `s`/`a` outside `screenStory` must `await PACK.story(it)` first.
 - Paid for already: `typeof X` of a later `const` inside an IIFE throws (TDZ) and kills the whole app at load; card CSS on
   `b` also hits icons (use `.ld-g>b`); Wikimedia hot-links fail with 429 (self-host); ruaccent homographs need pinning
   (кому́, not ко́му); a name at the start of a sentence needs a `w` entry; stress proposed by writers for common words is
-  often wrong (accept names only); isolated words sound muddy in Piper (say a colour inside a phrase).
+  often wrong (accept names only); isolated words sound muddy in Piper (say a colour inside a phrase); a Playwright element
+  handle (`page.$$`) kept by a test keeps the old screen alive — memory checks use locators (`tests/screens_leak.js`).
 
 ## Hard rules
 - Children's privacy: tests and fixtures use invented children only (Тина, Тоша, Тим). The first names already in the code

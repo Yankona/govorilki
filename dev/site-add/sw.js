@@ -2,7 +2,9 @@
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
 // page kept under its own address. Icons and fonts (our own copy in fonts/) come from the cache and refresh in the background.
 const CACHE = 'govorilki-v148';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './ru/', './pt/', './de/', './en/', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+// only the icons here: the page a family opens asks to keep itself, its game script (data/<lang>/app.*.js) and its data
+// packs (the «keep» message below), so a Russian family no longer downloads the four other languages
+const SHELL = ['./icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -28,6 +30,9 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   // recordings of the tales: straight to the network (Range requests; iOS media breaks when a SW answers them)
   if (url.pathname.includes('/tales/audio/') && !url.pathname.endsWith('.json')) return;
+  // the voice model in parts (engine/piper/voices/, 63 MB): the game keeps the joined model in the phone's own storage
+  // (OPFS), so the parts go straight to the network and are not kept a second time here
+  if (url.origin === location.origin && url.pathname.includes('/engine/piper/voices/')) return;
   // the voice's program (Piper, ONNX runtime; our own copy in engine/piper/, the CDN in older pages): about 32 MB, kept
   // once in its own cache, which a new version does not clear, and never fetched again for each phrase
   if (url.origin === location.origin && url.pathname.includes('/engine/piper/') || /^https:\/\/cdn\.jsdelivr\.net\/npm\/(@mintplex-labs\/piper-tts-web|onnxruntime-web)@/.test(req.url)) {

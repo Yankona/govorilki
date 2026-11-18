@@ -32,7 +32,7 @@ const seedOf = (lang, extra) => ({ engine: 'device', micOff: true, srOff: true, 
         if (u.pathname === '/v1/stats' && r.request().method() === 'POST') { stats.push(r.request().postData() || ''); return r.fulfill({ status: 200, headers: { 'Access-Control-Allow-Origin': '*' }, body: '{"ok":true}' }); }
         return r.fulfill({ status: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }, body: '{"ok":true,"msgs":[]}' });
       });
-      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
       await c.route(/\/frame-test\.html$/, r => r.fulfill({ status: 200, contentType: 'text/html', body: `<iframe src="${BASE + sub}" style="width:400px;height:700px"></iframe>` }));
       await c.addInitScript(s => { try { speechSynthesis.speak = u => setTimeout(() => u.onend && u.onend(), 5); } catch (e) {}
         if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); if (s[0]) localStorage.setItem('govorilki-v2', JSON.stringify(s[0])); if (s[1]) localStorage.setItem('govorilki-ev', JSON.stringify(s[1])); }, [seed, journal || null]);

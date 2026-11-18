@@ -21,7 +21,7 @@ async function open(b, lang, path, who, { day = DAY1, extra = {} } = {}) {
   const fam = { engine: 'device', micOff: true, srOff: true, parentPhone: true, startAt: 'kid', cur: who, curFam: 'f1', families: { f1: { id: 'f1', name: 'Т', cc: 'PT', kids: [who], grands: [] } }, profiles: { [who]: { ...kid(who, KIDS[who].langs.includes(lang) ? lang : KIDS[who].langs[0]), ...extra } } };
   const c = await b.newContext(DEV === 'phone' ? { ...devices['iPhone 13'], deviceScaleFactor: 1 } : { viewport: { width: 1280, height: 800 } });
   await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
   await c.addInitScript(s => { window.__said = []; try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 5); }; } catch (e) {} if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s.fam)); localStorage.setItem('govorilki-lang', s.lang); }, { fam, lang });
   const p = await c.newPage(); const errs = [];
   await p.clock.setFixedTime(day);
