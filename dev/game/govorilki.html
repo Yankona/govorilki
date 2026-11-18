@@ -2578,6 +2578,10 @@ button.rank{width:100%;border:0;text-align:left;cursor:pointer;color:inherit;fon
 .pv-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}.pv-t b{font-size:17px}.pv-t small{font-size:14px;color:var(--ink-soft);line-height:1.3}
 .pv-ad{display:flex;flex-direction:column;gap:8px;border-radius:20px;padding:10px 12px;background:var(--t-lilac);box-shadow:0 4px 0 var(--line)}
 .pv-acts{display:flex;gap:8px;flex-wrap:wrap}
+/* FOCUS-CSS: «Что важно» */
+.fo-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);text-align:left}
+.fo-row>span:first-child{flex:1 1 150px}.fo-row .sd-seg{margin:0;flex:0 0 auto;justify-content:flex-end;width:auto}
+.fo-row small{display:block;color:var(--ink-soft)}.gd-fo p{margin:2px 0}
 /* GUIDE-CSS: «Отчёт» cards for grown-ups */
 .gd-card{background:var(--surface,#fff);border-radius:22px;padding:14px 16px;margin:0 0 14px;box-shadow:0 2px 0 rgba(0,0,0,.06),0 6px 18px rgba(60,40,10,.08);display:flex;flex-direction:column;gap:8px}
 .gd-h{display:flex;align-items:center;gap:10px}.gd-h .chip-face{width:44px;height:44px;flex:none}.gd-h b{font:800 20px/1.2 var(--f-head,inherit)}.gd-h small{margin-left:auto;color:var(--ink-soft)}
@@ -4006,7 +4010,7 @@ function todayState() {
 const gameStep = (id, kind) => { const g = GAMES.find(x => x.id === id); return { key: id, kind, name: nm(g.name), run: () => g.go() }; };
 // the plan depends on the date and on how many times this lesson was already done today
 // the plan of a step; the little ones get a short one with nothing to read (little-ones)
-function lessonPlan(id) { return LITTLE_PLAN(id, lessonPlan0(id)); }
+function lessonPlan(id) { return FOCUS_PLAN(id, LITTLE_PLAN(id, lessonPlan0(id))); }
 function lessonPlan0(id) {
   const n = dayNo(), s = dayCounts(dayKey())[id] || 0, steps = [];
   // «Счёты» every day, for every age: one short round at the child's level (soroban)
@@ -24903,7 +24907,9 @@ const SETUI = (() => {
     if (S.kid) { S.kid.insertAdjacentHTML('beforeend', `<h3 class="fam-s">Вид игры</h3>${lookHTML(lookCur(), 'lookPar')}`); lookBind($('#lookPar'), lookSetKid); }
     const name = P.settings.name || 'Ребёнок', lg = LANGS.find(x => x[0] === LANG), ln = lg ? lg[2] + ' ' + lg[1] : '';
     let daySec = null; try { daySec = SIMPLE.parentSec(); root.append(daySec); } catch (e) {}
+    let foSec = null; try { foSec = FOCUS.parentSec(); root.append(foSec); } catch (e) {}
     const PAGES = [
+      ['focus', '🎯', 'Что важно', 'логопедия, чтение, математика — от вашего выбора', [foSec]],
       ['day', '🗺️', 'День и все игры', 'обязательные занятия, двери дня, любимая игра', [daySec]],
       ['guide', '📊', 'Отчёт', 'что получается и что пока трудно', [S.guide]],
       ['fam', '👪', 'Семья', '', [S.fam]],
@@ -24931,7 +24937,7 @@ const SETUI = (() => {
     }
     menu.onclick = e => { const b = e.target.closest('[data-page]'); if (b) { sfx.pop(); show(b.dataset.page); } };
     $('#backBtn').onclick = e => { if (open) { sfx.pop(); show(null); } else { open = null; back0(e); } };
-    show(focus === 'voice' || focus === 'guide' || focus === 'day' ? focus : open, true);
+    show(focus === 'voice' || focus === 'guide' || focus === 'day' || focus === 'focus' ? focus : open, true);
   }
   return { build, reset };
 })();
@@ -25299,6 +25305,7 @@ const GUIDE = (() => {
     const lb = pr.gw && pr.gw.w === prevWeek() ? { ...pr.gw, end: now } : pr.gwLast && pr.gwLast.w === prevWeek() ? pr.gwLast : null;
     const d = dig(pr, cur, now);
     if (lb) d.last = dig(pr, lb, lb.end || now, true);
+    try { d.fo = FOCUS.digest(pr); } catch (e) {}
     return d;
   }
   // cleaning a digest that came over the relay
@@ -25314,6 +25321,7 @@ const GUIDE = (() => {
       ru: n('ru', 3333), ru0: n('ru0', 3333), mn: n('mn', 99), mc: n('mc', 99), mw: n('mw', 999), ml0: n('ml0', 3333), mk: n('mk', 5),
       kp: /^[a-z]{2,10}$/.test(x.kp || '') ? x.kp : '', mS: n('mS', 999), rS: n('rS', 999), sy: n('sy', 9999), sp: n('sp', 99), rd: n('rd', 99), mt: n('mt', 99) };
     if (!deep && x.last) o.last = clean(x.last, true);
+    if (!deep) { try { const fo = FOCUS.clean(x.fo); if (fo) o.fo = fo; } catch (e) {} }
     return o;
   }
   const mathLv = d => d.m || (d.a <= 4 ? 1 : d.a === 5 ? 2 : d.a === 6 ? 3 : d.a === 7 ? 5 : d.a === 8 ? 7 : d.a === 9 ? 9 : 11);
@@ -25400,7 +25408,7 @@ const GUIDE = (() => {
         ${R.d !== d ? `<p class="gd-act">${esc(actLine(R.d))}</p>` : ''}
         ${rr.length ? `<div class="gd-rows">${rr.map(r => `<p><span>${r.a.e} ${esc(r.a.n)}</span><b class="${r.up ? 'up' : ''}">${arrow(r)}</b><small>${esc(r.l)}</small></p>`).join('')}</div>` : '<p class="muted">Пока нечего показать.</p>'}
         <button class="chip gd-share" data-gshare="${esc(kid.id)}">📤 Поделиться</button></details>`}
-      ${RUREP.month(d) ? `<p class="gd-month">🪆 <b>Русский язык.</b> ${esc(RUREP.month(d))}</p>` : ''}
+      ${(() => { try { return FOCUS.cardHTML(d.fo); } catch (e) { return ''; } })() + (RUREP.month(d) ? `<p class="gd-month">🪆 <b>Русский язык.</b> ${esc(RUREP.month(d))}</p>` : '')}
       <details class="gd-idea"><summary>💡 Если хотите помочь — одна идея</summary><p>${esc(t.text)}</p></details>
     </div>`;
   }
@@ -27243,10 +27251,11 @@ const PATH = (() => {
   // the old friend-and-plan block becomes the path
   function today(st) {
     const hero = st.querySelector('.hero'), plan = st.querySelector('section.today'); if (!hero || !plan) return;
-    const s = state(), N = s.ids.length, d = s.done.length, sk = streak(), sc = stickerCount();
+    // the week: days of the last 7, not an unbroken run (parent-focus)
+    const s = state(), N = s.ids.length, d = s.done.length, sk = (() => { try { return FOCUS.week(); } catch (e) { return streak(); } })(), sc = stickerCount();
     const box = document.createElement('section'); box.className = 'pd'; box.id = 'pdBox';
     box.innerHTML = `<div class="pd-top">
-        <button class="pd-pill" id="weekBtn" aria-label="Мой календарь: ${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд"><span class="emo">🔥</span><b>${sk}</b></button>
+        <button class="pd-pill" id="weekBtn" aria-label="Мой календарь: ${sk} из 7 дней"><span class="emo">🔥</span><b>${sk}<small>/7</small></b></button>
         <div class="pd-pill" title="Звёздочки">${ICON.star}<b id="starN">${P.stars}</b></div></div>
       <div class="pd-hero">
         <button class="pd-fr guide-ryz${Q() && P.cos && P.cos.frame ? ' frame-' + P.cos.frame : ''}" id="pdFriend" aria-label="Поздороваться">${friendSVG()}</button>
@@ -27277,7 +27286,7 @@ const PATH = (() => {
   // the right panel of a wide screen: the week, the stars, the family today
   function side(st) {
     if (st.querySelector('.pd-side') || !st.querySelector('#pdBox')) return;
-    const sk = streak(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
+    const sk = (() => { try { return FOCUS.week(); } catch (e) { return streak(); } })(), tk = dayKey(), now = new Date(), mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (now.getDay() + 6) % 7);
     const days = WEEK.map((w, i) => { const k = dayKey(new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + i)), on = dayTotal(k) > 0;
       return `<span class="pd-wd ${on ? 'on' : ''} ${k === tk ? 'now' : ''}"><i>${on ? '✓' : ''}</i>${w}</span>`; }).join('');
     const sc = stickerCount(), all = STK().length, left = (sc + 1) * 5 - P.stars;
@@ -27287,7 +27296,7 @@ const PATH = (() => {
       return `<div class="pd-fm"><span class="chip-face">${kidFace(id)}</span><b>${esc(pr.settings.label || pr.settings.name || '…')}</b><span class="pd-bar"><i style="width:${Math.round(d / ids.length * 100)}%"></i></span><small>${d}/${ids.length}</small></div>`;
     };
     const el = document.createElement('aside'); el.className = 'pd-side';
-    el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} ${plural(sk, ['день', 'дня', 'дней'])} подряд<small>эта неделя</small></h3><div class="pd-wk">${days}</div></button>
+    el.innerHTML = `<button class="pd-card" id="pdWeek"><h3><span class="emo">🔥</span>${sk} из 7 дней<small>за неделю</small></h3><div class="pd-wk">${days}</div></button>
       <button class="pd-card" id="pdStars"><h3>Звёзды</h3><div class="pd-big">${ICON.star}<b>${P.stars}</b></div><small>${sc < all ? `ещё ${left} — и новая наклейка` : 'все наклейки собраны!'}</small></button>
       ${KIDS.length > 1 ? `<div class="pd-card pd-fam"><h3>Семья сегодня</h3>${KIDS.map(kid).join('')}</div>` : ''}`;
     // everything else of the tab goes into the middle column
@@ -27352,10 +27361,12 @@ const SIMPLE = (() => {
     const L = LS(), ids = Object.keys(L), m = cfg().must, by = id => ORDER.includes(id) ? ORDER.indexOf(id) : 99;
     // the little ones: three steps by default (little-ones); a grown-up's choice wins
     let lil = false; try { lil = LITTLE.on() && !Object.keys(m).length; } catch (e) {}
-    const ms = lil ? LITTLE.must(ids) : ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
+    let ms = lil ? LITTLE.must(ids) : ids.filter(id => m[id] !== false).sort((a, b) => by(a) - by(b));
+    // the parents' focus: speech only when needed, the main subjects in, the day's minutes by age (parent-focus)
+    try { ms = FOCUS.must(ms, ids, m); } catch (e) {}
     return ms.length ? ms : ids.slice(0, 1).sort((a, b) => by(a) - by(b));
   }
-  const opt = () => { const ms = must(); return Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); };
+  const opt = () => { const ms = must(); let o = Object.keys(LS()).filter(id => !ms.includes(id)).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)); try { o = FOCUS.opt(o); } catch (e) {} return o; };
 
   // the games the child can open (what the search finds)
   function vis() {
@@ -27400,7 +27411,8 @@ const SIMPLE = (() => {
     const k = dayKey(), t = P.doorsToday;
     if (!t || t.d !== k) { const ids = plan(dayNo() + 15)[dayNo()] || []; P.doorsToday = { d: k, ids, extra: [] }; save(); }
     const V = vis();
-    return [...new Set([...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
+    let dl = []; try { dl = FOCUS.doors(); } catch (e) {}
+    return [...new Set([...dl, ...P.doorsToday.ids, ...(P.doorsToday.extra || [])])].map(area).filter(a => a && gamesOf(a, V).length);
   }
   function whenOpens(id) {
     const n = dayNo(), p = plan(n + 15);
@@ -27612,6 +27624,212 @@ const SIMPLE = (() => {
   return { AREAS, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
 /* SIMPLE-END */
+/* FOCUS-BEGIN */
+/* ---------- «Что важно для вашего ребёнка?» (parent-focus; the owner: «упор должен идти от родителя, от запроса»;
+   the evidence: dev/docs/science-dose.md). A layer the day builder calls, so the path stays one place:
+   - the grown-ups choose (behind the parent code): speech therapy нужна / не нужна / не знаю, and the main subjects
+     (reading, maths, chess, drawing). A new child starts with «не знаю»: no speech step until a 1-minute check by the
+     age norms of sounds, in each of the child's languages, says a sound lags (Р, Л and the hissing sounds before 6 are
+     the norm). Children who already did the speech step keep it («нужна»);
+   - «не нужна»: no speech step in the day at all (the games stay in «Все игры»); «нужна»: a short daily block of
+     3–7 minutes with many tries of the sound (≥ 50 for 4–5, more later) — a warm-up and sound games only, inside the
+     day's minutes, not on top;
+   - the day's length by age (8–12 / 12–15 / 15–20 / 20–25 minutes) and one game's length (2–3 / 3–4 / 4–5 / up to 10):
+     each lesson keeps as many steps as its share of the minutes; a main subject gets twice the share; soroban, the
+     puzzle, the drawing and chess doors stay every day, lighter;
+   - the week counts days (5 of the last 7), not an unbroken run;
+   - «Отчёт» shows the focus and how often it was done this week. P.settings.focus = { sp: 'yes'|'no'|'unk',
+     subj: ['read', 'math', 'chess', 'art'], chk: { d, ans: { lang: { group: 1 clean | 0 not yet } }, intel, lag: ['ru:r'], res: 'ok'|'lag' } }. ---------- */
+const FOCUS = (() => {
+  // the age when most children say the sounds of a group (McLeod & Crowe 2018, 27 languages; practical tables for ru)
+  const NORM = {
+    ru: [['sz', RU('С, З, Ц'), RU('сок, зонт'), 5], ['sh', RU('Ш, Ж, Ч, Щ'), RU('шапка, жук'), 6], ['l', RU('Л'), RU('лампа'), 6], ['r', RU('Р'), RU('рыба'), 6]],
+    en: [['sz', 's, z', 'sun, zoo', 5], ['sh', 'sh, ch, j', 'ship, chair', 6], ['l', 'l', 'lion', 6], ['r', 'r', 'rabbit', 7], ['th', 'th', 'thumb', 8]],
+    pt: [['sz', 's, z', 'sol, zebra', 5], ['sh', 'ch, j', 'chave, janela', 6], ['l', 'l, lh', 'lua, palhaço', 6], ['r', 'r, rr', 'rato, carro', 6]],
+    de: [['sz', 's, z', 'Sonne, Zebra', 5], ['sh', 'sch', 'Schuh', 6], ['l', 'l', 'Löwe', 5], ['r', 'r', 'Rose', 6], ['ch', 'ch', 'ich, Buch', 6]]
+  };
+  const SUBJ = [['read', '📖', 'Чтение'], ['math', '🔢', 'Математика'], ['chess', '♟️', 'Шахматы'], ['art', '🎨', 'Рисование']];
+  // a sound game of the speech block: the tries of the sound it gives (rounded down), the minutes it takes
+  const TRIES = 20, SPG = 1.3;
+  const POOL = { r: ['syll', 'house', 'r-end', 'count', 'magic', 'books'], sh: ['sh-syll', 'sh-sort', 'sh-house', 'beauty'], l: ['l-chist', 'l-house', 'l-twist', 'l-word', 'l-rap'], sz: ['sz-syll', 'sz-sort', 'sz-house', 'snd-hold'] };
+  const ageOf = (pr = P) => +(pr.settings.age || 0) || (pr.settings.track === 'l' ? 9 : 6);
+  // the dose by age: the day (min–max minutes), one game, the speech block's tries
+  function dose(pr = P) {
+    const a = ageOf(pr);
+    return a <= 5 ? { day: [8, 12], game: 2.5, gl: '2–3', tries: 50, sp: '3–5' } : a <= 7 ? { day: [12, 15], game: 3.5, gl: '3–4', tries: 80, sp: '5–7' }
+      : a <= 9 ? { day: [15, 20], game: 4.5, gl: '4–5', tries: 70, sp: '5–7' } : { day: [20, 25], game: 8, gl: 'до 10', tries: 60, sp: '5' };
+  }
+  const langsOf = (pr = P) => { let l = []; try { l = myLangs(pr); } catch (e) {} l = l.filter(c => NORM[c]); return l.length ? l : [NORM[LANG] ? LANG : 'ru']; };
+  // the parents' choice; a child with speech steps already done keeps them (the families from before)
+  function get(pr = P) {
+    const s = pr.settings;
+    if (!s.focus || typeof s.focus !== 'object') {
+      const did = Object.values(pr.days || {}).some(v => v === true || (v && v.speech)), snd = Array.isArray(s.sounds) && s.sounds.length;
+      s.focus = { sp: did || snd ? 'yes' : 'unk', subj: [] };
+    }
+    if (!Array.isArray(s.focus.subj)) s.focus.subj = [];
+    return s.focus;
+  }
+  const set = (k, v) => { get()[k] = v; CACHE = null; save(); };
+  // is the speech step in the day?
+  function speech(pr = P) { const f = get(pr); return f.sp === 'yes' || (f.sp === 'unk' && !!f.chk && f.chk.res === 'lag'); }
+  const main = (pr = P) => get(pr).subj;
+  // the 1-minute check: which groups lag the age norm, in every language of the child
+  function judge(ans, intel, pr = P) {
+    const a = ageOf(pr), lag = [];
+    Object.keys(ans).forEach(c => (NORM[c] || []).forEach(([k, , , age]) => { if (ans[c][k] === 0 && a >= age) lag.push(c + ':' + k); }));
+    const flag = intel === 0 && a >= 4;
+    return { lag, flag, res: lag.length || flag ? 'lag' : 'ok', see: flag || (lag.length && a >= 6) };
+  }
+
+  // minutes of a step, by its kind
+  function mins(st, id, pr = P) {
+    const d = dose(pr), k = String(st.key || '');
+    if (st.kind === 'breath') return .5; if (st.kind === 'artic') return 1;
+    if (k === 'soroban') return ageOf(pr) <= 5 ? 2 : 3; if (k === 'olymp-day') return 3; if (st.kind === 'book') return 0;
+    return id === 'speech' && speech(pr) ? SPG : d.game;
+  }
+  const sum = (steps, id) => steps.reduce((a, s) => a + mins(s, id), 0);
+  // the speech block of a child who needs it: one warm-up for the tongue, then sound games until the tries are enough
+  function speechBlock(full) {
+    const n = dayNo(), d = dose(), want = Math.ceil(d.tries / TRIES);
+    const warm = full.find(s => s.kind === 'artic') || full.find(s => s.kind === 'breath');
+    const games = full.filter(s => s.kind === 'game' && !/^(ml-|gram)/.test(String(s.key)));
+    let snd = []; try { snd = mySounds(); } catch (e) { snd = ['r']; }
+    const ok = id => { const g = GAMES.find(x => x.id === id); return g && !(g.hide && g.hide()) && !gameOff(id); };
+    const pool = [...new Set(snd.flatMap(k => POOL[k] || []))].filter(id => ok(id) && !games.some(s => s.key === id));
+    for (let i = 0; games.length < want && i < pool.length; i++) games.push(gameStep(pool[(n + i) % pool.length], 'game'));
+    return [warm, ...games.slice(0, want)].filter(Boolean);
+  }
+  // the lessons' full plans (before the dose), the minutes each one gets
+  let CACHE = null;
+  function alloc(ids) {
+    const key = [ROOT.cur, dayKey(), ids.join(), JSON.stringify(get()), P.settings.age, JSON.stringify(dayCounts(dayKey())), JSON.stringify(todayState().short || {})].join('|');
+    if (CACHE && CACHE.key === key) return CACHE.out;
+    const d = dose(), mn = main(), full = {}, out = { mins: {}, steps: {} };
+    ids.forEach(id => { let p = []; try { p = LITTLE_PLAN(id, lessonPlan0(id)); } catch (e) {} full[id] = id === 'speech' && speech() ? speechBlock(p) : p; });
+    // fixed: the speech block, soroban, the puzzle, the book; the rest of the day goes to reading and maths, a main one ×2
+    const fixed = ids.filter(id => id === 'speech' || !['read', 'math'].includes(id));
+    fixed.forEach(id => { const p = id === 'speech' ? full[id] : full[id].slice(0, 1); out.steps[id] = p; out.mins[id] = sum(p, id); });
+    const rest = ids.filter(id => !fixed.includes(id)), w = id => mn.includes(id) ? 2 : 1, W = rest.reduce((a, id) => a + w(id), 0);
+    const left = Math.max(0, d.day[1] - fixed.reduce((a, id) => a + out.mins[id], 0));
+    rest.forEach(id => {
+      const share = W ? left * w(id) / W : 0, p = [];
+      for (const s of full[id]) { if (p.length && sum([...p, s], id) > share + .01) break; p.push(s); }
+      out.steps[id] = p; out.mins[id] = sum(p, id);
+    });
+    out.total = ids.reduce((a, id) => a + (out.mins[id] || 0), 0);
+    CACHE = { key, out };
+    return out;
+  }
+  // the path: the speech step only when needed (then first); a main subject always in; a short day gets one more step
+  function must(ms, ids, m) {
+    const sp = speech(), mn = main(), ord = ['speech', 'read', 'math', 'soro', 'puzzle', 'book'];
+    let out = ms.filter(id => id !== 'speech' || sp);
+    if (sp && ids.includes('speech') && !out.includes('speech')) out.unshift('speech');
+    mn.forEach(id => { if (ids.includes(id) && !out.includes(id)) out.push(id); });
+    const extra = ord.filter(id => ids.includes(id) && !out.includes(id) && id !== 'speech' && (m || {})[id] !== false);
+    while (extra.length && alloc(out).total < dose().day[0]) out.push(extra.shift());
+    if (!out.length) out = ids.filter(id => id !== 'speech').slice(0, 1);
+    // the speech block first, then the main subjects, then the rest in the usual order
+    const rank = id => id === 'speech' ? -2 : mn.includes(id) ? -1 + ord.indexOf(id) / 10 : ord.indexOf(id);
+    return out.sort((a, b) => rank(a) - rank(b));
+  }
+  const opt = ids => speech() ? ids : ids.filter(id => id !== 'speech');
+  // a lesson's steps today: its share of the minutes
+  function plan(id, steps) {
+    let ms = []; try { ms = SIMPLE.must(); } catch (e) { return steps; }
+    if (!ms.includes(id)) return id === 'speech' && speech() ? speechBlock(steps) : steps;
+    const a = alloc(ms), p = a.steps[id];
+    if (!p || !p.length) return steps;
+    return p;
+  }
+  // the doors that stay every day, lighter: drawing, and chess from 5; a main one first
+  function doors() { const a = ageOf(), d = ['art', ...(a >= 5 ? ['chess'] : [])], mn = main().filter(x => x === 'art' || x === 'chess'); return [...new Set([...mn, ...d])]; }
+  const minutes = () => { try { return Math.round(alloc(SIMPLE.must()).total); } catch (e) { return 0; } };
+  // the week: days with a lesson in the last 7 (a missed day does not reset anything)
+  function week(pr = P) {
+    let n = 0; const d = new Date();
+    for (let i = 0; i < 7; i++) { const k = dayKey(d), v = (pr.days || {})[k]; if (v === true || (v && Object.values(v).some(x => x)) || (pr.frozen || []).includes(k)) n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  // for «Отчёт»: the focus and the days of the last 7 each focus lesson was done
+  function digest(pr) {
+    const f = get(pr), dd = {}, d = new Date();
+    for (let i = 0; i < 7; i++) { const v = (pr.days || {})[dayKey(d)]; ['speech', 'read', 'math'].forEach(id => { if (v === true ? id === 'speech' : v && v[id]) dd[id] = (dd[id] || 0) + 1; }); d.setDate(d.getDate() - 1); }
+    return { sp: f.sp === 'yes' ? 'y' : f.sp === 'no' ? 'n' : speech(pr) ? 'l' : 'u', f: f.subj.slice(0, 4), dd, wk: week(pr), ch: f.chk ? f.chk.d : '' };
+  }
+  function clean(x) {
+    if (!x || typeof x !== 'object') return null;
+    const dd = {}; ['speech', 'read', 'math'].forEach(k => { const v = Math.round(+((x.dd || {})[k]) || 0); if (v > 0) dd[k] = Math.min(7, v); });
+    return { sp: ['y', 'n', 'l', 'u'].includes(x.sp) ? x.sp : 'u', f: (Array.isArray(x.f) ? x.f : []).filter(k => SUBJ.some(s => s[0] === k)).slice(0, 4), dd, wk: Math.min(7, Math.max(0, Math.round(+x.wk || 0))), ch: /^\d{4}-\d\d-\d\d$/.test(x.ch || '') ? x.ch : '' };
+  }
+  function cardHTML(fo) {
+    if (!fo) return '';
+    const sp = { y: 'нужна', n: 'не нужна', l: 'нужна по проверке', u: fo.ch ? 'по проверке в норме' : 'не проверяли' }[fo.sp];
+    const nm2 = id => (SUBJ.find(s => s[0] === id) || [id, '', id])[2];
+    const ln = [];
+    fo.f.forEach(id => { if (fo.dd[id] !== undefined || id === 'read' || id === 'math') ln.push(`${nm2(id)}: ${fo.dd[id] || 0} из 7 дней`); });
+    if (fo.sp === 'y' || fo.sp === 'l') ln.push(`Логопедия: ${fo.dd.speech || 0} из 7 дней`);
+    return `<div class="gd-fo"><h3 class="gd-s">🎯 Главное</h3><p>${fo.f.length ? esc(fo.f.map(nm2).join(', ')) + ' · ' : ''}логопедия: ${esc(sp)}</p>${ln.length ? `<p>${esc(ln.join(' · '))}</p>` : ''}<p class="muted">Занимались ${fo.wk} из 7 последних дней.</p></div>`;
+  }
+
+  // «Для взрослых» → «Что важно»
+  function parentSec(sec) {
+    sec = sec || document.createElement('section'); sec.className = 'psec'; sec.id = 'focusPar';
+    const f = get(), d = dose(), a = ageOf(), name = P.settings.name || 'ребёнка', sp = speech(), c = f.chk;
+    const spNote = f.sp === 'no' ? 'Логопедических заданий в дне нет. Игры со звуками остаются в «Все игры».'
+      : f.sp === 'yes' ? `Каждый день короткий блок ${d.sp} мин: разминка и игры со звуком, цель — не меньше ${d.tries} попыток. Это часть дня, а не сверху.`
+      : c ? (c.res === 'lag' ? `Проверка ${c.d}: ${c.lag.length ? 'отстают звуки ' + esc(lagText(c.lag)) : 'речь трудно понять'}. Короткий блок логопедии включён (${d.sp} мин, ${d.tries}+ попыток).` : `Проверка ${c.d}: звуки по возрасту в норме — логопедии в дне нет.`)
+      : 'Пока без логопедии. Проверьте звуки за минуту — игра сравнит их с нормой возраста.';
+    sec.innerHTML = `<h2>🎯 Что важно для вашего ребёнка?</h2>
+      <p class="sd-note">Говорилки строят день от вашего выбора. Главное получает больше времени, остальное (рисование, шахматы, счёты) остаётся каждый день, понемногу.</p>
+      <h3 class="fam-s">Логопедия</h3>
+      <div class="sd-seg" id="foSp">${[['yes', 'Нужна'], ['no', 'Не нужна'], ['unk', 'Не знаю']].map(([v, t]) => `<button class="chip ${f.sp === v ? 'sel' : ''}" data-sp="${v}">${t}</button>`).join('')}</div>
+      <p class="sd-note" id="foSpN">${spNote}</p>
+      ${f.sp === 'no' ? '' : `<button class="chip" id="foChk">🩺 ${c ? 'Проверить звуки ещё раз' : 'Проверить звуки (1 минута)'}</button>`}
+      ${c && c.see ? '<p class="sd-note">⚠️ Советуем показать ребёнка логопеду: игра поддержит занятия, но не заменит специалиста.</p>' : ''}
+      <h3 class="fam-s">Главное сейчас</h3>
+      <div class="sd-seg" id="foSubj">${SUBJ.map(([k, e, t]) => `<button class="chip ${f.subj.includes(k) ? 'sel' : ''}" data-subj="${k}">${e} ${t}</button>`).join('')}</div>
+      <p class="sd-note">День для ${a} ${plural(a, ['года', 'лет', 'лет'])}: ${d.day[0]}–${d.day[1]} минут, одна игра — ${d.gl} мин. Сейчас в дне ≈ <b id="foMin">${minutes()}</b> мин${sp ? ', из них логопедия ≈ ' + Math.round(alloc(SIMPLE.must()).mins.speech || 0) + ' мин' : ''}.</p>`;
+    const redo = () => { parentSec(sec); try { const dp = $('#dayPar'); if (dp) SIMPLE.parentSec(dp); } catch (e) {} };
+    sec.querySelector('#foSp').onclick = e => { const b = e.target.closest('[data-sp]'); if (!b) return; sfx.tick(); set('sp', b.dataset.sp); redo(); };
+    sec.querySelector('#foSubj').onclick = e => { const b = e.target.closest('[data-subj]'); if (!b) return; sfx.tick(); const s = main(), k = b.dataset.subj; set('subj', s.includes(k) ? s.filter(x => x !== k) : [...s, k]); redo(); };
+    const ch = sec.querySelector('#foChk'); if (ch) ch.onclick = () => { sfx.pop(); check(sec, redo); };
+    return sec;
+  }
+  const lagText = lag => lag.map(x => { const [c, k] = x.split(':'), g = (NORM[c] || []).find(r => r[0] === k); return g ? g[1] + (langsOf().length > 1 ? ' (' + mlInfo(c)[2] + ')' : '') : ''; }).filter(Boolean).join(', ');
+  // the 1-minute check, right in the section: a grown-up marks each group of sounds in each language
+  function check(sec, done) {
+    const ls = langsOf(), ans = {}, a = ageOf();
+    ls.forEach(c => { ans[c] = {}; });
+    let intel = 1;
+    sec.innerHTML = `<h2>🩺 Звуки за минуту</h2>
+      <p class="sd-note">Отметьте, как ребёнок говорит сейчас, в обычной речи. Это не диагноз: игра сравнит ответы с возрастной нормой (${a} ${plural(a, ['год', 'года', 'лет'])}).</p>
+      ${ls.map(c => `<h3 class="fam-s">${mlInfo(c)[1]} ${esc(mlInfo(c)[2])}</h3>${NORM[c].map(([k, L, ex]) => `<div class="fo-row"><span><b>${esc(L)}</b> <small>${esc(ex)}</small></span>
+        <span class="sd-seg" data-l="${c}" data-g="${k}"><button class="chip sel" data-v="1">Чисто</button><button class="chip" data-v="0">Пока нет</button></span></div>`).join('')}`).join('')}
+      <div class="fo-row"><span><b>Чужие люди понимают речь ребёнка?</b></span><span class="sd-seg" id="foIntel"><button class="chip sel" data-v="1">Да</button><button class="chip" data-v="0">Плохо</button></span></div>
+      <button class="big" id="foDone">Готово</button>`;
+    ls.forEach(c => NORM[c].forEach(([k]) => { ans[c][k] = 1; }));
+    sec.querySelectorAll('[data-g]').forEach(g => g.onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; sfx.tick(); ans[g.dataset.l][g.dataset.g] = +b.dataset.v; g.querySelectorAll('[data-v]').forEach(x => x.classList.toggle('sel', x === b)); });
+    sec.querySelector('#foIntel').onclick = e => { const b = e.target.closest('[data-v]'); if (!b) return; sfx.tick(); intel = +b.dataset.v; e.currentTarget.querySelectorAll('[data-v]').forEach(x => x.classList.toggle('sel', x === b)); };
+    sec.querySelector('#foDone').onclick = () => { sfx.good(); finishCheck(ans, intel); done(); };
+    sec.scrollIntoView({ block: 'start' });
+  }
+  function finishCheck(ans, intel) {
+    const j = judge(ans, intel), f = get();
+    f.chk = { d: dayKey(), ans, intel, lag: j.lag, res: j.res, see: !!j.see };
+    // the lagging sounds become the sounds the speech games train (the four the game has)
+    const ks = [...new Set(j.lag.map(x => x.split(':')[1]).filter(k => SOUND_SET.some(s => s[0] === k)))];
+    if (ks.length) P.settings.sounds = ks;
+    try { EVT.log('focus', 'chk-' + j.res, j.lag.length); } catch (e) {}
+    CACHE = null; save();
+    return j;
+  }
+  return { NORM, SUBJ, get, set, speech, main, dose, judge, finishCheck, must, opt, plan, doors, minutes, alloc, week, digest, clean, cardHTML, parentSec, ageOf };
+})();
+function FOCUS_PLAN(id, steps) { try { return FOCUS.plan(id, steps); } catch (e) { return steps; } }
+/* FOCUS-END */
 /* TALK-BEGIN */
 /* ---------- the friend who listens (simple-day, phase 3): the child's friend sits in a corner of the home, the door
    rooms and the passport. A tap opens a little talk: «Слушаю…» with the phone's speech recognition when the
