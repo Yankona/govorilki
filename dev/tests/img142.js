@@ -6,7 +6,7 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
   const b = await chromium.launch(); const c = await b.newContext({ viewport: { width: 800, height: 900 } });
   const ext = []; c.on('request', r => { if (/wikimedia/.test(r.url())) ext.push(r.url()); });
   await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
   const p = await c.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); await p.goto(PAGE); await p.waitForTimeout(1500);
   const ids = ['pt-tram', 'pt-farol', 'pt-roca', 'mu-mozart', 'ar-vangogh', 'pt-boca'];
   console.log('urls:', JSON.stringify(await p.evaluate(ids => window.__T.run(`(${JSON.stringify(ids)}).map(id => [id, (learnImg(id) || []).length])`), ids)));

@@ -3934,7 +3934,9 @@ const PACK = (() => {
   async function warm() {
     const names = Object.keys(PACKS), sw = navigator.serviceWorker; if (!names.length || !sw) return;
     let reg = null; try { reg = await Promise.race([sw.ready, wait(20000)]); } catch (e) {}
-    if (reg && reg.active) reg.active.postMessage({ keep: names.map(n => new URL(url(n), location.href).href) });
+    // the page and the game's script (data/<lang>/app.*.js on the site) too, so the game opens offline after one visit
+    const page = location.href.split(/[?#]/)[0].replace(/index\.html$/, ''), own = window.GV_APP ? [page, new URL(window.GV_APP, location.href).href] : [];
+    if (reg && reg.active) reg.active.postMessage({ keep: own.concat(names.map(n => new URL(url(n), location.href).href)) });
     // the photos of the stories go offline too: the small one of every story (≈1.4 MB for all), so the lists, «Дальше»
     // and a story without its big photo show a picture without a connection (audit-rewards)
     if (reg && reg.active) try { reg.active.postMessage({ keep: pics() }); } catch (e) {}
@@ -3946,7 +3948,8 @@ const PACK = (() => {
     }
   }
   const pics = () => EMBEDDED ? [] : Object.keys(LEARN_IMG).map(id => new URL(LEARN_IMG[id][4] || `${SITE_ROOT}img/learn/${id}-s.webp`, location.href).href);
-  addEventListener('load', () => setTimeout(warm, 300));
+  // the site's page loads this script after its first paint (build.py), which can be after the page's load event
+  if (document.readyState === 'complete') setTimeout(warm, 300); else addEventListener('load', () => setTimeout(warm, 300));
   return { get, story, warm, url, pics, loaded: n => !!got[n] };
 })();
 const LOC = { ru: 'ru-RU', en: 'en-GB', pt: 'pt-PT', de: 'de-DE' }[LANG];
@@ -4869,6 +4872,8 @@ function newScreen() {
   tok++; hush(); windStop(); motorStop(); compStop(); try { MUSIC.stop(); } catch (e) {} stopMusic(); stopCam(); guardReset(); relayClose(); liveStop(); srAbortAll(); soundOut(true);
   timers.forEach(clearTimeout); timers = [];
   cancelAnimationFrame(rafId); resizeFn = null;
+  // let the old screen go: the bubble's watcher would otherwise keep the whole previous screen in memory
+  try { if (SAID_MO) SAID_MO.disconnect(); SAID_MO = null; SAID_ST = null; if (GUIDE_RO) GUIDE_RO.disconnect(); GUIDE_RO = null; } catch (e) {}
   $$('.said, .said-card, .flyer').forEach(x => x.remove());
   lookApply();
   return tok;
@@ -11850,7 +11855,7 @@ function screenFlash() {
 function screenOlymp() { OLY.play(); }
 
 /* ---------- the app's own voice: Piper (Rhasspy) running in a background worker of the browser, so games never stall.
-   The voice file (about 63 MB) downloads once from Hugging Face and stays on the phone; until it is ready the phone's
+   The voice file (about 63 MB) downloads once from our site (engine/piper/voices/) and stays on the phone; until it is ready the phone's
    own voice speaks. Every line said once is kept in the «govorilki-voice» cache and plays instantly next time. ---------- */
 const PIPER_VOICES = LANG === 'en' ? [['en_GB-jenny_dioco-medium', 'Jenny'], ['en_GB-cori-medium', 'Cori'], ['en_GB-alba-medium', 'Alba'], ['en_GB-alan-medium', 'Alan']]
   : LANG === 'pt' ? [['pt_PT-tugão-medium', 'Tugão']] : LANG === 'de' ? [['de_DE-thorsten-medium', 'Thorsten'], ['de_DE-kerstin-low', 'Kerstin'], ['de_DE-ramona-low', 'Ramona'], ['de_DE-eva_k-x_low', 'Eva']]
@@ -11866,6 +11871,33 @@ const ORT_URL = ENG ? ENG + 'ort.wasm.min.mjs' : CDN + 'onnxruntime-web@1.27.0/w
 const PH_URL = ENG ? ENG + 'piper-o91UDS6e.js' : CDN + '@mintplex-labs/piper-tts-web@1.0.5/dist/piper-o91UDS6e.js/+esm';
 const TTS_URL = ENG ? ENG + 'piper-tts-web.js' : CDN + '@mintplex-labs/piper-tts-web@1.0.5/+esm';
 const phBase = () => ENG ? ENG + 'piper_phonemize' : tts.WASM_BASE;
+// the voice models we host ourselves (engine/piper/voices/voices.json: a model in parts of up to 25 MB, the limit of the
+// site's host): the engine asks Hugging Face for them, this fetch answers from our site instead, part after part as one
+// stream (so the percent still moves), each part checked by its sha-256; a voice not listed there still comes from Hugging Face
+const HF = 'https://huggingface.co/diffusionstudio/piper-voices/resolve/main/', fetch0 = self.fetch.bind(self);
+let OWN = null;
+const own = () => OWN || (OWN = fetch0(ENG + 'voices/voices.json').then(r => r.ok ? r.json() : {}).catch(() => { OWN = null; return {}; }));
+self.fetch = async (u, o) => {
+  const url = String(u && u.url || u), m = ENG && url.startsWith(HF) ? (await own())[url.split('/').pop()] : null;
+  if (!m) return fetch0(u, o);
+  let i = 0, rd = null, got = [];
+  const body = new ReadableStream({ async pull(c) {
+    for (;;) {
+      if (!rd) {
+        if (i >= m.parts.length) { c.close(); return; }
+        const r = await fetch0(ENG + 'voices/' + m.parts[i].f);
+        if (!r.ok) throw new Error('voice part ' + r.status);
+        rd = r.body.getReader(); got = [];
+      }
+      const { done, value } = await rd.read();
+      if (!done) { got.push(value); c.enqueue(value); return; }
+      const all = new Uint8Array(await new Blob(got).arrayBuffer()), h = [...new Uint8Array(await crypto.subtle.digest('SHA-256', all))].map(x => x.toString(16).padStart(2, '0')).join('');
+      if (h !== m.parts[i].sha256) throw new Error('voice part ' + i + ' damaged');
+      rd = null; got = []; i++;
+    }
+  } });
+  return new Response(body, { headers: { 'Content-Length': String(m.size) } });
+};
 const ACC = String.fromCharCode(0x301), VL = 'аеёиоуыэюя', VI = 'aɑeɛiɪoɔuyʌɵ';
 async function hook() {
   if (ORT !== null) return;
@@ -20626,7 +20658,7 @@ GAMES.push(
    as text with the stress mark (U+0301). The family can add their own words in the voice settings. ---------- */
 let SAYRU = /*__SAYRU__*/null;   // { w: {word: form}, b: {'previous word': form}, c: {name with a capital: form}, s: {hash: 'word#n=form;…'}, p: {form: 'from|to'} }
 // on the built Russian page the dictionary is a data pack, fetched once the page has loaded; a line waits for it a little
-const SAYRU_P = !SAYRU && PACKS.sayru ? new Promise(r => addEventListener('load', r, { once: true })).then(() => PACK.get('sayru')).then(d => (SAYRU = d), () => null) : null;
+const SAYRU_P = !SAYRU && PACKS.sayru ? new Promise(r => document.readyState === 'complete' ? r() : addEventListener('load', r, { once: true })).then(() => PACK.get('sayru')).then(d => (SAYRU = d), () => null) : null;
 const ACC = '́';
 
 // numbers in words: case (nom gen dat acc ins prep) and gender (m f n, pl for ordinals)
@@ -30179,6 +30211,8 @@ const LAND_CARDS = [
   ['🌍', 'Узнаём', 'Истории о городах и странах, опыты на площадке, праздники, подготовка к поездке, слова на 11 языках.'],
   ['🏆', 'Вместе', 'Звёзды, серии дней и медали, командная серия братьев и сестёр, лига семей и баттлы.']];
 function screenLanding({ liga = '' } = {}) {
+  // the site's page shows a copy of these words before the script arrives (build.py); the same paragraph stays in place
+  const skel = document.querySelector('p.lp-skel.lp-tag');
   newScreen(); document.body.classList.remove('quest');
   const cl = cloudOn(), friends = ['tiger', 'kitty', 'panda', 'unicorn', 'ghost'].filter(k => FRIENDS[k]);
   app.innerHTML = `<div class="screen"><main class="stage scroll" id="stage"><div class="lp">
@@ -30216,6 +30250,8 @@ function screenLanding({ liga = '' } = {}) {
     <section class="lp-sec lp-end"><div class="lp-cta"><button class="big" id="obStart2">🚀 Создать семью</button></div>
       <p class="muted">На iPhone: «Поделиться» → «На экран „Домой“». На Android: меню ⋮ → «Добавить на главный экран».</p></section>
   </div></main></div>`;
+  const tag = app.querySelector('.lp-tag');
+  if (skel && tag) { skel.className = 'lp-tag'; skel.innerHTML = tag.innerHTML; tag.replaceWith(skel); }
   LANDUX.apply();
   LANDX.apply();
   quickLand();

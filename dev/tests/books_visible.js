@@ -15,7 +15,7 @@ let bad = 0; const check = (n, ok, m = '') => { if (!ok) bad++; console.log(`${o
   const base = { engine: 'device', micOff: true, srOff: true, parentPhone: true, cur: 'r4', curFam: 'ft', families: { ft: { id: 'ft', name: 'Т', cc: 'PT', kids: CASES.map(c => c[0]), grands: [] } }, profiles };
   const c = await b.newContext(DEV === 'laptop' ? { viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 } : { ...devices['iPhone 13'], deviceScaleFactor: 1 });
   await c.route(/ntfy|wikipedia|wikimedia|huggingface|jsdelivr|youtube|workers\.dev/, r => r.abort());
-  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { get P() { return P; }, run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { get P() { return P; }, run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
   await c.addInitScript(s => { if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, base);
   const p = await c.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
   const T = s => p.evaluate(x => window.__T.run(x), s);

@@ -11,7 +11,7 @@ let bad = 0; const fail = m => { bad++; console.log('  FAIL ' + m); };
   for (const lang of ['ru', 'en', 'pt', 'de']) {
     const c = await b.newContext({ ...devices['iPhone 13'], deviceScaleFactor: 1 });
     await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
     await c.addInitScript(s => { try { speechSynthesis.speak = u => setTimeout(() => u.onend && u.onend(), 5); } catch (e) {} if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, seed(lang));
     const p = await c.newPage(), errs = []; p.on('pageerror', e => errs.push(e.message));
     await p.goto(BASE + SUB[lang]); await p.waitForTimeout(1500);

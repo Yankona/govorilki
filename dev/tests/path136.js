@@ -8,7 +8,7 @@ async function open(b, cur, opt) {
   const fam = { engine: 'device', micOff: true, srOff: true, parentPhone: true, cur, curFam: 'ft', families: { ft: { id: 'ft', name: 'Т', cc: 'PT', kids: ['k1', 'k2'], grands: [] } }, profiles: { k1: kid('Тина', 'f', 'r', 5, 'kitty', 35), k2: kid('Тоша', 'm', 'l', 8, 'tiger', 140) } };
   const c = await b.newContext(opt);
   await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { get P() { return P; }, get ROOT() { return ROOT; }, run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { get P() { return P; }, get ROOT() { return ROOT; }, run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
   await c.addInitScript(s => { window.__said = []; try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 5); }; } catch (e) {} if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, fam);
   const p = await c.newPage(); p.errs = []; p.on('pageerror', e => p.errs.push(e.message));
   await p.goto(PAGE); await p.waitForTimeout(1500);

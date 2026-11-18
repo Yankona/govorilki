@@ -53,7 +53,7 @@ const NOT_FOR_GROWNUPS = ['chess-mm'];
     const ctx = async (seed, hash) => {
       const c = await b.newContext(DEV === 'laptop' ? { viewport: { width: 1280, height: 800 } } : { ...devices['iPhone 13'], deviceScaleFactor: 1 });
       await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
       await c.addInitScript(s => { try { speechSynthesis.speak = u => setTimeout(() => u.onend && u.onend(), 5); } catch (e) {} window.__E = []; addEventListener('error', e => window.__E.push(String(e.message).slice(0, 160))); addEventListener('unhandledrejection', e => window.__E.push('rejection ' + String(e.reason && e.reason.message || e.reason).slice(0, 160))); window.alert = () => {}; window.confirm = () => true; window.prompt = () => null;
         if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); if (s) localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, seed);
       const p = await c.newPage(), errs = [];

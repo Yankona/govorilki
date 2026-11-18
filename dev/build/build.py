@@ -119,6 +119,32 @@ with tempfile.TemporaryDirectory() as tmp:
   subprocess.run(['node', os.path.join(DEV, 'build', 'packs.js'), tmp + '/in.html', tmp + '/out.html', lang,
                   os.path.join(SITE, 'data', lang)] + (['sayru=' + SAYRU] if SAYRU else []), check=True)
   page = open(tmp + '/out.html', encoding='utf8').read()
+# the first screen sooner: the game's script (2–3 MB) leaves the page for data/<lang>/app.<hash>.js, loaded with defer,
+# so the page itself is small; until the script runs, the page shows the start screen's title and words (taken from the
+# translated script, so every language gets its own), or only the title for a family that plays already
+import hashlib
+a = page.index('<div id="app"></div>'); b = page.index('<script>', a); c = page.index('</script>', b)
+js = page[b + 8:c]
+assert 'goHome();' in js, 'the game script moved: update build.py'
+# the copy of the start screen is painted first, then the game draws its screen in the next frame
+assert js.count('goHome();\n})();') == 1
+js = js.replace('goHome();\n})();', "if (document.hidden || !document.fonts) goHome(); else Promise.race([window.__gvF || document.fonts.ready, new Promise(r => setTimeout(r, 1600))]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(goHome, 0))));\n})();")
+h = hashlib.sha1(js.encode('utf8')).hexdigest()[:10]
+ddir = os.path.join(SITE, 'data', lang)
+for f in os.listdir(ddir):
+  if f.startswith('app.') and f.endswith('.js'): os.remove(os.path.join(ddir, f))
+open(os.path.join(ddir, f'app.{h}.js'), 'w', encoding='utf8').write(js)
+def pick(rx):
+  m = re.search(rx, js); return m.group(1) if m else ''
+logo = pick(r'\[\.\.\.[\'"]([^\'"]+)[\'"]\]\.map\(c => `<span class="lt')
+tag = pick(r'<p class="lp-tag">([^<$`]+)</p>')
+free = pick(r'<p class="lp-free">([^<$`]+)</p>')
+assert logo and tag, 'the start screen moved: update the first-screen copy in build.py'
+letters = ''.join(f'<span class="lt" data-c="{ch}"></span>' for ch in logo)
+skel = f'''<div id="app"><script>(function(){{var k='calm';try{{var r=JSON.parse(localStorage.getItem('govorilki-v2')||'null');if(r&&r.profiles&&Object.keys(r.profiles).length)document.documentElement.classList.add('gv-ret');var p=r&&r.profiles&&r.profiles[r.cur],f=r&&r.families&&r.families[r.curFam];k=(p&&p.settings&&p.settings.look)||(f&&f.look)||k}}catch(e){{}}document.body.classList.toggle('look-calm',k!=='bright');document.body.classList.toggle('look-dark',k==='dark')}})()</script><style>.lp-skel{{visibility:hidden}}.gv-f .lp-skel{{visibility:visible}}.gv-ret .lp-skel{{display:none}}.lp-wait{{display:block;width:44px;height:44px;margin:28px auto;border-radius:50%;border:5px solid var(--line,#ddd);border-top-color:var(--tiger-deep,#e07a2e);animation:lpw 1s linear infinite}}@keyframes lpw{{to{{transform:rotate(1turn)}}}}</style><div class="screen"><main class="stage scroll" id="stage"><div class="lp"><header class="lp-hero"><h1 class="logo"><span class="vh">{logo}</span><span aria-hidden="true">{letters}</span></h1><p class="lp-tag lp-skel">{tag}</p><span class="lp-wait" role="progressbar" aria-label="…"></span>{f'<p class="lp-free lp-skel">{free}</p>' if free else ''}</header></div></main></div><script>(function(){{var F,G=new Promise(function(r){{F=function(){{document.documentElement.classList.add('gv-f');r()}}}});window.__gvF=G;try{{var p=document.querySelector('.lp-skel'),t=setTimeout(F,1500);document.fonts.load(getComputedStyle(p).font,p.textContent).then(function(){{clearTimeout(t);F()}},F)}}catch(e){{F()}}}})()</script></div>'''
+# the script starts downloading once the copy is painted, so the fonts and the copy do not wait behind its megabytes
+load = f'''<script>window.GV_APP='{up}data/{lang}/app.{h}.js';(window.__gvF||Promise.resolve()).then(function(){{var go=function(){{var s=document.createElement('script');s.src=window.GV_APP;document.body.appendChild(s)}};document.hidden?go():requestAnimationFrame(function(){{setTimeout(go,0)}})}})</script>'''
+page = page[:a] + skel + '\n' + load + page[c + 9:]
 open(out + '/index.html', 'w', encoding='utf8').write(page)
 json.dump({
   "name": META['name'],

@@ -8,7 +8,7 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
   for (const [track, age] of [['r', 5], ['l', 9]]) {
     const c = await b.newContext();
     await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
     const kid = { stars: 5, plays: {}, book: { title: 'Т', log: {} }, settings: { name: 'Тина', gender: 'f', track, age, friend: 'kitty', onboarded: true, lang: LANG } };
     await c.addInitScript(s => { if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, { engine: 'device', micOff: true, srOff: true, cur: 'k1', curFam: 'f1', families: { f1: { id: 'f1', name: 'Т', kids: ['k1'], grands: [] } }, profiles: { k1: kid } });
     const p = await c.newPage();

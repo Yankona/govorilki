@@ -29,7 +29,7 @@ let bad = 0; const ok = (c, m) => { console.log((c ? '  ok  ' : '  FAIL ') + m);
         if (a === 'opensearch') return json([q.get('search'), [], [], []]);
         return json({});
       });
-      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) }; { const sp0 = sayParts; sayParts = t => { const r = sp0(t); window.__parts.push(...r); return r; }; }'); r.fulfill({ response: x, body: t }); });
+      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) }; { const sp0 = sayParts; sayParts = t => { const r = sp0(t); window.__parts.push(...r); return r; }; }'); r.fulfill({ response: x, body: t }); });
       await c.addInitScript(s => { window.__said = []; window.__parts = []; try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 5); }; } catch (e) {} if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, fam);
       const p = await c.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
       const run = s => p.evaluate(s => window.__T.run(s), s);

@@ -5,7 +5,7 @@
 //     (no «Тина», no stars in what it stores);
 //  2) no request goes to ntfy, Google Fonts or jsDelivr; the fonts come from the site's fonts/;
 //  3) no summary for the author is sent (the old 3-hourly one);
-//  4) with the Piper voice the engine is fetched from engine/piper/ (the voice model itself still comes from Hugging Face).
+//  4) with the Piper voice the engine is fetched from engine/piper/ (the voice model too: engine/piper/voices/, see tests/voice_own.js).
 // Invented family only: бабушка Тома, Тина, Тим. node tests/privacy_hotfix.js [base] [phone|laptop] [langs=ru,en,pt,de]
 const { chromium, devices } = require('playwright');
 const fs = require('fs'), path = require('path');
@@ -51,7 +51,7 @@ const MIME = { '.css': 'text/css', '.woff2': 'font/woff2', '.js': 'text/javascri
         if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
         local.add(rel); return r.fulfill({ status: 200, headers: { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream' }, body: fs.readFileSync(f) });
       });
-      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+      await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
       await c.addInitScript(s => { try { speechSynthesis.speak = u => setTimeout(() => u.onend && u.onend(), 5); } catch (e) {}
         if (localStorage.getItem('seeded')) return; localStorage.setItem('seeded', 1); if (s) localStorage.setItem('govorilki-v2', JSON.stringify(s)); }, seed);
       const p = await c.newPage(), errs = [];
