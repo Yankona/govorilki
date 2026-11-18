@@ -27,7 +27,7 @@ async function open(b, lang, who, { cam = true } = {}) {
     profiles: { k1: kid('Тина', 'f', 6, 'kitty', lang), k2: kid('Тим', 'm', 9, 'tiger', lang) } };
   const c = await b.newContext(DEV === 'laptop' ? { viewport: { width: 1280, height: 800 } } : { ...devices['iPhone 13'] });
   await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev/, r => r.abort());
-  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+  await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
   await c.addInitScript(([s, real]) => {
     // the voice: long lines take a while (so a child can tap during them), short ones end quickly
     window.__said = []; window.__slow = 0;

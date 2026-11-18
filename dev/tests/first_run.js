@@ -20,7 +20,7 @@ const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
     const beacon = [], popups = [];
     c.on('request', r => { if (/cloudflareinsights|beacon\.min\.js/.test(r.url())) beacon.push(r.url()); });
     await c.route(/ntfy|wikipedia|huggingface|jsdelivr|youtube|wikimedia|workers\.dev|example\.org/, r => r.abort());
-    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
+    await c.route(u => /\/(ru|de|pt|en)?\/?(index\.html)?$|\/app\.[0-9a-f]+\.js$/.test(u.pathname), async r => { const x = await r.fetch(); let t = await x.text(); t = t.replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };'); r.fulfill({ response: x, body: t }); });
     await c.addInitScript(() => { window.__said = []; try { speechSynthesis.speak = u => { window.__said.push(u.text); setTimeout(() => u.onend && u.onend(), 5); }; } catch (e) {} });
     const p = await c.newPage(), errs = [], miss = [];
     p.on('pageerror', e => errs.push(e.message)); c.on('page', x => popups.push(x.url()));

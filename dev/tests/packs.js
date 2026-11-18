@@ -14,7 +14,7 @@ const srv = http.createServer((q, s) => {
   try { if (fs.statSync(f).isDirectory()) f = path.join(f, 'index.html'); } catch (e) { s.writeHead(404); return s.end(); }
   if (!fs.existsSync(f)) { s.writeHead(404); return s.end(); }
   let body = fs.readFileSync(f);
-  if (f.endsWith('index.html')) body = body.toString().replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };');
+  if (f.endsWith('index.html') || /[\/]app\.[0-9a-f]+\.js$/.test(f)) body = body.toString().replace(HOOK, HOOK + ' window.__T = { run: s => eval(s) };');
   s.writeHead(200, { 'content-type': TYPES[path.extname(f)] || 'application/octet-stream', 'cache-control': 'no-cache' }); s.end(body);
 });
 const kid = (name, g, age, fr, lang) => ({ stars: 5, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name, gender: g, track: 'r', age, friend: fr, onboarded: true, lang } });
