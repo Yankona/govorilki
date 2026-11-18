@@ -28,8 +28,8 @@ const ok = (c, msg, out) => { if (!c) { out.push(msg); } };
     const home = async () => { await run('goHome()'); await p.waitForTimeout(500); };
     await p.goto(BASE + SUB[lang]); await p.waitForTimeout(1500);
     const who = await p.$$('.who-kid'); if (who.length) { await who[0].click(); await p.waitForTimeout(900); }
-    // the book is its own card now, not a step of the path (my-book): Тоша 4 steps
-    for (const [k, nMust] of [['k1', 3], ['k2', 4]]) {
+    // the book is its own card (my-book); «Миссия Л» got the maths of the day (audit-rewards): 5 steps
+    for (const [k, nMust] of [['k1', 3], ['k2', 5]]) {
       await run(`switchKid('${k}')`); await p.waitForTimeout(700); await home();
       const tag = `${lang}/${k}`;
       ok(!(await p.$('#tabBar')), `${tag}: tab bar still there`, miss);
