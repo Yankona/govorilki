@@ -3444,6 +3444,8 @@ body.simple .home-t .stage{padding-bottom:110px}
 .sd-ask{position:relative;display:flex;flex-direction:column;gap:6px;align-items:flex-start;background:color-mix(in srgb,var(--sun) 20%,var(--paper));border-radius:20px;padding:14px 16px}
 .sd-ask b{font:900 19px var(--f-body);color:var(--ink)}.sd-ask small{font:700 14px var(--f-body);color:var(--ink-soft)}.sd-ask .ibtn{position:absolute;right:8px;top:8px}
 .sd-pick{display:flex;flex-direction:column;gap:14px;width:100%;max-width:720px;margin:0 auto}.sd-pick .sd-doors{width:100%;grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}.sd-door.pk{outline:4px solid var(--tiger);outline-offset:2px}
+.sd-favbar{position:fixed;right:calc(12px + env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));z-index:60;border:0;border-radius:999px;background:#FFE3EE;color:#2A2346;font:900 15px var(--f-body);padding:8px 14px;box-shadow:0 3px 0 rgba(0,0,0,.15);cursor:pointer}
+.sd-favbar b{margin-left:4px}
 /* DAYG-CSS-END */
 /* TALK-CSS: the friend in the corner and the little talk */
 .tk-fab{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;width:68px;height:68px;border-radius:50%;border:0;background:var(--paper);box-shadow:0 5px 0 var(--line-strong),0 6px 18px rgba(0,0,0,.18);padding:6px;cursor:pointer}
@@ -27511,28 +27513,50 @@ const SIMPLE = (() => {
     if (!best) best = [Q() ? 'chess-ai' : 'draw', 'draw', 'color', 'museum'].find(id => V.has(id)) || [...V][0];
     return GAMES.find(g => g.id === best) || null;
   }
+  // the favourite game's minutes (the owner, 18.11: a brother's minutes ran out during his sister's lessons): a
+  // balance of this child for today, spent only while this child is in the game with the app in front; ⏸ or going
+  // home keeps the rest for later («можно и вечером»); a word one minute before the end; midnight starts afresh
+  let FAVK = null, FLAST = 0, WARNED = false, FN = 0;
   const favState = () => (P.fav && P.fav.d === dayKey()) ? P.fav : null;
-  function favLeft() { const m = cfg().fav, f = favState(); if (!m) return Infinity; return f ? Math.max(0, f.t + m * 60e3 - Date.now()) : m * 60e3; }
+  function favLeft() { const m = cfg().fav, f = favState(); if (!m) return Infinity; return Math.max(0, m * 60e3 - ((f && f.used) || 0)); }
+  function favStop() { FAV_ON = false; FAVK = null; clearInterval(FT); const b = document.getElementById('sdFavBar'); if (b) b.remove(); try { save(); } catch (e) {} }
+  function favBar() {
+    if (!cfg().fav || !FAV_ON) return;
+    let b = document.getElementById('sdFavBar');
+    if (!b) {
+      b = document.createElement('button'); b.id = 'sdFavBar'; b.className = 'sd-favbar'; b.setAttribute('aria-label', 'Пауза');
+      document.body.append(b);
+      b.onclick = () => { sfx.pop(); favStop(); say('Пауза! Минутки подождут тебя.'); goHome(); };
+    }
+    b.innerHTML = `⏳ ${Math.ceil(favLeft() / 60e3)} мин <b>⏸</b>`;
+  }
   function favGo() {
     const g = favGame(); if (!g) return;
     if (favLeft() <= 0) { say('Время любимой игры на сегодня вышло. Завтра снова!'); return; }
-    if (!favState()) { P.fav = { d: dayKey(), t: Date.now() }; save(); }
-    FAV_ON = true; tick(); homeLeave(); g.go();
+    if (!favState() || favState().used === undefined) { P.fav = { d: dayKey(), used: 0 }; save(); }
+    FAV_ON = true; FAVK = ROOT.cur; FLAST = Date.now(); WARNED = favLeft() <= 60e3; tick(); homeLeave(); g.go(); favBar();
   }
-  // a gentle stop: the sand ran out, home with a word, no lost progress
+  // counts every two seconds while this child plays in front; a gentle stop at the end
   function tick() {
     clearInterval(FT); if (!cfg().fav) return;
     FT = setInterval(() => {
-      if (favLeft() > 0) return; clearInterval(FT);
-      if (!FAV_ON || $('#pdBox')) { FAV_ON = false; return; }
-      FAV_ON = false;
+      const now = Date.now(), dt = Math.min(now - FLAST, 5000); FLAST = now;
+      if (!FAV_ON || FAVK !== ROOT.cur || $('.home-t')) { favStop(); return; }
+      if (document.visibilityState !== 'visible') return;
+      const f = favState(); if (!f) { favStop(); return; }
+      f.used = (f.used || 0) + dt; if (++FN % 5 === 0) save(); favBar();
+      if (!WARNED && favLeft() <= 60e3 && favLeft() > 0) { WARNED = true; say('Ещё минутка любимой игры!'); }
+      if (favLeft() > 0) return;
+      favStop();
       const ov = document.createElement('div'); ov.className = 'overlay';
       ov.innerHTML = `<div class="winbox" role="dialog"><div class="sd-sand">⌛</div><h2>Время вышло!</h2><p class="win-line">Любимая игра на сегодня всё. Завтра снова — и новые двери!</p><div class="win-btns"><button class="big" id="sdHome">Домой</button></div></div>`;
       document.body.append(ov);
       say('Время любимой игры вышло. Завтра снова!');
       ov.querySelector('#sdHome').onclick = () => { sfx.pop(); ov.remove(); goHome(); };
-    }, 4000);
+    }, 2000);
   }
+  // the app hidden: nothing counts (the next tick sees it); the profile switched: the next tick stops
+  document.addEventListener('visibilitychange', () => { FLAST = Date.now(); });
 
   // the doors under the path; before the path is done, a teaser
   function sectionHTML() {
@@ -27541,7 +27565,7 @@ const SIMPLE = (() => {
     const ms = must().length, dn = must().filter(id => dayCounts(dayKey())[id]).length;
     const door = a => { const op = doorOpen(a); return `<button class="sd-door ${op ? 'open' : 'shut'} ${stamped(a.id) ? 'seen' : ''}" data-door="${a.id}" style="--a:${a.a}" aria-label="${esc(a.n)}">
         <span class="sd-dc">${pic(a.e)}${op ? (stamped(a.id) ? '<span class="sd-ck">✓</span>' : '') : '<span class="sd-lk">🔒</span>'}</span><b>${esc(a.n)}</b><small class="sd-tag">${fv.includes(a.id) ? '💛 моё любимое' : isSurprise(a.id) ? '🎁 сюрприз дня' : '⭐ тема недели'}</small></button>`; };
-    const favSub = !chest ? 'после сундука' : left <= 0 ? 'на сегодня всё, завтра снова' : !m ? 'играй сколько хочешь' : favState() ? `осталось ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ['минута', 'минуты', 'минут'])}` : `${m} ${plural(m, ['минута', 'минуты', 'минут'])}`;
+    const favSub = !chest ? 'после сундука' : left <= 0 ? 'на сегодня всё, завтра снова' : !m ? 'играй сколько хочешь' : favState() && favState().used ? `осталось ${Math.ceil(left / 60e3)} ${plural(Math.ceil(left / 60e3), ['минута', 'минуты', 'минут'])} · можно и вечером` : `${m} ${plural(m, ['минута', 'минуты', 'минут'])} · можно и вечером`;
     return `<section class="sd" id="sdBox">
       ${ask ? `<div class="sd-ask" id="sdAsk"><b>💛 Что ты любишь?</b><small>Выбери 2–4 — они будут открыты каждый день!</small><button class="big" id="sdAskGo">Выбрать</button><button class="ibtn" id="sdAskX" aria-label="Потом">✕</button></div>` : ''}
       <div class="sd-head"><h2>Двери дня</h2><small>${done ? 'открыты — выбирай!' : `откроются после тропы · ещё ${ms - dn} ${plural(ms - dn, ['шаг', 'шага', 'шагов'])}`}</small></div>
@@ -27551,7 +27575,7 @@ const SIMPLE = (() => {
     </section>`;
   }
   function bind(box) {
-    FAV_ON = false;
+    favStop();
     box.querySelectorAll('[data-door]').forEach(b => b.onclick = () => {
       const a = area(b.dataset.door); sfx.pop();
       if (!doorOpen(a)) { const left = must().filter(id => !dayCounts(dayKey())[id]).length; wiggle(b.querySelector('.sd-dc')); say(`${a.n} откроется после тропы. Осталось ${left} ${plural(left, ['шаг', 'шага', 'шагов'])}.`); return; }
@@ -27701,7 +27725,7 @@ const SIMPLE = (() => {
     sec.querySelector('#sdMir').onchange = e => { P.settings.mirrorAuto = e.target.checked; if (e.target.checked && ROOT.camAsk === 'no') delete ROOT.camAsk; save(); sfx.tick(); };
     return sec;
   }
-  return { AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
+  return { favStop, favState, AREAS, favs, favPick, isSurprise, planLine, on, cfg, must, opt, plan, today, pool, likes, whenOpens, pathDone, doorOpen, home, path, room, favGame, favLeft, favGo, screenPassport, parentSec, allGames, stamped, vis, gamesOf, isAll: () => ALLG, leaveAll: () => { ALLG = false; } };
 })();
 /* SIMPLE-END */
 /* TALK-BEGIN */
