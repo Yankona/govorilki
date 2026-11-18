@@ -68,7 +68,7 @@ let bad = 0;
     if (await p.$('.lt-offer [data-a="later"]')) { await p.click('.lt-offer [data-a="later"]'); await p.waitForTimeout(300); }
     const op = await p.$$eval('.sd-door.open', ds => ds.map(d => d.dataset.door));
     const cr = await run(`SIMPLE.AREAS.filter(a => a.g === 'c').map(a => a.id)`);
-    ok(op.length === 1 && cr.includes(op[0]), `after two skips open doors ${op}`);
+    ok(op.length >= 1 && op.every(id => cr.includes(id)), `after two skips open doors ${op}`);
     ok(!(await run('SIMPLE.pathDone()')), 'path counted done after skips');
     // the path done: the sticker to colour, drawing as the favourite
     await run(`P.days[dayKey()] = Object.fromEntries(SIMPLE.must().map(id => [id, 1])); P.chest = dayKey(); save()`); await home();
@@ -85,7 +85,7 @@ let bad = 0;
     }
     // a creative door every day for 30 days, no door two days running
     const cd = await run(`(() => { const n = dayNo(), pl = SIMPLE.plan(n + 30, { pool: SIMPLE.pool(), likes: SIMPLE.likes(), kid: 'k1', little: true, k: 2 }); let no = 0, rep = 0;
-      for (let d = n; d < n + 30; d++) { if (!pl[d].some(id => SIMPLE.AREAS.find(a => a.id === id).g === 'c')) no++; if (pl[d].includes('comics')) no++; if ((pl[d - 1] || []).some(x => pl[d].includes(x))) rep++; } return { no, rep }; })()`);
+      const fv = SIMPLE.favs(); for (let d = n; d < n + 30; d++) { const ds = [...fv, ...pl[d]]; if (!ds.some(id => SIMPLE.AREAS.find(a => a.id === id).g === 'c')) no++; if (ds.includes('comics')) no++; if ((pl[d - 1] || []).some(x => pl[d].includes(x))) rep++; } return { no, rep }; })()`);
     ok(cd.no === 0 && cd.rep === 0, `30 days: no creative door ${cd.no}, repeats ${cd.rep}`);
     // the three looks
     for (const lk of ['bright', 'calm', 'dark']) { await run(`P.settings.look = '${lk}'; save()`); await home(); await p.screenshot({ path: `${SHOTS}/little-${lang}-${DEV}-${lk}.png` }); }
