@@ -1,5 +1,5 @@
 // Language parity: every game a child sees in Russian is there in English, Portuguese and German too, unless it is
-// Russian by nature (Russian letters, Russian sounds and grammar, Russian audio tales) — the list RU_ONLY below.
+// Russian by nature (Russian letters, Russian sounds and grammar) — the list RU_ONLY below.
 // Then every visible game is opened in every language: no page error, something on screen, no Russian text on screen
 // or in the voice outside Russian, no horizontal scroll on a phone, one tap on an answer, and home works after.
 // Invented children only (Тина 5 track r, Тим 9 track r, Тоша 9 track l).
@@ -13,7 +13,7 @@ const LANGS = Object.entries({ ru: 'ru/', en: '', pt: 'pt/', de: 'de/' }).filter
 const KIDS = { young: ['Тина', 'f', 5, 'r'], older: ['Тим', 'm', 9, 'r'], mission: ['Тоша', 'm', 9, 'l'] };
 // Russian by nature: they teach Russian letters, Russian sounds, Russian grammar or play Russian audio
 const RU_ONLY = new Set(['primer', 'sz-sort', 'sz-syll', 'sz-house', 'speech-check', 'hear-pairs', 'syl-clap', 'syl-miss',
-  'gram-many', 'gram-dim', 'gram-whose', 'gram-odd', 'gram-page', 'chist-all', 'twist-pen', 'r-motor', 'r-throat', 'tales', 'ml-phr', 'world-say', 'world-roles']);
+  'gram-many', 'gram-dim', 'gram-whose', 'gram-odd', 'gram-page', 'chist-all', 'twist-pen', 'r-motor', 'r-throat', 'ml-phr', 'world-say', 'world-roles']);
 // names of the invented children may be Cyrillic anywhere
 const NAMES = /Тина|Тим|Тоша|Т\b/g;
 // buttons that answer a round, the first one found is tapped
