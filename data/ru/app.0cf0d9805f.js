@@ -19,7 +19,7 @@ const LANGDATA =  {};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
-const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"5e5d8b790f","HOLT":"3d8cb3624e","COMIC_ME":"ce9dfcdf3f","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"ef6b22fe34"};
+const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"5e5d8b790f","HOLT":"3d8cb3624e","COMIC_ME":"ce9dfcdf3f","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"9366eb91f6"};
 const PACK = (() => {
   const got = {}, run = {}, root = location.pathname.replace(/[^/]*$/, '').replace(/(en|pt|ru|de)\/$/, '');
   const url = n => root + 'data/' + LANG + '/' + n + '.json?h=' + PACKS[n];
@@ -1680,7 +1680,7 @@ function goHome() {
     <div id="leagueBox">${leagueCard()}</div>
     ${fy.length ? `<section class="group foryou"><div class="group-head"><h2>Для тебя</h2><p>${likesE || 'твои слова'}</p></div><div class="tiles">${fy.map(id => tileHTML(GAMES.find(g => g.id === id))).join('')}</div></section>` : ''}
     <button class="link-btn" id="parentsBtn">Для взрослых: голос, настройки, как заниматься</button>
-    ${GUEST || GPLAY ? '' : `<button class="link-btn" id="gpBtn">👵 Бабушка или дедушка хочет поиграть в игры ${esc(kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f').gen)}</button>`}
+    ${GUEST || GPLAY ? '' : `<button class="link-btn" id="gpBtn">${(P.settings.name || '').trim() ? `👵 Бабушка или дедушка хочет поиграть в игры ${esc(kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f').gen)}` : '👵 Бабушка или дедушка хочет поиграть в игры ребёнка'}</button>`}
     ${GUEST ? `<button class="link-btn" id="guestBtn">${GRAND[GUEST.who].e} Вернуться: вход для ${esc(lcFirst(decl(GUEST.name, GUEST.she)[1]))}</button>` : ''}`;
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
@@ -7768,7 +7768,7 @@ function screenOlymp() { OLY.play(); }
 
 
 
-const PIPER_VOICES = LANG === 'en' ? [['en_GB-jenny_dioco-medium', 'Jenny'], ['en_GB-cori-medium', 'Cori'], ['en_GB-alba-medium', 'Alba'], ['en_GB-alan-medium', 'Alan']]
+const PIPER_VOICES = LANG === 'en' ? [['en_GB-jenny_dioco-medium', 'Jenny (Dioco)'], ['en_GB-cori-medium', 'Cori'], ['en_GB-alba-medium', 'Alba'], ['en_GB-alan-medium', 'Alan']]
   : LANG === 'pt' ? [['pt_PT-tugão-medium', 'Tugão']] : LANG === 'de' ? [['de_DE-thorsten-medium', 'Thorsten'], ['de_DE-kerstin-low', 'Kerstin'], ['de_DE-ramona-low', 'Ramona'], ['de_DE-eva_k-x_low', 'Eva']]
   : [['ru_RU-irina-medium', 'Ирина'], ['ru_RU-denis-medium', 'Денис'], ['ru_RU-dmitri-medium', 'Дмитрий'], ['ru_RU-ruslan-medium', 'Руслан']];
 const PIPER_SRC = `
@@ -7789,7 +7789,7 @@ const HF = 'https://huggingface.co/diffusionstudio/piper-voices/resolve/main/', 
 let OWN = null;
 const own = () => OWN || (OWN = fetch0(ENG + 'voices/voices.json').then(r => r.ok ? r.json() : {}).catch(() => { OWN = null; return {}; }));
 self.fetch = async (u, o) => {
-  const url = String(u && u.url || u), m = ENG && url.startsWith(HF) ? (await own())[url.split('/').pop()] : null;
+  const url = String(u && u.url || u), m = ENG && url.startsWith(HF) ? (await own())[decodeURIComponent(url.split(/[?#]/)[0].split('/').pop())] : null;
   if (!m) return fetch0(u, o);
   let i = 0, rd = null, got = [];
   const body = new ReadableStream({ async pull(c) {
@@ -8368,6 +8368,8 @@ function screenParents(focus) {
       <li>Хвалите за старание. За каждый день занятий в альбом приходит новая наклейка: альбома хватает на месяц.</li>
 `}    </ul></section>
     </div>`, { guide: false, back: PAR_BACK });
+  
+  if (!(P.settings.name || '').trim()) $$('.parents h2').forEach(h => { if (/:\s*$/.test(h.textContent)) h.textContent = h.textContent.replace(/\s*:\s*$/, ''); });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   const nmL = $('#nameIn') && $('#nameIn').closest('label'); if (nmL) { nmL.insertAdjacentHTML('afterend', mlLangsHTML('mlLangsIn', P)); bindMlLangs('mlLangsIn', P); }
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
@@ -15002,7 +15004,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '174';
+const APP_VER = '175';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -15038,6 +15040,7 @@ function pultWho(next = screenPult) {
   newScreen();
   shell('Как дела у всех', `<div class="pult-gate">
     <p class="lead">Чей это телефон?</p>
+    <p class="muted">Спрашиваем один раз: если на телефоне играют дети, пульт закроется простым кодом, чтобы они случайно не поменяли настройки.</p>
     <button class="big" id="pwMine">📱 Мой: открывать с пульта, без кода</button>
     <button class="big ghost" id="pwKids">🧒 Здесь играют дети: закрыть пульт кодом</button>
     <p class="muted">Это можно поменять в пульте, внизу.</p></div>`, { back: () => goHome(), guide: false, raw: true });
@@ -15354,6 +15357,9 @@ const ML_LANGS = [['ru', '🇷🇺', RU('Русский'), 'ru-RU'], ['uk', '�
   ['he', '🇮🇱', RU('עברית'), 'he-IL'], ['tr', '🇹🇷', RU('Türkçe'), 'tr-TR'], ['zh', '🇨🇳', RU('中文'), 'zh-CN']];
 const mlInfo = c => ML_LANGS.find(x => x[0] === c) || ML_LANGS[0];
 
+const ML_NAME = { ru: 'Русский', uk: 'Украинский', pt: 'Португальский', en: 'Английский', de: 'Немецкий', es: 'Испанский', fr: 'Французский', it: 'Итальянский', he: 'Иврит', tr: 'Турецкий', zh: 'Китайский' };
+const mlName = c => ML_NAME[c] || mlInfo(c)[2];
+
 const ML_WORDS = JSON.parse(RU(`[
 ["🌹","роза","rosa","rose","Rose",1],["🐟","рыба","peixe","fish","Fisch",0],["🦒","жираф","girafa","giraffe","Giraffe",1],["🦓","зебра","zebra","zebra","Zebra",1],
 ["🌞","солнце","sol","sun","Sonne",0],["🍫","шоколад","chocolate","chocolate","Schokolade",1],["🐯","тигр","tigre","tiger","Tiger",1],["🦁","лев","leão","lion","Löwe",0],
@@ -15480,12 +15486,12 @@ const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in w
 const ML_ROLE = [['home', 'дома'], ['school', 'в школе'], ['learn', 'учит']];
 const mlLangsHTML = (id, pr) => {
   const on = myLangs(pr), main = mainLang(pr) || (READ_LANGS.includes(on[0]) ? on[0] : LANG);
-  const row = ([c, f, n]) => { const st = mlRole(c, pr); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
-  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])), more = ML_LANGS.filter(x => !top.includes(x));
+  const row = ([c, f, n]) => { const st = mlRole(c, pr), t = mlName(c); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${t}${t === n ? '' : ` <small class="ml-nat">${n}</small>`}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
+  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])).sort((a, b) => (b[0] === LANG) - (a[0] === LANG)), more = ML_LANGS.filter(x => !top.includes(x));
   const mains = READ_LANGS.filter(c => on.includes(c));
-  return `<div class="ml-langs" data-id="${id}"><p class="prow">На каких языках говорит ${esc(pr.settings.name || '')}? Дома, в школе или учит — игра будет использовать все.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
+  return `<div class="ml-langs" data-id="${id}"><p class="prow">На каких языках говорит ${esc((pr.settings.name || '').trim() || 'ребёнок')}? Дома, в школе или учит — игра будет использовать все.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
     ${more.length ? `<details class="ml-more"><summary>другие языки…</summary>${more.map(row).join('')}</details>` : ''}
-    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Главный язык игры:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlInfo(c)[2]}</button>`).join('')}</div></div></div>`;
+    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Главный язык игры:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlName(c)}</button>`).join('')}</div></div></div>`;
 };
 function bindMlLangs(id, pr) {
   const row = document.getElementById(id); if (!row) return;
@@ -17968,7 +17974,7 @@ const LOGO = (() => {
   );
   const snd0 = GAMES.find(g => g.id === 'sounds'); if (snd0) snd0.also = [...(snd0.also || []), 15];
   SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Mücke und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
-  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'picture stories, feelings and a brain warm-up', pt: 'histórias em imagens, emoções e aquecimento do cérebro', de: 'Bildergeschichten, Gefühle und Kopf-Gymnastik' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'syllables, one and lots, odd one out, picture stories and feelings', pt: 'sílabas, um e muitos, o intruso, histórias em imagens e emoções', de: 'Silben, einer und viele, was passt nicht, Bildergeschichten und Gefühle' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
   const sp = HOME_TABS.find(x => x.id === 'speak');
   if (sp) { sp.g.splice(sp.g.indexOf(9) + 1, 0, 15); sp.g.push(16); }
   MODS.splice(MODS.findIndex(m => m.id === 'sh') + 1, 0, { id: 'sz', e: '💧', n: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', g: [15], snd: 'sz' }, { id: 'hear', e: '👂', n: { en: 'Listening, syllables, grammar and stories', pt: 'Ouvir, sílabas, gramática e histórias', de: 'Hören, Silben, Grammatik und Erzählen' }[LANG] || 'Слух, слоги, грамматика и рассказ', g: [16] });
@@ -18250,41 +18256,224 @@ const GRAM = (() => {
 
 
 
+const XLG = (() => {
+  if (IS_RU) return {};
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  
+  const SYL = LX('XSYL', []);
+  const syls = w => w.split('-'), sylN = w => syls(w).length, wordOf = w => w.replace(/-/g, '');
+  const UP = s => s.toUpperCase();
+  const SLOG = ['слог', 'слога', 'слогов'];
+  function sylClap() {
+    const t = newScreen(), by = n => shuffle(SYL.filter(([w]) => sylN(w) === n));
+    const deck = shuffle([...by(1).slice(0, 1), ...by(2).slice(0, 2), ...by(3).slice(0, 2), ...by(4).slice(0, Q() ? 2 : 1)]);
+    let k = 0, n = 0, busy = false, tries = 0, wrongs = 0;
+    shell('Хлопни слоги', `<div class="lg"><div class="lg-card"><div class="lg-big" id="lgW"></div><button class="chip" id="lgAgain">🔊 Послушать слово</button></div>
+      <button class="lg-drum" id="lgD" aria-label="Хлопок">🥁</button><div class="lg-dots" id="lgDots"></div><p class="lg-ans" id="lgAns"></p>
+      <div class="og-btns"><button class="big ghost" id="lgR">↺ Заново</button><button class="big" id="lgOk">Готово</button></div></div>`);
+    const word = () => wordOf(deck[k][0]);
+    $('#lgAgain').onclick = () => say(cap(word()) + '.');
+    const dots = () => { $('#lgDots').innerHTML = '<i></i>'.repeat(n); };
+    const show = () => {
+      roundProg(k, deck.length);
+      busy = false; n = 0; tries = 0; dots(); $('#lgAns').textContent = '';
+      $('#lgW').innerHTML = pic(deck[k][1]);
+      (k === 0 ? talk(`Я скажу слово. Хлопни по барабану на каждый слог: ${syls(LX('XSYL_EX', 'ма-ши-на')).join(', ')} — три хлопка. Потом нажми «Готово».`) : wait(200)).then(() => { if (t === tok) say(cap(word()) + '.'); });
+    };
+    $('#lgD').onclick = () => { if (busy || n >= 6) return; sfx.note(n); n++; dots(); hopEl($('#lgD')); };
+    $('#lgR').onclick = () => { if (busy) return; n = 0; dots(); };
+    $('#lgOk').onclick = async () => {
+      if (busy || !n) return; busy = true;
+      const w = deck[k][0], c = sylN(w), ss = syls(w);
+      if (n !== c) {
+        sfx.oops(); wrongs++; tries++;
+        await talk(tries < 2 ? `Послушай по слогам: ${ss.join(', ')}. Хлопай вместе со мной.` : `${cap(word())}: ${c} ${plural(c, SLOG)} — ${ss.join(', ')}.`); if (t !== tok) return;
+        if (tries < 2) { n = 0; dots(); busy = false; return; }
+      } else sfx.good();
+      $('#lgAns').innerHTML = ss.map((s, i) => `<span class="lg-sy" style="--c:${BALLC[i % BALLC.length]}">${esc(UP(s))}</span>`).join('<i>-</i>');
+      if (n === c) { await talk(`Да! ${cap(word())}: ${c} ${plural(c, SLOG)}.`); if (t !== tok) return; }
+      await wait(500); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'syl-clap', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты слышишь слоги!', again: sylClap }); else show();
+    };
+    show();
+  }
+  
+  function sylMiss() {
+    const t = newScreen(), deck = sample(SYL.filter(([w]) => sylN(w) >= 2), 6);
+    const pool = [...new Set(SYL.flatMap(([w]) => syls(w).map(UP)))];
+    let k = 0, busy = false, wrongs = 0, ss = [], miss = -1, at = 0, build = false;
+    shell('Слоги потерялись', `<div class="lg"><div class="lg-card"><div class="lg-big" id="lgW"></div><button class="chip" id="lgAgain">🔊 Послушать слово</button></div>
+      <div class="lg-slots" id="lgSl"></div><p class="lg-q" id="lgQ"></p><div class="lg-syls" id="lgO"></div></div>`);
+    $('#lgAgain').onclick = () => say(cap(wordOf(deck[k][0])) + '.');
+    const slots = () => { $('#lgSl').innerHTML = ss.map((s, i) => `<span class="lg-slot ${(build ? i < at : i !== miss) ? 'full' : ''}">${(build ? i < at : i !== miss) ? esc(s) : ''}</span>`).join('<i>-</i>'); };
+    const show = () => {
+      roundProg(k, deck.length);
+      busy = false; const [w, e] = deck[k]; ss = syls(w).map(UP); build = k % 2 === 1; at = 0;
+      $('#lgW').innerHTML = pic(e);
+      let opts;
+      if (build) { opts = shuffle(ss.map((s, i) => [s, i])); $('#lgQ').textContent = 'Собери слово из слогов'; }
+      else { miss = ri(0, ss.length - 1); opts = shuffle([[ss[miss], miss], ...sample(pool.filter(s => !ss.includes(s)), 2).map(s => [s, -1])]); $('#lgQ').textContent = 'Какой слог потерялся?'; }
+      slots();
+      $('#lgO').innerHTML = opts.map(([s, i]) => `<button class="lg-syl" data-s="${esc(s)}" data-i="${i}">${esc(s)}</button>`).join('');
+      (k === 0 ? talk('Послушай слово. Один слог потерялся — найди его.') : k === 1 ? talk('А теперь собери слово из слогов по порядку.') : wait(200)).then(() => { if (t === tok) say(cap(wordOf(w)) + '.'); });
+    };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-s]'); if (!b || busy || b.classList.contains('used')) return;
+      const good = build ? b.dataset.s === ss[at] : +b.dataset.i === miss;
+      if (!good) { sfx.oops(); wiggle(b); wrongs++; say(b.dataset.s.toLowerCase() + '.'); return; }
+      sfx.pop(); b.classList.add('used');
+      if (build) { at++; slots(); if (at < ss.length) return; } else { miss = -1; slots(); }
+      busy = true; sfx.good(); await talk(`${cap(wordOf(deck[k][0]))}!`); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key: 'syl-miss', stars: wrongs <= 1 ? 3 : wrongs <= 4 ? 2 : 1, line: 'Все слоги нашлись!', again: sylMiss }); else later(show, 400);
+    };
+    show();
+  }
+
+   
+  function quiz({ key, title, deck, card, ask, line, again }) {
+    const t = newScreen(); let k = 0, busy = true, wrongs = 0;
+    shell(title, `<div class="lg"><div class="lg-card" id="lgC"></div><div class="lg-opts" id="lgO"></div></div>`);
+    const show = async () => {
+      roundProg(k, deck.length);
+      busy = true; const it = deck[k], opts = shuffle([it.right, ...it.wrong]);
+      $('#lgC').innerHTML = card(it); $('#lgO').innerHTML = '';
+      await talk(`${ask(it, k)} ${opts.slice(0, -1).join(', ')} или ${opts[opts.length - 1]}?`); if (t !== tok) return;
+      $('#lgO').innerHTML = opts.map(o => `<button class="lg-opt" data-o="${esc(o)}">${esc(cap(o))}</button>`).join('');
+      busy = false;
+    };
+    $('#lgO').onclick = async e => {
+      const b = e.target.closest('[data-o]'); if (!b || busy) return; busy = true;
+      const right = deck[k].right;
+      if (b.dataset.o !== right) { sfx.oops(); wiggle(b); wrongs++; await talk(`Послушай, как звучит: ${b.dataset.o}. Так не говорят. Выбери ещё раз.`); busy = false; return; }
+      sfx.good(); b.classList.add('right'); hopEl(b);
+      await talk(`${cap(right)}! Скажи: ${right}.`); if (t !== tok) return;
+      await askSaid(SAID(), { expect: right }); if (t !== tok) return;
+      k++; if (k >= deck.length) finish({ key, stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line, again }); else later(show, 300);
+    };
+    show();
+  }
+  const one = (e, w) => `<div class="lg-one"><span class="lg-big">${pic(e)}</span><b>${esc(cap(w))}</b></div>`;
+
+   
+  
+  const MANY = LX('XMANY', []);
+  const gramMany = () => quiz({
+    key: 'gram-many', title: 'Один — много', line: 'Ты знаешь, как сказать «много»!', again: gramMany,
+    deck: sample(MANY, 6).map(([w, right, e, w1, w2]) => ({ w, e, right, wrong: [w1, w2] })),
+    card: it => `${one(it.e, it.w)}<span class="lg-arrow">→</span><div class="lg-many">${pic(it.e).repeat(5)}</div>`,
+    ask: (it, k) => `${k === 0 ? 'Один и много. ' : ''}${cap(it.w)}. А если их много? Как сказать:`
+  });
+
+   
+  
+  const DIM = LX('XDIM', []);
+  const gramDim = () => quiz({
+    key: 'gram-dim', title: 'Назови ласково', line: 'Ты умеешь говорить ласково!', again: gramDim,
+    deck: sample(DIM, 6).map(([w, right, e, w1, w2]) => ({ w, e, right, wrong: [w1, w2] })),
+    card: it => `${one(it.e, it.w)}<span class="lg-arrow">→</span><div class="lg-one sm"><span class="lg-small">${pic(it.e)}</span><b>?</b></div>`,
+    ask: (it, k) => `${k === 0 ? 'Назовём ласково, когда он маленький. ' : ''}Это ${it.w}. А маленький, ласково — как сказать:`
+  });
+
+   
+  
+  const WHOSE = LX('XWHOSE', []);
+  const gramWhose = () => quiz({
+    key: 'gram-whose', title: 'Чей хвост?', line: 'Ты знаешь, чей хвост и чья лапа!', again: gramWhose,
+    deck: sample(WHOSE, 6).map(([w, q, right, w1, w2, e]) => ({ w, q, e, right, wrong: [w1, w2] })),
+    card: it => one(it.e, it.w),
+    ask: it => `${cap(it.w)}. ${it.q}`
+  });
+
+   
+  
+  const CATS = LX('XODD', []);
+  const CLOSE = [['fruit', 'veg'], ['wild', 'farm'], ['birds', 'insects'], ['tools', 'music']];
+  const isClose = (a, b) => CLOSE.some(([x, y]) => (x === a.k && y === b.k) || (y === a.k && x === b.k));
+  function gramOdd() {
+    const t = newScreen(), rounds = [];
+    for (const A of sample(CATS, 5)) {
+      const others = CATS.filter(B => B !== A), close = others.filter(B => isClose(A, B)), far = others.filter(B => !isClose(A, B));
+      const B = Q() && close.length && Math.random() < .6 ? pickOne(close) : pickOne(far), odd = pickOne(B.it);
+      const cards = shuffle([...sample(A.it, 3), odd]);
+      rounds.push({ A, B, odd, cards });
+    }
+    let k = 0, busy = false, wrongs = 0;
+    shell('Что лишнее?', `<div class="lg"><p class="lg-q">Какая картинка лишняя?</p><div class="lg-grid" id="lgP"></div><p class="lg-ans" id="lgAns"></p></div>`);
+    const show = () => {
+      roundProg(k, rounds.length);
+      busy = false; $('#lgAns').textContent = '';
+      $('#lgP').innerHTML = rounds[k].cards.map(([e, n]) => `<button class="lg-pic" data-n="${esc(n)}">${pic(e)}<b></b></button>`).join('');
+      talk(k === 0 ? 'Три картинки похожи, одна лишняя. Найди лишнюю.' : 'Какая лишняя?');
+    };
+    $('#lgP').onclick = async e => {
+      const b = e.target.closest('[data-n]'); if (!b || busy) return;
+      const { A, B, odd } = rounds[k];
+      if (b.dataset.n !== odd[1]) { sfx.oops(); wiggle(b); wrongs++; talk('Подумай: какая картинка не такая, как другие?'); return; }
+      busy = true; sfx.good(); b.classList.add('right');
+      $$('#lgP [data-n]').forEach(x => { x.querySelector('b').textContent = x.dataset.n; });
+      $('#lgAns').textContent = cap(A.many);
+      await talk(`${cap(odd[1])} — это ${B.one}. А остальные — ${A.many}. Скажи одним словом: ${A.many}.`); if (t !== tok) return;
+      await askSaid(SAID(), { expect: A.many }); if (t !== tok) return;
+      k++; if (k >= rounds.length) finish({ key: 'gram-odd', stars: wrongs <= 1 ? 3 : wrongs <= 3 ? 2 : 1, line: 'Ты умеешь называть одним словом!', again: gramOdd }); else later(show, 300);
+    };
+    show();
+  }
+
+  
+  const ICO = '<span class="ico-letters"><b class="L c">B</b><b class="L v">A</b>-?</span>';
+  [['syl-clap', 'Хлопни слоги', 'сколько слогов в слове?', sylClap, SYL],
+    ['syl-miss', 'Слоги потерялись', 'найди слог и собери слово', sylMiss, SYL, () => ICO],
+    ['gram-many', 'Один — много', 'один кот, много котов', gramMany, MANY],
+    ['gram-dim', 'Назови ласково', 'мяч — мячик, дом — домик', gramDim, DIM],
+    ['gram-whose', 'Чей хвост?', 'лисий, волчий, заячьи уши', gramWhose, WHOSE],
+    ['gram-odd', 'Что лишнее?', 'и назови одним словом', gramOdd, CATS]].forEach(([id, name, sub, go, data, ico]) => {
+    const g = GAMES.find(x => x.id === id); if (!g || !data.length) return;
+    Object.assign(g, { hide: null, name, sub, go }, ico ? { ico } : {});
+  });
+  return { sylClap, sylMiss, gramMany, gramDim, gramWhose, gramOdd };
+})();
+
+
+
 const PHR = (() => {
   
   const BASE = [
-    ['sch', 'Можно в туалет?', { pt: 'Posso ir à casa de banho?', en: 'May I go to the toilet?', de: 'Darf ich auf die Toilette gehen?', es: '¿Puedo ir al baño?', fr: 'Est-ce que je peux aller aux toilettes ?', it: 'Posso andare in bagno?', uk: 'Можна вийти до туалету?' }],
-    ['sch', 'Мне надо пописать.', { pt: 'Preciso de fazer xixi.', en: 'I need a wee.', de: 'Ich muss Pipi machen.', es: 'Tengo que hacer pis.', fr: "J'ai envie de faire pipi.", it: 'Devo fare la pipì.', uk: 'Мені треба пісяти.' }],
-    ['sch', 'Я не понимаю.', { pt: 'Não percebo.', en: "I don't understand.", de: 'Ich verstehe das nicht.', es: 'No entiendo.', fr: 'Je ne comprends pas.', it: 'Non capisco.', uk: 'Я не розумію.' }],
-    ['sch', 'Повторите, пожалуйста.', { pt: 'Pode repetir, por favor?', en: 'Can you say it again, please?', de: 'Können Sie das bitte wiederholen?', es: '¿Puede repetirlo, por favor?', fr: "Vous pouvez répéter, s'il vous plaît ?", it: 'Può ripetere, per favore?', uk: 'Повторіть, будь ласка.' }],
-    ['sch', 'Помогите мне, пожалуйста.', { pt: 'Pode ajudar-me, por favor?', en: 'Can you help me, please?', de: 'Können Sie mir bitte helfen?', es: '¿Me puede ayudar, por favor?', fr: "Vous pouvez m'aider, s'il vous plaît ?", it: 'Mi può aiutare, per favore?', uk: 'Допоможіть мені, будь ласка.' }],
-    ['sch', ['Я закончила.', 'Я закончил.'], { pt: 'Já acabei.', en: "I've finished.", de: 'Ich bin fertig.', es: 'Ya he terminado.', fr: "J'ai fini.", it: 'Ho finito.', uk: ['Я закінчила.', 'Я закінчив.'] }],
-    ['sch', 'Где мой рюкзак?', { pt: 'Onde está a minha mochila?', en: 'Where is my backpack?', de: 'Wo ist mein Rucksack?', es: '¿Dónde está mi mochila?', fr: 'Où est mon sac à dos ?', it: "Dov'è il mio zaino?", uk: 'Де мій рюкзак?' }],
-    ['body', 'Я хочу пить.', { pt: 'Tenho sede.', en: "I'm thirsty.", de: 'Ich habe Durst.', es: 'Tengo sed.', fr: "J'ai soif.", it: 'Ho sete.', uk: 'Я хочу пити.' }],
-    ['body', 'Можно попить воды?', { pt: 'Posso beber água?', en: 'Can I have some water, please?', de: 'Darf ich etwas Wasser trinken?', es: '¿Puedo beber agua?', fr: "Je peux boire de l'eau ?", it: "Posso bere un po' d'acqua?", uk: 'Можна попити води?' }],
-    ['body', 'Я хочу есть.', { pt: 'Tenho fome.', en: "I'm hungry.", de: 'Ich habe Hunger.', es: 'Tengo hambre.', fr: "J'ai faim.", it: 'Ho fame.', uk: 'Я хочу їсти.' }],
-    ['body', 'Мне холодно.', { pt: 'Tenho frio.', en: "I'm cold.", de: 'Mir ist kalt.', es: 'Tengo frío.', fr: "J'ai froid.", it: 'Ho freddo.', uk: 'Мені холодно.' }],
-    ['body', 'Мне жарко.', { pt: 'Tenho calor.', en: "I'm hot.", de: 'Mir ist heiß.', es: 'Tengo calor.', fr: "J'ai chaud.", it: 'Ho caldo.', uk: 'Мені жарко.' }],
-    ['body', 'У меня болит живот.', { pt: 'Dói-me a barriga.', en: 'My tummy hurts.', de: 'Mein Bauch tut weh.', es: 'Me duele la tripa.', fr: "J'ai mal au ventre.", it: 'Mi fa male la pancia.', uk: 'У мене болить живіт.' }],
-    ['body', ['Я упала, мне больно.', 'Я упал, мне больно.'], { pt: 'Caí e magoei-me.', en: 'I fell over and it hurts.', de: 'Ich bin hingefallen, es tut weh.', es: 'Me he caído y me duele.', fr: ["Je suis tombée, j'ai mal.", "Je suis tombé, j'ai mal."], it: ['Sono caduta, mi fa male.', 'Sono caduto, mi fa male.'], uk: ['Я впала, мені боляче.', 'Я впав, мені боляче.'] }],
-    ['body', 'Мне грустно, я хочу к маме.', { pt: 'Estou triste, quero a minha mãe.', en: 'I feel sad, I want my mum.', de: 'Ich bin traurig, ich will zu meiner Mama.', es: 'Estoy triste, quiero a mi mamá.', fr: 'Je suis triste, je veux ma maman.', it: 'Sono triste, voglio la mia mamma.', uk: 'Мені сумно, я хочу до мами.' }],
-    ['play', 'Можно мне поиграть с вами?', { pt: 'Posso brincar convosco?', en: 'Can I play with you?', de: 'Darf ich mitspielen?', es: '¿Puedo jugar con vosotros?', fr: 'Je peux jouer avec vous ?', it: 'Posso giocare con voi?', uk: 'Можна мені погратися з вами?' }],
-    ['play', 'Давай играть вместе!', { pt: 'Vamos brincar juntos?', en: "Let's play together!", de: 'Spielen wir zusammen?', es: '¿Jugamos juntos?', fr: 'On joue ensemble ?', it: 'Giochiamo insieme?', uk: 'Давай гратися разом!' }],
-    ['play', 'Как тебя зовут?', { pt: 'Como te chamas?', en: "What's your name?", de: 'Wie heißt du?', es: '¿Cómo te llamas?', fr: "Comment tu t'appelles ?", it: 'Come ti chiami?', uk: 'Як тебе звати?' }],
-    ['play', 'Меня зовут {n}.', { pt: 'Chamo-me {n}.', en: 'My name is {n}.', de: 'Ich heiße {n}.', es: 'Me llamo {n}.', fr: "Je m'appelle {n}.", it: 'Mi chiamo {n}.', uk: 'Мене звати {n}.' }],
-    ['play', 'Отдай, пожалуйста, это моё.', { pt: 'Devolve, por favor, é meu.', en: "Give it back, please, it's mine.", de: 'Gib das bitte zurück, das gehört mir.', es: 'Devuélvemelo, por favor, es mío.', fr: "Rends-le-moi, s'il te plaît, c'est à moi.", it: 'Ridammelo, per favore, è mio.', uk: 'Віддай, будь ласка, це моє.' }],
-    ['play', 'Можно я сяду рядом с тобой?', { pt: 'Posso sentar-me ao teu lado?', en: 'Can I sit next to you?', de: 'Darf ich mich neben dich setzen?', es: '¿Me puedo sentar a tu lado?', fr: 'Je peux m’asseoir à côté de toi ?', it: 'Posso sedermi vicino a te?', uk: 'Можна я сяду поруч із тобою?' }],
-    ['food', 'Можно ещё, пожалуйста?', { pt: 'Posso comer mais um pouco, por favor?', en: 'Can I have some more, please?', de: 'Kann ich bitte noch etwas haben?', es: '¿Me das un poco más, por favor?', fr: "Je peux en avoir encore, s'il vous plaît ?", it: "Posso averne ancora un po', per favore?", uk: 'Можна ще, будь ласка?' }],
-    ['food', 'Нет, спасибо.', { pt: ['Não, obrigada.', 'Não, obrigado.'], en: 'No, thank you.', de: 'Nein, danke.', es: 'No, gracias.', fr: 'Non, merci.', it: 'No, grazie.', uk: 'Ні, дякую.' }],
-    ['food', 'Я это не ем.', { pt: 'Eu não como isto.', en: "I don't eat this.", de: 'Das esse ich nicht.', es: 'Yo no como esto.', fr: 'Je ne mange pas ça.', it: 'Questo non lo mangio.', uk: 'Я це не їм.' }]
+    ['sch', RU('Можно в туалет?'), { pt: 'Posso ir à casa de banho?', en: 'May I go to the toilet?', de: 'Darf ich auf die Toilette gehen?', es: '¿Puedo ir al baño?', fr: 'Est-ce que je peux aller aux toilettes ?', it: 'Posso andare in bagno?', uk: RU('Можна вийти до туалету?') }],
+    ['sch', RU('Мне надо пописать.'), { pt: 'Preciso de fazer xixi.', en: 'I need a wee.', de: 'Ich muss Pipi machen.', es: 'Tengo que hacer pis.', fr: "J'ai envie de faire pipi.", it: 'Devo fare la pipì.', uk: RU('Мені треба пісяти.') }],
+    ['sch', RU('Я не понимаю.'), { pt: 'Não percebo.', en: "I don't understand.", de: 'Ich verstehe das nicht.', es: 'No entiendo.', fr: 'Je ne comprends pas.', it: 'Non capisco.', uk: RU('Я не розумію.') }],
+    ['sch', RU('Повторите, пожалуйста.'), { pt: 'Pode repetir, por favor?', en: 'Can you say it again, please?', de: 'Können Sie das bitte wiederholen?', es: '¿Puede repetirlo, por favor?', fr: "Vous pouvez répéter, s'il vous plaît ?", it: 'Può ripetere, per favore?', uk: RU('Повторіть, будь ласка.') }],
+    ['sch', RU('Помогите мне, пожалуйста.'), { pt: 'Pode ajudar-me, por favor?', en: 'Can you help me, please?', de: 'Können Sie mir bitte helfen?', es: '¿Me puede ayudar, por favor?', fr: "Vous pouvez m'aider, s'il vous plaît ?", it: 'Mi può aiutare, per favore?', uk: RU('Допоможіть мені, будь ласка.') }],
+    ['sch', [RU('Я закончила.'), RU('Я закончил.')], { pt: 'Já acabei.', en: "I've finished.", de: 'Ich bin fertig.', es: 'Ya he terminado.', fr: "J'ai fini.", it: 'Ho finito.', uk: [RU('Я закінчила.'), RU('Я закінчив.')] }],
+    ['sch', RU('Где мой рюкзак?'), { pt: 'Onde está a minha mochila?', en: 'Where is my backpack?', de: 'Wo ist mein Rucksack?', es: '¿Dónde está mi mochila?', fr: 'Où est mon sac à dos ?', it: "Dov'è il mio zaino?", uk: RU('Де мій рюкзак?') }],
+    ['body', RU('Я хочу пить.'), { pt: 'Tenho sede.', en: "I'm thirsty.", de: 'Ich habe Durst.', es: 'Tengo sed.', fr: "J'ai soif.", it: 'Ho sete.', uk: RU('Я хочу пити.') }],
+    ['body', RU('Можно попить воды?'), { pt: 'Posso beber água?', en: 'Can I have some water, please?', de: 'Darf ich etwas Wasser trinken?', es: '¿Puedo beber agua?', fr: "Je peux boire de l'eau ?", it: "Posso bere un po' d'acqua?", uk: RU('Можна попити води?') }],
+    ['body', RU('Я хочу есть.'), { pt: 'Tenho fome.', en: "I'm hungry.", de: 'Ich habe Hunger.', es: 'Tengo hambre.', fr: "J'ai faim.", it: 'Ho fame.', uk: RU('Я хочу їсти.') }],
+    ['body', RU('Мне холодно.'), { pt: 'Tenho frio.', en: "I'm cold.", de: 'Mir ist kalt.', es: 'Tengo frío.', fr: "J'ai froid.", it: 'Ho freddo.', uk: RU('Мені холодно.') }],
+    ['body', RU('Мне жарко.'), { pt: 'Tenho calor.', en: "I'm hot.", de: 'Mir ist heiß.', es: 'Tengo calor.', fr: "J'ai chaud.", it: 'Ho caldo.', uk: RU('Мені жарко.') }],
+    ['body', RU('У меня болит живот.'), { pt: 'Dói-me a barriga.', en: 'My tummy hurts.', de: 'Mein Bauch tut weh.', es: 'Me duele la tripa.', fr: "J'ai mal au ventre.", it: 'Mi fa male la pancia.', uk: RU('У мене болить живіт.') }],
+    ['body', [RU('Я упала, мне больно.'), RU('Я упал, мне больно.')], { pt: 'Caí e magoei-me.', en: 'I fell over and it hurts.', de: 'Ich bin hingefallen, es tut weh.', es: 'Me he caído y me duele.', fr: ["Je suis tombée, j'ai mal.", "Je suis tombé, j'ai mal."], it: ['Sono caduta, mi fa male.', 'Sono caduto, mi fa male.'], uk: [RU('Я впала, мені боляче.'), RU('Я впав, мені боляче.')] }],
+    ['body', RU('Мне грустно, я хочу к маме.'), { pt: 'Estou triste, quero a minha mãe.', en: 'I feel sad, I want my mum.', de: 'Ich bin traurig, ich will zu meiner Mama.', es: 'Estoy triste, quiero a mi mamá.', fr: 'Je suis triste, je veux ma maman.', it: 'Sono triste, voglio la mia mamma.', uk: RU('Мені сумно, я хочу до мами.') }],
+    ['play', RU('Можно мне поиграть с вами?'), { pt: 'Posso brincar convosco?', en: 'Can I play with you?', de: 'Darf ich mitspielen?', es: '¿Puedo jugar con vosotros?', fr: 'Je peux jouer avec vous ?', it: 'Posso giocare con voi?', uk: RU('Можна мені погратися з вами?') }],
+    ['play', RU('Давай играть вместе!'), { pt: 'Vamos brincar juntos?', en: "Let's play together!", de: 'Spielen wir zusammen?', es: '¿Jugamos juntos?', fr: 'On joue ensemble ?', it: 'Giochiamo insieme?', uk: RU('Давай гратися разом!') }],
+    ['play', RU('Как тебя зовут?'), { pt: 'Como te chamas?', en: "What's your name?", de: 'Wie heißt du?', es: '¿Cómo te llamas?', fr: "Comment tu t'appelles ?", it: 'Come ti chiami?', uk: RU('Як тебе звати?') }],
+    ['play', RU('Меня зовут {n}.'), { pt: 'Chamo-me {n}.', en: 'My name is {n}.', de: 'Ich heiße {n}.', es: 'Me llamo {n}.', fr: "Je m'appelle {n}.", it: 'Mi chiamo {n}.', uk: RU('Мене звати {n}.') }],
+    ['play', RU('Отдай, пожалуйста, это моё.'), { pt: 'Devolve, por favor, é meu.', en: "Give it back, please, it's mine.", de: 'Gib das bitte zurück, das gehört mir.', es: 'Devuélvemelo, por favor, es mío.', fr: "Rends-le-moi, s'il te plaît, c'est à moi.", it: 'Ridammelo, per favore, è mio.', uk: RU('Віддай, будь ласка, це моє.') }],
+    ['play', RU('Можно я сяду рядом с тобой?'), { pt: 'Posso sentar-me ao teu lado?', en: 'Can I sit next to you?', de: 'Darf ich mich neben dich setzen?', es: '¿Me puedo sentar a tu lado?', fr: 'Je peux m’asseoir à côté de toi ?', it: 'Posso sedermi vicino a te?', uk: RU('Можна я сяду поруч із тобою?') }],
+    ['food', RU('Можно ещё, пожалуйста?'), { pt: 'Posso comer mais um pouco, por favor?', en: 'Can I have some more, please?', de: 'Kann ich bitte noch etwas haben?', es: '¿Me das un poco más, por favor?', fr: "Je peux en avoir encore, s'il vous plaît ?", it: "Posso averne ancora un po', per favore?", uk: RU('Можна ще, будь ласка?') }],
+    ['food', RU('Нет, спасибо.'), { pt: ['Não, obrigada.', 'Não, obrigado.'], en: 'No, thank you.', de: 'Nein, danke.', es: 'No, gracias.', fr: 'Non, merci.', it: 'No, grazie.', uk: RU('Ні, дякую.') }],
+    ['food', RU('Я это не ем.'), { pt: 'Eu não como isto.', en: "I don't eat this.", de: 'Das esse ich nicht.', es: 'Yo no como esto.', fr: 'Je ne mange pas ça.', it: 'Questo non lo mangio.', uk: RU('Я це не їм.') }]
   ].map(([cat, ru, t], i) => ({ id: 'b' + i, cat, ru, t }));
   const CATS = [['mine', '✍️ Мои фразы'], ['sch', '🏫 В садике и школе'], ['body', '🤒 Самочувствие'], ['play', '🧸 Игра и друзья'], ['food', '🍽️ За столом']];
   const WAIT = [0, 1, 2, 4, 7, 14, 30];
   const gtx = v => { const s = Array.isArray(v) ? G(v[0], v[1]) : v || ''; return s.replace('{n}', P.settings.name || 'Вера'); };
   function st() { if (!P.phr) P.phr = { mine: [], learn: { b0: 1, b1: 1, b2: 1, b7: 1, b8: 1 }, box: {} }; return P.phr; }
-  const langs = () => { const ls = myLangs().filter(c => c !== 'ru'); const learn = ls.filter(c => mlLearns(c)); return [...learn, ...ls.filter(c => !learn.includes(c))]; };
+  
+  const langs = () => { const ls = myLangs().filter(c => c !== LANG); const learn = ls.filter(c => mlLearns(c)); return [...learn, ...ls.filter(c => !learn.includes(c))]; };
   const all = () => [...st().mine.map(x => ({ ...x, cat: 'mine' })), ...BASE];
-  const tr = (x, c) => gtx(x.t[c]);
+  
+  const tr = (x, c) => c === (x.l || 'ru') ? gtx(x.ru) : gtx(x.t[c]);
+  
+  const src = x => (x.l || 'ru') === LANG ? gtx(x.ru) : gtx(x.t[LANG]) || gtx(x.ru);
   const due = c => { const today = dayKey(); return all().filter(x => (st().learn[x.id] || x.cat === 'mine') && tr(x, c)).filter(x => { const b = st().box[x.id + '|' + c]; return !b || b.due <= today; }); };
   const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return dayKey(d); };
   function home(c0) {
@@ -18299,7 +18488,7 @@ const PHR = (() => {
       ${CATS.map(([k, h]) => { const xs = all().filter(x => x.cat === k); return xs.length ? `<h3 class="fam-s">${h}</h3><div class="phr-list">${xs.map(x => {
         const on = k === 'mine' || s.learn[x.id], b = s.box[x.id + '|' + c], tx = tr(x, c);
         return `<div class="phr-row ${on ? 'on' : ''}"><button class="phr-star" data-star="${x.id}" ${k === 'mine' ? 'disabled' : ''} aria-label="Учить">${on ? '⭐' : '☆'}</button>
-          <div class="phr-t"><b>${esc(gtx(x.ru))}</b><span>${tx ? esc(mlText(tx)) : '<i>нет перевода</i>'}</span>${b && b.b ? `<small>${'●'.repeat(Math.min(b.b, 6))}</small>` : ''}</div>
+          <div class="phr-t"><b>${esc(src(x))}</b><span>${tx ? esc(mlText(tx)) : '<i>нет перевода</i>'}</span>${b && b.b ? `<small>${'●'.repeat(Math.min(b.b, 6))}</small>` : ''}</div>
           ${tx ? `<button class="chip" data-say="${x.id}">🔊</button>` : ''}${k === 'mine' ? `<button class="chip" data-edit="${x.id}">✏️</button>` : ''}</div>`;
       }).join('')}</div>` : ''; }).join('')}</div>`);
     const box = $('.phr');
@@ -18324,13 +18513,13 @@ const PHR = (() => {
         <a class="phr-gt" data-gt="${l}" href="#" target="_blank" rel="noopener">Перевести в Google ↗</a>`; }).join('')}
       <p class="muted">Ссылка открывает Google Переводчик с этой фразой: фраза уходит в Google. Проверьте перевод с тем, кто говорит на языке.</p>
       <div class="og-btns"><button class="big" id="phS">Сохранить</button>${id ? '<button class="big ghost" id="phD">🗑 Удалить</button>' : ''}<button class="big ghost" id="phB">Назад</button></div></div></div>`);
-    $$('.phr-gt').forEach(a => a.addEventListener('click', () => { a.href = `https://translate.google.com/?sl=ru&tl=${a.dataset.gt}&text=${encodeURIComponent($('#phRu').value.trim())}&op=translate`; }));
+    $$('.phr-gt').forEach(a => a.addEventListener('click', () => { a.href = `https://translate.google.com/?sl=${x.l || LANG}&tl=${a.dataset.gt}&text=${encodeURIComponent($('#phRu').value.trim())}&op=translate`; }));
     $('#phB').onclick = () => { sfx.pop(); home(c); };
     if (id) $('#phD').onclick = () => { sfx.tick(); s.mine = s.mine.filter(y => y.id !== id); Object.keys(s.box).forEach(k => { if (k.startsWith(id + '|')) delete s.box[k]; }); save(); home(c); };
     $('#phS').onclick = () => {
       const ru = $('#phRu').value.trim().slice(0, 140); if (!ru) { wiggle($('#phRu')); return; }
       const t = {}; ls.forEach(l => { const v = $('#phT_' + l).value.trim().slice(0, 160); if (v) t[l] = v; });
-      if (id) Object.assign(x, { ru, t }); else s.mine.unshift({ id: 'm' + rid6(), ru, t });
+      if (id) Object.assign(x, { ru, t }); else s.mine.unshift({ id: 'm' + rid6(), ru, t, ...(IS_RU ? {} : { l: LANG }) });
       save(); sfx.good(); home(c);
     };
   }
@@ -18342,7 +18531,7 @@ const PHR = (() => {
     const show = () => {
       const x = deck[k];
       shell('Нужные фразы', `<div class="ml phr"><p class="ml-step">${k + 1} / ${deck.length}</p>
-        <div class="phr-card"><small>Как сказать: ${flag} ${esc(lname)}?</small><b>${esc(gtx(x.ru))}</b><p class="phr-ans" id="phAns"></p></div>
+        <div class="phr-card"><small>Как сказать: ${flag} ${esc(lname)}?</small><b>${esc(src(x))}</b><p class="phr-ans" id="phAns"></p></div>
         <div class="og-btns" id="phBtns"><button class="big" id="phShow">Скажи вслух — потом проверь</button></div>${mlNoVoice([c])}</div>`, { back: () => home(c) });
       talk(k === 0 ? `Как это сказать? Попробуй вслух, потом нажми кнопку.` : 'А это как сказать?');
       $('#phShow').onclick = async () => {
@@ -18362,9 +18551,9 @@ const PHR = (() => {
     };
     show();
   }
-  GAMES.push({ id: 'ml-phr', hide: () => !IS_RU || !langs().length, name: 'Нужные фразы', sub: 'как сказать в садике и в школе', ico: () => pic('💬'), bg: 'var(--t-peach)', go: () => home(), grp: 14,
+  GAMES.push({ id: 'ml-phr', hide: () => !langs().length, name: 'Нужные фразы', sub: 'как сказать в садике и в школе', ico: () => pic('💬'), bg: 'var(--t-peach)', go: () => home(), grp: 14,
     prog: () => { const c = langs()[0]; const n = c ? due(c).length : 0; return n ? `на сегодня ${n}` : ''; } });
-  return { home, BASE, gtx };
+  return { home, BASE, gtx, tr, src };
 })();
 
 
@@ -18927,14 +19116,14 @@ const WORLD = (() => {
     ['🧒', 'Друг', 'другу', 'с другом', 'friends', ['play']],
     ['🧑‍🍳', 'Продавец в кафе', 'продавцу в кафе', 'в кафе', 'street', ['food']]];
   const LANG_IN = { ru: 'по-русски', uk: 'по-украински', pt: 'по-португальски', en: 'по-английски', de: 'по-немецки', es: 'по-испански', fr: 'по-французски', it: 'по-итальянски', he: 'на иврите', tr: 'по-турецки', zh: 'по-китайски' };
-  const HELLO = { ru: 'Привет!', uk: 'Привіт!', pt: 'Olá!', en: 'Hello!', de: 'Hallo!', es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!', he: 'שלום!', tr: 'Merhaba!', zh: '你好！' };
+  const HELLO = { ru: RU('Привет!'), uk: RU('Привіт!'), pt: 'Olá!', en: 'Hello!', de: 'Hallo!', es: '¡Hola!', fr: 'Bonjour !', it: 'Ciao!', he: 'שלום!', tr: 'Merhaba!', zh: '你好！' };
   
   
   function roles(pr = P) {
     const st = pr.settings; st.roles = st.roles || {};
     const r = st.roles;
     ROLES.forEach(([k]) => { const v = r[k]; r[k] = Array.isArray(v) ? v.filter(Boolean) : v ? [v] : []; });
-    if (!r.home.length) r.home = [myLangs(pr)[0] || 'ru'];
+    if (!r.home.length) r.home = [myLangs(pr)[0] || LANG];
     if (!r.gran.length) r.gran = [...r.home];
     return r;
   }
@@ -18944,7 +19133,7 @@ const WORLD = (() => {
   const flag = c => mlInfo(c)[1];
   const lname = c => mlInfo(c)[2];
   
-  const phrase = (x, c) => c === 'ru' ? PHR.gtx(x.ru) : PHR.gtx(x.t[c]);
+  const phrase = (x, c) => PHR.tr(x, c);
   const mapHTML = () => { const r = roles(); return `<div class="wr-map">${ROLES.filter(x => r[x[0]].length).map(([k, e, , short]) => `<span class="wr-pin"><b>${e}</b><i>${r[k].map(flag).join('')}</i><small>${esc(short)}</small></span>`).join('')}</div>`; };
   const goLabel = () => ready() ? '🙋 Играть: «Кому как сказать?»' : 'Готово';
 
@@ -18989,7 +19178,7 @@ const WORLD = (() => {
   const ownFor = (o, role) => !o.who || o.who === '*' || o.who === role;
    
   const CJK = /[㐀-鿿]/;
-  const normX = s => String(s).toLowerCase().replace(/ß/g, 'ss').replace(/ё/g, 'е').normalize('NFD').replace(/\p{M}/gu, '').replace(/[’'`]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+  const normX = s => String(s).toLowerCase().replace(/ß/g, 'ss').replace(/ё/g, RU('е')).normalize('NFD').replace(/\p{M}/gu, '').replace(/[’'`]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
   const toks = s => CJK.test(s) ? [...normX(s).replace(/ /g, '')] : normX(s).split(' ').filter(Boolean);
   const near = (h, w) => h === w || (w.length >= 4 && lev(h, w) <= (w.length >= 7 ? 2 : 1));
   const heardIn = (heard, w) => { const hw = toks(heard || ''), tt = toks(w); return !tt.length || tt.every(x => hw.some(h => near(h, x))); };
@@ -19035,7 +19224,7 @@ const WORLD = (() => {
       <h3 class="fam-s">Мои фразы</h3><div class="ow-list" id="owList"></div>
     </div>`, { back: back || (() => screenSay()) });
     const drawLangs = () => {
-      const cs = langsFor(who).filter(c => c !== 'ru');
+      const cs = langsFor(who).filter(c => c !== LANG);
       $('#owLangs').innerHTML = cs.map(c => `<label class="prow" for="ow-${c}">${flag(c)} ${esc(lname(c))} <input id="ow-${c}" data-l="${c}" type="text" maxlength="120" autocomplete="off" lang="${c}" dir="${c === 'he' ? 'rtl' : 'auto'}"></label><a class="phr-gt" data-gt="${c}" href="#" target="_blank" rel="noopener">Перевести в Google ↗</a>`).join('')
         || '<p class="muted">С этим человеком ты говоришь по-русски: перевод не нужен.</p>';
     };
@@ -19046,7 +19235,7 @@ const WORLD = (() => {
         : '<p class="muted">Пока своих фраз нет.</p>';
     };
     drawLangs(); drawList();
-    $('#owLangs').addEventListener('click', e => { const a = e.target.closest('.phr-gt'); if (a) a.href = `https://translate.google.com/?sl=ru&tl=${a.dataset.gt}&text=${encodeURIComponent($('#owRu').value.trim())}&op=translate`; });
+    $('#owLangs').addEventListener('click', e => { const a = e.target.closest('.phr-gt'); if (a) a.href = `https://translate.google.com/?sl=${LANG}&tl=${a.dataset.gt}&text=${encodeURIComponent($('#owRu').value.trim())}&op=translate`; });
     $('#owWho').onclick = e => { const b = e.target.closest('[data-who]'); if (!b) return; sfx.tick(); who = b.dataset.who; $$('#owWho [data-who]').forEach(x => x.classList.toggle('sel', x === b)); drawLangs(); };
     $('#owList').onclick = e => { const b = e.target.closest('[data-del]'); if (!b) return; sfx.pop(); const id = b.dataset.del; P.phr.mine = own().filter(o => o.id !== id); Object.keys(P.phr.box || {}).forEach(k => { if (k.startsWith(id + '|')) delete P.phr.box[k]; }); save(); drawList(); };
     $('#owAdd').onclick = () => {
@@ -19054,8 +19243,8 @@ const WORLD = (() => {
       $$('#owLangs [data-l]').forEach(i => { const v = cleanS(i.value, 120); if (v) t[i.dataset.l] = v; });
       const cs = langsFor(who);
       if (!ru) { $('#owErr').textContent = 'Напишите, что сказать.'; return; }
-      if (!cs.includes('ru') && !Object.keys(t).length) { $('#owErr').textContent = 'Напишите, как это сказать хотя бы на одном языке.'; return; }
-      own().unshift({ id: 'm' + rid(6), ru, t, ...(who === '*' ? {} : { who }) }); save(); sfx.good();
+      if (!cs.includes(LANG) && !Object.keys(t).length) { $('#owErr').textContent = 'Напишите, как это сказать хотя бы на одном языке.'; return; }
+      own().unshift({ id: 'm' + rid(6), ru, t, ...(who === '*' ? {} : { who }), ...(IS_RU ? {} : { l: LANG }) }); save(); sfx.good();
       $('#owErr').textContent = ''; $('#owRu').value = ''; $$('#owLangs [data-l]').forEach(i => { i.value = ''; });
       drawList(); talk('Фраза добавлена. Она будет в «Кому как сказать?» и в «Нужных фразах».');
     };
@@ -19083,14 +19272,14 @@ const WORLD = (() => {
     const done = () => finish({ key: 'world-say', stars: right >= cards.length - 1 ? 3 : right >= cards.length / 2 ? 2 : 1,
       line: `Верный язык с первого раза: ${right} из ${cards.length}.${clear ? ` Сказано понятно: ${clear}.` : ''}`, again: () => screenSay(), menu: () => screenRoles() });
     const show = () => {
-      const { p, x, all, cs } = cards[k], [e, who, to, withWho] = p, ru = PHR.gtx(x.ru), my = k;
+      const { p, x, all, cs } = cards[k], [e, who, to, withWho] = p, ru = PHR.src(x), my = k;
       let firstTry = true;
       const still = () => t === tok && k === my;
       shell('Кому как сказать?', `<div class="wr wr-say"><p class="ml-step">${k + 1} / ${cards.length}</p>
         <div class="wr-card"><span class="wr-who">${e}</span><b>${esc(who)}</b><p>Скажи ${esc(to)}: «${esc(ru)}»</p></div>
         <p class="wr-q">На каком языке ты говоришь ${esc(withWho)}?</p>
         <div class="wr-opts" id="wrOpts">${opts.map(o => `<button class="wr-opt" data-c="${o}"><span>${flag(o)}</span><small>${esc(lname(o))}</small></button>`).join('')}</div>
-        <div id="wrOut"></div>${mlNoVoice(opts.filter(o => o !== 'ru'))}<button class="link-btn" id="wrOwn">✍️ Свои фразы</button></div>`, { back: () => screenRoles() });
+        <div id="wrOut"></div>${mlNoVoice(opts.filter(o => o !== LANG))}<button class="link-btn" id="wrOwn">✍️ Свои фразы</button></div>`, { back: () => screenRoles() });
       $('#wrOwn').onclick = () => { sfx.pop(); screenOwn(() => screenSay()); };
       talk(`Скажи ${to}: ${ru} На каком языке?`);
       $('#wrOpts').onclick = async ev => {
@@ -19105,7 +19294,7 @@ const WORLD = (() => {
         
         const c = cs.includes(b.dataset.c) ? b.dataset.c : cs[0], order = [c, ...cs.filter(o => o !== c)];
         $$('#wrOpts [data-c]').forEach(o => { o.disabled = true; o.classList.toggle('yes', all.includes(o.dataset.c)); });
-        const said = phrase(x, c), now = `Теперь скажи сам${G('а', '')}.`, hearIn = (l, w) => l === 'ru' ? say(w) : sayIn(l, w, .75);
+        const said = phrase(x, c), now = `Теперь скажи сам${G('а', '')}.`, hearIn = (l, w) => l === LANG ? say(w) : sayIn(l, w, .75);
         const canHear = srOk();
         $('#wrOut').innerHTML = `${order.map(o => `<div class="wr-ans"><span>${flag(o)}</span><b>${esc(mlText(phrase(x, o)))}</b><button class="chip" data-hear="${o}" aria-label="🔊">🔊</button></div>`).join('')}
           <div class="wr-heard" id="wrHeard" hidden></div>
@@ -19137,13 +19326,13 @@ const WORLD = (() => {
           else {
             const few = miss.length && miss.length < marks.length && miss.length <= 3;
             await talk(few ? `Почти! Послушай ${miss.length > 1 ? 'эти слова' : 'это слово'}.` : 'Послушай ещё раз, медленно.'); if (!still()) return;
-            await (c === 'ru' ? say(few ? miss.join(' ') : said) : sayIn(c, few ? miss.join(' ') : said, .6)); if (!still()) return;
+            await (c === LANG ? say(few ? miss.join(' ') : said) : sayIn(c, few ? miss.join(' ') : said, .6)); if (!still()) return;
             if (tries < 3) talk('Теперь ещё раз!');
           }
           if (tries >= 3) { mic.remove(); nextBig(); talk('Хорошо! Потренируем эту фразу в другой раз.'); }
         };
         const bb = $('#bubble'); if (bb) bb.textContent = now;
-        if (c === 'ru') { if (still()) say(`${said} ${now}`); }
+        if (c === LANG) { if (still()) say(`${said} ${now}`); }
         else { await sayIn(c, said, .75); if (still()) talk(now); }
       };
     };
@@ -19154,8 +19343,8 @@ const WORLD = (() => {
   const sec = SECTIONS.find(x => x.g === 14); if (sec && IS_RU) sec.p = 'где на каком языке, кому как сказать и как звучит каждый твой язык';
   const at = GAMES.findIndex(g => g.id === 'ml-sound');
   GAMES.splice(at < 0 ? GAMES.length : at, 0,
-    { id: 'world-say', hide: () => !IS_RU || !mlOn(), name: 'Кому как сказать?', sub: 'маме, учительнице, другу — на своём языке', ico: () => pic('🙋'), bg: 'var(--t-yellow)', go: () => screenSay(), grp: 14 },
-    { id: 'world-roles', hide: () => !IS_RU || !mlOn(), name: 'Где на каком языке', sub: () => { const r = roles(); return ROLES.filter(x => r[x[0]].length).map(x => x[1] + r[x[0]].map(flag).join('')).join(' '); }, ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenRoles(), grp: 14 });
+    { id: 'world-say', hide: () => !mlOn(), name: 'Кому как сказать?', sub: 'маме, учительнице, другу — на своём языке', ico: () => pic('🙋'), bg: 'var(--t-yellow)', go: () => screenSay(), grp: 14 },
+    { id: 'world-roles', hide: () => !mlOn(), name: 'Где на каком языке', sub: () => { const r = roles(); return ROLES.filter(x => r[x[0]].length).map(x => x[1] + r[x[0]].map(flag).join('')).join(' '); }, ico: () => pic('🗺️'), bg: 'var(--t-mint)', go: () => screenRoles(), grp: 14 });
   return { roles, screenRoles, screenSay, ready };
 })();
  
@@ -20962,7 +21151,7 @@ const SETUI = (() => {
     relabel('sfxIn', 'Звуки игры'); relabel('micIn', 'Микрофон слушает ребёнка'); relabel('srIn', 'Узнавать слова', 'речь распознаёт Apple или Google');
     
     const ml = $('#mlLangsIn'); const mlb = ml && (ml.closest('.ml-langs') || ml);
-    if (mlb && S.kid && S.kid.contains(mlb)) { const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>🗣️ Языки ребёнка</summary>'; mlb.before(d); d.append(mlb); }
+    if (mlb && S.kid && S.kid.contains(mlb)) { const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>🗣️ Языки ребёнка</summary>'; mlb.before(d); d.append(mlb); d.open = !(Array.isArray(P.settings.langs) && P.settings.langs.length) || myLangs().length >= 2; }
     
     const voice = document.createElement('section'); voice.className = 'psec'; voice.innerHTML = '<h2>🔊 Голос и звук</h2>';
     if (S.kid) {
@@ -24247,7 +24436,7 @@ const SIMPLE = (() => {
   
   const KNOW = ['learn-news', 'phys-lab', 'how', 'space', 'tales', 'travel', 'learn-jobs', 'comics', 'composers', 'museum'];
   function knowHTML() {
-    const V = vis(), gs = KNOW.filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
+    const V = vis(), gs = KNOW.flatMap(id => id === 'tales' && !V.has(id) ? ['bookshelf'] : [id]).filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
     return `<section class="sd-know" id="sdKnow"><h3>🌍 Узнаём</h3><div class="sd-kn">${gs.map(g => `<button class="sd-k" data-know="${g.id}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b>${newsDot(g.id) ? '<i class="tile-new">Новое!</i>' : ''}</button>`).join('')}<button class="sd-k" data-know="cal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div></section>`;
   }
   
@@ -24292,7 +24481,7 @@ const SIMPLE = (() => {
     if (ALLG) {
       const kt = st.querySelector('.kids-top');
       const bar = document.createElement('div'); bar.className = 'sd-allbar';
-      bar.innerHTML = `<b>🎮 Все игры</b><small>для взрослых: любая игра откроется для ${esc(P.settings.name || '')}</small><button class="chip" id="sdBack">← День</button>`;
+      bar.innerHTML = `<b>🎮 Все игры</b><small>${(P.settings.name || '').trim() ? `для взрослых: любая игра откроется для ${esc(P.settings.name)}` : 'для взрослых: откроется любая игра'}</small><button class="chip" id="sdBack">← День</button>`;
       (kt || st.firstElementChild).after(bar);
       bar.querySelector('#sdBack').onclick = () => { sfx.pop(); ALLG = false; P.homeTab = 'today'; goHome(); };
       return;
@@ -24317,6 +24506,15 @@ const SIMPLE = (() => {
       t.innerHTML = `<span>${pathDone() ? '🚪 Двери дня открыты:' : '🔒 После тропы:'}</span>${ds.map(a => `<b>${a.e} ${esc(a.n)}</b>`).join('')}`;
       hero.after(t);
       t.onclick = () => { sfx.pop(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    }
+    
+    
+    const kn = el.querySelector('#sdKnow');
+    if (hero && kn) {
+      const k = document.createElement('button'); k.className = 'sd-tease open sd-kgo'; k.id = 'sdKnowGo';
+      k.innerHTML = `<span>🌍 ${'Узнаём — открыто всегда:'}</span><b>${'истории, путешествия, новости, наука, праздники'}</b>`;
+      (box.querySelector('#sdTease') || hero).after(k);
+      k.onclick = () => { sfx.pop(); kn.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     }
     try { LITTLE.home(box); } catch (e) {}
     try { WISH.home(box); } catch (e) {}
@@ -24915,7 +25113,8 @@ const WISH = (() => {
   
   function parentHTML() {
     const ws = list(), o = out();
-    return `<h3 class="fam-s">Желания ${esc(P.settings.name || '')}</h3>
+    const wn = (P.settings.name || '').trim();
+    return `<h3 class="fam-s">${wn ? `Желания: ${esc(wn)}` : 'Желания ребёнка'}</h3>
       ${ws.length ? `<ul class="wi-pl">${ws.slice(0, 12).map(w => `<li>${w.done ? '✨' : '⏳'} ${esc(w.t)}</li>`).join('')}</ul>` : '<p class="sd-note">Пока нет. Ребёнок говорит желания другу в уголке.</p>'}
       <h3 class="fam-s">Хочу в игру</h3>
       <p class="sd-note">Чего ребёнок просил, а в игре пока нет. Имена убраны. Сами по себе никуда не уходят.</p>
@@ -25209,7 +25408,7 @@ const LITTLE = (() => {
     later(offer, 900);
   }
   
-  const parentLine = () => (() => { try { const l = HONEST.todayLine(P); return l ? `<p class="sd-note">${esc(l)}</p>` : ''; } catch (e) { return ''; } })() + (on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc(P.settings.name || '')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '');
+  const parentLine = () => (() => { try { const l = HONEST.todayLine(P); return l ? `<p class="sd-note">${esc(l)}</p>` : ''; } catch (e) { return ''; } })() + (on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc((P.settings.name || '').trim() || 'ребёнок')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '');
   return { on, listen, reads, plan, must, skipped, rescue, offer, stepDone, home, colour, parentLine, TEXT, EAR, dayStickers };
 })();
 function LITTLE_PLAN(id, full) {
