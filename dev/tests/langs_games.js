@@ -143,6 +143,8 @@ async function worldSay(p, lang, dev) {
       await p.evaluate(c => document.querySelector(`#wrOpts [data-c="${c}"]`).click(), c); await p.waitForTimeout(300);
       if (await p.$('#wrSaid')) break;
       if (r < 3) await check(p, lang, dev, 'world-say wrong language');
+      // after a wrong tap the game holds taps for a moment (GUARD: no mashing)
+      await p.waitForTimeout(200); await waitFor(p, () => !document.querySelector('#stage.locked'), 5000); await p.waitForTimeout(100);
     }
     if (!(await waitFor(p, () => !!document.querySelector('#wrSaid')))) { fail(`${lang} world-say: no answer`); break; }
     const ans = await p.evaluate(() => [...document.querySelectorAll('.wr-ans')].map(a => a.querySelector('span').textContent + ' ' + a.querySelector('b').textContent));
