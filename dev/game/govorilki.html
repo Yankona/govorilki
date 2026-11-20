@@ -6138,7 +6138,7 @@ function screenSyll(src = SYL, key = 'syll', title = 'Слоги и слова',
 function screenHouse(S0 = RU('Р')) {
   const S = SOUNDS[sndIdx(S0)].L;
   const t = newScreen(), posW = ['в начале', 'в середине', 'в конце'];
-  const H = S0 === RU('Л') ? HOUSE_L : S0 === RU('Ш') ? HOUSE_SH : S0 === RU('С') ? LOGO.HOUSE_S : HOUSE, n3 = H.some(h => h[2] === 2) ? 3 : 4, deck = shuffle([...sample(H.filter(h => h[2] === 0), n3), ...sample(H.filter(h => h[2] === 1), n3), ...sample(H.filter(h => h[2] === 2), 2)]);
+  const H = S0 === RU('Л') ? HOUSE_L : S0 === RU('Ш') ? HOUSE_SH : S0 === RU('С') ? SZG.HOUSE_S : HOUSE, n3 = H.some(h => h[2] === 2) ? 3 : 4, deck = shuffle([...sample(H.filter(h => h[2] === 0), n3), ...sample(H.filter(h => h[2] === 1), n3), ...sample(H.filter(h => h[2] === 2), 2)]);
   let k = 0, busy = false, miss = 0;
   shell(`Где живёт звук ${S}`, `<div class="house">
       <div class="house-top"><div class="roof"></div><div class="attic" id="attic"></div></div>
@@ -6167,7 +6167,7 @@ function screenHouse(S0 = RU('Р')) {
       return;
     }
     busy = true; b.classList.remove('glow'); b.classList.add('lit'); sfx.good();
-    hword.innerHTML = hiS(w.toUpperCase(), S);
+    hword.innerHTML = hiS(w.toUpperCase(), S0 === RU('С') && !IS_RU ? SND_HI.sz : S);
     await talk(`${cap(w)}: звук ${S} ${posW[pos]}!`); if (t !== tok) return;
     k++;
     if (k >= deck.length) finish({ key: S0 === RU('Л') ? 'l-house' : S0 === RU('Ш') ? 'sh-house' : S0 === RU('С') ? 'sz-house' : 'house', line: `Ты нашла, где живёт звук ${S}!`, again: () => screenHouse(S0) });
@@ -21840,10 +21840,12 @@ const STRETCH = (() => {
   GAMES.push({ id: 'snd-hold', name: 'Тяни звук', sub: 'насос, комарик, змейка, мотор', ico: () => pic('🎈'), bg: 'var(--t-blue)', go: () => hold(), grp: 0, also: [15], prog: () => '' });
   return { hold };
 })();
-const LOGO = (() => {
-  const SAID = () => G('Я сказала!', 'Я сказал!');
-  const VW = /[аеёиоуыэюя]/gi;
-  const sylN = w => (w.match(VW) || []).length;
+/* SZG-BEGIN С З Ц and «Похожие слова» in every language: sorting by ear with a picture for each sound (водичка С,
+   комарик З), syllables, where С lives (start, middle, end) and words that differ by one sound. The words and sounds are
+   language content (LX): each language trains the sounds its own children of 4–8 mix up — en s/z/sh/th and r/w/l,
+   pt s/z/ch/j, lh/l, nh/n, r/rr, de s/z/sch/ch — not a translation of the Russian ones. Outside LOGO, so the build
+   translates the words around them. */
+const SZG = (() => {
   // the letters of a that differ from b: the part between their common start and their common end
   function hiDiff(a, b) {
     if (a === b) return esc(a);
@@ -21854,31 +21856,33 @@ const LOGO = (() => {
   const tiles = (list, cls = 'lg-pic') => list.map(([w, e]) => `<button class="${cls}" data-w="${esc(w)}">${pic(e)}<b></b></button>`).join('');
 
   /* ===== С З Ц: sorting by ear, syllables, where С lives ===== */
-  const SZ_ITEMS = [['С', 'сок', '🧃'], ['С', 'сыр', '🧀'], ['С', 'сумка', '👜'], ['С', 'самолёт', '✈️'], ['С', 'собака', '🐕'], ['С', 'сова', '🦉'], ['С', 'слон', '🐘'],
+  const SZ_ITEMS = LX('SZ_ITEMS', [['С', 'сок', '🧃'], ['С', 'сыр', '🧀'], ['С', 'сумка', '👜'], ['С', 'самолёт', '✈️'], ['С', 'собака', '🐕'], ['С', 'сова', '🦉'], ['С', 'слон', '🐘'],
     ['С', 'лиса', '🦊'], ['С', 'оса', '🐝'], ['С', 'колесо', '🛞'], ['С', 'автобус', '🚌'], ['С', 'ананас', '🍍'], ['С', 'нос', '👃'], ['С', 'кактус', '🌵'], ['С', 'сапоги', '👢'], ['С', 'маска', '🎭'],
     ['З', 'зонт', '☂️'], ['З', 'зубы', '🦷'], ['З', 'зайка', '🐰'], ['З', 'коза', '🐐'], ['З', 'ваза', '🏺'], ['З', 'роза', '🌹'], ['З', 'глаза', '👀'], ['З', 'кукуруза', '🌽'], ['З', 'звезда', '⭐'],
-    ['Ц', 'цветок', '🌸'], ['Ц', 'цыплёнок', '🐥'], ['Ц', 'цирк', '🎪'], ['Ц', 'курица', '🐔'], ['Ц', 'огурец', '🥒'], ['Ц', 'птица', '🐦'], ['Ц', 'яйцо', '🥚'], ['Ц', 'кольцо', '💍'], ['Ц', 'овца', '🐑'], ['Ц', 'танец', '💃']];
-  const SZ_BINS = { 'С': ['💧', 'водичка: с-с-с', 'Свистит, как водичка!'], 'З': ['🦟', 'комарик: з-з-з', 'Звенит, как комарик!'], 'Ц': ['🤫', 'тише: ц-ц-ц', 'Тише-тише, цыц!'] };
+    ['Ц', 'цветок', '🌸'], ['Ц', 'цыплёнок', '🐥'], ['Ц', 'цирк', '🎪'], ['Ц', 'курица', '🐔'], ['Ц', 'огурец', '🥒'], ['Ц', 'птица', '🐦'], ['Ц', 'яйцо', '🥚'], ['Ц', 'кольцо', '💍'], ['Ц', 'овца', '🐑'], ['Ц', 'танец', '💃']]);
+  const SZ_BINS = LX('SZ_BINS', { 'С': ['💧', 'водичка: с-с-с', 'Свистит, как водичка!'], 'З': ['🦟', 'комарик: з-з-з', 'Звенит, как комарик!'], 'Ц': ['🤫', 'тише: ц-ц-ц', 'Тише-тише, цыц!'] });
+  const SZ_PAIRS = LX('SZ_PAIRS', [['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
+  const SZ_TITLES = LX('SZ_TITLES', { 'С,З': 'Водичка или комарик?', 'С,Ц': 'Водичка или тише?', 'З,Ц': 'Комарик или тише?' });
   function szSort() {
-    const t = newScreen(), pair = pickOne([['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
+    const t = newScreen(), pair = pickOne(SZ_PAIRS), nm2 = pair.map(L => SZ_BINS[L][1].split(':')[0]);
     const deck = shuffle(pair.flatMap(L => sample(SZ_ITEMS.filter(x => x[0] === L), 3)));
     let k = 0, busy = false;
     // the title names the two sounds of this round: «Водичка или тише?» when С meets Ц
-    shell({ 'С,З': 'Водичка или комарик?', 'С,Ц': 'Водичка или тише?', 'З,Ц': 'Комарик или тише?' }[pair.join()], `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
+    shell(SZ_TITLES[pair.join()] || cap(`${nm2[0]} или ${nm2[1]}?`), `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
       <div class="bins" id="bins">${pair.map(L => `<button class="bin" data-l="${L}"><span class="emo">${SZ_BINS[L][0]}</span><b class="L c">${L}</b><small>${SZ_BINS[L][1]}</small></button>`).join('')}</div></div>`);
     const cslot = $('#cslot'), bins = $('#bins');
     function show() {
       roundProg(k, deck.length);
       busy = false; const [, w, e] = deck[k];
       cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
-      talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${pair.map(L => SZ_BINS[L][1].split(':')[0]).join(' или ')}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
+      talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${nm2[0]} или ${nm2[1]}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
     }
     bins.onclick = async e => {
       const b = e.target.closest('.bin'); if (!b || busy) return;
       const [L, w] = deck[k];
       if (b.dataset.l !== L) { wiggle(b); sfx.oops(); talk(`Послушай ещё раз: ${w}`, { rate: .7 }); return; }
       busy = true; sfx.good(); hopEl(b);
-      $('.pcard .w').innerHTML = hiS(w.toUpperCase(), L);
+      $('.pcard .w').innerHTML = hiS(w.toUpperCase(), SZ_BINS[L][3] || L);
       await talk(`${cap(w)}. ${SZ_BINS[L][2]}`); if (t !== tok) return;
       k++;
       if (k >= deck.length) finish({ key: 'sz-sort', line: 'Ты различаешь свистящие звуки!', again: szSort });
@@ -21886,18 +21890,20 @@ const LOGO = (() => {
     };
     show();
   }
-  const SYL_S = [['са', 'СА', 'самолёт', '✈️'], ['со', 'СО', 'сова', '🦉'], ['су', 'СУ', 'сумка', '👜'], ['сы', 'СЫ', 'сыр', '🧀'], ['са', 'СА', 'сапоги', '👢'], ['су', 'СУ', 'суп', '🍲'],
-    ['зо', 'ЗО', 'зонт', '☂️'], ['зу', 'ЗУ', 'зубы', '🦷'], ['за', 'ЗА', 'зайка', '🐰'], ['цы', 'ЦЫ', 'цыплёнок', '🐥'], ['ци', 'ЦИ', 'цирк', '🎪']];
-  const HOUSE_S = [['сок', '🧃', 0], ['сыр', '🧀', 0], ['сумка', '👜', 0], ['сова', '🦉', 0], ['слон', '🐘', 0], ['самолёт', '✈️', 0], ['суп', '🍲', 0], ['сапоги', '👢', 0],
+  const SYL_S = LX('SYL_S', [['са', 'СА', 'самолёт', '✈️'], ['со', 'СО', 'сова', '🦉'], ['су', 'СУ', 'сумка', '👜'], ['сы', 'СЫ', 'сыр', '🧀'], ['са', 'СА', 'сапоги', '👢'], ['су', 'СУ', 'суп', '🍲'],
+    ['зо', 'ЗО', 'зонт', '☂️'], ['зу', 'ЗУ', 'зубы', '🦷'], ['за', 'ЗА', 'зайка', '🐰'], ['цы', 'ЦЫ', 'цыплёнок', '🐥'], ['ци', 'ЦИ', 'цирк', '🎪']]);
+  // the letters lit in the syllable game's words
+  const SYL_HL = LX('SYL_S_HL', RU('сзц'));
+  const HOUSE_S = LX('HOUSE_S', [['сок', '🧃', 0], ['сыр', '🧀', 0], ['сумка', '👜', 0], ['сова', '🦉', 0], ['слон', '🐘', 0], ['самолёт', '✈️', 0], ['суп', '🍲', 0], ['сапоги', '👢', 0],
     ['лиса', '🦊', 1], ['оса', '🐝', 1], ['миска', '🥣', 1], ['маска', '🎭', 1], ['весы', '⚖️', 1], ['колесо', '🛞', 1], ['капуста', '🥬', 1],
-    ['нос', '👃', 2], ['автобус', '🚌', 2], ['ананас', '🍍', 2], ['кактус', '🌵', 2], ['кокос', '🥥', 2], ['компас', '🧭', 2]];
+    ['нос', '👃', 2], ['автобус', '🚌', 2], ['ананас', '🍍', 2], ['кактус', '🌵', 2], ['кокос', '🥥', 2], ['компас', '🧭', 2]]);
 
   /* ===== Похожие слова: words that differ by one sound; the voice says one, the child finds its picture ===== */
-  const PAIRS = [[['мышка', '🐭'], ['мишка', '🧸'], ['миска', '🥣']], [['кот', '🐈'], ['кит', '🐋']], [['дом', '🏠'], ['дым', '💨']], [['удочка', '🎣'], ['уточка', '🦆']],
+  const PAIRS = LX('HEAR_PAIRS', [[['мышка', '🐭'], ['мишка', '🧸'], ['миска', '🥣']], [['кот', '🐈'], ['кит', '🐋']], [['дом', '🏠'], ['дым', '💨']], [['удочка', '🎣'], ['уточка', '🦆']],
     [['рак', '🦞'], ['лак', '💅'], ['мак', '🌺']], [['рама', '🖼️'], ['лама', '🦙']], [['зуб', '🦷'], ['суп', '🍲']], [['роза', '🌹'], ['роса', '💧']], [['шар', '🎈'], ['жар', '🔥']],
     [['уши', '👂'], ['ужи', '🐍']], [['лук', '🧅'], ['жук', '🪲']], [['кошка', '🐱'], ['ложка', '🥄']], [['мышка', '🐭'], ['мушка', '🪰']], [['сок', '🧃'], ['сом', '🐟']],
     [['усы', '🥸'], ['уши', '👂']], [['белка', '🐿️'], ['булка', '🍞']], [['ёжик', '🦔'], ['ножик', '🔪']], [['бант', '🎀'], ['бинт', '🩹']], [['ракета', '🚀'], ['ракетка', '🏓']],
-    [['лапа', '🐾'], ['лампа', '💡']], [['рука', '✋'], ['река', '🏞️']]];
+    [['лапа', '🐾'], ['лампа', '💡']], [['рука', '✋'], ['река', '🏞️']]]);
   function hearPairs(nRounds = 6, onDone) {
     const t = newScreen(), deck = sample(PAIRS, nRounds); let k = 0, busy = false, target = null, miss = 0;
     shell('Похожие слова', `<div class="lg"><p class="lg-q">Слушай внимательно и нажми на картинку</p><div class="lg-pics" id="lgP"></div>
@@ -21922,6 +21928,19 @@ const LOGO = (() => {
     };
     show();
   }
+  // the names in the game list (the Russian ones; the build translates them)
+  const N = { sort: ['Водичка или комарик?', 'С, З или Ц'], syll: ['Свистящие слоги', 'са-са-са… самолёт!'], house: ['Где живёт звук С', 'в начале, в середине, в конце'], pairs: ['Похожие слова', 'мышка, мишка или миска?'] };
+  const ICO = LX('SZ_ICO', [RU('С'), RU('А')]);
+  const ico = () => `<span class="ico-letters"><b class="L c">${ICO[0]}</b><b class="L v">${ICO[1]}</b></span>`;
+  const syll = () => screenSyll(SYL_S, 'sz-syll', N.syll[0], SYL_HL);
+  return { szSort, syll, ico, ICO, HOUSE_S, hearPairs, N };
+})();
+/* SZG-END */
+
+const LOGO = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const VW = /[аеёиоуыэюя]/gi;
+  const sylN = w => (w.match(VW) || []).length;
 
   /* ===== syllables: clap them, find the lost one, put a word together ===== */
   const LONG = [['ЧЕ-РЕ-ПА-ХА', '🐢'], ['ВЕ-ЛО-СИ-ПЕД', '🚲'], ['КРО-КО-ДИЛ', '🐊'], ['ПО-МИ-ДОР', '🍅'], ['МА-ШИ-НА', '🚗'], ['ТЕ-ЛЕ-ВИ-ЗОР', '📺'], ['ГУ-СЕ-НИ-ЦА', '🐛'],
@@ -22152,7 +22171,7 @@ const LOGO = (() => {
     }
     function hearing() {
       if (t !== tok) return;
-      talk('Теперь проверим слух.').then(() => { if (t === tok) hearPairs(res.hearN, n => { res.hear = n; t = tok; syllables(0); }); });
+      talk('Теперь проверим слух.').then(() => { if (t === tok) SZG.hearPairs(res.hearN, n => { res.hear = n; t = tok; syllables(0); }); });
     }
     function syllables(i) {
       if (t !== tok) return;
@@ -22201,11 +22220,11 @@ const LOGO = (() => {
   /* ===== the games, their sections and modules ===== */
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
-    { id: 'sz-sort', hide: RU_ONLY, name: 'Водичка или комарик?', sub: 'С, З или Ц', ico: () => pic('🦟'), bg: 'var(--t-green)', go: szSort, grp: 15 },
-    { id: 'sz-syll', hide: RU_ONLY, name: 'Свистящие слоги', sub: 'са-са-са… самолёт!', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenSyll(SYL_S, 'sz-syll', 'Свистящие слоги', 'сзц'), grp: 15 },
-    { id: 'sz-house', hide: RU_ONLY, name: 'Где живёт звук С', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse('С'), grp: 15 },
+    { id: 'sz-sort', name: SZG.N.sort[0], sub: SZG.N.sort[1], ico: () => pic('🦟'), bg: 'var(--t-green)', go: SZG.szSort, grp: 15 },
+    { id: 'sz-syll', name: SZG.N.syll[0], sub: SZG.N.syll[1], ico: SZG.ico, bg: 'var(--t-yellow)', go: SZG.syll, grp: 15 },
+    { id: 'sz-house', name: SZG.N.house[0], sub: SZG.N.house[1], ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse(RU('С')), grp: 15 },
     { id: 'speech-check', hide: RU_ONLY, name: 'Проверка речи', sub: 'со взрослым · отчёт и нужные игры', ico: () => pic('🩺'), bg: 'var(--t-mint)', go: check, grp: 16, prog: () => P.checks && P.checks[0] ? 'была ' + P.checks[0].d : '' },
-    { id: 'hear-pairs', hide: RU_ONLY, name: 'Похожие слова', sub: 'мышка, мишка или миска?', ico: () => pic('👂'), bg: 'var(--t-blue)', go: () => hearPairs(), grp: 16 },
+    { id: 'hear-pairs', name: SZG.N.pairs[0], sub: SZG.N.pairs[1], ico: () => pic('👂'), bg: 'var(--t-blue)', go: () => SZG.hearPairs(), grp: 16 },
     { id: 'syl-clap', hide: RU_ONLY, name: 'Хлопни слоги', sub: 'сколько слогов в слове?', ico: () => pic('🥁'), bg: 'var(--t-yellow)', go: sylClap, grp: 16 },
     { id: 'syl-miss', hide: RU_ONLY, name: 'Слоги потерялись', sub: 'найди слог и собери слово', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b>-?</span>', bg: 'var(--t-lilac)', go: sylMiss, grp: 16 },
     { id: 'gram-many', hide: RU_ONLY, name: 'Один — много', sub: 'один кот, много котов', ico: () => pic('🐈'), bg: 'var(--t-peach)', go: gramMany, grp: 16 },
@@ -22214,7 +22233,7 @@ const LOGO = (() => {
     { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 }
   );
   const snd0 = GAMES.find(g => g.id === 'sounds'); if (snd0) snd0.also = [...(snd0.also || []), 15];
-  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Mücke und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Blitz und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
   SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'picture stories, feelings and a brain warm-up', pt: 'histórias em imagens, emoções e aquecimento do cérebro', de: 'Bildergeschichten, Gefühle und Kopf-Gymnastik' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
   const sp = HOME_TABS.find(x => x.id === 'speak');
   if (sp) { sp.g.splice(sp.g.indexOf(9) + 1, 0, 15); sp.g.push(16); }
@@ -22235,7 +22254,7 @@ const LOGO = (() => {
   // one of these in the daily speech lesson, in turn
   const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
   const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
-  return { HOUSE_S, daily, hold: STRETCH.hold, hearPairs, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
+  return { daily, hold: STRETCH.hold, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
 })();
 
 /* ---------- «Грамматика: страница в день»: a grammar course for 4–6 year olds in the order of a speech therapist's
@@ -22750,7 +22769,8 @@ const SWAB = (() => {
    how to hold a pencil and sit, and tracing paths with a finger. Russian only; one declaration. ---------- */
 const IDEAS = (() => {
   const SAID = () => G('Я сказала!', 'Я сказал!');
-  const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l' };
+  // the child's sounds (settings) for the letters of every language's чистоговорки
+  const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l', S: 'sz', Z: 'sz', TH: 'sz', SH: 'sh', SCH: 'sh', CH: 'sh', J: 'sh', R: 'r', L: 'l', LH: 'l', NH: 'l' };
   const firstMine = list => list.find(L => mySounds().includes(SND[L])) || list[0];
 
   /* ===== a sequence to do with the body: cards in turn to a beat, faster each round ===== */
@@ -22857,7 +22877,8 @@ const IDEAS = (() => {
   }
 
   /* ===== чистоговорки for every sound ===== */
-  const CHIST = {
+  // every language its own: the keys are the chips, Р and Л come from CHIST_R and CHIST_L
+  const CHIST = LX('CHIST', {
     'С': ['Са-са-са — в лесу бегает лиса.', 'Со-со-со — у Сони колесо.', 'Су-су-су — было холодно в лесу.', 'Сы-сы-сы — у кота усы.', 'Ас-ас-ас — у нас ананас.', 'Ос-ос-ос — в саду растёт кокос.'],
     'З': ['За-за-за — вот идёт коза.', 'Зу-зу-зу — мы пасём козу.', 'Зы-зы-зы — колокольчик у козы.', 'Зо-зо-зо — у Зои новое пальто.', 'Зя-зя-зя — нам шалить нельзя.'],
     'Ц': ['Ца-ца-ца — вот идёт овца.', 'Цы-цы-цы — у курицы птенцы.', 'Цо-цо-цо — у курицы яйцо.', 'Ец-ец-ец — песню пел скворец.'],
@@ -22865,12 +22886,13 @@ const IDEAS = (() => {
     'Ж': ['Жа-жа-жа — есть иголки у ежа.', 'Жу-жу-жу — молоко дадим ежу.', 'Жи-жи-жи — здесь живут ужи.', 'Жо-жо-жо — снега много, хорошо.'],
     'Ч': ['Ча-ча-ча — горит в комнате свеча.', 'Чу-чу-чу — я на поезде качу.', 'Чи-чи-чи — прилетели к нам грачи.', 'Оч-оч-оч — наступила ночь.'],
     'Щ': ['Ща-ща-ща — мы поймали леща.', 'Щу-щу-щу — я щенка ищу.', 'Щи-щи-щи — мама варит щи.', 'Ащ-ащ-ащ — у меня новый плащ.']
-  };
-  const chistOf = L => L === 'Р' ? CHIST_R : L === 'Л' ? CHIST_L : CHIST[L];
+  });
+  const CHIST_KEYS = LX('CHIST_KEYS', [RU('С'), RU('З'), RU('Ц'), RU('Ш'), RU('Ж'), RU('Ч'), RU('Щ'), RU('Р'), RU('Л')]);
+  const chistOf = L => CHIST[L] || (L === RU('Р') || L === 'R' ? CHIST_R : CHIST_L);
   function chist(L0) {
-    const L = L0 || firstMine(['С', 'Ш', 'Р', 'Л', 'З', 'Ж', 'Ч', 'Щ', 'Ц']), t = newScreen(), deck = sample(chistOf(L), 4);
+    const L = L0 || firstMine(CHIST_KEYS), t = newScreen(), deck = sample(chistOf(L), 4);
     let k = 0;
-    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${['С', 'З', 'Ц', 'Ш', 'Ж', 'Ч', 'Щ', 'Р', 'Л'].map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
+    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${CHIST_KEYS.map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
     $('#chS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); chist(b.dataset.s); } };
     const tw = $('#tw');
     async function show() {
@@ -23008,7 +23030,7 @@ const IDEAS = (() => {
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
     { id: 'neuro', name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
-    { id: 'chist-all', hide: RU_ONLY, name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b>-<b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
+    { id: 'chist-all', name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => { const [c, v] = SZG.ICO; return `<span class="ico-letters"><b class="L c">${c}</b><b class="L v">${v}</b>-<b class="L c">${c}</b><b class="L v">${v}</b></span>`; }, bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
     { id: 'twist-pen', hide: RU_ONLY, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
     { id: 'r-motor', hide: RU_ONLY, name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
     { id: 'r-throat', hide: RU_ONLY, name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
@@ -28788,7 +28810,9 @@ const FOCUS = (() => {
   const SUBJ = [['read', '📖', 'Чтение'], ['math', '🔢', 'Математика'], ['chess', '♟️', 'Шахматы'], ['art', '🎨', 'Рисование']];
   // a sound game of the speech block: the tries of the sound it gives (rounded down), the minutes it takes
   const TRIES = 20, SPG = 1.3;
-  const POOL = { r: ['syll', 'house', 'r-end', 'count', 'magic', 'books'], sh: ['sh-syll', 'sh-sort', 'sh-house', 'beauty'], l: ['l-chist', 'l-house', 'l-twist', 'l-word', 'l-rap'], sz: ['sz-syll', 'sz-sort', 'sz-house', 'snd-hold'] };
+  const POOL = { r: ['syll', 'house', 'r-end', 'count', 'magic', 'books'], sh: ['sh-syll', 'sh-sort', 'sh-house', 'beauty', 'chist-all'], l: ['l-chist', 'l-house', 'l-twist', 'l-word', 'l-rap'], sz: ['sz-syll', 'sz-sort', 'sz-house', 'snd-hold', 'chist-all', 'hear-pairs'] };
+  // groups the speech games have no set of their own for: en th is trained with S and Z (sz-sort sorts S from TH), de ch (ich) with SCH
+  const NEAR = { th: 'sz', ch: 'sh' };
   const ageOf = (pr = P) => +(pr.settings.age || 0) || (pr.settings.track === 'l' ? 9 : 6);
   // the dose by age: the day (min–max minutes), one game, the speech block's tries
   function dose(pr = P) {
@@ -28969,7 +28993,7 @@ const FOCUS = (() => {
     const j = judge(ans, intel), f = get();
     f.chk = { d: dayKey(), ans, intel, lag: j.lag, res: j.res, see: !!j.see };
     // the lagging sounds become the sounds the speech games train (the four the game has)
-    const ks = [...new Set(j.lag.map(x => x.split(':')[1]).filter(k => SOUND_SET.some(s => s[0] === k)))];
+    const ks = [...new Set(j.lag.map(x => x.split(':')[1]).map(k => NEAR[k] || k).filter(k => SOUND_SET.some(s => s[0] === k)))];
     if (ks.length) P.settings.sounds = ks;
     try { EVT.log('focus', 'chk-' + j.res, j.lag.length); } catch (e) {}
     CACHE = null; save();
