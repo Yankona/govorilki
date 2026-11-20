@@ -1,15 +1,17 @@
-// The voice «Руслан» comes from our own site: the model in parts from engine/piper/voices/ (joined and checked in the
+// The app's voice comes from our own site («Руслан» in ru, Tugão in pt, Thorsten in de, Jenny in en): the model in parts from engine/piper/voices/ (joined and checked in the
 // browser), no request to huggingface.co; it is kept in the phone's storage (OPFS) and the next visit loads nothing.
 // Before the release copies site-add/ into the site, engine/piper/voices/ is served here from dev/site-add/.
-// Invented family only (Тина). Usage: node tests/voice_own.js [base]
+// Invented family only (Тина). Usage: node tests/voice_own.js [base] [lang=ru]
 const { chromium, devices } = require('playwright');
 const fs = require('fs'), path = require('path');
-const BASE = process.argv[2] || 'http://localhost:8781/govorilki/';
+const BASE = process.argv[2] || 'http://localhost:8781/govorilki/', LANG = process.argv[3] || 'ru';
+const VOICE = { ru: 'ru_RU-ruslan-medium', pt: 'pt_PT-tugão-medium', de: 'de_DE-thorsten-medium', en: 'en_GB-jenny_dioco-medium' }[LANG];
+const SAY = { ru: ['Привет, Тина!', 'Как дела?'], pt: ['Olá, Tina!', 'Como estás?'], de: ['Hallo, Tina!', 'Wie geht es dir?'], en: ['Hello, Tina!', 'How are you?'] }[LANG];
 const HOOK = 'const fam = () => ROOT.families[ROOT.curFam] || null;';
 const ADD = path.join(__dirname, '..', 'site-add');
 const seed = { engine: 'piper', micOff: true, srOff: true, parentPhone: true, cur: 'k1', curFam: 'f1',
   families: { f1: { id: 'f1', name: 'Т', cc: 'PT', kids: ['k1'], grands: [] } },
-  profiles: { k1: { stars: 5, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name: 'Тина', gender: 'f', track: 'r', age: 5, friend: 'kitty', onboarded: true, lang: 'ru' } } } };
+  profiles: { k1: { stars: 5, plays: {}, learn: {}, book: { title: 'Т', log: {} }, settings: { name: 'Тина', gender: 'f', track: 'r', age: 5, friend: 'kitty', onboarded: true, lang: LANG } } } };
 (async () => {
   const b = await chromium.launch();
   const c = await b.newContext({ ...devices['Pixel 5'], deviceScaleFactor: 1 });
@@ -26,27 +28,27 @@ const seed = { engine: 'piper', micOff: true, srOff: true, parentPhone: true, cu
   const p = await c.newPage(), errs = [];
   p.on('pageerror', e => errs.push(e.message));
   const ev = s => p.evaluate(s => window.__T.run(s), s);
-  await p.goto(BASE + 'ru/'); await p.waitForTimeout(2500);
+  await p.goto(BASE + (LANG === 'en' ? '' : LANG + '/')); await p.waitForTimeout(2500);
   const t0 = Date.now();
   const ok = await ev('piperWarm()').catch(e => 'ERR ' + e.message);
   const secs = ((Date.now() - t0) / 1000).toFixed(1);
   if (ok !== true) out.push('the voice did not load: ' + ok);
   // a phrase made by Руслан
-  const dur = await ev("piperAudio('Привет, Тина!').then(a => a.duration)").catch(e => 'ERR ' + e.message);
+  const dur = await ev(`piperAudio(${JSON.stringify(SAY[0])}).then(a => a.duration)`).catch(e => 'ERR ' + e.message);
   if (!(dur > 0.3)) out.push('no sound from the voice: ' + dur);
   const opfs = await p.evaluate(async () => { const d = await (await navigator.storage.getDirectory()).getDirectoryHandle('piper'); const o = {}; for await (const [k, h] of d.entries()) o[k] = (await h.getFile()).size; return o; }).catch(e => 'ERR ' + e.message);
-  if (!opfs || opfs['ru_RU-ruslan-medium.onnx'] !== 63201294) out.push('the model is not kept on the phone: ' + JSON.stringify(opfs));
+  if (!opfs || opfs[VOICE + '.onnx'] !== 63201294) out.push('the model is not kept on the phone: ' + JSON.stringify(opfs));
   const first = parts.slice(); parts.length = 0;
   if (!first.some(x => /part2/.test(x))) out.push('the parts were not fetched from our site: ' + JSON.stringify(first));
   // the next visit: the voice starts from the phone's storage, nothing is downloaded again
   await p.reload(); await p.waitForTimeout(2500);
   const ok2 = await ev('piperWarm()').catch(e => 'ERR ' + e.message);
-  const dur2 = await ev("piperAudio('Как дела?').then(a => a.duration)").catch(e => 'ERR ' + e.message);
+  const dur2 = await ev(`piperAudio(${JSON.stringify(SAY[1])}).then(a => a.duration)`).catch(e => 'ERR ' + e.message);
   if (ok2 !== true || !(dur2 > 0.3)) out.push('the voice did not start from the phone the second time: ' + ok2 + ' ' + dur2);
   if (parts.some(x => /\.part/.test(x))) out.push('the model was downloaded again: ' + JSON.stringify(parts));
   if (hf.length) out.push('requests to Hugging Face: ' + hf.slice(0, 3).join(' , '));
   if (errs.length) out.push('page errors: ' + errs.join(' | '));
-  console.log(`voice loaded in ${secs} s; fetched from our site: ${first.join(', ')}; kept: ${JSON.stringify(opfs)}; second visit fetched: ${JSON.stringify(parts)}; Hugging Face requests: ${hf.length}`);
+  console.log(`${LANG} ${VOICE}: voice loaded in ${secs} s; fetched from our site: ${first.join(', ')}; kept: ${JSON.stringify(opfs)}; second visit fetched: ${JSON.stringify(parts)}; Hugging Face requests: ${hf.length}`);
   console.log(out.length ? 'FAIL: ' + out.join(' ; ') : 'OK: the voice comes from our site');
   await b.close(); process.exit(out.length ? 1 : 0);
 })();

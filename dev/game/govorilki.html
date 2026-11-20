@@ -1997,6 +1997,7 @@ body:is(.look-dark,.quest) .bl-tale .ss.bl-on{background:#FFE58A;box-shadow:0 0 
 .ot-tx{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}.ot-tx b{font:700 19px/1.2 var(--f-display);overflow-wrap:anywhere}
 .ot-tx small{display:flex;gap:10px;font:700 14px var(--f-body);color:var(--ink-soft)}.ot-ok{color:var(--leaf,#2E8B57)}
 .ot-par{text-align:center;margin:8px 0 0}
+.ot-par .chip{display:inline-flex;white-space:normal;max-width:100%;text-align:left;line-height:1.25}
 .ot-pl{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:520px;margin:0 auto;padding:6px 0 24px;text-align:center}
 .ot-cv .ot-big{width:min(56vw,220px);height:min(56vw,220px);border-radius:32px;font-size:min(30vw,120px)}
 .ot-h{margin:0;font:700 26px/1.2 var(--f-display);overflow-wrap:anywhere}
@@ -2424,7 +2425,7 @@ body.gplay #app{height:calc(100% - 30px - env(safe-area-inset-top,0px))}
 .lang-row .lang-b{flex:0 0 auto;width:auto;min-width:0;gap:8px;padding:10px 16px;font:800 18px var(--f-body)}
 .lang-b .lang-f{font-size:24px;line-height:1}
 .ml-lrows{display:grid;gap:6px;margin-top:6px}.ml-lr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 6px 12px;border-radius:14px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
-.ml-lr.on{box-shadow:inset 0 0 0 3px var(--sun)}.ml-ln{display:flex;align-items:center;gap:8px;font:800 17px var(--f-body)}.ml-seg{display:flex;gap:6px}.ml-seg .chip{padding:6px 12px;font-size:15px}
+.ml-lr.on{box-shadow:inset 0 0 0 3px var(--sun)}.ml-nat{font:600 13px var(--f-body);color:var(--ink-soft)}.ml-ln{display:flex;align-items:center;gap:8px;font:800 17px var(--f-body)}.ml-seg{display:flex;gap:6px}.ml-seg .chip{padding:6px 12px;font-size:15px}
 .ml-seg .chip.sel{background:var(--t-yellow);box-shadow:0 3px 0 #D39A00,inset 0 0 0 3px var(--sun)}.ml-learn{font:800 13px var(--f-body);color:var(--plum);background:var(--t-lilac);border-radius:8px;padding:1px 7px;vertical-align:middle}
 .fe .lang-pick{margin:4px 0 6px}
 .ml-lr{flex-wrap:wrap}.ml-more summary{cursor:pointer;font:700 15px var(--f-body);color:var(--ink-soft);padding:4px 2px}.ml-more[open]{display:grid;gap:6px}
@@ -3515,7 +3516,7 @@ body:has(.overlay .winbox) .gm-toasts{top:auto;bottom:calc(env(safe-area-inset-b
 body.simple .home-t .stage{padding-bottom:110px}
 .sd{display:flex;flex-direction:column;gap:12px;margin-top:6px}
 .sd-tease{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;border:2px dashed var(--line-strong);background:none;border-radius:16px;padding:8px 12px;font:800 14px var(--f-body);color:var(--ink-soft);cursor:pointer;text-align:left}
-.sd-tease b{color:var(--ink);font-weight:900}.sd-tease.open{border-style:solid;border-color:var(--sun);background:color-mix(in srgb,var(--sun) 18%,transparent)}
+.sd-tease b{color:var(--ink);font-weight:900}.sd-kgo{margin-top:8px;border-color:#3D8BFD;background:color-mix(in srgb,#3D8BFD 12%,transparent)}.sd-tease.open{border-style:solid;border-color:var(--sun);background:color-mix(in srgb,var(--sun) 18%,transparent)}
 .sd-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .sd-head h2{margin:0;font:900 24px var(--f-head);color:var(--ink)}.sd-head small{font:800 14px var(--f-body);color:var(--ink-soft)}
 .sd-doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px}
@@ -5633,7 +5634,7 @@ function goHome() {
     <div id="leagueBox">${leagueCard()}</div>
     ${fy.length ? `<section class="group foryou"><div class="group-head"><h2>Для тебя</h2><p>${likesE || 'твои слова'}</p></div><div class="tiles">${fy.map(id => tileHTML(GAMES.find(g => g.id === id))).join('')}</div></section>` : ''}
     <button class="link-btn" id="parentsBtn">Для взрослых: голос, настройки, как заниматься</button>
-    ${GUEST || GPLAY ? '' : `<button class="link-btn" id="gpBtn">👵 Бабушка или дедушка хочет поиграть в игры ${esc(kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f').gen)}</button>`}
+    ${GUEST || GPLAY ? '' : `<button class="link-btn" id="gpBtn">${(P.settings.name || '').trim() ? `👵 Бабушка или дедушка хочет поиграть в игры ${esc(kidOf(ROOT.cur, P.settings.name, P.settings.gender === 'f').gen)}` : '👵 Бабушка или дедушка хочет поиграть в игры ребёнка'}</button>`}
     ${GUEST ? `<button class="link-btn" id="guestBtn">${GRAND[GUEST.who].e} Вернуться: вход для ${esc(lcFirst(decl(GUEST.name, GUEST.she)[1]))}</button>` : ''}`;
   } else {
     const T = HOME_TABS.find(x => x.id === tab), list = secs(T.g);
@@ -11905,7 +11906,7 @@ function screenOlymp() { OLY.play(); }
 /* ---------- the app's own voice: Piper (Rhasspy) running in a background worker of the browser, so games never stall.
    The voice file (about 63 MB) downloads once from our site (engine/piper/voices/) and stays on the phone; until it is ready the phone's
    own voice speaks. Every line said once is kept in the «govorilki-voice» cache and plays instantly next time. ---------- */
-const PIPER_VOICES = LANG === 'en' ? [['en_GB-jenny_dioco-medium', 'Jenny'], ['en_GB-cori-medium', 'Cori'], ['en_GB-alba-medium', 'Alba'], ['en_GB-alan-medium', 'Alan']]
+const PIPER_VOICES = LANG === 'en' ? [['en_GB-jenny_dioco-medium', 'Jenny (Dioco)'], ['en_GB-cori-medium', 'Cori'], ['en_GB-alba-medium', 'Alba'], ['en_GB-alan-medium', 'Alan']]
   : LANG === 'pt' ? [['pt_PT-tugão-medium', 'Tugão']] : LANG === 'de' ? [['de_DE-thorsten-medium', 'Thorsten'], ['de_DE-kerstin-low', 'Kerstin'], ['de_DE-ramona-low', 'Ramona'], ['de_DE-eva_k-x_low', 'Eva']]
   : [['ru_RU-irina-medium', 'Ирина'], ['ru_RU-denis-medium', 'Денис'], ['ru_RU-dmitri-medium', 'Дмитрий'], ['ru_RU-ruslan-medium', 'Руслан']];
 const PIPER_SRC = `
@@ -11926,7 +11927,7 @@ const HF = 'https://huggingface.co/diffusionstudio/piper-voices/resolve/main/', 
 let OWN = null;
 const own = () => OWN || (OWN = fetch0(ENG + 'voices/voices.json').then(r => r.ok ? r.json() : {}).catch(() => { OWN = null; return {}; }));
 self.fetch = async (u, o) => {
-  const url = String(u && u.url || u), m = ENG && url.startsWith(HF) ? (await own())[url.split('/').pop()] : null;
+  const url = String(u && u.url || u), m = ENG && url.startsWith(HF) ? (await own())[decodeURIComponent(url.split(/[?#]/)[0].split('/').pop())] : null;
   if (!m) return fetch0(u, o);
   let i = 0, rd = null, got = [];
   const body = new ReadableStream({ async pull(c) {
@@ -12512,6 +12513,8 @@ function screenParents(focus) {
       <li>Хвалите за старание. За каждый день занятий в альбом приходит новая наклейка: альбома хватает на месяц.</li>
 `}    </ul></section>
     </div>`, { guide: false, back: PAR_BACK });
+  // a child with no name yet (the one-tap start): «Как заниматься:» loses its colon instead of ending in a gap
+  if (!(P.settings.name || '').trim()) $$('.parents h2').forEach(h => { if (/:\s*$/.test(h.textContent)) h.textContent = h.textContent.replace(/\s*:\s*$/, ''); });
   if (focus === 'voice') later(() => { const el = $('#elSec'); if (el) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 50);
   const nmL = $('#nameIn') && $('#nameIn').closest('label'); if (nmL) { nmL.insertAdjacentHTML('afterend', mlLangsHTML('mlLangsIn', P)); bindMlLangs('mlLangsIn', P); }
   const vs = () => { $('#voiceState').textContent = VOICE ? `Голос: ${VOICE.name}.` : 'Русский голос на этом устройстве пока не найден. На iPhone и iPad: Настройки → Универсальный доступ → Устный контент → Голоса → Русский. На компьютере лучше всего звучит Chrome.'; };
@@ -19264,6 +19267,7 @@ function pultWho(next = screenPult) {
   newScreen();
   shell('Как дела у всех', `<div class="pult-gate">
     <p class="lead">Чей это телефон?</p>
+    <p class="muted">Спрашиваем один раз: если на телефоне играют дети, пульт закроется простым кодом, чтобы они случайно не поменяли настройки.</p>
     <button class="big" id="pwMine">📱 Мой: открывать с пульта, без кода</button>
     <button class="big ghost" id="pwKids">🧒 Здесь играют дети: закрыть пульт кодом</button>
     <p class="muted">Это можно поменять в пульте, внизу.</p></div>`, { back: () => goHome(), guide: false, raw: true });
@@ -19579,6 +19583,9 @@ const ML_LANGS = [['ru', '🇷🇺', RU('Русский'), 'ru-RU'], ['uk', '�
   ['de', '🇩🇪', RU('Deutsch'), 'de-DE'], ['es', '🇪🇸', RU('Español'), 'es-ES'], ['fr', '🇫🇷', RU('Français'), 'fr-FR'], ['it', '🇮🇹', RU('Italiano'), 'it-IT'],
   ['he', '🇮🇱', RU('עברית'), 'he-IL'], ['tr', '🇹🇷', RU('Türkçe'), 'tr-TR'], ['zh', '🇨🇳', RU('中文'), 'zh-CN']];
 const mlInfo = c => ML_LANGS.find(x => x[0] === c) || ML_LANGS[0];
+// the name of each language in the language of the page (pt-de-polish: «Русский» in Cyrillic topped the list on pt/de)
+const ML_NAME = { ru: 'Русский', uk: 'Украинский', pt: 'Португальский', en: 'Английский', de: 'Немецкий', es: 'Испанский', fr: 'Французский', it: 'Итальянский', he: 'Иврит', tr: 'Турецкий', zh: 'Китайский' };
+const mlName = c => ML_NAME[c] || mlInfo(c)[2];
 // the same thing in four languages; c: the words sound alike (good for «guess the language»)
 const ML_WORDS = JSON.parse(RU(`[
 ["🌹","роза","rosa","rose","Rose",1],["🐟","рыба","peixe","fish","Fisch",0],["🦒","жираф","girafa","giraffe","Giraffe",1],["🦓","зебра","zebra","zebra","Zebra",1],
@@ -19706,12 +19713,12 @@ const mlNoVoice = langs => { const no = langs.filter(c => 'speechSynthesis' in w
 const ML_ROLE = [['home', 'дома'], ['school', 'в школе'], ['learn', 'учит']];
 const mlLangsHTML = (id, pr) => {
   const on = myLangs(pr), main = mainLang(pr) || (READ_LANGS.includes(on[0]) ? on[0] : LANG);
-  const row = ([c, f, n]) => { const st = mlRole(c, pr); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${n}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
-  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])), more = ML_LANGS.filter(x => !top.includes(x));
+  const row = ([c, f, n]) => { const st = mlRole(c, pr), t = mlName(c); return `<div class="ml-lr ${st ? 'on' : ''}"><span class="ml-ln"><span class="lang-f">${f}</span>${t}${t === n ? '' : ` <small class="ml-nat">${n}</small>`}</span><span class="ml-seg">${ML_ROLE.map(([k, t]) => `<button class="chip ${st === k ? 'sel' : ''}" data-ml="${c}" data-st="${k}">${t}</button>`).join('')}</span></div>`; };
+  const top = ML_LANGS.filter(x => READ_LANGS.includes(x[0]) || on.includes(x[0])).sort((a, b) => (b[0] === LANG) - (a[0] === LANG)), more = ML_LANGS.filter(x => !top.includes(x));
   const mains = READ_LANGS.filter(c => on.includes(c));
-  return `<div class="ml-langs" data-id="${id}"><p class="prow">На каких языках говорит ${esc(pr.settings.name || '')}? Дома, в школе или учит — игра будет использовать все.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
+  return `<div class="ml-langs" data-id="${id}"><p class="prow">На каких языках говорит ${esc((pr.settings.name || '').trim() || 'ребёнок')}? Дома, в школе или учит — игра будет использовать все.</p><div class="ml-lrows" id="${id}">${top.map(row).join('')}
     ${more.length ? `<details class="ml-more"><summary>другие языки…</summary>${more.map(row).join('')}</details>` : ''}
-    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Главный язык игры:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlInfo(c)[2]}</button>`).join('')}</div></div></div>`;
+    <div class="ml-main" ${mains.length > 1 ? '' : 'hidden'}><span>Главный язык игры:</span>${mains.map(c => `<button class="chip ${c === main ? 'sel' : ''}" data-mlmain="${c}">${mlInfo(c)[1]} ${mlName(c)}</button>`).join('')}</div></div></div>`;
 };
 function bindMlLangs(id, pr) {
   const row = document.getElementById(id); if (!row) return;
@@ -25257,7 +25264,7 @@ const SETUI = (() => {
     relabel('sfxIn', 'Звуки игры'); relabel('micIn', 'Микрофон слушает ребёнка'); relabel('srIn', 'Узнавать слова', 'речь распознаёт Apple или Google');
     // the long list of languages folds away
     const ml = $('#mlLangsIn'); const mlb = ml && (ml.closest('.ml-langs') || ml);
-    if (mlb && S.kid && S.kid.contains(mlb)) { const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>🗣️ Языки ребёнка</summary>'; mlb.before(d); d.append(mlb); }
+    if (mlb && S.kid && S.kid.contains(mlb)) { const d = document.createElement('details'); d.className = 'set-more'; d.innerHTML = '<summary>🗣️ Языки ребёнка</summary>'; mlb.before(d); d.append(mlb); d.open = !(Array.isArray(P.settings.langs) && P.settings.langs.length) || myLangs().length >= 2; }
     // the child: name, languages, interests, reading; the voice moves to its own part
     const voice = document.createElement('section'); voice.className = 'psec'; voice.innerHTML = '<h2>🔊 Голос и звук</h2>';
     if (S.kid) {
@@ -28628,7 +28635,7 @@ const SIMPLE = (() => {
   // always one tap, never behind the path (the owner, 18.11: «праздники, новости, наука и многое-многое другое нельзя терять»)
   const KNOW = ['learn-news', 'phys-lab', 'how', 'space', 'tales', 'travel', 'learn-jobs', 'comics', 'composers', 'museum'];
   function knowHTML() {
-    const V = vis(), gs = KNOW.filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
+    const V = vis(), gs = KNOW.flatMap(id => id === 'tales' && !V.has(id) ? ['bookshelf'] : [id]).filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
     return `<section class="sd-know" id="sdKnow"><h3>🌍 Узнаём</h3><div class="sd-kn">${gs.map(g => `<button class="sd-k" data-know="${g.id}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b>${newsDot(g.id) ? '<i class="tile-new">Новое!</i>' : ''}</button>`).join('')}<button class="sd-k" data-know="cal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div></section>`;
   }
   // «Моё любимое»: big pictures, 2–4, any day again
@@ -28673,7 +28680,7 @@ const SIMPLE = (() => {
     if (ALLG) {
       const kt = st.querySelector('.kids-top');
       const bar = document.createElement('div'); bar.className = 'sd-allbar';
-      bar.innerHTML = `<b>🎮 Все игры</b><small>для взрослых: любая игра откроется для ${esc(P.settings.name || '')}</small><button class="chip" id="sdBack">← День</button>`;
+      bar.innerHTML = `<b>🎮 Все игры</b><small>${(P.settings.name || '').trim() ? `для взрослых: любая игра откроется для ${esc(P.settings.name)}` : 'для взрослых: откроется любая игра'}</small><button class="chip" id="sdBack">← День</button>`;
       (kt || st.firstElementChild).after(bar);
       bar.querySelector('#sdBack').onclick = () => { sfx.pop(); ALLG = false; P.homeTab = 'today'; goHome(); };
       return;
@@ -28698,6 +28705,15 @@ const SIMPLE = (() => {
       t.innerHTML = `<span>${pathDone() ? '🚪 Двери дня открыты:' : '🔒 После тропы:'}</span>${ds.map(a => `<b>${a.e} ${esc(a.n)}</b>`).join('')}`;
       hero.after(t);
       t.onclick = () => { sfx.pop(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    }
+    // «Узнаём» is never behind the path (pt-de-polish: a new family could not find stories and news on the first day):
+    // one tap from the top brings its tiles into view
+    const kn = el.querySelector('#sdKnow');
+    if (hero && kn) {
+      const k = document.createElement('button'); k.className = 'sd-tease open sd-kgo'; k.id = 'sdKnowGo';
+      k.innerHTML = `<span>🌍 ${'Узнаём — открыто всегда:'}</span><b>${'истории, путешествия, новости, наука, праздники'}</b>`;
+      (box.querySelector('#sdTease') || hero).after(k);
+      k.onclick = () => { sfx.pop(); kn.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
     }
     try { LITTLE.home(box); } catch (e) {}
     try { WISH.home(box); } catch (e) {}
@@ -29321,7 +29337,8 @@ const WISH = (() => {
   // the grown-ups: the child's wishes and «Хочу в игру», with «Отправить автору» (one tap) and «Очистить»
   function parentHTML() {
     const ws = list(), o = out();
-    return `<h3 class="fam-s">Желания ${esc(P.settings.name || '')}</h3>
+    const wn = (P.settings.name || '').trim();
+    return `<h3 class="fam-s">${wn ? `Желания: ${esc(wn)}` : 'Желания ребёнка'}</h3>
       ${ws.length ? `<ul class="wi-pl">${ws.slice(0, 12).map(w => `<li>${w.done ? '✨' : '⏳'} ${esc(w.t)}</li>`).join('')}</ul>` : '<p class="sd-note">Пока нет. Ребёнок говорит желания другу в уголке.</p>'}
       <h3 class="fam-s">Хочу в игру</h3>
       <p class="sd-note">Чего ребёнок просил, а в игре пока нет. Имена убраны. Сами по себе никуда не уходят.</p>
@@ -29634,7 +29651,7 @@ const LITTLE = (() => {
     later(offer, 900);
   }
   // for the grown-ups' «День»: a calm line about today
-  const parentLine = () => (() => { try { const l = HONEST.todayLine(P); return l ? `<p class="sd-note">${esc(l)}</p>` : ''; } catch (e) { return ''; } })() + (on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc(P.settings.name || '')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '');
+  const parentLine = () => (() => { try { const l = HONEST.todayLine(P); return l ? `<p class="sd-note">${esc(l)}</p>` : ''; } catch (e) { return ''; } })() + (on() && (td().skips || 0) >= 2 ? `<p class="sd-note">Сегодня ${esc((P.settings.name || '').trim() || 'ребёнок')} отложил${P.settings.gender === 'f' ? 'а' : ''} ${td().skips} ${plural(td().skips, ['шаг', 'шага', 'шагов'])} — творческая дверь открылась сама, чтобы день закончился радостно.</p>` : '');
   return { on, listen, reads, plan, must, skipped, rescue, offer, stepDone, home, colour, parentLine, TEXT, EAR, dayStickers };
 })();
 function LITTLE_PLAN(id, full) {
