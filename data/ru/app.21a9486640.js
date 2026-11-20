@@ -19,7 +19,7 @@ const LANGDATA =  {};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
-const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"5e5d8b790f","HOLT":"3d8cb3624e","COMIC_ME":"ce9dfcdf3f","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"9366eb91f6"};
+const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"5e5d8b790f","HOLT":"3d8cb3624e","COMIC_ME":"ce9dfcdf3f","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"823e5c1f55"};
 const PACK = (() => {
   const got = {}, run = {}, root = location.pathname.replace(/[^/]*$/, '').replace(/(en|pt|ru|de)\/$/, '');
   const url = n => root + 'data/' + LANG + '/' + n + '.json?h=' + PACKS[n];
@@ -2185,7 +2185,7 @@ function screenSyll(src = SYL, key = 'syll', title = 'Слоги и слова',
 function screenHouse(S0 = RU('Р')) {
   const S = SOUNDS[sndIdx(S0)].L;
   const t = newScreen(), posW = ['в начале', 'в середине', 'в конце'];
-  const H = S0 === RU('Л') ? HOUSE_L : S0 === RU('Ш') ? HOUSE_SH : S0 === RU('С') ? LOGO.HOUSE_S : HOUSE, n3 = H.some(h => h[2] === 2) ? 3 : 4, deck = shuffle([...sample(H.filter(h => h[2] === 0), n3), ...sample(H.filter(h => h[2] === 1), n3), ...sample(H.filter(h => h[2] === 2), 2)]);
+  const H = S0 === RU('Л') ? HOUSE_L : S0 === RU('Ш') ? HOUSE_SH : S0 === RU('С') ? SZG.HOUSE_S : HOUSE, n3 = H.some(h => h[2] === 2) ? 3 : 4, deck = shuffle([...sample(H.filter(h => h[2] === 0), n3), ...sample(H.filter(h => h[2] === 1), n3), ...sample(H.filter(h => h[2] === 2), 2)]);
   let k = 0, busy = false, miss = 0;
   shell(`Где живёт звук ${S}`, `<div class="house">
       <div class="house-top"><div class="roof"></div><div class="attic" id="attic"></div></div>
@@ -2214,7 +2214,7 @@ function screenHouse(S0 = RU('Р')) {
       return;
     }
     busy = true; b.classList.remove('glow'); b.classList.add('lit'); sfx.good();
-    hword.innerHTML = hiS(w.toUpperCase(), S);
+    hword.innerHTML = hiS(w.toUpperCase(), S0 === RU('С') && !IS_RU ? SND_HI.sz : S);
     await talk(`${cap(w)}: звук ${S} ${posW[pos]}!`); if (t !== tok) return;
     k++;
     if (k >= deck.length) finish({ key: S0 === RU('Л') ? 'l-house' : S0 === RU('Ш') ? 'sh-house' : S0 === RU('С') ? 'sz-house' : 'house', line: `Ты нашла, где живёт звук ${S}!`, again: () => screenHouse(S0) });
@@ -15004,7 +15004,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '175';
+const APP_VER = '176';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -17599,10 +17599,9 @@ const STRETCH = (() => {
   GAMES.push({ id: 'snd-hold', name: 'Тяни звук', sub: 'насос, комарик, змейка, мотор', ico: () => pic('🎈'), bg: 'var(--t-blue)', go: () => hold(), grp: 0, also: [15], prog: () => '' });
   return { hold };
 })();
-const LOGO = (() => {
-  const SAID = () => G('Я сказала!', 'Я сказал!');
-  const VW = /[аеёиоуыэюя]/gi;
-  const sylN = w => (w.match(VW) || []).length;
+
+
+const SZG = (() => {
   
   function hiDiff(a, b) {
     if (a === b) return esc(a);
@@ -17613,50 +17612,59 @@ const LOGO = (() => {
   const tiles = (list, cls = 'lg-pic') => list.map(([w, e]) => `<button class="${cls}" data-w="${esc(w)}">${pic(e)}<b></b></button>`).join('');
 
    
-  const SZ_ITEMS = [['С', 'сок', '🧃'], ['С', 'сыр', '🧀'], ['С', 'сумка', '👜'], ['С', 'самолёт', '✈️'], ['С', 'собака', '🐕'], ['С', 'сова', '🦉'], ['С', 'слон', '🐘'],
+  const SZ_ITEMS = LX('SZ_ITEMS', [['С', 'сок', '🧃'], ['С', 'сыр', '🧀'], ['С', 'сумка', '👜'], ['С', 'самолёт', '✈️'], ['С', 'собака', '🐕'], ['С', 'сова', '🦉'], ['С', 'слон', '🐘'],
     ['С', 'лиса', '🦊'], ['С', 'оса', '🐝'], ['С', 'колесо', '🛞'], ['С', 'автобус', '🚌'], ['С', 'ананас', '🍍'], ['С', 'нос', '👃'], ['С', 'кактус', '🌵'], ['С', 'сапоги', '👢'], ['С', 'маска', '🎭'],
     ['З', 'зонт', '☂️'], ['З', 'зубы', '🦷'], ['З', 'зайка', '🐰'], ['З', 'коза', '🐐'], ['З', 'ваза', '🏺'], ['З', 'роза', '🌹'], ['З', 'глаза', '👀'], ['З', 'кукуруза', '🌽'], ['З', 'звезда', '⭐'],
-    ['Ц', 'цветок', '🌸'], ['Ц', 'цыплёнок', '🐥'], ['Ц', 'цирк', '🎪'], ['Ц', 'курица', '🐔'], ['Ц', 'огурец', '🥒'], ['Ц', 'птица', '🐦'], ['Ц', 'яйцо', '🥚'], ['Ц', 'кольцо', '💍'], ['Ц', 'овца', '🐑'], ['Ц', 'танец', '💃']];
-  const SZ_BINS = { 'С': ['💧', 'водичка: с-с-с', 'Свистит, как водичка!'], 'З': ['🦟', 'комарик: з-з-з', 'Звенит, как комарик!'], 'Ц': ['🤫', 'тише: ц-ц-ц', 'Тише-тише, цыц!'] };
-  function szSort() {
-    const t = newScreen(), pair = pickOne([['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
+    ['Ц', 'цветок', '🌸'], ['Ц', 'цыплёнок', '🐥'], ['Ц', 'цирк', '🎪'], ['Ц', 'курица', '🐔'], ['Ц', 'огурец', '🥒'], ['Ц', 'птица', '🐦'], ['Ц', 'яйцо', '🥚'], ['Ц', 'кольцо', '💍'], ['Ц', 'овца', '🐑'], ['Ц', 'танец', '💃']]);
+  const SZ_BINS = LX('SZ_BINS', { 'С': ['💧', 'водичка: с-с-с', 'Свистит, как водичка!'], 'З': ['🦟', 'комарик: з-з-з', 'Звенит, как комарик!'], 'Ц': ['🤫', 'тише: ц-ц-ц', 'Тише-тише, цыц!'] });
+  const SZ_PAIRS = LX('SZ_PAIRS', [['С', 'З'], ['С', 'З'], ['С', 'Ц'], ['З', 'Ц']]);
+  const SZ_TITLES = LX('SZ_TITLES', { 'С,З': 'Водичка или комарик?', 'С,Ц': 'Водичка или тише?', 'З,Ц': 'Комарик или тише?' });
+  const SZ = { items: SZ_ITEMS, bins: SZ_BINS, pairs: SZ_PAIRS, titles: SZ_TITLES };
+  
+  const R_SORT = LX('R_SORT', { items: [], bins: {}, pairs: [], titles: {}, line: '' });
+  const szSort = () => sortBy(SZ, 'sz-sort', 'Ты различаешь свистящие звуки!', szSort);
+  function sortBy(S, key, line, again) {
+    const { items: SZ_ITEMS, bins: SZ_BINS, titles: SZ_TITLES } = S;
+    const t = newScreen(), pair = pickOne(S.pairs), nm2 = pair.map(L => SZ_BINS[L][1].split(':')[0]);
     const deck = shuffle(pair.flatMap(L => sample(SZ_ITEMS.filter(x => x[0] === L), 3)));
     let k = 0, busy = false;
     
-    shell({ 'С,З': 'Водичка или комарик?', 'С,Ц': 'Водичка или тише?', 'З,Ц': 'Комарик или тише?' }[pair.join()], `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
+    shell(SZ_TITLES[pair.join()] || cap(`${nm2[0]} или ${nm2[1]}?`), `<div class="books-wrap"><div class="card-slot" id="cslot"></div>
       <div class="bins" id="bins">${pair.map(L => `<button class="bin" data-l="${L}"><span class="emo">${SZ_BINS[L][0]}</span><b class="L c">${L}</b><small>${SZ_BINS[L][1]}</small></button>`).join('')}</div></div>`);
     const cslot = $('#cslot'), bins = $('#bins');
     function show() {
       roundProg(k, deck.length);
       busy = false; const [, w, e] = deck[k];
       cslot.innerHTML = `<div class="pcard" style="--rot:${rnd(-6, 6).toFixed(1)}deg">${pic(e)}<span class="w"></span></div>`;
-      talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${pair.map(L => SZ_BINS[L][1].split(':')[0]).join(' или ')}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
+      talk(k === 0 ? `Послушай слово и нажми, на что похож звук: ${nm2[0]} или ${nm2[1]}. ${cap(w)}.` : `${cap(w)}. На что похоже?`);
     }
     bins.onclick = async e => {
       const b = e.target.closest('.bin'); if (!b || busy) return;
       const [L, w] = deck[k];
       if (b.dataset.l !== L) { wiggle(b); sfx.oops(); talk(`Послушай ещё раз: ${w}`, { rate: .7 }); return; }
       busy = true; sfx.good(); hopEl(b);
-      $('.pcard .w').innerHTML = hiS(w.toUpperCase(), L);
+      $('.pcard .w').innerHTML = hiS(w.toUpperCase(), SZ_BINS[L][3] || L);
       await talk(`${cap(w)}. ${SZ_BINS[L][2]}`); if (t !== tok) return;
       k++;
-      if (k >= deck.length) finish({ key: 'sz-sort', line: 'Ты различаешь свистящие звуки!', again: szSort });
+      if (k >= deck.length) finish({ key, line, again });
       else later(show, 300);
     };
     show();
   }
-  const SYL_S = [['са', 'СА', 'самолёт', '✈️'], ['со', 'СО', 'сова', '🦉'], ['су', 'СУ', 'сумка', '👜'], ['сы', 'СЫ', 'сыр', '🧀'], ['са', 'СА', 'сапоги', '👢'], ['су', 'СУ', 'суп', '🍲'],
-    ['зо', 'ЗО', 'зонт', '☂️'], ['зу', 'ЗУ', 'зубы', '🦷'], ['за', 'ЗА', 'зайка', '🐰'], ['цы', 'ЦЫ', 'цыплёнок', '🐥'], ['ци', 'ЦИ', 'цирк', '🎪']];
-  const HOUSE_S = [['сок', '🧃', 0], ['сыр', '🧀', 0], ['сумка', '👜', 0], ['сова', '🦉', 0], ['слон', '🐘', 0], ['самолёт', '✈️', 0], ['суп', '🍲', 0], ['сапоги', '👢', 0],
+  const SYL_S = LX('SYL_S', [['са', 'СА', 'самолёт', '✈️'], ['со', 'СО', 'сова', '🦉'], ['су', 'СУ', 'сумка', '👜'], ['сы', 'СЫ', 'сыр', '🧀'], ['са', 'СА', 'сапоги', '👢'], ['су', 'СУ', 'суп', '🍲'],
+    ['зо', 'ЗО', 'зонт', '☂️'], ['зу', 'ЗУ', 'зубы', '🦷'], ['за', 'ЗА', 'зайка', '🐰'], ['цы', 'ЦЫ', 'цыплёнок', '🐥'], ['ци', 'ЦИ', 'цирк', '🎪']]);
+  
+  const SYL_HL = LX('SYL_S_HL', RU('сзц'));
+  const HOUSE_S = LX('HOUSE_S', [['сок', '🧃', 0], ['сыр', '🧀', 0], ['сумка', '👜', 0], ['сова', '🦉', 0], ['слон', '🐘', 0], ['самолёт', '✈️', 0], ['суп', '🍲', 0], ['сапоги', '👢', 0],
     ['лиса', '🦊', 1], ['оса', '🐝', 1], ['миска', '🥣', 1], ['маска', '🎭', 1], ['весы', '⚖️', 1], ['колесо', '🛞', 1], ['капуста', '🥬', 1],
-    ['нос', '👃', 2], ['автобус', '🚌', 2], ['ананас', '🍍', 2], ['кактус', '🌵', 2], ['кокос', '🥥', 2], ['компас', '🧭', 2]];
+    ['нос', '👃', 2], ['автобус', '🚌', 2], ['ананас', '🍍', 2], ['кактус', '🌵', 2], ['кокос', '🥥', 2], ['компас', '🧭', 2]]);
 
    
-  const PAIRS = [[['мышка', '🐭'], ['мишка', '🧸'], ['миска', '🥣']], [['кот', '🐈'], ['кит', '🐋']], [['дом', '🏠'], ['дым', '💨']], [['удочка', '🎣'], ['уточка', '🦆']],
+  const PAIRS = LX('HEAR_PAIRS', [[['мышка', '🐭'], ['мишка', '🧸'], ['миска', '🥣']], [['кот', '🐈'], ['кит', '🐋']], [['дом', '🏠'], ['дым', '💨']], [['удочка', '🎣'], ['уточка', '🦆']],
     [['рак', '🦞'], ['лак', '💅'], ['мак', '🌺']], [['рама', '🖼️'], ['лама', '🦙']], [['зуб', '🦷'], ['суп', '🍲']], [['роза', '🌹'], ['роса', '💧']], [['шар', '🎈'], ['жар', '🔥']],
     [['уши', '👂'], ['ужи', '🐍']], [['лук', '🧅'], ['жук', '🪲']], [['кошка', '🐱'], ['ложка', '🥄']], [['мышка', '🐭'], ['мушка', '🪰']], [['сок', '🧃'], ['сом', '🐟']],
     [['усы', '🥸'], ['уши', '👂']], [['белка', '🐿️'], ['булка', '🍞']], [['ёжик', '🦔'], ['ножик', '🔪']], [['бант', '🎀'], ['бинт', '🩹']], [['ракета', '🚀'], ['ракетка', '🏓']],
-    [['лапа', '🐾'], ['лампа', '💡']], [['рука', '✋'], ['река', '🏞️']]];
+    [['лапа', '🐾'], ['лампа', '💡']], [['рука', '✋'], ['река', '🏞️']]]);
   function hearPairs(nRounds = 6, onDone) {
     const t = newScreen(), deck = sample(PAIRS, nRounds); let k = 0, busy = false, target = null, miss = 0;
     shell('Похожие слова', `<div class="lg"><p class="lg-q">Слушай внимательно и нажми на картинку</p><div class="lg-pics" id="lgP"></div>
@@ -17681,6 +17689,104 @@ const LOGO = (() => {
     };
     show();
   }
+   
+  
+  const CHECK = LX('CHECK', [['С', [['сок', '🧃'], ['оса', '🐝'], ['нос', '👃']], 5, 'sz'], ['З', [['зонт', '☂️'], ['коза', '🐐']], 5, 'sz'], ['Ц', [['цирк', '🎪'], ['курица', '🐔'], ['огурец', '🥒']], 5, 'sz'],
+    ['Ш', [['шапка', '🧢'], ['кошка', '🐱'], ['душ', '🚿']], 6, 'sh'], ['Ж', [['жук', '🪲'], ['ножницы', '✂️']], 6, 'sh'], ['Ч', [['чайник', '🫖'], ['очки', '👓'], ['мяч', '⚽']], 6, 'sh'],
+    ['Щ', [['щётка', '🪥'], ['ящик', '📦']], 6, 'sh'], ['Л', [['лампа', '💡'], ['волк', '🐺'], ['стул', '🪑']], 6, 'l'], ['Ль', [['лимон', '🍋'], ['пальма', '🌴'], ['ель', '🌲']], 5, 'l'],
+    ['Р', [['рыба', '🐟'], ['корова', '🐄'], ['шар', '🎈']], 6, 'r'], ['Рь', [['рис', '🍚'], ['дверь', '🚪']], 6, 'r']]);
+  const CHECK_KEY = Object.fromEntries(CHECK.map(c => [c[0], c[3]]));
+  const LONGW = LX('LONGW', [['велосипед', '🚲'], ['черепаха', '🐢'], ['телевизор', '📺'], ['сковорода', '🍳'], ['милиционер', '👮']]);
+  const hiSnd = (w, L) => !IS_RU ? hiS(w, /^[SZ]$/.test(L) ? SND_HI.sz : L.toLowerCase()) : hiSnd1(w, L), hiSnd1 = (w, L) => { const c = L[0].toLowerCase(), i = w.indexOf(c); return i < 0 ? esc(w) : esc(w.slice(0, i)) + `<b class="hl">${esc(w.slice(i, i + 1))}</b>` + esc(w.slice(i + 1)); };
+  function check() {
+    let t = newScreen(); const name = P.settings.name || 'ребёнок';
+    shell('Проверка речи', `<div class="lg"><div class="lg-card lg-adult">
+      <p class="lg-q">Для взрослого: 7–10 минут вместе с ${esc(name === 'ребёнок' ? 'ребёнком' : IS_RU ? decl(name, P.settings.gender === 'f')[4] : name)}</p>
+      <ol class="lg-list"><li>Ребёнок называет картинки. Вы отмечаете, как прозвучал <b class="hl">выделенный</b> звук: чисто или с ошибкой (замена, пропуск, искажение).</li>
+      <li>Если ребёнок не знает слова, нажмите 🔊: пусть повторит за голосом, и отметьте.</li>
+      <li>Потом игра проверит слух на похожие слова и как ребёнок повторяет длинные слова.</li></ol>
+      <p class="muted">Это домашняя проверка, а не диагноз. Отчёт сохранится, его можно показать логопеду.</p>
+      <div class="og-btns"><button class="big" id="lgGo">Начать</button></div></div></div>`);
+    const res = { snd: {}, hear: 0, hearN: 5, syl: 0, sylN: LONGW.length };
+    const items = CHECK.flatMap(([L, ws]) => ws.map(([w, e]) => ({ L, w, e })));
+    $('#lgGo').onclick = () => { sfx.pop(); sounds(0); };
+    function sounds(i) {
+      if (t !== tok) return;
+      if (i >= items.length) { hearing(); return; }
+      const it = items[i];
+      shell('Проверка речи', `<div class="lg"><p class="lg-step">Звуки: ${i + 1} из ${items.length}</p><div class="lg-card"><span class="lg-big">${pic(it.e)}</span>
+        <p class="lg-adult-w">${hiSnd(it.w, it.L)} <small>звук ${esc(it.L)}</small></p><button class="chip" id="lgSay">🔊 Подсказать слово</button></div>
+        <div class="lg-mark"><button class="big" data-m="1">✓ Чисто</button><button class="big ghost" data-m="0">✗ С ошибкой</button></div></div>`);
+      $('#lgSay').onclick = () => talk(`Повтори: ${it.w}.`);
+      talk(i === 0 ? 'Что это? Скажи громко.' : 'А это?');
+      $('.lg-mark').onclick = e => {
+        const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick();
+        (res.snd[it.L] = res.snd[it.L] || []).push(+b.dataset.m);
+        sounds(i + 1);
+      };
+    }
+    function hearing() {
+      if (t !== tok) return;
+      talk('Теперь проверим слух.').then(() => { if (t === tok) hearPairs(res.hearN, n => { res.hear = n; t = tok; syllables(0); }); });
+    }
+    function syllables(i) {
+      if (t !== tok) return;
+      if (i >= LONGW.length) { report(); return; }
+      const [w, e] = LONGW[i];
+      t = newScreen();
+      shell('Проверка речи', `<div class="lg"><p class="lg-step">Длинные слова: ${i + 1} из ${LONGW.length}</p><div class="lg-card"><span class="lg-big">${pic(e)}</span>
+        <p class="lg-adult-w">${esc(w)}</p><button class="chip" id="lgSay">🔊 Ещё раз</button></div>
+        <p class="muted">Ребёнок повторяет слово. Ошибка — если пропущен, переставлен или добавлен слог.</p>
+        <div class="lg-mark"><button class="big" data-m="1">✓ Без ошибок</button><button class="big ghost" data-m="0">✗ Слоги не так</button></div></div>`);
+      $('#lgSay').onclick = () => talk(`${cap(w)}.`);
+      talk(`Повтори за мной: ${w}.`);
+      $('.lg-mark').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick(); res.syl += +b.dataset.m; syllables(i + 1); };
+    }
+    function report() {
+      const t2 = newScreen(), bad = CHECK.map(([L]) => L).filter(L => (res.snd[L] || []).some(x => !x));
+      const keys = [...new Set(bad.map(L => ({ th: 'sz', ch: 'sh' })[CHECK_KEY[L]] || CHECK_KEY[L]))].filter(k => SOUND_SET.some(s => s[0] === k)), hearBad = res.hear <= res.hearN - 2, sylBad = res.syl <= res.sylN - 2;
+      const prev = (P.checks || [])[0];
+      P.checks = [{ d: dayKey(), snd: res.snd, hear: res.hear, hearN: res.hearN, syl: res.syl, sylN: res.sylN }, ...(P.checks || [])].slice(0, 6); save();
+      try { const ans = { [LANG]: {} }; (FOCUS.NORM[LANG] || []).forEach(([k]) => { ans[LANG][k] = CHECK.some(([L, , , g]) => g === k && (res.snd[L] || []).some(x => !x)) ? 0 : 1; }); FOCUS.finishCheck(ans, 1); } catch (e) {}
+      const age = +(P.settings.age || 0) || 6, norm = a => a ? ` <small>${a <= age ? 'по возрасту уже должен звучать' : `норма — к ${a} годам`}</small>` : '';
+      const row = ([L, , a]) => { const m = res.snd[L] || [], err = m.filter(x => !x).length; return `<li class="${err ? (a && a > age ? 'early' : 'bad') : 'ok'}"><b>${esc(L)}</b><span>${err ? `${a && a > age ? '🌱' : '⚠️'} с ошибкой ${err} из ${m.length}` : '✅ чисто'}${norm(a)}</span></li>`; };
+      const games = [...keys.flatMap(k => ({ sz: ['sz-sort', 'sz-syll', 'snd-hold'], sh: ['sh-sort', 'sh-syll'], l: ['l-chist', 'l-house'], r: ['syll', 'house'] }[k] || [])),
+        ...(hearBad ? ['hear-pairs'] : []), ...(sylBad ? ['syl-clap', 'syl-miss'] : [])].filter(id => GAMES.some(g => g.id === id));
+      const label = k => SOUND_SET.find(x => x[0] === k)[1];
+      shell('Отчёт о речи', `<div class="lg"><div class="lg-card lg-adult">
+        <p class="lg-q">${esc(P.settings.name || 'Ребёнок')}, ${esc(dayKey())}</p>
+        <ul class="lg-rep">${CHECK.map(row).join('')}</ul>
+        <p class="lg-line">👂 Похожие слова на слух: <b>${res.hear} из ${res.hearN}</b> ${hearBad ? '⚠️' : '✅'}</p>
+        <p class="lg-line">🥁 Длинные слова без ошибок в слогах: <b>${res.syl} из ${res.sylN}</b> ${sylBad ? '⚠️' : '✅'}</p>
+        ${prev ? `<p class="muted">Прошлая проверка ${esc(prev.d)}: с ошибкой ${CHECK.filter(([L]) => (prev.snd[L] || []).some(x => !x)).map(([L]) => L).join(', ') || 'ничего'}.</p>` : ''}
+        ${keys.length ? `<p class="lg-line">Потренировать: <b>${keys.map(label).join(', ')}</b></p><div class="og-btns"><button class="big" id="lgOn">Включить эти звуки в занятиях</button></div>` : '<p class="lg-line">Все звуки прозвучали чисто. 🎉</p>'}
+        ${games.length ? `<p class="lg-line">Игры для этого:</p><div class="lg-chips" id="lgG">${games.map(id => `<button class="chip" data-g="${id}">${esc(nm(GAMES.find(g => g.id === id).name))}</button>`).join('')}</div>` : ''}
+        <p class="muted">Это домашняя проверка, а не диагноз. 🌱 — по возрасту этот звук ещё может не получаться. Если отметок ⚠️ много, звук заменяется другим или похожие слова путаются на слух, покажите отчёт логопеду.</p>
+        <div class="og-btns"><button class="big" id="lgFin">Готово ⭐</button></div></div></div>`);
+      const on = $('#lgOn');
+      if (on) on.onclick = () => {
+        sfx.magic(); P.settings.sounds = [...new Set([...soundsOf(P).filter(k => keys.includes(k)), ...keys])];
+        if (Array.isArray(P.settings.mods)) MODS.filter(m => m.snd && keys.includes(m.snd)).forEach(m => { if (!P.settings.mods.includes(m.id)) P.settings.mods.push(m.id); });
+        save(); on.textContent = '✓ Включено'; on.disabled = true;
+      };
+      const gl = $('#lgG'); if (gl) gl.onclick = e => { const b = e.target.closest('[data-g]'); if (b) { sfx.pop(); GAMES.find(g => g.id === b.dataset.g).go(); } };
+      $('#lgFin').onclick = () => { if (t2 === tok) finish({ key: 'speech-check', stars: 3, line: 'Проверка готова!', again: check }); };
+      talk('Проверка готова! Отчёт для взрослых.');
+    }
+  }
+  
+  const N = { sort: ['Водичка или комарик?', 'С, З или Ц'], syll: ['Свистящие слоги', 'са-са-са… самолёт!'], house: ['Где живёт звук С', 'в начале, в середине, в конце'], check: ['Проверка речи', 'со взрослым · отчёт и нужные игры'], pairs: ['Похожие слова', 'мышка, мишка или миска?'] };
+  const ICO = LX('SZ_ICO', [RU('С'), RU('А')]);
+  const ico = () => `<span class="ico-letters"><b class="L c">${ICO[0]}</b><b class="L v">${ICO[1]}</b></span>`;
+  const syll = () => screenSyll(SYL_S, 'sz-syll', N.syll[0], SYL_HL);
+  return { szSort, sortBy, R_SORT, syll, ico, ICO, HOUSE_S, hearPairs, check, N };
+})();
+ 
+
+const LOGO = (() => {
+  const SAID = () => G('Я сказала!', 'Я сказал!');
+  const VW = /[аеёиоуыэюя]/gi;
+  const sylN = w => (w.match(VW) || []).length;
 
    
   const LONG = [['ЧЕ-РЕ-ПА-ХА', '🐢'], ['ВЕ-ЛО-СИ-ПЕД', '🚲'], ['КРО-КО-ДИЛ', '🐊'], ['ПО-МИ-ДОР', '🍅'], ['МА-ШИ-НА', '🚗'], ['ТЕ-ЛЕ-ВИ-ЗОР', '📺'], ['ГУ-СЕ-НИ-ЦА', '🐛'],
@@ -17875,96 +17981,15 @@ const LOGO = (() => {
 
   
 
-  const CHECK = [['С', [['сок', '🧃'], ['оса', '🐝'], ['нос', '👃']]], ['З', [['зонт', '☂️'], ['коза', '🐐']]], ['Ц', [['цирк', '🎪'], ['курица', '🐔'], ['огурец', '🥒']]],
-    ['Ш', [['шапка', '🧢'], ['кошка', '🐱'], ['душ', '🚿']]], ['Ж', [['жук', '🪲'], ['ножницы', '✂️']]], ['Ч', [['чайник', '🫖'], ['очки', '👓'], ['мяч', '⚽']]],
-    ['Щ', [['щётка', '🪥'], ['ящик', '📦']]], ['Л', [['лампа', '💡'], ['волк', '🐺'], ['стул', '🪑']]], ['Ль', [['лимон', '🍋'], ['пальма', '🌴'], ['ель', '🌲']]],
-    ['Р', [['рыба', '🐟'], ['корова', '🐄'], ['шар', '🎈']]], ['Рь', [['рис', '🍚'], ['дверь', '🚪']]]];
-  const CHECK_KEY = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Л': 'l', 'Ль': 'l', 'Р': 'r', 'Рь': 'r' };
-  const LONGW = [['велосипед', '🚲'], ['черепаха', '🐢'], ['телевизор', '📺'], ['сковорода', '🍳'], ['милиционер', '👮']];
-  const hiSnd = (w, L) => { const c = L[0].toLowerCase(), i = w.indexOf(c); return i < 0 ? esc(w) : esc(w.slice(0, i)) + `<b class="hl">${esc(w.slice(i, i + 1))}</b>` + esc(w.slice(i + 1)); };
-  function check() {
-    let t = newScreen(); const name = P.settings.name || 'ребёнок';
-    shell('Проверка речи', `<div class="lg"><div class="lg-card lg-adult">
-      <p class="lg-q">Для взрослого: 7–10 минут вместе с ${esc(name === 'ребёнок' ? 'ребёнком' : decl(name, P.settings.gender === 'f')[4])}</p>
-      <ol class="lg-list"><li>Ребёнок называет картинки. Вы отмечаете, как прозвучал <b class="hl">выделенный</b> звук: чисто или с ошибкой (замена, пропуск, искажение).</li>
-      <li>Если ребёнок не знает слова, нажмите 🔊: пусть повторит за голосом, и отметьте.</li>
-      <li>Потом игра проверит слух на похожие слова и как ребёнок повторяет длинные слова.</li></ol>
-      <p class="muted">Это домашняя проверка, а не диагноз. Отчёт сохранится, его можно показать логопеду.</p>
-      <div class="og-btns"><button class="big" id="lgGo">Начать</button></div></div></div>`);
-    const res = { snd: {}, hear: 0, hearN: 5, syl: 0, sylN: LONGW.length };
-    const items = CHECK.flatMap(([L, ws]) => ws.map(([w, e]) => ({ L, w, e })));
-    $('#lgGo').onclick = () => { sfx.pop(); sounds(0); };
-    function sounds(i) {
-      if (t !== tok) return;
-      if (i >= items.length) { hearing(); return; }
-      const it = items[i];
-      shell('Проверка речи', `<div class="lg"><p class="lg-step">Звуки: ${i + 1} из ${items.length}</p><div class="lg-card"><span class="lg-big">${pic(it.e)}</span>
-        <p class="lg-adult-w">${hiSnd(it.w, it.L)} <small>звук ${esc(it.L)}</small></p><button class="chip" id="lgSay">🔊 Подсказать слово</button></div>
-        <div class="lg-mark"><button class="big" data-m="1">✓ Чисто</button><button class="big ghost" data-m="0">✗ С ошибкой</button></div></div>`);
-      $('#lgSay').onclick = () => talk(`Повтори: ${it.w}.`);
-      talk(i === 0 ? 'Что это? Скажи громко.' : 'А это?');
-      $('.lg-mark').onclick = e => {
-        const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick();
-        (res.snd[it.L] = res.snd[it.L] || []).push(+b.dataset.m);
-        sounds(i + 1);
-      };
-    }
-    function hearing() {
-      if (t !== tok) return;
-      talk('Теперь проверим слух.').then(() => { if (t === tok) hearPairs(res.hearN, n => { res.hear = n; t = tok; syllables(0); }); });
-    }
-    function syllables(i) {
-      if (t !== tok) return;
-      if (i >= LONGW.length) { report(); return; }
-      const [w, e] = LONGW[i];
-      t = newScreen();
-      shell('Проверка речи', `<div class="lg"><p class="lg-step">Длинные слова: ${i + 1} из ${LONGW.length}</p><div class="lg-card"><span class="lg-big">${pic(e)}</span>
-        <p class="lg-adult-w">${esc(w)}</p><button class="chip" id="lgSay">🔊 Ещё раз</button></div>
-        <p class="muted">Ребёнок повторяет слово. Ошибка — если пропущен, переставлен или добавлен слог.</p>
-        <div class="lg-mark"><button class="big" data-m="1">✓ Без ошибок</button><button class="big ghost" data-m="0">✗ Слоги не так</button></div></div>`);
-      $('#lgSay').onclick = () => talk(`${cap(w)}.`);
-      talk(`Повтори за мной: ${w}.`);
-      $('.lg-mark').onclick = e => { const b = e.target.closest('[data-m]'); if (!b) return; sfx.tick(); res.syl += +b.dataset.m; syllables(i + 1); };
-    }
-    function report() {
-      const t2 = newScreen(), bad = CHECK.map(([L]) => L).filter(L => (res.snd[L] || []).some(x => !x));
-      const keys = [...new Set(bad.map(L => CHECK_KEY[L]))], hearBad = res.hear <= res.hearN - 2, sylBad = res.syl <= res.sylN - 2;
-      const prev = (P.checks || [])[0];
-      P.checks = [{ d: dayKey(), snd: res.snd, hear: res.hear, hearN: res.hearN, syl: res.syl, sylN: res.sylN }, ...(P.checks || [])].slice(0, 6); save();
-      const row = ([L]) => { const m = res.snd[L] || [], err = m.filter(x => !x).length; return `<li class="${err ? 'bad' : 'ok'}"><b>${esc(L)}</b><span>${err ? `⚠️ с ошибкой ${err} из ${m.length}` : '✅ чисто'}</span></li>`; };
-      const games = [...keys.flatMap(k => ({ sz: ['sz-sort', 'sz-syll', 'snd-hold'], sh: ['sh-sort', 'sh-syll'], l: ['l-chist', 'l-house'], r: ['syll', 'house'] }[k] || [])),
-        ...(hearBad ? ['hear-pairs'] : []), ...(sylBad ? ['syl-clap', 'syl-miss'] : [])].filter(id => GAMES.some(g => g.id === id));
-      const label = k => SOUND_SET.find(x => x[0] === k)[1];
-      shell('Отчёт о речи', `<div class="lg"><div class="lg-card lg-adult">
-        <p class="lg-q">${esc(P.settings.name || 'Ребёнок')}, ${esc(dayKey())}</p>
-        <ul class="lg-rep">${CHECK.map(row).join('')}</ul>
-        <p class="lg-line">👂 Похожие слова на слух: <b>${res.hear} из ${res.hearN}</b> ${hearBad ? '⚠️' : '✅'}</p>
-        <p class="lg-line">🥁 Длинные слова без ошибок в слогах: <b>${res.syl} из ${res.sylN}</b> ${sylBad ? '⚠️' : '✅'}</p>
-        ${prev ? `<p class="muted">Прошлая проверка ${esc(prev.d)}: с ошибкой ${CHECK.filter(([L]) => (prev.snd[L] || []).some(x => !x)).map(([L]) => L).join(', ') || 'ничего'}.</p>` : ''}
-        ${keys.length ? `<p class="lg-line">Потренировать: <b>${keys.map(label).join(', ')}</b></p><div class="og-btns"><button class="big" id="lgOn">Включить эти звуки в занятиях</button></div>` : '<p class="lg-line">Все звуки прозвучали чисто. 🎉</p>'}
-        ${games.length ? `<p class="lg-line">Игры для этого:</p><div class="lg-chips" id="lgG">${games.map(id => `<button class="chip" data-g="${id}">${esc(nm(GAMES.find(g => g.id === id).name))}</button>`).join('')}</div>` : ''}
-        <p class="muted">Это домашняя проверка, а не диагноз. Если ошибок много, звук заменяется другим или ребёнку уже 5 лет и больше, покажите отчёт логопеду.</p>
-        <div class="og-btns"><button class="big" id="lgFin">Готово ⭐</button></div></div></div>`);
-      const on = $('#lgOn');
-      if (on) on.onclick = () => {
-        sfx.magic(); P.settings.sounds = [...new Set([...soundsOf(P).filter(k => keys.includes(k)), ...keys])];
-        if (Array.isArray(P.settings.mods)) MODS.filter(m => m.snd && keys.includes(m.snd)).forEach(m => { if (!P.settings.mods.includes(m.id)) P.settings.mods.push(m.id); });
-        save(); on.textContent = '✓ Включено'; on.disabled = true;
-      };
-      const gl = $('#lgG'); if (gl) gl.onclick = e => { const b = e.target.closest('[data-g]'); if (b) { sfx.pop(); GAMES.find(g => g.id === b.dataset.g).go(); } };
-      $('#lgFin').onclick = () => { if (t2 === tok) finish({ key: 'speech-check', stars: 3, line: 'Проверка готова!', again: check }); };
-      talk('Проверка готова! Отчёт для взрослых.');
-    }
-  }
 
    
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
-    { id: 'sz-sort', hide: RU_ONLY, name: 'Водичка или комарик?', sub: 'С, З или Ц', ico: () => pic('🦟'), bg: 'var(--t-green)', go: szSort, grp: 15 },
-    { id: 'sz-syll', hide: RU_ONLY, name: 'Свистящие слоги', sub: 'са-са-са… самолёт!', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => screenSyll(SYL_S, 'sz-syll', 'Свистящие слоги', 'сзц'), grp: 15 },
-    { id: 'sz-house', hide: RU_ONLY, name: 'Где живёт звук С', sub: 'в начале, в середине, в конце', ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse('С'), grp: 15 },
-    { id: 'speech-check', hide: RU_ONLY, name: 'Проверка речи', sub: 'со взрослым · отчёт и нужные игры', ico: () => pic('🩺'), bg: 'var(--t-mint)', go: check, grp: 16, prog: () => P.checks && P.checks[0] ? 'была ' + P.checks[0].d : '' },
-    { id: 'hear-pairs', hide: RU_ONLY, name: 'Похожие слова', sub: 'мышка, мишка или миска?', ico: () => pic('👂'), bg: 'var(--t-blue)', go: () => hearPairs(), grp: 16 },
+    { id: 'sz-sort', name: SZG.N.sort[0], sub: SZG.N.sort[1], ico: () => pic('🦟'), bg: 'var(--t-green)', go: SZG.szSort, grp: 15 },
+    { id: 'sz-syll', name: SZG.N.syll[0], sub: SZG.N.syll[1], ico: SZG.ico, bg: 'var(--t-yellow)', go: SZG.syll, grp: 15 },
+    { id: 'sz-house', name: SZG.N.house[0], sub: SZG.N.house[1], ico: () => pic('🏠'), bg: 'var(--t-pink)', go: () => screenHouse(RU('С')), grp: 15 },
+    { id: 'speech-check', name: SZG.N.check[0], sub: SZG.N.check[1], ico: () => pic('🩺'), bg: 'var(--t-mint)', go: SZG.check, grp: 16, prog: () => P.checks && P.checks[0] ? 'была ' + P.checks[0].d : '' },
+    { id: 'hear-pairs', name: SZG.N.pairs[0], sub: SZG.N.pairs[1], ico: () => pic('👂'), bg: 'var(--t-blue)', go: () => SZG.hearPairs(), grp: 16 },
     { id: 'syl-clap', hide: RU_ONLY, name: 'Хлопни слоги', sub: 'сколько слогов в слове?', ico: () => pic('🥁'), bg: 'var(--t-yellow)', go: sylClap, grp: 16 },
     { id: 'syl-miss', hide: RU_ONLY, name: 'Слоги потерялись', sub: 'найди слог и собери слово', ico: () => '<span class="ico-letters"><b class="L c">М</b><b class="L v">А</b>-?</span>', bg: 'var(--t-lilac)', go: sylMiss, grp: 16 },
     { id: 'gram-many', hide: RU_ONLY, name: 'Один — много', sub: 'один кот, много котов', ico: () => pic('🐈'), bg: 'var(--t-peach)', go: gramMany, grp: 16 },
@@ -17973,8 +17998,8 @@ const LOGO = (() => {
     { id: 'gram-odd', hide: RU_ONLY, name: 'Что лишнее?', sub: 'и назови одним словом', ico: () => pic('🍌'), bg: 'var(--t-yellow)', go: gramOdd, grp: 16 }
   );
   const snd0 = GAMES.find(g => g.id === 'sounds'); if (snd0) snd0.also = [...(snd0.also || []), 15];
-  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Mücke und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
-  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'syllables, one and lots, odd one out, picture stories and feelings', pt: 'sílabas, um e muitos, o intruso, histórias em imagens e emoções', de: 'Silben, einer und viele, was passt nicht, Bildergeschichten und Gefühle' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 9) + 1, 0, { g: 15, h: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', p: { en: 'water, mosquito and hush-hush', pt: 'água, mosquito e chiu', de: 'Wasser, Blitz und Pssst' }[LANG] || 'водичка, комарик и тише-тише', only: 'r' });
+  SECTIONS.splice(SECTIONS.findIndex(x => x.g === 5) + 1, 0, { g: 16, h: { en: 'Listen and speak', pt: 'Ouvir e falar', de: 'Hören und sprechen' }[LANG] || 'Слушаю и говорю', p: { en: 'similar words, syllables, one and lots, odd one out, picture stories and feelings', pt: 'palavras parecidas, sílabas, um e muitos, o intruso, histórias em imagens e emoções', de: 'ähnliche Wörter, Silben, einer und viele, was passt nicht, Bildergeschichten und Gefühle' }[LANG] || 'похожие слова, слоги, грамматика, рассказ и чувства' });
   const sp = HOME_TABS.find(x => x.id === 'speak');
   if (sp) { sp.g.splice(sp.g.indexOf(9) + 1, 0, 15); sp.g.push(16); }
   MODS.splice(MODS.findIndex(m => m.id === 'sh') + 1, 0, { id: 'sz', e: '💧', n: { en: 'S and Z sounds', pt: 'Os sons S e Z', de: 'S und Z' }[LANG] || 'Свистящие: С З Ц', g: [15], snd: 'sz' }, { id: 'hear', e: '👂', n: { en: 'Listening, syllables, grammar and stories', pt: 'Ouvir, sílabas, gramática e histórias', de: 'Hören, Silben, Grammatik und Erzählen' }[LANG] || 'Слух, слоги, грамматика и рассказ', g: [16] });
@@ -17994,7 +18019,7 @@ const LOGO = (() => {
   
   const DAILY = ['hear-pairs', 'chist-all', 'gram-many', 'neuro', 'syl-clap', 'gram-dim', 'story-seq', 'twist-pen', 'syl-miss', 'gram-whose', 'emo', 'gram-odd'];
   const daily = i => { const ok = DAILY.filter(id => !gameOff(id)); return ok.length ? ok[i % ok.length] : null; };
-  return { HOUSE_S, daily, hold: STRETCH.hold, hearPairs, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
+  return { daily, hold: STRETCH.hold, MANY, DIM, WHOSE, OF, SAID, ONE, WHOSE_Q };
 })();
 
 
@@ -18679,7 +18704,8 @@ const SWAB = (() => {
 
 const IDEAS = (() => {
   const SAID = () => G('Я сказала!', 'Я сказал!');
-  const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l' };
+  
+  const SND = { 'С': 'sz', 'З': 'sz', 'Ц': 'sz', 'Ш': 'sh', 'Ж': 'sh', 'Ч': 'sh', 'Щ': 'sh', 'Р': 'r', 'Л': 'l', S: 'sz', Z: 'sz', TH: 'sz', SH: 'sh', SCH: 'sh', CH: 'sh', J: 'sh', R: 'r', L: 'l', LH: 'l', NH: 'l' };
   const firstMine = list => list.find(L => mySounds().includes(SND[L])) || list[0];
 
    
@@ -18737,33 +18763,37 @@ const IDEAS = (() => {
   }
 
    
-  const R_EX = [
+  
+  const R_EX = LX('R_EX', [
     { id: 'drum', name: 'Барабанщик', text: 'Рот широко открыт. Кончик языка стучит по бугоркам за верхними зубами, как палочка по барабану: д-д-д. Нижняя челюсть не двигается.', pose: ['swingUp', 'catFlat'], line: 'Бам-бам-бам!' },
     { id: 'gun', name: 'Пулемёт', text: 'Рот открыт, кончик языка за верхними зубами. Быстро-быстро: т-т-т, с сильным выдохом. Поднеси ладошку ко рту — чувствуешь ветерок?', pose: ['swingUp', 'catFlat'], line: 'Быстро-быстро!' },
     { id: 'paint', name: 'Маляр', text: 'Рот открыт. Кончиком языка «красим» нёбо от зубов назад и обратно. Нижняя челюсть не двигается.', pose: ['swingUp', 'paintBack'], line: 'Красим!' }
-  ];
+  ]);
   const THROAT = 'Положи ладошку на горлышко и скажи «а-а-а»: горлышко дрожит от голоса — это хорошо. А когда звучит Р, дрожит кончик языка впереди, за верхними зубами, а не горло. Если Р похоже на урчание в горле, не тренируем Р в словах: сначала барабанщик, пулемёт и маляр, и покажите ребёнка логопеду.';
-  const R_VOW = ['Ар!', 'Ор!', 'Ур!', 'Ыр!', 'Ара!', 'Оро!', 'Уру!', 'Ыры!'];
-  const R_WORDS = [['шар', '🎈'], ['сыр', '🧀'], ['комар', '🦟'], ['корова', '🐄'], ['гора', '⛰️'], ['барабан', '🥁'], ['морковка', '🥕'], ['пирамида', '🔺'], ['ведро', '🪣'], ['помидор', '🍅']];
+  const R_VOW = LX('R_VOW', ['Ар!', 'Ор!', 'Ур!', 'Ыр!', 'Ара!', 'Оро!', 'Уру!', 'Ыры!']);
+  const R_WORDS = LX('R_WORDS', [['шар', '🎈'], ['сыр', '🧀'], ['комар', '🦟'], ['корова', '🐄'], ['гора', '⛰️'], ['барабан', '🥁'], ['морковка', '🥕'], ['пирамида', '🔺'], ['ведро', '🪣'], ['помидор', '🍅']]);
+  const R_HL = LX('R_HL', RU('р'));
+  
+  const RT = LX('R_TXT', { title: 'Р без «д»', intro: 'Тренируем Р без «д». Сначала зарядка для кончика языка.', vow: 'Р после гласной — без «д»', words: 'Р в середине и в конце слова', line: 'Моторчик Р заводится!',
+    tip: ['Если ребёнок говорит «др» вместо Р (дрыба, дрома), язык ещё не умеет дрожать сам и помогает себе ударом «д». Тренируем кончик языка (барабанщик, пулемёт, маляр) и Р после гласной: ар, ара — там «д» не к чему прицепиться. Слова с Р в начале — позже.', 'Горловое Р (урчит в горле) дома словами не исправляется: делаем упражнения для кончика языка и идём к логопеду.'] });
   function rMotor() {
     const t = newScreen(), plan = [...R_EX, 'vow', 'words'];
-    shell('Р без «д»', `<div class="nr"><div class="pr-steps" id="rS">${plan.map((p, i) => `<span>${i + 1}</span>`).join('')}</div><div id="rBox" class="gr-box"></div>
-      <details class="pr-tip"><summary>💡 Взрослому</summary><p>Если ребёнок говорит «др» вместо Р (дрыба, дрома), язык ещё не умеет дрожать сам и помогает себе ударом «д». Тренируем кончик языка (барабанщик, пулемёт, маляр) и Р после гласной: ар, ара — там «д» не к чему прицепиться. Слова с Р в начале — позже.</p>
-      <p>Горловое Р (урчит в горле) дома словами не исправляется: делаем упражнения для кончика языка и идём к логопеду.</p></details></div>`);
+    shell(RT.title, `<div class="nr"><div class="pr-steps" id="rS">${plan.map((p, i) => `<span>${i + 1}</span>`).join('')}</div><div id="rBox" class="gr-box"></div>
+      <details class="pr-tip"><summary>💡 Взрослому</summary>${RT.tip.map(x => `<p>${esc(x)}</p>`).join('')}</details></div>`);
     const box = $('#rBox');
     (async () => {
-      await talk('Тренируем Р без «д». Сначала зарядка для кончика языка.'); if (t !== tok) return;
+      await talk(RT.intro); if (t !== tok) return;
       for (let k = 0; k < plan.length; k++) {
         if (t !== tok) return;
         $$('#rS span').forEach((x, n) => { x.classList.toggle('now', n === k); x.classList.toggle('done', n < k); });
         const p = plan[k];
         if (p === 'vow') {
-          box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">Р после гласной — без «д»</p></div>`;
-          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), 'р'); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
+          box.innerHTML = `<div class="tw-card"><p class="tw-text" id="rV"></p><p class="tw-step">${esc(RT.vow)}</p></div>`;
+          for (const v of shuffle(R_VOW).slice(0, 5)) { $('#rV').innerHTML = hiS(v.toUpperCase(), R_HL); await talk(`Повтори: ${v}`); if (t !== tok) return; await askSaid(SAID(), { expect: v.replace('!', ''), loose: true }); if (t !== tok) return; }
         } else if (p === 'words') {
-          box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">Р в середине и в конце слова</p></div>`;
+          box.innerHTML = `<div class="tw-card"><div class="lg-big" id="rP"></div><p class="tw-text" id="rW"></p><p class="tw-step">${esc(RT.words)}</p></div>`;
           const ws = sample(R_WORDS, 5), redo = new Set();
-          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), 'р'); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
+          for (const [w, e] of ws) { $('#rP').innerHTML = pic(e); $('#rW').innerHTML = hiS(w.toUpperCase(), R_HL); await talk(`${cap(w)}. Повтори чётко.`); if (t !== tok) return; const r = await askSaid(SAID(), { expect: w }); if (t !== tok) return; if (r && r.again && !redo.has(w)) { redo.add(w); ws.push([w, e]); } }
         } else {
           box.innerHTML = `<div class="artic-stage"><div class="mirror" id="rM">${faceSVG(p.pose[0])}<div class="say-b" id="rB" hidden></div></div><div class="artic-side"><p class="howto"><b>${esc(p.name)}.</b> ${esc(p.text)}</p></div></div>`;
           await talk(`${p.name}. ${p.text.split('.')[0]}.`); if (t !== tok) return;
@@ -18774,10 +18804,11 @@ const IDEAS = (() => {
           }
         }
       }
-      finish({ key: 'r-motor', line: 'Моторчик Р заводится!', again: rMotor });
+      finish({ key: 'r-motor', line: RT.line, again: rMotor });
     })();
   }
   function rThroat() {
+    if (!IS_RU) return SZG.sortBy(SZG.R_SORT, 'r-throat', SZG.R_SORT.line, rThroat);
     const t = newScreen();
     shell('Р не в горле', `<div class="artic-stage"><div class="mirror">${faceSVG('frog')}</div><div class="artic-side"><p class="howto">${esc(THROAT)}</p><div class="og-btns"><button class="big" id="rOk">Понятно</button><button class="big ghost" id="rGo">Барабанщик и Р без «д»</button></div></div></div>`);
     talk('Положи ладошку на горлышко и скажи: а-а-а.');
@@ -18786,7 +18817,8 @@ const IDEAS = (() => {
   }
 
    
-  const CHIST = {
+  
+  const CHIST = LX('CHIST', {
     'С': ['Са-са-са — в лесу бегает лиса.', 'Со-со-со — у Сони колесо.', 'Су-су-су — было холодно в лесу.', 'Сы-сы-сы — у кота усы.', 'Ас-ас-ас — у нас ананас.', 'Ос-ос-ос — в саду растёт кокос.'],
     'З': ['За-за-за — вот идёт коза.', 'Зу-зу-зу — мы пасём козу.', 'Зы-зы-зы — колокольчик у козы.', 'Зо-зо-зо — у Зои новое пальто.', 'Зя-зя-зя — нам шалить нельзя.'],
     'Ц': ['Ца-ца-ца — вот идёт овца.', 'Цы-цы-цы — у курицы птенцы.', 'Цо-цо-цо — у курицы яйцо.', 'Ец-ец-ец — песню пел скворец.'],
@@ -18794,12 +18826,13 @@ const IDEAS = (() => {
     'Ж': ['Жа-жа-жа — есть иголки у ежа.', 'Жу-жу-жу — молоко дадим ежу.', 'Жи-жи-жи — здесь живут ужи.', 'Жо-жо-жо — снега много, хорошо.'],
     'Ч': ['Ча-ча-ча — горит в комнате свеча.', 'Чу-чу-чу — я на поезде качу.', 'Чи-чи-чи — прилетели к нам грачи.', 'Оч-оч-оч — наступила ночь.'],
     'Щ': ['Ща-ща-ща — мы поймали леща.', 'Щу-щу-щу — я щенка ищу.', 'Щи-щи-щи — мама варит щи.', 'Ащ-ащ-ащ — у меня новый плащ.']
-  };
-  const chistOf = L => L === 'Р' ? CHIST_R : L === 'Л' ? CHIST_L : CHIST[L];
+  });
+  const CHIST_KEYS = LX('CHIST_KEYS', [RU('С'), RU('З'), RU('Ц'), RU('Ш'), RU('Ж'), RU('Ч'), RU('Щ'), RU('Р'), RU('Л')]);
+  const chistOf = L => CHIST[L] || (L === RU('Р') || L === 'R' ? CHIST_R : CHIST_L);
   function chist(L0) {
-    const L = L0 || firstMine(['С', 'Ш', 'Р', 'Л', 'З', 'Ж', 'Ч', 'Щ', 'Ц']), t = newScreen(), deck = sample(chistOf(L), 4);
+    const L = L0 || firstMine(CHIST_KEYS), t = newScreen(), deck = sample(chistOf(L), 4);
     let k = 0;
-    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${['С', 'З', 'Ц', 'Ш', 'Ж', 'Ч', 'Щ', 'Р', 'Л'].map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
+    shell('Чистоговорки', `<div class="nr"><div class="lg-chips" id="chS">${CHIST_KEYS.map(x => `<button class="chip ${x === L ? 'sel' : ''}" data-s="${x}">${x}</button>`).join('')}</div><div class="tw-card" id="tw"></div></div>`);
     $('#chS').onclick = e => { const b = e.target.closest('[data-s]'); if (b && b.dataset.s !== L) { sfx.pop(); chist(b.dataset.s); } };
     const tw = $('#tw');
     async function show() {
@@ -18817,14 +18850,15 @@ const IDEAS = (() => {
   }
 
    
-  const TWIST = [['Шла Саша по шоссе и сосала сушку.', 'сш'], ['На дворе трава, на траве дрова.', 'р'], ['Карл у Клары украл кораллы, а Клара у Карла украла кларнет.', 'рл'],
+  
+  const TWIST = LX('TWIST', [['Шла Саша по шоссе и сосала сушку.', 'сш'], ['На дворе трава, на траве дрова.', 'р'], ['Карл у Клары украл кораллы, а Клара у Карла украла кларнет.', 'рл'],
     ['Ехал Грека через реку, видит Грека — в реке рак.', 'р'], ['Сшила Саша Сашке шапку.', 'сш'], ['У ежа ежата, у ужа ужата.', 'ж'], ['Шесть мышат в шалаше шуршат.', 'ш'],
-    ['Щуку я тащу, тащу, щуку я не упущу.', 'щ'], ['Мила мыла мишку мылом.', 'л'], ['Слишком много ножек у сороконожек.', 'сж'], ['Бык тупогуб, тупогубенький бычок.', ''], ['Четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами чертёж.', 'ч']];
+    ['Щуку я тащу, тащу, щуку я не упущу.', 'щ'], ['Мила мыла мишку мылом.', 'л'], ['Слишком много ножек у сороконожек.', 'сж'], ['Бык тупогуб, тупогубенький бычок.', ''], ['Четыре чёрненьких чумазеньких чертёнка чертили чёрными чернилами чертёж.', 'ч']]);
   function twistPencil() {
     const t = newScreen(), mine = TWIST.filter(([, s]) => s && mySounds().some(k => [...(SND_HI[k] || '')].some(c => s.includes(c))));
     const deck = [...new Set([...shuffle(mine), ...shuffle(TWIST)])].slice(0, 3);
     let k = 0;
-    shell('Скороговорки с карандашом', `<div class="nr"><details class="pr-tip"><summary>💡 Взрослому</summary><p>Карандаш (или палочку морковки) держим зубами поперёк, неглубоко: язык и губы работают сильнее, а без карандаша речь становится чётче. Карандаш чистый, острым концом не в рот; удобнее взять толстую морковную палочку.</p></details><div class="tw-card" id="tw"></div></div>`);
+    shell('Скороговорки с карандашом', `<div class="nr"><details class="pr-tip"><summary>💡 Взрослому</summary><p>Это игра на дикцию, как у актёров, а не логопедия: исследований о том, что карандаш в зубах исправляет звуки, нет, а обзоры (Cochrane 2015, ASHA) не находят пользы от упражнений без речи. Звуки исправляют, упражняясь в самих звуках, — для этого другие игры.</p><p>С 6 лет. Вместо карандаша лучше толстая морковная палочка поперёк зубов, неглубоко. Ребёнок сидит, взрослый рядом; с предметом во рту не ходить и не бегать.</p></details><div class="tw-card" id="tw"></div></div>`);
     const tw = $('#tw');
     async function show() {
       const [s, hl] = deck[k];
@@ -18937,10 +18971,10 @@ const IDEAS = (() => {
   const RU_ONLY = () => !IS_RU;
   GAMES.push(
     { id: 'neuro', name: 'Нейроразминка', sub: 'кулак — ребро — ладонь, колечки, ухо — нос', ico: () => pic('🧠'), bg: 'var(--t-lilac)', go: neuroMenu, grp: 0, also: [16] },
-    { id: 'chist-all', hide: RU_ONLY, name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => '<span class="ico-letters"><b class="L c">С</b><b class="L v">А</b>-<b class="L c">С</b><b class="L v">А</b></span>', bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
-    { id: 'twist-pen', hide: RU_ONLY, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
-    { id: 'r-motor', hide: RU_ONLY, name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: IS_RU ? 1 : -1 },
-    { id: 'r-throat', hide: RU_ONLY, name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic('✋'), bg: 'var(--t-mint)', go: rThroat, grp: IS_RU ? 1 : -1, info: 1 },
+    { id: 'chist-all', name: 'Чистоговорки', sub: 'на все звуки — без каши во рту', ico: () => { const [c, v] = SZG.ICO; return `<span class="ico-letters"><b class="L c">${c}</b><b class="L v">${v}</b>-<b class="L c">${c}</b><b class="L v">${v}</b></span>`; }, bg: 'var(--t-yellow)', go: () => chist(), grp: 16, also: [15, 9] },
+    { id: 'twist-pen', hide: () => (+P.settings.age || 6) < 6, name: 'Скороговорки с карандашом', sub: 'морковный челлендж для дикции', ico: () => pic('✏️'), bg: 'var(--t-peach)', go: twistPencil, grp: 16, also: [5] },
+    { id: 'r-motor', name: 'Р без «д»', sub: 'барабанщик, пулемёт, маляр, ар-ор-ур', ico: () => pic('🥁'), bg: 'var(--t-pink)', go: rMotor, grp: 1 },
+    { id: 'r-throat', name: 'Р не в горле', sub: 'ладошка на горлышке: где дрожит?', ico: () => pic(IS_RU ? '✋' : '👂'), bg: 'var(--t-mint)', go: rThroat, grp: 1, info: IS_RU ? 1 : 0 },
     { id: 'hand', name: 'Красивый почерк', sub: 'пальчики, карандаш, дорожки', ico: () => pic('✍️'), bg: 'var(--t-mint)', go: handMenu, grp: 2, also: [6] }
   );
   if (IS_RU) {
@@ -24584,16 +24618,21 @@ const SIMPLE = (() => {
 
 const FOCUS = (() => {
   
+  
+  
+  
   const NORM = {
     ru: [['sz', RU('С, З, Ц'), RU('сок, зонт'), 5], ['sh', RU('Ш, Ж, Ч, Щ'), RU('шапка, жук'), 6], ['l', RU('Л'), RU('лампа'), 6], ['r', RU('Р'), RU('рыба'), 6]],
-    en: [['sz', 's, z', 'sun, zoo', 5], ['sh', 'sh, ch, j', 'ship, chair', 6], ['l', 'l', 'lion', 6], ['r', 'r', 'rabbit', 7], ['th', 'th', 'thumb', 8]],
-    pt: [['sz', 's, z', 'sol, zebra', 5], ['sh', 'ch, j', 'chave, janela', 6], ['l', 'l, lh', 'lua, palhaço', 6], ['r', 'r, rr', 'rato, carro', 6]],
-    de: [['sz', 's, z', 'Sonne, Zebra', 5], ['sh', 'sch', 'Schuh', 6], ['l', 'l', 'Löwe', 5], ['r', 'r', 'Rose', 6], ['ch', 'ch', 'ich, Buch', 6]]
+    en: [['sz', 's, z', 'sun, zoo', 5], ['sh', 'sh, ch, j', 'ship, chair', 5], ['l', 'l', 'lion', 5], ['r', 'r', 'rabbit', 6], ['th', 'th', 'thumb', 7]],
+    pt: [['sz', 's, z', 'sol, zebra', 5], ['sh', 'ch, j', 'chave, janela', 5], ['l', 'l, lh', 'lua, palhaço', 4], ['r', 'r, rr, pr', 'pera, carro, prato', 6]],
+    de: [['sz', 's, z', 'Sonne, Zebra', 5], ['sh', 'sch', 'Schuh', 5], ['l', 'l', 'Löwe', 4], ['r', 'r', 'Rose', 4], ['ch', 'ch', 'ich, Buch', 5]]
   };
   const SUBJ = [['read', '📖', 'Чтение'], ['math', '🔢', 'Математика'], ['chess', '♟️', 'Шахматы'], ['art', '🎨', 'Рисование']];
   
   const TRIES = 20, SPG = 1.3;
-  const POOL = { r: ['syll', 'house', 'r-end', 'count', 'magic', 'books'], sh: ['sh-syll', 'sh-sort', 'sh-house', 'beauty'], l: ['l-chist', 'l-house', 'l-twist', 'l-word', 'l-rap'], sz: ['sz-syll', 'sz-sort', 'sz-house', 'snd-hold'] };
+  const POOL = { r: ['syll', 'house', 'r-end', 'count', 'magic', 'books'], sh: ['sh-syll', 'sh-sort', 'sh-house', 'beauty', 'chist-all'], l: ['l-chist', 'l-house', 'l-twist', 'l-word', 'l-rap'], sz: ['sz-syll', 'sz-sort', 'sz-house', 'snd-hold', 'chist-all', 'hear-pairs'] };
+  
+  const NEAR = { th: 'sz', ch: 'sh' };
   const ageOf = (pr = P) => +(pr.settings.age || 0) || (pr.settings.track === 'l' ? 9 : 6);
   
   function dose(pr = P) {
@@ -24774,7 +24813,7 @@ const FOCUS = (() => {
     const j = judge(ans, intel), f = get();
     f.chk = { d: dayKey(), ans, intel, lag: j.lag, res: j.res, see: !!j.see };
     
-    const ks = [...new Set(j.lag.map(x => x.split(':')[1]).filter(k => SOUND_SET.some(s => s[0] === k)))];
+    const ks = [...new Set(j.lag.map(x => x.split(':')[1]).map(k => NEAR[k] || k).filter(k => SOUND_SET.some(s => s[0] === k)))];
     if (ks.length) P.settings.sounds = ks;
     try { EVT.log('focus', 'chk-' + j.res, j.lag.length); } catch (e) {}
     CACHE = null; save();

@@ -1,7 +1,7 @@
 // Offline cache. The page comes from the network first, so an update shows up as soon as the app is opened;
 // without a connection the saved copy opens. One worker serves the languages: / (English), /ru/, /pt/ and /en/, each
 // page kept under its own address. Icons and fonts (our own copy in fonts/) come from the cache and refresh in the background.
-const CACHE = 'govorilki-v175';
+const CACHE = 'govorilki-v176';
 // only the icons here: the page a family opens asks to keep itself, its game script (data/<lang>/app.*.js) and its data
 // packs (the «keep» message below), so a Russian family no longer downloads the four other languages
 const SHELL = ['./icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
