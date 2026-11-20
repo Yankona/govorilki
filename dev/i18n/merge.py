@@ -24,7 +24,7 @@ os.makedirs(H + '/tables', exist_ok=True); os.makedirs(H + '/langdata', exist_ok
 for L in tables: json.dump(tables[L], open(H + f'/tables/{L}.json', 'w'), ensure_ascii=False)
 for L in ('en', 'pt'):
     data = {}
-    for part in ('A', 'B', 'C'):
+    for part in ('A', 'B', 'C', 'D'):
         f = H + f'/phonics/{part}.{L}.json'
         if os.path.exists(f): data.update(json.load(open(f)))
     data['MORE_STORIES'] = stories_ld.more(L)
