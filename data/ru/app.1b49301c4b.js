@@ -19,7 +19,7 @@ const LANGDATA =  {};
 const LX = (k, v) => LANGDATA[k] !== undefined ? LANGDATA[k] : v;
 
 
-const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"5e5d8b790f","HOLT":"3d8cb3624e","COMIC_ME":"ce9dfcdf3f","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"0363602321"};
+const PACKS = {"st1":"048f0e09f6","st2":"f9b4210b70","st3":"d69cf791cf","st4":"64625970f9","st5":"c3e3376f3a","st6":"60233c8254","st7":"4ad41f70b9","st8":"cdad22d688","st9":"a94325d272","st10":"eed17e5557","st11":"6cc9ae39db","st12":"5e5d8b790f","HOLT":"3d8cb3624e","COMIC_ME":"ce9dfcdf3f","COMIC_EPS":"3ce80d6a26","GLOBE_GEO":"f06c660690","sayru":"ef6b22fe34"};
 const PACK = (() => {
   const got = {}, run = {}, root = location.pathname.replace(/[^/]*$/, '').replace(/(en|pt|ru|de)\/$/, '');
   const url = n => root + 'data/' + LANG + '/' + n + '.json?h=' + PACKS[n];
@@ -15002,7 +15002,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '173';
+const APP_VER = '174';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -21931,7 +21931,7 @@ const BOOKSHELF = (() => {
     const books = BOOKS.filter(b => b.s === sh.id), n = books.filter(b => S[b.id] === 'read').length;
     shell('Книжная полка', `<div class="bk-wrap">
       <p class="lead" id="bkLead">Выбери полку и книгу. Прочитанные книги отмечай — за каждую пять звёзд!</p>
-      ${IS_RU ? TALES.tile() : '<p class="bk-note"><span class="emo">🎧</span> Аудиосказки пока есть только в русской версии игры.</p>'}
+      ${TALES.tile()}
       <div class="bk-tabs" role="tablist">${BOOK_SHELVES.map(x => `<button class="bk-tab ${x.id === sh.id ? 'sel' : ''}" data-s="${x.id}" role="tab" aria-selected="${x.id === sh.id}"><span class="emo">${x.e}</span><b>${x.n}</b><small>${x.age}</small></button>`).join('')}</div>
       <section class="bk-shelf"><h2><span class="emo">${sh.e}</span> ${sh.n} <small>${sh.age}</small></h2>
         <p class="bk-cnt">${sh.id === 's6' ? 'Для взрослых: что ждёт впереди.' : `Прочитано ${n} из ${books.length}`}</p>
@@ -21939,7 +21939,7 @@ const BOOKSHELF = (() => {
       <p class="bk-parent"><span class="emo">👨‍👩‍👧</span> <span><b>Для взрослых.</b> Эти книги лучше всего читать вместе и на бумаге: взрослый читает вслух, ребёнок рассматривает картинки и задаёт вопросы. Отмечайте, что уже прочитали — у каждого ребёнка своя полка.</span></p>
     </div>`, { back: goHome });
     talk(sh.id === 's6' ? 'Это полка на будущее. Эти книги ждут, когда ты подрастёшь.' : `Полка «${sh.n}». Выбери книгу!`);
-    if (IS_RU) TALES.index().catch(() => {});
+    TALES.index().catch(() => {});
     $('#stage').onclick = e => {
       const tb = e.target.closest('.bk-tab'); if (tb) { sfx.pop(); P.shelfTab = tb.dataset.s; open(tb.dataset.s); return; }
       const c = e.target.closest('.bk-card'); if (c) { sfx.pop(); book(BOOKS.find(b => b.id === c.dataset.b), sh.id); return; }
@@ -21956,7 +21956,7 @@ const BOOKSHELF = (() => {
         ${cover(b, true)}<h2>${esc(b.t)}</h2><p class="bk-by">${esc(b.by)}</p>${b.d ? `<p class="bk-d">${esc(b.d)}</p>` : ''}
         <div class="bk-acts"><button class="chip bk-act ${m === 'now' ? 'sel' : ''}" data-act="now"><span class="emo">📖</span>Читаем сейчас</button>
           <button class="chip bk-act ${m === 'read' ? 'sel' : ''}" data-act="read"><span class="emo">✅</span>Прочитали</button></div>
-        ${IS_RU ? TALES.forBook(b.id) : ''}</div>`; };
+        ${TALES.forBook(b.id)}</div>`; };
     draw(); document.body.append(ov);
     const close = () => { ov.remove(); open(sid); };
     talk(`${b.t}. ${b.d || b.by}`);
@@ -22244,9 +22244,10 @@ const MYBOOK = (() => {
 
 
 
+
 const TALES = (() => {
   let IDX = null, warmOn = false; const TXT = {};
-  const base = () => SITE_ROOT + 'tales/';
+  const base = () => SITE_ROOT + 'tales/' + (IS_RU ? '' : LANG + '/'), abase = () => SITE_ROOT + 'tales/audio/' + (IS_RU ? '' : LANG + '/');
   const pause = ms => new Promise(r => setTimeout(r, ms));
   
 
@@ -22404,7 +22405,7 @@ const TALES = (() => {
   let RECS = null;
   async function recs() {
     if (RECS) return RECS;
-    try { const r = await fetch(base() + 'audio/index.json'); RECS = r.ok ? await r.json() : {}; } catch (e) { return {}; }
+    try { const r = await fetch(abase() + 'index.json'); RECS = r.ok ? await r.json() : {}; } catch (e) { return {}; }
     return RECS;
   }
   async function text(id) {
@@ -22417,9 +22418,9 @@ const TALES = (() => {
     if (warmOn) return; warmOn = true;
     index().then(async xs => { for (const x of xs) { try { await text(x.id); } catch (e) {} await pause(120); } }).catch(() => { warmOn = false; });
   }
-  const BOOK_OF = { perrault: /Перро/, andersen: /Андерсен/, grimm: /Гримм/, aesop: /Эзоп/, russian: /народн/i };
+  const BOOK_OF = { perrault: /Перро|Perrault/, andersen: /Андерсен|Andersen/, grimm: /Гримм|Grimm/, aesop: /Эзоп|Aesop|Esopo|Äsop/, russian: IS_RU ? /народн/i : null };
   const heard = () => (P.tales = P.tales && typeof P.tales === 'object' ? P.tales : {});
-  const tile = () => `<button class="lg-cta bk-tales" id="bkTales"><span class="emo">🎧</span><span class="lg-t"><b>Аудиосказки</b><small>народные сказки, Пушкин, Крылов, Толстой — послушать перед сном</small></span></button>`;
+  const tile = () => `<button class="lg-cta bk-tales" id="bkTales"><span class="emo">🎧</span><span class="lg-t"><b>Аудиосказки</b><small>${IS_RU ? 'народные сказки, Пушкин, Крылов, Толстой — послушать перед сном' : 'старые добрые сказки с текстом на экране — послушать перед сном'}</small></span></button>`;
   function forBook(bid) {
     const re = BOOK_OF[bid]; if (!re || !IDX) return '';
     const rc = RECS || {}, xs = IDX.filter(x => re.test(x.by)).sort((a, b) => !!rc[b.id] - !!rc[a.id]).slice(0, 10); if (!xs.length) return '';   
@@ -22429,7 +22430,7 @@ const TALES = (() => {
     const t = newScreen();
     shell('Аудиосказки', `<div class="tl-wrap"><p class="lead" id="tlLead">Выбери сказку — я прочитаю её вслух. Текст будет на экране.</p>
       <div class="tl-list" id="tlList"><p class="muted">Открываю сказки…</p></div>
-      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.${FREC.canRec() ? ' Любую сказку можно прочитать своим голосом: кнопка «🎤 Прочитать своим голосом» в сказке. Запись остаётся только на этом телефоне — в интернет и в облако семьи она не попадает.' : ''}</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
+      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> ${IS_RU ? 'Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена.' : 'Здесь только тексты, свободные от авторских прав (из Викитеки), и записи, которые можно свободно распространять. Сказки без записи читает голос игры.'} У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.${FREC.canRec() ? ' Любую сказку можно прочитать своим голосом: кнопка «🎤 Прочитать своим голосом» в сказке. Запись остаётся только на этом телефоне — в интернет и в облако семьи она не попадает.' : ''}</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
     talk('Выбери сказку. Я прочитаю её вслух.');
     let xs;
     const RC = await recs().catch(() => ({})), FM = await FREC.byTale().catch(() => ({}));
@@ -22460,7 +22461,7 @@ const TALES = (() => {
     const famChips = FR.map(r => `<button class="chip fr-chip" data-m="fam:${esc(r.who)}">${FREC.face(r, 'tl-ff')} ${esc(FREC.label(r))}</button>`).join('');
     const S = [];
     const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${sentences(p).map(s => { const j = S.push({ s: s.trim(), pi }) - 1; return `<span class="ss" data-j="${j}">${esc(s)}</span>`; }).join('')}</p>`).join('');
-    shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>
+    shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>${d.src ? `<p class="tl-src">📜 ${esc(d.src)}</p>` : ''}
         ${R || FR.length ? `<div class="tl-mode" id="tlMode">${famChips}${R ? '<button class="chip" data-m="actor">🎙 Слушать актёра</button>' : ''}<button class="chip" data-m="voice">🔊 Голос игры</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
         ${FREC.canRec() ? (R || FR.length ? `<p class="fr-small"><button class="chip" id="tlRec">🎤 ${FR.length ? 'Записать ещё / изменить запись' : 'Прочитать своим голосом'}</button></p>`
           : `<div class="fr-cta"><button class="big" id="tlRec">🎤 Прочитать своим голосом</button><small>У этой сказки нет записи актёра. Мама, папа, бабушка или дедушка могут прочитать её сами — ребёнок услышит родной голос. 🔒 Запись остаётся только на этом телефоне.</small></div>`) : ''}
@@ -22504,7 +22505,7 @@ const TALES = (() => {
         blobTried = true; fetching = true; note('Запись грузится…');
         let late = false;
         const ac = typeof AbortController === 'function' ? new AbortController() : null, to = setTimeout(() => { late = true; if (ac) ac.abort(); }, 25000);
-        fetch(base() + 'audio/' + R.f, ac ? { signal: ac.signal } : {}).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(bl => {
+        fetch(abase() + R.f, ac ? { signal: ac.signal } : {}).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(bl => {
           clearTimeout(to); fetching = false; if (t !== tok || my !== run || !playing || !au) return;
           rolling = false; au.src = URL.createObjectURL(bl);
           au.addEventListener('loadedmetadata', () => { try { au.currentTime = R.ts[at] || 0; } catch (e) {} const pr = au.play(); if (pr && pr.catch) pr.catch(() => stalled(my)); }, { once: true });
@@ -22523,7 +22524,7 @@ const TALES = (() => {
       if (at >= S.length) at = 0;
       $('#tlEnd').hidden = true; mark(at); credit();
       if (!au) {
-        au = new Audio(base() + 'audio/' + R.f); au.preload = 'auto'; au.setAttribute('playsinline', '');
+        au = new Audio(abase() + R.f); au.preload = 'auto'; au.setAttribute('playsinline', '');
         au.addEventListener('playing', () => { rolling = true; });
         au.addEventListener('timeupdate', () => {
           if (!au) return;
@@ -22608,7 +22609,7 @@ const TALES = (() => {
     warm();
   }
   
-  GAMES.push({ id: 'tales', name: 'Аудиосказки', sub: 'слушать сказки с текстом на экране', kw: 'сказки слушать перед сном', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => list(goHome), grp: 10, also: [2, 6], hide: () => !IS_RU,
+  GAMES.push({ id: 'tales', name: 'Аудиосказки', sub: 'слушать сказки с текстом на экране', kw: 'сказки слушать перед сном', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => list(goHome), grp: 10, also: [2, 6],
     prog: () => { const n = Object.values(heard()).filter(x => x && x.done).length; return n ? `дослушано: ${n}` : ''; } });
   return { index, tile, forBook, list, play };
 })();

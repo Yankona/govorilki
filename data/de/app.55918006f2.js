@@ -14781,7 +14781,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '173';
+const APP_VER = '174';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Ich habe die App gemacht: Schlüssel erstellen</button></div>`;
 
@@ -21703,7 +21703,7 @@ const BOOKSHELF = (() => {
     const books = BOOKS.filter(b => b.s === sh.id), n = books.filter(b => S[b.id] === 'read').length;
     shell("Bücherregal", `<div class="bk-wrap">
       <p class="lead" id="bkLead">Such dir ein Regal und ein Buch aus. Hak gelesene Bücher ab, für jedes gibt es fünf Sterne!</p>
-      ${IS_RU ? TALES.tile() : "<p class=\"bk-note\"><span class=\"emo\">🎧</span> Hörmärchen gibt es vorerst nur in der russischen Version des Spiels.</p>"}
+      ${TALES.tile()}
       <div class="bk-tabs" role="tablist">${BOOK_SHELVES.map(x => `<button class="bk-tab ${x.id === sh.id ? 'sel' : ''}" data-s="${x.id}" role="tab" aria-selected="${x.id === sh.id}"><span class="emo">${x.e}</span><b>${x.n}</b><small>${x.age}</small></button>`).join('')}</div>
       <section class="bk-shelf"><h2><span class="emo">${sh.e}</span> ${sh.n} <small>${sh.age}</small></h2>
         <p class="bk-cnt">${sh.id === 's6' ? "Für Erwachsene: Das kommt später." : `${n} von ${books.length} gelesen`}</p>
@@ -21711,7 +21711,7 @@ const BOOKSHELF = (() => {
       <p class="bk-parent"><span class="emo">👨‍👩‍👧</span> <span><b>Für Erwachsene.</b> Diese Bücher liest man am besten gemeinsam und auf Papier: Ein Erwachsener liest vor, das Kind schaut sich die Bilder an und stellt Fragen. Hakt ab, was ihr schon gelesen habt. Jedes Kind hat sein eigenes Regal.</span></p>
     </div>`, { back: goHome });
     talk(sh.id === 's6' ? "Das ist das Regal für später. Diese Bücher warten, bis du größer bist." : `Regal „${sh.n}“. Such dir ein Buch aus!`);
-    if (IS_RU) TALES.index().catch(() => {});
+    TALES.index().catch(() => {});
     $('#stage').onclick = e => {
       const tb = e.target.closest('.bk-tab'); if (tb) { sfx.pop(); P.shelfTab = tb.dataset.s; open(tb.dataset.s); return; }
       const c = e.target.closest('.bk-card'); if (c) { sfx.pop(); book(BOOKS.find(b => b.id === c.dataset.b), sh.id); return; }
@@ -21728,7 +21728,7 @@ const BOOKSHELF = (() => {
         ${cover(b, true)}<h2>${esc(b.t)}</h2><p class="bk-by">${esc(b.by)}</p>${b.d ? `<p class="bk-d">${esc(b.d)}</p>` : ''}
         <div class="bk-acts"><button class="chip bk-act ${m === 'now' ? 'sel' : ''}" data-act="now"><span class="emo">📖</span>Wir lesen gerade</button>
           <button class="chip bk-act ${m === 'read' ? 'sel' : ''}" data-act="read"><span class="emo">✅</span>Gelesen</button></div>
-        ${IS_RU ? TALES.forBook(b.id) : ''}</div>`; };
+        ${TALES.forBook(b.id)}</div>`; };
     draw(); document.body.append(ov);
     const close = () => { ov.remove(); open(sid); };
     talk(`${b.t}. ${b.d || b.by}`);
@@ -22016,9 +22016,10 @@ const MYBOOK = (() => {
 
 
 
+
 const TALES = (() => {
   let IDX = null, warmOn = false; const TXT = {};
-  const base = () => SITE_ROOT + 'tales/';
+  const base = () => SITE_ROOT + 'tales/' + (IS_RU ? '' : LANG + '/'), abase = () => SITE_ROOT + 'tales/audio/' + (IS_RU ? '' : LANG + '/');
   const pause = ms => new Promise(r => setTimeout(r, ms));
   
 
@@ -22040,11 +22041,11 @@ const TALES = (() => {
     const famId = () => ROOT.curFam || '';
     const cnt = r => { let n = 0; for (let i = 0; i < r.n; i++) if (r.parts[i]) n++; return n; };
     const bytes = r => (r.parts || []).reduce((a, x) => a + (x ? x.byteLength || 0 : 0), 0);
-    const size = b => b < 1e6 ? Math.max(1, Math.round(b / 1024)) + ' КБ' : (b / 1048576).toFixed(1).replace('.', ',') + ' МБ';
+    const size = b => b < 1e6 ? Math.max(1, Math.round(b / 1024)) + " KB" : (b / 1048576).toFixed(1).replace('.', ',') + " MB";
     const LOW = /^(Бабушк|Дедушк|Мам|Пап|Тёт|Тет|Дяд|Сестр|Брат)/;
-    const label = r => 'Читает ' + (LOW.test(r.name) ? r.name[0].toLowerCase() + r.name.slice(1) : r.name);
+    const label = r => "Es liest: " + (LOW.test(r.name) ? r.name[0].toLowerCase() + r.name.slice(1) : r.name);
     const face = (r, cls) => kinFace({ av: r.av, role: r.role, name: r.name, she: r.she }, cls || 'fr-face');
-    const PRIV = 'Запись остаётся только на этом телефоне и никуда не отправляется.';
+    const PRIV = "Die Aufnahme bleibt nur auf diesem Handy und wird nirgendwohin geschickt.";
     
     async function byTale() {
       const m = {}; if (!ok()) return m;
@@ -22053,8 +22054,8 @@ const TALES = (() => {
     }
     
     function readers() {
-      const f = fam(), gs = (f && f.grands || []).filter(g => g && g.id).map(g => ({ who: g.id, name: g.name || 'Бабушка', she: !!g.she, role: roleOf(g)[0], av: avaOk(g.av) ? g.av : '' }));
-      for (const [r, n, she] of [['mom', 'Мама', true], ['dad', 'Папа', false]]) if (!gs.some(g => g.role === r)) gs.push({ who: '_' + r, name: n, she, role: r, av: '' });
+      const f = fam(), gs = (f && f.grands || []).filter(g => g && g.id).map(g => ({ who: g.id, name: g.name || "Oma", she: !!g.she, role: roleOf(g)[0], av: avaOk(g.av) ? g.av : '' }));
+      for (const [r, n, she] of [['mom', "Mama", true], ['dad', "Papa", false]]) if (!gs.some(g => g.role === r)) gs.push({ who: '_' + r, name: n, she, role: r, av: '' });
       return gs;
     }
     function mime() {
@@ -22079,9 +22080,9 @@ const TALES = (() => {
       if (!pick) {
         const have = (await all()).filter(r => r.fam === fid && r.tid === tid); if (t !== tok) return;
         const rs = readers(); have.forEach(h => { if (!rs.some(r => r.who === h.who)) rs.push({ who: h.who, name: h.name, she: h.she, role: h.role, av: h.av }); });
-        shell('Прочитать своим голосом', `<div class="fr-wrap"><h2 class="fr-h">${esc(d.t)}</h2><p class="lead">Кто читает сказку?</p>
+        shell("Mit eigener Stimme vorlesen", `<div class="fr-wrap"><h2 class="fr-h">${esc(d.t)}</h2><p class="lead">Wer liest das Märchen vor?</p>
           <div class="fr-who" id="frWho">${rs.map(r => { const h = have.find(x => x.who === r.who);
-            return `<button class="fr-r" data-w="${esc(r.who)}">${face(r)}<b>${esc(r.name)}</b>${h && cnt(h) ? `<small>записано ${cnt(h)} из ${S.length} · ${size(bytes(h))}</small>` : ''}</button>`; }).join('')}</div>
+            return `<button class="fr-r" data-w="${esc(r.who)}">${face(r)}<b>${esc(r.name)}</b>${h && cnt(h) ? `<small>aufgenommen: ${cnt(h)} von ${S.length} · ${size(bytes(h))}</small>` : ''}</button>`; }).join('')}</div>
           <p class="fr-priv">🔒 ${PRIV}</p></div>`, { back, guide: false });
         $('#frWho').onclick = e => { const b = e.target.closest('[data-w]'); if (!b) return; sfx.pop(); record(tid, d, back, done, rs.find(r => r.who === b.dataset.w)); };
         return;
@@ -22092,21 +22093,21 @@ const TALES = (() => {
       Object.assign(R, { name: pick.name, she: pick.she, role: pick.role, av: pick.av, n: S.length });
       let cur = 0; while (cur < S.length && R.parts[cur]) cur++; if (cur >= S.length) cur = 0;
       const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${S.map((x, j) => x.pi === pi ? `<span class="ss" data-j="${j}">${esc(x.s)} </span>` : '').join('')}</p>`).join('');
-      shell('Прочитать своим голосом', `<article class="tl-read fr-rec"><p class="pt-who">${face(pick, 'pt-mini')} <b>${esc(label(pick))}</b></p><h2>${esc(d.t)}</h2>
-          <p class="fr-tip">Нажмите «● Запись» и читайте выделенную фразу, потом «Дальше». Ошиблись — нажмите на фразу и запишите её ещё раз.</p>
+      shell("Mit eigener Stimme vorlesen", `<article class="tl-read fr-rec"><p class="pt-who">${face(pick, 'pt-mini')} <b>${esc(label(pick))}</b></p><h2>${esc(d.t)}</h2>
+          <p class="fr-tip">Tippen Sie auf «● Aufnahme» und lesen Sie den markierten Satz, dann «Weiter». Verlesen? Tippen Sie auf den Satz und nehmen Sie ihn noch einmal auf.</p>
           <div class="tl-text fr-text" id="frText">${html}</div>
-          <p class="fr-info" id="frInfo"></p><p class="fr-delw"><button class="chip" id="frDel">🗑 Удалить эту запись</button></p></article>
+          <p class="fr-info" id="frInfo"></p><p class="fr-delw"><button class="chip" id="frDel">🗑 Diese Aufnahme löschen</button></p></article>
         <div class="fr-ctl"><div class="fr-btns" id="frBtns"></div><p class="fr-priv">🔒 ${PRIV}</p></div>`, { back: () => leave(back), guide: false, raw: true });
       const spans = $$('#frText .ss'), MT = mime();
       let on = false, mr = null, busy = false, delArm = false;
-      const info = m => { $('#frInfo').textContent = m || `Записано ${cnt(R)} из ${S.length} фраз · ${size(bytes(R))}`; };
+      const info = m => { $('#frInfo').textContent = m || `${cnt(R)} von ${S.length} Sätzen aufgenommen · ${size(bytes(R))}`; };
       function paint(scroll) {
         if (t !== tok) return;
         spans.forEach(s => { const j = +s.dataset.j; s.classList.toggle('on', j === cur); s.classList.toggle('done', !!R.parts[j]); });
         if (scroll !== false && spans[cur]) spans[cur].scrollIntoView({ block: 'center', behavior: 'smooth' });
         $('#frBtns').innerHTML = on
-          ? `<span class="fr-dot" aria-hidden="true"></span><button class="chip" id="frPause">❚❚ Пауза</button><button class="big" id="frNext">${cur >= S.length - 1 ? '✓ Последняя' : 'Дальше ▶'}</button>`
-          : `<button class="big fr-go" id="frGo">● Запись</button>${R.parts[cur] ? '<button class="ibtn" id="frHear" aria-label="Послушать фразу">▶</button>' : ''}${cnt(R) ? '<button class="big ok" id="frDone">✓ Готово</button>' : ''}`;
+          ? `<span class="fr-dot" aria-hidden="true"></span><button class="chip" id="frPause">❚❚ Pause</button><button class="big" id="frNext">${cur >= S.length - 1 ? "✓ Letzter" : "Weiter ▶"}</button>`
+          : `<button class="big fr-go" id="frGo">● Aufnahme</button>${R.parts[cur] ? "<button class=\"ibtn\" id=\"frHear\" aria-label=\"Satz anhören\">▶</button>" : ''}${cnt(R) ? "<button class=\"big ok\" id=\"frDone\">✓ Fertig</button>" : ''}`;
         info(); $('#frDel').hidden = !cnt(R);
       }
       
@@ -22118,7 +22119,7 @@ const TALES = (() => {
           const sec = (performance.now() - st) / 1000;
           if (t === tok && ch.length && sec > 0.5) {
             const bl = new Blob(ch, { type: m.mimeType || MT || 'audio/webm' });
-            try { R.parts[j] = await bl.arrayBuffer(); R.dur[j] = Math.round(sec * 10) / 10; R.mime = bl.type; R.at = Date.now(); await put(R); } catch (e) { info('Не получилось сохранить — на телефоне мало места?'); }
+            try { R.parts[j] = await bl.arrayBuffer(); R.dur[j] = Math.round(sec * 10) / 10; R.mime = bl.type; R.at = Date.now(); await put(R); } catch (e) { info("Speichern hat nicht geklappt — ist das Handy voll?"); }
           }
           res();
         }; });
@@ -22134,13 +22135,13 @@ const TALES = (() => {
           if (t !== tok) { micClose(); return; }
           try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
           on = true; take(cur); sfx.tick();
-        } catch (e) { micClose(); info('Не получилось включить микрофон. Разрешите его в настройках браузера и нажмите «Запись» ещё раз.'); busy = false; return; }
+        } catch (e) { micClose(); info("Das Mikrofon ließ sich nicht einschalten. Erlauben Sie es in den Browser-Einstellungen und tippen Sie noch einmal auf «Aufnahme»."); busy = false; return; }
         busy = false; paint();
       }
       async function pauseRec() { if (busy) return; busy = true; await stopTake(); micClose(); on = false; busy = false; paint(false); }
       async function next() {
         if (busy) return; busy = true; await stopTake(); if (t !== tok) return;
-        if (cur >= S.length - 1) { micClose(); on = false; let j = 0; while (j < S.length && R.parts[j]) j++; cur = j < S.length ? j : cur; busy = false; paint(); if (j >= S.length) info(`Все фразы записаны · ${size(bytes(R))}. Нажмите «Готово».`); return; }
+        if (cur >= S.length - 1) { micClose(); on = false; let j = 0; while (j < S.length && R.parts[j]) j++; cur = j < S.length ? j : cur; busy = false; paint(); if (j >= S.length) info(`Alle Sätze aufgenommen · ${size(bytes(R))}. Tippen Sie auf «Fertig».`); return; }
         cur++; take(cur); busy = false; paint();
       }
       async function leave(go) { await stopTake(); micClose(); on = false; go(); }
@@ -22155,9 +22156,9 @@ const TALES = (() => {
       $('#frText').onclick = e => { const s = e.target.closest('.ss'); if (!s || on || busy) return; cur = +s.dataset.j; hush(); paint(false); };
       $('#frDel').onclick = async () => {
         if (on || busy) return;
-        if (!delArm) { delArm = true; $('#frDel').textContent = '🗑 Точно удалить? Нажмите ещё раз'; return; }
+        if (!delArm) { delArm = true; $('#frDel').textContent = "🗑 Wirklich löschen? Noch einmal tippen"; return; }
         try { await del(k); } catch (e) {}
-        R = { ...R, parts: [], dur: [] }; cur = 0; delArm = false; $('#frDel').textContent = '🗑 Удалить эту запись'; paint(); info('Запись удалена.');
+        R = { ...R, parts: [], dur: [] }; cur = 0; delArm = false; $('#frDel').textContent = "🗑 Diese Aufnahme löschen"; paint(); info("Aufnahme gelöscht.");
       };
       
       const vis = () => { if (document.hidden && on && t === tok) pauseRec(); if (t !== tok) document.removeEventListener('visibilitychange', vis); };
@@ -22176,7 +22177,7 @@ const TALES = (() => {
   let RECS = null;
   async function recs() {
     if (RECS) return RECS;
-    try { const r = await fetch(base() + 'audio/index.json'); RECS = r.ok ? await r.json() : {}; } catch (e) { return {}; }
+    try { const r = await fetch(abase() + 'index.json'); RECS = r.ok ? await r.json() : {}; } catch (e) { return {}; }
     return RECS;
   }
   async function text(id) {
@@ -22189,59 +22190,59 @@ const TALES = (() => {
     if (warmOn) return; warmOn = true;
     index().then(async xs => { for (const x of xs) { try { await text(x.id); } catch (e) {} await pause(120); } }).catch(() => { warmOn = false; });
   }
-  const BOOK_OF = { perrault: /Перро/, andersen: /Андерсен/, grimm: /Гримм/, aesop: /Эзоп/, russian: /народн/i };
+  const BOOK_OF = { perrault: /Перро|Perrault/, andersen: /Андерсен|Andersen/, grimm: /Гримм|Grimm/, aesop: /Эзоп|Aesop|Esopo|Äsop/, russian: IS_RU ? /народн/i : null };
   const heard = () => (P.tales = P.tales && typeof P.tales === 'object' ? P.tales : {});
-  const tile = () => `<button class="lg-cta bk-tales" id="bkTales"><span class="emo">🎧</span><span class="lg-t"><b>Аудиосказки</b><small>народные сказки, Пушкин, Крылов, Толстой — послушать перед сном</small></span></button>`;
+  const tile = () => `<button class="lg-cta bk-tales" id="bkTales"><span class="emo">🎧</span><span class="lg-t"><b>Hörmärchen</b><small>${IS_RU ? "russische Volksmärchen, Puschkin, Krylow, Tolstoi — zum Hören vor dem Schlafen" : "alte Märchen mit dem Text auf dem Bildschirm — zum Hören vor dem Schlafen"}</small></span></button>`;
   function forBook(bid) {
     const re = BOOK_OF[bid]; if (!re || !IDX) return '';
     const rc = RECS || {}, xs = IDX.filter(x => re.test(x.by)).sort((a, b) => !!rc[b.id] - !!rc[a.id]).slice(0, 10); if (!xs.length) return '';   
-    return `<div class="bk-listen"><b>🎧 Послушать</b>${xs.map(x => `<button class="chip" data-tale="${x.id}"><span class="emo">${x.e}</span>${esc(x.t)}</button>`).join('')}</div>`;
+    return `<div class="bk-listen"><b>🎧 Anhören</b>${xs.map(x => `<button class="chip" data-tale="${x.id}"><span class="emo">${x.e}</span>${esc(x.t)}</button>`).join('')}</div>`;
   }
   async function list(back) {
     const t = newScreen();
-    shell('Аудиосказки', `<div class="tl-wrap"><p class="lead" id="tlLead">Выбери сказку — я прочитаю её вслух. Текст будет на экране.</p>
-      <div class="tl-list" id="tlList"><p class="muted">Открываю сказки…</p></div>
-      <p class="bk-parent"><span class="emo">📜</span> <span><b>Для взрослых.</b> Здесь только тексты, свободные от авторских прав: народные сказки из собрания Афанасьева, Пушкин, Крылов, Л. Н. Толстой, Ушинский и старые переводы Перро и Андерсена. У некоторых сказок есть живое чтение актёра (записи проекта LibriVox, общественное достояние): кнопка «🎙 Слушать актёра». Для сна есть ночной режим 🌙: экран темнеет, кнопки прячутся.${FREC.canRec() ? ' Любую сказку можно прочитать своим голосом: кнопка «🎤 Прочитать своим голосом» в сказке. Запись остаётся только на этом телефоне — в интернет и в облако семьи она не попадает.' : ''}</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
-    talk('Выбери сказку. Я прочитаю её вслух.');
+    shell("Hörmärchen", `<div class="tl-wrap"><p class="lead" id="tlLead">Such dir ein Märchen aus — ich lese es dir vor. Der Text steht auf dem Bildschirm.</p>
+      <div class="tl-list" id="tlList"><p class="muted">Die Märchen werden geöffnet…</p></div>
+      <p class="bk-parent"><span class="emo">📜</span> <span><b>Für Erwachsene.</b> ${IS_RU ? "Hier gibt es nur urheberrechtsfreie Texte: russische Volksmärchen, Puschkin, Krylow, Tolstoi und alte Übersetzungen von Perrault und Andersen." : "Hier gibt es nur urheberrechtsfreie Texte (aus Wikisource) und Aufnahmen, die man frei weitergeben darf. Märchen ohne Aufnahme liest die Stimme des Spiels."} Manche Märchen liest ein Mensch vor (Aufnahmen von Freiwilligen des Projekts LibriVox, gemeinfrei): die Taste «🎙 Echte Stimme». Zum Einschlafen gibt es den Nachtmodus 🌙: Der Bildschirm wird dunkel, die Tasten verschwinden.${FREC.canRec() ? " Jedes Märchen können Sie mit eigener Stimme vorlesen: die Taste «🎤 Mit eigener Stimme vorlesen» im Märchen. Die Aufnahme bleibt nur auf diesem Handy — sie kommt nicht ins Internet und nicht in die Familien-Cloud." : ''}</span></p></div>`, { back: back || (() => BOOKSHELF.open()) });
+    talk("Such dir ein Märchen aus. Ich lese es dir vor.");
     let xs;
     const RC = await recs().catch(() => ({})), FM = await FREC.byTale().catch(() => ({}));
-    try { xs = await index(); } catch (e) { if (t === tok) $('#tlList').innerHTML = '<p class="muted">Сказки не загрузились. Они откроются, когда появится интернет, а потом будут работать и без него.</p>'; return; }
+    try { xs = await index(); } catch (e) { if (t === tok) $('#tlList').innerHTML = "<p class=\"muted\">Die Märchen wurden nicht geladen. Sie öffnen sich, sobald es Internet gibt, und danach gehen sie auch ohne.</p>"; return; }
     if (t !== tok) return;
     warm();
     const H = heard(), age = P.settings.age || 0;
     const row = x => { const h = H[x.id] || {}, fm = FM[x.id];
-      return `<button class="tl-i ${h.done ? 'seen' : ''} ${fm ? 'fam' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b>${fm ? `<span class="tl-fam">${FREC.face(fm[0], 'tl-ff')} ${esc(fm.map(FREC.label).join(', '))}</span>` : ''}<small>${esc(x.by)} · ${x.min} мин${x.age ? ' · ' + x.age[0] + '+' : ''}${RC[x.id] ? ' · 🎙 читает актёр' : ''}${h.at ? ' · можно дослушать' : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
+      return `<button class="tl-i ${h.done ? 'seen' : ''} ${fm ? 'fam' : ''}" data-id="${x.id}"><span class="emo tl-e">${x.e}</span><span class="tl-tx"><b>${esc(x.t)}</b>${fm ? `<span class="tl-fam">${FREC.face(fm[0], 'tl-ff')} ${esc(fm.map(FREC.label).join(', '))}</span>` : ''}<small>${esc(x.by)} · ${x.min} Min.${x.age ? ' · ' + x.age[0] + '+' : ''}${RC[x.id] ? " · 🎙 echte Stimme" : ''}${h.at ? " · weiterhören" : ''}</small></span>${h.done ? '<span class="tl-ck">✓</span>' : ''}</button>`; };
     
     const ours = xs.filter(x => FM[x.id]), others = xs.filter(x => !FM[x.id]);
     const live = (a, b) => !!RC[b.id] - !!RC[a.id];      
     const mine = (age ? others.filter(x => !x.age || age >= x.age[0] - 1) : others).slice().sort(live), rest = others.filter(x => !mine.includes(x)).sort(live);
-    $('#tlList').innerHTML = (ours.length ? `<h3 class="tl-h">🏠 Читает наша семья</h3>${ours.map(row).join('')}${mine.length ? '<h3 class="tl-h">Все сказки</h3>' : ''}` : '') + mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Для детей постарше</h3>${rest.map(row).join('')}` : '');
+    $('#tlList').innerHTML = (ours.length ? `<h3 class="tl-h">🏠 Von unserer Familie gelesen</h3>${ours.map(row).join('')}${mine.length ? "<h3 class=\"tl-h\">Alle Märchen</h3>" : ''}` : '') + mine.map(row).join('') + (rest.length ? `<h3 class="tl-h">Für größere Kinder</h3>${rest.map(row).join('')}` : '');
     $('#tlList').onclick = e => { const b = e.target.closest('.tl-i'); if (b) { sfx.pop(); play(b.dataset.id, () => list(back)); } };
   }
   async function play(id, back) {
     const t = newScreen();
     let d;
     try { await index().catch(() => null); d = await text(id); } catch (e) {
-      shell('Аудиосказки', '<p class="lead">Эта сказка не загрузилась. Проверьте интернет и попробуйте ещё раз.</p>', { back: back || (() => list()) }); return;
+      shell("Hörmärchen", "<p class=\"lead\">Dieses Märchen wurde nicht geladen. Prüfen Sie das Internet und versuchen Sie es noch einmal.</p>", { back: back || (() => list()) }); return;
     }
     if (t !== tok) return;
     const R = ((await recs().catch(() => ({})))[id]) || null;
     const FR = (await FREC.byTale().catch(() => ({})))[id] || [];
     if (t !== tok) return;
-    const recIt = () => grownUp(() => FREC.record(id, d, () => play(id, back), who => { heard()[id] = { ...(heard()[id] || {}), mode: 'fam:' + who }; save(); play(id, back); }), 'Прочитать сказку своим голосом — это для взрослых.');
+    const recIt = () => grownUp(() => FREC.record(id, d, () => play(id, back), who => { heard()[id] = { ...(heard()[id] || {}), mode: 'fam:' + who }; save(); play(id, back); }), "Ein Märchen mit eigener Stimme vorlesen ist etwas für Erwachsene.");
     const famChips = FR.map(r => `<button class="chip fr-chip" data-m="fam:${esc(r.who)}">${FREC.face(r, 'tl-ff')} ${esc(FREC.label(r))}</button>`).join('');
     const S = [];
     const html = d.p.map((p, pi) => `<p class="tl-p ${/\n/.test(p) ? 'verse' : ''}">${sentences(p).map(s => { const j = S.push({ s: s.trim(), pi }) - 1; return `<span class="ss" data-j="${j}">${esc(s)}</span>`; }).join('')}</p>`).join('');
-    shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>
-        ${R || FR.length ? `<div class="tl-mode" id="tlMode">${famChips}${R ? '<button class="chip" data-m="actor">🎙 Слушать актёра</button>' : ''}<button class="chip" data-m="voice">🔊 Голос игры</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
-        ${FREC.canRec() ? (R || FR.length ? `<p class="fr-small"><button class="chip" id="tlRec">🎤 ${FR.length ? 'Записать ещё / изменить запись' : 'Прочитать своим голосом'}</button></p>`
-          : `<div class="fr-cta"><button class="big" id="tlRec">🎤 Прочитать своим голосом</button><small>У этой сказки нет записи актёра. Мама, папа, бабушка или дедушка могут прочитать её сами — ребёнок услышит родной голос. 🔒 Запись остаётся только на этом телефоне.</small></div>`) : ''}
-        <div class="tl-text" id="tlText">${html}</div><p class="tl-end" id="tlEnd" hidden>Конец 🌙</p></article>
-      <div class="tl-ctl"><button class="ibtn" id="tlPrev" aria-label="Фраза назад">⏮</button><button class="big" id="tlPlay"></button>
-        <button class="ibtn" id="tlNext" aria-label="Фраза вперёд">⏭</button><button class="ibtn" id="tlNight" aria-label="Ночной режим">🌙</button></div>`, { back: back || (() => list()), guide: false, raw: true });
+    shell(esc(d.t), `<article class="tl-read"><h2>${esc(d.t)}</h2><p class="tl-by">${esc(d.by)}</p>${d.src ? `<p class="tl-src">📜 ${esc(d.src)}</p>` : ''}
+        ${R || FR.length ? `<div class="tl-mode" id="tlMode">${famChips}${R ? "<button class=\"chip\" data-m=\"actor\">🎙 Echte Stimme</button>" : ''}<button class="chip" data-m="voice">🔊 Stimme des Spiels</button></div><p class="tl-cr" id="tlCr"></p>` : ''}
+        ${FREC.canRec() ? (R || FR.length ? `<p class="fr-small"><button class="chip" id="tlRec">🎤 ${FR.length ? "Weiter aufnehmen / Aufnahme ändern" : "Mit eigener Stimme vorlesen"}</button></p>`
+          : `<div class="fr-cta"><button class="big" id="tlRec">🎤 Mit eigener Stimme vorlesen</button><small>Dieses Märchen hat keine Aufnahme von einem Menschen. Mama, Papa, Oma oder Opa können es selbst vorlesen — das Kind hört eine vertraute Stimme. 🔒 Die Aufnahme bleibt nur auf diesem Handy.</small></div>`) : ''}
+        <div class="tl-text" id="tlText">${html}</div><p class="tl-end" id="tlEnd" hidden>Ende 🌙</p></article>
+      <div class="tl-ctl"><button class="ibtn" id="tlPrev" aria-label="Satz zurück">⏮</button><button class="big" id="tlPlay"></button>
+        <button class="ibtn" id="tlNext" aria-label="Satz vor">⏭</button><button class="ibtn" id="tlNight" aria-label="Nachtmodus">🌙</button></div>`, { back: back || (() => list()), guide: false, raw: true });
     const H = heard(), me = H[id] = H[id] || {}, spans = $$('#tlText .ss');
     let at = me.at > 0 && me.at < S.length ? me.at : 0, run = 0, playing = false, night = false;
-    const btn = () => { const b = $('#tlPlay'); if (b) b.textContent = playing ? '⏸ Пауза' : at > 0 && at < S.length ? '▶ Дальше' : '▶ Слушать'; };
+    const btn = () => { const b = $('#tlPlay'); if (b) b.textContent = playing ? "⏸ Pause" : at > 0 && at < S.length ? "▶ Weiter" : "▶ Anhören"; };
     const mark = j => {
       spans.forEach(s => s.classList.toggle('on', +s.dataset.j === j));
       const el = spans[j]; if (el && !night) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -22254,11 +22255,11 @@ const TALES = (() => {
     const finish = () => {
       playing = false; me.at = 0; me.done = 1; save();
       spans.forEach(s => s.classList.remove('on')); $('#tlEnd').hidden = false; btn();
-      const nt = $('#tlNightT'); if (nt) nt.textContent = 'Конец. Спокойной ночи!';
+      const nt = $('#tlNightT'); if (nt) nt.textContent = "Ende. Gute Nacht!";
     };
     const credit = () => { const c = $('#tlCr'); if (!c) return;
       const fr = famOf(mode);
-      c.textContent = fr ? `🏠 ${FREC.label(fr)}. Запись хранится только на этом телефоне.` : mode === 'actor' && R ? `🎙 Читает ${R.who}. Запись проекта LibriVox — общественное достояние (Public Domain).` : '🔊 Читает голос игры.';
+      c.textContent = fr ? `🏠 ${FREC.label(fr)}. Die Aufnahme ist nur auf diesem Handy gespeichert.` : mode === 'actor' && R ? `🎙 Es liest: ${R.who}. Eine Aufnahme des Projekts LibriVox — gemeinfrei (Public Domain).` : "🔊 Die Stimme des Spiels liest.";
       $$('#tlMode .chip').forEach(b => b.classList.toggle('sel', b.dataset.m === mode)); };
     
     
@@ -22267,16 +22268,16 @@ const TALES = (() => {
     function toVoice(force) {
       if (t !== tok) return;
       const was = force || playing; try { if (au) au.pause(); } catch (e) {} au = null; TALE_AUDIO = null; mode = 'voice'; blobTried = false; credit(); btn();
-      note('Запись не загрузилась (нужен интернет). Читает голос игры.');
+      note("Die Aufnahme wurde nicht geladen (dafür braucht es Internet). Die Stimme des Spiels liest.");
       if (was) { playing = false; go(); }
     }
     function stalled(my) {
       if (t !== tok || my !== run || !playing || !au || mode !== 'actor' || fetching) return;
       if (!blobTried) {
-        blobTried = true; fetching = true; note('Запись грузится…');
+        blobTried = true; fetching = true; note("Die Aufnahme lädt…");
         let late = false;
         const ac = typeof AbortController === 'function' ? new AbortController() : null, to = setTimeout(() => { late = true; if (ac) ac.abort(); }, 25000);
-        fetch(base() + 'audio/' + R.f, ac ? { signal: ac.signal } : {}).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(bl => {
+        fetch(abase() + R.f, ac ? { signal: ac.signal } : {}).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(bl => {
           clearTimeout(to); fetching = false; if (t !== tok || my !== run || !playing || !au) return;
           rolling = false; au.src = URL.createObjectURL(bl);
           au.addEventListener('loadedmetadata', () => { try { au.currentTime = R.ts[at] || 0; } catch (e) {} const pr = au.play(); if (pr && pr.catch) pr.catch(() => stalled(my)); }, { once: true });
@@ -22285,7 +22286,7 @@ const TALES = (() => {
         return;
       }
       blobTried = false; run++; playing = false; try { au.pause(); } catch (e) {} btn();
-      note('Запись не играет — нажми ещё раз. Если не получится, включи «Голос игры».');
+      note("Die Aufnahme spielt nicht — tippe noch einmal. Wenn es nicht klappt, wähle «Stimme des Spiels».");
     }
     function watch(my, ms) {
       setTimeout(() => { if (t === tok && my === run && playing && au && !(rolling && !au.paused && au.readyState >= 2)) stalled(my); }, ms || 5000);
@@ -22295,7 +22296,7 @@ const TALES = (() => {
       if (at >= S.length) at = 0;
       $('#tlEnd').hidden = true; mark(at); credit();
       if (!au) {
-        au = new Audio(base() + 'audio/' + R.f); au.preload = 'auto'; au.setAttribute('playsinline', '');
+        au = new Audio(abase() + R.f); au.preload = 'auto'; au.setAttribute('playsinline', '');
         au.addEventListener('playing', () => { rolling = true; });
         au.addEventListener('timeupdate', () => {
           if (!au) return;
@@ -22358,8 +22359,8 @@ const TALES = (() => {
       night = on; const scr = $('.screen'); if (!scr) return;
       $$('.tl-night').forEach(x => x.remove());
       if (!on) { const el = spans[at]; if (el) el.scrollIntoView({ block: 'center' }); return; }
-      scr.insertAdjacentHTML('beforeend', `<div class="tl-night" id="tlNightOv" role="button" aria-label="Пауза или дальше"><p class="tl-nt" id="tlNightT">${esc(S[Math.min(at, S.length - 1)].s)}</p>
-        <button class="tl-nx" id="tlNightX" aria-label="Выйти из ночного режима">☀️</button></div>`);
+      scr.insertAdjacentHTML('beforeend', `<div class="tl-night" id="tlNightOv" role="button" aria-label="Pause oder weiter"><p class="tl-nt" id="tlNightT">${esc(S[Math.min(at, S.length - 1)].s)}</p>
+        <button class="tl-nx" id="tlNightX" aria-label="Nachtmodus beenden">☀️</button></div>`);
       $('#tlNightOv').onclick = e => { if (e.target.closest('#tlNightX')) { setNight(false); return; } toggle(); };
       if (!playing) go();
     }
@@ -22380,8 +22381,8 @@ const TALES = (() => {
     warm();
   }
   
-  GAMES.push({ id: 'tales', name: 'Аудиосказки', sub: 'слушать сказки с текстом на экране', kw: 'сказки слушать перед сном', ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => list(goHome), grp: 10, also: [2, 6], hide: () => !IS_RU,
-    prog: () => { const n = Object.values(heard()).filter(x => x && x.done).length; return n ? `дослушано: ${n}` : ''; } });
+  GAMES.push({ id: 'tales', name: "Hörmärchen", sub: "Märchen hören, mit dem Text auf dem Bildschirm", kw: "Märchen hören vor dem Schlafen Geschichten", ico: () => pic('🎧'), bg: 'var(--t-lilac)', go: () => list(goHome), grp: 10, also: [2, 6],
+    prog: () => { const n = Object.values(heard()).filter(x => x && x.done).length; return n ? `zu Ende gehört: ${n}` : ''; } });
   return { index, tile, forBook, list, play };
 })();
 GAMES.push({ id: 'bookshelf', name: "Bücherregal", sub: "die besten Bücher für dein Alter", kw: "Bücher Märchen Hörmärchen Lesen", ico: () => pic('📚'), bg: 'var(--t-peach)', go: () => BOOKSHELF.open(), grp: 6, also: [2, 10],
