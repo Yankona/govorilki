@@ -83,7 +83,7 @@ def head(l, k, title, desc, canonical, alts, ld, og_type='website', xdef=None):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}">
-<meta property="og:image" content="{SITE}/assets/og-{l or 'ru'}.png">
+<meta property="og:image" content="{SITE}/assets/og-{'hub' if canonical == SITE + '/' else (l or 'ru')}.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:locale" content="{OG_LOCALE[l or 'ru']}">{og_alt}
 <meta name="twitter:card" content="summary_large_image">
