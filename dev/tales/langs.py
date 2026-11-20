@@ -14,7 +14,7 @@ import difflib, json, os, re, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, '..', 'site-add', 'tales')
 DL = sys.argv[1]
-MIN_COVER = 0.85
+MIN_COVER = 0.75          # as tales/recordings.py: the recogniser misses words of a good reading too (pt: Brazilian readers)
 PD = 'LibriVox, Public Domain'
 sentences = lambda s: re.findall(r'[^.!?…]+[.!?…]+[»"]?\s*|[^.!?…]+$', s) or [s]
 def norm(s):
