@@ -92,7 +92,7 @@ let bad = 0;
       await home();
     }
     // «позвать бабушку в шахматы» (the owner, 21.11): a tile beside the calendar when the family has a grown-up
-    ok(!kn.includes('kin'), 'chess tile without grown-ups');
+    ok(kn.includes('kin'), 'chess tile missing without grown-ups (it should say how to add them)');
     await run(`fam().grands = [{ id: 'g1', name: 'Бабушка Тома', she: 1, role: 'gm' }]; save(); famPeople()`); await home();
     const ch = p.locator('#sdKnow [data-know="kin"]');
     ok(await ch.count() === 1, 'no «позвать в шахматы» tile with a granny');

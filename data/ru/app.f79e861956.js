@@ -15006,7 +15006,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '178';
+const APP_VER = '179';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -24475,8 +24475,9 @@ const SIMPLE = (() => {
   
   function kinTile(V) {
     const gs = Object.values(GRAND);
-    if (!gs.length || !V.has('chess-online')) return '';
-    return `<button class="sd-k" data-know="kin"><span class="tile-ico">${avaOk(gs[0].av) ? kinFace(gs[0], 'pic') : pic(gs[0].e)}</span><b>Позвать в шахматы</b></button>`;
+    
+    if (!V.has('chess-online')) return '';
+    return `<button class="sd-k" data-know="kin"><span class="tile-ico">${gs[0] ? (avaOk(gs[0].av) ? kinFace(gs[0], 'pic') : pic(gs[0].e)) : pic('👵')}</span><b>Позвать в шахматы</b></button>`;
   }
   function knowHTML() {
     const V = vis(), gs = KNOW.flatMap(id => id === 'tales' && !V.has(id) ? ['bookshelf'] : [id]).filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
