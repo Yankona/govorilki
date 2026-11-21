@@ -5261,7 +5261,7 @@ async function newGame(opp, side) {
   return { g, sent };
 }
 
-const shareRow = (msg, url, id) => `<div class="fam-row"><button class="big" id="${id}">📤 Отправить</button>
+const shareRow = (msg, url, id, label) => `<div class="fam-row"><button class="big" id="${id}">${label || '📤 Отправить'}</button>
   <a class="chip" href="sms:?&body=${encodeURIComponent(msg + ' ' + url)}">✉️ SMS</a>
   <button class="chip" data-copy="${id}">📋 Скопировать</button></div>`;
 function bindShare(id, msg, url, said) {
@@ -5549,6 +5549,7 @@ function screenOnline(id) {
   let R = chReplay(g.h), sel = -1, promo = null, oppSeen = 0, offerFrom = 0, resignAsk = false, lastSync = 0, pending = false, starred = !!g.starred;
   shell(guestOn() ? 'Шахматы с ' + KID.ins : `Партия: ${opp.name}`, `<div class="og">
       <div class="og-p" id="ogOpp"><span class="og-e">${opp.e}</span><span class="og-n"><b>${opp.name}</b><small id="ogSeen">${colorName(otherColor(g.me))}</small></span></div>
+      <div class="og-wait" id="ogWait" hidden></div>
       <div class="og-wrap"><div class="ch-board" id="ogB"></div></div>
       <div class="og-p me"><span class="og-e">${me.e}</span><span class="og-n"><b>${guestOn() ? me.name : 'Я'}</b><small>${colorName(g.me)}</small></span></div>
       <p class="og-st" id="ogSt"></p>
@@ -5556,7 +5557,6 @@ function screenOnline(id) {
       <div class="og-offer" id="ogOffer" hidden></div>
       <div class="og-moves" id="ogM"></div>
       <div class="og-btns"><button class="chip" id="ogDraw">🤝 Предложить ничью</button><button class="chip" id="ogResign">🏳️ Сдаться</button></div>
-      <div class="og-wait" id="ogWait" hidden></div>
       <p class="og-msg" id="ogMsg" role="status"></p>
       <p class="og-net" id="ogNet">Подключаюсь…</p>
     </div>`, { back, guide: false });
@@ -5588,7 +5588,9 @@ function screenOnline(id) {
     if (!w.hidden && !w.innerHTML) {
       const forWho = g.opp, url = gameLink(g, forWho);
       const msg = forWho === KID.id ? `${KID.name}, ${lcFirst(me.name)} зовёт тебя сыграть в шахматы! Открой ссылку:` : `${who(forWho).name}, это ${KID.name}! Давай сыграем в шахматы. Открой ссылку:`;
-      w.innerHTML = `<p class="lead">${opp.name} ещё не открыл${opp.she ? 'а' : ''} партию. Приглашение уже ${forWho === KID.id ? 'в игре у ' + KID.gen : 'во входе у ' + lcFirst(decl(opp.name, opp.she)[1])}. Можно ещё отправить ссылку:</p>${shareRow(msg, url, 'ogShare')}`;
+      
+      w.innerHTML = forWho === KID.id ? `<p class="lead">${opp.name} ещё не открыл${opp.she ? 'а' : ''} партию. Приглашение уже в игре у ${KID.gen}. Можно ещё отправить ссылку:</p>${shareRow(msg, url, 'ogShare')}`
+        : `<p class="lead"><b>Отправь ссылку: ${lcFirst(opp.name)} нажмёт на неё и сразу окажется за этой доской.</b></p>${shareRow(msg, url, 'ogShare', opp.to ? `📤 Отправить ${opp.to}` : '')}`;
       bindShare('ogShare', msg, url, s => { $('#ogMsg').textContent = s; });
     }
   }
@@ -15004,7 +15006,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '177';
+const APP_VER = '178';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 

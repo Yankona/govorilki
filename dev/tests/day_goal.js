@@ -96,7 +96,14 @@ let bad = 0;
     await run(`fam().grands = [{ id: 'g1', name: 'Бабушка Тома', she: 1, role: 'gm' }]; save(); famPeople()`); await home();
     const ch = p.locator('#sdKnow [data-know="kin"]');
     ok(await ch.count() === 1, 'no «позвать в шахматы» tile with a granny');
-    if (await ch.count()) { await ch.click(); await p.waitForTimeout(900); const fx = [!!(await p.$('#famAI')), !!(await p.$('[data-who="g1"]')), await p.evaluate(() => (document.querySelector('#stage') || document.body).innerText.slice(0, 200))]; ok(fx[0] && fx[1], 'chess tile does not open the family chess ' + JSON.stringify(fx)); await p.screenshot({ path: SHOTS + '/goal-chess.png' }); }
+    if (await ch.count()) { await ch.click(); await p.waitForTimeout(900); const fx = [!!(await p.$('#famAI')), !!(await p.$('[data-who="g1"]')), await p.evaluate(() => (document.querySelector('#stage') || document.body).innerText.slice(0, 200))]; ok(fx[0] && fx[1], 'chess tile does not open the family chess ' + JSON.stringify(fx)); await p.screenshot({ path: SHOTS + '/goal-chess.png' });
+      // «как бабушка поймёт, что мы позвали?»: after «позвать», the link to her is above the board, in view, and leads to this game
+      await p.click('[data-who="g1"]'); await p.waitForTimeout(1500);
+      const wt = p.locator('#ogWait'), inv = await wt.isVisible() && await wt.evaluate(e => { const r = e.getBoundingClientRect(), b = document.querySelector('#ogB').getBoundingClientRect(); return r.bottom <= innerHeight && r.top < b.top; });
+      ok(inv, 'the link to granny is not above the board in view');
+      const lk = await run(`(() => { const g = Object.values(gamesAll()).find(x => x.opp === 'g1'); return g && gameLink(g, 'g1').includes('g=' + g.id) && gameLink(g, 'g1').includes('vhod=g1'); })()`);
+      ok(lk, 'granny\'s link does not lead to the game');
+      await p.screenshot({ path: SHOTS + `/goal-invite-${lang}.png` }); }
     await run(`fam().grands = []; save(); famPeople()`); await home();
     // three looks
     for (const lk of ['bright', 'calm', 'dark']) { await run(`P.settings.look = '${lk}'; save()`); await home(); await p.screenshot({ path: `${SHOTS}/goal-${lang}-${DEV}-${lk}.png` }); }
