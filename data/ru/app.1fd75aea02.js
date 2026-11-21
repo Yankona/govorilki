@@ -15004,7 +15004,7 @@ function screenPult() {
   appVer($('#pvVer'));
 }
 
-const APP_VER = '176';
+const APP_VER = '177';
 
 const authorHTML = () => `<div class="prow-btns"><button class="link-btn" id="pvAuthor">👑 Я автор приложения: создать ключ</button></div>`;
 
@@ -24447,7 +24447,7 @@ const SIMPLE = (() => {
       homeLeave(); room(a);
     });
     const fb = box.querySelector('#sdFavs'); if (fb) fb.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
-    box.querySelectorAll('[data-know]').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); const id = b.dataset.know; if (id === 'cal') screenCalendar(); else GAMES.find(g => g.id === id).go(); });
+    box.querySelectorAll('[data-know]').forEach(b => b.onclick = () => { sfx.pop(); homeLeave(); const id = b.dataset.know; if (id === 'cal') screenCalendar(); else if (id === 'kin') screenFamChess(); else GAMES.find(g => g.id === id).go(); });
     const fc = box.querySelector('#sdFavCh'); if (fc) fc.onclick = () => { sfx.pop(); homeLeave(); favChoose(); };
     const ag = box.querySelector('#sdAskGo'); if (ag) ag.onclick = () => { sfx.pop(); homeLeave(); favPick(); };
     const ax = box.querySelector('#sdAskX'); if (ax) ax.onclick = () => { sfx.pop(); P.favAsked = 1; save(); const el = box.querySelector('#sdAsk'); if (el) el.remove(); };
@@ -24469,9 +24469,16 @@ const SIMPLE = (() => {
   
   
   const KNOW = ['learn-news', 'phys-lab', 'how', 'space', 'tales', 'travel', 'learn-jobs', 'comics', 'composers', 'museum'];
+  
+  
+  function kinTile(V) {
+    const gs = Object.values(GRAND);
+    if (!gs.length || !V.has('chess-online')) return '';
+    return `<button class="sd-k" data-know="kin"><span class="tile-ico">${avaOk(gs[0].av) ? kinFace(gs[0], 'pic') : pic(gs[0].e)}</span><b>Позвать в шахматы</b></button>`;
+  }
   function knowHTML() {
     const V = vis(), gs = KNOW.flatMap(id => id === 'tales' && !V.has(id) ? ['bookshelf'] : [id]).filter(id => V.has(id)).map(id => GAMES.find(g => g.id === id)).filter(Boolean);
-    return `<section class="sd-know" id="sdKnow"><h3>🌍 Узнаём</h3><div class="sd-kn">${gs.map(g => `<button class="sd-k" data-know="${g.id}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b>${newsDot(g.id) ? '<i class="tile-new">Новое!</i>' : ''}</button>`).join('')}<button class="sd-k" data-know="cal"><span class="emo">📅</span><b>Календарь и праздники</b></button></div></section>`;
+    return `<section class="sd-know" id="sdKnow"><h3>🌍 Узнаём</h3><div class="sd-kn">${gs.map(g => `<button class="sd-k" data-know="${g.id}"><span class="tile-ico">${g.ico()}</span><b>${nm(g.name)}</b>${newsDot(g.id) ? '<i class="tile-new">Новое!</i>' : ''}</button>`).join('')}<button class="sd-k" data-know="cal"><span class="emo">📅</span><b>Календарь и праздники</b></button>${kinTile(V)}</div></section>`;
   }
   
   function favPick() {

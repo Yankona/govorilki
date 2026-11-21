@@ -91,6 +91,13 @@ let bad = 0;
       ok(!(await p.$('.home-t')), `«Узнаём» ${id} does not open`);
       await home();
     }
+    // «позвать бабушку в шахматы» (the owner, 21.11): a tile beside the calendar when the family has a grown-up
+    ok(!kn.includes('kin'), 'chess tile without grown-ups');
+    await run(`fam().grands = [{ id: 'g1', name: 'Бабушка Тома', she: 1, role: 'gm' }]; save(); famPeople()`); await home();
+    const ch = p.locator('#sdKnow [data-know="kin"]');
+    ok(await ch.count() === 1, 'no «позвать в шахматы» tile with a granny');
+    if (await ch.count()) { await ch.click(); await p.waitForTimeout(900); const fx = [!!(await p.$('#famAI')), !!(await p.$('[data-who="g1"]')), await p.evaluate(() => (document.querySelector('#stage') || document.body).innerText.slice(0, 200))]; ok(fx[0] && fx[1], 'chess tile does not open the family chess ' + JSON.stringify(fx)); await p.screenshot({ path: SHOTS + '/goal-chess.png' }); }
+    await run(`fam().grands = []; save(); famPeople()`); await home();
     // three looks
     for (const lk of ['bright', 'calm', 'dark']) { await run(`P.settings.look = '${lk}'; save()`); await home(); await p.screenshot({ path: `${SHOTS}/goal-${lang}-${DEV}-${lk}.png` }); }
     await run(`P.settings.look = ''; save()`);
